@@ -1,0 +1,28 @@
+{
+  "name": "sucks",
+  "version": "0.0.1",
+  "description": "Sucks Python to Javscript port",
+  "main": "sucks.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha -R tap > test.tap",
+    "test_windows": "SET NODE_ENV=test&&mocha -R tap > test.tap"
+  },
+  "keywords": [
+    "ecovacs",
+    "deebot",
+    "sucks"
+  ],
+  "author": "Joost ter Heide",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joostth/sucks.js.git"
+  },
+  "dependencies": {
+    "simple-xmpp": "^1.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.1.0",
+    "node-machine-id": "^1.1.10"
+  }
+}
