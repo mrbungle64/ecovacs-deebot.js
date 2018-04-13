@@ -24,7 +24,7 @@ Connecting to your vacuum is performed in two steps:
 
 Once you have your account setup, step one is to log in:
 ```javascript
-const sucks = require('sucks.js')
+const sucks = require('sucks')
 	, EcoVacsAPI = sucks.EcoVacsAPI
 	, VacBot = sucks.VacBot;
 
@@ -116,7 +116,7 @@ Possible options for lifespan component are `main_brush`, `side_brush` and `filt
 Based on the response from the XMPP Server several events are
 emitted:
 * `stanza`: generic event with an object as it's argument: {type: 
-  <any of the other event names in this list>, value: <value object>}
+  \<any of the other event names in this list\>, value: \<value object\>}
 * `ChargeState`: event fired when the charge state is reported. Argument
   of the event is a string representing the charge state.
 * `BatteryInfo`: event fired when the battery charge state is reported.

@@ -141,7 +141,7 @@ class EcoVacsAPI {
 							resolve(json.data);
 						} else if(json.code == '1005') {
 							envLog("[EcoVacsAPI] incorrect email or password");
-							throw "incorrect email or password";
+							throw new Error("incorrect email or password");
 						} else {
 							envLog("[EcoVacsAPI] call to %s failed with %s", func, JSON.stringify(json));
 							throw new Error("failure code {msg} ({code}) for call {func} and parameters {param}".format({msg: json['msg'], code: json['code'], func: func, param: JSON.stringify(args)}));
@@ -267,7 +267,7 @@ class EcoVacsAPI {
 
 EcoVacsAPI.CLIENT_KEY = "eJUWrzRv34qFSaYk";
 EcoVacsAPI.SECRET = "Cyu5jcR4zyK6QEPn1hdIGXB5QIDAQABMA0GC";
-EcoVacsAPI.PUBLIC_KEY = fs.readFileSync("key.pem", "utf8");
+EcoVacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
 EcoVacsAPI.MAIN_URL_FORMAT = 'https://eco-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
 EcoVacsAPI.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
 EcoVacsAPI.REALM = 'ecouser.net';

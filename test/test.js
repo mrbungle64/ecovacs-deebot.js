@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const sucks = require('../sucks.js');
+const sucks = require('../index.js');
 
 describe('API', function() {
 	describe('error checking', function() {

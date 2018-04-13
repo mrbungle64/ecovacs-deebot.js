@@ -2,7 +2,7 @@
   "name": "sucks",
   "version": "0.0.1",
   "description": "Sucks Python to Javscript port",
-  "main": "sucks.js",
+  "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha -R tap > test.tap",
     "test_windows": "SET NODE_ENV=test&&mocha -R tap > test.tap"
