@@ -24,27 +24,27 @@ Connecting to your vacuum is performed in two steps:
 
 Once you have your account setup, step one is to log in:
 ```javascript
-	const sucks = require('sucks.js')
-		, EcoVacsAPI = sucks.EcoVacsAPI
-		, VacBot = sucks.VacBot;
-	
-	// You need to provide a device ID uniquely identifying the
-	// machine you're using to connect, the country you're in
-	// (which you can for example retrieve from http://ipinfo.io/json).
-	// The file countries.js contains a mapping between country codes
-	// and continent codes. If it doesn't appear to work for your
-	// continent, try "ww", their world-wide catchall.
-    let api = new EcoVacsAPI(device_id, country, continent);
-	
-	// The account_id is your Ecovacs username.
-	// The password_hash is an md5 hash of your Ecovacs password.
-	api.connect(account_id, password_hash).then(() => {
-		console.log("Connected!");
-	}).catch((e) => {
-		// The Ecovacs API endpoint is not very stable, so
-		// connecting fails randomly from time to time
-		console.error("Failure in connecting!");
-	});
+const sucks = require('sucks.js')
+	, EcoVacsAPI = sucks.EcoVacsAPI
+	, VacBot = sucks.VacBot;
+
+// You need to provide a device ID uniquely identifying the
+// machine you're using to connect, the country you're in
+// (which you can for example retrieve from http://ipinfo.io/json).
+// The file countries.js contains a mapping between country codes
+// and continent codes. If it doesn't appear to work for your
+// continent, try "ww", their world-wide catchall.
+let api = new EcoVacsAPI(device_id, country, continent);
+
+// The account_id is your Ecovacs username.
+// The password_hash is an md5 hash of your Ecovacs password.
+api.connect(account_id, password_hash).then(() => {
+	console.log("Connected!");
+}).catch((e) => {
+	// The Ecovacs API endpoint is not very stable, so
+	// connecting fails randomly from time to time
+	console.error("Failure in connecting!");
+});
 ```
 
 This logs you in through the HTTP API and retrieves the required
@@ -53,15 +53,15 @@ the devices linked to your account to prepare connectivity to your
 vacuum.
 
 ```javascript
-	api.devices().then((devices) => {
-		console.log("Devices:", JSON.stringify(devices));
-		
-		let vacuum = devices[0]; // Selects the first vacuum from your account
-		let vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
-		vacbot.on("ready", (event) => {
-			console.log("Vacbot ready);
-		});
+api.devices().then((devices) => {
+	console.log("Devices:", JSON.stringify(devices));
+	
+	let vacuum = devices[0]; // Selects the first vacuum from your account
+	let vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+	vacbot.on("ready", (event) => {
+		console.log("Vacbot ready");
 	});
+});
 ```
 
 This connects to your vacuum through the XMPP protocol. Once the
@@ -71,42 +71,46 @@ actions to it.
 
 There are shortcut functions available to run actions on your bot.
 ```javascript
-	vacbot.run("clean", [mode, [speed]]);
-	vacbot.run("edge");
-	vacbot.run("spot");
-	vacbot.run("stop");
-	vacbot.run("charge");
-	vacbot.run("move", direction);
-	vacbot.run("left"); // shortcut for vacbot.run("move", "left")
-	vacbot.run("right"); // shortcut for vacbot.run("move", "right")
-	vacbot.run("forward"); // shortcut for vacbot.run("move", "forward")
-	vacbot.run("turnaround"); // shortcut for vacbot.run("move", "turnaround")
-	vacbot.run("deviceinfo");
-	vacbot.run("cleanstate");
-	vacbot.run("chargestate");
-	vacbot.run("batterystate");
-	vacbot.run("lifespan", component);
-	vacbot.run("settime", timestamp, timezone);
+vacbot.run("clean", [mode, [speed]]);
+vacbot.run("edge");
+vacbot.run("spot");
+vacbot.run("stop");
+vacbot.run("charge");
+vacbot.run("move", direction);
+vacbot.run("left"); // shortcut for vacbot.run("move", "left")
+vacbot.run("right"); // shortcut for vacbot.run("move", "right")
+vacbot.run("forward"); // shortcut for vacbot.run("move", "forward")
+vacbot.run("turnaround"); // shortcut for vacbot.run("move", "turnaround")
+vacbot.run("deviceinfo");
+vacbot.run("cleanstate");
+vacbot.run("chargestate");
+vacbot.run("batterystate");
+vacbot.run("lifespan", component);
+vacbot.run("settime", timestamp, timezone);
 ```
 
 Or you can use command classes like the original python sucks library
 ```javascript
-	vacbot.send_command(new sucks.Clean([mode, [speed]]));
-	vacbot.send_command(new sucks.Edge());
-	vacbot.send_command(new sucks.Spot());
-	vacbot.send_command(new sucks.Stop());
-	vacbot.send_command(new sucks.Charge());
-	vacbot.send_command(new sucks.Move(direction));
-	vacbot.send_command(new sucks.GetDeviceInfo());
-	vacbot.send_command(new sucks.GetCleanState());
-	vacbot.send_command(new sucks.GetChargeState());
-	vacbot.send_command(new sucks.GetBatteryState());
-	vacbot.send_command(new sucks.GetLifeSpan(component));
-	vacbot.send_command(new sucks.SetTime(timestamp, timezone));
+vacbot.send_command(new sucks.Clean([mode, [speed]]));
+vacbot.send_command(new sucks.Edge());
+vacbot.send_command(new sucks.Spot());
+vacbot.send_command(new sucks.Stop());
+vacbot.send_command(new sucks.Charge());
+vacbot.send_command(new sucks.Move(direction));
+vacbot.send_command(new sucks.GetDeviceInfo());
+vacbot.send_command(new sucks.GetCleanState());
+vacbot.send_command(new sucks.GetChargeState());
+vacbot.send_command(new sucks.GetBatteryState());
+vacbot.send_command(new sucks.GetLifeSpan(component));
+vacbot.send_command(new sucks.SetTime(timestamp, timezone));
 ```
 
+Possible options for direction are `left`, `right`, `forward`, `turnaround`, and `stop`.
+
 Possible options for clean mode are `auto`, `edge`, `spot`, `single_room`, and `stop`.
+
 Possible options for cleaning fan speed are `normal` and `high`.
+
 Possible options for lifespan component are `main_brush`, `side_brush` and `filter`.
 
 Based on the response from the XMPP Server several events are
@@ -134,11 +138,11 @@ const sucks = require('sucks')
 	, countries = require('./countries.js');
 
 let account_id = "email@domain.com"
-  , password = "a1b2c3d4"
-  , password_hash = EcoVacsAPI.md5(password)
-  , device_id = EcoVacsAPI.md5(nodeMachineId.machineIdSync())
-  , country = null
-  , continent = null;
+	, password = "a1b2c3d4"
+	, password_hash = EcoVacsAPI.md5(password)
+	, device_id = EcoVacsAPI.md5(nodeMachineId.machineIdSync())
+	, country = null
+	, continent = null;
   
 httpGetJson('http://ipinfo.io/json').then((json) => {
 	country = json['country'].toLowerCase();
@@ -212,6 +216,6 @@ The example code about uses the following additional resources:
 * [node-machine-id](https://www.npmjs.com/package/node-machine-id) which
   provides an easy way to create a unique identifier for the machine running
   the code.
-* [https://ipinfo.io/] which provides a json API for IP address information
+* [https://ipinfo.io/](https://ipinfo.io/) which provides a json API for IP address information
   and is free to use for testing or non-commercial use up to 1000 requests
   per day.
