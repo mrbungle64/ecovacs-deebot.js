@@ -1,11 +1,11 @@
 {
   "name": "sucks",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Sucks Python to Javscript port",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha -R tap > test.tap",
-    "test_windows": "SET NODE_ENV=test&&mocha -R tap > test.tap"
+    "test": "NODE_ENV=test mocha",
+    "test_windows": "SET NODE_ENV=test&&mocha"
   },
   "keywords": [
     "ecovacs",

@@ -31,9 +31,9 @@ const sucks = require('sucks')
 // You need to provide a device ID uniquely identifying the
 // machine you're using to connect, the country you're in
 // (which you can for example retrieve from http://ipinfo.io/json).
-// The file countries.js contains a mapping between country codes
-// and continent codes. If it doesn't appear to work for your
-// continent, try "ww", their world-wide catchall.
+// The module exports a countries object which contains a mapping 
+// between country codes and continent codes. If it doesn't appear
+// to work for your continent, try "ww", their world-wide catchall.
 let api = new EcoVacsAPI(device_id, country, continent);
 
 // The account_id is your Ecovacs username.
@@ -135,7 +135,7 @@ const sucks = require('sucks')
 	, VacBot = sucks.VacBot
 	, nodeMachineId = require('node-machine-id')
 	, http = require('http')
-	, countries = require('./countries.js');
+	, countries = sucks.countries;
 
 let account_id = "email@domain.com"
 	, password = "a1b2c3d4"

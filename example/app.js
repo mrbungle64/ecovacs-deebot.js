@@ -1,9 +1,9 @@
-const sucks = require('../index.js')
+const sucks = require('sucks')
 	, EcoVacsAPI = sucks.EcoVacsAPI
 	, VacBot = sucks.VacBot
 	, nodeMachineId = require('node-machine-id')
 	, http = require('http')
-	, countries = require('../countries.js');
+	, countries = sucks.countries;
 
 let account_id = "email@domain.com"
   , password = "a1b2c3d4"

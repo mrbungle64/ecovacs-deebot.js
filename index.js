@@ -3,7 +3,8 @@ const https = require('https')
 	, crypto = require('crypto')
 	, EventEmitter = require('events')
 	, fs = require('fs')
-	, Element = require('ltx').Element;
+	, Element = require('ltx').Element
+	, countries = require('./countries.js');
 
 String.prototype.format = function() {
 	if(arguments.length==0) {
@@ -773,3 +774,4 @@ module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.SetTime = SetTime;
 module.exports.isObject = isObject;
+module.exports.countries = countries;

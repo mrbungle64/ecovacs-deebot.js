@@ -111,4 +111,22 @@ describe('API tools', function() {
 			assert.equal("{first} {second}".format(), "{first} {second}");
 		});
 	});
+	
+	describe('countries', function() {
+		it('should export a countries object', function() {
+			assert.ok(sucks.countries);
+		});
+		
+		it('should export the continent for 250 countries', function() {
+			let iter = 0;
+			for(let key in sucks.countries) {
+				if(sucks.countries.hasOwnProperty(key)) {
+					if(!!sucks.countries[key].continent) {
+						iter++;
+					}
+				}
+			}
+			assert.equal(iter, 250);
+		})
+	});
 });
