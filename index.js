@@ -57,6 +57,7 @@ class EcoVacsAPI {
 					this.auth_code = token['authCode'];
 					this.__call_login_by_it_token().then((login) => {
 						this.user_access_token = login['token'];
+						this.uid = login['userId'];
 						envLog("[EcoVacsAPI] EcoVacsAPI connection complete");
 						resolve("ready");
 					}).catch((e) => {
