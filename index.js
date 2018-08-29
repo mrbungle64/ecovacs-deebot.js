@@ -275,14 +275,14 @@ EcoVacsAPI.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do
 EcoVacsAPI.REALM = 'ecouser.net';
 
 class VacBot {
-    constructor(user, domain, resource, secret, vacuum, continent, server_address=null){
+    constructor(user, hostname, resource, secret, vacuum, continent, server_address=null){
         this.vacuum = vacuum;
         this.clean_status = null;
         this.charge_status = null;
         this.battery_status = null;
         this.ping_interval = null;
 
-        this.xmpp = new EcoVacsXMPP(this, user, domain, resource, secret, continent, server_address);
+        this.xmpp = new EcoVacsXMPP(this, user, hostname, resource, secret, continent, server_address);
 
 		this.xmpp.on("ready", () => {envLog("[VacBot] Ready event!");});
 	}
@@ -455,13 +455,13 @@ class VacBot {
 }
 
 class EcoVacsXMPP extends EventEmitter {
-	constructor(bot, user, domain, resource, secret, continent, server_address, server_port) {
+	constructor(bot, user, hostname, resource, secret, continent, server_address, server_port) {
 		super();
 		this.simpleXmpp = require('simple-xmpp');
 		
 		this.bot = bot;
 		this.user = user;
-        this.domain = domain;
+        this.hostname = hostname;
         this.resource = resource;
         this.secret = secret;
         this.continent = continent;
@@ -586,7 +586,7 @@ class EcoVacsXMPP extends EventEmitter {
 	}
 	
 	_my_address(){
-        return this.user + '@' + this.domain + '/' + this.resource;
+        return this.user + '@' + this.hostname + '/' + this.resource;
 	}
 	
 	send_ping(to){
@@ -599,9 +599,9 @@ class EcoVacsXMPP extends EventEmitter {
 	}
 	
 	connect_and_wait_until_ready() {
-		envLog("[EcoVacsXMPP] Connecting as %s to %s", this.user + '@' + this.domain, this.server_address + ":" + this.server_port);
+		envLog("[EcoVacsXMPP] Connecting as %s to %s", this.user + '@' + this.hostname, this.server_address + ":" + this.server_port);
 		this.simpleXmpp.connect({
-			jid: this.user + '@' + this.domain
+			jid: this.user + '@' + this.hostname
 		  , password: '0/' + this.resource + '/' + this.secret
 		  , host: this.server_address
 		  , port: this.server_port
