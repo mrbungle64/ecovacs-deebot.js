@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "6"
+  - "stable"
+
+before_install:
+  - npm install -g nyc mocha codeclimate-test-reporter
+
+after_success:
+  - nyc --reporter=lcov npm test
+  - nyc report --reporter=lcov
