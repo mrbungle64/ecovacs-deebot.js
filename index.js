@@ -342,14 +342,14 @@ class VacBot {
 
       let report = iq.attrs['type'];
 
-      switch (report) {
-        case "Going":
+      switch (report.toLowerCase()) {
+        case "going":
           this.charge_status = 'returning';
           break;
-        case "SlotCharging":
+        case "slotcharging":
           this.charge_status = 'charging';
           break;
-        case "Idle":
+        case "idle":
           this.charge_status = 'idle';
           break;
         default:
