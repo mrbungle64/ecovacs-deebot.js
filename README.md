@@ -3,7 +3,7 @@ sucks.js
 
 A like for like JavaScript port of the python project [sucks](https://github.com/wpietri/sucks)
 to drive an Ecovacs robot vacuum. Currently known to work
-with the Ecovacs Deebot N79, M80 Pro, M81, M88 Pro, and R95
+with the Ecovacs Deebot N79, M80 Pro, M81, M88 Pro, R95 and Slim 2
 MKII from both North America and Europe.
 
 All credits for figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
