@@ -1,30 +1,30 @@
 const assert = require('assert');
 
-const sucks = require('../index.js');
+const ecovacsDeebot = require('../index.js');
 
 describe('API', function () {
   describe('error checking', function () {
     it('should throw an error when no arguments are provided', function () {
       assert.throws(() => {
-        let api = new sucks.EcoVacsAPI();
+        let api = new ecovacsDeebot.EcoVacsAPI();
       });
     });
 
     it('should throw an error when no country or continent is provided', function () {
       assert.throws(() => {
-        let api = new sucks.EcoVacsAPI("abcdefghijklmnopqrestuvwyz");
+        let api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz");
       });
     });
 
     it('should throw an error when no continent is provided', function () {
       assert.throws(() => {
-        let api = new sucks.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl");
+        let api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl");
       });
     });
 
     it('should not throw an error when all arguments are provided to the constructor', function () {
       assert.doesNotThrow(() => {
-        let api = new sucks.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
+        let api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
       });
     });
   });
@@ -33,26 +33,26 @@ describe('API', function () {
     it('should store the country and device id parameter in a meta variable', function () {
       let device_id = "abcdefghijklmnopqrestuvwyz";
       let country = "nl";
-      let api = new sucks.EcoVacsAPI(device_id, country, "eu");
+      let api = new ecovacsDeebot.EcoVacsAPI(device_id, country, "eu");
       assert.equal(api.meta.deviceId, device_id);
       assert.equal(api.meta.country, country);
     });
 
     it('should store the first 8 characters of the device id as the resource id', function () {
-      let api = new sucks.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
+      let api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
       assert.equal(api.resource, "abcdefgh");
     });
 
     it('should store the country provided', function () {
       let country = "nl";
-      let api = new sucks.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", country, "eu");
+      let api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", country, "eu");
       assert.ok(api.country);
       assert.equal(api.country, country);
     });
 
     it('should store the continent provided', function () {
       let continent = "eu";
-      let api = new sucks.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
+      let api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
       assert.ok(api.continent);
       assert.equal(api.continent, continent);
     });
@@ -80,21 +80,21 @@ describe('API', function () {
 describe('API tools', function () {
   describe('#isObject', function () {
     it('should check if a value is truely an object', function () {
-      assert.equal(sucks.isObject(null), false);
-      assert.equal(sucks.isObject("test"), false);
-      assert.equal(sucks.isObject(String("test")), false);
-      assert.equal(sucks.isObject(100), false);
-      assert.equal(sucks.isObject(100.5), false);
-      assert.equal(sucks.isObject(true), false);
-      assert.equal(sucks.isObject(undefined), false);
-      assert.equal(sucks.isObject(Symbol()), false);
-      assert.equal(sucks.isObject({}), true);
-      assert.equal(sucks.isObject({key: "value"}), true);
-      assert.equal(sucks.isObject(JSON.parse('{"key": "value"}')), true);
-      assert.equal(sucks.isObject(() => {
+      assert.equal(ecovacsDeebot.isObject(null), false);
+      assert.equal(ecovacsDeebot.isObject("test"), false);
+      assert.equal(ecovacsDeebot.isObject(String("test")), false);
+      assert.equal(ecovacsDeebot.isObject(100), false);
+      assert.equal(ecovacsDeebot.isObject(100.5), false);
+      assert.equal(ecovacsDeebot.isObject(true), false);
+      assert.equal(ecovacsDeebot.isObject(undefined), false);
+      assert.equal(ecovacsDeebot.isObject(Symbol()), false);
+      assert.equal(ecovacsDeebot.isObject({}), true);
+      assert.equal(ecovacsDeebot.isObject({key: "value"}), true);
+      assert.equal(ecovacsDeebot.isObject(JSON.parse('{"key": "value"}')), true);
+      assert.equal(ecovacsDeebot.isObject(() => {
       }), true);
-      assert.equal(sucks.isObject(new Object()), true);
-      assert.equal(sucks.isObject(new Date()), true);
+      assert.equal(ecovacsDeebot.isObject(new Object()), true);
+      assert.equal(ecovacsDeebot.isObject(new Date()), true);
     });
   });
 
@@ -118,14 +118,14 @@ describe('API tools', function () {
 
   describe('countries', function () {
     it('should export a countries object', function () {
-      assert.ok(sucks.countries);
+      assert.ok(ecovacsDeebot.countries);
     });
 
     it('should export the continent for 250 countries', function () {
       let iter = 0;
-      for (let key in sucks.countries) {
-        if (sucks.countries.hasOwnProperty(key)) {
-          if (!!sucks.countries[key].continent) {
+      for (let key in ecovacsDeebot.countries) {
+        if (ecovacsDeebot.countries.hasOwnProperty(key)) {
+          if (!!ecovacsDeebot.countries[key].continent) {
             iter++;
           }
         }

@@ -3,6 +3,7 @@ const https = require('https')
   , crypto = require('crypto')
   , EventEmitter = require('events')
   , fs = require('fs')
+  , pahoMqtt = require('paho-mqtt')
   , Element = require('ltx').Element
   , countries = require('./countries.js');
 
@@ -668,6 +669,7 @@ VacBotCommand.CLEAN_MODE = {
   'auto': 'auto',
   'edge': 'border',
   'spot': 'spot',
+  'spot_area': 'spot_area',
   'single_room': 'singleroom',
   'stop': 'stop'
 };

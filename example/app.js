@@ -1,9 +1,9 @@
-const sucks = require('sucks')
-  , EcoVacsAPI = sucks.EcoVacsAPI
-  , VacBot = sucks.VacBot
+const ecovacsDeebot = require('ecovacs-deebot')
+  , EcoVacsAPI = ecovacsDeebot.EcoVacsAPI
+  , VacBot = ecovacsDeebot.VacBot
   , nodeMachineId = require('node-machine-id')
   , http = require('http')
-  , countries = sucks.countries;
+  , countries = ecovacsDeebot.countries;
 
 let account_id = "email@domain.com"
   , password = "a1b2c3d4"
