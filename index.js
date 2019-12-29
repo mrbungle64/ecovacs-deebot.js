@@ -3,7 +3,6 @@ const https = require('https')
   , crypto = require('crypto')
   , EventEmitter = require('events')
   , fs = require('fs')
-  , pahoMqtt = require('paho-mqtt')
   , Element = require('ltx').Element
   , countries = require('./countries.js');
 
@@ -40,7 +39,6 @@ class EcoVacsAPI {
       'channel': 'c_googleplay',
       'deviceType': '1'
     };
-
     this.resource = device_id.substr(0, 8);
     this.country = country;
     this.continent = continent;
@@ -168,17 +166,21 @@ class EcoVacsAPI {
     });
   }
 
-  __call_user_api(func, args) {
+  __call_portal_api(api, func, args) {
     return new Promise((resolve, reject) => {
       envLog("[EcoVacsAPI] calling user api %s with %s", func, JSON.stringify(args));
-      let params = {'todo': func};
-      for (let key in args) {
-        if (args.hasOwnProperty(key)) {
-          params[key] = args[key];
-        }
+      let params;
+      if (api === EcoVacsAPI.USERSAPI) {
+        params = Object.assign({'todo': func}, args);
+      } else {
+        params = Object.assign({}, args);
       }
 
-      let url = EcoVacsAPI.USER_URL_FORMAT.format({continent: this.continent});
+      let continent = this.continent;
+      if ('continent' in arguments) {
+        continent = arguments['continent'];
+      }
+      let url = (EcoVacsAPI.PORTAL_URL_FORMAT + "/" + api).format({continent: continent});
       url = new URL(url);
       envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
@@ -235,20 +237,20 @@ class EcoVacsAPI {
   }
 
   __call_login_by_it_token() {
-    return this.__call_user_api('loginByItToken',
-      {
-        'country': this.meta['country'].toUpperCase(),
-        'resource': this.resource,
-        'realm': EcoVacsAPI.REALM,
-        'userId': this.uid,
-        'token': this.auth_code
-      }
+    return this.__call_portal_api(EcoVacsAPI.USERSAPI, 'loginByItToken',
+        {
+          'country': this.meta['country'].toUpperCase(),
+          'resource': this.resource,
+          'realm': EcoVacsAPI.REALM,
+          'userId': this.uid,
+          'token': this.auth_code
+        }
     );
   }
 
-  devices() {
+  getDevices() {
     return new Promise((resolve, reject) => {
-      this.__call_user_api('GetDeviceList', {
+      this.__call_portal_api(EcoVacsAPI.USERSAPI, 'GetDeviceList', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -263,6 +265,24 @@ class EcoVacsAPI {
         reject(e);
       });
     });
+  }
+
+  setIOTMQDevices(devices) {
+    // Added for devices that utilize MQTT instead of XMPP for communication
+    for (let device in devices) {
+      if (devices.hasOwnProperty(device)) {
+        device['iotmq'] = false;
+        if (device['company'] === 'eco-ng') {
+          // Check if the device is part of the list
+          device['iotmq'] = true;
+        }
+      }
+    }
+    return devices;
+  }
+
+  devices() {
+    return this.setIOTMQDevices(this.getDevices());
   }
 
   static md5(text) {
@@ -289,6 +309,15 @@ EcoVacsAPI.SECRET = "Cyu5jcR4zyK6QEPn1hdIGXB5QIDAQABMA0GC";
 EcoVacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
 EcoVacsAPI.MAIN_URL_FORMAT = 'https://eco-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
 EcoVacsAPI.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
+EcoVacsAPI.PORTAL_URL_FORMAT = 'https://portal-{continent}.ecouser.net/api';
+EcoVacsAPI.USERSAPI = 'users/user.do';
+
+// IOT Device Manager - This provides control of "IOT" products via RestAPI, some bots use this instead of XMPP
+EcoVacsAPI.IOTDEVMANAGERAPI = 'iot/devmanager.do';
+EcoVacsAPI.LGLOGAPI = 'lg/log.do';
+// Leaving this open, the only endpoint known currently is "Product IOT Map" -  pim/product/getProductIotMap - This provides a list of "IOT" products.  Not sure what this provides the app.
+EcoVacsAPI.PRODUCTAPI = 'pim/product';
+
 EcoVacsAPI.REALM = 'ecouser.net';
 
 class VacBot {
@@ -298,8 +327,16 @@ class VacBot {
     this.charge_status = null;
     this.battery_status = null;
     this.ping_interval = null;
+    // Set none for clients to start
+    this.xmpp = null;
+    this.iotmq = null;
 
-    this.xmpp = new EcoVacsXMPP(this, user, hostname, resource, secret, continent, server_address);
+    if (!vacuum['iotmq']) {
+      this.xmpp = new EcoVacsXMPP(this, user, hostname, resource, secret, continent, server_address);
+    }
+    else {
+      this.iotmq = new EcoVacsIOTMQ(user, hostname, resource, secret, continent, vacuum, server_address);
+    }
 
     this.xmpp.on("ready", () => {
       envLog("[VacBot] Ready event!");
@@ -307,11 +344,18 @@ class VacBot {
   }
 
   connect_and_wait_until_ready() {
-    this.xmpp.connect_and_wait_until_ready();
-
-    this.ping_interval = setInterval(() => {
-      this.xmpp.send_ping(this._vacuum_address());
-    }, 30000);
+    if (!this.vacuum['iotmq']) {
+      this.xmpp.connect_and_wait_until_ready();
+      this.ping_interval = setInterval(() => {
+        this.xmpp.send_ping(this._vacuum_address());
+      }, 30000);
+    }
+    else {
+      this.iotmq.connect_and_wait_until_ready();
+      this.ping_interval = setTimeout(() => {
+        this.iotmq.send_ping(this._vacuum_address());
+      }, 30000);
+    }
   }
 
   on(name, func) {
@@ -365,19 +409,48 @@ class VacBot {
   }
 
   _vacuum_address() {
-    return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom'
+    if (!this.vacuum['iotmq']) {
+      return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
+    }
+    else {
+      return this.vacuum['did'];
+    }
   }
 
-  send_command(command) {
+  send_command(action) {
     envLog("[VacBot] Sending command `%s`", command.name);
-    this.xmpp.send_command(command, this._vacuum_address());
+    if (!this.vacuum['iotmq']) {
+      this.xmpp.send_command(action.to_xml(), this._vacuum_address());
+    }
+    else {
+      // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
+      // IOTMQ devices need the full action for additional parsing
+      this.iotmq.send_command(action, this._vacuum_address());
+    }
+  }
+
+  send_ping() {
+    try {
+      if (!this.vacuum['iotmq']) {
+        this.xmpp.send_ping(this._vacuum_address());
+      }
+      else if (this.vacuum['iotmq']) {
+        if (!this.iotmq.send_ping()) {
+          throw new Error("Ping did not reach VacBot");
+        }
+      }
+    }
+    catch (e) {
+      throw new Error("Ping did not reach VacBot");
+    }
   }
 
   run(action) {
+    var args;
     switch (action) {
       case "Clean":
       case "clean":
-        var args = Array.prototype.slice.call(arguments, 1);
+        args = Array.prototype.slice.call(arguments, 1);
         if (args.length == 0) {
           this.send_command(new Clean());
         } else if (args.length == 1) {
@@ -402,31 +475,6 @@ class VacBot {
       case "charge":
         this.send_command(new Charge());
         break;
-      case "Move":
-      case "move":
-        var args = Array.prototype.slice.call(arguments, 1);
-        if (args.length < 1) {
-          return;
-        }
-        this.send_command(new Move(args[0]));
-        break;
-      case "Left":
-      case "left":
-        this.run("Move", "left");
-        break;
-      case "Right":
-      case "right":
-        this.run("Move", "right");
-        break;
-      case "Forward":
-      case "forward":
-        this.run("Move", "forward");
-        break;
-      case "turn_around":
-      case "TurnAround":
-      case "turnaround":
-        this.run("Move", "turn_around");
-        break;
       case "GetDeviceInfo":
       case "getdeviceinfo":
       case "deviceinfo":
@@ -450,7 +498,7 @@ class VacBot {
       case "GetLifeSpan":
       case "getlifespan":
       case "lifespan":
-        var args = Array.prototype.slice.call(arguments, 1);
+        args = Array.prototype.slice.call(arguments, 1);
         if (args.length < 1) {
           return;
         }
@@ -459,7 +507,7 @@ class VacBot {
       case "SetTime":
       case "settime":
       case "time":
-        var args = Array.prototype.slice.call(arguments, 1);
+        args = Array.prototype.slice.call(arguments, 1);
         if (args.length < 2) {
           return;
         }
@@ -467,14 +515,16 @@ class VacBot {
         break;
     }
   }
+}
 
-  disconnect() {
-    this.xmpp.disconnect();
+class EcoVacsIOTMQ extends EventEmitter {
+  constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
+    super();
   }
 }
 
 class EcoVacsXMPP extends EventEmitter {
-  constructor(bot, user, hostname, resource, secret, continent, server_address, server_port) {
+  constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
     super();
     this.simpleXmpp = require('simple-xmpp');
 
@@ -581,7 +631,7 @@ class EcoVacsXMPP extends EventEmitter {
   }
 
   session_start(event) {
-    envLog("[EcoVacsXMPP] ----------------- starting session ----------------")
+    envLog("[EcoVacsXMPP] ----------------- starting session ----------------");
     envLog("[EcoVacsXMPP] event = {event}".format({event: JSON.stringify(event)}));
     this.emit("ready", event);
   }
@@ -688,17 +738,34 @@ VacBotCommand.COMPONENT = {
   'side_brush': 'SideBrush',
   'filter': 'DustCaseHeap'
 };
-VacBotCommand.ACTION = {
-  'forward': 'forward',
-  'left': 'SpinLeft',
-  'right': 'SpinRight',
-  'turn_around': 'TurnAround',
-  'stop': 'stop'
+VacBotCommand.CLEAN_ACTION = {
+  'start': 's',
+  'pause': 'p',
+  'resume': 'r',
+  'stop': 'h'
 };
 
 class Clean extends VacBotCommand {
-  constructor(mode = "auto", speed = "normal") {
-    super("Clean", {'clean': {'type': VacBotCommand.CLEAN_MODE[mode], 'speed': VacBotCommand.FAN_SPEED[speed]}});
+  constructor(mode = "auto", speed = "normal", iotmq=false, action='start') {
+    if (arguments.length < 5) {
+      // Looks like action is needed for some bots, shouldn't affect older models
+      super('Clean', {
+        'clean': {
+          'type': VacBotCommand.CLEAN_MODE[mode],
+          'speed': ecovacs_fan_speed(speed),
+          'act': VacBotCommand.CLEAN_ACTION[action]
+        }
+      })
+    }
+    else {
+      let initCmd = {'type': VacBotCommand.CLEAN_MODE[mode], 'speed': ecovacs_fan_speed(speed)};
+      for (let key in arguments) {
+        if (arguments.hasOwnProperty(key)) {
+          initCmd[key] = arguments[key];
+        }
+      }
+      super('Clean', {'clean': initCmd})
+    }
   }
 }
 
@@ -723,12 +790,6 @@ class Stop extends Clean {
 class Charge extends VacBotCommand {
   constructor() {
     super("Charge", {'charge': {'type': VacBotCommand.CHARGE_MODE['return']}});
-  }
-}
-
-class Move extends VacBotCommand {
-  constructor(action) {
-    super("Move", {'move': {'action': VacBotCommand.ACTION[action]}});
   }
 }
 
@@ -776,8 +837,20 @@ function isObject(val) {
 }
 
 envLog = function () {
-  if (process.env.NODE_ENV == "development" || process.env.NODE_ENV == "dev") {
+  if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev") {
     console.log.apply(this, arguments);
+  }
+};
+
+function ecovacs_fan_speed(speed) {
+  if (speed === 'normal' || speed === VacBotCommand.FAN_SPEED['normal']) {
+    return VacBotCommand.FAN_SPEED['normal'];
+  }
+  else if (speed === 'high' || speed === VacBotCommand.FAN_SPEED['high']) {
+    return VacBotCommand.FAN_SPEED['high'];
+  }
+  else {
+    throw Error("Fan speed not found - {}".format(speed));
   }
 }
 
@@ -789,7 +862,6 @@ module.exports.Edge = Edge;
 module.exports.Spot = Spot;
 module.exports.Stop = Stop;
 module.exports.Charge = Charge;
-module.exports.Move = Move;
 module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;

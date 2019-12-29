@@ -1,15 +1,13 @@
 ecovacs-deebot.js
 ========
 
-A like for like JavaScript port of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
+`**Work in progress!**`
+
+A like for like JavaScript port based on [sucks.js](https://github.com/joostth/sucks.js) of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
 to drive an Ecovacs Deebot (Ozmo) robot vacuum.
 
 All credits for figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
-
-## Installation
-
-	npm install ecovacs-deebot
 
 ## Dedication
 
