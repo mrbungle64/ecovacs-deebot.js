@@ -335,7 +335,7 @@ class VacBot {
       this.xmpp = new EcoVacsXMPP(this, user, hostname, resource, secret, continent, server_address);
     }
     else {
-      this.iotmq = new EcoVacsIOTMQ(user, hostname, resource, secret, continent, vacuum, server_address);
+      this.iotmq = new EcoVacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
     }
 
     this.xmpp.on("ready", () => {
@@ -418,7 +418,7 @@ class VacBot {
   }
 
   send_command(action) {
-    envLog("[VacBot] Sending command `%s`", command.name);
+    envLog("[VacBot] Sending command `%s`", action.name);
     if (!this.vacuum['iotmq']) {
       this.xmpp.send_command(action.to_xml(), this._vacuum_address());
     }
@@ -524,7 +524,7 @@ class EcoVacsIOTMQ extends EventEmitter {
 }
 
 class EcoVacsXMPP extends EventEmitter {
-  constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
+  constructor(bot, user, hostname, resource, secret, continent, server_address, server_port) {
     super();
     this.simpleXmpp = require('simple-xmpp');
 
