@@ -7,7 +7,7 @@ const https = require('https')
   , countries = require('./countries.js');
 
 String.prototype.format = function () {
-  if (arguments.length == 0) {
+  if (arguments.length === 0) {
     return this;
   }
   var args = arguments['0'];
@@ -16,9 +16,9 @@ String.prototype.format = function () {
   });
 };
 
-class EcoVacsAPI {
+class EcovacsAPI {
   constructor(device_id, country, continent) {
-    envLog("[EcoVacsAPI] Setting up EcoVacsAPI");
+    envLog("[EcovacsAPI] Setting up EcovacsAPI");
 
     if (!device_id) {
       throw "No Device ID provided";
@@ -47,8 +47,7 @@ class EcoVacsAPI {
   connect(account_id, password_hash) {
     return new Promise((resolve, reject) => {
       let login_info = null;
-
-      this.__call_main_api('user/login', {'account': EcoVacsAPI.encrypt(account_id), 'password': EcoVacsAPI.encrypt(password_hash)}).then((info) => {
+      this.__call_main_api('user/login', {'account': EcovacsAPI.encrypt(account_id), 'password': EcovacsAPI.encrypt(password_hash)}).then((info) => {
         login_info = info;
         this.uid = login_info.uid;
         this.login_access_token = login_info.accessToken;
@@ -57,18 +56,18 @@ class EcoVacsAPI {
           this.__call_login_by_it_token().then((login) => {
             this.user_access_token = login['token'];
             this.uid = login['userId'];
-            envLog("[EcoVacsAPI] EcoVacsAPI connection complete");
+            envLog("[EcovacsAPI] EcovacsAPI connection complete");
             resolve("ready");
           }).catch((e) => {
-            envLog("[EcoVacsAPI]", e);
+            envLog("[EcovacsAPI]", e);
             reject(e);
           });
         }).catch((e) => {
-          envLog("[EcoVacsAPI]", e);
+          envLog("[EcovacsAPI]", e);
           reject(e);
         });
       }).catch((e) => {
-        envLog("[EcoVacsAPI]", e);
+        envLog("[EcovacsAPI]", e);
         reject(e);
       });
     });
@@ -86,32 +85,32 @@ class EcoVacsAPI {
       }
     }
 
-    let sign_on_text = EcoVacsAPI.CLIENT_KEY;
+    let sign_on_text = EcovacsAPI.CLIENT_KEY;
     let keys = Object.keys(sign_on);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
       sign_on_text += k + "=" + sign_on[k];
     }
-    sign_on_text += EcoVacsAPI.SECRET;
+    sign_on_text += EcovacsAPI.SECRET;
 
-    result['authAppkey'] = EcoVacsAPI.CLIENT_KEY;
-    result['authSign'] = EcoVacsAPI.md5(sign_on_text);
+    result['authAppkey'] = EcovacsAPI.CLIENT_KEY;
+    result['authSign'] = EcovacsAPI.md5(sign_on_text);
 
-    return EcoVacsAPI.paramsToQueryList(result);
+    return EcovacsAPI.paramsToQueryList(result);
   }
 
   __call_main_api(func, args) {
     return new Promise((resolve, reject) => {
-      envLog("[EcoVacsAPI] calling main api %s with %s", func, JSON.stringify(args));
+      envLog("[EcovacsAPI] calling main api %s with %s", func, JSON.stringify(args));
       let params = {};
       for (var key in args) {
         if (args.hasOwnProperty(key)) {
           params[key] = args[key];
         }
       }
-      params['requestId'] = EcoVacsAPI.md5(Number.parseFloat(Date.now() / 1000).toFixed(0));
-      let url = (EcoVacsAPI.MAIN_URL_FORMAT + "/" + func).format(this.meta);
+      params['requestId'] = EcovacsAPI.md5(Number.parseFloat(Date.now() / 1000).toFixed(0));
+      let url = (EcovacsAPI.MAIN_URL_FORMAT + "/" + func).format(this.meta);
       url = new URL(url);
       url.search = this.__sign(params).join('&');
       envLog(`[EcoVacsAPI] Calling ${url.href}`);
@@ -126,7 +125,7 @@ class EcoVacsAPI {
             `Status Code: ${statusCode}`);
         }
         if (error) {
-          console.error("[EcoVacsAPI] " + error.message);
+          console.error("[EcovacsAPI] " + error.message);
           res.resume();
           return;
         }
@@ -139,14 +138,14 @@ class EcoVacsAPI {
         res.on('end', () => {
           try {
             const json = JSON.parse(rawData);
-            envLog("[EcoVacsAPI] got %s", JSON.stringify(json));
+            envLog("[EcovacsAPI] got %s", JSON.stringify(json));
             if (json.code == '0000') {
               resolve(json.data);
             } else if (json.code == '1005') {
-              envLog("[EcoVacsAPI] incorrect email or password");
+              envLog("[EcovacsAPI] incorrect email or password");
               throw new Error("incorrect email or password");
             } else {
-              envLog("[EcoVacsAPI] call to %s failed with %s", func, JSON.stringify(json));
+              envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
               throw new Error("failure code {msg} ({code}) for call {func} and parameters {param}".format({
                 msg: json['msg'],
                 code: json['code'],
@@ -155,7 +154,7 @@ class EcoVacsAPI {
               }));
             }
           } catch (e) {
-            console.error("[EcoVacsAPI] " + e.message);
+            console.error("[EcovacsAPI] " + e.message);
             reject(e);
           }
         });
@@ -168,9 +167,9 @@ class EcoVacsAPI {
 
   __call_portal_api(api, func, args) {
     return new Promise((resolve, reject) => {
-      envLog("[EcoVacsAPI] calling user api %s with %s", func, JSON.stringify(args));
+      envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
       let params;
-      if (api === EcoVacsAPI.USERSAPI) {
+      if (api === EcovacsAPI.USERSAPI) {
         params = Object.assign({'todo': func}, args);
       } else {
         params = Object.assign({}, args);
@@ -180,7 +179,7 @@ class EcoVacsAPI {
       if ('continent' in arguments) {
         continent = arguments['continent'];
       }
-      let url = (EcoVacsAPI.PORTAL_URL_FORMAT + "/" + api).format({continent: continent});
+      let url = (EcovacsAPI.PORTAL_URL_FORMAT + "/" + api).format({continent: continent});
       url = new URL(url);
       envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
@@ -194,7 +193,7 @@ class EcoVacsAPI {
           'Content-Length': Buffer.byteLength(JSON.stringify(params))
         }
       };
-      envLog("[EcoVacsAPI] Sending POST to", JSON.stringify(reqOptions));
+      envLog("[EcovacsAPI] Sending POST to", JSON.stringify(reqOptions));
 
       const req = https.request(reqOptions, (res) => {
         res.setEncoding('utf8');
@@ -205,11 +204,11 @@ class EcoVacsAPI {
         res.on('end', () => {
           try {
             const json = JSON.parse(rawData);
-            envLog("[EcoVacsAPI] got %s", JSON.stringify(json));
+            envLog("[EcovacsAPI] got %s", JSON.stringify(json));
             if (json['result'] == 'ok') {
               resolve(json);
             } else {
-              envLog("[EcoVacsAPI] call to %s failed with %s", func, JSON.stringify(json));
+              envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
               throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
                 errno: json['errno'],
                 error: json['error'],
@@ -218,7 +217,7 @@ class EcoVacsAPI {
               });
             }
           } catch (e) {
-            console.error("[EcoVacsAPI] " + e.message);
+            console.error("[EcovacsAPI] " + e.message);
             reject(e);
           }
         });
@@ -230,18 +229,18 @@ class EcoVacsAPI {
       });
 
       // write data to request body
-      envLog("[EcoVacsAPI] Sending", JSON.stringify(params));
+      envLog("[EcovacsAPI] Sending", JSON.stringify(params));
       req.write(JSON.stringify(params));
       req.end();
     });
   }
 
   __call_login_by_it_token() {
-    return this.__call_portal_api(EcoVacsAPI.USERSAPI, 'loginByItToken',
+    return this.__call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken',
         {
           'country': this.meta['country'].toUpperCase(),
           'resource': this.resource,
-          'realm': EcoVacsAPI.REALM,
+          'realm': EcovacsAPI.REALM,
           'userId': this.uid,
           'token': this.auth_code
         }
@@ -250,12 +249,12 @@ class EcoVacsAPI {
 
   getDevices() {
     return new Promise((resolve, reject) => {
-      this.__call_portal_api(EcoVacsAPI.USERSAPI, 'GetDeviceList', {
+      this.__call_portal_api(EcovacsAPI.USERSAPI, 'GetDeviceList', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
           'userid': this.uid,
-          'realm': EcoVacsAPI.REALM,
+          'realm': EcovacsAPI.REALM,
           'token': this.user_access_token,
           'resource': this.resource
         }
@@ -290,7 +289,7 @@ class EcoVacsAPI {
   }
 
   static encrypt(text) {
-    return crypto.publicEncrypt({key: EcoVacsAPI.PUBLIC_KEY, padding: crypto.constants.RSA_PKCS1_PADDING}, new Buffer(text)).toString('base64');
+    return crypto.publicEncrypt({key: EcovacsAPI.PUBLIC_KEY, padding: crypto.constants.RSA_PKCS1_PADDING}, new Buffer(text)).toString('base64');
   }
 
   static paramsToQueryList(params) {
@@ -304,21 +303,21 @@ class EcoVacsAPI {
   }
 }
 
-EcoVacsAPI.CLIENT_KEY = "eJUWrzRv34qFSaYk";
-EcoVacsAPI.SECRET = "Cyu5jcR4zyK6QEPn1hdIGXB5QIDAQABMA0GC";
-EcoVacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
-EcoVacsAPI.MAIN_URL_FORMAT = 'https://eco-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
-EcoVacsAPI.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
-EcoVacsAPI.PORTAL_URL_FORMAT = 'https://portal-{continent}.ecouser.net/api';
-EcoVacsAPI.USERSAPI = 'users/user.do';
+EcovacsAPI.CLIENT_KEY = "eJUWrzRv34qFSaYk";
+EcovacsAPI.SECRET = "Cyu5jcR4zyK6QEPn1hdIGXB5QIDAQABMA0GC";
+EcovacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
+EcovacsAPI.MAIN_URL_FORMAT = 'https://eco-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
+EcovacsAPI.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
+EcovacsAPI.PORTAL_URL_FORMAT = 'https://portal-{continent}.ecouser.net/api';
+EcovacsAPI.USERSAPI = 'users/user.do';
 
 // IOT Device Manager - This provides control of "IOT" products via RestAPI, some bots use this instead of XMPP
-EcoVacsAPI.IOTDEVMANAGERAPI = 'iot/devmanager.do';
-EcoVacsAPI.LGLOGAPI = 'lg/log.do';
+EcovacsAPI.IOTDEVMANAGERAPI = 'iot/devmanager.do';
+EcovacsAPI.LGLOGAPI = 'lg/log.do';
 // Leaving this open, the only endpoint known currently is "Product IOT Map" -  pim/product/getProductIotMap - This provides a list of "IOT" products.  Not sure what this provides the app.
-EcoVacsAPI.PRODUCTAPI = 'pim/product';
+EcovacsAPI.PRODUCTAPI = 'pim/product';
 
-EcoVacsAPI.REALM = 'ecouser.net';
+EcovacsAPI.REALM = 'ecouser.net';
 
 class VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
@@ -328,38 +327,31 @@ class VacBot {
     this.battery_status = null;
     this.ping_interval = null;
     // Set none for clients to start
-    this.xmpp = null;
-    this.iotmq = null;
+    this.ecovacsClient = null;
 
     if (!vacuum['iotmq']) {
-      this.xmpp = new EcoVacsXMPP(this, user, hostname, resource, secret, continent, server_address);
+      const EcovacsXMPP = require('./library/ecovacsXMPP.js');
+      this.ecovacsClient = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
     }
     else {
-      this.iotmq = new EcoVacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      const EcovacsIOTMQ = require('./library/ecovacsIOTMQ.js');
+      this.ecovacsClient = new EcovacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
     }
 
-    this.xmpp.on("ready", () => {
+    this.ecovacsClient.on("ready", () => {
       envLog("[VacBot] Ready event!");
     });
   }
 
   connect_and_wait_until_ready() {
-    if (!this.vacuum['iotmq']) {
-      this.xmpp.connect_and_wait_until_ready();
+      this.ecovacsClient.connect_and_wait_until_ready();
       this.ping_interval = setInterval(() => {
         this.xmpp.send_ping(this._vacuum_address());
       }, 30000);
-    }
-    else {
-      this.iotmq.connect_and_wait_until_ready();
-      this.ping_interval = setTimeout(() => {
-        this.iotmq.send_ping(this._vacuum_address());
-      }, 30000);
-    }
   }
 
   on(name, func) {
-    this.xmpp.on(name, func);
+    this.ecovacsClient.on(name, func);
   }
 
   _handle_clean_report(iq) {
@@ -420,22 +412,22 @@ class VacBot {
   send_command(action) {
     envLog("[VacBot] Sending command `%s`", action.name);
     if (!this.vacuum['iotmq']) {
-      this.xmpp.send_command(action.to_xml(), this._vacuum_address());
+      this.ecovacsClient.send_command(action.to_xml(), this._vacuum_address());
     }
     else {
       // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
       // IOTMQ devices need the full action for additional parsing
-      this.iotmq.send_command(action, this._vacuum_address());
+      this.ecovacsClient.send_command(action, this._vacuum_address());
     }
   }
 
   send_ping() {
     try {
       if (!this.vacuum['iotmq']) {
-        this.xmpp.send_ping(this._vacuum_address());
+        this.ecovacsClient.send_ping(this._vacuum_address());
       }
       else if (this.vacuum['iotmq']) {
-        if (!this.iotmq.send_ping()) {
+        if (!this.ecovacsClient.send_ping()) {
           throw new Error("Ping did not reach VacBot");
         }
       }
@@ -514,171 +506,6 @@ class VacBot {
         this.send_command(new SetTime(args[0], args[1]));
         break;
     }
-  }
-}
-
-class EcoVacsIOTMQ extends EventEmitter {
-  constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
-    super();
-  }
-}
-
-class EcoVacsXMPP extends EventEmitter {
-  constructor(bot, user, hostname, resource, secret, continent, server_address, server_port) {
-    super();
-    this.simpleXmpp = require('simple-xmpp');
-
-    this.bot = bot;
-    this.user = user;
-    this.hostname = hostname;
-    this.resource = resource;
-    this.secret = secret;
-    this.continent = continent;
-    this.iter = 1;
-
-    if (!server_address) {
-      this.server_address = 'msg-{continent}.ecouser.net'.format({continent: continent});
-    } else {
-      this.server_address = server_address;
-    }
-
-    if (!server_port) {
-      this.server_port = 5223
-    } else {
-      this.server_port = server_port;
-    }
-
-    this.simpleXmpp.on('online', (event) => {
-      this.session_start(event);
-    });
-
-    this.simpleXmpp.on('close', () => {
-      envLog('[EcoVacsXMPP] I\'m disconnected :(');
-      this.emit("closed");
-    });
-
-    this.simpleXmpp.on('chat', (from, message) => {
-      envLog('[EcoVacsXMPP] Chat from %s: %s', from, message);
-    });
-
-    this.simpleXmpp.on('stanza', (stanza) => {
-      //envLog('[EcoVacsXMPP] Received stanza:', JSON.stringify(stanza));
-      envLog('[EcoVacsXMPP] Received stanza XML:', stanza.toString());
-      if (stanza.name == "iq" && stanza.attrs.type == "set" && !!stanza.children[0] && stanza.children[0].name == "query" && !!stanza.children[0].children[0] /*&& !!stanza.children[0].children[0].children[0]*/) {
-        envLog('[EcoVacsXMPP] Response for %s:, %s', stanza.children[0].children[0].attrs.td, JSON.stringify(stanza.children[0].children[0]));
-        switch (stanza.children[0].children[0].attrs.td) {
-          case "PushRobotNotify":
-            let type = stanza.children[0].children[0].attrs['type'];
-            let act = stanza.children[0].children[0].attrs['act'];
-            this.emit(stanza.children[0].children[0].attrs.td, {type: type, act: act});
-            this.emit("stanza", {type: stanza.children[0].children[0].attrs.td, value: {type: type, act: act}});
-            break;
-          case "DeviceInfo":
-            envLog("[EcoVacsXMPP] Received an DeviceInfo Stanza");
-            break;
-          case "ChargeState":
-            this.bot._handle_charge_state(stanza.children[0].children[0].children[0]);
-            this.emit(stanza.children[0].children[0].attrs.td, this.bot.charge_status);
-            this.emit("stanza", {type: stanza.children[0].children[0].attrs.td, value: this.bot.charge_status});
-            break;
-          case "BatteryInfo":
-            this.bot._handle_battery_info(stanza.children[0].children[0].children[0]);
-            this.emit(stanza.children[0].children[0].attrs.td, this.bot.battery_status);
-            this.emit("stanza", {type: stanza.children[0].children[0].attrs.td, value: this.bot.battery_status});
-            break;
-          case "CleanReport":
-            this.bot._handle_clean_report(stanza.children[0].children[0].children[0]);
-            this.emit(stanza.children[0].children[0].attrs.td, this.bot.clean_status);
-            this.emit("stanza", {type: stanza.children[0].children[0].attrs.td, value: this.bot.clean_status});
-            break;
-          case "WKVer":
-            envLog("[EcoVacsXMPP] Received an WKVer Stanza");
-            break;
-          case "Error":
-          case "error":
-            envLog("[EcoVacsXMPP] Received an error for action '%s': %s", stanza.children[0].children[0].attrs.action, stanza.children[0].children[0].attrs.error);
-            break;
-          case "OnOff":
-            envLog("[EcoVacsXMPP] Received an OnOff Stanza");
-            break;
-          case "Sched":
-            envLog("[EcoVacsXMPP] Received an Sched Stanza");
-            break;
-          case "LifeSpan":
-            envLog("[EcoVacsXMPP] Received an LifeSpan Stanza");
-            break;
-          default:
-            envLog("[EcoVacsXMPP] Unknown response type received");
-            break;
-        }
-      } else if (stanza.name == "iq" && stanza.attrs.type == "error" && !!stanza.children[0] && stanza.children[0].name == "error" && !!stanza.children[0].children[0]) {
-        envLog('[EcoVacsXMPP] Response Error for request %s', stanza.attrs.id);
-
-        switch (stanza.children[0].attrs.code) {
-          case "404":
-            console.error("[EcoVacsXMPP] Couldn't reach the vac :[%s] %s", stanza.children[0].attrs.code, stanza.children[0].children[0].name);
-            break;
-          default:
-            console.error("[EcoVacsXMPP] Unknown error received: %s", JSON.stringify(stanza.children[0]));
-            break;
-        }
-      }
-    });
-
-    this.simpleXmpp.on('error', (e) => {
-      envLog('[EcoVacsXMPP] Error:', e);
-    });
-  }
-
-  session_start(event) {
-    envLog("[EcoVacsXMPP] ----------------- starting session ----------------");
-    envLog("[EcoVacsXMPP] event = {event}".format({event: JSON.stringify(event)}));
-    this.emit("ready", event);
-  }
-
-  subscribe_to_ctls(func) {
-    envLog("[EcoVacsXMPP] Adding listener to ready event");
-    this.on("ready", func);
-  }
-
-  send_command(xml, recipient) {
-    let c = this._wrap_command(xml, recipient);
-    envLog('[EcoVacsXMPP] Sending xml:', c.toString());
-    this.simpleXmpp.conn.send(c);
-  }
-
-  _wrap_command(ctl, recipient) {
-    let id = this.iter++;
-    let q = new Element('iq', {id: id, to: recipient, from: this._my_address(), type: 'set'});
-    q.c('query', {xmlns: 'com:ctl'}).cnode(ctl.to_xml());
-    return q;
-  }
-
-  _my_address() {
-    return this.user + '@' + this.hostname + '/' + this.resource;
-  }
-
-  send_ping(to) {
-    let id = this.iter++;
-    envLog("[EcoVacsXMPP] *** sending ping ***");
-    var e = new Element('iq', {id: id, to: to, from: this._my_address(), type: 'get'});
-    e.c('query', {xmlns: 'urn:xmpp:ping'});
-    envLog("[EcoVacsXMPP] Sending ping XML:", e.toString());
-    this.simpleXmpp.conn.send(e);
-  }
-
-  connect_and_wait_until_ready() {
-    envLog("[EcoVacsXMPP] Connecting as %s to %s", this.user + '@' + this.hostname, this.server_address + ":" + this.server_port);
-    this.simpleXmpp.connect({
-      jid: this.user + '@' + this.hostname
-      , password: '0/' + this.resource + '/' + this.secret
-      , host: this.server_address
-      , port: this.server_port
-    });
-
-    this.on("ready", (event) => {
-      this.send_ping(this.bot._vacuum_address());
-    });
   }
 }
 
@@ -854,9 +681,8 @@ function ecovacs_fan_speed(speed) {
   }
 }
 
-module.exports.EcoVacsAPI = EcoVacsAPI;
+module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.VacBot = VacBot;
-module.exports.EcoVacsXMPP = EcoVacsXMPP;
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
