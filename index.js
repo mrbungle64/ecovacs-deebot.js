@@ -1,10 +1,9 @@
-const https = require('https')
-  , URL = require('url').URL
-  , crypto = require('crypto')
-  , EventEmitter = require('events')
-  , fs = require('fs')
-  , Element = require('ltx').Element
-  , countries = require('./countries.js');
+const https = require('https'),
+  URL = require('url').URL,
+  crypto = require('crypto'),
+  fs = require('fs'),
+  Element = require('ltx').Element,
+  countries = require('./countries.js');
 
 String.prototype.format = function () {
   if (arguments.length === 0) {
@@ -47,11 +46,17 @@ class EcovacsAPI {
   connect(account_id, password_hash) {
     return new Promise((resolve, reject) => {
       let login_info = null;
-      this.__call_main_api('user/login', {'account': EcovacsAPI.encrypt(account_id), 'password': EcovacsAPI.encrypt(password_hash)}).then((info) => {
+      this.__call_main_api('user/login', {
+        'account': EcovacsAPI.encrypt(account_id),
+        'password': EcovacsAPI.encrypt(password_hash)
+      }).then((info) => {
         login_info = info;
         this.uid = login_info.uid;
         this.login_access_token = login_info.accessToken;
-        this.__call_main_api('user/getAuthCode', {'uid': this.uid, 'accessToken': this.login_access_token}).then((token) => {
+        this.__call_main_api('user/getAuthCode', {
+          'uid': this.uid,
+          'accessToken': this.login_access_token
+        }).then((token) => {
           this.auth_code = token['authCode'];
           this.__call_login_by_it_token().then((login) => {
             this.user_access_token = login['token'];
@@ -116,7 +121,9 @@ class EcovacsAPI {
       envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
       https.get(url.href, (res) => {
-        const {statusCode} = res;
+        const {
+          statusCode
+        } = res;
         const contentType = res.headers['content-type'];
 
         let error;
@@ -139,9 +146,9 @@ class EcovacsAPI {
           try {
             const json = JSON.parse(rawData);
             envLog("[EcovacsAPI] got %s", JSON.stringify(json));
-            if (json.code == '0000') {
+            if (json.code === '0000') {
               resolve(json.data);
-            } else if (json.code == '1005') {
+            } else if (json.code === '1005') {
               envLog("[EcovacsAPI] incorrect email or password");
               throw new Error("incorrect email or password");
             } else {
@@ -170,7 +177,9 @@ class EcovacsAPI {
       envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
       let params;
       if (api === EcovacsAPI.USERSAPI) {
-        params = Object.assign({'todo': func}, args);
+        params = Object.assign({
+          'todo': func
+        }, args);
       } else {
         params = Object.assign({}, args);
       }
@@ -179,7 +188,9 @@ class EcovacsAPI {
       if ('continent' in arguments) {
         continent = arguments['continent'];
       }
-      let url = (EcovacsAPI.PORTAL_URL_FORMAT + "/" + api).format({continent: continent});
+      let url = (EcovacsAPI.PORTAL_URL_FORMAT + "/" + api).format({
+        continent: continent
+      });
       url = new URL(url);
       envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
@@ -205,7 +216,7 @@ class EcovacsAPI {
           try {
             const json = JSON.parse(rawData);
             envLog("[EcovacsAPI] got %s", JSON.stringify(json));
-            if (json['result'] == 'ok') {
+            if (json['result'] === 'ok') {
               resolve(json);
             } else {
               envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
@@ -236,15 +247,13 @@ class EcovacsAPI {
   }
 
   __call_login_by_it_token() {
-    return this.__call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken',
-        {
-          'country': this.meta['country'].toUpperCase(),
-          'resource': this.resource,
-          'realm': EcovacsAPI.REALM,
-          'userId': this.uid,
-          'token': this.auth_code
-        }
-    );
+    return this.__call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken', {
+      'country': this.meta['country'].toUpperCase(),
+      'resource': this.resource,
+      'realm': EcovacsAPI.REALM,
+      'userId': this.uid,
+      'token': this.auth_code
+    });
   }
 
   getDevices() {
@@ -289,7 +298,10 @@ class EcovacsAPI {
   }
 
   static encrypt(text) {
-    return crypto.publicEncrypt({key: EcovacsAPI.PUBLIC_KEY, padding: crypto.constants.RSA_PKCS1_PADDING}, new Buffer(text)).toString('base64');
+    return crypto.publicEncrypt({
+      key: EcovacsAPI.PUBLIC_KEY,
+      padding: crypto.constants.RSA_PKCS1_PADDING
+    }, new Buffer(text)).toString('base64');
   }
 
   static paramsToQueryList(params) {
@@ -326,16 +338,19 @@ class VacBot {
     this.charge_status = null;
     this.battery_status = null;
     this.ping_interval = null;
+    this.error_event = null;
     // Set none for clients to start
+    this.ecovacs = null;
     this.ecovacsClient = null;
 
     if (!vacuum['iotmq']) {
       const EcovacsXMPP = require('./library/ecovacsXMPP.js');
-      this.ecovacsClient = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
-    }
-    else {
+      this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      this.ecovacsClient = this.ecovacs.simpleXmpp;
+    } else {
       const EcovacsIOTMQ = require('./library/ecovacsIOTMQ.js');
-      this.ecovacsClient = new EcovacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      this.ecovacs = new EcovacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      this.ecovacsClient = this.ecovacs.mqtt;
     }
 
     this.ecovacsClient.on("ready", () => {
@@ -344,26 +359,52 @@ class VacBot {
   }
 
   connect_and_wait_until_ready() {
-      this.ecovacsClient.connect_and_wait_until_ready();
-      this.ping_interval = setInterval(() => {
-        this.xmpp.send_ping(this._vacuum_address());
-      }, 30000);
+    this.ecovacsClient.connect_and_wait_until_ready();
+    this.ping_interval = setInterval(() => {
+      this.ecovacsClient.send_ping(this._vacuum_address());
+    }, 30000);
   }
 
   on(name, func) {
     this.ecovacsClient.on(name, func);
   }
 
-  _handle_clean_report(iq) {
-    this.clean_status = iq.attrs['type'];
-    envLog("[VacBot] *** clean_status = " + this.clean_status);
+  _handle_clean_report(event) {
+    let type = event.attrs['type'];
+    try {
+      type = VacBotCommand.CLEAN_MODE[type];
+      if (this.vacuum['iotmq']) {
+        // Was able to parse additional status from the IOTMQ, may apply to XMPP too
+        let statustype = event['st'];
+        statustype = VacBotCommand.CLEAN_ACTION[statustype];
+        if (statustype === 'stop' || statustype === 'pause') {
+          type = statustype
+        }
+      }
+    } catch (e) {
+
+    }
+    this.clean_status = type;
+    this.vacuum_status = type;
+
+    let fan = null;
+    if ("speed" in event) {
+      fan = event['speed'];
+    }
+    if (fan !== null) {
+      try {
+        fan = VacBotCommand.FAN_SPEED[fan];
+      } catch (e) {
+        console.error("[VacBot] Unknown fan speed: ", fan);
+      }
+      this.fan_speed = fan;
+      this.statusEvents.notify(self.vacuum_status);
+      envLog("[VacBot] *** clean_status = " + this.clean_status);
+    }
   }
 
   _handle_battery_info(iq) {
     try {
-      if (iq.name !== "battery") {
-        throw "Not a battery state";
-      }
       this.battery_status = parseFloat(iq.attrs['power']) / 100;
       envLog("[VacBot] *** battery_status = %d\%", this.battery_status * 100);
     } catch (e) {
@@ -400,11 +441,18 @@ class VacBot {
     }
   }
 
+  _handle_error(event) {
+    if ('error' in event) {
+      this.error_event = event['error'];
+    } else if ('errs' in event) {
+      this.error_event = event['errs'];
+    }
+  }
+
   _vacuum_address() {
     if (!this.vacuum['iotmq']) {
       return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
-    }
-    else {
+    } else {
       return this.vacuum['did'];
     }
   }
@@ -413,8 +461,7 @@ class VacBot {
     envLog("[VacBot] Sending command `%s`", action.name);
     if (!this.vacuum['iotmq']) {
       this.ecovacsClient.send_command(action.to_xml(), this._vacuum_address());
-    }
-    else {
+    } else {
       // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
       // IOTMQ devices need the full action for additional parsing
       this.ecovacsClient.send_command(action, this._vacuum_address());
@@ -425,14 +472,12 @@ class VacBot {
     try {
       if (!this.vacuum['iotmq']) {
         this.ecovacsClient.send_ping(this._vacuum_address());
-      }
-      else if (this.vacuum['iotmq']) {
+      } else if (this.vacuum['iotmq']) {
         if (!this.ecovacsClient.send_ping()) {
           throw new Error("Ping did not reach VacBot");
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       throw new Error("Ping did not reach VacBot");
     }
   }
@@ -443,9 +488,9 @@ class VacBot {
       case "Clean":
       case "clean":
         args = Array.prototype.slice.call(arguments, 1);
-        if (args.length == 0) {
+        if (args.length === 0) {
           this.send_command(new Clean());
-        } else if (args.length == 1) {
+        } else if (args.length === 1) {
           this.send_command(new Clean(args[0]));
         } else {
           this.send_command(new Clean(args[0], args[1]));
@@ -519,7 +564,9 @@ class VacBotCommand {
   }
 
   to_xml() {
-    let ctl = new Element('ctl', {td: this.name});
+    let ctl = new Element('ctl', {
+      td: this.name
+    });
     for (let key in this.args) {
       if (this.args.hasOwnProperty(key)) {
         let value = this.args[key];
@@ -573,7 +620,7 @@ VacBotCommand.CLEAN_ACTION = {
 };
 
 class Clean extends VacBotCommand {
-  constructor(mode = "auto", speed = "normal", iotmq=false, action='start') {
+  constructor(mode = "auto", speed = "normal", iotmq = false, action = 'start') {
     if (arguments.length < 5) {
       // Looks like action is needed for some bots, shouldn't affect older models
       super('Clean', {
@@ -583,15 +630,19 @@ class Clean extends VacBotCommand {
           'act': VacBotCommand.CLEAN_ACTION[action]
         }
       })
-    }
-    else {
-      let initCmd = {'type': VacBotCommand.CLEAN_MODE[mode], 'speed': ecovacs_fan_speed(speed)};
+    } else {
+      let initCmd = {
+        'type': VacBotCommand.CLEAN_MODE[mode],
+        'speed': ecovacs_fan_speed(speed)
+      };
       for (let key in arguments) {
         if (arguments.hasOwnProperty(key)) {
           initCmd[key] = arguments[key];
         }
       }
-      super('Clean', {'clean': initCmd})
+      super('Clean', {
+        'clean': initCmd
+      })
     }
   }
 }
@@ -616,7 +667,11 @@ class Stop extends Clean {
 
 class Charge extends VacBotCommand {
   constructor() {
-    super("Charge", {'charge': {'type': VacBotCommand.CHARGE_MODE['return']}});
+    super("Charge", {
+      'charge': {
+        'type': VacBotCommand.CHARGE_MODE['return']
+      }
+    });
   }
 }
 
@@ -646,13 +701,20 @@ class GetBatteryState extends VacBotCommand {
 
 class GetLifeSpan extends VacBotCommand {
   constructor(component) {
-    super("GetLifeSpan", {'type': VacBotCommand.COMPONENT[component]});
+    super("GetLifeSpan", {
+      'type': VacBotCommand.COMPONENT[component]
+    });
   }
 }
 
 class SetTime extends VacBotCommand {
   constructor(timestamp, timezone) {
-    super("SetTime", {'time': {'t': timestamp, 'tz': timezone}});
+    super("SetTime", {
+      'time': {
+        't': timestamp,
+        'tz': timezone
+      }
+    });
   }
 }
 
@@ -672,11 +734,9 @@ envLog = function () {
 function ecovacs_fan_speed(speed) {
   if (speed === 'normal' || speed === VacBotCommand.FAN_SPEED['normal']) {
     return VacBotCommand.FAN_SPEED['normal'];
-  }
-  else if (speed === 'high' || speed === VacBotCommand.FAN_SPEED['high']) {
+  } else if (speed === 'high' || speed === VacBotCommand.FAN_SPEED['high']) {
     return VacBotCommand.FAN_SPEED['high'];
-  }
-  else {
+  } else {
     throw Error("Fan speed not found - {}".format(speed));
   }
 }
