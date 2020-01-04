@@ -3,6 +3,7 @@ const https = require('https'),
   crypto = require('crypto'),
   fs = require('fs'),
   Element = require('ltx').Element,
+  constants = require('./library/ecocavsConstants.js'),
   countries = require('./countries.js');
 
 String.prototype.format = function () {
@@ -372,11 +373,11 @@ class VacBot {
   _handle_clean_report(event) {
     let type = event.attrs['type'];
     try {
-      type = VacBotCommand.CLEAN_MODE[type];
+      type = constants.CLEAN_MODE_TO_ECOVACS[type];
       if (this.vacuum['iotmq']) {
         // Was able to parse additional status from the IOTMQ, may apply to XMPP too
         let statustype = event['st'];
-        statustype = VacBotCommand.CLEAN_ACTION[statustype];
+        statustype = constants.CLEAN_ACTION_TO_ECOVACS[statustype];
         if (statustype === 'stop' || statustype === 'pause') {
           type = statustype
         }
@@ -393,7 +394,7 @@ class VacBot {
     }
     if (fan !== null) {
       try {
-        fan = VacBotCommand.FAN_SPEED[fan];
+        fan = constants.FAN_SPEED_TO_ECOVACS[fan];
       } catch (e) {
         console.error("[VacBot] Unknown fan speed: ", fan);
       }
@@ -589,51 +590,21 @@ class VacBotCommand {
   }
 }
 
-VacBotCommand.CLEAN_MODE = {
-  'auto': 'auto',
-  'edge': 'border',
-  'spot': 'spot',
-  'spot_area': 'spot_area',
-  'single_room': 'singleroom',
-  'stop': 'stop'
-};
-VacBotCommand.FAN_SPEED = {
-  'normal': 'standard',
-  'high': 'strong'
-};
-VacBotCommand.CHARGE_MODE = {
-  'return': 'go',
-  'returning': 'Going',
-  'charging': 'SlotCharging',
-  'idle': 'Idle'
-};
-VacBotCommand.COMPONENT = {
-  'main_brush': 'Brush',
-  'side_brush': 'SideBrush',
-  'filter': 'DustCaseHeap'
-};
-VacBotCommand.CLEAN_ACTION = {
-  'start': 's',
-  'pause': 'p',
-  'resume': 'r',
-  'stop': 'h'
-};
-
 class Clean extends VacBotCommand {
   constructor(mode = "auto", speed = "normal", iotmq = false, action = 'start') {
     if (arguments.length < 5) {
       // Looks like action is needed for some bots, shouldn't affect older models
       super('Clean', {
         'clean': {
-          'type': VacBotCommand.CLEAN_MODE[mode],
-          'speed': ecovacs_fan_speed(speed),
-          'act': VacBotCommand.CLEAN_ACTION[action]
+          'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
+          'speed': constants.ecovacs_fan_speed(speed),
+          'act': constants.CLEAN_ACTION_TO_ECOVACS[action]
         }
       })
     } else {
       let initCmd = {
-        'type': VacBotCommand.CLEAN_MODE[mode],
-        'speed': ecovacs_fan_speed(speed)
+        'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
+        'speed': constants.ecovacs_fan_speed(speed)
       };
       for (let key in arguments) {
         if (arguments.hasOwnProperty(key)) {
@@ -669,7 +640,7 @@ class Charge extends VacBotCommand {
   constructor() {
     super("Charge", {
       'charge': {
-        'type': VacBotCommand.CHARGE_MODE['return']
+        'type': constants.CHARGE_MODE_TO_ECOVACS['return']
       }
     });
   }
@@ -702,7 +673,7 @@ class GetBatteryState extends VacBotCommand {
 class GetLifeSpan extends VacBotCommand {
   constructor(component) {
     super("GetLifeSpan", {
-      'type': VacBotCommand.COMPONENT[component]
+      'type': constants.COMPONENT_TO_ECOVACS[component]
     });
   }
 }
@@ -730,16 +701,6 @@ envLog = function () {
     console.log.apply(this, arguments);
   }
 };
-
-function ecovacs_fan_speed(speed) {
-  if (speed === 'normal' || speed === VacBotCommand.FAN_SPEED['normal']) {
-    return VacBotCommand.FAN_SPEED['normal'];
-  } else if (speed === 'high' || speed === VacBotCommand.FAN_SPEED['high']) {
-    return VacBotCommand.FAN_SPEED['high'];
-  } else {
-    throw Error("Fan speed not found - {}".format(speed));
-  }
-}
 
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.VacBot = VacBot;
