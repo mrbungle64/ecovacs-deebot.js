@@ -2,8 +2,9 @@ const https = require('https'),
   URL = require('url').URL,
   crypto = require('crypto'),
   fs = require('fs'),
-  Element = require('ltx').Element,
+  vacBotCommand = require('./library/vacBotCommand.js'),
   constants = require('./library/ecovacsConstants.js'),
+  tools = require('./library/tools.js'),
   countries = require('./countries.js');
 
 String.prototype.format = function () {
@@ -18,7 +19,7 @@ String.prototype.format = function () {
 
 class EcovacsAPI {
   constructor(device_id, country, continent) {
-    envLog("[EcovacsAPI] Setting up EcovacsAPI");
+    tools.envLog("[EcovacsAPI] Setting up EcovacsAPI");
 
     if (!device_id) {
       throw "No Device ID provided";
@@ -62,18 +63,18 @@ class EcovacsAPI {
           this.__call_login_by_it_token().then((login) => {
             this.user_access_token = login['token'];
             this.uid = login['userId'];
-            envLog("[EcovacsAPI] EcovacsAPI connection complete");
+            tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
             resolve("ready");
           }).catch((e) => {
-            envLog("[EcovacsAPI]", e);
+            tools.envLog("[EcovacsAPI]", e);
             reject(e);
           });
         }).catch((e) => {
-          envLog("[EcovacsAPI]", e);
+          tools.envLog("[EcovacsAPI]", e);
           reject(e);
         });
       }).catch((e) => {
-        envLog("[EcovacsAPI]", e);
+        tools.envLog("[EcovacsAPI]", e);
         reject(e);
       });
     });
@@ -108,7 +109,7 @@ class EcovacsAPI {
 
   __call_main_api(func, args) {
     return new Promise((resolve, reject) => {
-      envLog("[EcovacsAPI] calling main api %s with %s", func, JSON.stringify(args));
+      tools.envLog("[EcovacsAPI] calling main api %s with %s", func, JSON.stringify(args));
       let params = {};
       for (var key in args) {
         if (args.hasOwnProperty(key)) {
@@ -119,7 +120,7 @@ class EcovacsAPI {
       let url = (EcovacsAPI.MAIN_URL_FORMAT + "/" + func).format(this.meta);
       url = new URL(url);
       url.search = this.__sign(params).join('&');
-      envLog(`[EcoVacsAPI] Calling ${url.href}`);
+      tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
       https.get(url.href, (res) => {
         const {
@@ -146,14 +147,14 @@ class EcovacsAPI {
         res.on('end', () => {
           try {
             const json = JSON.parse(rawData);
-            envLog("[EcovacsAPI] got %s", JSON.stringify(json));
+            tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
             if (json.code === '0000') {
               resolve(json.data);
             } else if (json.code === '1005') {
-              envLog("[EcovacsAPI] incorrect email or password");
+              tools.envLog("[EcovacsAPI] incorrect email or password");
               throw new Error("incorrect email or password");
             } else {
-              envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
+              tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
               throw new Error("failure code {msg} ({code}) for call {func} and parameters {param}".format({
                 msg: json['msg'],
                 code: json['code'],
@@ -175,7 +176,7 @@ class EcovacsAPI {
 
   __call_portal_api(api, func, args) {
     return new Promise((resolve, reject) => {
-      envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
+      tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
       let params;
       if (api === EcovacsAPI.USERSAPI) {
         params = Object.assign({
@@ -193,7 +194,7 @@ class EcovacsAPI {
         continent: continent
       });
       url = new URL(url);
-      envLog(`[EcoVacsAPI] Calling ${url.href}`);
+      tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
       const reqOptions = {
         hostname: url.hostname,
@@ -205,7 +206,7 @@ class EcovacsAPI {
           'Content-Length': Buffer.byteLength(JSON.stringify(params))
         }
       };
-      envLog("[EcovacsAPI] Sending POST to", JSON.stringify(reqOptions));
+      tools.envLog("[EcovacsAPI] Sending POST to", JSON.stringify(reqOptions));
 
       const req = https.request(reqOptions, (res) => {
         res.setEncoding('utf8');
@@ -216,11 +217,11 @@ class EcovacsAPI {
         res.on('end', () => {
           try {
             const json = JSON.parse(rawData);
-            envLog("[EcovacsAPI] got %s", JSON.stringify(json));
+            tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
             if (json['result'] === 'ok') {
               resolve(json);
             } else {
-              envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
+              tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
               throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
                 errno: json['errno'],
                 error: json['error'],
@@ -241,7 +242,7 @@ class EcovacsAPI {
       });
 
       // write data to request body
-      envLog("[EcovacsAPI] Sending", JSON.stringify(params));
+      tools.envLog("[EcovacsAPI] Sending", JSON.stringify(params));
       req.write(JSON.stringify(params));
       req.end();
     });
@@ -355,7 +356,7 @@ class VacBot {
     }
 
     this.ecovacsClient.on("ready", () => {
-      envLog("[VacBot] Ready event!");
+      tools.envLog("[VacBot] Ready event!");
     });
   }
 
@@ -400,14 +401,14 @@ class VacBot {
       }
       this.fan_speed = fan;
       this.statusEvents.notify(self.vacuum_status);
-      envLog("[VacBot] *** clean_status = " + this.clean_status);
+      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
     }
   }
 
   _handle_battery_info(iq) {
     try {
       this.battery_status = parseFloat(iq.attrs['power']) / 100;
-      envLog("[VacBot] *** battery_status = %d\%", this.battery_status * 100);
+      tools.envLog("[VacBot] *** battery_status = %d\%", this.battery_status * 100);
     } catch (e) {
       console.error("[VacBot] couldn't parse battery status ", iq);
     }
@@ -436,7 +437,7 @@ class VacBot {
           break;
       }
 
-      envLog("[VacBot] *** charge_status = " + this.charge_status)
+      tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
     } catch (e) {
       console.error("[VacBot] couldn't parse charge status ", iq);
     }
@@ -459,7 +460,7 @@ class VacBot {
   }
 
   send_command(action) {
-    envLog("[VacBot] Sending command `%s`", action.name);
+    tools.envLog("[VacBot] Sending command `%s`", action.name);
     if (!this.vacuum['iotmq']) {
       this.ecovacsClient.send_command(action.to_xml(), this._vacuum_address());
     } else {
@@ -490,48 +491,48 @@ class VacBot {
       case "clean":
         args = Array.prototype.slice.call(arguments, 1);
         if (args.length === 0) {
-          this.send_command(new Clean());
+          this.send_command(new vacBotCommand.Clean());
         } else if (args.length === 1) {
-          this.send_command(new Clean(args[0]));
+          this.send_command(new vacBotCommand.Clean(args[0]));
         } else {
-          this.send_command(new Clean(args[0], args[1]));
+          this.send_command(new vacBotCommand.Clean(args[0], args[1]));
         }
         break;
       case "Edge":
       case "edge":
-        this.send_command(new Edge());
+        this.send_command(new vacBotCommand.Edge());
         break;
       case "Spot":
       case "spot":
-        this.send_command(new Spot());
+        this.send_command(new vacBotCommand.Spot());
         break;
       case "Stop":
       case "stop":
-        this.send_command(new Stop());
+        this.send_command(new vacBotCommand.Stop());
         break;
       case "Charge":
       case "charge":
-        this.send_command(new Charge());
+        this.send_command(new vacBotCommand.Charge());
         break;
       case "GetDeviceInfo":
       case "getdeviceinfo":
       case "deviceinfo":
-        this.send_command(new GetDeviceInfo());
+        this.send_command(new vacBotCommand.GetDeviceInfo());
         break;
       case "GetCleanState":
       case "getcleanstate":
       case "cleanstate":
-        this.send_command(new GetCleanState());
+        this.send_command(new vacBotCommand.GetCleanState());
         break;
       case "GetChargeState":
       case "getchargestate":
       case "chargestate":
-        this.send_command(new GetChargeState());
+        this.send_command(new vacBotCommand.GetChargeState());
         break;
       case "GetBatteryState":
       case "getbatterystate":
       case "batterystate":
-        this.send_command(new GetBatteryState());
+        this.send_command(new vacBotCommand.GetBatteryState());
         break;
       case "GetLifeSpan":
       case "getlifespan":
@@ -540,7 +541,7 @@ class VacBot {
         if (args.length < 1) {
           return;
         }
-        this.send_command(new GetLifeSpan(args[0]));
+        this.send_command(new vacBotCommand.GetLifeSpan(args[0]));
         break;
       case "SetTime":
       case "settime":
@@ -549,171 +550,12 @@ class VacBot {
         if (args.length < 2) {
           return;
         }
-        this.send_command(new SetTime(args[0], args[1]));
+        this.send_command(new vacBotCommand.SetTime(args[0], args[1]));
         break;
     }
   }
 }
 
-class VacBotCommand {
-  constructor(name, args = null) {
-    if (args == null) {
-      args = {}
-    }
-    this.name = name;
-    this.args = args;
-  }
-
-  to_xml() {
-    let ctl = new Element('ctl', {
-      td: this.name
-    });
-    for (let key in this.args) {
-      if (this.args.hasOwnProperty(key)) {
-        let value = this.args[key];
-        if (isObject(value)) {
-          ctl.c(key, value);
-        } else {
-          ctl.attr(key, value);
-        }
-      }
-    }
-    return ctl;
-  }
-
-  toString() {
-    return this.command_name() + " command";
-  }
-
-  command_name() {
-    return this.name.toLowerCase();
-  }
-}
-
-class Clean extends VacBotCommand {
-  constructor(mode = "auto", speed = "normal", iotmq = false, action = 'start') {
-    if (arguments.length < 5) {
-      // Looks like action is needed for some bots, shouldn't affect older models
-      super('Clean', {
-        'clean': {
-          'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
-          'speed': constants.ecovacs_fan_speed(speed),
-          'act': constants.CLEAN_ACTION_TO_ECOVACS[action]
-        }
-      })
-    } else {
-      let initCmd = {
-        'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
-        'speed': constants.ecovacs_fan_speed(speed)
-      };
-      for (let key in arguments) {
-        if (arguments.hasOwnProperty(key)) {
-          initCmd[key] = arguments[key];
-        }
-      }
-      super('Clean', {
-        'clean': initCmd
-      })
-    }
-  }
-}
-
-class Edge extends Clean {
-  constructor() {
-    super('edge', 'high')
-  }
-}
-
-class Spot extends Clean {
-  constructor() {
-    super('spot', 'high')
-  }
-}
-
-class Stop extends Clean {
-  constructor() {
-    super('stop', 'normal')
-  }
-}
-
-class Charge extends VacBotCommand {
-  constructor() {
-    super("Charge", {
-      'charge': {
-        'type': constants.CHARGE_MODE_TO_ECOVACS['return']
-      }
-    });
-  }
-}
-
-class GetDeviceInfo extends VacBotCommand {
-  constructor() {
-    super("GetDeviceInfo");
-  }
-}
-
-class GetCleanState extends VacBotCommand {
-  constructor() {
-    super("GetCleanState");
-  }
-}
-
-class GetChargeState extends VacBotCommand {
-  constructor() {
-    super("GetChargeState");
-  }
-}
-
-class GetBatteryState extends VacBotCommand {
-  constructor() {
-    super("GetBatteryInfo");
-  }
-}
-
-class GetLifeSpan extends VacBotCommand {
-  constructor(component) {
-    super("GetLifeSpan", {
-      'type': constants.COMPONENT_TO_ECOVACS[component]
-    });
-  }
-}
-
-class SetTime extends VacBotCommand {
-  constructor(timestamp, timezone) {
-    super("SetTime", {
-      'time': {
-        't': timestamp,
-        'tz': timezone
-      }
-    });
-  }
-}
-
-function isObject(val) {
-  if (val === null) {
-    return false;
-  }
-  return ((typeof val === 'function') || (typeof val === 'object'));
-}
-
-envLog = function () {
-  if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev") {
-    console.log.apply(this, arguments);
-  }
-};
-
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.VacBot = VacBot;
-module.exports.Clean = Clean;
-module.exports.Edge = Edge;
-module.exports.Spot = Spot;
-module.exports.Stop = Stop;
-module.exports.Charge = Charge;
-module.exports.GetDeviceInfo = GetDeviceInfo;
-module.exports.GetCleanState = GetCleanState;
-module.exports.GetChargeState = GetChargeState;
-module.exports.GetBatteryState = GetBatteryState;
-module.exports.GetLifeSpan = GetLifeSpan;
-module.exports.SetTime = SetTime;
-module.exports.isObject = isObject;
 module.exports.countries = countries;

@@ -1,5 +1,15 @@
 const EventEmitter = require('events');
 
+String.prototype.format = function () {
+    if (arguments.length === 0) {
+        return this;
+    }
+    var args = arguments['0'];
+    return this.replace(/{(\w+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined' ? args[number] : match;
+    });
+};
+
 class EcovacsIOTMQ extends EventEmitter {
     constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
         super();
