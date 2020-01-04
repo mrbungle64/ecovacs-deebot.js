@@ -68,13 +68,6 @@ class EcovacsXMPP extends EventEmitter {
                                     type: type,
                                     act: act
                                 });
-                                this.emit("stanza", {
-                                    type: command,
-                                    value: {
-                                        type: type,
-                                        act: act
-                                    }
-                                });
                                 break;
                             case "DeviceInfo":
                                 envLog("[EcovacsXMPP] Received an DeviceInfo Stanza");
@@ -82,26 +75,14 @@ class EcovacsXMPP extends EventEmitter {
                             case "ChargeState":
                                 this.bot._handle_charge_state(secondChild.children[0]);
                                 this.emit(command, this.bot.charge_status);
-                                this.emit("stanza", {
-                                    type: command,
-                                    value: this.bot.charge_status
-                                });
                                 break;
                             case "BatteryInfo":
                                 this.bot._handle_battery_info(secondChild.children[0]);
                                 this.emit(command, this.bot.battery_status);
-                                this.emit("stanza", {
-                                    type: command,
-                                    value: this.bot.battery_status
-                                });
                                 break;
                             case "CleanReport":
                                 this.bot._handle_clean_report(secondChild.children[0]);
                                 this.emit(command, this.bot.clean_status);
-                                this.emit("stanza", {
-                                    type: command,
-                                    value: this.bot.clean_status
-                                });
                                 break;
                             case "WKVer":
                                 envLog("[EcovacsXMPP] Received an WKVer Stanza");
@@ -109,6 +90,8 @@ class EcovacsXMPP extends EventEmitter {
                             case "Error":
                             case "error":
                                 envLog("[EcovacsXMPP] Received an error for action '%s': %s", secondChild.attrs.action, secondChild.attrs.error);
+                                this.bot._handle_error(secondChild.attrs.error);
+                                this.emit(command, this.bot.error_event);
                                 break;
                             case "OnOff":
                                 envLog("[EcovacsXMPP] Received an OnOff Stanza");
