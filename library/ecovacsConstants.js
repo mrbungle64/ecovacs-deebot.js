@@ -91,7 +91,7 @@ function ecovacs_fan_speed(speed) {
     } else if (speed === 'high' || speed === FAN_SPEED_TO_ECOVACS['high']) {
         return FAN_SPEED_TO_ECOVACS['high'];
     } else {
-        throw Error("Fan speed not found - {}".format(speed));
+        throw Error("Fan speed not found: {}".format(speed));
     }
 }
 

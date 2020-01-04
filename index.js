@@ -3,7 +3,7 @@ const https = require('https'),
   crypto = require('crypto'),
   fs = require('fs'),
   Element = require('ltx').Element,
-  constants = require('./library/ecocavsConstants.js'),
+  constants = require('./library/ecovacsConstants.js'),
   countries = require('./countries.js');
 
 String.prototype.format = function () {
