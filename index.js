@@ -177,21 +177,17 @@ class EcovacsAPI {
   __call_portal_api(api, func, args) {
     return new Promise((resolve, reject) => {
       tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
-      let params;
-      if (api === EcovacsAPI.USERSAPI) {
-        params = Object.assign({
-          'todo': func
-        }, args);
-      } else {
-        params = Object.assign({}, args);
+      let params = {
+        'todo': func
+      };
+      for (let key in args) {
+        if (args.hasOwnProperty(key)) {
+          params[key] = args[key];
+        }
       }
 
-      let continent = this.continent;
-      if ('continent' in arguments) {
-        continent = arguments['continent'];
-      }
       let url = (EcovacsAPI.PORTAL_URL_FORMAT + "/" + api).format({
-        continent: continent
+        continent: this.continent
       });
       url = new URL(url);
       tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
@@ -553,6 +549,10 @@ class VacBot {
         this.send_command(new vacBotCommand.SetTime(args[0], args[1]));
         break;
     }
+  }
+
+  disconnect() {
+    this.ecovacsClient.disconnect();
   }
 }
 

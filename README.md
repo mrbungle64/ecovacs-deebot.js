@@ -1,7 +1,7 @@
 ecovacs-deebot.js
 ========
 
-`**Work in progress!**`
+**Work in progress! The code does not work yet!**
 
 A like for like JavaScript port based on [sucks.js](https://github.com/joostth/sucks.js) of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
 to drive an Ecovacs Deebot (Ozmo) robot vacuum.
