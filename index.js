@@ -332,6 +332,7 @@ EcovacsAPI.REALM = 'ecouser.net';
 class VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     this.vacuum = vacuum;
+    this.vacuum_status = null;
     this.clean_status = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -380,9 +381,10 @@ class VacBot {
         }
       }
     } catch (e) {
-
+      console.error("[VacBot] Unknown cleaning status: ", event);
     }
     this.clean_status = type;
+    tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
     this.vacuum_status = type;
 
     let fan = null;
@@ -396,8 +398,6 @@ class VacBot {
         console.error("[VacBot] Unknown fan speed: ", fan);
       }
       this.fan_speed = fan;
-      this.statusEvents.notify(self.vacuum_status);
-      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
     }
   }
 

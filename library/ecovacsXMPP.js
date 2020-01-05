@@ -83,6 +83,7 @@ class EcovacsXMPP extends EventEmitter {
                             case "CleanReport":
                                 this.bot._handle_clean_report(secondChild.children[0]);
                                 this.emit(command, this.bot.clean_status);
+                                this.emit('FanSpeed', this.bot.fan_speed);
                                 break;
                             case "WKVer":
                                 envLog("[EcovacsXMPP] Received an WKVer Stanza");
