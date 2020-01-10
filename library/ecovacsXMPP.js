@@ -102,6 +102,8 @@ class EcovacsXMPP extends EventEmitter {
                                 break;
                             case "LifeSpan":
                                 envLog("[EcovacsXMPP] Received an LifeSpan Stanza");
+                                this.bot._handle_life_span(secondChild.children[0]);
+                                this.emit(command, this.bot.components.toString());
                                 break;
                             default:
                                 envLog("[EcovacsXMPP] Unknown response type received");

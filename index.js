@@ -336,6 +336,7 @@ class VacBot {
     this.clean_status = null;
     this.charge_status = null;
     this.battery_status = null;
+    this.components = [];
     this.ping_interval = null;
     this.error_event = null;
     // Set none for clients to start
@@ -368,10 +369,30 @@ class VacBot {
     this.ecovacsClient.on(name, func);
   }
 
+  _handle_life_span(event) {
+    let type = event.attrs['type'];
+    try {
+      type = constants.COMPONENT_FROM_ECOVACS[type];
+    } catch (e) {
+      console.error("[VacBot] Unknown component type: ", event);
+    }
+
+    if ('val' in event) {
+      lifespan = parseInt(event['val']) / 100;
+    } else {
+      lifespan = parseInt(event['left']) / 60; // This works for a D901
+    }
+    this.components[type] = lifespan;
+    lifespan_event = {
+      'type': type,
+      'lifespan': lifespan
+    };
+  }
+
   _handle_clean_report(event) {
     let type = event.attrs['type'];
     try {
-      type = constants.CLEAN_MODE_TO_ECOVACS[type];
+      type = constants.CLEAN_MODE_FROM_ECOVACS[type];
       if (this.vacuum['iotmq']) {
         // Was able to parse additional status from the IOTMQ, may apply to XMPP too
         let statustype = event['st'];
