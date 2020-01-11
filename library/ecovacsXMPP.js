@@ -1,4 +1,6 @@
 const EventEmitter = require('events');
+const tools = require('./tools');
+const Element = require('ltx').Element;
 
 String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -40,111 +42,108 @@ class EcovacsXMPP extends EventEmitter {
         }
 
         this.simpleXmpp.on('online', (event) => {
+            tools.envLog('[EcovacsXMPP] Session start');
             this.session_start(event);
+            this.emit('online', '[simpleXmpp] online');
         });
 
         this.simpleXmpp.on('close', () => {
-            envLog('[EcovacsXMPP] I\'m disconnected :(');
+            tools.envLog('[EcovacsXMPP] I\'m disconnected :(');
             this.emit("closed");
         });
 
-        this.simpleXmpp.on('chat', (from, message) => {
-            envLog('[EcovacsXMPP] Chat from %s: %s', from, message);
-        });
-
         this.simpleXmpp.on('stanza', (stanza) => {
-            let firstChild = stanza.children[0];
-            if (firstChild) {
+            tools.envLog('[EcoVacsXMPP] Received stanza XML:', stanza.toString());
+            if (stanza.name === "iq" && (stanza.attrs.type === "set" || stanza.attrs.type === "result") && !!stanza.children[0] && stanza.children[0].name === "query" && !!stanza.children[0].children[0]) {
+                let firstChild = stanza.children[0];
+                tools.envLog('[simpleXmpp] firstChild:', firstChild.toString());
                 let secondChild = firstChild.children[0];
-                if (secondChild) {
-                    if (stanza.name === "iq" && stanza.attrs.type === "set" && firstChild.name === "query") {
-                        let command = secondChild.attrs.td;
-                        envLog('[EcovacsXMPP] Response for %s:, %s', command, JSON.stringify(secondChild));
-                        switch (command) {
-                            case "PushRobotNotify":
-                                let type = secondChild.attrs['type'];
-                                let act = secondChild.attrs['act'];
-                                this.emit(command, {
-                                    type: type,
-                                    act: act
-                                });
-                                break;
-                            case "DeviceInfo":
-                                envLog("[EcovacsXMPP] Received an DeviceInfo Stanza");
-                                break;
-                            case "ChargeState":
-                                this.bot._handle_charge_state(secondChild.children[0]);
-                                this.emit(command, this.bot.charge_status);
-                                break;
-                            case "BatteryInfo":
-                                this.bot._handle_battery_info(secondChild.children[0]);
-                                this.emit(command, this.bot.battery_status);
-                                break;
-                            case "CleanReport":
-                                this.bot._handle_clean_report(secondChild.children[0]);
-                                this.emit(command, this.bot.clean_status);
-                                this.emit('FanSpeed', this.bot.fan_speed);
-                                break;
-                            case "WKVer":
-                                envLog("[EcovacsXMPP] Received an WKVer Stanza");
-                                break;
-                            case "Error":
-                            case "error":
-                                envLog("[EcovacsXMPP] Received an error for action '%s': %s", secondChild.attrs.action, secondChild.attrs.error);
-                                this.bot._handle_error(secondChild.attrs.error);
-                                this.emit(command, this.bot.error_event);
-                                break;
-                            case "OnOff":
-                                envLog("[EcovacsXMPP] Received an OnOff Stanza");
-                                break;
-                            case "Sched":
-                                envLog("[EcovacsXMPP] Received an Sched Stanza");
-                                break;
-                            case "LifeSpan":
-                                envLog("[EcovacsXMPP] Received an LifeSpan Stanza");
-                                this.bot._handle_life_span(secondChild.children[0]);
-                                this.emit(command, this.bot.components.toString());
-                                break;
-                            default:
-                                envLog("[EcovacsXMPP] Unknown response type received");
-                                break;
-                        }
-                    } else if (stanza.name === "iq" && stanza.attrs.type === "error" && firstChild.name === "error") {
-                        envLog('[EcovacsXMPP] Response Error for request %s', stanza.attrs.id);
-                        switch (firstChild.attrs.code) {
-                            case "404":
-                                console.error("[EcovacsXMPP] Couldn't reach the vac :[%s] %s", firstChild.attrs.code, secondChild.name);
-                                break;
-                            default:
-                                console.error("[EcovacsXMPP] Unknown error received: %s", JSON.stringify(firstChild));
-                                break;
-                        }
-                    }
+                tools.envLog('[simpleXmpp] secondChild:', secondChild.toString());
+                let command = secondChild.attrs.td;
+                tools.envLog('[simpleXmpp] Response for %s:, %s', command, JSON.stringify(secondChild));
+                switch (command) {
+                    case "PushRobotNotify":
+                        let type = secondChild.attrs['type'];
+                        let act = secondChild.attrs['act'];
+                        this.emit(command, {
+                            type: type,
+                            act: act
+                        });
+                        break;
+                    case "DeviceInfo":
+                        tools.envLog("[EcovacsXMPP] Received an DeviceInfo Stanza");
+                        break;
+                    case "ChargeState":
+                        this.bot._handle_charge_state(secondChild.children[0]);
+                        this.emit(command, this.bot.charge_status);
+                        break;
+                    case "BatteryInfo":
+                        this.bot._handle_battery_info(secondChild.children[0]);
+                        this.emit(command, this.bot.battery_status);
+                        break;
+                    case "CleanReport":
+                        this.bot._handle_clean_report(secondChild.children[0]);
+                        this.emit(command, this.bot.clean_status);
+                        this.emit('FanSpeed', this.bot.fan_speed);
+                        break;
+                    case "WKVer":
+                        tools.envLog("[EcovacsXMPP] Received an WKVer Stanza");
+                        break;
+                    case "Error":
+                    case "error":
+                        tools.envLog("[EcovacsXMPP] Received an error for action '%s': %s", secondChild.attrs.action, secondChild.attrs.error);
+                        this.bot._handle_error(secondChild.attrs.error);
+                        this.emit(command, this.bot.error_event);
+                        break;
+                    case "OnOff":
+                        tools.envLog("[EcovacsXMPP] Received an OnOff Stanza");
+                        break;
+                    case "Sched":
+                        tools.envLog("[EcovacsXMPP] Received an Sched Stanza");
+                        break;
+                    case "LifeSpan":
+                        tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza");
+                        this.bot._handle_life_span(secondChild.children[0]);
+                        this.emit(command, this.bot.components.toString());
+                        break;
+                    default:
+                        tools.envLog("[EcovacsXMPP] Unknown response type received");
+                        break;
+                }
+            } else if (stanza.name === "iq" && stanza.attrs.type === "error" && !!stanza.children[0] && stanza.children[0].name === "error" && !!stanza.children[0].children[0]) {
+                tools.envLog('[EcovacsXMPP] Response Error for request %s', stanza.attrs.id);
+                switch (firstChild.attrs.code) {
+                    case "404":
+                        console.error("[EcovacsXMPP] Couldn't reach the vac :[%s] %s", firstChild.attrs.code, secondChild.name);
+                        break;
+                    default:
+                        console.error("[EcovacsXMPP] Unknown error received: %s", JSON.stringify(firstChild));
+                        break;
                 }
             }
         });
 
         this.simpleXmpp.on('error', (e) => {
-            envLog('[EcovacsXMPP] Error:', e);
+            tools.envLog('[EcovacsXMPP] Error:', e);
         });
     }
 
     session_start(event) {
-        envLog("[EcovacsXMPP] ----------------- starting session ----------------");
-        envLog("[EcovacsXMPP] event = {event}".format({
+        tools.envLog("[EcovacsXMPP] ----------------- starting session ----------------");
+        tools.envLog("[EcovacsXMPP] event = {event}".format({
             event: JSON.stringify(event)
         }));
         this.emit("ready", event);
     }
 
     subscribe_to_ctls(func) {
-        envLog("[EcovacsXMPP] Adding listener to ready event");
+        tools.envLog("[EcovacsXMPP] Adding listener to ready event");
         this.on("ready", func);
     }
 
     send_command(xml, recipient) {
         let c = this._wrap_command(xml, recipient);
-        envLog('[EcovacsXMPP] Sending xml:', c.toString());
+        tools.envLog('[EcovacsXMPP] Sending xml:', c.toString());
         this.simpleXmpp.conn.send(c);
     }
 
@@ -168,7 +167,7 @@ class EcovacsXMPP extends EventEmitter {
 
     send_ping(to) {
         let id = this.iter++;
-        envLog("[EcovacsXMPP] *** sending ping ***");
+        tools.envLog("[EcovacsXMPP] *** sending ping ***");
         var e = new Element('iq', {
             id: id,
             to: to,
@@ -178,12 +177,12 @@ class EcovacsXMPP extends EventEmitter {
         e.c('query', {
             xmlns: 'urn:xmpp:ping'
         });
-        envLog("[EcovacsXMPP] Sending ping XML:", e.toString());
+        tools.envLog("[EcovacsXMPP] Sending ping XML:", e.toString());
         this.simpleXmpp.conn.send(e);
     }
 
     connect_and_wait_until_ready() {
-        envLog("[EcovacsXMPP] Connecting as %s to %s", this.user + '@' + this.hostname, this.server_address + ":" + this.server_port);
+        tools.envLog("[EcovacsXMPP] Connecting as %s to %s", this.user + '@' + this.hostname, this.server_address + ":" + this.server_port);
         this.simpleXmpp.connect({
             jid: this.user + '@' + this.hostname,
             password: '0/' + this.resource + '/' + this.secret,

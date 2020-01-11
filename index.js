@@ -186,8 +186,20 @@ class EcovacsAPI {
         }
       }
 
+      let continent = this.continent;
+      tools.envLog(`[EcoVacsAPI] continent ${this.continent}`);
+      if (arguments.hasOwnProperty('continent')) {
+        continent = arguments.continent;
+      }
+      tools.envLog(`[EcoVacsAPI] continent ${continent}`);
+
+      let retryAttempts = 0;
+      if (arguments.hasOwnProperty('retryAttempts')) {
+        retryAttempts = arguments.retryAttempts + 1;
+      }
+
       let url = (EcovacsAPI.PORTAL_URL_FORMAT + "/" + api).format({
-        continent: this.continent
+        continent: continent
       });
       url = new URL(url);
       tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
@@ -214,16 +226,27 @@ class EcovacsAPI {
           try {
             const json = JSON.parse(rawData);
             tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
+            tools.envLog("[EcovacsAPI] result: %s", json['result']);
             if (json['result'] === 'ok') {
               resolve(json);
-            } else {
-              tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
-              throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
-                errno: json['errno'],
-                error: json['error'],
-                func: func,
-                params: JSON.stringify(args)
-              });
+            } else if (json['result'] === 'fail') {
+              // If it is a set token error try again
+              if (json['error'] === 'set token error.') {
+                if (retryAttempts <= 3) {
+                  tools.envLog("loginByItToken set token error, trying again (%s/3)", retryAttempts);
+                  return this.__call_portal_api(api, func, args, retryAttempts);
+                } else {
+                  tools.envLog("loginByItToken set token error, failed after %s attempts", retryAttempts);
+                }
+              } else {
+                tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
+                throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
+                  errno: json['errno'],
+                  error: json['error'],
+                  func: func,
+                  params: JSON.stringify(args)
+                });
+              }
             }
           } catch (e) {
             console.error("[EcovacsAPI] " + e.message);
@@ -341,32 +364,32 @@ class VacBot {
     this.error_event = null;
     // Set none for clients to start
     this.ecovacs = null;
-    this.ecovacsClient = null;
+    this.useMqtt = vacuum['iotmq'];
 
-    if (!vacuum['iotmq']) {
+    if (!this.useMqtt) {
+      tools.envLog("[VacBot] Using EcovacsXMPP");
       const EcovacsXMPP = require('./library/ecovacsXMPP.js');
       this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
-      this.ecovacsClient = this.ecovacs.simpleXmpp;
     } else {
+      tools.envLog("[VacBot] Using EcovacsIOTMQ");
       const EcovacsIOTMQ = require('./library/ecovacsIOTMQ.js');
       this.ecovacs = new EcovacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
-      this.ecovacsClient = this.ecovacs.mqtt;
     }
 
-    this.ecovacsClient.on("ready", () => {
+    this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
     });
   }
 
   connect_and_wait_until_ready() {
-    this.ecovacsClient.connect_and_wait_until_ready();
+    this.ecovacs.connect_and_wait_until_ready();
     this.ping_interval = setInterval(() => {
-      this.ecovacsClient.send_ping(this._vacuum_address());
+      this.ecovacs.send_ping(this._vacuum_address());
     }, 30000);
   }
 
   on(name, func) {
-    this.ecovacsClient.on(name, func);
+    this.ecovacs.on(name, func);
   }
 
   _handle_life_span(event) {
@@ -377,13 +400,15 @@ class VacBot {
       console.error("[VacBot] Unknown component type: ", event);
     }
 
-    if ('val' in event) {
+    let lifespan = null;
+    if (event.hasOwnProperty('val')) {
       lifespan = parseInt(event['val']) / 100;
-    } else {
+    } else if (event.hasOwnProperty('left')) {
       lifespan = parseInt(event['left']) / 60; // This works for a D901
     }
+
     this.components[type] = lifespan;
-    lifespan_event = {
+    let lifespan_event = {
       'type': type,
       'lifespan': lifespan
     };
@@ -393,7 +418,7 @@ class VacBot {
     let type = event.attrs['type'];
     try {
       type = constants.CLEAN_MODE_FROM_ECOVACS[type];
-      if (this.vacuum['iotmq']) {
+      if (this.useMqtt) {
         // Was able to parse additional status from the IOTMQ, may apply to XMPP too
         let statustype = event['st'];
         statustype = constants.CLEAN_ACTION_TO_ECOVACS[statustype];
@@ -409,7 +434,7 @@ class VacBot {
     this.vacuum_status = type;
 
     let fan = null;
-    if ("speed" in event) {
+    if (event.hasOwnProperty('speed')) {
       fan = event['speed'];
     }
     if (fan !== null) {
@@ -461,15 +486,15 @@ class VacBot {
   }
 
   _handle_error(event) {
-    if ('error' in event) {
+    if (event.hasOwnProperty('error')) {
       this.error_event = event['error'];
-    } else if ('errs' in event) {
+    } else if (event.hasOwnProperty('errs')) {
       this.error_event = event['errs'];
     }
   }
 
   _vacuum_address() {
-    if (!this.vacuum['iotmq']) {
+    if (!this.useMqtt) {
       return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
     } else {
       return this.vacuum['did'];
@@ -478,21 +503,21 @@ class VacBot {
 
   send_command(action) {
     tools.envLog("[VacBot] Sending command `%s`", action.name);
-    if (!this.vacuum['iotmq']) {
-      this.ecovacsClient.send_command(action.to_xml(), this._vacuum_address());
+    if (!this.useMqtt) {
+      this.ecovacs.send_command(action.to_xml(), this._vacuum_address());
     } else {
       // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
       // IOTMQ devices need the full action for additional parsing
-      this.ecovacsClient.send_command(action, this._vacuum_address());
+      this.ecovacs.send_command(action, this._vacuum_address());
     }
   }
 
   send_ping() {
     try {
-      if (!this.vacuum['iotmq']) {
-        this.ecovacsClient.send_ping(this._vacuum_address());
-      } else if (this.vacuum['iotmq']) {
-        if (!this.ecovacsClient.send_ping()) {
+      if (!this.useMqtt) {
+        this.ecovacs.send_ping(this._vacuum_address());
+      } else if (this.useMqtt) {
+        if (!this.ecovacs.send_ping()) {
           throw new Error("Ping did not reach VacBot");
         }
       }
@@ -573,7 +598,7 @@ class VacBot {
   }
 
   disconnect() {
-    this.ecovacsClient.disconnect();
+    this.ecovacs.disconnect();
   }
 }
 

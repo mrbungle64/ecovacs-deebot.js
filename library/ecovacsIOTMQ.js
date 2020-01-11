@@ -1,4 +1,6 @@
 const EventEmitter = require('events');
+const tools = require('./tools');
+const URL = require('url').URL;
 
 String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -14,21 +16,20 @@ class EcovacsIOTMQ extends EventEmitter {
     constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
         super();
         this.mqtt = require('mqtt');
+        this.client = null;
 
         this.bot = bot;
         this.user = user;
         this.hostname = hostname;
+        this.domain = this.hostname.split(".")[0]; // MQTT is using domain without tld extension
         this.resource = resource;
         this.secret = secret;
         this.continent = continent;
         this.vacuum = vacuum;
-
-        this.iter = 1;
+        this.clientId = this.user + '@' + this.domain + '/' + this.resource;
 
         if (!server_address) {
-            this.server_address = 'mq-{}.ecouser.net'.format({
-                continent: continent
-            });
+            this.server_address = 'mq-{continent}.ecouser.net'.format({continent:continent});
         } else {
             this.server_address = server_address;
         }
@@ -38,99 +39,68 @@ class EcovacsIOTMQ extends EventEmitter {
         } else {
             this.server_port = server_port;
         }
-
-        this.scheduler = sched.scheduler(time.time, time.sleep);
-        this.scheduler_thread = threading.scheduler_thread(self.scheduler.run, true, "mqtt_schedule_thread");
-
-        this._client_id = this.user + '@' + this.hostname.split(".")[0] + '/' + this.resource;
-        this.mqtt.password.set(this.user + '@' + this.domain, secret)
     }
 
     connect_and_wait_until_ready() {
-        envLog("[EcovacsIOTMQ] Connecting as %s to %s", this.user + '@' + this.hostname, this.server_address + ":" + this.server_port);
-        // TODO: This is pretty insecure and accepts any cert
-        this.ClientMQTT.connect(this.hostname, this.server_port, {
+        let options = {
+            clientId: this.clientId,
+            username: this.user + '@' + this.domain,
+            password: this.secret,
             rejectUnauthorized: false
-        });
+        };
+        let url = 'mqtts://' + this.server_address + ':' + this.server_port;
+        this.client = this.mqtt.connect(url, options);
+        tools.envLog("[EcovacsIOTMQ] Connecting as %s to %s", this.user + '@' + this.domain, url);
 
-        this.ClientMQTT.on('connect', () => {
-            client.subscribe('presence', function (err) {
+        let vacuum_did = this.vacuum['did'];
+        let vacuum_class = this.vacuum['class'];
+        let vacuum_resource = this.vacuum['resource'];
+        let client = this.client;
+
+        this.client.on('connect', function () {
+            tools.envLog('[EcovacsIOTMQ] connected');
+            client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', {qos: 0}, (err) => {
                 if (!err) {
-                    client.publish('presence', 'Hello mqtt')
+                    tools.envLog('[EcovacsIOTMQ] subscribe successful');
                 }
-            })
+                else {
+                    tools.envLog('[EcovacsIOTMQ] subscribe err: %s', err.toString());
+                }
+            });
+            client.handleMessage = (packet, done) => {
+                tools.envLog('[EcovacsIOTMQ] packet.payload: %s', packet.payload.toString());
+                done();
+            }
         });
-
-        this.ClientMQTT.on('message', (topic, message) => {
+        this.client.on('message', (topic, message) => {
             // message is Buffer
-            console.log(message.toString())
-            client.end()
+            tools.envLog('[EcovacsIOTMQ] message: %s', message.toString());
+            client.end();
         });
-
-        this.connect(this.hostname, this.port);
-        this.loop_start();
         this.wait_until_ready();
     }
 
     wait_until_ready() {
-        this.ready_flag.wait();
     }
 
     subscribe_to_ctls(self, func) {
-        this.ctl_subscribers.append(func)
     }
 
     _disconnect() {
         //disconnect mqtt connection
-        this.disconnect();
-        //Clear schedule queue
-        this.scheduler.empty();
+        this.client.disconnect();
     }
 
     _run_scheduled_func(self, timer_seconds, timer_func) {
-        timer_func();
-        this.schedule(timer_seconds, timer_func);
     }
 
     schedule(self, timer_seconds, timer_func) {
-        this.scheduler.enter(timer_seconds, 1, this._run_scheduled_func, (timer_seconds, timer_func));
-        if (!this.scheduler_thread.isAlive()) {
-            this.scheduler_thread.start();
-        }
     }
 
-    on_connect(client, userdata, flags, rc) {
-        if (rc !== 0) {
-            return;
-        }
-        this.subscribe('iot/atr/+/' + this.vacuum['did'] + '/' + this.vacuum['class'] + '/' + this.vacuum['resource'] + '/+', 0);
-        this.ready_flag.set();
-    }
-
-    send_ping() {
-        let rc = this._send_simple_command(MQTTPublish.paho.PINGREQ);
-        if (rc === MQTTPublish.paho.MQTT_ERR_SUCCESS) {
-            return true;
-        } else {
-            return false;
-        }
+    send_ping(to) {
     }
 
     send_command(action, recipient) {
-        // For handling Clean when action not specified (i.e. CLI)
-        if (action.name === "Clean" && !'act' in action.args['clean']) {
-            // Inject a start action
-            action.args['clean']['act'] = CLEAN_ACTION_TO_ECOVACS['start'];
-        }
-
-        let c;
-        if (action.is_td_command) {
-            c = this._wrap_td_command(action, recipient);
-        } else {
-            c = this._wrap_command(action, recipient);
-        }
-
-        this._handle_ctl_api(action, this.__call_ecovacs_device_api(c, action.api_base_url))
     }
 
     _wrap_command(self, cmd, recipient) {
@@ -201,22 +171,6 @@ class EcovacsIOTMQ extends EventEmitter {
     }
 
     _handle_ctl_api(self, action, message) {
-        let resp = null;
-        if (!message === {}) {
-            if ('resp' in message) {
-                resp = this._ctl_to_dict_api(action, message['resp']);
-            } else {
-                resp = {
-                    'event': action.name.replace("Get", "", 1).replace(/^_+|_+$/g, '').lower().replace('([A-Z]{1})', '_\1'),
-                    'data': message
-                };
-            }
-            if (resp != null) {
-                for (let s in this.ctl_subscribers) {
-                    s(resp);
-                }
-            }
-        }
     }
 
     _ctl_to_dict_api(self, action, xmlstring) {
@@ -257,13 +211,6 @@ class EcovacsIOTMQ extends EventEmitter {
     }
 
     _handle_ctl_mqtt(self, client, userdata, message) {
-        //_LOGGER.debug("EcoVacs MQTT Received Message on Topic: {} - Message: {}".format(message.topic, str(message.payload.decode("utf-8"))))
-        let as_dict = this._ctl_to_dict_mqtt(message.topic, str(message.payload.decode("utf-8")));
-        if (as_dict != null) {
-            for (let s in this.ctl_subscribers) {
-                s(as_dict);
-            }
-        }
     }
 
     _ctl_to_dict_mqtt(self, topic, xmlstring) {
