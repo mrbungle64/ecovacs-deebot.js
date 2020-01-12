@@ -12,7 +12,7 @@ String.prototype.format = function () {
     });
 };
 
-class EcovacsIOTMQ extends EventEmitter {
+class EcovacsMQTT extends EventEmitter {
     constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
         super();
         this.mqtt = require('mqtt');
@@ -20,16 +20,19 @@ class EcovacsIOTMQ extends EventEmitter {
 
         this.bot = bot;
         this.user = user;
+        this.username = this.user + '@' + this.domain;
+        this.clientId = this.username + '/' + this.resource;
         this.hostname = hostname;
         this.domain = this.hostname.split(".")[0]; // MQTT is using domain without tld extension
         this.resource = resource;
         this.secret = secret;
         this.continent = continent;
         this.vacuum = vacuum;
-        this.clientId = this.user + '@' + this.domain + '/' + this.resource;
 
         if (!server_address) {
-            this.server_address = 'mq-{continent}.ecouser.net'.format({continent:continent});
+            this.server_address = 'mq-{continent}.ecouser.net'.format({
+                continent: continent
+            });
         } else {
             this.server_address = server_address;
         }
@@ -44,13 +47,13 @@ class EcovacsIOTMQ extends EventEmitter {
     connect_and_wait_until_ready() {
         let options = {
             clientId: this.clientId,
-            username: this.user + '@' + this.domain,
+            username: this.username,
             password: this.secret,
             rejectUnauthorized: false
         };
         let url = 'mqtts://' + this.server_address + ':' + this.server_port;
         this.client = this.mqtt.connect(url, options);
-        tools.envLog("[EcovacsIOTMQ] Connecting as %s to %s", this.user + '@' + this.domain, url);
+        tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
 
         let vacuum_did = this.vacuum['did'];
         let vacuum_class = this.vacuum['class'];
@@ -58,50 +61,42 @@ class EcovacsIOTMQ extends EventEmitter {
         let client = this.client;
 
         this.client.on('connect', function () {
-            tools.envLog('[EcovacsIOTMQ] connected');
-            client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', {qos: 0}, (err) => {
+            tools.envLog('[EcovacsMQTT] connected');
+            client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', {
+                qos: 0
+            }, (err, granted) => {
                 if (!err) {
-                    tools.envLog('[EcovacsIOTMQ] subscribe successful');
-                }
-                else {
-                    tools.envLog('[EcovacsIOTMQ] subscribe err: %s', err.toString());
+                    tools.envLog('[EcovacsMQTT] subscribe successful');
+                } else {
+                    tools.envLog('[EcovacsMQTT] subscribe err: %s', err.toString());
                 }
             });
             client.handleMessage = (packet, done) => {
-                tools.envLog('[EcovacsIOTMQ] packet.payload: %s', packet.payload.toString());
+                tools.envLog('[EcovacsMQTT] packet.payload: %s', packet.payload.toString());
                 done();
             }
         });
         this.client.on('message', (topic, message) => {
             // message is Buffer
-            tools.envLog('[EcovacsIOTMQ] message: %s', message.toString());
+            tools.envLog('[EcovacsMQTT] message: %s', message.toString());
             client.end();
         });
-        this.wait_until_ready();
     }
 
-    wait_until_ready() {
-    }
-
-    subscribe_to_ctls(self, func) {
-    }
+    subscribe_to_ctls(self, func) {}
 
     _disconnect() {
         //disconnect mqtt connection
         this.client.disconnect();
     }
 
-    _run_scheduled_func(self, timer_seconds, timer_func) {
-    }
+    _run_scheduled_func(self, timer_seconds, timer_func) {}
 
-    schedule(self, timer_seconds, timer_func) {
-    }
+    schedule(self, timer_seconds, timer_func) {}
 
-    send_ping(to) {
-    }
+    send_ping(to) {}
 
-    send_command(action, recipient) {
-    }
+    send_command(action, recipient) {}
 
     _wrap_command(self, cmd, recipient) {
         // Remove the td from ctl xml for RestAPI
@@ -170,8 +165,7 @@ class EcovacsIOTMQ extends EventEmitter {
             return {};
     }
 
-    _handle_ctl_api(self, action, message) {
-    }
+    _handle_ctl_api(self, action, message) {}
 
     _ctl_to_dict_api(self, action, xmlstring) {
         let xml = ET.fromstring(xmlstring);
@@ -210,8 +204,7 @@ class EcovacsIOTMQ extends EventEmitter {
         }
     }
 
-    _handle_ctl_mqtt(self, client, userdata, message) {
-    }
+    _handle_ctl_mqtt(self, client, userdata, message) {}
 
     _ctl_to_dict_mqtt(self, topic, xmlstring) {
         //I haven't seen the need to fall back to data within the topic (like we do with IOT rest call actions), but it is here in case of future need
@@ -266,4 +259,4 @@ class EcovacsIOTMQ extends EventEmitter {
     }
 }
 
-module.exports = EcovacsIOTMQ;
+module.exports = EcovacsMQTT;

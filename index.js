@@ -364,7 +364,7 @@ class VacBot {
     this.error_event = null;
     // Set none for clients to start
     this.ecovacs = null;
-    this.useMqtt = vacuum['iotmq'];
+    this.useMqtt = true; //vacuum['iotmq'];
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -372,8 +372,8 @@ class VacBot {
       this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
     } else {
       tools.envLog("[VacBot] Using EcovacsIOTMQ");
-      const EcovacsIOTMQ = require('./library/ecovacsIOTMQ.js');
-      this.ecovacs = new EcovacsIOTMQ(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      const ecovacsMQTT = require('./library/ecovacsMQTT.js');
+      this.ecovacs = new ecovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address);
     }
 
     this.ecovacs.on("ready", () => {
