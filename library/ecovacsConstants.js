@@ -38,7 +38,7 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'auto': 'auto',
     'border': 'edge',
     'spot': 'spot',
-    'spot_area': 'spot_area',
+    'SpotArea': 'spot_area',
     'singleroom': 'single_room',
     'stop': 'stop',
     'going': 'returning'
@@ -84,15 +84,3 @@ exports.COMPONENT_FROM_ECOVACS = {
     'side_brush': 'side_brush',
     'dust_case_heap': 'filter'
 };
-
-function ecovacs_fan_speed(speed) {
-    if (speed === 'normal' || speed === FAN_SPEED_TO_ECOVACS['normal']) {
-        return FAN_SPEED_TO_ECOVACS['normal'];
-    } else if (speed === 'high' || speed === FAN_SPEED_TO_ECOVACS['high']) {
-        return FAN_SPEED_TO_ECOVACS['high'];
-    } else {
-        throw Error("Fan speed not found: {}".format(speed));
-    }
-}
-
-module.exports.ecovacs_fan_speed = ecovacs_fan_speed;

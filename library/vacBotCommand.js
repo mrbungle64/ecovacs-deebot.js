@@ -3,10 +3,7 @@ const tools = require('./tools.js'),
     constants = require('./ecovacsConstants.js');
 
 class VacBotCommand {
-    constructor(name, args = null) {
-        if (args === null) {
-            args = {}
-        }
+    constructor(name, args = {}) {
         this.name = name;
         this.args = args;
     }
@@ -38,48 +35,62 @@ class VacBotCommand {
 }
 
 class Clean extends VacBotCommand {
-    constructor(mode = "auto", speed = "normal", iotmq = false, action = 'start') {
-        if (arguments.length < 5) {
-            // Looks like action is needed for some bots, shouldn't affect older models
-            super('Clean', {
-                'clean': {
-                    'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
-                    'speed': constants.ecovacs_fan_speed(speed),
-                    'act': constants.CLEAN_ACTION_TO_ECOVACS[action]
-                }
-            })
-        } else {
-            let initCmd = {
-                'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
-                'speed': constants.ecovacs_fan_speed(speed)
-            };
-            for (let key in arguments) {
-                if (arguments.hasOwnProperty(key)) {
-                    initCmd[key] = arguments[key];
-                }
+    constructor(mode = "auto", action = 'start', speed = "normal", iotmq = false) {
+        let initCmd = {
+            'type': constants.CLEAN_MODE_TO_ECOVACS[mode],
+            'speed': constants.FAN_SPEED_TO_ECOVACS[speed],
+            'act': constants.CLEAN_ACTION_TO_ECOVACS[action]
+        };
+        for (let key in arguments) {
+            if (arguments.hasOwnProperty(key)) {
+                initCmd[key] = arguments[key];
             }
-            super('Clean', {
-                'clean': initCmd
-            })
         }
+        tools.envLog("initCmd %s", initCmd);
+        super('Clean', {
+            'clean': initCmd,
+            'id': getReqID()
+        })
     }
+}
+
+function getReqID(customid = "0") {
+    // Generate a somewhat random string for request id, with minium 8 chars. Works similar to ecovacs app
+    if (customid != "0") {
+        rtnval = customid; // return provided id as string
+    } else {
+        rtnval = Math.floor(Math.random() * 99999999) + 1;
+    }
+    return rtnval.toString(); // return as string
 }
 
 class Edge extends Clean {
     constructor() {
-        super('edge', 'high')
+        super('edge')
     }
 }
 
 class Spot extends Clean {
     constructor() {
-        super('spot', 'high')
+        super('spot')
+    }
+}
+
+class Pause extends Clean {
+    constructor() {
+        super('pause', 'pause')
     }
 }
 
 class Stop extends Clean {
     constructor() {
-        super('stop', 'normal')
+        super('stop', 'stop')
+    }
+}
+
+class SpotArea extends Clean {
+    constructor(action = "start", area = "", map_position = "", cleanings = 1) {
+        super("spot_area", constants.CLEAN_ACTION_TO_ECOVACS[action]);
     }
 }
 
@@ -88,7 +99,8 @@ class Charge extends VacBotCommand {
         super("Charge", {
             'charge': {
                 'type': constants.CHARGE_MODE_TO_ECOVACS['return']
-            }
+            },
+            'id': getReqID()
         });
     }
 }
@@ -136,11 +148,12 @@ class SetTime extends VacBotCommand {
     }
 }
 
-module.exports.VacBotCommand = VacBotCommand;
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
+module.exports.SpotArea = SpotArea;
 module.exports.Stop = Stop;
+module.exports.Pause = Pause;
 module.exports.Charge = Charge;
 module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;

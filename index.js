@@ -66,15 +66,15 @@ class EcovacsAPI {
             tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
             resolve("ready");
           }).catch((e) => {
-            tools.envLog("[EcovacsAPI]", e);
+            tools.envLog("[EcovacsAPI] %s calling __call_login_by_it_token()", e.message);
             reject(e);
           });
         }).catch((e) => {
-          tools.envLog("[EcovacsAPI]", e);
+          tools.envLog("[EcovacsAPI] %s calling __call_main_api('user/getAuthCode', {...})", e.message);
           reject(e);
         });
       }).catch((e) => {
-        tools.envLog("[EcovacsAPI]", e);
+        tools.envLog("[EcovacsAPI] %s calling __call_main_api('user/login', {...})", e.message);
         reject(e);
       });
     });
@@ -153,9 +153,11 @@ class EcovacsAPI {
             } else if (json.code === '1005') {
               tools.envLog("[EcovacsAPI] incorrect email or password");
               throw new Error("incorrect email or password");
+            } else if (json.code === '0002') {
+              throw new Error("Failure code 0002 Interface authentication failed (Maybe different userId than is passed in?)");
             } else {
               tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
-              throw new Error("failure code {msg} ({code}) for call {func} and parameters {param}".format({
+              throw new Error("Failure code {msg} ({code}) for call {func} and parameters {param}".format({
                 msg: json['msg'],
                 code: json['code'],
                 func: func,
@@ -359,12 +361,12 @@ class VacBot {
     this.clean_status = null;
     this.charge_status = null;
     this.battery_status = null;
+    this.lifeSpan_values = {};
     this.components = [];
     this.ping_interval = null;
     this.error_event = null;
-    // Set none for clients to start
     this.ecovacs = null;
-    this.useMqtt = true; //vacuum['iotmq'];
+    this.useMqtt = vacuum['iotmq'];
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -372,8 +374,8 @@ class VacBot {
       this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
     } else {
       tools.envLog("[VacBot] Using EcovacsIOTMQ");
-      const ecovacsMQTT = require('./library/ecovacsMQTT.js');
-      this.ecovacs = new ecovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      const EcovacsMQTT = require('./library/ecovacsMQTT.js');
+      this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address);
     }
 
     this.ecovacs.on("ready", () => {
@@ -408,23 +410,22 @@ class VacBot {
     }
 
     this.components[type] = lifespan;
-    let lifespan_event = {
+    let lifespan_values = {
       'type': type,
       'lifespan': lifespan
     };
+    this.lifeSpan_values = this.components;
+    tools.envLog("[VacBot] lifespan: ", components.toString());
   }
 
   _handle_clean_report(event) {
     let type = event.attrs['type'];
     try {
       type = constants.CLEAN_MODE_FROM_ECOVACS[type];
-      if (this.useMqtt) {
-        // Was able to parse additional status from the IOTMQ, may apply to XMPP too
-        let statustype = event['st'];
-        statustype = constants.CLEAN_ACTION_TO_ECOVACS[statustype];
-        if (statustype === 'stop' || statustype === 'pause') {
-          type = statustype
-        }
+      let statustype = event.attrs['st'];
+      statustype = constants.CLEAN_ACTION_FROM_ECOVACS[statustype];
+      if (statustype === 'stop' || statustype === 'pause') {
+        type = statustype
       }
     } catch (e) {
       console.error("[VacBot] Unknown cleaning status: ", event);
@@ -434,16 +435,18 @@ class VacBot {
     this.vacuum_status = type;
 
     let fan = null;
-    if (event.hasOwnProperty('speed')) {
-      fan = event['speed'];
+    if (event.attrs.hasOwnProperty('speed')) {
+      fan = event.attrs['speed'];
     }
+    tools.envLog("[VacBot] fan: ", fan);
     if (fan !== null) {
       try {
-        fan = constants.FAN_SPEED_TO_ECOVACS[fan];
+        fan = constants.FAN_SPEED_FROM_ECOVACS[fan];
       } catch (e) {
         console.error("[VacBot] Unknown fan speed: ", fan);
       }
       this.fan_speed = fan;
+      tools.envLog("[VacBot] fan speed: ", fan);
     }
   }
 
@@ -461,9 +464,7 @@ class VacBot {
       if (iq.name !== "charge") {
         throw "Not a charge state";
       }
-
       let report = iq.attrs['type'];
-
       switch (report.toLowerCase()) {
         case "going":
           this.charge_status = 'returning';
@@ -478,7 +479,6 @@ class VacBot {
           console.error("[VacBot] Unknown charging status '%s'", report);
           break;
       }
-
       tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
     } catch (e) {
       console.error("[VacBot] couldn't parse charge status ", iq);
@@ -527,17 +527,17 @@ class VacBot {
   }
 
   run(action) {
-    var args;
+    tools.envLog("action: %s", action);
+    tools.envLog("arguments[0]: %s", arguments[0]);
     switch (action) {
       case "Clean":
       case "clean":
-        args = Array.prototype.slice.call(arguments, 1);
-        if (args.length === 0) {
+        if (arguments.length <= 1) {
           this.send_command(new vacBotCommand.Clean());
-        } else if (args.length === 1) {
-          this.send_command(new vacBotCommand.Clean(args[0]));
+        } else if (arguments.length === 2) {
+          this.send_command(new vacBotCommand.Clean(arguments[1]));
         } else {
-          this.send_command(new vacBotCommand.Clean(args[0], args[1]));
+          this.send_command(new vacBotCommand.Clean(arguments[1], arguments[2]));
         }
         break;
       case "Edge":
@@ -548,9 +548,17 @@ class VacBot {
       case "spot":
         this.send_command(new vacBotCommand.Spot());
         break;
+      case "SpotArea":
+      case "spotArea":
+        this.send_command(new vacBotCommand.SpotArea());
+        break;
       case "Stop":
       case "stop":
         this.send_command(new vacBotCommand.Stop());
+        break;
+      case "Pause":
+      case "pause":
+        this.send_command(new vacBotCommand.Pause());
         break;
       case "Charge":
       case "charge":
@@ -579,20 +587,18 @@ class VacBot {
       case "GetLifeSpan":
       case "getlifespan":
       case "lifespan":
-        args = Array.prototype.slice.call(arguments, 1);
-        if (args.length < 1) {
+        if (arguments.length < 1) {
           return;
         }
-        this.send_command(new vacBotCommand.GetLifeSpan(args[0]));
+        this.send_command(new vacBotCommand.GetLifeSpan(arguments[0]));
         break;
       case "SetTime":
       case "settime":
       case "time":
-        args = Array.prototype.slice.call(arguments, 1);
-        if (args.length < 2) {
+        if (arguments.length < 2) {
           return;
         }
-        this.send_command(new vacBotCommand.SetTime(args[0], args[1]));
+        this.send_command(new vacBotCommand.SetTime(arguments[0], arguments[1]));
         break;
     }
   }
