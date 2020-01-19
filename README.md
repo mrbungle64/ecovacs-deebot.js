@@ -70,9 +70,9 @@ actions to it.
 
 There are shortcut functions available to run actions on your bot.
 ```javascript
-vacbot.run("Clean", [mode, [action]]);
-vacbot.run("SpotArea", [mode, [action], [area]]);
-vacbot.run("CustomArea", [mode, [action], [map_position], [count]]);
+vacbot.run("Clean", mode, action);
+vacbot.run("SpotArea", mode, action, area);
+vacbot.run("CustomArea", mode, action, map_position, cleanings);
 vacbot.run("Edge");
 vacbot.run("Spot");
 vacbot.run("Stop");
@@ -103,9 +103,9 @@ vacbot.run("PlaySound");
 
 ##### map_position
 * comma-separated list of exactly 4 position values for `x1,y1,x2,y2` (e.g. `-3975.000000,2280.000000,-1930.000000,4575.000000`)
-    * position `0.000000,0.000000,0.000000,0.000000` the position of the charging dock
+    * position `0.000000,0.000000,0.000000,0.000000` the position of the charging station
 
-##### count
+##### cleanings
 * `1`, `2`
 
 ## Example
@@ -177,7 +177,7 @@ function httpGetJson(url) {
 ```
 
 ### 0.1.2
-* (mrbungle64) Feature release (Alpha)
+* (mrbungle64) Feature release (alpha)
    * Implemented SpotArea command
    * Implemented CustomArea command
 
