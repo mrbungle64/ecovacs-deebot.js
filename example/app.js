@@ -46,11 +46,11 @@ httpGetJson('http://ipinfo.io/json').then((json) => {
       vacbot.on("ready", (event) => {
         console.log("Vacbot ready: %s", JSON.stringify(event.jid));
 
-        vacbot.run("batterystate");
-        vacbot.run("clean");
+        vacbot.run("BatteryState");
+        vacbot.run("Clean");
         setTimeout(() => {
-          vacbot.run("stop");
-          vacbot.run("charge");
+          vacbot.run("Stop");
+          vacbot.run("Charge");
         }, 60000);
 
         vacbot.on("BatteryInfo", (battery) => {

@@ -532,7 +532,6 @@ class VacBot {
 
   run(action) {
     tools.envLog("action: %s", action);
-    tools.envLog("arguments[0]: %s", arguments[0]);
     switch (action.toLowerCase()) {
       case "clean":
         if (arguments.length <= 1) {
@@ -550,7 +549,16 @@ class VacBot {
         this.send_command(new vacBotCommand.Spot());
         break;
       case "spotarea":
-        this.send_command(new vacBotCommand.SpotArea());
+        if (arguments.length < 3) {
+          return;
+        }
+        this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
+        break;
+      case "customarea":
+        if (arguments.length < 4) {
+          return;
+        }
+        this.send_command(new vacBotCommand.CustomArea(arguments[1], arguments[2], arguments[3]));
         break;
       case "stop":
         this.send_command(new vacBotCommand.Stop());
