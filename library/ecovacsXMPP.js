@@ -48,7 +48,6 @@ class EcovacsXMPP extends EventEmitter {
             this.bot.run('GetCleanState');
             this.bot.run('GetChargeState');
             this.bot.run('GetBatteryState');
-            this.bot.run('GetLifeSpan');
         });
 
         this.simpleXmpp.on('close', () => {
@@ -57,6 +56,7 @@ class EcovacsXMPP extends EventEmitter {
         });
 
         this.simpleXmpp.on('stanza', (stanza) => {
+            tools.envLog('stanza: %s',stanza.toString());
             if (stanza.name === "iq" && (stanza.attrs.type === "set" || stanza.attrs.type === "result") && !!stanza.children[0] && stanza.children[0].name === "query" && !!stanza.children[0].children[0]) {
                 let firstChild = stanza.children[0];
                 let secondChild = firstChild.children[0];

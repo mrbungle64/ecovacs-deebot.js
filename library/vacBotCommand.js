@@ -148,6 +148,32 @@ class SetTime extends VacBotCommand {
     }
 }
 
+class GetCleanSpeed extends VacBotCommand {
+    constructor(component) {
+        super("GetCleanSpeed");
+    }
+}
+
+class SetWaterLevel extends VacBotCommand {
+    constructor(level) {
+        super("SetWaterPermeability", {
+            'v': WATER_LEVEL_TO_ECOVACS[level]
+        });
+    }
+}
+
+class GetWaterLevel extends VacBotCommand {
+    constructor(level) {
+        super("GetWaterPermeability");
+    }
+}
+
+class PlaySound extends VacBotCommand {
+    constructor(sid = '0') {
+        super("PlaySound", {'sid': sid});
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -161,3 +187,7 @@ module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.SetTime = SetTime;
+module.exports.GetCleanSpeed = GetCleanSpeed;
+module.exports.GetWaterLevel = GetWaterLevel;
+module.exports.SetWaterLevel = SetWaterLevel;
+module.exports.PlaySound = PlaySound;

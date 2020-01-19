@@ -459,6 +459,10 @@ class VacBot {
     }
   }
 
+  _handle_water_level(iq) {
+
+  }
+
   _handle_charge_state(iq) {
     try {
       if (iq.name !== "charge") {
@@ -529,8 +533,7 @@ class VacBot {
   run(action) {
     tools.envLog("action: %s", action);
     tools.envLog("arguments[0]: %s", arguments[0]);
-    switch (action) {
-      case "Clean":
+    switch (action.toLowerCase()) {
       case "clean":
         if (arguments.length <= 1) {
           this.send_command(new vacBotCommand.Clean());
@@ -540,65 +543,64 @@ class VacBot {
           this.send_command(new vacBotCommand.Clean(arguments[1], arguments[2]));
         }
         break;
-      case "Edge":
       case "edge":
         this.send_command(new vacBotCommand.Edge());
         break;
-      case "Spot":
       case "spot":
         this.send_command(new vacBotCommand.Spot());
         break;
-      case "SpotArea":
-      case "spotArea":
+      case "spotarea":
         this.send_command(new vacBotCommand.SpotArea());
         break;
-      case "Stop":
       case "stop":
         this.send_command(new vacBotCommand.Stop());
         break;
-      case "Pause":
       case "pause":
         this.send_command(new vacBotCommand.Pause());
         break;
-      case "Charge":
       case "charge":
         this.send_command(new vacBotCommand.Charge());
         break;
-      case "GetDeviceInfo":
       case "getdeviceinfo":
       case "deviceinfo":
         this.send_command(new vacBotCommand.GetDeviceInfo());
         break;
-      case "GetCleanState":
       case "getcleanstate":
       case "cleanstate":
         this.send_command(new vacBotCommand.GetCleanState());
         break;
-      case "GetChargeState":
       case "getchargestate":
       case "chargestate":
         this.send_command(new vacBotCommand.GetChargeState());
         break;
-      case "GetBatteryState":
       case "getbatterystate":
       case "batterystate":
         this.send_command(new vacBotCommand.GetBatteryState());
         break;
-      case "GetLifeSpan":
       case "getlifespan":
       case "lifespan":
-        if (arguments.length < 1) {
-          return;
-        }
-        this.send_command(new vacBotCommand.GetLifeSpan(arguments[0]));
-        break;
-      case "SetTime":
-      case "settime":
-      case "time":
         if (arguments.length < 2) {
           return;
         }
-        this.send_command(new vacBotCommand.SetTime(arguments[0], arguments[1]));
+        this.send_command(new vacBotCommand.GetLifeSpan(arguments[1]));
+        break;
+      case "getwaterlevel":
+        this.send_command(new vacBotCommand.GetWaterLevel());
+        break;
+      case "playsound":
+        this.send_command(new vacBotCommand.PlaySound());
+        break;
+      case "settime":
+        if (arguments.length <= 3) {
+          return;
+        }
+        this.send_command(new vacBotCommand.SetTime(arguments[1], arguments[2]));
+        break;
+      case "setwaterlevel":
+        if (arguments.length < 2) {
+          return;
+        }
+        this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         break;
     }
   }
