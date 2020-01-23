@@ -154,7 +154,7 @@ class EcovacsAPI {
               tools.envLog("[EcovacsAPI] incorrect email or password");
               throw new Error("incorrect email or password");
             } else if (json.code === '0002') {
-              throw new Error("Failure code 0002 Interface authentication failed (Maybe different userId than is passed in?)");
+              throw new Error("Failure code 0002");
             } else {
               tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
               throw new Error("Failure code {msg} ({code}) for call {func} and parameters {param}".format({
@@ -359,6 +359,7 @@ class VacBot {
     this.vacuum = vacuum;
     this.vacuum_status = null;
     this.clean_status = null;
+    this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
     this.lifeSpan_values = {};
@@ -576,6 +577,10 @@ class VacBot {
       case "getcleanstate":
       case "cleanstate":
         this.send_command(new vacBotCommand.GetCleanState());
+        break;
+      case "getcleanspeed":
+      case "cleanspeed":
+        this.send_command(new vacBotCommand.GetCleanSpeed());
         break;
       case "getchargestate":
       case "chargestate":
