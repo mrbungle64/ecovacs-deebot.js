@@ -44,10 +44,6 @@ class EcovacsXMPP extends EventEmitter {
         this.simpleXmpp.on('online', (event) => {
             tools.envLog('[EcovacsXMPP] Session start');
             this.session_start(event);
-            this.emit('online', '[simpleXmpp] online');
-            this.bot.run('GetCleanState');
-            this.bot.run('GetChargeState');
-            this.bot.run('GetBatteryState');
         });
 
         this.simpleXmpp.on('close', () => {

@@ -19,12 +19,14 @@
     "url": "https://github.com/mrbungle64/ecovacs-deebot.js"
   },
   "dependencies": {
-    "simple-xmpp": "^1.3.0",
+    "ltx": "^2.9.2",
     "mqtt": "^3.0.0",
-    "ltx": "^2.9.2"
+    "simple-xmpp": "^1.3.0",
+    "xmldom": "^0.2.1"
   },
   "devDependencies": {
     "mocha": "^5.1.0",
-    "node-machine-id": "^1.1.12"
+    "node-machine-id": "^1.1.12",
+    "nyc": "^15.0.0"
   }
 }
