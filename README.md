@@ -1,16 +1,18 @@
-ecovacs-deebot.js
+# ecovacs-deebot.js
 
-# Ecovacs Deebot module
-
-**Work in progress! The code for handling MQTT devices does not work yet!**
+[![NPM version](http://img.shields.io/npm/v/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
+[![Travis-CI](https://travis-ci.org/mrbungle64/ecovacs-deebot.js.svg?branch=master)](https://travis-ci.org/mrbungle64/ecovacs-deebot.js)
 
 A JavaScript port based on [sucks.js](https://github.com/joostth/sucks.js) of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
 to drive an Ecovacs Deebot (Ozmo) robot vacuum.
+
+So far, only devices that communicate with the **XMPP** protocol work.
 
 All credits for figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
 
 ## Installation
+
 	npm install ecovacs-deebot
 
 ## Usage
@@ -76,6 +78,7 @@ vacbot.run("CustomArea", mode, action, map_position, cleanings);
 vacbot.run("Edge");
 vacbot.run("Spot");
 vacbot.run("Stop");
+vacbot.run("Pause");
 vacbot.run("Charge");
 vacbot.run("DeviceInfo");
 vacbot.run("CleanState");
