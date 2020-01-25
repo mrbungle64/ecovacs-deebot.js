@@ -1,6 +1,7 @@
 const assert = require('assert');
 
 const ecovacsDeebot = require('../index.js');
+const tools = require('../library/tools.js');
 
 describe('API', function () {
   describe('error checking', function () {
@@ -79,22 +80,22 @@ describe('API', function () {
 
 describe('API tools', function () {
   describe('#isObject', function () {
-    it('should check if a value is truely an object', function () {
-      assert.equal(ecovacsDeebot.isObject(null), false);
-      assert.equal(ecovacsDeebot.isObject("test"), false);
-      assert.equal(ecovacsDeebot.isObject(String("test")), false);
-      assert.equal(ecovacsDeebot.isObject(100), false);
-      assert.equal(ecovacsDeebot.isObject(100.5), false);
-      assert.equal(ecovacsDeebot.isObject(true), false);
-      assert.equal(ecovacsDeebot.isObject(undefined), false);
-      assert.equal(ecovacsDeebot.isObject(Symbol()), false);
-      assert.equal(ecovacsDeebot.isObject({}), true);
-      assert.equal(ecovacsDeebot.isObject({key: "value"}), true);
-      assert.equal(ecovacsDeebot.isObject(JSON.parse('{"key": "value"}')), true);
-      assert.equal(ecovacsDeebot.isObject(() => {
+    it('should check if a value is truly an object', function () {
+      assert.equal(tools.isObject(null), false);
+      assert.equal(tools.isObject("test"), false);
+      assert.equal(tools.isObject(String("test")), false);
+      assert.equal(tools.isObject(100), false);
+      assert.equal(tools.isObject(100.5), false);
+      assert.equal(tools.isObject(true), false);
+      assert.equal(tools.isObject(undefined), false);
+      assert.equal(tools.isObject(Symbol()), false);
+      assert.equal(tools.isObject({}), true);
+      assert.equal(tools.isObject({key: "value"}), true);
+      assert.equal(tools.isObject(JSON.parse('{"key": "value"}')), true);
+      assert.equal(tools.isObject(() => {
       }), true);
-      assert.equal(ecovacsDeebot.isObject(new Object()), true);
-      assert.equal(ecovacsDeebot.isObject(new Date()), true);
+      assert.equal(tools.isObject(new Object()), true);
+      assert.equal(tools.isObject(new Date()), true);
     });
   });
 
