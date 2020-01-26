@@ -2,6 +2,9 @@ const EventEmitter = require('events');
 const tools = require('./tools');
 const URL = require('url').URL;
 const fs = require('fs');
+const constants = require('./ecovacsConstants');
+const request = require('request');
+var DOMParser = require('xmldom').DOMParser;
 
 String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -43,18 +46,6 @@ class EcovacsMQTT extends EventEmitter {
         } else {
             this.server_port = server_port;
         }
-    }
-
-    session_start(event) {
-        tools.envLog("[EcovacsXMPP] ----------------- starting session ----------------");
-        tools.envLog("[EcovacsXMPP] event = {event}".format({
-            event: JSON.stringify(event)
-        }));
-        this.emit("ready", event);
-    }
-
-    connect_and_wait_until_ready() {
-        // TODO: This is pretty insecure and accepts any cert, maybe actually check?
 
         //var caFile = fs.readFileSync(__dirname + "/key.pem", "utf8");
 
@@ -75,14 +66,15 @@ class EcovacsMQTT extends EventEmitter {
         let client = this.client;
 
         client.on('connect', function () {
-            tools.envLog('[EcovacsMQTT] connected');
             client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (err, granted) => {
                 if (!err) {
                     tools.envLog('[EcovacsMQTT] subscribe successful');
+                    this.emit('ready', 'ready!');
                 } else {
                     tools.envLog('[EcovacsMQTT] subscribe err: %s', err.toString());
                 }
             });
+            tools.envLog('[EcovacsMQTT] connected');
         });
 
         client.on('message', (topic, message) => {
@@ -94,39 +86,62 @@ class EcovacsMQTT extends EventEmitter {
 
         client.on('error', (error) => {
             tools.envLog("[EcovacsMQTT] -----------------------------------------------");
-            tools.envLog('[EcovacsMQTT] error: %s', error.toString());
+            //tools.envLog('[EcovacsMQTT] error: %s', error.toString());
         });
 
         client.on('packetsend', (packet) => {
             tools.envLog("[EcovacsMQTT] -----------------------------------------------");
-            tools.envLog("Packet Send aufgerufen");
-            tools.envLog(packet);
+            tools.envLog("[EcovacsMQTT] Packet Send aufgerufen");
+            //tools.envLog(packet);
         });
 
         client.on('packetreceive', (packet) => {
             tools.envLog("[EcovacsMQTT] -----------------------------------------------");
-            tools.envLog("Packet Receive aufgerufen");
-            tools.envLog(packet);
+            tools.envLog("[EcovacsMQTT] Packet Receive aufgerufen");
+            //tools.envLog(packet);
         });
     }
 
-    send_command(action, recipient) {}
+    session_start(event) {
+        tools.envLog("[EcovacsMQTT] ----------------- starting session ----------------");
+        tools.envLog("[EcovacsMQTT] event = {event}".format({
+            event: JSON.stringify(event)
+        }));
+        this.emit("ready", event);
+    }
 
-    _wrap_command(self, cmd, recipient) {
+    connect_and_wait_until_ready() {
+        this.on("ready", (event) => {
+            this.send_ping(this.bot._vacuum_address());
+        });
+    }
+
+    send_command(action, recipient) {
+        if (action.name === 'Clean') {
+            if (!action.args.hasOwnProperty('act')) {
+                action.args['act'] = constants.CLEAN_ACTION_TO_ECOVACS['start'];
+            }
+        }
+        let json = this._wrap_command(action, recipient);
+        this._handle_ctl_api(action, this.__call_ecovacs_device_api(json));
+    }
+
+    _wrap_command(action, recipient) {
+        let xml = action.to_xml();
         // Remove the td from ctl xml for RestAPI
-        let payloadXml = cmd.to_xml();
-        payloadXml.attrib.pop("td");
+        let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
+        payloadXml.documentElement.removeAttribute('td');
 
         return {
             'auth': {
-                'realm': EcoVacsAPI.REALM,
+                'realm': 'ecouser.net',
                 'resource': this.resource,
                 'token': this.secret,
                 'userid': this.user,
                 'with': 'users',
             },
-            "cmdName": cmd.name,
-            "payload": ET.tostring(payloadXml).decode(),
+            "cmdName": action.name,
+            "payload": payloadXml.toString(),
 
             "payloadType": "x",
             "td": "q",
@@ -136,81 +151,95 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _wrap_td_command(self, cmd, recipient) {
-        return {
-            'auth': {
-                'realm': EcoVacsAPI.REALM,
-                'resource': this.resource,
-                'token': this.secret,
-                'userid': this.user,
-                'with': 'users',
-            },
-            "td": cmd.name,
-            "did": recipient,
-            "resource": this.vacuum['resource']
-        }
-    }
+    __call_ecovacs_device_api(json) {
+        let url = 'https://portal-{continent}.ecouser.net/api/iot/devmanager.do'.format({
+            continent: this.continent
+        });
 
-    __call_ecovacs_device_api(self, args, base_url = EcoVacsAPI.IOTDEVMANAGERAPI) {
-        let params = {};
-        params.update(args);
-
-        let url = (EcoVacsAPI.PORTAL_URL_FORMAT + "/" + base_url).format(this.continent);
-        //The RestAPI sometimes doesnt provide a response depending on command, reduce timeout to 3 to accomodate and make requests faster
         try {
             //May think about having timeout as an arg that could be provided in the future
-            let response = requests.post(url, params, 3);
-        } catch (e) {
-
-        }
-
-        let json = response.json();
-        if (json['ret'] === 'ok') {
-            return json;
-        } else if (json['ret'] === 'fail') {
-            if ('debug' in json) {
-                if (json['debug'] === 'wait for response timed out') {
-                    // TODO - Maybe handle timeout for IOT better in the future
+            let response = request.post(url, {
+                json: json
+            }, (error, response, body) => {
+                if (error) {
+                    console.error(error);
                     return {};
                 }
-            }
-        } else
-            //TODO - Not sure if we want to raise an error yet, just return empty for now
-            return {};
+                if (body['ret'] === 'ok') {
+                    return responseJson.toJSON();
+                }
+                tools.envLog('[EcovacsMQTT] statusCode:', response && response.statusCode);
+                tools.envLog('[EcovacsMQTT] body:', body);
+            })
+        } catch (e) {
+            throw new Error('[EcovacsMQTT] ' + e.message);
+        }
+
+        return {};
     }
 
-    _handle_ctl_api(self, action, message) {}
+    _handle_ctl_api(command, message) {
+        let resp = null;
+        if (message !== undefined) {
+            if ('resp' in message) {
+                resp = this._ctl_to_dict_api(command, message['resp']);
+            }
+            else {
+                resp = {
+                    'event': command.name.replace("Get", "", 1).replace(/^_+|_+$/g, '').toLowerCase(),
+                    'data': message
+                };
+            }
+        }
+        switch (command) {
+            case "ChargeState":
+                this.bot._handle_charge_state(resp);
+                this.emit(command, this.bot.charge_status);
+                break;
+            case "BatteryInfo":
+                this.bot._handle_battery_info(resp);
+                this.emit(command, this.bot.battery_status);
+                break;
+            case "CleanReport":
+                this.bot._handle_clean_report(resp);
+                this.emit(command, this.bot.clean_status);
+                this.emit('FanSpeed', this.bot.fan_speed);
+                break;
+            case "LifeSpan":
+                this.bot._handle_life_span(resp);
+                this.emit(command, this.bot.components);
+                break;
+            default:
+                tools.envLog("[EcovacsMQTT] Unknown response type received");
+                break;
+        }
+    }
 
-    _ctl_to_dict_api(self, action, xmlstring) {
-        let xml = ET.fromstring(xmlstring);
-        let xmlChild = xml.getchildren();
-        if (len(xmlChild) > 0) {
-            let result = xmlChild[0].attrib.copy();
+    _ctl_to_dict_api(action, xmlstring) {
+        let payloadXml = new DOMParser().parseFromString(xmlstring, 'text/xml');
+        if (payloadXml.hasChildNodes()) {
+            let xmlChilds = payloadXml.childNodes;
+            let result = {};
+            Object.assign(xmlChilds[0].attrib, result);
             //Fix for difference in XMPP vs API response
             //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-            if (xmlChild[0].tag === "clean") {
+            if (xmlChilds[0].tag === "clean") {
                 result['event'] = "CleanReport";
-            } else if (xmlChild[0].tag === "charge") {
+            } else if (xmlChilds[0].tag === "charge") {
                 result['event'] = "ChargeState";
-            } else if (xmlChild[0].tag === "battery") {
+            } else if (xmlChilds[0].tag === "battery") {
                 result['event'] = "BatteryInfo";
             } else { //Default back to replacing Get from the api cmdName
-                result['event'] = action.name.replace("Get", "", 1);
+                result['event'] = action.name.replace("Get", "");
             }
         } else {
-            let result = xml.attrib.copy();
-            result['event'] = action.name.replace("Get", "", 1);
+            let result = {};
+            Object.assign(xml.attrib, result);
+            result['event'] = action.name.replace("Get", "");
             if ('ret' in result) { //Handle errors as needed
                 if (result['ret'] === 'fail') {
                     if (action.name === "Charge") { //So far only seen this with Charge, when already docked
                         result['event'] = "ChargeState";
-                    }
-                }
-            }
-            for (let key in result) {
-                if (result.hasOwnProperty(key)) {
-                    if (!parseInt(result[key])) { //Fix to handle negative int values
-                        result[key] = stringcase.snakecase(result[key]);
                     }
                 }
             }
@@ -221,32 +250,51 @@ class EcovacsMQTT extends EventEmitter {
     _handle_ctl_mqtt(userdata, message) {
         let as_dict = this._ctl_to_dict_mqtt(message.topic, message.payload);
         if (as_dict !== null) {
-            tools.envLog("as_dict:");
-            tools.envLog(as_dict);
+            let command = as_dict['key'];
+            switch (command) {
+                case "ChargeState":
+                    this.bot._handle_charge_state(as_dict);
+                    this.emit(command, this.bot.charge_status);
+                    break;
+                case "BatteryInfo":
+                    this.bot._handle_battery_info(as_dict);
+                    this.emit(command, this.bot.battery_status);
+                    break;
+                case "CleanReport":
+                    this.bot._handle_clean_report(as_dict);
+                    this.emit(command, this.bot.clean_status);
+                    this.emit('FanSpeed', this.bot.fan_speed);
+                    break;
+                case "LifeSpan":
+                    this.bot._handle_life_span(as_dict);
+                    this.emit(command, this.bot.components);
+                    break;
+                default:
+                    tools.envLog("[EcovacsMQTT] Unknown response type received");
+                    break;
+            }
         }
     }
 
     _ctl_to_dict_mqtt(topic, xmlstring) {
-        // parser = new xml2js.Parser();
-        //I haven't seen the need to fall back to data within the topic (like we do with IOT rest call actions), but it is here in case of future need
-        /*let xml = parser.parseString(xmlstring, (err, result) => {
-            let result = xml.attrib.copy();
-        });*/
         //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
+        let xml = new DOMParser().parseFromString(xmlstring, 'text/xml');
 
         //Including changes from jasonarends @ 28da7c2 below
-        let result = "";
-        if (!'td' in result) {
+        let result = Object.assign(xml.attributes, result);
+        if (!result.hasOwnProperty('td')) {
             // This happens for commands with no response data, such as PlaySound
             // Handle response data with no 'td'
 
             // single element with type and val
             if ('type' in result) {
-                // seems to always be LifeSpan type
-                result['event'] = "LifeSpan";
+                if (result.hasOwnProperty('type')) {
+                    // seems to always be LifeSpan type
+                    result['event'] = "LifeSpan";
+                }
             } else {
                 // case where there is child element
-                if (len(xml) > 0) {
+                if (xml.length > 0) {
                     if ('clean' in xml[0].tag) {
                         result['event'] = "CleanReport";
                     } else if ('charge' in xml[0].tag) {
@@ -256,7 +304,7 @@ class EcovacsMQTT extends EventEmitter {
                     } else {
                         return;
                     }
-                    result.update(xml[0].attrib);
+                    Object.assign(xml[0].attrib, result);
                 } else {
                     // for non-'type' result with no child element, e.g., result of PlaySound
                     return;
@@ -266,16 +314,7 @@ class EcovacsMQTT extends EventEmitter {
             // response includes 'td'
             result['event'] = result.pop('td');
             if (xml) {
-                result.update(xml[0].attrib);
-            }
-        }
-
-        for (let key in result) {
-            if (result.hasOwnProperty(key)) {
-                //Check for RepresentInt to handle negative int values, and ',' for ignoring position updates
-                if (!parseInt(result[key]) && !',' in result[key]) {
-                    result[key] = stringcase.snakecase(result[key]);
-                }
+                Object.assign(xml[0].attrib, result);
             }
         }
         return result
@@ -285,9 +324,7 @@ class EcovacsMQTT extends EventEmitter {
         return this.user + '@' + this.hostname + '/' + this.resource;
     }
 
-    send_ping(to) {
-
-    }
+    send_ping(to) {}
 }
 
 module.exports = EcovacsMQTT;
