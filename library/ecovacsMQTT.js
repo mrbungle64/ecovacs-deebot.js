@@ -63,50 +63,32 @@ class EcovacsMQTT extends EventEmitter {
         let vacuum_did = this.vacuum['did'];
         let vacuum_class = this.vacuum['class'];
         let vacuum_resource = this.vacuum['resource'];
-        let client = this.client;
+        let ecovacsMQTT = this;
 
-        client.on('connect', function () {
-            client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (err, granted) => {
-                if (!err) {
+        this.client.on('connect', function () {
+            this.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (error, granted) => {
+                if (!error) {
                     tools.envLog('[EcovacsMQTT] subscribe successful');
-                    this.emit('ready', 'ready!');
+                    ecovacsMQTT.emit('ready', 'ready!');
                 } else {
-                    tools.envLog('[EcovacsMQTT] subscribe err: %s', err.toString());
+                    tools.envLog('[EcovacsMQTT] subscribe err: %s', error.toString());
                 }
             });
-            tools.envLog('[EcovacsMQTT] connected');
+            tools.envLog('[EcovacsMQTT] client connected');
         });
 
-        client.on('message', (topic, message) => {
-            tools.envLog("[EcovacsMQTT] -----------------------------------------------");
+        this.client.on('message', (topic, message) => {
             tools.envLog('[EcovacsMQTT] message: %s', message.toString());
-            this._handle_ctl_mqtt(topic, message);
-            client.end();
+            this._handle_ctl_mqtt(message);
+            this.end();
         });
 
-        client.on('error', (error) => {
-            tools.envLog("[EcovacsMQTT] -----------------------------------------------");
-            //tools.envLog('[EcovacsMQTT] error: %s', error.toString());
-        });
-
-        client.on('packetsend', (packet) => {
-            tools.envLog("[EcovacsMQTT] -----------------------------------------------");
-            tools.envLog("[EcovacsMQTT] Packet Send aufgerufen");
-            //tools.envLog(packet);
-        });
-
-        client.on('packetreceive', (packet) => {
-            tools.envLog("[EcovacsMQTT] -----------------------------------------------");
-            tools.envLog("[EcovacsMQTT] Packet Receive aufgerufen");
-            //tools.envLog(packet);
+        this.client.on('error', (error) => {
+            ecovacsMQTT.emit('error', packet.toString());
         });
     }
 
     session_start(event) {
-        tools.envLog("[EcovacsMQTT] ----------------- starting session ----------------");
-        tools.envLog("[EcovacsMQTT] event = {event}".format({
-            event: JSON.stringify(event)
-        }));
         this.emit("ready", event);
     }
 
@@ -155,9 +137,7 @@ class EcovacsMQTT extends EventEmitter {
         let url = 'https://portal-{continent}.ecouser.net/api/iot/devmanager.do'.format({
             continent: this.continent
         });
-
         try {
-            //May think about having timeout as an arg that could be provided in the future
             let response = request.post(url, {
                 json: json
             }, (error, response, body) => {
@@ -168,73 +148,53 @@ class EcovacsMQTT extends EventEmitter {
                 if (body['ret'] === 'ok') {
                     return responseJson.toJSON();
                 }
-                tools.envLog('[EcovacsMQTT] statusCode:', response && response.statusCode);
-                tools.envLog('[EcovacsMQTT] body:', body);
             })
         } catch (e) {
             throw new Error('[EcovacsMQTT] ' + e.message);
         }
-
         return {};
     }
 
-    _handle_ctl_api(command, message) {
+    _handle_ctl_api(action, message) {
         let resp = null;
+        let command = action;
         if (message !== undefined) {
             if ('resp' in message) {
-                resp = this._ctl_to_dict_api(command, message['resp']);
+                resp = this._ctl_to_dict_api(action, message['resp']);
             }
             else {
+                command = action.name.replace("Get", "", 1).replace(/^_+|_+$/g, '');
                 resp = {
-                    'event': command.name.replace("Get", "", 1).replace(/^_+|_+$/g, '').toLowerCase(),
+                    'event': command.toLowerCase(),
                     'data': message
                 };
             }
         }
-        switch (command) {
-            case "ChargeState":
-                this.bot._handle_charge_state(resp);
-                this.emit(command, this.bot.charge_status);
-                break;
-            case "BatteryInfo":
-                this.bot._handle_battery_info(resp);
-                this.emit(command, this.bot.battery_status);
-                break;
-            case "CleanReport":
-                this.bot._handle_clean_report(resp);
-                this.emit(command, this.bot.clean_status);
-                this.emit('FanSpeed', this.bot.fan_speed);
-                break;
-            case "LifeSpan":
-                this.bot._handle_life_span(resp);
-                this.emit(command, this.bot.components);
-                break;
-            default:
-                tools.envLog("[EcovacsMQTT] Unknown response type received");
-                break;
+        if (resp) {
+            this._handle_command(command, resp.data);
         }
     }
 
     _ctl_to_dict_api(action, xmlstring) {
         let payloadXml = new DOMParser().parseFromString(xmlstring, 'text/xml');
-        if (payloadXml.hasChildNodes()) {
-            let xmlChilds = payloadXml.childNodes;
+        if (payloadXml.documentElement.hasChildNodes()) {
+            let firstChild = payloadXml.documentElement.firstChild;
             let result = {};
-            Object.assign(xmlChilds[0].attrib, result);
+            Object.assign(firstChild.attributes, result);
             //Fix for difference in XMPP vs API response
             //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-            if (xmlChilds[0].tag === "clean") {
+            if (firstChild.name === "clean") {
                 result['event'] = "CleanReport";
-            } else if (xmlChilds[0].tag === "charge") {
+            } else if (firstChild.name === "charge") {
                 result['event'] = "ChargeState";
-            } else if (xmlChilds[0].tag === "battery") {
+            } else if (firstChild.name === "battery") {
                 result['event'] = "BatteryInfo";
             } else { //Default back to replacing Get from the api cmdName
                 result['event'] = action.name.replace("Get", "");
             }
         } else {
             let result = {};
-            Object.assign(xml.attrib, result);
+            Object.assign(payloadXml.documentElement.attributes, result);
             result['event'] = action.name.replace("Get", "");
             if ('ret' in result) { //Handle errors as needed
                 if (result['ret'] === 'fail') {
@@ -247,64 +207,69 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _handle_ctl_mqtt(userdata, message) {
+    _handle_ctl_mqtt(message) {
         let as_dict = this._ctl_to_dict_mqtt(message.topic, message.payload);
         if (as_dict !== null) {
             let command = as_dict['key'];
-            switch (command) {
-                case "ChargeState":
-                    this.bot._handle_charge_state(as_dict);
-                    this.emit(command, this.bot.charge_status);
-                    break;
-                case "BatteryInfo":
-                    this.bot._handle_battery_info(as_dict);
-                    this.emit(command, this.bot.battery_status);
-                    break;
-                case "CleanReport":
-                    this.bot._handle_clean_report(as_dict);
-                    this.emit(command, this.bot.clean_status);
-                    this.emit('FanSpeed', this.bot.fan_speed);
-                    break;
-                case "LifeSpan":
-                    this.bot._handle_life_span(as_dict);
-                    this.emit(command, this.bot.components);
-                    break;
-                default:
-                    tools.envLog("[EcovacsMQTT] Unknown response type received");
-                    break;
-            }
+            this._handle_command(command, as_dict);
+        }
+    }
+
+    _handle_command(command, event) {
+        switch (command) {
+            case "ChargeState":
+                this.bot._handle_charge_state(event);
+                this.emit(command, this.bot.charge_status);
+                break;
+            case "BatteryInfo":
+                this.bot._handle_battery_info(event);
+                this.emit(command, this.bot.battery_status);
+                break;
+            case "CleanReport":
+                this.bot._handle_clean_report(event);
+                this.emit(command, this.bot.clean_status);
+                this.emit('FanSpeed', this.bot.fan_speed);
+                break;
+            case "LifeSpan":
+                this.bot._handle_life_span(event);
+                this.emit(command, this.bot.components);
+                break;
+            default:
+                tools.envLog("[EcovacsMQTT._handle_ctl_mqtt] Unknown response type for command %s received: %s", command, event);
+                break;
         }
     }
 
     _ctl_to_dict_mqtt(topic, xmlstring) {
         //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
         let xml = new DOMParser().parseFromString(xmlstring, 'text/xml');
+        if (!xml) return;
 
         //Including changes from jasonarends @ 28da7c2 below
-        let result = Object.assign(xml.attributes, result);
-        if (!result.hasOwnProperty('td')) {
+        let result = {};
+        result = Object.assign(xml.documentElement.attributes, result);
+        if (!xml.documentElement.attributes.getNamedItem('td')) {
             // This happens for commands with no response data, such as PlaySound
             // Handle response data with no 'td'
 
             // single element with type and val
-            if ('type' in result) {
-                if (result.hasOwnProperty('type')) {
+            if (xml.documentElement.attributes.getNamedItem('type')) {
                     // seems to always be LifeSpan type
                     result['event'] = "LifeSpan";
-                }
             } else {
                 // case where there is child element
-                if (xml.length > 0) {
-                    if ('clean' in xml[0].tag) {
+                if (xml.documentElement.hasChildNodes()) {
+                    let firstChild = xml.documentElement.firstChild;
+                    if (firstChild.name === 'clean') {
                         result['event'] = "CleanReport";
-                    } else if ('charge' in xml[0].tag) {
+                    } else if (firstChild.name === 'charge') {
                         result['event'] = "ChargeState";
-                    } else if ('battery' in xml[0].tag) {
+                    } else if (firstChild.name === 'battery') {
                         result['event'] = "BatteryInfo";
                     } else {
                         return;
                     }
-                    Object.assign(xml[0].attrib, result);
+                    Object.assign(firstChild.attributes, result);
                 } else {
                     // for non-'type' result with no child element, e.g., result of PlaySound
                     return;
@@ -312,9 +277,11 @@ class EcovacsMQTT extends EventEmitter {
             }
         } else {
             // response includes 'td'
-            result['event'] = result.pop('td');
-            if (xml) {
-                Object.assign(xml[0].attrib, result);
+            result['event'] = xml.documentElement.attributes.getNamedItem('td').name;
+            xml.documentElement.removeAttribute('td');
+            if (xml.documentElement.hasChildNodes()) {
+                let firstChild = payloadXml.documentElement.firstChild;
+                Object.assign(firstChild.attributes, result);
             }
         }
         return result
