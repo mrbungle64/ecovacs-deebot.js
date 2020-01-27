@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 const tools = require('./tools');
 const Element = require('ltx').Element;
+const constants = require('./ecovacsConstants.js');
 
 String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -57,15 +58,15 @@ class EcovacsXMPP extends EventEmitter {
                 let firstChild = stanza.children[0];
                 let secondChild = firstChild.children[0];
                 let command = secondChild.attrs.td;
+                // We have to guess if we got a value for the lifespan of components
+                let type = null;
+                if (!command) {
+                    type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                    if (type) {
+                        command = 'LifeSpan';
+                    }
+                }
                 switch (command) {
-                    case "PushRobotNotify":
-                        let type = secondChild.attrs['type'];
-                        let act = secondChild.attrs['act'];
-                        this.emit(command, {
-                            type: type,
-                            act: act
-                        });
-                        break;
                     case "DeviceInfo":
                         tools.envLog("[EcovacsXMPP] Received an DeviceInfo Stanza %s", secondChild.children[0]);
                         this.emit(command, this.bot.charge_status);
@@ -83,25 +84,20 @@ class EcovacsXMPP extends EventEmitter {
                         this.emit(command, this.bot.clean_status);
                         this.emit('FanSpeed', this.bot.fan_speed);
                         break;
-                    case "WKVer":
-                        tools.envLog("[EcovacsXMPP] Received an WKVer Stanza");
-                        break;
                     case "Error":
                     case "error":
                         tools.envLog("[EcovacsXMPP] Received an error for action '%s': %s", secondChild.attrs.action, secondChild.attrs.error);
                         this.bot._handle_error(secondChild.attrs.error);
                         this.emit(command, this.bot.error_event);
                         break;
-                    case "OnOff":
-                        tools.envLog("[EcovacsXMPP] Received an OnOff Stanza");
-                        break;
-                    case "Sched":
-                        tools.envLog("[EcovacsXMPP] Received an Sched Stanza");
-                        break;
                     case "LifeSpan":
-                        tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", secondChild.children[0]);
-                        this.bot._handle_life_span(secondChild.children[0]);
-                        this.emit(command, this.bot.components);
+                        tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", secondChild.attrs);
+                        this.bot._handle_life_span(secondChild.attrs);
+                        if (type) {
+                            if (this.bot.components[type]) {
+                                this.emit('LifeSpan_' + type, this.bot.components[type]);
+                            }
+                        }
                         break;
                     default:
                         tools.envLog("[EcovacsXMPP] Unknown response type received");

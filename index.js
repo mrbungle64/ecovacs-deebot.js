@@ -235,10 +235,10 @@ class EcovacsAPI {
               // If it is a set token error try again
               if (json['error'] === 'set token error.') {
                 if (retryAttempts <= 3) {
-                  tools.envLog("loginByItToken set token error, trying again (%s/3)", retryAttempts);
+                  tools.envLog("[EcovacsAPI] loginByItToken set token error, trying again (%s/3)", retryAttempts);
                   return this.__call_portal_api(api, func, args, retryAttempts);
                 } else {
-                  tools.envLog("loginByItToken set token error, failed after %s attempts", retryAttempts);
+                  tools.envLog("[EcovacsAPI] loginByItToken set token error, failed after %s attempts", retryAttempts);
                 }
               } else {
                 tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
@@ -362,8 +362,7 @@ class VacBot {
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
-    this.lifeSpan_values = {};
-    this.components = [];
+    this.components = {};
     this.ping_interval = null;
     this.error_event = null;
     this.ecovacs = null;
@@ -381,6 +380,12 @@ class VacBot {
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
+      this.run('GetBatteryState');
+      this.run('GetCleanState');
+      this.run('GetChargeState');
+      this.run('GetLifeSpan','main_brush');
+      this.run('GetLifeSpan','side_brush');
+      this.run('GetLifeSpan','filter');
     });
   }
 
@@ -396,7 +401,13 @@ class VacBot {
   }
 
   _handle_life_span(event) {
-    let type = event.attrs['type'];
+    let type = null;
+    if (event.hasOwnProperty('type')) {
+      type = event['type'];
+    }
+    else {
+      return;
+    }
     try {
       type = constants.COMPONENT_FROM_ECOVACS[type];
     } catch (e) {
@@ -404,19 +415,20 @@ class VacBot {
     }
 
     let lifespan = null;
-    if (event.hasOwnProperty('val')) {
+    if ((event.hasOwnProperty('val')) && (event.hasOwnProperty('total'))) {
+      lifespan = parseInt(event['val']) / parseInt(event['total']) * 100;
+    } else if (event.hasOwnProperty('val')) {
       lifespan = parseInt(event['val']) / 100;
+    } else if (event.hasOwnProperty('left') && (event.hasOwnProperty('total'))) {
+      lifespan = parseInt(event['left']) / parseInt(event['total']) * 100; // This works e.g. for a Ozmo 930
     } else if (event.hasOwnProperty('left')) {
-      lifespan = parseInt(event['left']) / 60; // This works for a D901
+      lifespan = parseInt(event['left']) / 60; // This works e.g. for a D901
     }
-
-    this.components[type] = lifespan;
-    let lifespan_values = {
-      'type': type,
-      'lifespan': lifespan
-    };
-    this.lifeSpan_values = this.components;
-    tools.envLog("[VacBot] lifespan: ", components.toString());
+    if (lifespan) {
+      tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
+      this.components[type] = lifespan;
+    }
+    tools.envLog("[VacBot] lifespan components: ", this.components.toString());
   }
 
   _handle_clean_report(event) {
@@ -532,7 +544,7 @@ class VacBot {
   }
 
   run(action) {
-    tools.envLog("action: %s", action);
+    tools.envLog("[VacBot] action: %s", action);
     switch (action.toLowerCase()) {
       case "clean":
         if (arguments.length <= 1) {

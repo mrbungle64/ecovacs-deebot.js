@@ -82,5 +82,8 @@ exports.COMPONENT_TO_ECOVACS = {
 exports.COMPONENT_FROM_ECOVACS = {
     'brush': 'main_brush',
     'side_brush': 'side_brush',
-    'dust_case_heap': 'filter'
+    'dust_case_heap': 'filter',
+    'Brush': 'main_brush',
+    'SideBrush': 'side_brush',
+    'DustCaseHeap': 'filter'
 };

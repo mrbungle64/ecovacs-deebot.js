@@ -143,7 +143,8 @@ class GetBatteryState extends VacBotCommand {
 class GetLifeSpan extends VacBotCommand {
     constructor(component) {
         super('GetLifeSpan', {
-            'type': constants.COMPONENT_TO_ECOVACS[component]
+            'type': constants.COMPONENT_TO_ECOVACS[component],
+            'id': getReqID()
         });
     }
 }

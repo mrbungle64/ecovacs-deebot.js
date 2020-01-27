@@ -1,6 +1,7 @@
 # ecovacs-deebot.js
 
 [![NPM version](http://img.shields.io/npm/v/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
+[![Downloads](https://img.shields.io/npm/dm/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
 [![Travis-CI](https://travis-ci.org/mrbungle64/ecovacs-deebot.js.svg?branch=master)](https://travis-ci.org/mrbungle64/ecovacs-deebot.js)
 
 A JavaScript port based on [sucks.js](https://github.com/joostth/sucks.js) of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
@@ -85,6 +86,9 @@ vacbot.run("CleanState");
 vacbot.run("ChargeState");
 vacbot.run("BatteryState");
 vacbot.run("PlaySound");
+vacbot.run('GetLifeSpan','main_brush');
+vacbot.run('GetLifeSpan','side_brush');
+vacbot.run('GetLifeSpan','filter');
 ```
 
 ### Possible options
@@ -179,6 +183,10 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.1.3
+* (mrbungle64) Feature release (alpha)
+   * Implemented GetLifeSpan command
+   
 ### 0.1.2
 * (mrbungle64) Feature release (alpha)
    * Implemented SpotArea command
