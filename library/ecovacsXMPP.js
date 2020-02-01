@@ -56,14 +56,23 @@ class EcovacsXMPP extends EventEmitter {
             tools.envLog('stanza: %s',stanza.toString());
             if (stanza.name === "iq" && (stanza.attrs.type === "set" || stanza.attrs.type === "result") && !!stanza.children[0] && stanza.children[0].name === "query" && !!stanza.children[0].children[0]) {
                 let firstChild = stanza.children[0];
+                tools.envLog('firstChild: %s',firstChild.toString());
                 let secondChild = firstChild.children[0];
+                tools.envLog('secondChild: %s',secondChild.toString());
                 let command = secondChild.attrs.td;
                 // We have to guess if we got a value for the lifespan of components
                 let type = null;
+                let level = null;
                 if (!command) {
                     type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                     if (type) {
                         command = 'LifeSpan';
+                    }
+                    if (secondChild.attrs.hasOwnProperty('v')) {
+                        level = constants.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v];
+                        if (level) {
+                            command = 'WaterLevel';
+                        }
                     }
                 }
                 switch (command) {
@@ -93,10 +102,22 @@ class EcovacsXMPP extends EventEmitter {
                     case "LifeSpan":
                         tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", secondChild.attrs);
                         this.bot._handle_life_span(secondChild.attrs);
+                        if (!type) {
+                            if (secondChild.attrs.hasOwnProperty('type')) {
+                                type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                            }
+                        }
                         if (type) {
                             if (this.bot.components[type]) {
                                 this.emit('LifeSpan_' + type, this.bot.components[type]);
                             }
+                        }
+                        break;
+                    case "WaterLevel":
+                        tools.envLog("[EcovacsXMPP] Received an WaterLevel Stanza %s", secondChild.attrs);
+                        this.bot._handle_water_level(secondChild.attrs.v);
+                        if (this.bot.water_level) {
+                            this.emit('WaterLevel', this.bot.water_level);
                         }
                         break;
                     default:

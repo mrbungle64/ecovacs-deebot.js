@@ -81,14 +81,16 @@ vacbot.run("Spot");
 vacbot.run("Stop");
 vacbot.run("Pause");
 vacbot.run("Charge");
-vacbot.run("DeviceInfo");
-vacbot.run("CleanState");
-vacbot.run("ChargeState");
-vacbot.run("BatteryState");
+vacbot.run("GetDeviceInfo");
+vacbot.run("GetCleanState");
+vacbot.run("GetChargeState");
+vacbot.run("GetBatteryState");
 vacbot.run("PlaySound");
-vacbot.run('GetLifeSpan','main_brush');
-vacbot.run('GetLifeSpan','side_brush');
-vacbot.run('GetLifeSpan','filter');
+vacbot.run('GetLifeSpan', 'main_brush');
+vacbot.run('GetLifeSpan', 'side_brush');
+vacbot.run('GetLifeSpan', 'filter');
+vacbot.run('GetWaterLevel');
+vacbot.run('SetWaterLevel', level);
 ```
 
 ### Possible options
@@ -182,6 +184,11 @@ function httpGetJson(url) {
 	});
 }
 ```
+
+### 0.1.4
+* (mrbungle64) Feature release (alpha)
+   * Implemented GetWaterLevel command
+   * Implemented SetWaterLevel command
 
 ### 0.1.3
 * (mrbungle64) Feature release (alpha)

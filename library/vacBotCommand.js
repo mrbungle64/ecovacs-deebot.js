@@ -169,14 +169,17 @@ class GetCleanSpeed extends VacBotCommand {
 class SetWaterLevel extends VacBotCommand {
     constructor(level) {
         super('SetWaterPermeability', {
-            'v': constants.WATER_LEVEL_TO_ECOVACS[level]
+            'v': constants.WATER_LEVEL_TO_ECOVACS[level],
+            'id': getReqID()
         });
     }
 }
 
 class GetWaterLevel extends VacBotCommand {
     constructor() {
-        super('GetWaterPermeability');
+        super('GetWaterPermeability', {
+            'id': getReqID()
+        });
     }
 }
 

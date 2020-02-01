@@ -362,6 +362,7 @@ class VacBot {
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
+    this.water_level = null;
     this.components = {};
     this.ping_interval = null;
     this.error_event = null;
@@ -386,6 +387,7 @@ class VacBot {
       this.run('GetLifeSpan','main_brush');
       this.run('GetLifeSpan','side_brush');
       this.run('GetLifeSpan','filter');
+      this.run('GetWaterLevel');
     });
   }
 
@@ -435,17 +437,16 @@ class VacBot {
     let type = event.attrs['type'];
     try {
       type = constants.CLEAN_MODE_FROM_ECOVACS[type];
-      let statustype = event.attrs['st'];
-      statustype = constants.CLEAN_ACTION_FROM_ECOVACS[statustype];
+      let statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
       if (statustype === 'stop' || statustype === 'pause') {
         type = statustype
       }
+      this.clean_status = type;
+      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
+      this.vacuum_status = type;
     } catch (e) {
       console.error("[VacBot] Unknown cleaning status: ", event);
     }
-    this.clean_status = type;
-    tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
-    this.vacuum_status = type;
 
     let fan = null;
     if (event.attrs.hasOwnProperty('speed')) {
@@ -455,11 +456,11 @@ class VacBot {
     if (fan !== null) {
       try {
         fan = constants.FAN_SPEED_FROM_ECOVACS[fan];
+        this.fan_speed = fan;
+        tools.envLog("[VacBot] fan speed: ", fan);
       } catch (e) {
         console.error("[VacBot] Unknown fan speed: ", fan);
       }
-      this.fan_speed = fan;
-      tools.envLog("[VacBot] fan speed: ", fan);
     }
   }
 
@@ -472,8 +473,13 @@ class VacBot {
     }
   }
 
-  _handle_water_level(iq) {
-
+  _handle_water_level(level) {
+    try {
+      this.water_level = constants.WATER_LEVEL_FROM_ECOVACS[level];
+      tools.envLog("[VacBot] *** water_level = " + this.water_level);
+    } catch (e) {
+      console.error("[VacBot] Unknown water level value: ", level);
+    }
   }
 
   _handle_charge_state(iq) {

@@ -1,6 +1,6 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Javascript library to drive an Ecovacs Deebot robot vacuum",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "deebot",
     "sucks"
   ],
-  "author": "Joost ter Heide",
+  "author": "Sascha Hölzel",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",

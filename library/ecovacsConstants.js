@@ -52,7 +52,15 @@ exports.FAN_SPEED_TO_ECOVACS = {
 exports.WATER_LEVEL_TO_ECOVACS = {
     'low': '1',
     'medium': '2',
-    'high': '3'
+    'high': '3',
+    'max': '4'
+};
+
+exports.WATER_LEVEL_FROM_ECOVACS = {
+    '1': 'low',
+    '2': 'medium',
+    '3': 'high',
+    '4': 'max'
 };
 
 exports.FAN_SPEED_FROM_ECOVACS = {
