@@ -59,14 +59,15 @@ class EcovacsXMPP extends EventEmitter {
                 tools.envLog('firstChild: %s',firstChild.toString());
                 let secondChild = firstChild.children[0];
                 tools.envLog('secondChild: %s',secondChild.toString());
-                let command = secondChild.attrs.td;
-                // We have to guess if we got a value for the lifespan of components
                 let type = null;
                 let level = null;
+                let command = secondChild.attrs.td;
                 if (!command) {
-                    type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
-                    if (type) {
-                        command = 'LifeSpan';
+                    if (secondChild.attrs.hasOwnProperty('type')) {
+                        type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                        if (type) {
+                            command = 'LifeSpan';
+                        }
                     }
                     if (secondChild.attrs.hasOwnProperty('v')) {
                         level = constants.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v];
@@ -128,7 +129,7 @@ class EcovacsXMPP extends EventEmitter {
                 tools.envLog('[EcovacsXMPP] Response Error for request %s', stanza.attrs.id);
                 switch (stanza.children[0].attrs.code) {
                     case "404":
-                        console.error("[EcovacsXMPP] Couldn't reach the vac :[%s] %s", stanza.children[0].attrs.code, stanza.children[0].children[0].name);
+                        console.error("[EcovacsXMPP] Couldn't reach the vac: [%s] %s", stanza.children[0].attrs.code, stanza.children[0].children[0].name);
                         break;
                     default:
                         console.error("[EcovacsXMPP] Unknown error received: %s", JSON.stringify(stanza.children[0]));
