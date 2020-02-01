@@ -441,12 +441,12 @@ class VacBot {
       if (statustype === 'stop' || statustype === 'pause') {
         type = statustype
       }
-      this.clean_status = type;
-      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
-      this.vacuum_status = type;
     } catch (e) {
       console.error("[VacBot] Unknown cleaning status: ", event);
     }
+    this.clean_status = type;
+    tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
+    this.vacuum_status = type;
 
     let fan = null;
     if (event.attrs.hasOwnProperty('speed')) {
@@ -475,8 +475,8 @@ class VacBot {
 
   _handle_water_level(level) {
     try {
-      this.water_level = constants.WATER_LEVEL_FROM_ECOVACS[level];
-      tools.envLog("[VacBot] *** water_level = " + this.water_level);
+      this.water_level = level;
+      tools.envLog("[VacBot] *** water_level = " + constants.WATER_LEVEL_FROM_ECOVACS[level] + " (" + level + ")");
     } catch (e) {
       console.error("[VacBot] Unknown water level value: ", level);
     }
