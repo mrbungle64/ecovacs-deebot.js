@@ -184,6 +184,10 @@ function httpGetJson(url) {
 	});
 }
 ```
+### 0.1.5
+* (mrbungle64) Bugfix release (alpha)
+  * Bugfix
+  * A few minor changes
 
 ### 0.1.4
 * (mrbungle64) Feature release (alpha)
