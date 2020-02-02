@@ -588,6 +588,9 @@ class VacBot {
       case "charge":
         this.send_command(new vacBotCommand.Charge());
         break;
+      case "playsound":
+        this.send_command(new vacBotCommand.PlaySound());
+        break;
       case "getdeviceinfo":
       case "deviceinfo":
         this.send_command(new vacBotCommand.GetDeviceInfo());
@@ -617,15 +620,6 @@ class VacBot {
         break;
       case "getwaterlevel":
         this.send_command(new vacBotCommand.GetWaterLevel());
-        break;
-      case "playsound":
-        this.send_command(new vacBotCommand.PlaySound());
-        break;
-      case "settime":
-        if (arguments.length <= 3) {
-          return;
-        }
-        this.send_command(new vacBotCommand.SetTime(arguments[1], arguments[2]));
         break;
       case "setwaterlevel":
         if (arguments.length < 2) {

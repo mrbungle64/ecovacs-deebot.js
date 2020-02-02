@@ -184,6 +184,11 @@ function httpGetJson(url) {
 	});
 }
 ```
+### 0.1.6
+* (mrbungle64) Bugfix release (alpha)
+  * Fix package-lock.json
+  * A few minor changes
+
 ### 0.1.5
 * (mrbungle64) Bugfix release (alpha)
   * Bugfix

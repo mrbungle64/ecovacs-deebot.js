@@ -118,7 +118,9 @@ class Charge extends VacBotCommand {
 
 class GetDeviceInfo extends VacBotCommand {
     constructor() {
-        super('GetDeviceInfo');
+        super('GetDeviceInfo', {
+            'id': getReqID()
+        });
     }
 }
 
