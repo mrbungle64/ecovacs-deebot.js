@@ -368,6 +368,7 @@ class VacBot {
     this.error_event = null;
     this.ecovacs = null;
     this.useMqtt = vacuum['iotmq'];
+    this.deviceClass = vacuum['class'];
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -384,11 +385,52 @@ class VacBot {
       this.run('GetBatteryState');
       this.run('GetCleanState');
       this.run('GetChargeState');
-      this.run('GetLifeSpan','main_brush');
-      this.run('GetLifeSpan','side_brush');
-      this.run('GetLifeSpan','filter');
+      this.run('GetLifeSpan', 'main_brush');
+      this.run('GetLifeSpan', 'side_brush');
+      this.run('GetLifeSpan', 'filter');
       this.run('GetWaterLevel');
     });
+  }
+
+  isSupportedDevice() {
+    const devices = JSON.parse(JSON.stringify(getSupportedDevices()));
+    return devices.hasOwnProperty(this.deviceClass);
+  }
+
+  isKnownDevice() {
+    const devices = JSON.parse(JSON.stringify(getKnownDevices()));
+    return devices.hasOwnProperty(this.deviceClass) || this.isSupportedDevice();
+  }
+
+  getDeviceProperty(property) {
+    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    if (devices.hasOwnProperty(this.deviceClass)) {
+      const device = devices[this.deviceClass];
+      if (device.hasOwnProperty(property)) {
+        return device[property];
+      }
+    }
+    return false;
+  }
+
+  hasMainBrush() {
+    return this.getDeviceProperty('main_brush');
+  }
+
+  hasSpotAreas() {
+    return this.getDeviceProperty('spot_area');
+  }
+
+  hasCustomAreas() {
+    return this.getDeviceProperty('custom_area');
+  }
+
+  hasMoppingSystem() {
+    return this.getDeviceProperty('mopping_system');
+  }
+
+  hasVoiceReports() {
+    return this.getDeviceProperty('voice_report');
   }
 
   connect_and_wait_until_ready() {
@@ -406,8 +448,7 @@ class VacBot {
     let type = null;
     if (event.hasOwnProperty('type')) {
       type = event['type'];
-    }
-    else {
+    } else {
       return;
     }
     try {
@@ -633,6 +674,25 @@ class VacBot {
   disconnect() {
     this.ecovacs.disconnect();
   }
+}
+
+function getAllKnownDevices() {
+  let devices = {};
+  devices = Object.assign(devices, getSupportedDevices());
+  devices = Object.assign(devices, getKnownDevices());
+  return devices;
+}
+
+function getSupportedDevices() {
+  return constants.SupportedDevices;
+}
+
+function getKnownDevices() {
+  return constants.KnownDevices;
+}
+
+function getProductIotMap() {
+  return constants.EcoVacsHomeProducts;
 }
 
 module.exports.EcoVacsAPI = EcovacsAPI;
