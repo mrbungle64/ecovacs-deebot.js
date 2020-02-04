@@ -61,14 +61,14 @@ api.connect(email, password_hash).then(() => {
         });
         vacbot.connect_and_wait_until_ready();
         vacbot.run('Clean');
+        vacbot.run('GetLifeSpan', 'main_brush');
+        vacbot.run('GetLifeSpan', 'side_brush');
+        vacbot.run('GetLifeSpan', 'filter');
         let interval = setInterval(() => {
             vacbot.run('GetCleanState');
             vacbot.run('GetChargeState');
             vacbot.run('GetBatteryState');
-            vacbot.run('GetLifeSpan', 'main_brush');
-            vacbot.run('GetLifeSpan', 'side_brush');
-            vacbot.run('GetLifeSpan', 'filter');
-        }, 60000);
+        }, 15000);
     });
 }).catch((e) => {
     console.log('Failure in connecting: ', e.message);
