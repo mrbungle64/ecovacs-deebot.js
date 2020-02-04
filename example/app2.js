@@ -17,7 +17,7 @@ console.log(continent);
 const api = new EcoVacsAPI(device_id, countrycode, continent);
 api.connect(email, password_hash).then(() => {
     api.devices().then((devices) => {
-        let vacuum = devices[1];
+        let vacuum = devices[0];
         console.log(vacuum);
         let vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
         vacbot.on('ready', (event) => {
