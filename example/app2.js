@@ -49,6 +49,9 @@ api.connect(email, password_hash).then(() => {
                 console.log('[app2.js] side_brush: ' + Math.round(level));
             });
             // MQTT
+            vacbot.on('message', (event) => {
+                console.log('[app2.js] message: ' + event);
+            });
             vacbot.on('packetsend', (event) => {
                 console.log('[app2.js] packetsend: ' + event);
             });
