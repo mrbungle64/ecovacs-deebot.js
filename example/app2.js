@@ -1,5 +1,5 @@
 //const sucks = require('sucks');
-const sucks = require('./ecovacs-deebot.js/index');
+const sucks = require('./../index');
 const nodeMachineId = require('node-machine-id');
 const EcoVacsAPI = sucks.EcoVacsAPI;
 const VacBot = sucks.VacBot;
