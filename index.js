@@ -298,22 +298,8 @@ class EcovacsAPI {
     });
   }
 
-  setIOTMQDevices(devices) {
-    // Added for devices that utilize MQTT instead of XMPP for communication
-    for (let device in devices) {
-      if (devices.hasOwnProperty(device)) {
-        device['iotmq'] = false;
-        if (device['company'] === 'eco-ng') {
-          // Check if the device is part of the list
-          device['iotmq'] = true;
-        }
-      }
-    }
-    return devices;
-  }
-
   devices() {
-    return this.setIOTMQDevices(this.getDevices());
+    return this.getDevices();
   }
 
   static md5(text) {
@@ -367,7 +353,7 @@ class VacBot {
     this.ping_interval = null;
     this.error_event = null;
     this.ecovacs = null;
-    this.useMqtt = vacuum['iotmq'];
+    this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
 
     if (!this.useMqtt) {
