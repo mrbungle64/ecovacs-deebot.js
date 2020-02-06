@@ -184,40 +184,38 @@ function httpGetJson(url) {
 	});
 }
 ```
+
+### 0.1.7
+  * Bugfix detecting MQTT devices
+  * Register features of known and supported models
+  
 ### 0.1.6
-* (mrbungle64) Bugfix release (alpha)
   * Fix package-lock.json
   * A few minor changes
 
 ### 0.1.5
-* (mrbungle64) Bugfix release (alpha)
   * Bugfix
   * A few minor changes
 
 ### 0.1.4
-* (mrbungle64) Feature release (alpha)
    * Implemented GetWaterLevel command
    * Implemented SetWaterLevel command
 
 ### 0.1.3
-* (mrbungle64) Feature release (alpha)
    * Implemented GetLifeSpan command
    
 ### 0.1.2
-* (mrbungle64) Feature release (alpha)
    * Implemented SpotArea command
    * Implemented CustomArea command
 
 ### 0.1.1
-* (mrbungle64) Feature release (Alpha)
    * Implemented PlaySound command
 
 ### 0.1.0
-* (mrbungle64) Alpha release
   * Deebot Ozmo 930 is working
 
 ### 0.0.2
-* (mrbungle64) Initial development release
+* Initial development release
 
 ## Thanks and credits
 * @joostth ([sucks.js](https://github.com/joostth/sucks.js))
