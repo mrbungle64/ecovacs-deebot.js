@@ -67,15 +67,14 @@ class EcovacsMQTT extends EventEmitter {
         let ecovacsMQTT = this;
 
         this.client.on('connect', function () {
+            tools.envLog('[EcovacsMQTT] client connected');
             this.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (error, granted) => {
                 if (!error) {
-                    tools.envLog('[EcovacsMQTT] subscribe successful');
-                    ecovacsMQTT.emit('ready', 'ready!');
+                    ecovacsMQTT.emit('ready', 'Client connected. Subscribe successful');
                 } else {
                     tools.envLog('[EcovacsMQTT] subscribe err: %s', error.toString());
                 }
             });
-            tools.envLog('[EcovacsMQTT] client connected');
         });
 
         this.client.on('message', (topic, message) => {
@@ -106,6 +105,7 @@ class EcovacsMQTT extends EventEmitter {
             }
         }
         let c = this._wrap_command(action, recipient);
+        tools.envLog("[EcovacsMQTT] c: %s", c);
         this.__call_ecovacs_device_api(c).then((json) => {
             this._handle_ctl_api(action, json);
         }).catch((e) => {
@@ -166,6 +166,7 @@ class EcovacsMQTT extends EventEmitter {
 
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
+                res.setTimeout(3000);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -177,14 +178,12 @@ class EcovacsMQTT extends EventEmitter {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json));
-                            throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
-                                errno: json['errno'],
-                                error: json['error'],
-                                params: JSON.stringify(args)
+                            throw "failure code: {errno}".format({
+                                errno: json['errno']
                             });
                         }
                     } catch (e) {
-                        console.error("[EcovacsMQTT] " + e.message);
+                        console.error("[EcovacsMQTT] " + e.toString());
                         reject(e);
                     }
                 });
@@ -275,10 +274,9 @@ class EcovacsMQTT extends EventEmitter {
             case "CleanReport":
                 this.bot._handle_clean_report(event);
                 this.emit(command, this.bot.clean_status);
-                this.emit('FanSpeed', this.bot.fan_speed);
                 break;
             default:
-                tools.envLog("[EcovacsMQTT._handle_ctl_mqtt] Unknown response type for command %s received: %s", command, event);
+                tools.envLog("[EcovacsMQTT] Unknown response type for command %s received: %s", command, event);
                 break;
         }
     }
