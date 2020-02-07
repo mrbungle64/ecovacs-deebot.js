@@ -115,6 +115,10 @@ class EcovacsMQTT extends EventEmitter {
 
     _wrap_command(action, recipient) {
         let xml = action.to_xml();
+        if (!xml) {
+            tools.envLog("[EcovacsMQTT] _wrap_command: %s", action.to_xml());
+            return {};
+        }
         // Remove the td from ctl xml for RestAPI
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
@@ -166,7 +170,7 @@ class EcovacsMQTT extends EventEmitter {
 
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
-                res.setTimeout(3000);
+                res.setTimeout(6000);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -222,10 +226,15 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _ctl_to_dict_api(action, xmlstring) {
+        let result = {};
+        if (!xmlstring) {
+            tools.envLog("[EcovacsMQTT] _ctl_to_dict_api action: %s", action);
+            tools.envLog("[EcovacsMQTT] _ctl_to_dict_api xmlstring: %s", xmlstring);
+            return result;
+        }
         let payloadXml = new DOMParser().parseFromString(xmlstring, 'text/xml');
         if (payloadXml.documentElement.hasChildNodes()) {
             let firstChild = payloadXml.documentElement.firstChild;
-            let result = {};
             Object.assign(firstChild.attributes, result);
             //Fix for difference in XMPP vs API response
             //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
@@ -239,7 +248,6 @@ class EcovacsMQTT extends EventEmitter {
                 result['event'] = action.name.replace("Get", "");
             }
         } else {
-            let result = {};
             Object.assign(payloadXml.documentElement.attributes, result);
             result['event'] = action.name.replace("Get", "");
             if (result.hasOwnProperty('ret')) { //Handle errors as needed
@@ -285,9 +293,13 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _ctl_to_dict_mqtt(topic, xmlstring) {
+        if (!xmlstring) {
+            tools.envLog("[EcovacsMQTT] _ctl_to_dict_mqtt topic: %s", topic);
+            tools.envLog("[EcovacsMQTT] _ctl_to_dict_mqtt xmlstring: %s", xmlstring);
+            return {};
+        }
         //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
         let xml = new DOMParser().parseFromString(xmlstring, 'text/xml');
-        if (!xml) return;
         let result = tools.xmlDocumentElement2Json(xml.documentElement);
 
         if (!xml.documentElement.attributes.getNamedItem('td')) {
