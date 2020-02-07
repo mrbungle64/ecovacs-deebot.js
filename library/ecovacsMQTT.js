@@ -80,7 +80,7 @@ class EcovacsMQTT extends EventEmitter {
         this.client.on('message', (topic, message) => {
             tools.envLog('[EcovacsMQTT] message: %s', message.toString());
             this._handle_ctl_mqtt(message);
-            this.end();
+            this.client.end();
         });
 
         this.client.on('error', (error) => {
@@ -174,7 +174,7 @@ class EcovacsMQTT extends EventEmitter {
                 res.on('end', () => {
                     try {
                         const json = JSON.parse(rawData);
-                        if (json['result'] === 'ok') {
+                        if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json));
