@@ -255,9 +255,12 @@ class EcovacsMQTT extends EventEmitter {
 
     _handle_ctl_mqtt(message) {
         let as_dict = this._ctl_to_dict_mqtt(message.topic, message.payload);
-        if (as_dict !== null) {
+        if (as_dict) {
             let command = as_dict['key'];
             this._handle_command(command, as_dict);
+        }
+        else {
+            tools.envLog("[EcovacsMQTT] as_dict undefined");
         }
     }
 
