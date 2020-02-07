@@ -105,7 +105,7 @@ class EcovacsMQTT extends EventEmitter {
             }
         }
         let c = this._wrap_command(action, recipient);
-        tools.envLog("[EcovacsMQTT] c: %s", c);
+        tools.envLog("[EcovacsMQTT] c: %s", JSON.stringify(c));
         this.__call_ecovacs_device_api(c).then((json) => {
             this._handle_ctl_api(action, json);
         }).catch((e) => {
@@ -242,7 +242,7 @@ class EcovacsMQTT extends EventEmitter {
             let result = {};
             Object.assign(payloadXml.documentElement.attributes, result);
             result['event'] = action.name.replace("Get", "");
-            if ('ret' in result) { //Handle errors as needed
+            if (result.hasOwnProperty('ret')) { //Handle errors as needed
                 if (result['ret'] === 'fail') {
                     if (action.name === "Charge") { //So far only seen this with Charge, when already docked
                         result['event'] = "ChargeState";
@@ -318,7 +318,7 @@ class EcovacsMQTT extends EventEmitter {
             }
         } else {
             // response includes 'td'
-            result['event'] = xml.documentElement.attributes.getNamedItem('td').name;
+            result['event'] = xml.documentElement.attributes.getNamedItem('td').name.replace("Server", "");
             if (xml.documentElement.hasChildNodes()) {
                 let firstChild = payloadXml.documentElement.firstChild;
                 Object.assign(firstChild.attributes, result);
