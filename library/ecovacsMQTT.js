@@ -80,7 +80,7 @@ class EcovacsMQTT extends EventEmitter {
         this.client.on('message', (topic, message) => {
             tools.envLog('[EcovacsMQTT] message topic: %s', topic.toString());
             tools.envLog('[EcovacsMQTT] message message: %s', message.toString());
-            this._handle_ctl_mqtt(message);
+            this._handle_ctl_mqtt(topic.toString(), message.toString());
             this.client.end();
         });
 
@@ -100,7 +100,7 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     send_command(action, recipient) {
-        if (action.name === 'Clean') {
+        if (action.name.toLowerCase() === 'clean') {
             if (!action.args.hasOwnProperty('act')) {
                 action.args['act'] = constants.CLEAN_ACTION_TO_ECOVACS['start'];
             }
@@ -238,12 +238,12 @@ class EcovacsMQTT extends EventEmitter {
     _handle_ctl_api(action, message) {
         let resp = null;
         let command = action;
-        if (message !== undefined) {
+        if (message) {
             if ('resp' in message) {
                 resp = this._ctl_to_dict_api(action, message['resp']);
             }
             else {
-                command = action.name.replace("Get", "").replace(/^_+|_+$/g, '');
+                command = action.name.replace(/^_+|_+$/g, '');
                 resp = {
                     'event': command.toLowerCase(),
                     'data': message
@@ -313,8 +313,8 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _handle_ctl_mqtt(message) {
-        let as_dict = this._ctl_to_dict_mqtt(message.topic, message.payload);
+    _handle_ctl_mqtt(topic, payload) {
+        let as_dict = this._ctl_to_dict_mqtt(topic, payload);
         if (as_dict) {
             let command = as_dict['key'];
             this._handle_command(command, as_dict);
@@ -373,16 +373,17 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _handle_command(command, event) {
+        command = command.replace("Get", "").toLowerCase();
         switch (command) {
-            case "ChargeState":
+            case "chargestate":
                 this.bot._handle_charge_state(event);
                 this.emit(command, this.bot.charge_status);
                 break;
-            case "BatteryInfo":
+            case "batteryinfo":
                 this.bot._handle_battery_info(event);
                 this.emit(command, this.bot.battery_status);
                 break;
-            case "CleanReport":
+            case "cleanreport":
                 this.bot._handle_clean_report(event);
                 this.emit(command, this.bot.clean_status);
                 break;
