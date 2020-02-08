@@ -123,7 +123,7 @@ class EcovacsMQTT extends EventEmitter {
             let payloadRequest = [];
             payloadRequest['header'] = [];
             payloadRequest['header']['pri'] = '2';
-            payloadRequest['header']['ts'] = datetime.datetime.now().timestamp();
+            payloadRequest['header']['ts'] = Math.floor(Date.now());
             payloadRequest['header']['tmz'] = 480;
             payloadRequest['header']['ver'] = '0.0.22';
 
