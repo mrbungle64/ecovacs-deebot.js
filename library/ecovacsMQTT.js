@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const tools = require('./tools');
+const tools = require('./tools.js');
 const URL = require('url').URL;
 const fs = require('fs');
 const constants = require('./ecovacsConstants');

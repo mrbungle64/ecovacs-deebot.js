@@ -29,4 +29,5 @@ envLog = function () {
 };
 
 module.exports.isObject = isObject;
+module.exports.xmlDocumentElement2Json = xmlDocumentElement2Json;
 module.exports.envLog = envLog;
