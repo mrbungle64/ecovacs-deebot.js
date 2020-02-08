@@ -354,7 +354,7 @@ class VacBot {
     this.ping_interval = null;
     this.error_event = null;
     this.ecovacs = null;
-    this.useMqtt = true; //(vacuum['company'] === 'eco-ng') ? true : false;
+    this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
 
     if (!this.useMqtt) {
@@ -372,10 +372,14 @@ class VacBot {
       this.run('GetBatteryState');
       this.run('GetCleanState');
       this.run('GetChargeState');
-      this.run('GetLifeSpan', 'main_brush');
+      if (this.hasMainBrush()) {
+        this.run('GetLifeSpan', 'main_brush');
+      }
       this.run('GetLifeSpan', 'side_brush');
       this.run('GetLifeSpan', 'filter');
-      this.run('GetWaterLevel');
+      if (this.hasMoppingSystem()) {
+        this.run('GetWaterLevel');
+      }
     });
   }
 
@@ -710,7 +714,11 @@ class VacBot {
         if (arguments.length < 2) {
           return;
         }
-        this.send_command(new vacBotCommand.GetLifeSpan(arguments[1]));
+        let component = arguments[1];
+        if (this.isOzmo950()) {
+          component = constants.COMPONENT_TO_OZMO950[component];
+        }
+        this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
       case "getwaterlevel":
         this.send_command(new vacBotCommand.GetWaterLevel());

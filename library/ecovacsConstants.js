@@ -87,13 +87,21 @@ exports.COMPONENT_TO_ECOVACS = {
     'filter': 'DustCaseHeap'
 };
 
+exports.COMPONENT_TO_OZMO950 = {
+    'main_brush': 'brush',
+    'side_brush': 'sideBrush',
+    'filter': 'heap'
+};
+
 exports.COMPONENT_FROM_ECOVACS = {
     'brush': 'main_brush',
     'side_brush': 'side_brush',
     'dust_case_heap': 'filter',
     'Brush': 'main_brush',
     'SideBrush': 'side_brush',
-    'DustCaseHeap': 'filter'
+    'sideBrush': 'side_brush',
+    'DustCaseHeap': 'filter',
+    'heap': 'filter'
 };
 
 exports.SupportedDevices = {
