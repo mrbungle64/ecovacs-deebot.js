@@ -354,7 +354,7 @@ class VacBot {
     this.ping_interval = null;
     this.error_event = null;
     this.ecovacs = null;
-    this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
+    this.useMqtt = true; //(vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
 
     if (!this.useMqtt) {

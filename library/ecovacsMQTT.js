@@ -144,7 +144,7 @@ class EcovacsMQTT extends EventEmitter {
             let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
             payloadXml.documentElement.removeAttribute('td');
 
-            payload = payloadXml;
+            payload = payloadXml.toString();
             payloadType = "x";
         }
 
@@ -176,7 +176,7 @@ class EcovacsMQTT extends EventEmitter {
         }
 
         return new Promise((resolve, reject) => {
-            let url = constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI.format({
+            let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
                 continent: this.continent
             });
             let headers = {
