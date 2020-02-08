@@ -1,3 +1,14 @@
+exports.MAIN_URL_FORMAT = 'https://eco-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
+exports.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
+exports.PORTAL_URL_FORMAT = 'https://portal-{continent}.ecouser.net/api';
+exports.USERSAPI = 'users/user.do';
+// IOT Device Manager - This provides control of "IOT" products via RestAPI, some bots use this instead of XMPP
+exports.IOTDEVMANAGERAPI = 'iot/devmanager.do';
+exports.LGLOGAPI = 'lg/log.do';
+// Leaving this open, the only endpoint known currently is "Product IOT Map" -  pim/product/getProductIotMap - This provides a list of "IOT" products.  Not sure what this provides the app.
+exports.PRODUCTAPI = 'pim/product';
+exports.REALM = 'ecouser.net';
+
 exports.CLEANING_STATES = [
     'auto',
     'edge',

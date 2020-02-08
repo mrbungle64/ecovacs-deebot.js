@@ -327,18 +327,19 @@ class EcovacsAPI {
 EcovacsAPI.CLIENT_KEY = "eJUWrzRv34qFSaYk";
 EcovacsAPI.SECRET = "Cyu5jcR4zyK6QEPn1hdIGXB5QIDAQABMA0GC";
 EcovacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
-EcovacsAPI.MAIN_URL_FORMAT = 'https://eco-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
-EcovacsAPI.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
-EcovacsAPI.PORTAL_URL_FORMAT = 'https://portal-{continent}.ecouser.net/api';
-EcovacsAPI.USERSAPI = 'users/user.do';
+
+EcovacsAPI.MAIN_URL_FORMAT = constants.MAIN_URL_FORMAT;
+EcovacsAPI.USER_URL_FORMAT = constants.USER_URL_FORMAT;
+EcovacsAPI.PORTAL_URL_FORMAT = constants.PORTAL_URL_FORMAT;
+EcovacsAPI.USERSAPI = constants.USERSAPI;
 
 // IOT Device Manager - This provides control of "IOT" products via RestAPI, some bots use this instead of XMPP
-EcovacsAPI.IOTDEVMANAGERAPI = 'iot/devmanager.do';
-EcovacsAPI.LGLOGAPI = 'lg/log.do';
+EcovacsAPI.IOTDEVMANAGERAPI = constants.IOTDEVMANAGERAPI;
+EcovacsAPI.LGLOGAPI = constants.LGLOGAPI;
 // Leaving this open, the only endpoint known currently is "Product IOT Map" -  pim/product/getProductIotMap - This provides a list of "IOT" products.  Not sure what this provides the app.
-EcovacsAPI.PRODUCTAPI = 'pim/product';
+EcovacsAPI.PRODUCTAPI = constants.PRODUCTAPI;
 
-EcovacsAPI.REALM = 'ecouser.net';
+EcovacsAPI.REALM = constants.REALM;
 
 class VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
