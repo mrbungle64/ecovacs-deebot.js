@@ -379,6 +379,13 @@ class VacBot {
     });
   }
 
+  isOzmo950() {
+    if (this.deviceClass === 'yna5xi') {
+      return true;
+    }
+    return false;
+  }
+
   isSupportedDevice() {
     const devices = JSON.parse(JSON.stringify(getSupportedDevices()));
     return devices.hasOwnProperty(this.deviceClass);
@@ -433,7 +440,11 @@ class VacBot {
 
   _handle_life_span(event) {
     let type = null;
-    if (event.hasOwnProperty('type')) {
+    // Deebot Ozmo 950
+    if (event.hasOwnProperty('body')) {
+      let response = event['body']['data'][0];
+      type = response['type'];
+    } else if (event.hasOwnProperty('type')) {
       type = event['type'];
     } else {
       return;
@@ -462,6 +473,26 @@ class VacBot {
   }
 
   _handle_clean_report(event) {
+    // Deebot Ozmo 950
+    if (event.hasOwnProperty('body')) {
+      let response = event['body']['data'];
+      if (response['state'] === 'clean') {
+        if (response['trigger'] === 'app') {
+          if (response['cleanState']['motionState'] === 'working') {
+            this.vacuum_status = 'cleaning';
+          } else if (response['cleanState']['motionState'] === 'pause') {
+            this.vacuum_status = 'paused';
+          } else {
+            this.vacuum_status = 'returning';
+          }
+        } else if (response['trigger'] === 'alert') {
+          this.vacuum_status = 'error';
+        }
+      }
+      this.clean_status = this.vacuum_status;
+      return;
+    }
+
     let type = event.attrs['type'];
     try {
       type = constants.CLEAN_MODE_FROM_ECOVACS[type];
@@ -492,12 +523,21 @@ class VacBot {
     }
   }
 
-  _handle_battery_info(iq) {
+  _handle_battery_info(event) {
+    let value = null;
+    // Deebot Ozmo 950
+    if (event.hasOwnProperty('body')) {
+      let response = event['body'];
+      value = response['data']['value'];
+    }
+    else {
+      value = parseFloat(event.attrs['power']) / 100;
+    }
     try {
-      this.battery_status = parseFloat(iq.attrs['power']) / 100;
+      this.battery_status = value;
       tools.envLog("[VacBot] *** battery_status = %d\%", this.battery_status * 100);
     } catch (e) {
-      console.error("[VacBot] couldn't parse battery status ", iq);
+      console.error("[VacBot] couldn't parse battery status ", event);
     }
   }
 
@@ -510,12 +550,38 @@ class VacBot {
     }
   }
 
-  _handle_charge_state(iq) {
+  _handle_charge_state(event) {
+    // Deebot Ozmo 950
+    if (event.hasOwnProperty('body')) {
+      let response = event['body'];
+      let status = null;
+      if (response['code'] == 0) {
+        if (response['data']['isCharging'] == 1) {
+          status = 'docked';
+        }
+      } else {
+        if ((response['msg'] === 'fail') && (response['code'] == '30007')) {
+          // Already charging
+          status = 'docked';
+        } else if ((response['msg'] === 'fail') && (response['code'] == '5')) {
+          // Busy with another command
+          status = 'error';
+        } else if ((response['msg'] === 'fail') && (response['code'] == '3')) {
+          // Bot in stuck state, example dust bin out
+          status = 'error';
+        }
+      }
+      if (status) {
+        this.charge_status = status;
+      }
+      return;
+    }
+
     try {
-      if (iq.name !== "charge") {
+      if (event.name !== "charge") {
         throw "Not a charge state";
       }
-      let report = iq.attrs['type'];
+      let report = event.attrs['type'];
       switch (report.toLowerCase()) {
         case "going":
           this.charge_status = 'returning';
@@ -532,7 +598,7 @@ class VacBot {
       }
       tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
     } catch (e) {
-      console.error("[VacBot] couldn't parse charge status ", iq);
+      console.error("[VacBot] couldn't parse charge status ", event);
     }
   }
 

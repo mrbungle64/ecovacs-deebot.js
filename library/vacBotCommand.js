@@ -190,7 +190,7 @@ class GetWaterLevel extends VacBotCommand {
 
 class PlaySound extends VacBotCommand {
     constructor(sid = '0') {
-        super('PlaySound', {'sid': sid});
+        super('PlaySound', {'count': 1, 'sid': sid});
     }
 }
 

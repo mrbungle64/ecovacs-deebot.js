@@ -78,7 +78,8 @@ class EcovacsMQTT extends EventEmitter {
         });
 
         this.client.on('message', (topic, message) => {
-            tools.envLog('[EcovacsMQTT] message: %s', message.toString());
+            tools.envLog('[EcovacsMQTT] message topic: %s', topic.toString());
+            tools.envLog('[EcovacsMQTT] message message: %s', message.toString());
             this._handle_ctl_mqtt(message);
             this.client.end();
         });
@@ -114,27 +115,51 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _wrap_command(action, recipient) {
-        let xml = action.to_xml();
-        if (!xml) {
-            tools.envLog("[EcovacsMQTT] _wrap_command: %s", action.to_xml());
-            return {};
+        let payload = null;
+        let payloadType = null;
+
+        if (this.bot.isOzmo950()) {
+            // All requests need to have this header -- not sure about timezone and ver
+            let payloadRequest = [];
+            payloadRequest['header'] = [];
+            payloadRequest['header']['pri'] = '2';
+            payloadRequest['header']['ts'] = datetime.datetime.now().timestamp();
+            payloadRequest['header']['tmz'] = 480;
+            payloadRequest['header']['ver'] = '0.0.22';
+
+            if (action.args.length > 0) {
+                payloadRequest['body'] = [];
+                payloadRequest['body']['data'] = action.args;
+            }
+
+            payload = payloadRequest;
+            payloadType = "j";
+        } else {
+            let xml = action.to_xml();
+            if (!xml) {
+                tools.envLog("[EcovacsMQTT] _wrap_command: %s", action.to_xml());
+                return {};
+            }
+            // Remove the td from ctl xml for RestAPI
+            let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
+            payloadXml.documentElement.removeAttribute('td');
+
+            payload = payloadXml;
+            payloadType = "x";
         }
-        // Remove the td from ctl xml for RestAPI
-        let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
-        payloadXml.documentElement.removeAttribute('td');
 
         return {
             'auth': {
-                'realm': 'ecouser.net',
+                'realm': constants.REALM,
                 'resource': this.resource,
                 'token': this.secret,
                 'userid': this.user,
                 'with': 'users',
             },
             "cmdName": action.name,
-            "payload": payloadXml.toString(),
+            "payload": payload,
 
-            "payloadType": "x",
+            "payloadType": payloadType,
             "td": "q",
             "toId": recipient,
             "toRes": this.vacuum['resource'],
@@ -143,28 +168,33 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     __call_ecovacs_device_api(args) {
+        let params = {};
+        for (let key in args) {
+            if (args.hasOwnProperty(key)) {
+                params[key] = args[key];
+            }
+        }
+
         return new Promise((resolve, reject) => {
-            let url = 'https://portal-{continent}.ecouser.net/api/iot/devmanager.do'.format({
+            let url = constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI.format({
                 continent: this.continent
             });
+            let headers = {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(JSON.stringify(params))
+            };
+            if (this.bot.isOzmo950()) {
+                url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
+                headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
+            }
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
-
-            let params = {};
-            for (let key in args) {
-                if (args.hasOwnProperty(key)) {
-                    params[key] = args[key];
-                }
-            }
 
             const reqOptions = {
                 hostname: url.hostname,
                 path: url.pathname,
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': Buffer.byteLength(JSON.stringify(params))
-                }
+                headers: headers
             };
             tools.envLog("[EcovacsMQTT] Sending POST to", JSON.stringify(reqOptions));
 
@@ -225,39 +255,61 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _ctl_to_dict_api(action, xmlstring) {
+    _ctl_to_dict_api(action, xmlOrJsonString) {
         let result = {};
-        if (!xmlstring) {
+        if (!xmlOrJsonString) {
             tools.envLog("[EcovacsMQTT] _ctl_to_dict_api action: %s", action);
-            tools.envLog("[EcovacsMQTT] _ctl_to_dict_api xmlstring: %s", xmlstring);
+            tools.envLog("[EcovacsMQTT] _ctl_to_dict_api xmlOrJsonString: %s", xmlOrJsonString);
             return result;
         }
-        let payloadXml = new DOMParser().parseFromString(xmlstring, 'text/xml');
-        if (payloadXml.documentElement.hasChildNodes()) {
-            let firstChild = payloadXml.documentElement.firstChild;
-            Object.assign(firstChild.attributes, result);
-            //Fix for difference in XMPP vs API response
-            //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-            if (firstChild.name === "clean") {
-                result['event'] = "CleanReport";
-            } else if (firstChild.name === "charge") {
-                result['event'] = "ChargeState";
-            } else if (firstChild.name === "battery") {
-                result['event'] = "BatteryInfo";
-            } else { //Default back to replacing Get from the api cmdName
-                result['event'] = action.name.replace("Get", "");
-            }
-        } else {
-            Object.assign(payloadXml.documentElement.attributes, result);
-            result['event'] = action.name.replace("Get", "");
-            if (result.hasOwnProperty('ret')) { //Handle errors as needed
-                if (result['ret'] === 'fail') {
-                    if (action.name === "Charge") { //So far only seen this with Charge, when already docked
-                        result['event'] = "ChargeState";
-                    }
+        let name = null;
+        if (xmlOrJsonString.hasOwnProperty('body')) {
+            let result = xmlOrJsonString;
+            if (result['body']['msg'] === 'ok') {
+                name = action.name.toLowerCase();
+                if (name === 'cleaninfo') {
+                    result['event'] = "CleanReport";
+                } else if (name === 'chargestate') {
+                    result['event'] = "ChargeState";
+                } else if (name === 'battery') {
+                    result['event'] = "BatteryInfo";
+                } else { //Default back to replacing Get from the api cmdName
+                    result['event'] = name.replace("Get", "");
                 }
             }
             return result;
+        }
+        else {
+            let payloadXml = new DOMParser().parseFromString(xmlOrJsonString, 'text/xml');
+            if (payloadXml.documentElement.hasChildNodes()) {
+                let firstChild = payloadXml.documentElement.firstChild;
+                name = firstChild.name;
+            }
+            if (name) {
+                result = Object.assign(result, firstChild.attributes);
+                //Fix for difference in XMPP vs API response
+                //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
+                if (name === "clean") {
+                    result['event'] = "CleanReport";
+                } else if (name === "charge") {
+                    result['event'] = "ChargeState";
+                } else if (name === "battery") {
+                    result['event'] = "BatteryInfo";
+                } else { //Default back to replacing Get from the api cmdName
+                    result['event'] = action.name.replace("Get", "");
+                }
+            } else {
+                result = Object.assign(result, payloadXml.documentElement.attributes);
+                result['event'] = action.name.replace("Get", "");
+                if (result.hasOwnProperty('ret')) { //Handle errors as needed
+                    if (result['ret'] === 'fail') {
+                        if (action.name === "Charge") { //So far only seen this with Charge, when already docked
+                            result['event'] = "ChargeState";
+                        }
+                    }
+                }
+                return result;
+            }
         }
     }
 
@@ -269,26 +321,6 @@ class EcovacsMQTT extends EventEmitter {
         }
         else {
             tools.envLog("[EcovacsMQTT] as_dict undefined");
-        }
-    }
-
-    _handle_command(command, event) {
-        switch (command) {
-            case "ChargeState":
-                this.bot._handle_charge_state(event);
-                this.emit(command, this.bot.charge_status);
-                break;
-            case "BatteryInfo":
-                this.bot._handle_battery_info(event);
-                this.emit(command, this.bot.battery_status);
-                break;
-            case "CleanReport":
-                this.bot._handle_clean_report(event);
-                this.emit(command, this.bot.clean_status);
-                break;
-            default:
-                tools.envLog("[EcovacsMQTT] Unknown response type for command %s received: %s", command, event);
-                break;
         }
     }
 
@@ -308,8 +340,8 @@ class EcovacsMQTT extends EventEmitter {
 
             // single element with type and val
             if (xml.documentElement.attributes.getNamedItem('type')) {
-                    // seems to always be LifeSpan type
-                    result['event'] = "LifeSpan";
+                // seems to always be LifeSpan type
+                result['event'] = "LifeSpan";
             } else {
                 // case where there is child element
                 if (xml.documentElement.hasChildNodes()) {
@@ -333,11 +365,31 @@ class EcovacsMQTT extends EventEmitter {
             result['event'] = xml.documentElement.attributes.getNamedItem('td').name.replace("Server", "");
             if (xml.documentElement.hasChildNodes()) {
                 let firstChild = payloadXml.documentElement.firstChild;
-                Object.assign(firstChild.attributes, result);
+                result = Object.assign(result, firstChild.attributes);
             }
             delete result['td'];
         }
         return result
+    }
+
+    _handle_command(command, event) {
+        switch (command) {
+            case "ChargeState":
+                this.bot._handle_charge_state(event);
+                this.emit(command, this.bot.charge_status);
+                break;
+            case "BatteryInfo":
+                this.bot._handle_battery_info(event);
+                this.emit(command, this.bot.battery_status);
+                break;
+            case "CleanReport":
+                this.bot._handle_clean_report(event);
+                this.emit(command, this.bot.clean_status);
+                break;
+            default:
+                tools.envLog("[EcovacsMQTT] Unknown response type for command %s received: %s", command, event);
+                break;
+        }
     }
 
     _my_address() {

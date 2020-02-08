@@ -9,17 +9,6 @@ exports.LGLOGAPI = 'lg/log.do';
 exports.PRODUCTAPI = 'pim/product';
 exports.REALM = 'ecouser.net';
 
-exports.CLEANING_STATES = [
-    'auto',
-    'edge',
-    'spot',
-    'spot_area',
-    'single_room'
-];
-exports.CHARGING_STATES = [
-    'charging'
-];
-
 // These dictionaries convert to and from Ozmo's consts (which closely match what the UI and manuals use)
 // to and from what the Ecovacs API uses (which are sometimes very oddly named and have random capitalization.)
 exports.CLEAN_MODE_TO_ECOVACS = {
