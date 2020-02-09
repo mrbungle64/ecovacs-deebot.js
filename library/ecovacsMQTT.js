@@ -78,8 +78,6 @@ class EcovacsMQTT extends EventEmitter {
         });
 
         this.client.on('message', (topic, message) => {
-            tools.envLog('[EcovacsMQTT] message topic: %s', topic.toString());
-            tools.envLog('[EcovacsMQTT] message message: %s', message.toString());
             this._handle_message(topic.toString(), message.toString());
             this.client.end();
         });
@@ -241,16 +239,21 @@ class EcovacsMQTT extends EventEmitter {
         if (message) {
             if (message.hasOwnProperty('resp')) {
                 resp = this._command_to_dict_api(action, message['resp']);
+                tools.envLog("[EcovacsMQTT] _handle_command_api resp: %s", JSON.stringify(resp));
             }
             else if (action.hasOwnProperty('name')) {
+                tools.envLog("[EcovacsMQTT] _handle_command_api name: %s", action.name);
                 command = action.name.replace(/^_+|_+$/g, '');
+                tools.envLog("[EcovacsMQTT] _handle_command_api command: %s", command);
                 resp = {
                     'event': command.toLowerCase(),
                     'data': message
                 };
+                tools.envLog("[EcovacsMQTT] _handle_command_api resp: %s", JSON.stringify(resp));
             }
         }
         if (resp) {
+            tools.envLog("[EcovacsMQTT] _handle_command_api command: %s", command);
             this._handle_command(command, resp.data);
         }
     }
@@ -325,12 +328,13 @@ class EcovacsMQTT extends EventEmitter {
     _handle_message(topic, payload) {
         let as_dict = this._message_to_dict(topic, payload);
         if (as_dict) {
-            tools.envLog("[EcovacsMQTT] as_dict: %s", as_dict);
+            tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict));
             let command = as_dict['event'];
-            tools.envLog("[EcovacsMQTT] command: %s", command);
-            this._handle_command(command, as_dict);
-        }
-        else {
+            if (command) {
+                tools.envLog("[EcovacsMQTT] command: %s", command);
+                this._handle_command(command, as_dict);
+            }
+        } else {
             tools.envLog("[EcovacsMQTT] as_dict undefined");
         }
     }
@@ -344,7 +348,7 @@ class EcovacsMQTT extends EventEmitter {
         let isJson = false;
         try {
             xmlOrJson = JSON.parse(xmlOrJson);
-            tools.envLog("[EcovacsMQTT] _message_to_dict JSON: %s", xmlOrJson);
+            tools.envLog("[EcovacsMQTT] _message_to_dict JSON: %s", JSON.stringify(xmlOrJson));
             isJson = true;
         } catch (e) {
             tools.envLog("[EcovacsMQTT] _message_to_dict xmlString: %s", xmlOrJson);
@@ -352,6 +356,7 @@ class EcovacsMQTT extends EventEmitter {
         let name = null;
         if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
             let result = xmlOrJson;
+            tools.envLog("[EcovacsMQTT] _message_to_dict body: %s", JSON.stringify(result['body']));
             if (result['body']['msg'] === 'ok') {
                 name = action.name.replace("Get", "");
                 if (name.toLowerCase() === 'cleaninfo') {
@@ -363,6 +368,7 @@ class EcovacsMQTT extends EventEmitter {
                 } else if (name.toLowerCase() === 'lifespan') {
                     result['event'] = "LifeSpan";
                 } else { //Default back to replacing Get from the api cmdName
+                    tools.envLog("[EcovacsMQTT] _message_to_dict default: %s", name);
                     result['event'] = name;
                 }
             } else {
@@ -370,6 +376,9 @@ class EcovacsMQTT extends EventEmitter {
                     if (name === "charge") {
                         result['event'] = "ChargeState";
                     }
+                }
+                if (!result['event']) {
+                    tools.envLog("[EcovacsMQTT] _message_to_dict no command detected");
                 }
             }
             return result;
