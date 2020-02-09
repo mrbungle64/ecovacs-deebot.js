@@ -274,15 +274,15 @@ class EcovacsMQTT extends EventEmitter {
         if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
             let result = xmlOrJson;
             if (result['body']['msg'] === 'ok') {
-                name = action.name.toLowerCase();
-                if (name === 'cleaninfo') {
+                name = action.name.replace("Get", "");
+                if (name.toLowerCase() === 'cleaninfo') {
                     result['event'] = "CleanReport";
-                } else if (name === 'chargestate') {
+                } else if (name.toLowerCase() === 'chargestate') {
                     result['event'] = "ChargeState";
-                } else if (name === 'battery') {
+                } else if (name.toLowerCase() === 'battery') {
                     result['event'] = "BatteryInfo";
                 } else { //Default back to replacing Get from the api cmdName
-                    result['event'] = name.replace("Get", "");
+                    result['event'] = name;
                 }
             }
             return result;
@@ -292,17 +292,17 @@ class EcovacsMQTT extends EventEmitter {
             let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
             if (payloadXml.documentElement.hasChildNodes()) {
                 let firstChild = payloadXml.documentElement.firstChild;
-                name = firstChild.name;
+                name = firstChild.name.replace("Get", "");
             }
             if (name) {
                 result = Object.assign(result, firstChild.attributes);
                 //Fix for difference in XMPP vs API response
                 //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-                if (name === "clean") {
+                if (name.toLowerCase() === "clean") {
                     result['event'] = "CleanReport";
-                } else if (name === "charge") {
+                } else if (name.toLowerCase() === "charge") {
                     result['event'] = "ChargeState";
-                } else if (name === "battery") {
+                } else if (name.toLowerCase() === "battery") {
                     result['event'] = "BatteryInfo";
                 } else { //Default back to replacing Get from the api cmdName
                     result['event'] = action.name.replace("Get", "");
@@ -312,7 +312,7 @@ class EcovacsMQTT extends EventEmitter {
                 result['event'] = action.name.replace("Get", "");
                 if (result.hasOwnProperty('ret')) { //Handle errors as needed
                     if (result['ret'] === 'fail') {
-                        if (action.name === "Charge") { //So far only seen this with Charge, when already docked
+                        if (result['event'].toLowerCase() === "charge") { //So far only seen this with Charge, when already docked
                             result['event'] = "ChargeState";
                         }
                     }
@@ -351,17 +351,17 @@ class EcovacsMQTT extends EventEmitter {
         if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
             let result = xmlOrJson;
             if (result['body']['msg'] === 'ok') {
-                name = action.name.toLowerCase();
-                if (name === 'cleaninfo') {
+                name = action.name.replace("Get", "");
+                if (name.toLowerCase() === 'cleaninfo') {
                     result['event'] = "clean_report";
-                } else if (name === 'chargestate') {
+                } else if (name.toLowerCase() === 'chargestate') {
                     result['event'] = "charge_state";
-                } else if (name === 'battery') {
+                } else if (name.toLowerCase() === 'battery') {
                     result['event'] = "battery_info";
-                } else if (name === 'lifespan') {
+                } else if (name.toLowerCase() === 'lifespan') {
                     result['event'] = "life_span";
                 } else { //Default back to replacing Get from the api cmdName
-                    result['event'] = name.replace("Get", "");
+                    result['event'] = name;
                 }
             } else {
                 if (result['body']['msg'] === 'fail') {
