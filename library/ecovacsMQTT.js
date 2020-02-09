@@ -325,7 +325,9 @@ class EcovacsMQTT extends EventEmitter {
     _handle_message(topic, payload) {
         let as_dict = this._message_to_dict(topic, payload);
         if (as_dict) {
-            let command = as_dict['key'];
+            tools.envLog("[EcovacsMQTT] as_dict: %s", as_dict);
+            let command = as_dict['event'];
+            tools.envLog("[EcovacsMQTT] command: %s", command);
             this._handle_command(command, as_dict);
         }
         else {
@@ -353,20 +355,20 @@ class EcovacsMQTT extends EventEmitter {
             if (result['body']['msg'] === 'ok') {
                 name = action.name.replace("Get", "");
                 if (name.toLowerCase() === 'cleaninfo') {
-                    result['event'] = "clean_report";
+                    result['event'] = "CleanReport";
                 } else if (name.toLowerCase() === 'chargestate') {
-                    result['event'] = "charge_state";
+                    result['event'] = "ChargeState";
                 } else if (name.toLowerCase() === 'battery') {
-                    result['event'] = "battery_info";
+                    result['event'] = "BatteryInfo";
                 } else if (name.toLowerCase() === 'lifespan') {
-                    result['event'] = "life_span";
+                    result['event'] = "LifeSpan";
                 } else { //Default back to replacing Get from the api cmdName
                     result['event'] = name;
                 }
             } else {
                 if (result['body']['msg'] === 'fail') {
                     if (name === "charge") {
-                        result['event'] = "charge_state";
+                        result['event'] = "ChargeState";
                     }
                 }
             }
