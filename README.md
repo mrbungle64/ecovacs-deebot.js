@@ -185,6 +185,10 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.1.8
+  * Improved support for MQTT devices
+  * Implemented support for Ozmo 950 device
+
 ### 0.1.7
   * Bugfix detecting MQTT devices
   * Register features of known and supported models
