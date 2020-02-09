@@ -79,7 +79,6 @@ class EcovacsMQTT extends EventEmitter {
 
         this.client.on('message', (topic, message) => {
             this._handle_message(topic.toString(), message.toString());
-            this.client.end();
         });
 
         this.client.on('error', (error) => {
