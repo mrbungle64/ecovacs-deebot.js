@@ -80,7 +80,7 @@ class EcovacsMQTT extends EventEmitter {
         this.client.on('message', (topic, message) => {
             tools.envLog('[EcovacsMQTT] message topic: %s', topic.toString());
             tools.envLog('[EcovacsMQTT] message message: %s', message.toString());
-            this._handle_ctl_mqtt(topic.toString(), message.toString());
+            this._handle_message(topic.toString(), message.toString());
             this.client.end();
         });
 
@@ -108,7 +108,7 @@ class EcovacsMQTT extends EventEmitter {
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT] c: %s", JSON.stringify(c));
         this.__call_ecovacs_device_api(c).then((json) => {
-            this._handle_ctl_api(action, json);
+            this._handle_command_api(action, json);
         }).catch((e) => {
             tools.envLog("[EcovacsMQTT] send_command: %s", e.toString());
         });
@@ -235,12 +235,12 @@ class EcovacsMQTT extends EventEmitter {
         });
     }
 
-    _handle_ctl_api(action, message) {
+    _handle_command_api(action, message) {
         let resp = null;
         let command = action;
         if (message) {
             if ('resp' in message) {
-                resp = this._ctl_to_dict_api(action, message['resp']);
+                resp = this._command_to_dict_api(action, message['resp']);
             }
             else {
                 command = action.name.replace(/^_+|_+$/g, '');
@@ -255,16 +255,16 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _ctl_to_dict_api(action, xmlOrJsonString) {
+    _command_to_dict_api(action, xmlOrJson) {
         let result = {};
-        if (!xmlOrJsonString) {
-            tools.envLog("[EcovacsMQTT] _ctl_to_dict_api action: %s", action);
-            tools.envLog("[EcovacsMQTT] _ctl_to_dict_api xmlOrJsonString: %s", xmlOrJsonString);
+        if (!xmlOrJson) {
+            tools.envLog("[EcovacsMQTT] _command_to_dict_api action: %s", action);
+            tools.envLog("[EcovacsMQTT] _command_to_dict_api xmlOrJson: %s", xmlOrJson);
             return result;
         }
         let name = null;
-        if (xmlOrJsonString.hasOwnProperty('body')) {
-            let result = xmlOrJsonString;
+        if (xmlOrJson.hasOwnProperty('body')) {
+            let result = xmlOrJson;
             if (result['body']['msg'] === 'ok') {
                 name = action.name.toLowerCase();
                 if (name === 'cleaninfo') {
@@ -280,7 +280,8 @@ class EcovacsMQTT extends EventEmitter {
             return result;
         }
         else {
-            let payloadXml = new DOMParser().parseFromString(xmlOrJsonString, 'text/xml');
+            let xmlString = xmlOrJson;
+            let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
             if (payloadXml.documentElement.hasChildNodes()) {
                 let firstChild = payloadXml.documentElement.firstChild;
                 name = firstChild.name;
@@ -313,8 +314,8 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _handle_ctl_mqtt(topic, payload) {
-        let as_dict = this._ctl_to_dict_mqtt(topic, payload);
+    _handle_message(topic, payload) {
+        let as_dict = this._message_to_dict(topic, payload);
         if (as_dict) {
             let command = as_dict['key'];
             this._handle_command(command, as_dict);
@@ -324,52 +325,79 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _ctl_to_dict_mqtt(topic, xmlstring) {
-        if (!xmlstring) {
-            tools.envLog("[EcovacsMQTT] _ctl_to_dict_mqtt topic: %s", topic);
-            tools.envLog("[EcovacsMQTT] _ctl_to_dict_mqtt xmlstring: %s", xmlstring);
+    _message_to_dict(topic, xmlOrJson) {
+        if (!xmlOrJson) {
+            tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
+            tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson: %s", xmlOrJson);
             return {};
         }
-        //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
-        let xml = new DOMParser().parseFromString(xmlstring, 'text/xml');
-        let result = tools.xmlDocumentElement2Json(xml.documentElement);
-
-        if (!xml.documentElement.attributes.getNamedItem('td')) {
-            // This happens for commands with no response data, such as PlaySound
-            // Handle response data with no 'td'
-
-            // single element with type and val
-            if (xml.documentElement.attributes.getNamedItem('type')) {
-                // seems to always be LifeSpan type
-                result['event'] = "LifeSpan";
+        let name = null;
+        if (xmlOrJson.hasOwnProperty('body')) {
+            let result = xmlOrJson;
+            if (result['body']['msg'] === 'ok') {
+                name = action.name.toLowerCase();
+                if (name === 'cleaninfo') {
+                    result['event'] = "clean_report";
+                } else if (name === 'chargestate') {
+                    result['event'] = "charge_state";
+                } else if (name === 'battery') {
+                    result['event'] = "battery_info";
+                } else if (name === 'lifespan') {
+                    result['event'] = "life_span";
+                } else { //Default back to replacing Get from the api cmdName
+                    result['event'] = name.replace("Get", "");
+                }
             } else {
-                // case where there is child element
-                if (xml.documentElement.hasChildNodes()) {
-                    let firstChild = xml.documentElement.firstChild;
-                    if (firstChild.name === 'clean') {
-                        result['event'] = "CleanReport";
-                    } else if (firstChild.name === 'charge') {
-                        result['event'] = "ChargeState";
-                    } else if (firstChild.name === 'battery') {
-                        result['event'] = "BatteryInfo";
-                    } else {
-                        return;
+                if (result['body']['msg'] === 'fail') {
+                    if (name === "charge") {
+                        result['event'] = "charge_state";
                     }
-                } else {
-                    // for non-'type' result with no child element, e.g., result of PlaySound
-                    return;
                 }
             }
-        } else {
-            // response includes 'td'
-            result['event'] = xml.documentElement.attributes.getNamedItem('td').name.replace("Server", "");
-            if (xml.documentElement.hasChildNodes()) {
-                let firstChild = payloadXml.documentElement.firstChild;
-                result = Object.assign(result, firstChild.attributes);
-            }
-            delete result['td'];
+            return result;
         }
-        return result
+        else {
+            //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
+            let xmlString = xmlOrJson;
+            let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
+            let result = tools.xmlDocumentElement2Json(xml.documentElement);
+
+            // Handle response data with no 'td'
+            if (!xml.documentElement.attributes.getNamedItem('td')) {
+
+                // single element with type and val
+                if (xml.documentElement.attributes.getNamedItem('type')) {
+                    // seems to always be LifeSpan type
+                    result['event'] = "LifeSpan";
+                } else {
+                    // case where there is child element
+                    if (xml.documentElement.hasChildNodes()) {
+                        let name = xml.documentElement.firstChild.name;
+                        if (name === 'clean') {
+                            result['event'] = "CleanReport";
+                        } else if (name === 'charge') {
+                            result['event'] = "ChargeState";
+                        } else if (name === 'battery') {
+                            result['event'] = "BatteryInfo";
+                        } else {
+                            return;
+                        }
+                    } else {
+                        // for non-'type' result with no child element, e.g., result of PlaySound
+                        return;
+                    }
+                }
+            } else {
+                // response includes 'td'
+                result['event'] = xml.documentElement.attributes.getNamedItem('td').name.replace("Server", "");
+                if (xml.documentElement.hasChildNodes()) {
+                    let firstChild = payloadXml.documentElement.firstChild;
+                    result = Object.assign(result, firstChild.attributes);
+                }
+                delete result['td'];
+            }
+            return result
+        }
     }
 
     _handle_command(command, event) {
