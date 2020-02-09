@@ -153,6 +153,15 @@ exports.KnownDevices = {
         "voice_report": false,
         'single_room': true
     },
+    "uv242z": {
+        "name": "DEEBOT 710",
+        "main_brush": true,
+        "spot_area": false,
+        "custom_area": false,
+        "mopping_system": false,
+        "voice_report": true,
+        'single_room': false
+    },
     "ls1ok3": {
         "name": "DEEBOT 900 Series",
         "main_brush": true,
