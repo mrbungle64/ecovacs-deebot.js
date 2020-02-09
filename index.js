@@ -384,7 +384,9 @@ class VacBot {
   }
 
   isOzmo950() {
+    tools.envLog("[VacBot] deviceClass: %s", this.deviceClass);
     if (this.deviceClass === 'yna5xi') {
+      tools.envLog("[VacBot] Ozmo 950 detected");
       return true;
     }
     return false;

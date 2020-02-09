@@ -200,7 +200,7 @@ class EcovacsMQTT extends EventEmitter {
 
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
-                res.setTimeout(6000);
+                res.setTimeout(60000);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -239,10 +239,10 @@ class EcovacsMQTT extends EventEmitter {
         let resp = null;
         let command = action;
         if (message) {
-            if ('resp' in message) {
+            if (message.hasOwnProperty('resp')) {
                 resp = this._command_to_dict_api(action, message['resp']);
             }
-            else {
+            else if (action.hasOwnProperty('name')) {
                 command = action.name.replace(/^_+|_+$/g, '');
                 resp = {
                     'event': command.toLowerCase(),
@@ -326,9 +326,9 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _message_to_dict(topic, xmlOrJson) {
+        tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
+        tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson: %s", xmlOrJson);
         if (!xmlOrJson) {
-            tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
-            tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson: %s", xmlOrJson);
             return {};
         }
         let name = null;
@@ -405,15 +405,15 @@ class EcovacsMQTT extends EventEmitter {
         switch (command) {
             case "chargestate":
                 this.bot._handle_charge_state(event);
-                this.emit(command, this.bot.charge_status);
+                this.emit("ChargeState", this.bot.charge_status);
                 break;
             case "batteryinfo":
                 this.bot._handle_battery_info(event);
-                this.emit(command, this.bot.battery_status);
+                this.emit("BatteryInfo", this.bot.battery_status);
                 break;
             case "cleanreport":
                 this.bot._handle_clean_report(event);
-                this.emit(command, this.bot.clean_status);
+                this.emit("CleanReport", this.bot.clean_status);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown response type for command %s received: %s", command, event);
