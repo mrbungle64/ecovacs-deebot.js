@@ -6,6 +6,15 @@ function isObject(val) {
     return ((typeof val === 'function') || (typeof val === 'object'));
 }
 
+function isValidJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 function xmlDocumentElement2Json(element) {
     let json = {};
     json[element.nodeName] = {};
@@ -29,5 +38,6 @@ envLog = function () {
 };
 
 module.exports.isObject = isObject;
+module.exports.isValidJsonString = isValidJsonString;
 module.exports.xmlDocumentElement2Json = xmlDocumentElement2Json;
 module.exports.envLog = envLog;

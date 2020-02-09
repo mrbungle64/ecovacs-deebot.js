@@ -235,23 +235,24 @@ class EcovacsMQTT extends EventEmitter {
     _handle_command_api(action, message) {
         let resp = null;
         let command = action;
+        if (action.hasOwnProperty('name')) {
+            command = action.name.replace(/^_+|_+$/g, '');
+            tools.envLog("[EcovacsMQTT] _handle_command_api name: %s", action.name);
+            tools.envLog("[EcovacsMQTT] _handle_command_api command: %s", command);
+        }
         if (message) {
             if (message.hasOwnProperty('resp')) {
                 resp = this._command_to_dict_api(action, message['resp']);
-                tools.envLog("[EcovacsMQTT] _handle_command_api resp: %s", JSON.stringify(resp));
             }
-            else if (action.hasOwnProperty('name')) {
-                tools.envLog("[EcovacsMQTT] _handle_command_api name: %s", action.name);
-                command = action.name.replace(/^_+|_+$/g, '');
-                tools.envLog("[EcovacsMQTT] _handle_command_api command: %s", command);
+            else {
                 resp = {
                     'event': command.toLowerCase(),
                     'data': message
                 };
-                tools.envLog("[EcovacsMQTT] _handle_command_api resp: %s", JSON.stringify(resp));
             }
         }
         if (resp) {
+            tools.envLog("[EcovacsMQTT] _handle_command_api resp: %s", JSON.stringify(resp));
             tools.envLog("[EcovacsMQTT] _handle_command_api command: %s", command);
             this._handle_command(command, resp.data);
         }
@@ -260,31 +261,16 @@ class EcovacsMQTT extends EventEmitter {
     _command_to_dict_api(action, xmlOrJson) {
         // TODO: fix duplicate code
         let result = {};
+        let name = null;
         if (!xmlOrJson) {
             tools.envLog("[EcovacsMQTT] _command_to_dict_api action: %s", action);
             return result;
         }
-        let isJson = false;
-        try {
-            xmlOrJson = JSON.parse(xmlOrJson);
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api JSON: %s", xmlOrJson);
-            isJson = true;
-        } catch (e) {
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api xmlString: %s", xmlOrJson);
-        }
-        let name = null;
-        if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
-            let result = xmlOrJson;
-            if (result['body']['msg'] === 'ok') {
-                name = action.name.replace("Get", "");
-                if (name.toLowerCase() === 'cleaninfo') {
-                    result['event'] = "CleanReport";
-                } else if (name.toLowerCase() === 'chargestate') {
-                    result['event'] = "ChargeState";
-                } else if (name.toLowerCase() === 'battery') {
-                    result['event'] = "BatteryInfo";
-                } else { //Default back to replacing Get from the api cmdName
-                    result['event'] = name;
+        if (tools.isValidJsonString(xmlOrJson)) {
+            let result = JSON.parse(xmlOrJson);
+            if (result.hasOwnProperty('body')) {
+                if (result['body']['msg'] === 'ok') {
+                    result['event'] = getEventNameForCommandString(action.name);
                 }
             }
             return result;
@@ -300,15 +286,7 @@ class EcovacsMQTT extends EventEmitter {
                 result = Object.assign(result, firstChild.attributes);
                 //Fix for difference in XMPP vs API response
                 //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-                if (name.toLowerCase() === "clean") {
-                    result['event'] = "CleanReport";
-                } else if (name.toLowerCase() === "charge") {
-                    result['event'] = "ChargeState";
-                } else if (name.toLowerCase() === "battery") {
-                    result['event'] = "BatteryInfo";
-                } else { //Default back to replacing Get from the api cmdName
-                    result['event'] = action.name.replace("Get", "");
-                }
+                result['event'] = getEventNameForCommandString(name);
             } else {
                 result = Object.assign(result, payloadXml.documentElement.attributes);
                 result['event'] = action.name.replace("Get", "");
@@ -340,44 +318,31 @@ class EcovacsMQTT extends EventEmitter {
 
     _message_to_dict(topic, xmlOrJson) {
         // TODO: fix duplicate code
+        let name = null;
         if (!xmlOrJson) {
             tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
             return {};
         }
-        let isJson = false;
-        try {
-            xmlOrJson = JSON.parse(xmlOrJson);
-            tools.envLog("[EcovacsMQTT] _message_to_dict JSON: %s", JSON.stringify(xmlOrJson));
-            isJson = true;
-        } catch (e) {
-            tools.envLog("[EcovacsMQTT] _message_to_dict xmlString: %s", xmlOrJson);
-        }
-        let name = null;
-        if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
-            let result = xmlOrJson;
-            tools.envLog("[EcovacsMQTT] _message_to_dict body: %s", JSON.stringify(result['body']));
-            if (result['body']['msg'] === 'ok') {
-                name = action.name.replace("Get", "");
-                if (name.toLowerCase() === 'cleaninfo') {
-                    result['event'] = "CleanReport";
-                } else if (name.toLowerCase() === 'chargestate') {
-                    result['event'] = "ChargeState";
-                } else if (name.toLowerCase() === 'battery') {
-                    result['event'] = "BatteryInfo";
-                } else if (name.toLowerCase() === 'lifespan') {
-                    result['event'] = "LifeSpan";
-                } else { //Default back to replacing Get from the api cmdName
-                    tools.envLog("[EcovacsMQTT] _message_to_dict default: %s", name);
-                    result['event'] = name;
-                }
-            } else {
-                if (result['body']['msg'] === 'fail') {
-                    if (name === "charge") {
-                        result['event'] = "ChargeState";
+        if (tools.isValidJsonString(xmlOrJson)) {
+            let result = JSON.parse(xmlOrJson);
+            if (xmlOrJson.hasOwnProperty('body')) {
+                tools.envLog("[EcovacsMQTT] _message_to_dict body: %s", JSON.stringify(result['body']));
+                if (result['body']['msg'] === 'ok') {
+                    result['event'] = getEventNameForCommandString(topic.name);
+                    if (!result['event']) {
+                        //Default back to replacing Get from the api cmdName
+                        tools.envLog("[EcovacsMQTT] _message_to_dict default: %s", topic.name);
+                        result['event'] = topic.name;
                     }
-                }
-                if (!result['event']) {
-                    tools.envLog("[EcovacsMQTT] _message_to_dict no command detected");
+                } else {
+                    if (result['body']['msg'] === 'fail') {
+                        if (name === "charge") {
+                            result['event'] = "ChargeState";
+                        }
+                    }
+                    if (!result['event']) {
+                        tools.envLog("[EcovacsMQTT] _message_to_dict no command detected");
+                    }
                 }
             }
             return result;
@@ -387,6 +352,7 @@ class EcovacsMQTT extends EventEmitter {
             let xmlString = xmlOrJson;
             let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
             let result = tools.xmlDocumentElement2Json(xml.documentElement);
+            let name = null;
 
             // Handle response data with no 'td'
             if (!xml.documentElement.attributes.getNamedItem('td')) {
@@ -398,16 +364,8 @@ class EcovacsMQTT extends EventEmitter {
                 } else {
                     // case where there is child element
                     if (xml.documentElement.hasChildNodes()) {
-                        let name = xml.documentElement.firstChild.name;
-                        if (name === 'clean') {
-                            result['event'] = "CleanReport";
-                        } else if (name === 'charge') {
-                            result['event'] = "ChargeState";
-                        } else if (name === 'battery') {
-                            result['event'] = "BatteryInfo";
-                        } else {
-                            return;
-                        }
+                        name = xml.documentElement.firstChild.name;
+                        result['event'] = getEventNameForCommandString(name);
                     } else {
                         // for non-'type' result with no child element, e.g., result of PlaySound
                         return;
@@ -415,7 +373,8 @@ class EcovacsMQTT extends EventEmitter {
                 }
             } else {
                 // response includes 'td'
-                result['event'] = xml.documentElement.attributes.getNamedItem('td').name.replace("Server", "");
+                name = xml.documentElement.attributes.getNamedItem('td').name;
+                result['event'] = getEventNameForCommandString(name);
                 if (xml.documentElement.hasChildNodes()) {
                     let firstChild = payloadXml.documentElement.firstChild;
                     result = Object.assign(result, firstChild.attributes);
@@ -427,17 +386,16 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _handle_command(command, event) {
-        command = command.replace("Get", "").toLowerCase();
-        switch (command) {
-            case "chargestate":
+        switch (getEventNameForCommandString(command)) {
+            case "ChargeState":
                 this.bot._handle_charge_state(event);
                 this.emit("ChargeState", this.bot.charge_status);
                 break;
-            case "batteryinfo":
+            case "BatteryInfo":
                 this.bot._handle_battery_info(event);
                 this.emit("BatteryInfo", this.bot.battery_status);
                 break;
-            case "cleanreport":
+            case "CleanReport":
                 this.bot._handle_clean_report(event);
                 this.emit("CleanReport", this.bot.clean_status);
                 break;
@@ -452,6 +410,26 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     send_ping(to) {}
+}
+
+function getEventNameForCommandString(str) {
+    let command = str.replace('Get','').replace("Server", "");
+    switch (command.toLowerCase()) {
+        case 'clean':
+        case 'cleanreport':
+            return 'CleanReport';
+        case 'charge':
+        case 'chargestate':
+            return 'ChargeState';
+        case "battery":
+        case 'batteryinfo':
+            return 'BatteryInfo';
+        case 'lifespan':
+            return 'LifeSpan';
+        default:
+            tools.envLog("[EcovacsMQTT] Unknown command name: %s", command);
+            return command;
+    }
 }
 
 module.exports = EcovacsMQTT;
