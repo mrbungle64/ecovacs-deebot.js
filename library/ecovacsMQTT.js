@@ -256,14 +256,22 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _command_to_dict_api(action, xmlOrJson) {
+        // TODO: fix duplicate code
         let result = {};
         if (!xmlOrJson) {
             tools.envLog("[EcovacsMQTT] _command_to_dict_api action: %s", action);
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api xmlOrJson: %s", xmlOrJson);
             return result;
         }
+        let isJson = false;
+        try {
+            xmlOrJson = JSON.parse(xmlOrJson);
+            tools.envLog("[EcovacsMQTT] _command_to_dict_api JSON: %s", xmlOrJson);
+            isJson = true;
+        } catch (e) {
+            tools.envLog("[EcovacsMQTT] _command_to_dict_api xmlString: %s", xmlOrJson);
+        }
         let name = null;
-        if (xmlOrJson.hasOwnProperty('body')) {
+        if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
             let result = xmlOrJson;
             if (result['body']['msg'] === 'ok') {
                 name = action.name.toLowerCase();
@@ -326,13 +334,21 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _message_to_dict(topic, xmlOrJson) {
-        tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
-        tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson: %s", xmlOrJson);
+        // TODO: fix duplicate code
         if (!xmlOrJson) {
+            tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
             return {};
         }
+        let isJson = false;
+        try {
+            xmlOrJson = JSON.parse(xmlOrJson);
+            tools.envLog("[EcovacsMQTT] _message_to_dict JSON: %s", xmlOrJson);
+            isJson = true;
+        } catch (e) {
+            tools.envLog("[EcovacsMQTT] _message_to_dict xmlString: %s", xmlOrJson);
+        }
         let name = null;
-        if (xmlOrJson.hasOwnProperty('body')) {
+        if ((isJson) && (xmlOrJson.hasOwnProperty('body'))) {
             let result = xmlOrJson;
             if (result['body']['msg'] === 'ok') {
                 name = action.name.toLowerCase();
