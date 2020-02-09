@@ -383,7 +383,7 @@ class EcovacsMQTT extends EventEmitter {
                 name = xml.documentElement.attributes.getNamedItem('td').name;
                 result['event'] = getEventNameForCommandString(name);
                 if (xml.documentElement.hasChildNodes()) {
-                    let firstChild = payloadXml.documentElement.firstChild;
+                    let firstChild = xml.documentElement.firstChild;
                     result = Object.assign(result, firstChild.attributes);
                 }
                 delete result['td'];
