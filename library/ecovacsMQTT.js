@@ -334,6 +334,13 @@ class EcovacsMQTT extends EventEmitter {
                         tools.envLog("[EcovacsMQTT] _message_to_dict default: %s", topic.name);
                         result['event'] = topic.name;
                     }
+                } else if (result['body']['data']) {
+                    let data = result['body']['data'];
+                    if ((data.hasOwnProperty('cleanState'))) {
+                        if (data['cleanstate']['type']) {
+                            result['event'] = getEventNameForCommandString(data['cleanstate']['type']);
+                        }
+                    }
                 } else {
                     if (result['body']['msg'] === 'fail') {
                         if (name === "charge") {
