@@ -185,6 +185,9 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.1.11
+  * Bugfix release
+  
 ### 0.1.8
   * Improved support for MQTT devices
   * Implemented support for Ozmo 950 device
@@ -226,6 +229,7 @@ function httpGetJson(url) {
 * @wpietri ([sucks](https://github.com/wpietri/sucks))
 * @bmartin5692 ([sucks](https://github.com/bmartin5692/sucks), [bumber](https://github.com/bmartin5692/bumper))
 * @Ligio ([ozmo](https://github.com/Ligio/ozmo))
+* @And3rsL ([Deebotozmo](https://github.com/And3rsL/Deebotozmo))
 
 ## Dedication
 
