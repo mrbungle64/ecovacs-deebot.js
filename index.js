@@ -369,16 +369,18 @@ class VacBot {
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
-      this.run('GetBatteryState');
-      this.run('GetCleanState');
-      this.run('GetChargeState');
-      if (this.hasMainBrush()) {
-        this.run('GetLifeSpan', 'main_brush');
-      }
-      this.run('GetLifeSpan', 'side_brush');
-      this.run('GetLifeSpan', 'filter');
-      if (this.hasMoppingSystem()) {
-        this.run('GetWaterLevel');
+      if (!this.useMqtt) {
+        this.run('GetBatteryState');
+        this.run('GetCleanState');
+        this.run('GetChargeState');
+        if (this.hasMainBrush()) {
+          this.run('GetLifeSpan', 'main_brush');
+        }
+        this.run('GetLifeSpan', 'side_brush');
+        this.run('GetLifeSpan', 'filter');
+        if (this.hasMoppingSystem()) {
+          this.run('GetWaterLevel');
+        }
       }
     });
   }
@@ -452,13 +454,16 @@ class VacBot {
       type = response['type'];
     } else if (event.hasOwnProperty('type')) {
       type = event['type'];
-    } else {
-      return;
     }
+
     try {
       type = constants.COMPONENT_FROM_ECOVACS[type];
     } catch (e) {
       console.error("[VacBot] Unknown component type: ", event);
+    }
+
+    if (!type) {
+      return;
     }
 
     let lifespan = null;
@@ -533,10 +538,10 @@ class VacBot {
     let value = null;
     // Deebot Ozmo 950
     if (event.hasOwnProperty('body')) {
-      let response = event['body'];
-      value = response['data']['value'];
-    }
-    else {
+      value = event['body']['data']['value'];
+    } else if (event.hasOwnProperty('ctl')) {
+      value = event['ctl']['battery']['power'];
+    } else {
       value = parseFloat(event.attrs['power']) / 100;
     }
     try {
@@ -561,8 +566,8 @@ class VacBot {
     if (event.hasOwnProperty('body')) {
       let response = event['body'];
       let status = null;
-      if (response['code'] == 0) {
-        if (response['data']['isCharging'] == 1) {
+      if (response['code'] == '0') {
+        if (response['data']['isCharging'] == '1') {
           status = 'docked';
         }
       } else {

@@ -36,9 +36,6 @@ api.connect(email, password_hash).then(() => {
                 let battery = Math.round(batterystatus * 100);
                 console.log('[app2.js] BatteryInfo: ' + battery);
             });
-            vacbot.on('online', (online) => {
-                console.log('[app2.js] online: ' + online);
-            });
             vacbot.on('LifeSpan_filter', (level) => {
                 console.log('[app2.js] filter: ' + Math.round(level));
             });
@@ -52,23 +49,29 @@ api.connect(email, password_hash).then(() => {
             vacbot.on('message', (event) => {
                 console.log('[app2.js] message: ' + event);
             });
-            vacbot.on('packetsend', (event) => {
-                console.log('[app2.js] packetsend: ' + event);
-            });
-            vacbot.on('packetreceive', (event) => {
-                console.log('[app2.js] packetreceive: ' + event);
-            });
         });
         vacbot.connect_and_wait_until_ready();
-        vacbot.run('Clean');
-        vacbot.run('GetLifeSpan', 'main_brush');
-        vacbot.run('GetLifeSpan', 'side_brush');
-        vacbot.run('GetLifeSpan', 'filter');
-        let interval = setInterval(() => {
-            vacbot.run('GetCleanState');
-            vacbot.run('GetChargeState');
-            vacbot.run('GetBatteryState');
-        }, 15000);
+
+        console.log('[app2.js] isKnownDevice: ' + vacbot.isKnownDevice());
+        console.log('[app2.js] isSupportedDevice: ' + vacbot.isSupportedDevice());
+        console.log('[app2.js] name: ' + vacbot.getDeviceProperty('name'));
+        console.log('[app2.js] hasMainBrush: ' + vacbot.hasMainBrush());
+        console.log('[app2.js] hasSpotAreas: ' + vacbot.hasSpotAreas());
+        console.log('[app2.js] hasCustomAreas: ' + vacbot.hasCustomAreas());
+        console.log('[app2.js] hasMoppingSystem: ' + vacbot.hasMoppingSystem());
+        console.log('[app2.js] hasVoiceReports: ' + vacbot.hasVoiceReports());
+
+        if (!vacbot.useMqtt) {
+            vacbot.run('Clean');
+            vacbot.run('GetLifeSpan', 'main_brush');
+            vacbot.run('GetLifeSpan', 'side_brush');
+            vacbot.run('GetLifeSpan', 'filter');
+            let interval = setInterval(() => {
+                vacbot.run('GetCleanState');
+                vacbot.run('GetChargeState');
+                vacbot.run('GetBatteryState');
+            }, 15000);
+        }
     });
 }).catch((e) => {
     console.log('Failure in connecting: ', e.message);
