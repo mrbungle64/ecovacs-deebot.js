@@ -369,18 +369,16 @@ class VacBot {
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
-      if (!this.useMqtt) {
-        this.run('GetBatteryState');
-        this.run('GetCleanState');
-        this.run('GetChargeState');
-        if (this.hasMainBrush()) {
-          this.run('GetLifeSpan', 'main_brush');
-        }
-        this.run('GetLifeSpan', 'side_brush');
-        this.run('GetLifeSpan', 'filter');
-        if (this.hasMoppingSystem()) {
-          this.run('GetWaterLevel');
-        }
+      this.run('GetBatteryState');
+      this.run('GetCleanState');
+      this.run('GetChargeState');
+      if (this.hasMainBrush()) {
+        this.run('GetLifeSpan', 'main_brush');
+      }
+      this.run('GetLifeSpan', 'side_brush');
+      this.run('GetLifeSpan', 'filter');
+      if (this.hasMoppingSystem()) {
+        this.run('GetWaterLevel');
       }
     });
   }
