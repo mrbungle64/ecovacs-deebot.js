@@ -307,7 +307,13 @@ class EcovacsMQTT extends EventEmitter {
         let command = null;
         if (as_dict) {
             tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
-            if (as_dict.hasOwnProperty('ctl')) {
+            if (as_dict.hasOwnProperty('body')) {
+                let data = as_dict['body']['data'];
+                if (data.hasOwnProperty('isLow')) {
+                    command = 'BatteryInfo';
+                }
+            }
+            else if (as_dict.hasOwnProperty('ctl')) {
                 command = as_dict['ctl']['td'];
             }
             else {
