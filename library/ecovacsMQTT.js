@@ -312,6 +312,11 @@ class EcovacsMQTT extends EventEmitter {
                 if (data.hasOwnProperty('isLow')) {
                     command = 'BatteryInfo';
                 }
+                else if (data.hasOwnProperty('state')) {
+                    if (data['state'] === 'clean') {
+                        command = 'CleanReport';
+                    }
+                }
             }
             else if (as_dict.hasOwnProperty('ctl')) {
                 command = as_dict['ctl']['td'];
