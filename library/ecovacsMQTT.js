@@ -241,18 +241,19 @@ class EcovacsMQTT extends EventEmitter {
         }
 
         if (message) {
+            tools.envLog("[EcovacsMQTT] _handle_command_response() message: %s", JSON.stringify(message, getCircularReplacer()));
             if (message.hasOwnProperty('resp')) {
 
                 resp = this._command_to_dict_api(action, message['resp']);
+                tools.envLog("[EcovacsMQTT] _handle_command_response() resp(1): %s", command, JSON.stringify(resp, getCircularReplacer()));
             }
             else {
                 resp = {
                     'event': command.toLowerCase(),
                     'data': message
                 };
+                tools.envLog("[EcovacsMQTT] _handle_command_response() resp(2): %s", command, JSON.stringify(resp, getCircularReplacer()));
             }
-            tools.envLog("[EcovacsMQTT] _handle_command_response() command: %s resp: %s", command, JSON.stringify(resp, getCircularReplacer()));
-
             this._handle_command(command, resp);
         }
     }
@@ -423,7 +424,7 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _handle_command(command, event) {
-        tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, event);
+        tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         switch (getEventNameForCommandString(command)) {
             case "ChargeState":
                 this.bot._handle_charge_state(event);
@@ -437,8 +438,11 @@ class EcovacsMQTT extends EventEmitter {
                 this.bot._handle_clean_report(event);
                 this.emit("CleanReport", this.bot.clean_status);
                 break;
+            case "LifeSpan":
+                this.bot._handle_life_span(event);
+                break;
             default:
-                tools.envLog("[EcovacsMQTT] Unknown response type for command %s received: %s", command, event);
+                tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
                 break;
         }
     }
@@ -465,6 +469,9 @@ function getEventNameForCommandString(str) {
             return 'BatteryInfo';
         case 'lifespan':
             return 'LifeSpan';
+        case "waterlevel":
+        case "waterpermeability":
+            return 'WaterLevel';
         default:
             tools.envLog("[EcovacsMQTT] Unknown command name: %s str: %s", command, str);
             return command;
