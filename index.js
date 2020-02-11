@@ -501,34 +501,37 @@ class VacBot {
       this.clean_status = this.vacuum_status;
       return;
     }
-
-    let type = event.attrs['type'];
-    try {
-      type = constants.CLEAN_MODE_FROM_ECOVACS[type];
-      let statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
-      if (statustype === 'stop' || statustype === 'pause') {
-        type = statustype
-      }
-    } catch (e) {
-      console.error("[VacBot] Unknown cleaning status: ", event);
-    }
-    this.clean_status = type;
-    tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
-    this.vacuum_status = type;
-
-    let fan = null;
-    if (event.attrs.hasOwnProperty('speed')) {
-      fan = event.attrs['speed'];
-    }
-    tools.envLog("[VacBot] fan: ", fan);
-    if (fan !== null) {
+    if (event) {
+      let type = event.attrs['type'];
       try {
-        fan = constants.FAN_SPEED_FROM_ECOVACS[fan];
-        this.fan_speed = fan;
-        tools.envLog("[VacBot] fan speed: ", fan);
+        type = constants.CLEAN_MODE_FROM_ECOVACS[type];
+        let statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+        if (statustype === 'stop' || statustype === 'pause') {
+          type = statustype
+        }
       } catch (e) {
-        console.error("[VacBot] Unknown fan speed: ", fan);
+        console.error("[VacBot] Unknown cleaning status: ", event);
       }
+      this.clean_status = type;
+      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
+      this.vacuum_status = type;
+
+      let fan = null;
+      if (event.attrs.hasOwnProperty('speed')) {
+        fan = event.attrs['speed'];
+      }
+      tools.envLog("[VacBot] fan: ", fan);
+      if (fan !== null) {
+        try {
+          fan = constants.FAN_SPEED_FROM_ECOVACS[fan];
+          this.fan_speed = fan;
+          tools.envLog("[VacBot] fan speed: ", fan);
+        } catch (e) {
+          console.error("[VacBot] Unknown fan speed: ", fan);
+        }
+      }
+    } else {
+      console.error("[VacBot] _handle_clean_report event undefined");
     }
   }
 
