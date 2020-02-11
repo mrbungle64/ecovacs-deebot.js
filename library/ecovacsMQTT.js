@@ -163,21 +163,17 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     __call_ecovacs_device_api(args) {
-        let params = {};
-        for (let key in args) {
-            if (args.hasOwnProperty(key)) {
-                params[key] = args[key];
-            }
-        }
-
         return new Promise((resolve, reject) => {
+            let params = {};
+            for (let key in args) {
+                if (args.hasOwnProperty(key)) {
+                    params[key] = args[key];
+                }
+            }
             let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
                 continent: this.continent
             });
-            let headers = {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(JSON.stringify(params))
-            };
+            let headers = {};
             if (this.bot.isOzmo950()) {
                 url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
                 headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
@@ -195,7 +191,7 @@ class EcovacsMQTT extends EventEmitter {
 
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
-                res.setTimeout(60000);
+                res.setTimeout(6000);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -249,7 +245,7 @@ class EcovacsMQTT extends EventEmitter {
             }
             else {
                 resp = {
-                    'event': command.toLowerCase(),
+                    'event': command,
                     'data': message
                 };
                 tools.envLog("[EcovacsMQTT] _handle_command_response() resp(2): %s", command, JSON.stringify(resp, getCircularReplacer()));
