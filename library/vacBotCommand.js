@@ -180,6 +180,12 @@ class GetWaterLevel extends VacBotCommand {
     }
 }
 
+class GetWaterBoxInfo extends VacBotCommand {
+    constructor() {
+        super('GetWaterBoxInfo');
+    }
+}
+
 class GetDeebotPos extends VacBotCommand {
     constructor() {
         super('GetDeebotPos');
@@ -210,4 +216,5 @@ module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetWaterLevel = GetWaterLevel;
 module.exports.SetWaterLevel = SetWaterLevel;
+module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.PlaySound = PlaySound;

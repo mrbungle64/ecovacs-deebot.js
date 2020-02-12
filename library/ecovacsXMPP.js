@@ -84,8 +84,8 @@ class EcovacsXMPP extends EventEmitter {
                 }
                 switch (command) {
                     case "WaterBoxInfo":
-                        tools.envLog("[EcovacsXMPP] WaterBoxInfo: %s", secondChild.attrs.on);
-                        this.emit("WaterBoxInfo", secondChild.attrs.on);
+                        this.bot._handle_waterbox_info(secondChild.attrs.on);
+                        this.emit("WaterBoxInfo", this.bot.waterbox_info);
                         break;
                     case "DeviceInfo":
                         tools.envLog("[EcovacsXMPP] Received an DeviceInfo Stanza %s", secondChild.children[0]);

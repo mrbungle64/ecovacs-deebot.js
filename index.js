@@ -351,16 +351,17 @@ class VacBot {
       y: null,
       a: null,
       invalid: 0
-    }
+    };
     this.charge_position = {
       x: null,
       y: null,
       a: null
-    }
+    };
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
     this.water_level = null;
+    this.waterbox_info = null;
     this.components = {};
     this.ping_interval = null;
     this.error_event = null;
@@ -608,12 +609,13 @@ class VacBot {
   }
 
   _handle_water_level(level) {
-    try {
       this.water_level = level;
       tools.envLog("[VacBot] *** water_level = " + constants.WATER_LEVEL_FROM_ECOVACS[level] + " (" + level + ")");
-    } catch (e) {
-      console.error("[VacBot] Unknown water level value: ", level);
-    }
+  }
+
+  _handle_waterbox_info(val) {
+      this.waterbox_info = val;
+      tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
   }
 
   _handle_charge_state(event) {
@@ -790,6 +792,9 @@ class VacBot {
           return;
         }
         this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
+        break;
+      case "getwaterboxinfo":
+        this.send_command(new vacBotCommand.GetWaterBoxInfo());
         break;
     }
   }
