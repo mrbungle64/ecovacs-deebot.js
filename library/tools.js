@@ -15,6 +15,34 @@ function isValidJsonString(str) {
     return true;
 }
 
+function getEventNameForCommandString(str) {
+    envLog("[tools] getEventNameForCommandString() str: %s", str);
+    let command = str.replace(/^_+|_+$/g, '').replace('Get','').replace("Server", "");
+    switch (command.toLowerCase()) {
+        case 'clean':
+        case 'cleanreport':
+            return 'CleanReport';
+        case 'charge':
+        case 'chargestate':
+            return 'ChargeState';
+        case "battery":
+        case 'batteryinfo':
+            return 'BatteryInfo';
+        case 'lifespan':
+            return 'LifeSpan';
+        case "waterlevel":
+        case "waterpermeability":
+            return 'WaterLevel';
+        case "waterboxinfo":
+            return 'WaterBoxInfo';
+        case "deebotposition":
+            return 'DeebotPosition';
+        default:
+            envLog("[tools] Unknown command name: %s str: %s", command, str);
+            return command;
+    }
+}
+
 function xmlDocumentElement2Json(element) {
     let json = {};
     json[element.nodeName] = {};
@@ -39,5 +67,6 @@ envLog = function () {
 
 module.exports.isObject = isObject;
 module.exports.isValidJsonString = isValidJsonString;
+module.exports.getEventNameForCommandString = getEventNameForCommandString;
 module.exports.xmlDocumentElement2Json = xmlDocumentElement2Json;
 module.exports.envLog = envLog;

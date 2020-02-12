@@ -63,6 +63,12 @@ class EcovacsXMPP extends EventEmitter {
                 let level = null;
                 let command = secondChild.attrs.td;
                 if (!command) {
+                    if (secondChild.children[0]) {
+                        let name = secondChild.children[0].name;
+                        if (name) {
+                            command = tools.getEventNameForCommandString(name);
+                        }
+                    }
                     if (secondChild.attrs.hasOwnProperty('type')) {
                         type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                         if (type) {
@@ -77,6 +83,10 @@ class EcovacsXMPP extends EventEmitter {
                     }
                 }
                 switch (command) {
+                    case "WaterBoxInfo":
+                        tools.envLog("[EcovacsXMPP] WaterBoxInfo: %s", secondChild.attrs.on);
+                        this.emit("WaterBoxInfo", secondChild.attrs.on);
+                        break;
                     case "DeviceInfo":
                         tools.envLog("[EcovacsXMPP] Received an DeviceInfo Stanza %s", secondChild.children[0]);
                         this.emit(command, this.bot.charge_status);
@@ -122,7 +132,7 @@ class EcovacsXMPP extends EventEmitter {
                         }
                         break;
                     default:
-                        tools.envLog("[EcovacsXMPP] Unknown response type received");
+                        tools.envLog("[EcovacsXMPP] Unknown response type received: %s", JSON.stringify(stanza));
                         break;
                 }
             } else if (stanza.name === "iq" && stanza.attrs.type === "error" && !!stanza.children[0] && stanza.children[0].name === "error" && !!stanza.children[0].children[0]) {
