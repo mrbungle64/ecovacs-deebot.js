@@ -99,21 +99,26 @@ class EcovacsMQTT extends EventEmitter {
     send_command(action, recipient) {
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT] c: %s", JSON.stringify(c, getCircularReplacer()));
-        this.__call_ecovacs_device_api(c).then((json) => {
+        this._call_ecovacs_device_api(c).then((json) => {
             this._handle_command_response(action, json);
         }).catch((e) => {
             tools.envLog("[EcovacsMQTT] error send_command: %s", e.toString());
         });
     }
 
-    _wrap_command(action, recipient) {
-        if (!action) {
-            tools.envLog("[EcovacsMQTT] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
-            return {};
-        }
-
-        let payload = null;
+    _wrap_command_getPayloadType(action) {
         let payloadType = null;
+        if (this.bot.isOzmo950()) {
+            payloadType = "j";
+        }
+        else {
+            payloadType = "x";
+        }
+        return payloadType;
+    }
+
+    _wrap_command_getPayload(action) {
+        let payload = null;
 
         if (this.bot.isOzmo950()) {
             // All requests need to have this header -- not sure about timezone and ver
@@ -130,7 +135,7 @@ class EcovacsMQTT extends EventEmitter {
             }
 
             payload = payloadRequest;
-            payloadType = "j";
+            tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payload);
         } else {
             let xml = action.to_xml();
             // Remove the td from ctl xml for RestAPI
@@ -140,7 +145,14 @@ class EcovacsMQTT extends EventEmitter {
 
             payload = payloadXml.toString();
             tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payloadXml.toString());
-            payloadType = "x";
+        }
+        return payload;
+    }
+
+    _wrap_command(action, recipient) {
+        if (!action) {
+            tools.envLog("[EcovacsMQTT] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
+            return {};
         }
 
         return {
@@ -152,9 +164,9 @@ class EcovacsMQTT extends EventEmitter {
                 'with': 'users',
             },
             "cmdName": action.name,
-            "payload": payload,
+            "payload": this._wrap_command_getPayload(action),
 
-            "payloadType": payloadType,
+            "payloadType": this._wrap_command_getPayloadType(action),
             "td": "q",
             "toId": recipient,
             "toRes": this.vacuum['resource'],
@@ -162,21 +174,16 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    __call_ecovacs_device_api(args) {
+    _call_ecovacs_device_api(params) {
         return new Promise((resolve, reject) => {
-            let params = {};
-            for (let key in args) {
-                if (args.hasOwnProperty(key)) {
-                    params[key] = args[key];
-                }
-            }
             let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
                 continent: this.continent
             });
-            let headers = {};
+            let headers = {
+                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
+            };
             if (this.bot.isOzmo950()) {
                 url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
-                headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
             }
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
