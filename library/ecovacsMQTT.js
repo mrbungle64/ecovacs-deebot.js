@@ -340,7 +340,7 @@ class EcovacsMQTT extends EventEmitter {
 
             tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
 
-            let command = _dict_to_command(as_dict);
+            let command = this._dict_to_command(as_dict);
             if (command) {
                 tools.envLog("[EcovacsMQTT] command: %s", command);
                 this._handle_command(command, as_dict);
@@ -444,6 +444,9 @@ class EcovacsMQTT extends EventEmitter {
             case "LifeSpan":
                 this.bot._handle_life_span(event);
                 break;
+            case "DeebotPosition":
+                this.bot._handle_deebot_position(event);
+                break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
                 break;
@@ -455,6 +458,17 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     send_ping(to) {}
+
+    //end session
+    disconnect() {
+        tools.envLog("[EcovacsMQTT] Closing MQTT Client...");
+        try{
+            this.client.end();
+            tools.envLog("[EcovacsMQTT] Closed MQTT Client");
+        } catch(e) {
+            tools.envLog("[EcovacsMQTT] Error closing MQTT Client:  %s", e.toString());
+        }
+    }
 }
 
 function getEventNameForCommandString(str) {
@@ -475,6 +489,8 @@ function getEventNameForCommandString(str) {
         case "waterlevel":
         case "waterpermeability":
             return 'WaterLevel';
+        case "deebotposition":
+            return 'DeebotPosition';
         default:
             tools.envLog("[EcovacsMQTT] Unknown command name: %s str: %s", command, str);
             return command;
