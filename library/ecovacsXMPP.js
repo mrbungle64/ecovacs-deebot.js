@@ -70,8 +70,8 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('type')) {
-                        type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
-                        if (type) {
+                        let component = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                        if (component) {
                             command = 'LifeSpan';
                         }
                     }
@@ -86,10 +86,6 @@ class EcovacsXMPP extends EventEmitter {
                     case "WaterBoxInfo":
                         this.bot._handle_waterbox_info(secondChild.attrs.on);
                         this.emit("WaterBoxInfo", this.bot.waterbox_info);
-                        break;
-                    case "DeviceInfo":
-                        tools.envLog("[EcovacsXMPP] Received an DeviceInfo Stanza %s", secondChild.children[0]);
-                        this.emit(command, this.bot.charge_status);
                         break;
                     case "ChargeState":
                         this.bot._handle_charge_state(secondChild.children[0]);
@@ -113,14 +109,9 @@ class EcovacsXMPP extends EventEmitter {
                     case "LifeSpan":
                         tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", secondChild.attrs);
                         this.bot._handle_life_span(secondChild.attrs);
-                        if (!type) {
-                            if (secondChild.attrs.hasOwnProperty('type')) {
-                                type = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
-                            }
-                        }
-                        if (type) {
-                            if (this.bot.components[type]) {
-                                this.emit('LifeSpan_' + type, this.bot.components[type]);
+                        if (component) {
+                            if (this.bot.components[component]) {
+                                this.emit('LifeSpan_' + component, this.bot.components[component]);
                             }
                         }
                         break;
