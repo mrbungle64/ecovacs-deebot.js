@@ -180,10 +180,12 @@ class EcovacsMQTT extends EventEmitter {
                 continent: this.continent
             });
             let headers = {
-                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(JSON.stringify(params))
             };
             if (this.bot.isOzmo950()) {
                 url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
+                headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
             }
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
