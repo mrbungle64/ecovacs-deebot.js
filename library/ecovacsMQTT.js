@@ -275,7 +275,7 @@ class EcovacsMQTT extends EventEmitter {
             let result = JSON.parse(xmlOrJson);
             if (result.hasOwnProperty('body')) {
                 if (result['body']['msg'] === 'ok') {
-                    result['event'] = getEventNameForCommandString(action.name);
+                    result['event'] = tools.getEventNameForCommandString(action.name);
                 }
             }
             return result;
@@ -291,7 +291,7 @@ class EcovacsMQTT extends EventEmitter {
                 result = Object.assign(result, firstChild.attributes);
                 //Fix for difference in XMPP vs API response
                 //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-                result['event'] = getEventNameForCommandString(name);
+                result['event'] = tools.getEventNameForCommandString(name);
             } else {
                 result = Object.assign(result, payloadXml.documentElement.attributes);
                 result['event'] = action.name.replace("Get", "");
@@ -364,7 +364,7 @@ class EcovacsMQTT extends EventEmitter {
             if (xmlOrJson.hasOwnProperty('body')) {
                 tools.envLog("[EcovacsMQTT] _message_to_dict body: %s", JSON.stringify(result['body'], getCircularReplacer()));
                 if (result['body']['msg'] === 'ok') {
-                    result['event'] = getEventNameForCommandString(topic.name);
+                    result['event'] = tools.getEventNameForCommandString(topic.name);
                     if (!result['event']) {
                         //Default back to replacing Get from the api cmdName
                         tools.envLog("[EcovacsMQTT] _message_to_dict default: %s", topic.name);
@@ -374,7 +374,7 @@ class EcovacsMQTT extends EventEmitter {
                     let data = result['body']['data'];
                     if ((data.hasOwnProperty('cleanState'))) {
                         if (data['cleanstate']['type']) {
-                            result['event'] = getEventNameForCommandString(data['cleanstate']['type']);
+                            result['event'] = tools.getEventNameForCommandString(data['cleanstate']['type']);
                         }
                     }
                 } else {
@@ -408,7 +408,7 @@ class EcovacsMQTT extends EventEmitter {
                     // case where there is child element
                     if (xml.documentElement.hasChildNodes()) {
                         name = xml.documentElement.firstChild.name;
-                        result['event'] = getEventNameForCommandString(name);
+                        result['event'] = tools.getEventNameForCommandString(name);
                     } else {
                         // for non-'type' result with no child element, e.g., result of PlaySound
                         return;
@@ -417,7 +417,7 @@ class EcovacsMQTT extends EventEmitter {
             } else {
                 // response includes 'td'
                 name = xml.documentElement.attributes.getNamedItem('td').name;
-                result['event'] = getEventNameForCommandString(name);
+                result['event'] = tools.getEventNameForCommandString(name);
                 if (xml.documentElement.hasChildNodes()) {
                     let firstChild = xml.documentElement.firstChild;
                     result = Object.assign(result, firstChild.attributes);
@@ -430,7 +430,7 @@ class EcovacsMQTT extends EventEmitter {
 
     _handle_command(command, event) {
         tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
-        switch (getEventNameForCommandString(command)) {
+        switch (tools.getEventNameForCommandString(command)) {
             case "ChargeState":
                 this.bot._handle_charge_state(event);
                 this.emit("ChargeState", this.bot.charge_status);
@@ -470,32 +470,6 @@ class EcovacsMQTT extends EventEmitter {
         } catch(e) {
             tools.envLog("[EcovacsMQTT] Error closing MQTT Client:  %s", e.toString());
         }
-    }
-}
-
-function getEventNameForCommandString(str) {
-    tools.envLog("[EcovacsMQTT] getEventNameForCommandString() str: %s", str);
-    let command = str.replace(/^_+|_+$/g, '').replace('Get','').replace("Server", "");
-    switch (command.toLowerCase()) {
-        case 'clean':
-        case 'cleanreport':
-            return 'CleanReport';
-        case 'charge':
-        case 'chargestate':
-            return 'ChargeState';
-        case "battery":
-        case 'batteryinfo':
-            return 'BatteryInfo';
-        case 'lifespan':
-            return 'LifeSpan';
-        case "waterlevel":
-        case "waterpermeability":
-            return 'WaterLevel';
-        case "deebotposition":
-            return 'DeebotPosition';
-        default:
-            tools.envLog("[EcovacsMQTT] Unknown command name: %s str: %s", command, str);
-            return command;
     }
 }
 
