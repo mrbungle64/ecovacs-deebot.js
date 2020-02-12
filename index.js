@@ -346,6 +346,17 @@ class VacBot {
     this.vacuum = vacuum;
     this.vacuum_status = null;
     this.clean_status = null;
+    this.deebot_position = {
+      x: null,
+      y: null,
+      a: null,
+      invalid: 0
+    }
+    this.charge_position = {
+      x: null,
+      y: null,
+      a: null
+    }
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -479,6 +490,49 @@ class VacBot {
       this.components[type] = lifespan;
     }
     tools.envLog("[VacBot] lifespan components: ", this.components.toString());
+  }
+
+  _handle_deebot_position(event) {
+        // Deebot Ozmo 950
+        if (event.hasOwnProperty('body')) {
+          let response = event['body']['data'];
+
+          //as deebotPos and chargePos can also appear in other messages (CleanReport)
+          //the handling should be extracted to a seperate function
+
+          this.deebot_position = {
+            x:response['deebotPos']['x'], 
+            y:response['deebotPos']['y'], 
+            a:response['deebotPos']['a'], 
+            invalid:response['deebotPos']['invalid']
+          };
+          tools.envLog("[VacBot] *** Deebot Position = "
+            + 'x=' + this.deebot_position.x
+            + ' y=' + this.deebot_position.y
+            + ' a=' + this.deebot_position.a
+            + ' invalid=' + this.deebot_position.invalid
+          );
+          
+          if(response['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
+            //there can be more than one charging station only handles first charging station
+            this.charge_position = { 
+              x:response['chargePos'][0]['x'], 
+              y:response['chargePos'][0]['y'], 
+              a:response['chargePos'][0]['a']
+            };
+            tools.envLog("[VacBot] *** Charge Position = "
+              + 'x=' + this.charge_position.x
+              + ' y=' + this.charge_position.y
+              + ' a=' + this.charge_position.a
+            );
+          }
+          return;
+        }
+        if (event) {
+          tools.envLog("[VacBot] _handle_deebot_position currently not supported for this model");
+        } else {
+          console.error("[VacBot] _handle_deebot_position event undefined");
+        }
   }
 
   _handle_clean_report(event) {

@@ -444,6 +444,9 @@ class EcovacsMQTT extends EventEmitter {
             case "LifeSpan":
                 this.bot._handle_life_span(event);
                 break;
+            case "DeebotPosition":
+                this.bot._handle_deebot_position(event);
+                break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
                 break;
@@ -486,6 +489,8 @@ function getEventNameForCommandString(str) {
         case "waterlevel":
         case "waterpermeability":
             return 'WaterLevel';
+        case "deebotposition":
+            return 'DeebotPosition';
         default:
             tools.envLog("[EcovacsMQTT] Unknown command name: %s str: %s", command, str);
             return command;
