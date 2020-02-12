@@ -29,8 +29,8 @@ api.connect(email, password_hash).then(() => {
             vacbot.on('FanSpeed', (speed) => {
                 console.log('[app2.js] FanSpeed: ' + speed);
             });
-            vacbot.on('CleanState', (state) => {
-                console.log('[app2.js] CleanState: ' + state);
+            vacbot.on('CleanReport', (state) => {
+                console.log('[app2.js] CleanReport: ' + state);
             });
             vacbot.on('BatteryInfo', (batterystatus) => {
                 let battery = Math.round(batterystatus * 100);
@@ -44,6 +44,12 @@ api.connect(email, password_hash).then(() => {
             });
             vacbot.on('LifeSpan_side_brush', (level) => {
                 console.log('[app2.js] side_brush: ' + Math.round(level));
+            });
+            vacbot.on('WaterLevel', (level) => {
+                console.log('[ecovacs-deebot-test.js] water level: ' + level);
+            });
+            vacbot.on('WaterBoxInfo', (level) => {
+                console.log('[ecovacs-deebot-test.js] waterBoxInfo: ' + level);
             });
             // MQTT
             vacbot.on('message', (event) => {
@@ -70,7 +76,7 @@ api.connect(email, password_hash).then(() => {
                 vacbot.run('GetCleanState');
                 vacbot.run('GetChargeState');
                 vacbot.run('GetBatteryState');
-            }, 15000);
+            }, 60000);
         }
         
         
