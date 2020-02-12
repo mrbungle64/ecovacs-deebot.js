@@ -5,7 +5,7 @@ const tools = require('./tools.js'),
 class VacBotCommand {
     constructor(name, args = {}) {
         this.name = name;
-        this.args = args;
+        this.args = Object.assign(args, { 'id': getReqID() });
     }
 
     to_xml() {
@@ -48,8 +48,7 @@ class Clean extends VacBotCommand {
         }
         tools.envLog('initCmd %s', initCmd);
         super('Clean', {
-            'clean': initCmd,
-            'id': getReqID()
+            'clean': initCmd
         })
     }
 }
@@ -110,17 +109,14 @@ class Charge extends VacBotCommand {
         super('Charge', {
             'charge': {
                 'type': constants.CHARGE_MODE_TO_ECOVACS['return']
-            },
-            'id': getReqID()
+            }
         });
     }
 }
 
 class GetDeviceInfo extends VacBotCommand {
     constructor() {
-        super('GetDeviceInfo', {
-            'id': getReqID()
-        });
+        super('GetDeviceInfo');
     }
 }
 
@@ -145,8 +141,7 @@ class GetBatteryState extends VacBotCommand {
 class GetLifeSpan extends VacBotCommand {
     constructor(component) {
         super('GetLifeSpan', {
-            'type': constants.COMPONENT_TO_ECOVACS[component],
-            'id': getReqID()
+            'type': constants.COMPONENT_TO_ECOVACS[component]
         });
     }
 }
@@ -174,17 +169,20 @@ class SetWaterLevel extends VacBotCommand {
             level = constants.WATER_LEVEL_TO_ECOVACS[level];
         }
         super('SetWaterPermeability', {
-            'v': level,
-            'id': getReqID()
+            'v': level
         });
     }
 }
 
 class GetWaterLevel extends VacBotCommand {
     constructor() {
-        super('GetWaterPermeability', {
-            'id': getReqID()
-        });
+        super('GetWaterPermeability');
+    }
+}
+
+class GetDeebotPos extends VacBotCommand {
+    constructor() {
+        super('GetDeebotPos');
     }
 }
 
@@ -202,6 +200,7 @@ module.exports.CustomArea = CustomArea;
 module.exports.Stop = Stop;
 module.exports.Pause = Pause;
 module.exports.Charge = Charge;
+module.exports.GetDeebotPos = GetDeebotPos;
 module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
