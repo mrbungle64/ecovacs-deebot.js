@@ -72,6 +72,25 @@ api.connect(email, password_hash).then(() => {
                 vacbot.run('GetBatteryState');
             }, 15000);
         }
+        
+        
+            //
+            // Catch ctrl-c to exit program
+            //
+            process.on('SIGINT', function() {
+                console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
+                disconnect();
+            });
+
+            function disconnect() {
+                try {
+                    vacbot.disconnect();
+                } catch (e) {
+                    console.log('Failure in disconnecting: ', e.message);
+                }
+                console.log("Exiting...");
+                process.exit();
+            }
     });
 }).catch((e) => {
     console.log('Failure in connecting: ', e.message);
