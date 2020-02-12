@@ -333,7 +333,7 @@ class EcovacsMQTT extends EventEmitter {
 
             tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
 
-            let command = _dict_to_command(as_dict);
+            let command = this._dict_to_command(as_dict);
             if (command) {
                 tools.envLog("[EcovacsMQTT] command: %s", command);
                 this._handle_command(command, as_dict);
