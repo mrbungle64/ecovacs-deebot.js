@@ -119,7 +119,7 @@ class EcovacsMQTT extends EventEmitter {
 
     _wrap_command_getPayload(action) {
         let payload = null;
-
+        tools.envLog("[EcovacsMQTT] _wrap_command() args: ", action.getArgs());
         if (this.bot.isOzmo950()) {
             // All requests need to have this header -- not sure about timezone and ver
             let payloadRequest = {};
@@ -129,7 +129,7 @@ class EcovacsMQTT extends EventEmitter {
             payloadRequest['header']['tmz'] = 480;
             payloadRequest['header']['ver'] = '0.0.22';
 
-            if (action.args.length > 0) {
+            if(Object.keys(action.args).length > 0) {
                 payloadRequest['body'] = {};
                 payloadRequest['body']['data'] = action.args;
             }
