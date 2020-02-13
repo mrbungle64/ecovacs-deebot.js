@@ -61,6 +61,7 @@ class EcovacsXMPP extends EventEmitter {
                 tools.envLog('secondChild: %s',secondChild.toString());
                 let type = null;
                 let level = null;
+                let component = null;
                 let command = secondChild.attrs.td;
                 if (!command) {
                     if (secondChild.children[0]) {
