@@ -8,10 +8,13 @@ function isObject(val) {
 
 function isValidJsonString(str) {
     try {
+        envLog("[tools] isValidJsonString() str: %s", str);
         JSON.parse(str);
     } catch (e) {
+        envLog("[tools] isValidJsonString() false");
         return false;
     }
+    envLog("[tools] isValidJsonString() true");
     return true;
 }
 
