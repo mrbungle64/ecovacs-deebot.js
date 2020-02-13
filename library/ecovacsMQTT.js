@@ -194,7 +194,6 @@ class EcovacsMQTT extends EventEmitter {
             }
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
-
             const reqOptions = {
                 hostname: url.hostname,
                 path: url.pathname,
