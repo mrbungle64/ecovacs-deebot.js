@@ -119,7 +119,7 @@ class EcovacsMQTT extends EventEmitter {
 
     _wrap_command_getPayload(action) {
         let payload = null;
-
+        tools.envLog("[EcovacsMQTT] _wrap_command() args: ", action.args);
         if (this.bot.isOzmo950()) {
             // All requests need to have this header -- not sure about timezone and ver
             let payloadRequest = {};
@@ -129,7 +129,7 @@ class EcovacsMQTT extends EventEmitter {
             payloadRequest['header']['tmz'] = 480;
             payloadRequest['header']['ver'] = '0.0.22';
 
-            if (action.args.length > 0) {
+            if(Object.keys(action.args).length > 0) {
                 payloadRequest['body'] = {};
                 payloadRequest['body']['data'] = action.args;
             }
@@ -189,7 +189,6 @@ class EcovacsMQTT extends EventEmitter {
             }
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
-
             const reqOptions = {
                 hostname: url.hostname,
                 path: url.pathname,
@@ -201,6 +200,11 @@ class EcovacsMQTT extends EventEmitter {
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
                 res.setTimeout(6000);
+                tools.envLog("[EcovacsMQTT] (request statusCode:", res.statusCode);
+                tools.envLog("[EcovacsMQTT] (request statusMessage:", res.statusMessage);
+                tools.envLog("[EcovacsMQTT] (request url:", res.url);
+                tools.envLog("[EcovacsMQTT] (request urlPathArgs:", res.urlPathArgs);
+                tools.envLog("[EcovacsMQTT] (request headers:", res.headers);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
