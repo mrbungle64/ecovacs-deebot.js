@@ -118,7 +118,7 @@ class EcovacsXMPP extends EventEmitter {
                         break;
                     case "WaterLevel":
                         tools.envLog("[EcovacsXMPP] Received an WaterLevel Stanza %s", secondChild.attrs);
-                        this.bot._handle_water_level(secondChild.attrs.v);
+                        this.bot._handle_water_level(secondChild);
                         if (this.bot.water_level) {
                             this.emit('WaterLevel', this.bot.water_level);
                         }

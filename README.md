@@ -185,6 +185,9 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.2.0
+  * Improved support for Ozmo 950 device
+
 ### 0.1.11
   * Bugfix release
   

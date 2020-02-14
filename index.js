@@ -596,7 +596,7 @@ class VacBot {
     if (event.hasOwnProperty('body')) {
       value = event['body']['data']['value'];
     } else if (event.hasOwnProperty('ctl')) {
-      value = event['ctl']['battery']['power']*100;
+      value = event['ctl']['battery']['power'];
     } else {
       value = parseFloat(event.attrs['power']);
     }
@@ -614,7 +614,7 @@ class VacBot {
     if (event.hasOwnProperty('body')) {
       this.water_level = event['body']['data']['amount'];
     } else {
-      this.water_level = event.attrs['level']; //TODO Please check for non 950 models
+      this.water_level = event.attrs['v'];
     }
     tools.envLog("[VacBot] *** water_level = " + constants.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
   }
