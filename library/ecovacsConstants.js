@@ -19,12 +19,28 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'single_room': 'singleroom',
     'stop': 'stop'
 };
+exports.CLEAN_MODE_TO_OZMO950 = {
+    'auto': 'auto',
+    'edge': 'border',
+    'spot': 'spot',
+    'spot_area': 'spotArea',
+    'single_room': 'singleroom',
+    'stop': 'stop'
+};
+
 
 exports.CLEAN_ACTION_TO_ECOVACS = {
     'start': 's',
     'pause': 'p',
     'resume': 'r',
     'stop': 'h',
+};
+
+exports.CLEAN_ACTION_TO_OZMO950 = {
+    'start': 'start',
+    'pause': 'pause',
+    'resume': 'resume',
+    'stop': 'stop',
 };
 
 exports.CLEAN_ACTION_FROM_ECOVACS = {
@@ -47,6 +63,11 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
 exports.FAN_SPEED_TO_ECOVACS = {
     'normal': 'standard',
     'high': 'strong'
+};
+
+exports.FAN_SPEED_TO_OZMO950 = {
+    'normal': '0',
+    'high': '1'
 };
 
 exports.WATER_LEVEL_TO_ECOVACS = {
@@ -73,6 +94,12 @@ exports.CHARGE_MODE_TO_ECOVACS = {
     'returning': 'Going',
     'charging': 'SlotCharging',
     'idle': 'Idle'
+};
+exports.CHARGE_MODE_TO_OZMO950 = {
+    'return': 'return',
+    'returning': 'returning',
+    'charging': 'charging',
+    'idle': 'idle'
 };
 
 exports.CHARGE_MODE_FROM_ECOVACS = {
