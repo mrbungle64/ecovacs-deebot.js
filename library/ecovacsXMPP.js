@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const tools = require('./tools');
+const tools = require('./tools.js');
 const Element = require('ltx').Element;
 const constants = require('./ecovacsConstants.js');
 
@@ -61,6 +61,7 @@ class EcovacsXMPP extends EventEmitter {
                 tools.envLog('secondChild: %s',secondChild.toString());
                 let type = null;
                 let level = null;
+                let component = null;
                 let command = secondChild.attrs.td;
                 if (!command) {
                     if (secondChild.children[0]) {
@@ -202,6 +203,9 @@ class EcovacsXMPP extends EventEmitter {
             xmlns: 'urn:xmpp:ping'
         });
         this.simpleXmpp.conn.send(e);
+    }
+
+    disconnect() {
     }
 }
 

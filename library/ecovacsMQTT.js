@@ -97,6 +97,11 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     send_command(action, recipient) {
+        if (this.bot.isOzmo950()) {
+            if (constants.COMMAND_TO_OZMO950[action.name]) {
+                action.name = constants.COMMAND_TO_OZMO950[action.name];
+            }
+        }
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT] c: %s", JSON.stringify(c, getCircularReplacer()));
         this._call_ecovacs_device_api(c).then((json) => {

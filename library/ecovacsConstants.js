@@ -104,6 +104,21 @@ exports.COMPONENT_FROM_ECOVACS = {
     'heap': 'filter'
 };
 
+exports.COMMAND_TO_OZMO950 = {
+    'Clean': 'clean',
+    'Charge': 'charge',
+    'SetTime': 'setTime',
+    'PlaySound': 'playSound',
+    'GetLifeSpan': 'getLifeSpan',
+    'GetBatteryInfo': 'getBattery',
+    'GetCleanState': 'getCleanInfo',
+    'GetCleanSpeed': 'getCleanSpeed',
+    'GetChargeState': 'getChargeState',
+    'GetWaterBoxInfo': 'getWaterInfo',
+    'GetWaterPermeability': 'getWaterInfo',
+    'SetWaterPermeability': 'setWaterPermeability'
+};
+
 exports.SupportedDevices = {
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
