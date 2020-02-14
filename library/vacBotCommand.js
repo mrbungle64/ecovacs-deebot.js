@@ -47,7 +47,7 @@ class Clean extends VacBotCommand {
             }
         }
         tools.envLog('initCmd %s', initCmd);
-        super('clean', {
+        super('Clean', {
             'clean': initCmd
         })
     }
@@ -106,7 +106,7 @@ class CustomArea extends Clean {
 
 class Charge extends VacBotCommand {
     constructor() {
-        super('charge', {
+        super('Charge', {
             'charge': {
                 'type': constants.CHARGE_MODE_TO_ECOVACS['return']
             }
@@ -116,31 +116,31 @@ class Charge extends VacBotCommand {
 
 class GetDeviceInfo extends VacBotCommand {
     constructor() {
-        super('getDeviceInfo');
+        super('GetDeviceInfo');
     }
 }
 
 class GetCleanState extends VacBotCommand {
     constructor() {
-        super('getCleanState');
+        super('GetCleanState');
     }
 }
 
 class GetChargeState extends VacBotCommand {
     constructor() {
-        super('getChargeState');
+        super('GetChargeState');
     }
 }
 
 class GetBatteryState extends VacBotCommand {
     constructor() {
-        super('getBatteryInfo');
+        super('GetBatteryInfo');
     }
 }
 
 class GetLifeSpan extends VacBotCommand {
     constructor(component) {
-        super('getLifeSpan', {
+        super('GetLifeSpan', {
             'type': constants.COMPONENT_TO_ECOVACS[component]
         });
     }
@@ -159,7 +159,7 @@ class SetTime extends VacBotCommand {
 
 class GetCleanSpeed extends VacBotCommand {
     constructor(component) {
-        super('getCleanSpeed');
+        super('GetCleanSpeed');
     }
 }
 
@@ -176,25 +176,25 @@ class SetWaterLevel extends VacBotCommand {
 
 class GetWaterLevel extends VacBotCommand {
     constructor() {
-        super('getWaterPermeability');
+        super('GetWaterPermeability');
     }
 }
 
 class GetWaterBoxInfo extends VacBotCommand {
     constructor() {
-        super('getWaterBoxInfo');
+        super('GetWaterBoxInfo');
     }
 }
 
 class GetDeebotPos extends VacBotCommand {
     constructor() {
-        super('getDeebotPos');
+        super('GetDeebotPos');
     }
 }
 
 class PlaySound extends VacBotCommand {
     constructor(sid = '0') {
-        super('playSound', {'count': 1, 'sid': sid});
+        super('PlaySound', {'count': 1, 'sid': sid});
     }
 }
 
