@@ -365,8 +365,9 @@ class EcovacsMQTT extends EventEmitter {
     _message_to_dict(topic, xmlOrJson) {
         // TODO: fix duplicate code
         let name = null;
+        tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
         if (!xmlOrJson) {
-            tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
+            tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson missing ... topic: %s", topic);
             return {};
         }
         if (tools.isValidJsonString(xmlOrJson)) {
