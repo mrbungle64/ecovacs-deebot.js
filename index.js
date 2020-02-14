@@ -596,21 +596,27 @@ class VacBot {
     if (event.hasOwnProperty('body')) {
       value = event['body']['data']['value'];
     } else if (event.hasOwnProperty('ctl')) {
-      value = event['ctl']['battery']['power'];
+      value = event['ctl']['battery']['power']*100;
     } else {
-      value = parseFloat(event.attrs['power']) / 100;
+      value = parseFloat(event.attrs['power']);
     }
     try {
       this.battery_status = value;
-      tools.envLog("[VacBot] *** battery_status = %d\%", this.battery_status * 100);
+      tools.envLog("[VacBot] *** battery_status = %d\%", this.battery_status);
     } catch (e) {
       console.error("[VacBot] couldn't parse battery status ", event);
     }
   }
 
-  _handle_water_level(level) {
-      this.water_level = level;
-      tools.envLog("[VacBot] *** water_level = " + constants.WATER_LEVEL_FROM_ECOVACS[level] + " (" + level + ")");
+  _handle_water_level(event) {
+
+    // Deebot Ozmo 950
+    if (event.hasOwnProperty('body')) {
+      this.water_level = event['body']['data']['amount'];
+    } else {
+      this.water_level = event.attrs['level']; //TODO Please check for non 950 models
+    }
+    tools.envLog("[VacBot] *** water_level = " + constants.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
   }
 
   _handle_waterbox_info(val) {

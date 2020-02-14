@@ -205,11 +205,11 @@ class EcovacsMQTT extends EventEmitter {
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
                 res.setTimeout(6000);
-                tools.envLog("[EcovacsMQTT] (request statusCode:", res.statusCode);
-                tools.envLog("[EcovacsMQTT] (request statusMessage:", res.statusMessage);
-                tools.envLog("[EcovacsMQTT] (request url:", res.url);
-                tools.envLog("[EcovacsMQTT] (request urlPathArgs:", res.urlPathArgs);
-                tools.envLog("[EcovacsMQTT] (request headers:", res.headers);
+                // tools.envLog("[EcovacsMQTT] (request statusCode:", res.statusCode);
+                // tools.envLog("[EcovacsMQTT] (request statusMessage:", res.statusMessage);
+                // tools.envLog("[EcovacsMQTT] (request url:", res.url);
+                // tools.envLog("[EcovacsMQTT] (request urlPathArgs:", res.urlPathArgs);
+                // tools.envLog("[EcovacsMQTT] (request headers:", res.headers);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -280,10 +280,8 @@ class EcovacsMQTT extends EventEmitter {
             tools.envLog("[EcovacsMQTT] _command_to_dict_api() xmlOrJson missing ... action: %s", action);
             return result;
         }
-        if (tools.isValidJsonString(xmlOrJson) || this.bot.isOzmo950()) {
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api() isValidJsonString: %s", tools.isValidJsonString(xmlOrJson));
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api() isOzmo950: %s", this.bot.isOzmo950());
-            let result = JSON.parse(xmlOrJson);
+        if (tools.isValidJsonString(JSON.stringify(xmlOrJson, getCircularReplacer()))) {
+            let result = xmlOrJson;
             if (result.hasOwnProperty('body')) {
                 if (result['body']['msg'] === 'ok') {
                     result['event'] = tools.getEventNameForCommandString(action.name);
@@ -460,6 +458,9 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "DeebotPosition":
                 this.bot._handle_deebot_position(event);
+                break;
+            case "WaterLevel":
+                this.bot._handle_water_level(event);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
