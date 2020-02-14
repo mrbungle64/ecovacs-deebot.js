@@ -33,7 +33,7 @@ api.connect(email, password_hash).then(() => {
                 console.log('[app2.js] CleanReport: ' + state);
             });
             vacbot.on('BatteryInfo', (batterystatus) => {
-                let battery = Math.round(batterystatus * 100);
+                let battery = Math.round(batterystatus);
                 console.log('[app2.js] BatteryInfo: ' + battery);
             });
             vacbot.on('LifeSpan_filter', (level) => {

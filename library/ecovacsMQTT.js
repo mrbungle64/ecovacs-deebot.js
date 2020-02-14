@@ -205,11 +205,11 @@ class EcovacsMQTT extends EventEmitter {
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
                 res.setTimeout(6000);
-                tools.envLog("[EcovacsMQTT] (request statusCode:", res.statusCode);
-                tools.envLog("[EcovacsMQTT] (request statusMessage:", res.statusMessage);
-                tools.envLog("[EcovacsMQTT] (request url:", res.url);
-                tools.envLog("[EcovacsMQTT] (request urlPathArgs:", res.urlPathArgs);
-                tools.envLog("[EcovacsMQTT] (request headers:", res.headers);
+                // tools.envLog("[EcovacsMQTT] (request statusCode:", res.statusCode);
+                // tools.envLog("[EcovacsMQTT] (request statusMessage:", res.statusMessage);
+                // tools.envLog("[EcovacsMQTT] (request url:", res.url);
+                // tools.envLog("[EcovacsMQTT] (request urlPathArgs:", res.urlPathArgs);
+                // tools.envLog("[EcovacsMQTT] (request headers:", res.headers);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -257,7 +257,7 @@ class EcovacsMQTT extends EventEmitter {
         if (message) {
             tools.envLog("[EcovacsMQTT] _handle_command_response() message: %s", JSON.stringify(message, getCircularReplacer()));
             if (message.hasOwnProperty('resp')) {
-
+                tools.envLog("[EcovacsMQTT] _handle_command_response() resp(0): %s", command, JSON.stringify(resp, getCircularReplacer()));
                 resp = this._command_to_dict_api(action, message['resp']);
                 tools.envLog("[EcovacsMQTT] _handle_command_response() resp(1): %s", command, JSON.stringify(resp, getCircularReplacer()));
             }
@@ -280,8 +280,8 @@ class EcovacsMQTT extends EventEmitter {
             tools.envLog("[EcovacsMQTT] _command_to_dict_api() xmlOrJson missing ... action: %s", action);
             return result;
         }
-        if (tools.isValidJsonString(xmlOrJson)) {
-            let result = JSON.parse(xmlOrJson);
+        if (tools.isValidJsonString(JSON.stringify(xmlOrJson, getCircularReplacer()))) {
+            let result = xmlOrJson;
             if (result.hasOwnProperty('body')) {
                 if (result['body']['msg'] === 'ok') {
                     result['event'] = tools.getEventNameForCommandString(action.name);
@@ -290,6 +290,7 @@ class EcovacsMQTT extends EventEmitter {
             return result;
         }
         else {
+            tools.envLog("[EcovacsMQTT] _command_to_dict_api() isValidJsonString false: %s");
             let xmlString = xmlOrJson;
             let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
             if (payloadXml.documentElement.hasChildNodes()) {
@@ -457,6 +458,9 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "DeebotPosition":
                 this.bot._handle_deebot_position(event);
+                break;
+            case "WaterLevel":
+                this.bot._handle_water_level(event);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);

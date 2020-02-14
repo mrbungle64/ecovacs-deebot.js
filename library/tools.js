@@ -8,30 +8,37 @@ function isObject(val) {
 
 function isValidJsonString(str) {
     try {
+        envLog("[tools] isValidJsonString() str: %s", str);
         JSON.parse(str);
     } catch (e) {
+        envLog("[tools] isValidJsonString() false");
         return false;
     }
+    envLog("[tools] isValidJsonString() true");
     return true;
 }
 
 function getEventNameForCommandString(str) {
     envLog("[tools] getEventNameForCommandString() str: %s", str);
-    let command = str.replace(/^_+|_+$/g, '').replace('Get','').replace("Server", "");
+    let command = str.toLowerCase().replace(/^_+|_+$/g, '').replace("get","").replace("server", "");
+    envLog("[tools] getEventNameForCommandString() command: %s", command);
     switch (command.toLowerCase()) {
         case 'clean':
         case 'cleanreport':
+        case 'cleaninfo':
             return 'CleanReport';
         case 'charge':
         case 'chargestate':
             return 'ChargeState';
         case "battery":
         case 'batteryinfo':
+        case 'battery':
             return 'BatteryInfo';
         case 'lifespan':
             return 'LifeSpan';
         case "waterlevel":
         case "waterpermeability":
+        case "waterinfo":
             return 'WaterLevel';
         case "waterboxinfo":
             return 'WaterBoxInfo';
