@@ -185,15 +185,18 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.2.1
+  * (boriswerner) Basic clean & charge working (Ozmo 950)
+
 ### 0.2.0
-  * Improved support for Ozmo 950 device
+  * (boriswerner) Improved support for Ozmo 950
 
 ### 0.1.11
   * Bugfix release
   
 ### 0.1.8
   * Improved support for MQTT devices
-  * Implemented support for Ozmo 950 device
+  * Implemented support for Ozmo 950
 
 ### 0.1.7
   * Bugfix detecting MQTT devices
