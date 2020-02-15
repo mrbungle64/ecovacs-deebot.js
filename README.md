@@ -185,6 +185,9 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.2.2
+  * Bugfix release
+
 ### 0.2.1
   * (boriswerner) Basic clean & charge working (Ozmo 950)
 

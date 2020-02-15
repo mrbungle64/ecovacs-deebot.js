@@ -319,12 +319,10 @@ class EcovacsMQTT extends EventEmitter {
 
     _dict_to_command(json) {
         if (json.hasOwnProperty('body')) {
-
             return this._body_data_to_command(json['body']['data']);
-
-        } else if (json.hasOwnProperty('ctl')) {
-
-            return json['ctl']['td'];
+        }
+        else if (json.hasOwnProperty('ctl')) {
+            return json['ctl'];
         }
         else {
             return json['event'];

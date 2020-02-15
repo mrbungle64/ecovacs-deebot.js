@@ -558,11 +558,17 @@ class VacBot {
       this.clean_status = this.vacuum_status;
       return;
     }
-    if (event) {
+    if ((event) && (event.attrs)) {
       let type = event.attrs['type'];
       try {
         type = constants.CLEAN_MODE_FROM_ECOVACS[type];
-        let statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+        let statustype = null;
+        if (event.attrs['st']) {
+          statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+        }
+        else if (event.attrs['act']) {
+          statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
+        }
         if (statustype === 'stop' || statustype === 'pause') {
           type = statustype
         }
