@@ -763,6 +763,9 @@ class VacBot {
         case "pause":
           this.send_command(new vacBotCommand950.Pause());
           break;
+        case "resume":
+          this.send_command(new vacBotCommand950.Resume());
+          break;
         case "charge":
           this.send_command(new vacBotCommand950.Charge());
           break;
@@ -798,19 +801,19 @@ class VacBot {
           if (this.isOzmo950()) {
             component = constants.COMPONENT_TO_OZMO950[component];
           }
-          this.send_command(new vacBotCommand.GetLifeSpan(component));
+          this.send_command(new vacBotCommand950.GetLifeSpan(component));
           break;
         case "getwaterlevel":
-          this.send_command(new vacBotCommand.GetWaterLevel());
+          this.send_command(new vacBotCommand950.GetWaterLevel());
           break;
         case "setwaterlevel":
           if (arguments.length < 2) {
             return;
           }
-          this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
+          this.send_command(new vacBotCommand950.SetWaterLevel(arguments[1]));
           break;
         case "getwaterboxinfo":
-          this.send_command(new vacBotCommand.GetWaterBoxInfo());
+          this.send_command(new vacBotCommand950.GetWaterBoxInfo());
           break;
       }
     }
