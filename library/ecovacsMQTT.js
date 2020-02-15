@@ -365,7 +365,7 @@ class EcovacsMQTT extends EventEmitter {
     _message_to_dict(topic, xmlOrJson) {
         // TODO: fix duplicate code
         let name = null;
-        tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic);
+        tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic.name, " ", topic);
         if (!xmlOrJson) {
             tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson missing ... topic: %s", topic);
             return {};
@@ -375,6 +375,7 @@ class EcovacsMQTT extends EventEmitter {
             if (xmlOrJson.hasOwnProperty('body')) {
                 tools.envLog("[EcovacsMQTT] _message_to_dict body: %s", JSON.stringify(result['body'], getCircularReplacer()));
                 if (result['body']['msg'] === 'ok') {
+                    tools.envLog("[EcovacsMQTT] _message_to_dict [1]]");
                     result['event'] = tools.getEventNameForCommandString(topic.name);
                     if (!result['event']) {
                         //Default back to replacing Get from the api cmdName
@@ -382,6 +383,7 @@ class EcovacsMQTT extends EventEmitter {
                         result['event'] = topic.name;
                     }
                 } else if (result['body']['data']) {
+                    tools.envLog("[EcovacsMQTT] _message_to_dict [2]]");
                     let data = result['body']['data'];
                     if ((data.hasOwnProperty('cleanState'))) {
                         if (data['cleanstate']['type']) {
@@ -389,6 +391,7 @@ class EcovacsMQTT extends EventEmitter {
                         }
                     }
                 } else {
+                    tools.envLog("[EcovacsMQTT] _message_to_dict [3]]");
                     if (result['body']['msg'] === 'fail') {
                         if (name === "charge") {
                             result['event'] = "ChargeState";
@@ -399,6 +402,7 @@ class EcovacsMQTT extends EventEmitter {
                     }
                 }
             }
+            tools.envLog("[EcovacsMQTT] _message_to_dict result.event: %s", result.event);
             return result;
         }
         else {
