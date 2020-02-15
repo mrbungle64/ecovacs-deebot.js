@@ -539,6 +539,7 @@ class VacBot {
   }
 
   _handle_clean_report(event) {
+    this.vacuum_status = 'unknown';
     // Deebot Ozmo 950
     if (event.hasOwnProperty('body')) {
       let response = event['body']['data'];
@@ -558,44 +559,39 @@ class VacBot {
       this.clean_status = this.vacuum_status;
       return;
     }
-    if ((event) && (event.attrs)) {
+    if (event.attrs) {
       let type = event.attrs['type'];
-      try {
+      if (constants.CLEAN_MODE_FROM_ECOVACS[type]) {
         type = constants.CLEAN_MODE_FROM_ECOVACS[type];
-        let statustype = null;
-        if (event.attrs['st']) {
-          statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
-        }
-        else if (event.attrs['act']) {
-          statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
-        }
-        if (statustype === 'stop' || statustype === 'pause') {
-          type = statustype
-        }
-      } catch (e) {
-        console.error("[VacBot] Unknown cleaning status: ", event);
+      }
+      let statustype = null;
+      if (event.attrs['st']) {
+        statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+      }
+      else if (event.attrs['act']) {
+        statustype = constants.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
+      }
+      if (statustype === 'stop' || statustype === 'pause') {
+        type = statustype
       }
       this.clean_status = type;
-      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
       this.vacuum_status = type;
+      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
 
-      let fan = null;
       if (event.attrs.hasOwnProperty('speed')) {
-        fan = event.attrs['speed'];
-      }
-      tools.envLog("[VacBot] fan: ", fan);
-      if (fan !== null) {
-        try {
+        let fan = event.attrs['speed'];
+        if (constants.FAN_SPEED_FROM_ECOVACS[fan]) {
           fan = constants.FAN_SPEED_FROM_ECOVACS[fan];
           this.fan_speed = fan;
           tools.envLog("[VacBot] fan speed: ", fan);
-        } catch (e) {
-          console.error("[VacBot] Unknown fan speed: ", fan);
+        } else {
+          tools.envLog("[VacBot] Unknown fan speed: ", fan);
         }
+      } else {
+        tools.envLog("[VacBot] couldn't parse clean report ", event);
       }
-    } else {
-      console.error("[VacBot] _handle_clean_report event undefined");
     }
+    this.clean_status = this.vacuum_status;
   }
 
   _handle_battery_info(event) {
@@ -617,7 +613,6 @@ class VacBot {
   }
 
   _handle_water_level(event) {
-
     // Deebot Ozmo 950
     if (event.hasOwnProperty('body')) {
       this.water_level = event['body']['data']['amount'];
@@ -659,10 +654,7 @@ class VacBot {
       return;
     }
 
-    try {
-      if (event.name !== "charge") {
-        throw "Not a charge state";
-      }
+    if (event.attrs) {
       let report = event.attrs['type'];
       switch (report.toLowerCase()) {
         case "going":
@@ -675,11 +667,12 @@ class VacBot {
           this.charge_status = 'idle';
           break;
         default:
+          this.charge_status = 'unknown';
           console.error("[VacBot] Unknown charging status '%s'", report);
           break;
       }
       tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
-    } catch (e) {
+    } else {
       console.error("[VacBot] couldn't parse charge status ", event);
     }
   }
