@@ -4,6 +4,8 @@ const https = require('https'),
   fs = require('fs'),
   vacBotCommand = require('./library/vacBotCommand.js'),
   constants = require('./library/ecovacsConstants.js'),
+  vacBotCommand950 = require('./library/vacBotCommand950.js'),
+  
   tools = require('./library/tools.js'),
   countries = require('./countries.js');
 
