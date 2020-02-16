@@ -406,36 +406,34 @@ class EcovacsMQTT extends EventEmitter {
         else {
             //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
             let xmlString = xmlOrJson;
-            let xml = new DOMParser().parseFromString(xmlString, 'text/xml');
-            let result = tools.xmlDocumentElement2Json(xml.documentElement);
-            let name = null;
+            tools.envLog("[EcovacsMQTT] _message_to_dict() xmlString: %s", xmlString);
+            let xml = new DOMParser().parseFromString(xmlString, 'text/xml').documentElement;
+            let result = xml.attributes;
 
-            // Handle response data with no 'td'
-            if (!xml.documentElement.attributes.getNamedItem('td')) {
-
-                // single element with type and val
-                if (xml.documentElement.attributes.getNamedItem('type')) {
+            if (!result.getNamedItem('td')) {
+                // Handle response data with no 'td'
+                if (result.getNamedItem('type')) {
+                    // single element with type and val
                     // seems to always be LifeSpan type
                     result['event'] = "LifeSpan";
-                } else {
+                } else if (xml.hasChildNodes()) {
                     // case where there is child element
-                    if (xml.documentElement.hasChildNodes()) {
-                        name = xml.documentElement.firstChild.name;
+                    name = xml.firstChild.name;
+                    if (name) {
                         result['event'] = tools.getEventNameForCommandString(name);
-                    } else {
-                        // for non-'type' result with no child element, e.g., result of PlaySound
-                        return;
+                        result = Object.assign(result, xml.firstChild.attributes);
                     }
                 }
             } else {
                 // response includes 'td'
-                name = xml.documentElement.attributes.getNamedItem('td').name;
-                result['event'] = tools.getEventNameForCommandString(name);
-                if (xml.documentElement.hasChildNodes()) {
-                    let firstChild = xml.documentElement.firstChild;
-                    result = Object.assign(result, firstChild.attributes);
+                name = xml.attributes.getNamedItem('td').name;
+                if (name) {
+                    result['event'] = tools.getEventNameForCommandString(name);
+                    if (xml.firstChild.attributes) {
+                        result = Object.assign(result, xml.firstChild.attributes);
+                    }
+                    delete result['td'];
                 }
-                delete result['td'];
             }
             return result
         }
