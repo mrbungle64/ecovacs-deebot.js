@@ -21,11 +21,12 @@ exports.CLEAN_MODE_TO_ECOVACS = {
 };
 exports.CLEAN_MODE_TO_OZMO950 = {
     'auto': 'auto',
-    'edge': 'border',
+    'edge': 'edge',
     'spot': 'spot',
-    'spot_area': 'spotArea',
+    'spotArea': 'spotArea',
     'single_room': 'singleroom',
-    'stop': 'stop'
+    'stop': 'stop',
+    'customArea': 'customArea',
 };
 
 
@@ -96,7 +97,7 @@ exports.CHARGE_MODE_TO_ECOVACS = {
     'idle': 'Idle'
 };
 exports.CHARGE_MODE_TO_OZMO950 = {
-    'return': 'return',
+    'return': 'go',
     'returning': 'returning',
     'charging': 'charging',
     'idle': 'idle'
@@ -143,7 +144,7 @@ exports.COMMAND_TO_OZMO950 = {
     'GetChargeState': 'getChargeState',
     'GetWaterBoxInfo': 'getWaterInfo',
     'GetWaterPermeability': 'getWaterInfo',
-    'SetWaterPermeability': 'setWaterPermeability'
+    'SetWaterPermeability': 'setWaterInfo'
 };
 
 exports.SupportedDevices = {

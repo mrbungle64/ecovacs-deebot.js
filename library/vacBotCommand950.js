@@ -64,32 +64,41 @@ function getReqID(customid = '0') {
 
 class Edge extends Clean {
     constructor() {
-        super('edge');
+        super('edge', 'start');
     }
 }
 
 class Spot extends Clean {
     constructor() {
-        super('spot');
+        super('spot', 'start'
+        //, {'content':'-291,111'}
+        ); 
+        // requires content, not included to not start the bot without knowing what happens
     }
 }
 
 class Pause extends VacBotCommand950 {
     constructor() {
-        super('pause', {'act': 'pause'});
+        super('clean', {'act': 'pause'});
+    }
+}
+
+class Resume extends VacBotCommand950 {
+    constructor() {
+        super('clean', {'act': 'resume'});
     }
 }
 
 class Stop extends VacBotCommand950 {
     constructor() {
-        super('stop',  {'act': 'stop'});
+        super('clean',  {'act': 'stop'});
     }
 }
 
 class SpotArea extends Clean {
     constructor(action = 'start', area = '') {
         if (area !== '') {
-            super('spot_area', action, {'mid': area});
+            super('spotArea', action, {'content': area, 'count': '1'});
         }
     }
 }
@@ -97,7 +106,7 @@ class SpotArea extends Clean {
 class CustomArea extends Clean {
     constructor(action = 'start', map_position = '', cleanings = 1) {
         if (map_position !== '') {
-            super('spot_area', action, {'p': map_position, 'deep': cleanings});
+            super('customArea', action, {'content': map_position, 'count': cleanings});
         }
     }
 }
@@ -162,7 +171,7 @@ class SetWaterLevel extends VacBotCommand950 {
             level = constants.WATER_LEVEL_TO_ECOVACS[level];
         }
         super('SetWaterPermeability', {
-            'v': level
+            'amount': level
         });
     }
 }
@@ -198,6 +207,7 @@ module.exports.SpotArea = SpotArea;
 module.exports.CustomArea = CustomArea;
 module.exports.Stop = Stop;
 module.exports.Pause = Pause;
+module.exports.Resume = Resume;
 module.exports.Charge = Charge;
 module.exports.GetDeebotPos = GetDeebotPos;
 module.exports.GetDeviceInfo = GetDeviceInfo;
