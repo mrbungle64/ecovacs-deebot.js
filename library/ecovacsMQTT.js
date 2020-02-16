@@ -421,18 +421,26 @@ class EcovacsMQTT extends EventEmitter {
                     name = xml.firstChild.name;
                     if (name) {
                         result['event'] = tools.getEventNameForCommandString(name);
-                        result = Object.assign(result, xml.firstChild.attributes);
+                        if (xml.firstChild.attributes) {
+                            result = Object.assign(result, xml.firstChild.attributes);
+                        }
                     }
                 }
-            } else {
+            } else if (xml.attributes) {
                 // response includes 'td'
                 name = xml.attributes.getNamedItem('td').name;
                 if (name) {
                     result['event'] = tools.getEventNameForCommandString(name);
-                    if (xml.firstChild.attributes) {
-                        result = Object.assign(result, xml.firstChild.attributes);
+                    if (xml.hasChildNodes()) {
+                        if (xml.firstChild.attributes) {
+                            result = Object.assign(result, xml.firstChild.attributes);
+                        }
                     }
-                    delete result['td'];
+                }
+            } else if (xml.hasOwnProperty('event')) {
+                name = xml.getAttributeNode('event').value;
+                if ((name) && (name !== 'td')) {
+                    result['event'] = tools.getEventNameForCommandString(name);
                 }
             }
             return result
