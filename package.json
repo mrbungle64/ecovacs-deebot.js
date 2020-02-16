@@ -1,6 +1,6 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Javascript library to drive an Ecovacs Deebot robot vacuum",
   "main": "index.js",
   "scripts": {

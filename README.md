@@ -204,6 +204,9 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.2.4
+  * (mrbungle64) Improved handling of messages (MQTT/XML)
+  
 ### 0.2.3
   * (boriswerner) Improved support for Ozmo 950
 
