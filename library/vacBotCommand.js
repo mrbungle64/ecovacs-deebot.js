@@ -82,6 +82,12 @@ class Pause extends Clean {
     }
 }
 
+class Resume extends Clean {
+    constructor() {
+        super('auto', 'resume');
+    }
+}
+
 class Stop extends Clean {
     constructor() {
         super('stop', 'stop');
@@ -205,6 +211,7 @@ module.exports.SpotArea = SpotArea;
 module.exports.CustomArea = CustomArea;
 module.exports.Stop = Stop;
 module.exports.Pause = Pause;
+module.exports.Resume = Resume;
 module.exports.Charge = Charge;
 module.exports.GetDeebotPos = GetDeebotPos;
 module.exports.GetDeviceInfo = GetDeviceInfo;

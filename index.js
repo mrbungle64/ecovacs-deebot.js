@@ -845,6 +845,9 @@ class VacBot {
         case "pause":
           this.send_command(new vacBotCommand.Pause());
           break;
+        case "resume":
+          this.send_command(new vacBotCommand.Resume());
+          break;
         case "charge":
           this.send_command(new vacBotCommand.Charge());
           break;
