@@ -157,6 +157,15 @@ exports.SupportedDevices = {
         "voice_report": true,
         'single_room': false
     },
+    "yna5xi": {
+        "name": "DEEBOT OZMO 950 Series",
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        'single_room': false
+    },
     "123": {
         "name": "DEEBOT Slim2 Series",
         "main_brush": false,
@@ -225,15 +234,6 @@ exports.KnownDevices = {
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
-    },
-    "yna5xi": {
-        "name": "DEEBOT OZMO 950 Series",
         "main_brush": true,
         "spot_area": true,
         "custom_area": true,
