@@ -408,39 +408,35 @@ class EcovacsMQTT extends EventEmitter {
             let xmlString = xmlOrJson;
             tools.envLog("[EcovacsMQTT] _message_to_dict() xmlString: %s", xmlString);
             let xml = new DOMParser().parseFromString(xmlString, 'text/xml').documentElement;
-            let result = xml.attributes;
+            let result = {};
 
-            if (!result.getNamedItem('td')) {
+            if (!xml.attributes.getNamedItem('td')) {
                 // Handle response data with no 'td'
-                if (result.getNamedItem('type')) {
+                if (xml.attributes.getNamedItem('type')) {
                     // single element with type and val
                     // seems to always be LifeSpan type
-                    result['event'] = "LifeSpan";
+                    name = "LifeSpan";
                 } else if (xml.hasChildNodes()) {
                     // case where there is child element
                     name = xml.firstChild.name;
-                    if (name) {
-                        result['event'] = tools.getEventNameForCommandString(name);
-                        if (xml.firstChild.attributes) {
-                            result = Object.assign(result, xml.firstChild.attributes);
-                        }
-                    }
                 }
             } else if (xml.attributes) {
                 // response includes 'td'
-                name = xml.attributes.getNamedItem('td').name;
-                if (name) {
-                    result['event'] = tools.getEventNameForCommandString(name);
-                    if (xml.hasChildNodes()) {
-                        if (xml.firstChild.attributes) {
-                            result = Object.assign(result, xml.firstChild.attributes);
+                name = xml.attributes.getNamedItem('td').value;
+            }
+            if (name) {
+                result = {
+                    'event': getEventNameForCommandString(name),
+                    'attrs': {}
+                };
+                if (xml.hasChildNodes()) {
+                    if (xml.firstChild.attributes) {
+                        let attrs = {};
+                        for (let i = 0; i < xml.firstChild.attributes.length; i++) {
+                            attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
                         }
+                        result.attrs = Object.assign(result.attrs, attrs);
                     }
-                }
-            } else if (xml.hasOwnProperty('event')) {
-                name = xml.getAttributeNode('event').value;
-                if ((name) && (name !== 'td')) {
-                    result['event'] = tools.getEventNameForCommandString(name);
                 }
             }
             return result
