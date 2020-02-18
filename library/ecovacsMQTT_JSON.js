@@ -92,11 +92,8 @@ class EcovacsMQTT_JSON extends EventEmitter {
     }
 
     send_command(action, recipient) {
-        if (this.bot.isOzmo950()) {
-            if (constants.COMMAND_TO_OZMO950[action.name]) {
-                action.name = constants.COMMAND_TO_OZMO950[action.name];
-            }
-        }
+        action.name = constants.COMMAND_TO_OZMO950[action.name];
+
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT_JSON] c: %s", JSON.stringify(c, getCircularReplacer()));
         this._call_ecovacs_device_api(c).then((json) => {
@@ -119,33 +116,25 @@ class EcovacsMQTT_JSON extends EventEmitter {
 
     _wrap_command_getPayload(action) {
         let payload = null;
-        tools.envLog("[EcovacsMQTT_JSON] _wrap_command() args: ", action.args);
-        if (this.bot.isOzmo950()) {
-            // All requests need to have this header -- not sure about timezone and ver
-            let payloadRequest = {};
-            payloadRequest['header'] = {};
-            payloadRequest['header']['pri'] = '2';
-            payloadRequest['header']['ts'] = Math.floor(Date.now());
-            payloadRequest['header']['tmz'] = 480;
-            payloadRequest['header']['ver'] = '0.0.22';
 
-            if(Object.keys(action.args).length > 0) {
-                payloadRequest['body'] = {};
-                payloadRequest['body']['data'] = action.args;
-            }
+        tools.envLog("[EcovacsMQTT_JSON] _wrap_command() args: ", JSON.stringify(action.args, getCircularReplacer()));
+    
+        // All requests need to have this header -- not sure about timezone and ver
+        let payloadRequest = {};
+        payloadRequest['header'] = {};
+        payloadRequest['header']['pri'] = '2';
+        payloadRequest['header']['ts'] = Math.floor(Date.now());
+        payloadRequest['header']['tmz'] = 480;
+        payloadRequest['header']['ver'] = '0.0.22';
 
-            payload = payloadRequest;
-            tools.envLog("[EcovacsMQTT_JSON] _wrap_command() payload: %s", payload);
-        } else {
-            let xml = action.to_xml();
-            // Remove the td from ctl xml for RestAPI
-            tools.envLog("[EcovacsMQTT_JSON] _wrap_command() DOMParser().parseFromString: %s", xml.toString());
-            let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
-            payloadXml.documentElement.removeAttribute('td');
-
-            payload = payloadXml.toString();
-            tools.envLog("[EcovacsMQTT_JSON] _wrap_command() payload: %s", payloadXml.toString());
+        if(Object.keys(action.args).length > 0) {
+            payloadRequest['body'] = {};
+            payloadRequest['body']['data'] = action.args;
         }
+
+        payload = payloadRequest;
+        tools.envLog("[EcovacsMQTT_JSON] _wrap_command() payload: %s", JSON.stringify(payload, getCircularReplacer()));
+        
         return payload;
     }
 

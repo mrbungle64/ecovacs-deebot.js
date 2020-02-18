@@ -8,23 +8,6 @@ class VacBotCommand950 {
         this.args = Object.assign(args, { 'id': getReqID() });
     }
 
-    to_xml() {
-        let ctl = new Element('ctl', {
-            td: this.name
-        });
-        for (let key in this.args) {
-            if (this.args.hasOwnProperty(key)) {
-                let value = this.args[key];
-                if (tools.isObject(value)) {
-                    ctl.c(key, value);
-                } else {
-                    ctl.attr(key, value);
-                }
-            }
-        }
-        return ctl;
-    }
-
     toString() {
         return this.command_name() + ' command';
     }
@@ -144,7 +127,7 @@ class GetBatteryState extends VacBotCommand950 {
 
 class GetLifeSpan extends VacBotCommand950 {
     constructor(component) {
-        super('GetLifeSpan', {'type': constants.COMPONENT_TO_ECOVACS[component]});
+        super('GetLifeSpan', [constants.COMPONENT_TO_OZMO950[component]]);
     }
 }
 

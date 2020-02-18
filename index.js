@@ -800,9 +800,6 @@ run(action) {
             return;
           }
           let component = arguments[1];
-          if (this.isOzmo950()) {
-            component = constants.COMPONENT_TO_OZMO950[component];
-          }
           this.send_command(new vacBotCommand950.GetLifeSpan(component));
           break;
         case "getwaterlevel":
