@@ -21,6 +21,9 @@ function isValidJsonString(str) {
 function getEventNameForCommandString(str) {
     envLog("[tools] getEventNameForCommandString() str: %s", str);
     let command = str.toLowerCase().replace(/^_+|_+$/g, '').replace("get","").replace("server", "");
+    if(command.startsWith("on")) { //950 series incoming events
+        command = command.substring(2);
+    }
     envLog("[tools] getEventNameForCommandString() command: %s", command);
     switch (command.toLowerCase()) {
         case 'clean':
@@ -51,7 +54,17 @@ function getEventNameForCommandString(str) {
 
 envLog = function () {
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev") {
-        console.log.apply(this, arguments);
+        if (arguments[0]=="[DEBUG_INCOMING_RAW]" || arguments[0]=="[DEBUG_INCOMING]") {
+            console.log.apply(this, [...arguments].slice(1)); //to keep things as is for dev
+         } else {
+            console.log.apply(this, arguments);
+         }
+    } else {
+        if (process.env.NODE_ENV === "DEBUG_INCOMING_RAW" && arguments[0]=="[DEBUG_INCOMING_RAW]") { // only process debug messages
+            console.log.apply(this, [...arguments].slice(1));
+        }else if (process.env.NODE_ENV === "DEBUG_INCOMING" && arguments[0]=="[DEBUG_INCOMING]") { // only process debug messages
+            console.log.apply(this, [...arguments].slice(1));
+        }
     }
 };
 

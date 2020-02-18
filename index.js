@@ -5,7 +5,7 @@ const https = require('https'),
   vacBotCommand = require('./library/vacBotCommand.js'),
   constants = require('./library/ecovacsConstants.js'),
   vacBotCommand950 = require('./library/vacBotCommand950.js'),
-  
+
   tools = require('./library/tools.js'),
   countries = require('./countries.js');
 
@@ -370,8 +370,11 @@ class VacBot {
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
-
-    if (!this.useMqtt) {
+    if(vacuum.deviceClass = 'yna5xi') {
+      tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
+      const EcovacsMQTT_JSON = require('./library/ecovacsMQTT_JSON.js');
+      this.ecovacs = new EcovacsMQTT_JSON(this, user, hostname, resource, secret, continent, vacuum, server_address);
+    } else if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
       const EcovacsXMPP = require('./library/ecovacsXMPP.js');
       this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
@@ -541,24 +544,30 @@ class VacBot {
   _handle_clean_report(event) {
     this.vacuum_status = 'unknown';
     // Deebot Ozmo 950
-    if (event.hasOwnProperty('body')) {
-      let response = event['body']['data'];
-      if (response['state'] === 'clean') {
-        if (response['trigger'] === 'app') {
-          if (response['cleanState']['motionState'] === 'working') {
-            this.vacuum_status = 'cleaning';
-          } else if (response['cleanState']['motionState'] === 'pause') {
-            this.vacuum_status = 'paused';
-          } else {
-            this.vacuum_status = 'returning';
+    if (this.isOzmo950()) {
+      if (event['resultCode'] == '0') {
+        if (event['resultData']['state'] === 'clean') {
+          if (event['resultData']['trigger'] === 'app') {
+            if (event['resultData']['cleanState']['motionState'] === 'working') {
+              this.vacuum_status = 'cleaning';
+            } else if (event['resultData']['cleanState']['motionState'] === 'pause') {
+              this.vacuum_status = 'paused';
+            } else {
+              this.vacuum_status = 'returning';
+            }
+          } else if (event['resultData']['trigger'] === 'alert') {
+            this.vacuum_status = 'error';
           }
-        } else if (response['trigger'] === 'alert') {
-          this.vacuum_status = 'error';
+        } else if (event['resultData']['state'] === 'idle') {
+          this.vacuum_status = 'idle';
         }
+      } else {
+        this.vacuum_status = 'error';
       }
       this.clean_status = this.vacuum_status;
       return;
     }
+
     if (event.attrs) {
       let type = event.attrs['type'];
       if (constants.CLEAN_MODE_FROM_ECOVACS[type]) {
@@ -597,8 +606,8 @@ class VacBot {
   _handle_battery_info(event) {
     let value = null;
     // Deebot Ozmo 950
-    if (event.hasOwnProperty('body')) {
-      value = event['body']['data']['value'];
+    if (this.isOzmo950()) {
+      value = event['resultData']['value'];
     } else if (event.hasOwnProperty('ctl')) {
       value = event['ctl']['battery']['power'];
     } else {
@@ -614,8 +623,8 @@ class VacBot {
 
   _handle_water_level(event) {
     // Deebot Ozmo 950
-    if (event.hasOwnProperty('body')) {
-      this.water_level = event['body']['data']['amount'];
+    if (this.isOzmo950()) {
+      this.water_level = event['resultData']['amount'];
     } else {
       this.water_level = event.attrs['v'];
     }
@@ -629,21 +638,21 @@ class VacBot {
 
   _handle_charge_state(event) {
     // Deebot Ozmo 950
-    if (event.hasOwnProperty('body')) {
-      let response = event['body'];
+    if (this.isOzmo950()) {
+
       let status = null;
-      if (response['code'] == '0') {
-        if (response['data']['isCharging'] == '1') {
+      if (event['resultCode'] == '0') {
+        if (event['resultData']['isCharging'] == '1') {
           status = 'docked';
         }
       } else {
-        if ((response['msg'] === 'fail') && (response['code'] == '30007')) {
+        if ((event['resultCodeMessage'] === 'fail') && (event['resultCode'] == '30007')) {
           // Already charging
           status = 'docked';
-        } else if ((response['msg'] === 'fail') && (response['code'] == '5')) {
+        } else if ((event['resultCodeMessage'] === 'fail') && (event['resultCode'] == '5')) {
           // Busy with another command
           status = 'error';
-        } else if ((response['msg'] === 'fail') && (response['code'] == '3')) {
+        } else if ((event['resultCodeMessage'] === 'fail') && (event['resultCode'] == '3')) {
           // Bot in stuck state, example dust bin out
           status = 'error';
         }
@@ -718,7 +727,7 @@ class VacBot {
     }
   }
 
-  run(action) {
+run(action) {
     tools.envLog("[VacBot] action: %s", action);
 
     if(this.isOzmo950() ) {

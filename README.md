@@ -36,6 +36,26 @@ Devices that communicate with the **MQTT** protocol are experimental.
 * Deebot Ozmo 900
 * Deebot Ozmo 950
 
+## Models
+
+So far, only devices that communicate with the **XMPP** protocol work properly. 
+Devices that communicate with the **MQTT** protocol are experimental.
+
+### Works properly
+* Deebot Slim 2
+* Deebot Ozmo 610
+* Deebot Ozmo 930
+
+### Should work
+* Deebot N79T
+* Deebot 601
+* Deebot Ozmo 960
+
+### Should work partially
+* Deebot 710
+* Deebot Ozmo 900
+* Deebot Ozmo 950
+
 ## Usage
 
 To get started, you'll need to have already set up an Ecovacs account using your smartphone.
