@@ -426,7 +426,7 @@ class EcovacsMQTT extends EventEmitter {
             }
             if (name) {
                 result = {
-                    'event': getEventNameForCommandString(name),
+                    'event': tools.getEventNameForCommandString(name),
                     'attrs': {}
                 };
                 if (xml.hasChildNodes()) {
