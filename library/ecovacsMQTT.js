@@ -413,8 +413,7 @@ class EcovacsMQTT extends EventEmitter {
             if (!xml.attributes.getNamedItem('td')) {
                 // Handle response data with no 'td'
                 if (xml.attributes.getNamedItem('type')) {
-                    // single element with type and val
-                    // seems to always be LifeSpan type
+                    // single element with type and val seems to always be LifeSpan type
                     name = "LifeSpan";
                 } else if (xml.hasChildNodes()) {
                     // case where there is child element
@@ -424,20 +423,23 @@ class EcovacsMQTT extends EventEmitter {
                 // response includes 'td'
                 name = xml.attributes.getNamedItem('td').value;
             }
+
             if (name) {
-                result = {
-                    'event': tools.getEventNameForCommandString(name),
-                    'attrs': {}
-                };
+                let attrs = {};
                 if (xml.hasChildNodes()) {
-                    if (xml.firstChild.attributes) {
-                        let attrs = {};
-                        for (let i = 0; i < xml.firstChild.attributes.length; i++) {
-                            attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
-                        }
-                        result.attrs = Object.assign(result.attrs, attrs);
+                    for (let i = 0; i < xml.firstChild.attributes.length; i++) {
+                        attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
                     }
                 }
+                else if (xml.attributes) {
+                    for (let i = 0; i < xml.attributes.length; i++) {
+                        attrs[xml.attributes[i].name] = xml.attributes[i].value;
+                    }
+                }
+                result = {
+                    'event': tools.getEventNameForCommandString(name),
+                    'attrs': attrs
+                };
             }
             return result
         }
