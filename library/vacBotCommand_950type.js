@@ -1,28 +1,10 @@
 const tools = require('./tools.js'),
-    Element = require('ltx').Element,
-    constants = require('./ecovacsConstants.js');
+    constants_type = require('./ecovacsConstants_950type.js');
 
-class VacBotCommand950 {
+class VacBotCommand_950type {
     constructor(name, args = {}) {
         this.name = name;
         this.args = Object.assign(args, { 'id': getReqID() });
-    }
-
-    to_xml() {
-        let ctl = new Element('ctl', {
-            td: this.name
-        });
-        for (let key in this.args) {
-            if (this.args.hasOwnProperty(key)) {
-                let value = this.args[key];
-                if (tools.isObject(value)) {
-                    ctl.c(key, value);
-                } else {
-                    ctl.attr(key, value);
-                }
-            }
-        }
-        return ctl;
     }
 
     toString() {
@@ -34,12 +16,12 @@ class VacBotCommand950 {
     }
 }
 
-class Clean extends VacBotCommand950 {
+class Clean extends VacBotCommand_950type {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let initCmd = {
-            'type': constants.CLEAN_MODE_TO_OZMO950[mode],
-            'speed': constants.FAN_SPEED_TO_OZMO950['normal'],
-            'act': constants.CLEAN_ACTION_TO_OZMO950[action]
+            'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
+            'speed': constants_type.FAN_SPEED_TO_ECOVACS['normal'],
+            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action]
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
@@ -70,28 +52,25 @@ class Edge extends Clean {
 
 class Spot extends Clean {
     constructor() {
-        super('spot', 'start'
-        //, {'content':'-291,111'}
-        ); 
-        // requires content, not included to not start the bot without knowing what happens
+        super('spot', 'start', {'content':'0,0'}); 
     }
 }
 
-class Pause extends VacBotCommand950 {
+class Pause extends VacBotCommand_950type {
     constructor() {
-        super('clean', {'act': 'pause'});
+        super('Clean', {'act': 'pause'});
     }
 }
 
-class Resume extends VacBotCommand950 {
+class Resume extends VacBotCommand_950type {
     constructor() {
-        super('clean', {'act': 'resume'});
+        super('Clean', {'act': 'resume'});
     }
 }
 
-class Stop extends VacBotCommand950 {
+class Stop extends VacBotCommand_950type {
     constructor() {
-        super('clean',  {'act': 'stop'});
+        super('Clean',  {'act': 'stop'});
     }
 }
 
@@ -111,44 +90,44 @@ class CustomArea extends Clean {
     }
 }
 
-class Charge extends VacBotCommand950 {
+class Charge extends VacBotCommand_950type {
     constructor() {
-        super('Charge', {'act': constants.CHARGE_MODE_TO_OZMO950['return']}
+        super('Charge', {'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']}
         );
     }
 }
 
-class GetDeviceInfo extends VacBotCommand950 {
+class GetDeviceInfo extends VacBotCommand_950type {
     constructor() {
         super('GetDeviceInfo');
     }
 }
 
-class GetCleanState extends VacBotCommand950 {
+class GetCleanState extends VacBotCommand_950type {
     constructor() {
         super('GetCleanState');
     }
 }
 
-class GetChargeState extends VacBotCommand950 {
+class GetChargeState extends VacBotCommand_950type {
     constructor() {
         super('GetChargeState');
     }
 }
 
-class GetBatteryState extends VacBotCommand950 {
+class GetBatteryState extends VacBotCommand_950type {
     constructor() {
         super('GetBatteryInfo');
     }
 }
 
-class GetLifeSpan extends VacBotCommand950 {
+class GetLifeSpan extends VacBotCommand_950type {
     constructor(component) {
-        super('GetLifeSpan', {'type': constants.COMPONENT_TO_ECOVACS[component]});
+        super('GetLifeSpan', [constants_type.COMPONENT_TO_ECOVACS[component]]);
     }
 }
 
-class SetTime extends VacBotCommand950 {
+class SetTime extends VacBotCommand_950type {
     constructor(timestamp, timezone) {
         super('SetTime', {
             'time': {
@@ -159,16 +138,16 @@ class SetTime extends VacBotCommand950 {
     }
 }
 
-class GetCleanSpeed extends VacBotCommand950 {
+class GetCleanSpeed extends VacBotCommand_950type {
     constructor(component) {
         super('GetCleanSpeed');
     }
 }
 
-class SetWaterLevel extends VacBotCommand950 {
+class SetWaterLevel extends VacBotCommand_950type {
     constructor(level) {
-        if (constants.WATER_LEVEL_TO_ECOVACS.hasOwnProperty(level)) {
-            level = constants.WATER_LEVEL_TO_ECOVACS[level];
+        if (constants_type.WATER_LEVEL_TO_ECOVACS.hasOwnProperty(level)) {
+            level = constants_type.WATER_LEVEL_TO_ECOVACS[level];
         }
         super('SetWaterPermeability', {
             'amount': level
@@ -176,25 +155,25 @@ class SetWaterLevel extends VacBotCommand950 {
     }
 }
 
-class GetWaterLevel extends VacBotCommand950 {
+class GetWaterLevel extends VacBotCommand_950type {
     constructor() {
         super('GetWaterPermeability');
     }
 }
 
-class GetWaterBoxInfo extends VacBotCommand950 {
+class GetWaterBoxInfo extends VacBotCommand_950type {
     constructor() {
         super('GetWaterBoxInfo');
     }
 }
 
-class GetDeebotPos extends VacBotCommand950 {
+class GetDeebotPos extends VacBotCommand_950type {
     constructor() {
         super('GetDeebotPos');
     }
 }
 
-class PlaySound extends VacBotCommand950 {
+class PlaySound extends VacBotCommand_950type {
     constructor(sid = '0') {
         super('PlaySound', {'count': 1, 'sid': sid});
     }

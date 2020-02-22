@@ -3,6 +3,7 @@ const tools = require('./tools.js');
 const URL = require('url').URL;
 const fs = require('fs');
 const constants = require('./ecovacsConstants');
+const dictionary = require('./ecovacsConstants_non950type');
 const request = require('request');
 const https = require('https');
 const DOMParser = require('xmldom').DOMParser;
@@ -97,11 +98,6 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     send_command(action, recipient) {
-        if (this.bot.isOzmo950()) {
-            if (constants.COMMAND_TO_OZMO950[action.name]) {
-                action.name = constants.COMMAND_TO_OZMO950[action.name];
-            }
-        }
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT] c: %s", JSON.stringify(c, getCircularReplacer()));
         this._call_ecovacs_device_api(c).then((json) => {
@@ -112,45 +108,23 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _wrap_command_getPayloadType(action) {
-        let payloadType = null;
-        if (this.bot.isOzmo950()) {
-            payloadType = "j";
-        }
-        else {
-            payloadType = "x";
-        }
+        let payloadType = "x";
         return payloadType;
     }
 
     _wrap_command_getPayload(action) {
         let payload = null;
         tools.envLog("[EcovacsMQTT] _wrap_command() args: ", action.args);
-        if (this.bot.isOzmo950()) {
-            // All requests need to have this header -- not sure about timezone and ver
-            let payloadRequest = {};
-            payloadRequest['header'] = {};
-            payloadRequest['header']['pri'] = '2';
-            payloadRequest['header']['ts'] = Math.floor(Date.now());
-            payloadRequest['header']['tmz'] = 480;
-            payloadRequest['header']['ver'] = '0.0.22';
 
-            if(Object.keys(action.args).length > 0) {
-                payloadRequest['body'] = {};
-                payloadRequest['body']['data'] = action.args;
-            }
+        let xml = action.to_xml();
+        // Remove the td from ctl xml for RestAPI
+        tools.envLog("[EcovacsMQTT] _wrap_command() DOMParser().parseFromString: %s", xml.toString());
+        let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
+        payloadXml.documentElement.removeAttribute('td');
 
-            payload = payloadRequest;
-            tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payload);
-        } else {
-            let xml = action.to_xml();
-            // Remove the td from ctl xml for RestAPI
-            tools.envLog("[EcovacsMQTT] _wrap_command() DOMParser().parseFromString: %s", xml.toString());
-            let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
-            payloadXml.documentElement.removeAttribute('td');
+        payload = payloadXml.toString();
+        tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payloadXml.toString());
 
-            payload = payloadXml.toString();
-            tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payloadXml.toString());
-        }
         return payload;
     }
 
@@ -188,10 +162,7 @@ class EcovacsMQTT extends EventEmitter {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(JSON.stringify(params))
             };
-            if (this.bot.isOzmo950()) {
-                url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
-                headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
-            }
+
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
             const reqOptions = {
@@ -364,6 +335,7 @@ class EcovacsMQTT extends EventEmitter {
         // TODO: fix duplicate code
         let name = null;
         tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic.name, " ", topic);
+
         if (!xmlOrJson) {
             tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson missing ... topic: %s", topic);
             return {};
@@ -462,6 +434,15 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "LifeSpan":
                 this.bot._handle_life_span(event);
+                if(this.bot.components["filter"]) {
+                    this.emit("LifeSpan_filter", this.bot.components["filter"]);
+                }
+                if(this.bot.components["side_brush"]) {
+                    this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
+                }
+                if(this.bot.components["main_brush"]) {
+                    this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
+                }
                 break;
             case "DeebotPosition":
                 this.bot._handle_deebot_position(event);
