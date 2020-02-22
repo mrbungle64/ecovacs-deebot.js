@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 const tools = require('./tools.js');
 const Element = require('ltx').Element;
 const constants = require('./ecovacsConstants.js');
+const dictionary = require('./ecovacsConstants_non950type.js');
 
 String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -71,13 +72,13 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('type')) {
-                        let component = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                        let component = dictionary.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                         if (component) {
                             command = 'LifeSpan';
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('v')) {
-                        level = constants.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v];
+                        level = dictionary.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v];
                         if (level) {
                             command = 'WaterLevel';
                         }

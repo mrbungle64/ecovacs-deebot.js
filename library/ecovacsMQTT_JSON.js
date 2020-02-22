@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 const tools = require('./tools.js');
 const URL = require('url').URL;
 const constants = require('./ecovacsConstants');
+const dictionary = require('./ecovacsConstants_950type');
 const https = require('https');
 
 String.prototype.format = function () {
@@ -92,7 +93,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
     }
 
     send_command(action, recipient) {
-        action.name = constants.COMMAND_TO_OZMO950[action.name];
+        action.name = dictionary.COMMAND_TO_ECOVACS[action.name];
 
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT_JSON] c: %s", JSON.stringify(c, getCircularReplacer()));
@@ -101,17 +102,6 @@ class EcovacsMQTT_JSON extends EventEmitter {
         }).catch((e) => {
             tools.envLog("[EcovacsMQTT_JSON] error send_command: %s", e.toString());
         });
-    }
-
-    _wrap_command_getPayloadType(action) {
-        let payloadType = null;
-        if (this.bot.isOzmo950()) {
-            payloadType = "j";
-        }
-        else {
-            payloadType = "x";
-        }
-        return payloadType;
     }
 
     _wrap_command_getPayload(action) {
@@ -155,7 +145,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
             "cmdName": action.name,
             "payload": this._wrap_command_getPayload(action),
 
-            "payloadType": this._wrap_command_getPayloadType(action),
+            "payloadType": "j",
             "td": "q",
             "toId": recipient,
             "toRes": this.vacuum['resource'],
@@ -168,14 +158,13 @@ class EcovacsMQTT_JSON extends EventEmitter {
             let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
                 continent: this.continent
             });
+            url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
             let headers = {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(JSON.stringify(params))
             };
-            if (this.bot.isOzmo950()) {
-                url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
-                headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
-            }
+            headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
+            
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT_JSON] Calling ${url.href}`);
             const reqOptions = {
@@ -301,7 +290,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.bot._handle_battery_info(event);
                 this.emit("BatteryInfo", this.bot.battery_status);
                 break;
-            case "CleanReport":
+            case "cleaninfo":
                 this.bot._handle_clean_report(event);
                 this.emit("CleanReport", this.bot.clean_status);
                 break;
@@ -350,5 +339,7 @@ function getCircularReplacer() {
         return value;
     };
 }
+
+
 
 module.exports = EcovacsMQTT_JSON;

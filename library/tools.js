@@ -1,3 +1,23 @@
+const constants = require('./ecovacsConstants.js');
+
+function getAllKnownDevices() {
+    let devices = {};
+    devices = Object.assign(devices, getSupportedDevices());
+    devices = Object.assign(devices, getKnownDevices());
+    return devices;
+}
+
+function getSupportedDevices() {
+    return constants.SupportedDevices;
+}
+
+function getKnownDevices() {
+    return constants.KnownDevices;
+}
+
+function getProductIotMap() {
+    return constants.EcoVacsHomeProducts;
+}
 
 function isObject(val) {
     if (val === null) {
@@ -72,3 +92,7 @@ module.exports.isObject = isObject;
 module.exports.isValidJsonString = isValidJsonString;
 module.exports.getEventNameForCommandString = getEventNameForCommandString;
 module.exports.envLog = envLog;
+module.exports.getAllKnownDevices = getAllKnownDevices;
+module.exports.getSupportedDevices = getSupportedDevices;
+module.exports.getKnownDevices = getKnownDevices;
+module.exports.getProductIotMap = getProductIotMap;
