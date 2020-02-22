@@ -302,6 +302,20 @@ class EcovacsAPI {
     return this.getDevices();
   }
 
+  getVacBot(user, hostname, resource, secret, vacuum, continent, server_address = null) {
+    let vacbot = null;
+    if(vacuum['class'] === 'yna5xi') {
+      console.log('vacBot_950type identified');
+      const VacBot_950type = require('./library/vacBot_950type');
+      vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent);
+    } else {
+      console.log('vacBot_non950type identified');
+      const VacBot_non950type = require('./library/vacBot_non950type');
+      vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent);
+    }
+    return vacbot;
+  }
+
   static md5(text) {
     return crypto.createHash('md5').update(text).digest("hex");
   }
@@ -340,6 +354,7 @@ EcovacsAPI.LGLOGAPI = constants.LGLOGAPI;
 EcovacsAPI.PRODUCTAPI = constants.PRODUCTAPI;
 
 EcovacsAPI.REALM = constants.REALM;
+
 
 
 module.exports.EcoVacsAPI = EcovacsAPI;
