@@ -434,6 +434,15 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "LifeSpan":
                 this.bot._handle_life_span(event);
+                if(this.bot.components["filter"]) {
+                    this.emit("LifeSpan_filter", this.bot.components["filter"]);
+                }
+                if(this.bot.components["side_brush"]) {
+                    this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
+                }
+                if(this.bot.components["main_brush"]) {
+                    this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
+                }
                 break;
             case "DeebotPosition":
                 this.bot._handle_deebot_position(event);
