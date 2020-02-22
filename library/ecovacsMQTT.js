@@ -136,7 +136,7 @@ class EcovacsMQTT extends EventEmitter {
 
         return {
             'auth': {
-                'realm': constants.REALM,
+                'realm': dictionary.REALM,
                 'resource': this.resource,
                 'token': this.secret,
                 'userid': this.user,
@@ -155,7 +155,7 @@ class EcovacsMQTT extends EventEmitter {
 
     _call_ecovacs_device_api(params) {
         return new Promise((resolve, reject) => {
-            let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
+            let url = (dictionary.PORTAL_URL_FORMAT + '/' + dictionary.IOTDEVMANAGERAPI).format({
                 continent: this.continent
             });
             let headers = {

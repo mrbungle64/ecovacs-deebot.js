@@ -1,4 +1,4 @@
-const   constants_type = require('./ecovacsConstants_non950type.js');
+const   dictionary = require('./ecovacsConstants_non950type.js');
 const   vacBotCommand = require('./vacBotCommand_non950type.js');
         
 const   tools = require('./tools.js');
@@ -59,11 +59,6 @@ class VacBot_non950type {
   }
 
   isOzmo950() {
-    tools.envLog("[VacBot] deviceClass: %s", this.deviceClass);
-    if (this.deviceClass === 'yna5xi') {
-      tools.envLog("[VacBot] Ozmo 950 detected");
-      return true;
-    }
     return false;
   }
 
@@ -121,14 +116,12 @@ class VacBot_non950type {
 
   _handle_life_span(event) {
     let type = null;
-    
-    try {
-      type = constants_type.COMPONENT_FROM_ECOVACS[type];
-    } catch (e) {
-      console.error("[VacBot] Unknown component type: ", event);
+    if (event.hasOwnProperty('type')) {
+      type = dictionary.COMPONENT_FROM_ECOVACS[event['type']];
     }
 
     if (!type) {
+      console.error("[VacBot] Unknown component type: ", event);
       return;
     }
 
@@ -146,7 +139,7 @@ class VacBot_non950type {
       tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
       this.components[type] = lifespan;
     }
-    tools.envLog("[VacBot] lifespan components: ", this.components.toString());
+    tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
   }
 
   _handle_deebot_position(event) {
@@ -162,15 +155,15 @@ class VacBot_non950type {
 
     if (event.attrs) {
       let type = event.attrs['type'];
-      if (constants_type.CLEAN_MODE_FROM_ECOVACS[type]) {
-        type = constants_type.CLEAN_MODE_FROM_ECOVACS[type];
+      if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
+        type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
       let statustype = null;
       if (event.attrs['st']) {
-        statustype = constants_type.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+        statustype = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
       }
       else if (event.attrs['act']) {
-        statustype = constants_type.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
+        statustype = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
       }
       if (statustype === 'stop' || statustype === 'pause') {
         type = statustype
@@ -181,8 +174,8 @@ class VacBot_non950type {
 
       if (event.attrs.hasOwnProperty('speed')) {
         let fan = event.attrs['speed'];
-        if (constants_type.FAN_SPEED_FROM_ECOVACS[fan]) {
-          fan = constants_type.FAN_SPEED_FROM_ECOVACS[fan];
+        if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
+          fan = dictionary.FAN_SPEED_FROM_ECOVACS[fan];
           this.fan_speed = fan;
           tools.envLog("[VacBot] fan speed: ", fan);
         } else {
@@ -212,7 +205,7 @@ class VacBot_non950type {
 
   _handle_water_level(event) {
     this.water_level = event.attrs['v'];
-    tools.envLog("[VacBot] *** water_level = " + constants_type.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+    tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
   }
 
   _handle_waterbox_info(val) {
@@ -221,7 +214,6 @@ class VacBot_non950type {
   }
 
   _handle_charge_state(event) {
-
     if (event.attrs) {
       let report = event.attrs['type'];
       switch (report.toLowerCase()) {
@@ -288,7 +280,6 @@ class VacBot_non950type {
 
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
-
 
     switch (action.toLowerCase()) {
       case "clean":
@@ -374,7 +365,6 @@ class VacBot_non950type {
         this.send_command(new vacBotCommand.GetWaterBoxInfo());
         break;
     }
-  
   }
 
   disconnect() {
