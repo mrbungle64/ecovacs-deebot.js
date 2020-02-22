@@ -223,6 +223,11 @@ function httpGetJson(url) {
 	});
 }
 ```
+### 0.3.0
+  * (boriswerner) Separation of Ozmo 950 type bots (MQTT/JSON) from others (MQTT/XML and XMPP)
+  
+### 0.2.7
+  * (mrbungle64) Improved handling of messages (MQTT/XML)
 
 ### 0.2.5
   * (mrbungle64) Improved handling of messages (MQTT/XML)
