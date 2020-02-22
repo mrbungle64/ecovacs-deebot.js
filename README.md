@@ -204,7 +204,7 @@ function httpGetJson(url) {
 }
 ```
 
-### 0.2.6
+### 0.2.7
   * (mrbungle64) Improved handling of messages (MQTT/XML)
   
 ### 0.2.3
