@@ -20,6 +20,7 @@ class VacBot_950type {
       a: null
     };
     this.fan_speed = null;
+    this.relocation_state = null;
     this.charge_status = null;
     this.battery_status = null;
     this.water_level = null;
@@ -47,6 +48,9 @@ class VacBot_950type {
       }
       this.run('GetLifeSpan', 'side_brush');
       this.run('GetLifeSpan', 'filter');
+      this.run('GetPosition');
+      this.run('GetCleanSpeed');
+      //this.run('relocate');
       if (this.hasMoppingSystem()) {
         this.run('GetWaterInfo');
       }
@@ -138,17 +142,16 @@ class VacBot_950type {
 
   _handle_position(event) {
         // Deebot Ozmo 950
-        if (event.hasOwnProperty('body')) {
-          let response = event['body']['data'];
+        if (event['resultCode'] == '0') {
 
           //as deebotPos and chargePos can also appear in other messages (CleanReport)
           //the handling should be extracted to a seperate function
-          if(response['chargePos']) {
+          if(event['resultData']['deebotPos'] && event['resultData']['deebotPos']['invalid']===0) {
             this.deebot_position = {
-              x:response['deebotPos']['x'], 
-              y:response['deebotPos']['y'], 
-              a:response['deebotPos']['a'], 
-              invalid:response['deebotPos']['invalid']
+              x:event['resultData']['deebotPos']['x'], 
+              y:event['resultData']['deebotPos']['y'], 
+              a:event['resultData']['deebotPos']['a'], 
+              invalid:event['resultData']['deebotPos']['invalid']
             };
             tools.envLog("[VacBot] *** Deebot Position = "
               + 'x=' + this.deebot_position.x
@@ -158,12 +161,12 @@ class VacBot_950type {
             );
           }
           
-          if(response['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
+          if(event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
             //there can be more than one charging station only handles first charging station
             this.charge_position = { 
-              x:response['chargePos'][0]['x'], 
-              y:response['chargePos'][0]['y'], 
-              a:response['chargePos'][0]['a']
+              x:event['resultData']['chargePos'][0]['x'], 
+              y:event['resultData']['chargePos'][0]['y'], 
+              a:event['resultData']['chargePos'][0]['a']
             };
             tools.envLog("[VacBot] *** Charge Position = "
               + 'x=' + this.charge_position.x
@@ -173,15 +176,18 @@ class VacBot_950type {
           }
           return;
         }
-        if (event) {
-          tools.envLog("[VacBot] _handle_deebot_position currently not supported for this model");
-        } else {
+        if (!event) {
           console.error("[VacBot] _handle_deebot_position event undefined");
         }
   }
+  _handle_clean_speed(event) {
+    this.fan_speed = constants_type.FAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
+    tools.envLog("[VacBot] *** fan_speed = %s", this.fan_speed);
+  }
 
-  _handle_clean_info(event) { //to be checekd
+  _handle_clean_info(event) {
     this.vacuum_status = 'unknown';
+    tools.envLog("[VacBot] _handle_clean_info");
 
     if (event['resultCode'] == '0') {
       if (event['resultData']['state'] === 'clean') {
@@ -194,7 +200,7 @@ class VacBot_950type {
             this.vacuum_status = 'returning';
           }
         } else if (event['resultData']['trigger'] === 'alert') {
-          this.vacuum_status = 'error';
+          this.vacuum_status = 'alert';
         }
       } else if (event['resultData']['state'] === 'idle') {
         this.vacuum_status = 'idle';
@@ -215,6 +221,10 @@ class VacBot_950type {
   _handle_water_level(event) {
     this.water_level = event['resultData']['amount'];
     tools.envLog("[VacBot] *** water_level = " + constants_type.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+  }
+  _handle_relocationState(event) {
+    this.relocation_state = event['resultData']['state'];
+    tools.envLog("[VacBot] *** relocation_state = " + this.relocation_state);
   }
 
   _handle_water_info(event) {
@@ -290,7 +300,6 @@ class VacBot_950type {
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
 
-
     switch (action.toLowerCase()) {
       case "clean":
         if (arguments.length <= 1) {
@@ -331,31 +340,28 @@ class VacBot_950type {
       case "charge":
         this.send_command(new vacBotCommand.Charge());
         break;
+      case "relocate":
+        this.send_command(new vacBotCommand.Relocate());
+        break;
       case "playsound":
         this.send_command(new vacBotCommand.PlaySound());
         break;
       case "getdeviceinfo":
-      case "deviceinfo":
         this.send_command(new vacBotCommand.GetDeviceInfo());
         break;
       case "getcleanstate":
-      case "cleanstate":
         this.send_command(new vacBotCommand.GetCleanState());
         break;
       case "getcleanspeed":
-      case "cleanspeed":
         this.send_command(new vacBotCommand.GetCleanSpeed());
         break;
       case "getchargestate":
-      case "chargestate":
         this.send_command(new vacBotCommand.GetChargeState());
         break;
       case "getbatterystate":
-      case "batterystate":
         this.send_command(new vacBotCommand.GetBatteryState());
         break;
       case "getlifespan":
-      case "lifespan":
         if (arguments.length < 2) {
           return;
         }
@@ -366,6 +372,9 @@ class VacBot_950type {
       case "getwaterboxinfo":
       case "getwaterinfo":
         this.send_command(new vacBotCommand.GetWaterInfo());
+        break;
+      case "getposition":
+        this.send_command(new vacBotCommand.GetPosition());
         break;
       case "setwaterlevel":
         if (arguments.length < 2) {

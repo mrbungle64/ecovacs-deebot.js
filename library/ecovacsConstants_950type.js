@@ -88,18 +88,4 @@ exports.COMPONENT_FROM_ECOVACS = {
     'heap': 'filter'
 };
 
-exports.COMMAND_TO_ECOVACS = {
-    'Clean': 'clean',
-    'Charge': 'charge',
-    'SetTime': 'setTime',
-    'PlaySound': 'playSound',
-    'GetLifeSpan': 'getLifeSpan',
-    'GetBatteryInfo': 'getBattery',
-    'GetCleanState': 'getCleanInfo',
-    'GetCleanSpeed': 'getCleanSpeed',
-    'GetChargeState': 'getChargeState',
-    'GetWaterInfo': 'getWaterInfo',
-    'GetWaterBoxInfo': 'getWaterInfo',
-    'GetWaterPermeability': 'getWaterInfo',
-    'SetWaterPermeability': 'setWaterInfo'
-};
+

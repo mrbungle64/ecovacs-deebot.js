@@ -93,8 +93,6 @@ class EcovacsMQTT_JSON extends EventEmitter {
     }
 
     send_command(action, recipient) {
-        action.name = dictionary.COMMAND_TO_ECOVACS[action.name];
-
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT_JSON] c: %s", JSON.stringify(c, getCircularReplacer()));
         this._call_ecovacs_device_api(c).then((json) => {
@@ -285,7 +283,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
         if(command.startsWith("on")) { //incoming events
             command = command.substring(2);
         }
-        if(command.startsWith("get")) { //remove from "get" commands
+        if(command.startsWith("get") ) { //remove from "get" commands
             command = command.substring(3);
         }
         switch (command) {
@@ -293,13 +291,23 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.bot._handle_charge_state(event);
                 this.emit("ChargeState", this.bot.charge_status);
                 break;
+            case "battery":
             case "batteryinfo":
                 this.bot._handle_battery_info(event);
                 this.emit("BatteryInfo", this.bot.battery_status);
                 break;
             case "cleaninfo":
                 this.bot._handle_clean_info(event);
-                this.emit("CleanReport", this.bot.clean_status);
+                this.emit("CleanState", this.bot.clean_status);
+                break;
+            case "cleanspeed":
+            case "speed":
+                this.bot._handle_clean_speed(event);
+                this.emit("FanSpeed", this.bot.fan_speed);
+                break;
+            case "relocationstate":
+                this.bot._handle_relocationState(event);
+                this.emit("RelocationState", this.bot.relocation_state);
                 break;
             case "lifespan":
                 this.bot._handle_life_span(event);
@@ -315,9 +323,13 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "pos":
                 this.bot._handle_position(event);
+                this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
                 break;
             case "waterinfo":
                 this.bot._handle_water_info(event);
+                this.emit("WaterBoxInfo", this.bot.waterbox_info);
+                this.emit("WaterLevel", this.bot.water_level);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);

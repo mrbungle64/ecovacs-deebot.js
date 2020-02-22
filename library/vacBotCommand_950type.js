@@ -29,7 +29,7 @@ class Clean extends VacBotCommand_950type {
             }
         }
         tools.envLog('initCmd %s', initCmd);
-        super('Clean', initCmd);
+        super('clean', initCmd);
     }
 }
 
@@ -58,19 +58,19 @@ class Spot extends Clean {
 
 class Pause extends VacBotCommand_950type {
     constructor() {
-        super('Clean', {'act': 'pause'});
+        super('clean', {'act': 'pause'});
     }
 }
 
 class Resume extends VacBotCommand_950type {
     constructor() {
-        super('Clean', {'act': 'resume'});
+        super('clean', {'act': 'resume'});
     }
 }
 
 class Stop extends VacBotCommand_950type {
     constructor() {
-        super('Clean',  {'act': 'stop'});
+        super('clean',  {'act': 'stop'});
     }
 }
 
@@ -92,44 +92,50 @@ class CustomArea extends Clean {
 
 class Charge extends VacBotCommand_950type {
     constructor() {
-        super('Charge', {'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']}
+        super('charge', {'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']}
         );
     }
 }
 
 class GetDeviceInfo extends VacBotCommand_950type {
     constructor() {
-        super('GetDeviceInfo');
+        super('getDeviceInfo');
+    }
+}
+
+class Relocate extends VacBotCommand_950type {
+    constructor() {
+        super('setRelocationState', { "mode": "manu" });
     }
 }
 
 class GetCleanState extends VacBotCommand_950type {
     constructor() {
-        super('GetCleanState');
+        super('getCleanInfo');
     }
 }
 
 class GetChargeState extends VacBotCommand_950type {
     constructor() {
-        super('GetChargeState');
+        super('getChargeState');
     }
 }
 
 class GetBatteryState extends VacBotCommand_950type {
     constructor() {
-        super('GetBatteryInfo');
+        super('getBattery');
     }
 }
 
 class GetLifeSpan extends VacBotCommand_950type {
     constructor(component) {
-        super('GetLifeSpan', [constants_type.COMPONENT_TO_ECOVACS[component]]);
+        super('getLifeSpan', [constants_type.COMPONENT_TO_ECOVACS[component]]);
     }
 }
 
 class SetTime extends VacBotCommand_950type {
     constructor(timestamp, timezone) {
-        super('SetTime', {
+        super('setTime', {
             'time': {
                 't': timestamp,
                 'tz': timezone
@@ -140,7 +146,7 @@ class SetTime extends VacBotCommand_950type {
 
 class GetCleanSpeed extends VacBotCommand_950type {
     constructor(component) {
-        super('GetCleanSpeed');
+        super('getSpeed');
     }
 }
 
@@ -149,7 +155,7 @@ class SetWaterLevel extends VacBotCommand_950type {
         if (constants_type.WATER_LEVEL_TO_ECOVACS.hasOwnProperty(level)) {
             level = constants_type.WATER_LEVEL_TO_ECOVACS[level];
         }
-        super('SetWaterPermeability', {
+        super('setWaterInfo', {
             'amount': level
         });
     }
@@ -157,19 +163,18 @@ class SetWaterLevel extends VacBotCommand_950type {
 
 class GetWaterInfo extends VacBotCommand_950type {
     constructor() {
-        super('GetWaterInfo');
+        super('getWaterInfo');
     }
 }
-
-class GetDeebotPos extends VacBotCommand_950type {
+class GetPosition extends VacBotCommand_950type {
     constructor() {
-        super('GetDeebotPos');
+        super('getPos', ["chargePos", "deebotPos"]);
     }
 }
 
 class PlaySound extends VacBotCommand_950type {
     constructor(sid = '0') {
-        super('PlaySound', {'count': 1, 'sid': sid});
+        super('playSound', {'count': 1, 'sid': sid});
     }
 }
 
@@ -182,14 +187,15 @@ module.exports.Stop = Stop;
 module.exports.Pause = Pause;
 module.exports.Resume = Resume;
 module.exports.Charge = Charge;
-module.exports.GetDeebotPos = GetDeebotPos;
 module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.GetPosition = GetPosition;
 module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.PlaySound = PlaySound;
+module.exports.Relocate = Relocate;
