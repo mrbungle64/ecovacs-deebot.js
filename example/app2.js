@@ -19,7 +19,7 @@ api.connect(email, password_hash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[0];
         console.log(vacuum);
-        let vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+        let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
         vacbot.on('ready', (event) => {
             console.log('vacbot ready');
 
