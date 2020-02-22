@@ -128,7 +128,8 @@ class VacBot_950type {
         }
         tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
         
-        this.components[constants_type.COMPONENT_FROM_ECOVACS[type]] = lifespan;
+        this.components[type] = lifespan;
+        tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
       }
     } else {
       this.vacuum_status = 'error';

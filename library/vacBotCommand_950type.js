@@ -52,28 +52,25 @@ class Edge extends Clean {
 
 class Spot extends Clean {
     constructor() {
-        super('spot', 'start'
-        //, {'content':'-291,111'}
-        ); 
-        // requires content, not included to not start the bot without knowing what happens
+        super('spot', 'start', {'content':'0,0'}); 
     }
 }
 
 class Pause extends VacBotCommand_950type {
     constructor() {
-        super('clean', {'act': 'pause'});
+        super('Clean', {'act': 'pause'});
     }
 }
 
 class Resume extends VacBotCommand_950type {
     constructor() {
-        super('clean', {'act': 'resume'});
+        super('Clean', {'act': 'resume'});
     }
 }
 
 class Stop extends VacBotCommand_950type {
     constructor() {
-        super('clean',  {'act': 'stop'});
+        super('Clean',  {'act': 'stop'});
     }
 }
 
