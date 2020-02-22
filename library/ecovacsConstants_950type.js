@@ -98,6 +98,7 @@ exports.COMMAND_TO_ECOVACS = {
     'GetCleanState': 'getCleanInfo',
     'GetCleanSpeed': 'getCleanSpeed',
     'GetChargeState': 'getChargeState',
+    'GetWaterInfo': 'getWaterInfo',
     'GetWaterBoxInfo': 'getWaterInfo',
     'GetWaterPermeability': 'getWaterInfo',
     'SetWaterPermeability': 'setWaterInfo'

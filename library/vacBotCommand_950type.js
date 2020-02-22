@@ -155,15 +155,9 @@ class SetWaterLevel extends VacBotCommand_950type {
     }
 }
 
-class GetWaterLevel extends VacBotCommand_950type {
+class GetWaterInfo extends VacBotCommand_950type {
     constructor() {
-        super('GetWaterPermeability');
-    }
-}
-
-class GetWaterBoxInfo extends VacBotCommand_950type {
-    constructor() {
-        super('GetWaterBoxInfo');
+        super('GetWaterInfo');
     }
 }
 
@@ -196,7 +190,6 @@ module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
-module.exports.GetWaterLevel = GetWaterLevel;
+module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.SetWaterLevel = SetWaterLevel;
-module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.PlaySound = PlaySound;
