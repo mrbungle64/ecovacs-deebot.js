@@ -1,7 +1,6 @@
 const EventEmitter = require('events');
 const tools = require('./tools.js');
 const Element = require('ltx').Element;
-const constants = require('./ecovacsConstants.js');
 const dictionary = require('./ecovacsConstants_non950type.js');
 
 String.prototype.format = function () {
