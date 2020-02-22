@@ -131,8 +131,6 @@ class VacBot_950type {
         this.components[type] = lifespan;
         tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
       }
-    } else {
-      this.vacuum_status = 'error';
     }
     return;
 
