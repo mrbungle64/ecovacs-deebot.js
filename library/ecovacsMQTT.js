@@ -176,11 +176,6 @@ class EcovacsMQTT extends EventEmitter {
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
                 res.setTimeout(6000);
-                // tools.envLog("[EcovacsMQTT] (request statusCode:", res.statusCode);
-                // tools.envLog("[EcovacsMQTT] (request statusMessage:", res.statusMessage);
-                // tools.envLog("[EcovacsMQTT] (request url:", res.url);
-                // tools.envLog("[EcovacsMQTT] (request urlPathArgs:", res.urlPathArgs);
-                // tools.envLog("[EcovacsMQTT] (request headers:", res.headers);
                 let rawData = '';
                 res.on('data', (chunk) => {
                     rawData += chunk;
@@ -289,29 +284,11 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _dict_to_command(json) {
-        if (json.hasOwnProperty('body')) {
-            return this._body_data_to_command(json['body']['data']);
-        }
-        else if (json.hasOwnProperty('ctl')) {
+        if (json.hasOwnProperty('ctl')) {
             return json['ctl'];
         }
         else {
             return json['event'];
-        }
-    }
-
-    _body_data_to_command(data) {
-        // Ozmo 950 device only so far
-        if (data.hasOwnProperty('isLow')) {
-            return 'BatteryInfo';
-        }
-        else if (data.hasOwnProperty('state')) {
-            if (data['state'] === 'clean') {
-                return 'CleanReport';
-            }
-        }
-        else if (data.hasOwnProperty('deebotPos')) {
-            return 'DeebotPosition';
         }
     }
 
@@ -331,90 +308,50 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _message_to_dict(topic, xmlOrJson) {
-        // TODO: fix duplicate code
+    _message_to_dict(topic, xmlString) {
         let name = null;
         tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic.name, " ", topic);
 
-        if (!xmlOrJson) {
-            tools.envLog("[EcovacsMQTT] _message_to_dict xmlOrJson missing ... topic: %s", topic);
+        if (!xml) {
+            tools.envLog("[EcovacsMQTT] _message_to_dict xmlString missing ... topic: %s", topic);
             return {};
         }
-        if (tools.isValidJsonString(xmlOrJson)) {
-            let result = JSON.parse(xmlOrJson);
-            if (xmlOrJson.hasOwnProperty('body')) {
-                tools.envLog("[EcovacsMQTT] _message_to_dict body: %s", JSON.stringify(result['body'], getCircularReplacer()));
-                if (result['body']['msg'] === 'ok') {
-                    tools.envLog("[EcovacsMQTT] _message_to_dict [1]]");
-                    result['event'] = tools.getEventNameForCommandString(topic.name);
-                    if (!result['event']) {
-                        //Default back to replacing Get from the api cmdName
-                        tools.envLog("[EcovacsMQTT] _message_to_dict default: %s", topic.name);
-                        result['event'] = topic.name;
-                    }
-                } else if (result['body']['data']) {
-                    tools.envLog("[EcovacsMQTT] _message_to_dict [2]]");
-                    let data = result['body']['data'];
-                    if ((data.hasOwnProperty('cleanState'))) {
-                        if (data['cleanstate']['type']) {
-                            result['event'] = tools.getEventNameForCommandString(data['cleanstate']['type']);
-                        }
-                    }
-                } else {
-                    tools.envLog("[EcovacsMQTT] _message_to_dict [3]]");
-                    if (result['body']['msg'] === 'fail') {
-                        if (name === "charge") {
-                            result['event'] = "ChargeState";
-                        }
-                    }
-                    if (!result['event']) {
-                        tools.envLog("[EcovacsMQTT] _message_to_dict no command detected");
-                    }
-                }
-            }
-            tools.envLog("[EcovacsMQTT] _message_to_dict result.event: %s", result.event);
-            return result;
-        }
-        else {
-            //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
-            let xmlString = xmlOrJson;
-            tools.envLog("[EcovacsMQTT] _message_to_dict() xmlString: %s", xmlString);
-            let xml = new DOMParser().parseFromString(xmlString, 'text/xml').documentElement;
-            let result = {};
+        //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
+        tools.envLog("[EcovacsMQTT] _message_to_dict() xmlString: %s", xmlString);
+        let xml = new DOMParser().parseFromString(xmlString, 'text/xml').documentElement;
+        let result = {};
 
-            if (!xml.attributes.getNamedItem('td')) {
-                // Handle response data with no 'td'
-                if (xml.attributes.getNamedItem('type')) {
-                    // single element with type and val seems to always be LifeSpan type
-                    name = "LifeSpan";
-                } else if (xml.hasChildNodes()) {
-                    // case where there is child element
-                    name = xml.firstChild.name;
+        if (!xml.attributes.getNamedItem('td')) {
+            // Handle response data with no 'td'
+            if (xml.attributes.getNamedItem('type')) {
+                // single element with type and val seems to always be LifeSpan type
+                name = "LifeSpan";
+            } else if (xml.hasChildNodes()) {
+                // case where there is child element
+                name = xml.firstChild.name;
+            }
+        } else if (xml.attributes) {
+            // response includes 'td'
+            name = xml.attributes.getNamedItem('td').value;
+        }
+
+        if (name) {
+            let attrs = {};
+            if (xml.hasChildNodes()) {
+                for (let i = 0; i < xml.firstChild.attributes.length; i++) {
+                    attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
                 }
             } else if (xml.attributes) {
-                // response includes 'td'
-                name = xml.attributes.getNamedItem('td').value;
-            }
-
-            if (name) {
-                let attrs = {};
-                if (xml.hasChildNodes()) {
-                    for (let i = 0; i < xml.firstChild.attributes.length; i++) {
-                        attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
-                    }
+                for (let i = 0; i < xml.attributes.length; i++) {
+                    attrs[xml.attributes[i].name] = xml.attributes[i].value;
                 }
-                else if (xml.attributes) {
-                    for (let i = 0; i < xml.attributes.length; i++) {
-                        attrs[xml.attributes[i].name] = xml.attributes[i].value;
-                    }
-                }
-                result = {
-                    'event': tools.getEventNameForCommandString(name),
-                    'attrs': attrs
-                };
             }
-            return result
+            result = {
+                'event': tools.getEventNameForCommandString(name),
+                'attrs': attrs
+            };
         }
+        return result
     }
 
     _handle_command(command, event) {
