@@ -71,7 +71,8 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('type')) {
-                        let component = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                        component = constants.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                        tools.envLog("[EcovacsXMPP] LifeSpan component %s", component);
                         if (component) {
                             command = 'LifeSpan';
                         }
@@ -108,7 +109,7 @@ class EcovacsXMPP extends EventEmitter {
                         this.emit(command, this.bot.error_event);
                         break;
                     case "LifeSpan":
-                        tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", secondChild.attrs);
+                        tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", JSON.stringify(secondChild.attrs));
                         this.bot._handle_life_span(secondChild.attrs);
                         if (component) {
                             if (this.bot.components[component]) {
