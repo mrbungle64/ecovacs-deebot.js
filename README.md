@@ -77,7 +77,7 @@ api.devices().then((devices) => {
 	console.log("Devices:", JSON.stringify(devices));
 	
 	let vacuum = devices[0]; // Selects the first vacuum from your account
-	let vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+	let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
 	vacbot.on("ready", (event) => {
 		console.log("Vacbot ready");
 	});
@@ -161,7 +161,7 @@ httpGetJson('http://ipinfo.io/json').then((json) => {
 	api.connect(account_id, password_hash).then(() => {
 		api.devices().then((devices) => {
 			let vacuum = devices[0];
-			let vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+			let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
 			vacbot.on("ready", (event) => {
 				vacbot.run("BatteryState");
 				vacbot.run("Clean");
