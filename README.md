@@ -114,8 +114,8 @@ actions to it.
 There are shortcut functions available to run actions on your bot.
 ```javascript
 vacbot.run("Clean", mode, action);
-vacbot.run("SpotArea", mode, action, area);
-vacbot.run("CustomArea", mode, action, map_position, cleanings);
+vacbot.run("SpotArea", action, area);
+vacbot.run("CustomArea", action, map_position, cleanings);
 vacbot.run("Edge");
 vacbot.run("Spot");
 vacbot.run("Stop");
