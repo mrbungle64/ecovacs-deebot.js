@@ -1,8 +1,7 @@
-const   dictionary = require('./ecovacsConstants_non950type.js');
-const   vacBotCommand = require('./vacBotCommand_non950type.js');
-        
-const   tools = require('./tools.js');
-
+const dictionary = require('./ecovacsConstants_non950type.js');
+const vacBotCommand = require('./vacBotCommand_non950type.js');
+const errorCodes = require('./errorCodes');
+const tools = require('./tools.js');
 
 class VacBot_non950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
@@ -238,10 +237,24 @@ class VacBot_non950type {
   }
 
   _handle_error(event) {
-    if (event.hasOwnProperty('error')) {
-      this.error_event = event['error'];
-    } else if (event.hasOwnProperty('errs')) {
-      this.error_event = event['errs'];
+    let errorCode = null;
+    if (event.hasOwnProperty('errno')) {
+      if (errorCodes[event['errno']]) {
+        // NoError: Robot is operational
+        if (event['errno'] == '100') {
+          return;
+        }
+        errorCode = errorCodes[event['errno']];
+      }
+    }
+    if ((!errorCode) && (event.hasOwnProperty('error'))) {
+      errorCode = event['error'];
+    }
+    if ((!errorCode) && (event.hasOwnProperty('errs'))) {
+      errorCode = event['errs'];
+    }
+    if (errorCode) {
+      this.error_event = errorCode;
     }
   }
 

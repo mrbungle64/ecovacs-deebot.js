@@ -83,10 +83,6 @@ class EcovacsXMPP extends EventEmitter {
                     }
                 }
                 switch (command) {
-                    case "WaterBoxInfo":
-                        this.bot._handle_waterbox_info(secondChild.attrs.on);
-                        this.emit("WaterBoxInfo", this.bot.waterbox_info);
-                        break;
                     case "ChargeState":
                         this.bot._handle_charge_state(secondChild.children[0]);
                         this.emit(command, this.bot.charge_status);
@@ -102,9 +98,9 @@ class EcovacsXMPP extends EventEmitter {
                         break;
                     case "Error":
                     case "error":
-                        tools.envLog("[EcovacsXMPP] Received an error for action '%s': %s", secondChild.attrs.action, secondChild.attrs.error);
-                        this.bot._handle_error(secondChild.attrs.error);
-                        this.emit(command, this.bot.error_event);
+                        tools.envLog("[EcovacsXMPP] Received an error for action: %s", secondChild.attrs);
+                        this.bot._handle_error(secondChild.attrs);
+                        this.emit("Error", this.bot.error_event);
                         break;
                     case "LifeSpan":
                         tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", JSON.stringify(secondChild.attrs));
