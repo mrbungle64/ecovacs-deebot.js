@@ -7,8 +7,6 @@
 A JavaScript port based on [sucks.js](https://github.com/joostth/sucks.js) of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
 to drive an Ecovacs Deebot (Ozmo) robot vacuum.
 
-So far, only devices that communicate with the **XMPP** protocol work.
-
 All credits for figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
 
@@ -16,26 +14,6 @@ He documented his [findings on the protocol](http://github.com/wpietri/sucks/blo
 
 	npm install ecovacs-deebot
 	
-## Models
-
-So far, only devices that communicate with the **XMPP** protocol work properly. 
-Devices that communicate with the **MQTT** protocol are experimental.
-
-### Works properly
-* Deebot Slim 2
-* Deebot Ozmo 610
-* Deebot Ozmo 930
-
-### Should work
-* Deebot N79T
-* Deebot 601
-* Deebot Ozmo 960
-
-### Should work partially
-* Deebot 710
-* Deebot Ozmo 900
-* Deebot Ozmo 950
-
 ## Models
 
 So far, only devices that communicate with the **XMPP** protocol work properly. 
