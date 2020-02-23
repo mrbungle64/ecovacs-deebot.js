@@ -61,6 +61,7 @@ class EcovacsXMPP extends EventEmitter {
                 tools.envLog('secondChild: %s',secondChild.toString());
                 let type = null;
                 let level = null;
+                let waterboxinfo = null;
                 let component = null;
                 let command = secondChild.attrs.td;
                 if (!command) {
@@ -79,6 +80,12 @@ class EcovacsXMPP extends EventEmitter {
                         level = dictionary.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v];
                         if (level) {
                             command = 'WaterLevel';
+                        }
+                    }
+                    if (secondChild.attrs.hasOwnProperty('on')) {
+                        waterboxinfo = secondChild.attrs.on;
+                        if (waterboxinfo) {
+                            command = 'WaterBoxInfo';
                         }
                     }
                 }
@@ -118,6 +125,10 @@ class EcovacsXMPP extends EventEmitter {
                         if (this.bot.water_level) {
                             this.emit('WaterLevel', this.bot.water_level);
                         }
+                        break;
+                    case "WaterBoxInfo":
+                        this.bot._handle_waterbox_info(secondChild);
+                        this.emit("WaterBoxInfo", this.bot.waterbox_info);
                         break;
                     default:
                         tools.envLog("[EcovacsXMPP] Unknown response type received: %s", JSON.stringify(stanza));

@@ -207,9 +207,9 @@ class VacBot_non950type {
     tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
   }
 
-  _handle_waterbox_info(val) {
-      this.waterbox_info = val;
-      tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
+  _handle_waterbox_info(event) {
+    this.waterbox_info = event.attrs['on'];
+    tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
   }
 
   _handle_charge_state(event) {
