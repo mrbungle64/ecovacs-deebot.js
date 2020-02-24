@@ -50,6 +50,7 @@ class VacBot_non950type {
   }
 
   runGetStates() {
+    this.run('GetFirmwareVersion');
     this.run('GetCleanState');
     this.run('GetChargeState');
     this.run('GetBatteryState');
@@ -383,6 +384,9 @@ class VacBot_non950type {
         break;
       case "getwaterboxinfo":
         this.send_command(new vacBotCommand.GetWaterBoxInfo());
+        break;
+      case "getfirmwareversion":
+        this.send_command(new vacBotCommand.GetFirmwareVersion());
         break;
     }
   }
