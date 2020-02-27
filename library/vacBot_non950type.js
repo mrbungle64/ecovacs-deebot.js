@@ -124,7 +124,10 @@ class VacBot_non950type {
   _handle_life_span(event) {
     let type = null;
     if (event.hasOwnProperty('type')) {
-      type = dictionary.COMPONENT_FROM_ECOVACS[event['type']];
+      // type attribute must be trimmed because of Deebot M88
+      // { td: 'LifeSpan', type: 'DustCaseHeap ', ... }
+      type = event['type'].trim();
+      type = dictionary.COMPONENT_FROM_ECOVACS[type];
     }
 
     if (!type) {
