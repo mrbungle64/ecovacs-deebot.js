@@ -229,21 +229,11 @@ class VacBot_non950type {
 
   _handle_charge_state(event) {
     if (event.attrs) {
-      let report = event.attrs['type'];
-      switch (report.toLowerCase()) {
-        case "going":
-          this.charge_status = 'returning';
-          break;
-        case "slotcharging":
-          this.charge_status = 'charging';
-          break;
-        case "idle":
-          this.charge_status = 'idle';
-          break;
-        default:
-          this.charge_status = 'unknown';
-          console.error("[VacBot] Unknown charging status '%s'", report);
-          break;
+      let chargemode = event.attrs['type'];
+      if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode]) {
+        this.charge_status = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
+      } else {
+        console.error("[VacBot] Unknown charging status '%s'", chargemode);
       }
       tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
     } else {

@@ -58,15 +58,16 @@ exports.FAN_SPEED_FROM_ECOVACS = {
 };
 
 exports.CHARGE_MODE_TO_ECOVACS = {
-    'return': 'go',
-    'returning': 'Going',
-    'charging': 'SlotCharging',
-    'idle': 'Idle'
+    'return': 'go'
 };
 
 exports.CHARGE_MODE_FROM_ECOVACS = {
+    'Going': 'returning',
     'going': 'returning',
+    'SlotCharging': 'charging',
     'slot_charging': 'charging',
+    'WireCharging': 'charging',
+    'Idle': 'idle',
     'idle': 'idle'
 };
 
