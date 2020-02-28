@@ -105,6 +105,7 @@ class EcovacsXMPP extends EventEmitter {
                         break;
                     case "Error":
                     case "error":
+                    case "errors":
                         tools.envLog("[EcovacsXMPP] Received an error for action: %s", secondChild.attrs);
                         this.bot._handle_error(secondChild.attrs);
                         this.emit("Error", this.bot.error_event);
@@ -129,6 +130,10 @@ class EcovacsXMPP extends EventEmitter {
                     case "WaterBoxInfo":
                         this.bot._handle_waterbox_info(secondChild);
                         this.emit("WaterBoxInfo", this.bot.waterbox_info);
+                        break;
+                    case "DustCaseST":
+                        this.bot._handle_dustbox_info(secondChild);
+                        this.emit("DustCaseInfo", this.bot.dustbox_info);
                         break;
                     default:
                         tools.envLog("[EcovacsXMPP] Unknown response type received: %s", JSON.stringify(stanza));

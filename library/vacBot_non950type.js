@@ -23,6 +23,7 @@ class VacBot_non950type {
     this.charge_status = null;
     this.battery_status = null;
     this.water_level = null;
+    this.dustbox_info = null;
     this.waterbox_info = null;
     this.components = {};
     this.ping_interval = null;
@@ -50,7 +51,6 @@ class VacBot_non950type {
   }
 
   runGetStates() {
-    this.run('GetFirmwareVersion');
     this.run('GetCleanState');
     this.run('GetChargeState');
     this.run('GetBatteryState');
@@ -61,7 +61,6 @@ class VacBot_non950type {
     this.run('GetLifeSpan', 'filter');
     if (this.hasMoppingSystem()) {
       this.run('GetWaterLevel');
-      this.run('GetWaterBoxInfo');
     }
   }
 
@@ -154,7 +153,7 @@ class VacBot_non950type {
 
   _handle_deebot_position(event) {
         if (event) {
-          tools.envLog("[VacBot] _handle_deebot_position currently not supported for this model");
+          tools.envLog("[VacBot] _handle_deebot_position currently not supported for this model: %s", JSON.stringify(event));
         } else {
           console.error("[VacBot] _handle_deebot_position event undefined");
         }
@@ -218,6 +217,11 @@ class VacBot_non950type {
     tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
   }
 
+  _handle_dustbox_info(event) {
+    this.dustbox_info = event.attrs['st'];
+    tools.envLog("[VacBot] *** dustbox_info = " + this.dustbox_info);
+  }
+
   _handle_waterbox_info(event) {
     this.waterbox_info = event.attrs['on'];
     tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
@@ -250,12 +254,13 @@ class VacBot_non950type {
   _handle_error(event) {
     let errorCode = null;
     if (event.hasOwnProperty('errno')) {
-      if (errorCodes[event['errno']]) {
-        // NoError: Robot is operational
-        if (event['errno'] == '100') {
-          return;
-        }
-        errorCode = errorCodes[event['errno']];
+        errorCode = event['errno'];
+    }
+    if ((!errorCode) && (event.hasOwnProperty('new'))) {
+      errorCode = event['new'];
+      if ((errorCode == '') && (event['old'] !== '')) {
+        this.error_event = '';
+        return;
       }
     }
     if ((!errorCode) && (event.hasOwnProperty('error'))) {
@@ -264,8 +269,15 @@ class VacBot_non950type {
     if ((!errorCode) && (event.hasOwnProperty('errs'))) {
       errorCode = event['errs'];
     }
-    if (errorCode) {
-      this.error_event = errorCode;
+    // NoError: Robot is operational
+    if (errorCode == '100') {
+      this.error_event = '';
+      return;
+    }
+    if (errorCodes[errorCode]) {
+      this.error_event = errorCodes[errorCode];
+    } else {
+      this.error_event = 'unknown errorCode: ' + errorCode;
     }
   }
 
