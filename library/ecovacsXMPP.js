@@ -59,16 +59,11 @@ class EcovacsXMPP extends EventEmitter {
                 tools.envLog('firstChild: %s',firstChild.toString());
                 let secondChild = firstChild.children[0];
                 tools.envLog('secondChild: %s',secondChild.toString());
-                let type = null;
-                let level = null;
-                let waterboxinfo = null;
-                let component = null;
                 let command = secondChild.attrs.td;
                 if (!command) {
                     if (secondChild.children[0]) {
-                        let name = secondChild.children[0].name;
-                        if (name) {
-                            command = tools.getEventNameForCommandString(name);
+                        if (secondChild.children[0].name) {
+                            command = secondChild.children[0].name;
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('type')) {
@@ -77,19 +72,17 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('v')) {
-                        level = dictionary.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v];
-                        if (level) {
+                        if (dictionary.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v]) {
                             command = 'WaterLevel';
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('on')) {
-                        waterboxinfo = secondChild.attrs.on;
-                        if (waterboxinfo) {
+                        if (secondChild.attrs.on) {
                             command = 'WaterBoxInfo';
                         }
                     }
                 }
-                switch (command) {
+                switch (tools.getEventNameForCommandString(command)) {
                     case "ChargeState":
                         this.bot._handle_charge_state(secondChild.children[0]);
                         this.emit(command, this.bot.charge_status);
@@ -104,8 +97,6 @@ class EcovacsXMPP extends EventEmitter {
                         this.emit('FanSpeed', this.bot.fan_speed);
                         break;
                     case "Error":
-                    case "error":
-                    case "errors":
                         tools.envLog("[EcovacsXMPP] Received an error for action: %s", secondChild.attrs);
                         this.bot._handle_error(secondChild.attrs);
                         this.emit("Error", this.bot.error_event);
@@ -113,7 +104,7 @@ class EcovacsXMPP extends EventEmitter {
                     case "LifeSpan":
                         tools.envLog("[EcovacsXMPP] Received an LifeSpan Stanza %s", JSON.stringify(secondChild.attrs));
                         this.bot._handle_life_span(secondChild.attrs);
-                        component = dictionary.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
+                        const component = dictionary.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                         if (component) {
                             if (this.bot.components[component]) {
                                 this.emit('LifeSpan_' + component, this.bot.components[component]);

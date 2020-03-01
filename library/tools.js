@@ -66,6 +66,9 @@ function getEventNameForCommandString(str) {
             return 'WaterBoxInfo';
         case "deebotposition":
             return 'DeebotPosition';
+        case "error":
+        case "errors":
+            return "Error";
         default:
             envLog("[tools] Unknown command name: %s str: %s", command, str);
             return command;
