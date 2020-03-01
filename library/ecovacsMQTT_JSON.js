@@ -302,12 +302,18 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "cleanspeed":
             case "speed":
-                this.bot._handle_clean_speed(event);
-                this.emit("FanSpeed", this.bot.fan_speed);
+                this.bot._handle_fan_speed(event);
+                this.emit("CleanSpeed", this.bot.fan_speed);
                 break;
             case "relocationstate":
-                this.bot._handle_relocationState(event);
+                this.bot._handle_relocation_state(event);
                 this.emit("RelocationState", this.bot.relocation_state);
+                break;
+            case "cachedmapinfo":
+                this.bot._handle_cachedmapinfo(event);
+                this.emit("CurrentMapName", this.bot.currentMapName);
+                this.emit("CurrentMapMID", this.bot.currentMapMID);
+                this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                 break;
             case "lifespan":
                 this.bot._handle_life_span(event);
@@ -323,13 +329,36 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
-                this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
+                if(this.bot.deebot_position["invalid"]==1) {
+                    this.bot._handle_error({"resultCode":"0","resultCodeMessage":"ok","resultData":{"code":[102]}});
+                    this.emit("Error", this.bot.error_event);
+                } else {
+                    this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                }
+                this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]); 
                 break;
             case "waterinfo":
                 this.bot._handle_water_info(event);
                 this.emit("WaterBoxInfo", this.bot.waterbox_info);
                 this.emit("WaterLevel", this.bot.water_level);
+                break;
+            case "netinfo":
+                this.bot._handle_net_info(event);
+                this.emit("NetInfoIP", this.bot.netInfoIP);
+                this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
+                this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
+                this.emit("NetInfoMAC", this.bot.netInfoMAC);
+
+                break;
+            case "setwaterinfo":
+                this.bot.run('GetWaterLevel');
+                break;
+            case "setspeed":
+                this.bot.run('GetCleanSpeed');
+                break;
+            case "error":
+                this.bot._handle_error(event);
+                this.emit("Error", this.bot.error_event);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);

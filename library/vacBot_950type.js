@@ -31,7 +31,14 @@ class VacBot_950type {
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
+    this.currentMapName = 'unknown';
+    this.currentMapMID = null;
+    this.currentMapIndex = null;
 
+    this.netInfoIP = null;
+    this.netInfoWifiSSID = null;
+    this.netInfoWifiSignal = null;
+    this.netInfoMAC = null;
     
     tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
     const EcovacsMQTT = require('./ecovacsMQTT_JSON.js');
@@ -50,10 +57,14 @@ class VacBot_950type {
       this.run('GetLifeSpan', 'filter');
       this.run('GetPosition');
       this.run('GetCleanSpeed');
-      //this.run('relocate');
+      this.run('GetNetInfo');
+      this.run('GetCurrentMapName');
+      this.run('GetError');
+       //this.run('relocate');
       if (this.hasMoppingSystem()) {
-        this.run('GetWaterInfo');
+        this.run('GetWaterLevel');
       }
+      
     });
   }
 
@@ -146,7 +157,7 @@ class VacBot_950type {
 
           //as deebotPos and chargePos can also appear in other messages (CleanReport)
           //the handling should be extracted to a seperate function
-          if(event['resultData']['deebotPos'] && event['resultData']['deebotPos']['invalid']===0) {
+          if(event['resultData']['deebotPos']) {
             this.deebot_position = {
               x:event['resultData']['deebotPos']['x'], 
               y:event['resultData']['deebotPos']['y'], 
@@ -180,9 +191,22 @@ class VacBot_950type {
           console.error("[VacBot] _handle_deebot_position event undefined");
         }
   }
-  _handle_clean_speed(event) {
+  _handle_fan_speed(event) {
     this.fan_speed = constants_type.FAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
+    //this.fan_speed = event['resultData']['speed'];
     tools.envLog("[VacBot] *** fan_speed = %s", this.fan_speed);
+  }
+
+  _handle_net_info(event) {
+    this.netInfoIP = event['resultData']['ip'];
+    this.netInfoWifiSSID = event['resultData']['ssid'];
+    this.netInfoWifiSignal = event['resultData']['rssi'];
+    this.netInfoMAC = event['resultData']['mac'];
+
+    tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
+    tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
+    tools.envLog("[VacBot] *** netInfoWifiSignal = %s", this.netInfoWifiSignal);
+    tools.envLog("[VacBot] *** netInfoMAC = %s", this.netInfoMAC);
   }
 
   _handle_clean_info(event) {
@@ -222,9 +246,27 @@ class VacBot_950type {
     this.water_level = event['resultData']['amount'];
     tools.envLog("[VacBot] *** water_level = " + constants_type.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
   }
-  _handle_relocationState(event) {
+
+  _handle_relocation_state(event) {
     this.relocation_state = event['resultData']['state'];
     tools.envLog("[VacBot] *** relocation_state = " + this.relocation_state);
+  }
+
+  _handle_cachedmapinfo(event) {
+    this.currentMapName = 'unknown';
+    if (event['resultCode'] == '0') {
+      for ( let map in event['resultData']['info']) {
+        
+    tools.envLog("[VacBot] *** resultData = " + JSON.stringify(event['resultData']['info'][map]));
+        if (event['resultData']['info'][map]['using'] == 1) {
+          this.currentMapName = event['resultData']['info'][map]['name'];
+          this.currentMapMID = event['resultData']['info'][map]['mid'];
+          this.currentMapIndex = event['resultData']['info'][map]['index'];
+          break;
+        }
+      }
+    }
+    tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
   }
 
   _handle_water_info(event) {
@@ -265,11 +307,8 @@ class VacBot_950type {
   }
 
   _handle_error(event) {
-    if (event.hasOwnProperty('error')) {
-      this.error_event = event['error'];
-    } else if (event.hasOwnProperty('errs')) {
-      this.error_event = event['errs'];
-    }
+    this.error_event = event['resultData']['code'];
+    tools.envLog("[VacBot] *** error_event = " + this.error_event);
   }
 
   _vacuum_address() {
@@ -344,7 +383,11 @@ class VacBot_950type {
         this.send_command(new vacBotCommand.Relocate());
         break;
       case "playsound":
-        this.send_command(new vacBotCommand.PlaySound());
+        if (arguments.length <= 1) {
+          this.send_command(new vacBotCommand.PlaySound());
+        } else if (arguments.length === 2) {
+          this.send_command(new vacBotCommand.PlaySound(arguments[1]));
+        }        
         break;
       case "getdeviceinfo":
         this.send_command(new vacBotCommand.GetDeviceInfo());
@@ -358,8 +401,17 @@ class VacBot_950type {
       case "getchargestate":
         this.send_command(new vacBotCommand.GetChargeState());
         break;
+      case "getcurrentmapname":
+        this.send_command(new vacBotCommand.GetCurrentMapName());
+        break;
+      case "geterror":
+        this.send_command(new vacBotCommand.GetError());
+        break;
       case "getbatterystate":
         this.send_command(new vacBotCommand.GetBatteryState());
+        break;
+      case "getnetinfo":
+        this.send_command(new vacBotCommand.GetNetInfo());
         break;
       case "getlifespan":
         if (arguments.length < 2) {
@@ -381,6 +433,12 @@ class VacBot_950type {
           return;
         }
         this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
+        break;
+      case "setcleanspeed":
+        if (arguments.length < 2) {
+          return;
+        }
+        this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         break;
     }
   
