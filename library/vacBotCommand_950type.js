@@ -150,6 +150,22 @@ class GetCleanSpeed extends VacBotCommand_950type {
     }
 }
 
+class GetError extends VacBotCommand_950type {
+    constructor(component) {
+        super('getError');
+    }
+}
+
+class SetCleanSpeed extends VacBotCommand_950type {
+    constructor(level) {
+        if (constants_type.FAN_SPEED_TO_ECOVACS.hasOwnProperty(level)) {
+            level = constants_type.FAN_SPEED_TO_ECOVACS[level];
+        }
+        super('setSpeed', {
+            'speed': level
+        });
+    }
+}
 class SetWaterLevel extends VacBotCommand_950type {
     constructor(level) {
         if (constants_type.WATER_LEVEL_TO_ECOVACS.hasOwnProperty(level)) {
@@ -178,6 +194,19 @@ class PlaySound extends VacBotCommand_950type {
     }
 }
 
+class GetNetInfo extends VacBotCommand_950type {
+    constructor() {
+        super('getNetInfo');
+    }
+}
+
+class GetCurrentMapName extends VacBotCommand_950type {
+    constructor(sid = '0') {
+        super('getCachedMapInfo');
+    }
+}
+
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -195,7 +224,11 @@ module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.GetPosition = GetPosition;
 module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
+module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.PlaySound = PlaySound;
 module.exports.Relocate = Relocate;
+module.exports.GetCurrentMapName = GetCurrentMapName;
+module.exports.GetError = GetError;
+module.exports.GetNetInfo = GetNetInfo;
