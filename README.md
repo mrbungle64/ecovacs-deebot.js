@@ -201,6 +201,10 @@ function httpGetJson(url) {
 	});
 }
 ```
+### 0.3.2
+  * (boriswerner) Added Features for Ozmo 950
+  * (mrbungle64) Some improvements for non Ozmo 950
+  
 ### 0.3.1
   * A few changes and improvements
 
