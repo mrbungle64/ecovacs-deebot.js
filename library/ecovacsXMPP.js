@@ -125,6 +125,11 @@ class EcovacsXMPP extends EventEmitter {
                             this.bot._handle_dustbox_info(secondChild);
                             this.emit('DustCaseInfo', this.bot.dustbox_info);
                             break;
+                        case 'NetInfo':
+                            this.bot._handle_net_info(secondChild.attrs);
+                            this.emit("NetInfoIP", this.bot.netInfoIP);
+                            this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
+                            break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
                             break;

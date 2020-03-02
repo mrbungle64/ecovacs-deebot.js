@@ -28,6 +28,9 @@ class VacBot_non950type {
     this.components = {};
     this.ping_interval = null;
     this.error_event = null;
+    this.netInfoIP = null;
+    this.netInfoWifiSSID = null;
+
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
@@ -157,6 +160,17 @@ class VacBot_non950type {
         } else {
           console.error("[VacBot] _handle_deebot_position event undefined");
         }
+  }
+
+  _handle_net_info(event) {
+    if (event.hasOwnProperty('wi')) {
+      this.netInfoIP = event['wi'];
+      tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
+    }
+    if (event.hasOwnProperty('wi')) {
+      this.netInfoWifiSSID = event['s'];
+      tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
+    }
   }
 
   _handle_clean_report(event) {
@@ -392,6 +406,9 @@ class VacBot_non950type {
         break;
       case "getfirmwareversion":
         this.send_command(new vacBotCommand.GetFirmwareVersion());
+        break;
+      case "getnetinfo":
+        this.send_command(new vacBotCommand.GetNetInfo());
         break;
     }
   }

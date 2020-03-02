@@ -204,6 +204,12 @@ class PlaySound extends VacBotCommand_non950type {
     }
 }
 
+class GetNetInfo extends VacBotCommand_non950type {
+    constructor() {
+        super('GetNetInfo');
+    }
+}
+
 class GetFirmwareVersion extends VacBotCommand_non950type {
     constructor() {
         super('GetVersion', {
@@ -234,3 +240,4 @@ module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.PlaySound = PlaySound;
 module.exports.GetFirmwareVersion = GetFirmwareVersion;
+module.exports.GetNetInfo = GetNetInfo;
