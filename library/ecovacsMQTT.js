@@ -3,7 +3,6 @@ const tools = require('./tools.js');
 const URL = require('url').URL;
 const fs = require('fs');
 const constants = require('./ecovacsConstants');
-const dictionary = require('./ecovacsConstants_non950type');
 const request = require('request');
 const https = require('https');
 const DOMParser = require('xmldom').DOMParser;
@@ -136,7 +135,7 @@ class EcovacsMQTT extends EventEmitter {
 
         return {
             'auth': {
-                'realm': dictionary.REALM,
+                'realm': constants.REALM,
                 'resource': this.resource,
                 'token': this.secret,
                 'userid': this.user,
@@ -155,7 +154,7 @@ class EcovacsMQTT extends EventEmitter {
 
     _call_ecovacs_device_api(params) {
         return new Promise((resolve, reject) => {
-            let url = (dictionary.PORTAL_URL_FORMAT + '/' + dictionary.IOTDEVMANAGERAPI).format({
+            let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
                 continent: this.continent
             });
             let headers = {
