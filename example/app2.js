@@ -46,10 +46,22 @@ api.connect(email, password_hash).then(() => {
                 console.log('[app2.js] side_brush: ' + Math.round(level));
             });
             vacbot.on('WaterLevel', (level) => {
-                console.log('[ecovacs-deebot-test.js] water level: ' + level);
+                console.log('[app2.js] water level: ' + level);
             });
             vacbot.on('WaterBoxInfo', (level) => {
-                console.log('[ecovacs-deebot-test.js] waterBoxInfo: ' + level);
+                console.log('[app2.js] waterBoxInfo: ' + level);
+            });
+            vacbot.on('DustCaseInfo', (value) => {
+                console.log('[app2.js] DustCaseInfo: ' + value);
+            });
+            vacbot.on('FirmwareVersion', (version) => {
+                console.log('[app2.js] FirmwareVersion: ' + version);
+            });
+            vacbot.on('Error', (value) => {
+                console.log('[app2.js] Error: ' + value);
+            });
+            vacbot.on('NetInfoIP', (value) => {
+                console.log('[app2.js] NetInfoIP: ' + value);
             });
             // MQTT
             vacbot.on('message', (event) => {
@@ -67,18 +79,20 @@ api.connect(email, password_hash).then(() => {
         console.log('[app2.js] hasMoppingSystem: ' + vacbot.hasMoppingSystem());
         console.log('[app2.js] hasVoiceReports: ' + vacbot.hasVoiceReports());
 
-        if (!vacbot.useMqtt) {
+        setTimeout(() => {
             vacbot.run('Clean');
             vacbot.run('GetLifeSpan', 'main_brush');
             vacbot.run('GetLifeSpan', 'side_brush');
             vacbot.run('GetLifeSpan', 'filter');
-            let interval = setInterval(() => {
-                vacbot.run('GetCleanState');
-                vacbot.run('GetChargeState');
-                vacbot.run('GetBatteryState');
-            }, 60000);
-        }
-        
+            vacbot.run('GetNetInfo');
+        }, 6000);
+
+        setInterval(() => {
+            vacbot.run('GetCleanState');
+            vacbot.run('GetChargeState');
+            vacbot.run('GetBatteryState');
+            vacbot.run('GetWaterLevel');
+        }, 60000);
         
             //
             // Catch ctrl-c to exit program
