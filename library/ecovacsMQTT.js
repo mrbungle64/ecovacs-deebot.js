@@ -386,6 +386,10 @@ class EcovacsMQTT extends EventEmitter {
             case "WaterLevel":
                 this.bot._handle_water_level(event);
                 break;
+            case 'DustCaseST':
+                this.bot._handle_dustbox_info(event);
+                this.emit('DustCaseInfo', this.bot.dustbox_info);
+                break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
                 break;
