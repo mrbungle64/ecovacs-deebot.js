@@ -201,6 +201,10 @@ function httpGetJson(url) {
 	});
 }
 ```
+### 0.3.3
+  * (mrbungle64) Bugfixes (MQTT/XML)
+  * (mrbungle64) Start implement NetInfo (XMPP)
+  
 ### 0.3.2
   * (boriswerner) Added Features for Ozmo 950
   * (mrbungle64) Some improvements for non Ozmo 950
