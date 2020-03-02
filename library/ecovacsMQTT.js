@@ -311,7 +311,7 @@ class EcovacsMQTT extends EventEmitter {
         let name = null;
         tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic.name, " ", topic);
 
-        if (!xml) {
+        if (!xmlString) {
             tools.envLog("[EcovacsMQTT] _message_to_dict xmlString missing ... topic: %s", topic);
             return {};
         }
