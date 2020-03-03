@@ -154,14 +154,6 @@ class VacBot_non950type {
     tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
   }
 
-  _handle_deebot_position(event) {
-        if (event) {
-          tools.envLog("[VacBot] _handle_deebot_position currently not supported for this model: %s", JSON.stringify(event));
-        } else {
-          console.error("[VacBot] _handle_deebot_position event undefined");
-        }
-  }
-
   _handle_net_info(event) {
     if (event.hasOwnProperty('wi')) {
       this.netInfoIP = event['wi'];
@@ -229,6 +221,28 @@ class VacBot_non950type {
   _handle_water_level(event) {
     this.water_level = event.attrs['v'];
     tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+  }
+
+  _handle_deebot_position(event) {
+    if ((event.attrs) && (event.attrs['p']) && (event.attrs['a'])) {
+      this.deebot_position = {
+        x: event.attrs['p'].split(",")[0],
+        y: event.attrs['p'].split(",")[1],
+        a: event.attrs['a']
+      };
+      tools.envLog("[VacBot] *** deebot_position = %s %s", event.attrs['p'], event.attrs['a']);
+    }
+  }
+
+  _handle_charge_position(event) {
+    if ((event.attrs) && (event.attrs['p']) && (event.attrs['a'])) {
+      this.charge_position = {
+        x: event.attrs['p'].split(",")[0],
+        y: event.attrs['p'].split(",")[1],
+        a: event.attrs['a']
+      };
+      tools.envLog("[VacBot] *** charge_position = %s %s", event.attrs['p'], event.attrs['a']);
+    }
   }
 
   _handle_dustbox_info(event) {
@@ -409,6 +423,14 @@ class VacBot_non950type {
         break;
       case "getnetinfo":
         this.send_command(new vacBotCommand.GetNetInfo());
+        break;
+      case "getpos":
+      case "getposition":
+        this.send_command(new vacBotCommand.GetPos());
+        break;
+      case "getchargerpos":
+      case "getchargerposition":
+        this.send_command(new vacBotCommand.GetChargerPos());
         break;
     }
   }

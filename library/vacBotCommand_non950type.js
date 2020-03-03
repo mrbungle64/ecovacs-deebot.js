@@ -5,7 +5,10 @@ const Element = require('ltx').Element;
 class VacBotCommand_non950type {
     constructor(name, args = {}) {
         this.name = name;
-        this.args = Object.assign(args, { 'id': getReqID() });
+        if (!args.hasOwnProperty('id')) {
+            args = Object.assign(args, { 'id': getReqID() })
+        }
+        this.args = args;
     }
 
     to_xml() {
@@ -54,7 +57,7 @@ class Clean extends VacBotCommand_non950type {
 }
 
 function getReqID(customid = '0') {
-    // Generate a somewhat random string for request id, with minium 8 chars. Works similar to ecovacs app
+    // Generate a somewhat random string for request id, with minimum 8 chars. Works similar to Ecovacs App
     // This is required for the Ozmo 930
     if (customid !== '0') {
         rtnval = customid; // return provided id as string
@@ -192,12 +195,6 @@ class GetWaterBoxInfo extends VacBotCommand_non950type {
     }
 }
 
-class GetDeebotPos extends VacBotCommand_non950type {
-    constructor() {
-        super('GetDeebotPos');
-    }
-}
-
 class PlaySound extends VacBotCommand_non950type {
     constructor(sid = '0') {
         super('PlaySound', {'count': 1, 'sid': sid});
@@ -218,6 +215,20 @@ class GetFirmwareVersion extends VacBotCommand_non950type {
     }
 }
 
+class GetPos extends VacBotCommand_non950type {
+    constructor() {
+        super('GetPos');
+    }
+}
+
+class GetChargerPos extends VacBotCommand_non950type {
+    constructor() {
+        super('GetChargerPos', {
+            'id': '999999999'
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -227,7 +238,6 @@ module.exports.Stop = Stop;
 module.exports.Pause = Pause;
 module.exports.Resume = Resume;
 module.exports.Charge = Charge;
-module.exports.GetDeebotPos = GetDeebotPos;
 module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
@@ -240,4 +250,6 @@ module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.PlaySound = PlaySound;
 module.exports.GetFirmwareVersion = GetFirmwareVersion;
+module.exports.GetPos = GetPos;
+module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;

@@ -81,6 +81,14 @@ class EcovacsXMPP extends EventEmitter {
                             command = 'WaterBoxInfo';
                         }
                     }
+                    if ((secondChild.attrs.hasOwnProperty('p')) && (secondChild.attrs.hasOwnProperty('a'))) {
+                        if (secondChild.attrs.id == "999999999") {
+                            command = 'ChargePosition';
+                        }
+                        else {
+                            command = 'DeebotPosition';
+                        }
+                    }
                 }
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
@@ -124,6 +132,14 @@ class EcovacsXMPP extends EventEmitter {
                         case 'DustCaseST':
                             this.bot._handle_dustbox_info(secondChild);
                             this.emit('DustCaseInfo', this.bot.dustbox_info);
+                            break;
+                        case 'DeebotPosition':
+                            this.bot._handle_deebot_position(secondChild);
+                            this.emit('DeebotPosition', this.bot.deebot_position);
+                            break;
+                        case 'ChargePosition':
+                            this.bot._handle_charge_position(secondChild);
+                            this.emit('ChargePosition', this.bot.charge_position);
                             break;
                         case 'NetInfo':
                             this.bot._handle_net_info(secondChild.attrs);
