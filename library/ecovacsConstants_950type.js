@@ -36,10 +36,17 @@ exports.CLEAN_ACTION_TO_ECOVACS = {
 
 
 exports.FAN_SPEED_TO_ECOVACS = {
-    'normal': 0,
-    'high': 1,
-    'veryhigh': 2,
-    'silent': 1000
+    1: 1000,  //silent
+    2: 0,     //normal
+    3: 1,     //high
+    4: 2      //veryhigh
+};
+
+exports.FAN_SPEED_FROM_ECOVACS = {
+    1000: 1, //silent
+    0: 2,    //normal
+    1: 3,    //high
+    2: 4     //veryhigh
 };
 
 exports.WATER_LEVEL_TO_ECOVACS = {
@@ -54,13 +61,6 @@ exports.WATER_LEVEL_FROM_ECOVACS = {
     '2': 'medium',
     '3': 'high',
     '4': 'max'
-};
-
-exports.FAN_SPEED_FROM_ECOVACS = {
-    '0': 'normal',
-    '1': 'high',
-    '2': 'veryhigh',
-    '1000': 'silent'
 };
 
 exports.CHARGE_MODE_TO_ECOVACS = {
