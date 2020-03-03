@@ -201,6 +201,11 @@ function httpGetJson(url) {
 	});
 }
 ```
+
+### 0.3.4
+  * (mrbungle64) GetPos, GetChargePos (XMPP), DustCaseST (MQTT/XML)
+  * (boriswerner) setCleanSpeed standardized to numeric 1-4
+  
 ### 0.3.3
   * (mrbungle64) Bugfixes (MQTT/XML)
   * (mrbungle64) Start implement NetInfo (XMPP)
