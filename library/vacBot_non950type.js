@@ -159,7 +159,7 @@ class VacBot_non950type {
       this.netInfoIP = event['wi'];
       tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
     }
-    if (event.hasOwnProperty('wi')) {
+    if (event.hasOwnProperty('s')) {
       this.netInfoWifiSSID = event['s'];
       tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
     }
@@ -219,8 +219,10 @@ class VacBot_non950type {
   }
 
   _handle_water_level(event) {
-    this.water_level = event.attrs['v'];
-    tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+    if ((event.attrs) && (event.attrs['v'])) {
+      this.water_level = event.attrs['v'];
+      tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+    }
   }
 
   _handle_deebot_position(event) {
@@ -246,24 +248,28 @@ class VacBot_non950type {
   }
 
   _handle_dustbox_info(event) {
-    this.dustbox_info = event.attrs['st'];
-    tools.envLog("[VacBot] *** dustbox_info = " + this.dustbox_info);
+    if ((event.attrs) && (event.attrs['st'])) {
+      this.dustbox_info = event.attrs['st'];
+      tools.envLog("[VacBot] *** dustbox_info = " + this.dustbox_info);
+    }
   }
 
   _handle_waterbox_info(event) {
-    this.waterbox_info = event.attrs['on'];
-    tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
+    if ((event.attrs) && (event.attrs['on'])) {
+      this.waterbox_info = event.attrs['on'];
+      tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
+    }
   }
 
   _handle_charge_state(event) {
-    if (event.attrs) {
+    if ((event.attrs) && (event.attrs['type'])) {
       let chargemode = event.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode]) {
         this.charge_status = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
+        tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
       } else {
         console.error("[VacBot] Unknown charging status '%s'", chargemode);
       }
-      tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
     } else {
       console.error("[VacBot] couldn't parse charge status ", event);
     }
