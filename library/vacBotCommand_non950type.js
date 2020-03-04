@@ -248,4 +248,3 @@ module.exports.GetFirmwareVersion = GetFirmwareVersion;
 module.exports.GetPos = GetPos;
 module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;
-module.exports.GetWKVer = GetWKVer;
