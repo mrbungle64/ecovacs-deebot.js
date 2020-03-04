@@ -230,7 +230,7 @@ class VacBot_non950type {
         y: event.attrs['p'].split(",")[1],
         a: event.attrs['a']
       };
-      tools.envLog("[VacBot] *** deebot_position = %s %s", event.attrs['p'], event.attrs['a']);
+      tools.envLog("[VacBot] *** deebot_position = %s", JSON.stringify(this.deebot_position));
     }
   }
 
@@ -241,7 +241,7 @@ class VacBot_non950type {
         y: event.attrs['p'].split(",")[1],
         a: event.attrs['a']
       };
-      tools.envLog("[VacBot] *** charge_position = %s %s", event.attrs['p'], event.attrs['a']);
+      tools.envLog("[VacBot] *** charge_position = %s", JSON.stringify(this.charge_position));
     }
   }
 
@@ -428,6 +428,8 @@ class VacBot_non950type {
       case "getposition":
         this.send_command(new vacBotCommand.GetPos());
         break;
+      case "getchargepos":
+      case "getchargeposition":
       case "getchargerpos":
       case "getchargerposition":
         this.send_command(new vacBotCommand.GetChargerPos());
