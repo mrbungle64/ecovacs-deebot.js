@@ -56,14 +56,9 @@ class Clean extends VacBotCommand_non950type {
     }
 }
 
-function getReqID(customid = '0') {
-    // Generate a somewhat random string for request id, with minimum 8 chars. Works similar to Ecovacs App
+function getReqID() {
     // This is required for the Ozmo 930
-    if (customid !== '0') {
-        rtnval = customid; // return provided id as string
-    } else {
-        rtnval = Math.floor(Math.random() * 99999999) + 1;
-    }
+    rtnval = Math.floor(Math.random() * 99999999) + 1;
     return rtnval.toString(); // return as string
 }
 
@@ -253,3 +248,4 @@ module.exports.GetFirmwareVersion = GetFirmwareVersion;
 module.exports.GetPos = GetPos;
 module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;
+module.exports.GetWKVer = GetWKVer;

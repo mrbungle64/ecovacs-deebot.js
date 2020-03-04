@@ -47,28 +47,7 @@ class VacBot_non950type {
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
-      this.getStatesInterval = setTimeout(() => {
-        this.runGetStates();
-      }, 6000);
     });
-  }
-
-  runGetStates() {
-    this.run('GetCleanState');
-    this.run('GetChargeState');
-    this.run('GetBatteryState');
-    if (this.hasMainBrush()) {
-      this.run('GetLifeSpan', 'main_brush');
-    }
-    this.run('GetLifeSpan', 'side_brush');
-    this.run('GetLifeSpan', 'filter');
-    if (this.hasMoppingSystem()) {
-      this.run('GetWaterLevel');
-    }
-  }
-
-  isOzmo950() {
-    return false;
   }
 
   isSupportedDevice() {
