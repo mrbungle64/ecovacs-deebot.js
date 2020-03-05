@@ -16,23 +16,21 @@ He documented his [findings on the protocol](http://github.com/wpietri/sucks/blo
 	
 ## Models
 
-So far, only devices that communicate with the **XMPP** protocol work properly. 
-Devices that communicate with the **MQTT** protocol are experimental.
-
-### Works properly
+### Theses models are known to work
 * Deebot Slim 2
+* Deebot 601
+* Deebot 710/711
+* Deebot 900/901
 * Deebot Ozmo 610
 * Deebot Ozmo 930
-
-### Should work
-* Deebot N79T
-* Deebot 601
-* Deebot Ozmo 960
-
-### Should work partially
-* Deebot 710
-* Deebot Ozmo 900
 * Deebot Ozmo 950
+
+### These models should work partially
+* Deebot Ozmo 900
+
+### These models should work
+* Deebot N79T
+* Deebot 600/605
 
 ## Usage
 
@@ -202,6 +200,9 @@ function httpGetJson(url) {
 }
 ```
 
+### 0.3.5
+  * (mrbungle64) Bugfixes for CleanReport (Ozmo 950), DeebotPosition and ChargePosition (XMPP devices)
+  
 ### 0.3.4
   * (mrbungle64) GetPos, GetChargePos (XMPP), DustCaseST (MQTT/XML)
   * (boriswerner) setCleanSpeed standardized to numeric 1-4
