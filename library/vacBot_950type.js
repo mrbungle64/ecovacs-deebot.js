@@ -6,7 +6,6 @@ const   tools = require('./tools.js');
 class VacBot_950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     this.vacuum = vacuum;
-    this.vacuum_status = null;
     this.clean_status = null;
     this.deebot_position = {
       x: null,
@@ -210,31 +209,28 @@ class VacBot_950type {
   }
 
   _handle_clean_info(event) {
-    this.vacuum_status = 'unknown';
+    this.clean_status = 'unknown';
     tools.envLog("[VacBot] _handle_clean_info");
 
     if (event['resultCode'] == '0') {
       if (event['resultData']['state'] === 'clean') {
         if (event['resultData']['trigger'] === 'app') {
           if (event['resultData']['cleanState']['motionState'] === 'working') {
-            this.vacuum_status = 'cleaning';
+            this.clean_status = 'cleaning';
           } else if (event['resultData']['cleanState']['motionState'] === 'pause') {
-            this.vacuum_status = 'paused';
+            this.clean_status = 'paused';
           } else {
-            this.vacuum_status = 'returning';
+            this.clean_status = 'returning';
           }
         } else if (event['resultData']['trigger'] === 'alert') {
-          this.vacuum_status = 'alert';
+          this.clean_status = 'alert';
         }
       } else if (event['resultData']['state'] === 'idle') {
-        this.vacuum_status = 'idle';
+        this.clean_status = 'idle';
       }
     } else {
-      this.vacuum_status = 'error';
+      this.clean_status = 'error';
     }
-    this.clean_status = this.vacuum_status;
-    return;
-
   }
 
   _handle_battery_info(event) {

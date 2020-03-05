@@ -6,7 +6,6 @@ const tools = require('./tools.js');
 class VacBot_non950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     this.vacuum = vacuum;
-    this.vacuum_status = null;
     this.clean_status = null;
     this.deebot_position = {
       x: null,
@@ -145,7 +144,7 @@ class VacBot_non950type {
   }
 
   _handle_clean_report(event) {
-    this.vacuum_status = 'unknown';
+    this.clean_status = 'unknown';
 
     if (event.attrs) {
       let type = event.attrs['type'];
@@ -163,7 +162,6 @@ class VacBot_non950type {
         type = statustype
       }
       this.clean_status = type;
-      this.vacuum_status = type;
       tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
 
       if (event.attrs.hasOwnProperty('speed')) {
@@ -179,7 +177,6 @@ class VacBot_non950type {
         tools.envLog("[VacBot] couldn't parse clean report ", event);
       }
     }
-    this.clean_status = this.vacuum_status;
   }
 
   _handle_battery_info(event) {
