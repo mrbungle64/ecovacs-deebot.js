@@ -49,20 +49,6 @@ exports.FAN_SPEED_FROM_ECOVACS = {
     2: 4     //veryhigh
 };
 
-exports.WATER_LEVEL_TO_ECOVACS = {
-    'low': 1,
-    'medium': 2,
-    'high': 3,
-    'max': 4
-};
-
-exports.WATER_LEVEL_FROM_ECOVACS = {
-    '1': 'low',
-    '2': 'medium',
-    '3': 'high',
-    '4': 'max'
-};
-
 exports.CHARGE_MODE_TO_ECOVACS = {
     'return': 'go',
     'returning': 'returning',

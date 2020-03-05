@@ -240,7 +240,7 @@ class VacBot_950type {
 
   _handle_water_level(event) {
     this.water_level = event['resultData']['amount'];
-    tools.envLog("[VacBot] *** water_level = " + constants_type.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+    tools.envLog("[VacBot] *** water_level = %s", this.water_level);
   }
 
   _handle_relocation_state(event) {
@@ -269,7 +269,7 @@ class VacBot_950type {
     this.water_level = event['resultData']['amount'];
     this.waterbox_info = event['resultData']['enable'];
     tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
-    tools.envLog("[VacBot] *** water_level = " + constants_type.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+    tools.envLog("[VacBot] *** water_level = " + this.water_level);
   }
 
   _handle_charge_state(event) { //has to be checked

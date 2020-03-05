@@ -72,7 +72,8 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('v')) {
-                        if (dictionary.WATER_LEVEL_FROM_ECOVACS[secondChild.attrs.v]) {
+                        let waterLevel = parseInt(secondChild.attrs.v);
+                        if ((waterLevel >= 1) && (waterLevel <= 4)) {
                             command = 'WaterLevel';
                         }
                     }

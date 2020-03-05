@@ -197,7 +197,7 @@ class VacBot_non950type {
   _handle_water_level(event) {
     if ((event.attrs) && (event.attrs['v'])) {
       this.water_level = event.attrs['v'];
-      tools.envLog("[VacBot] *** water_level = " + dictionary.WATER_LEVEL_FROM_ECOVACS[this.water_level] + " (" + this.water_level + ")");
+      tools.envLog("[VacBot] *** water_level = %s", this.water_level);
     }
   }
 
