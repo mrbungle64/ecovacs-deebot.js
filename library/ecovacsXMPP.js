@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const tools = require('./tools.js');
+const tools = require('./tools');
 const Element = require('ltx').Element;
 const dictionary = require('./ecovacsConstants_non950type.js');
 

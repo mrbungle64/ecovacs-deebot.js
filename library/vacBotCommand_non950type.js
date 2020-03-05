@@ -1,5 +1,5 @@
-const tools = require('./tools.js');
-const constants_type = require('./ecovacsConstants_non950type.js');
+const tools = require('./tools');
+const constants_type = require('./ecovacsConstants_non950type');
 const Element = require('ltx').Element;
 
 class VacBotCommand_non950type {

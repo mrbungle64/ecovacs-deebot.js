@@ -1,7 +1,7 @@
-const dictionary = require('./ecovacsConstants_non950type.js');
-const vacBotCommand = require('./vacBotCommand_non950type.js');
+const dictionary = require('./ecovacsConstants_non950type');
+const vacBotCommand = require('./vacBotCommand_non950type');
 const errorCodes = require('./errorCodes');
-const tools = require('./tools.js');
+const tools = require('./tools');
 
 class VacBot_non950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {

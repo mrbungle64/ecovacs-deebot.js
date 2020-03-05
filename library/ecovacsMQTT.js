@@ -1,9 +1,7 @@
 const EventEmitter = require('events');
-const tools = require('./tools.js');
+const tools = require('./tools');
 const URL = require('url').URL;
-const fs = require('fs');
 const constants = require('./ecovacsConstants');
-const request = require('request');
 const https = require('https');
 const DOMParser = require('xmldom').DOMParser;
 
@@ -11,7 +9,7 @@ String.prototype.format = function () {
     if (arguments.length === 0) {
         return this;
     }
-    var args = arguments['0'];
+    let args = arguments['0'];
     return this.replace(/{(\w+)}/g, function (match, number) {
         return typeof args[number] != 'undefined' ? args[number] : match;
     });
@@ -106,13 +104,7 @@ class EcovacsMQTT extends EventEmitter {
         });
     }
 
-    _wrap_command_getPayloadType(action) {
-        let payloadType = "x";
-        return payloadType;
-    }
-
     _wrap_command_getPayload(action) {
-        let payload = null;
         tools.envLog("[EcovacsMQTT] _wrap_command() args: ", action.args);
 
         let xml = action.to_xml();
@@ -121,8 +113,8 @@ class EcovacsMQTT extends EventEmitter {
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
 
-        payload = payloadXml.toString();
-        tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payloadXml.toString());
+        let payload = payloadXml.toString();
+        tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payload);
 
         return payload;
     }
@@ -144,7 +136,7 @@ class EcovacsMQTT extends EventEmitter {
             "cmdName": action.name,
             "payload": this._wrap_command_getPayload(action),
 
-            "payloadType": this._wrap_command_getPayloadType(action),
+            "payloadType": "x",
             "td": "q",
             "toId": recipient,
             "toRes": this.vacuum['resource'],
@@ -237,31 +229,13 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _command_to_dict_api(action, xmlOrJson) {
-        // TODO: fix duplicate code
+    _command_to_dict_api(action, xmlString) {
         let result = {};
         let name = null;
-        if (!xmlOrJson) {
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api() xmlOrJson missing ... action: %s", action);
-            return result;
-        }
-        if (tools.isValidJsonString(JSON.stringify(xmlOrJson, getCircularReplacer()))) {
-            let result = xmlOrJson;
-            if (result.hasOwnProperty('body')) {
-                if (result['body']['msg'] === 'ok') {
-                    result['event'] = tools.getEventNameForCommandString(action.name);
-                }
-            }
-            return result;
-        }
-        else {
-            tools.envLog("[EcovacsMQTT] _command_to_dict_api() isValidJsonString false: %s");
-            let xmlString = xmlOrJson;
-            let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
-            if (payloadXml.documentElement.hasChildNodes()) {
-                let firstChild = payloadXml.documentElement.firstChild;
-                name = firstChild.name.replace("Get", "");
-            }
+        let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
+        if (payloadXml.documentElement.hasChildNodes()) {
+            let firstChild = payloadXml.documentElement.firstChild;
+            name = firstChild.name.replace("Get", "");
             if (name) {
                 result = Object.assign(result, firstChild.attributes);
                 //Fix for difference in XMPP vs API response

@@ -23,7 +23,7 @@ const CODES = {
     '201': 'AirFilterUninstall:',
     '202': 'UltrasonicComponentAbnormal',
     '203': 'SmallWheelError',
-    'UNKNOW': 'unknow'
+    'UNKNOW': 'unknown'
 };
 
 module.exports = CODES;

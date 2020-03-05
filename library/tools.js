@@ -1,4 +1,4 @@
-const constants = require('./ecovacsConstants.js');
+const constants = require('./ecovacsConstants');
 
 function getAllKnownDevices() {
     let devices = {};
