@@ -13,7 +13,11 @@ He documented his [findings on the protocol](http://github.com/wpietri/sucks/blo
 ## Installation
 
 	npm install ecovacs-deebot
-	
+
+## Usage
+
+Information on how to use this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki).
+
 ## Models
 
 ### Theses models are known to work
@@ -32,89 +36,85 @@ He documented his [findings on the protocol](http://github.com/wpietri/sucks/blo
 * Deebot N79T
 * Deebot 600/605
 
-## Usage
-
-Information on how to use this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki).
-
 ## Releases
 
 ### 0.3.5
-  * (mrbungle64) Bugfixes for CleanReport (Ozmo 950), DeebotPosition and ChargePosition (XMPP devices)
+* (mrbungle64) Bugfixes for CleanReport (Ozmo 950), DeebotPosition and ChargePosition (XMPP devices)
   
 ### 0.3.4
-  * (mrbungle64) GetPos, GetChargePos (XMPP), DustCaseST (MQTT/XML)
-  * (boriswerner) setCleanSpeed standardized to numeric 1-4
-  
+* (mrbungle64) GetPos, GetChargePos (XMPP), DustCaseST (MQTT/XML)
+* (boriswerner) setCleanSpeed standardized to numeric 1-4
+
 ### 0.3.3
-  * (mrbungle64) Bugfixes (MQTT/XML)
-  * (mrbungle64) Start implement NetInfo (XMPP)
-  
+* (mrbungle64) Bugfixes (MQTT/XML)
+* (mrbungle64) Start implement NetInfo (XMPP)
+
 ### 0.3.2
-  * (boriswerner) Added Features for Ozmo 950
-  * (mrbungle64) Some improvements for non Ozmo 950
-  
+* (boriswerner) Added Features for Ozmo 950
+* (mrbungle64) Some improvements for non Ozmo 950
+
 ### 0.3.1
-  * A few changes and improvements
+* A few changes and improvements
 
 ### 0.3.0
-  * (boriswerner) Separation of Ozmo 950 type bots (MQTT/JSON) from others (MQTT/XML and XMPP)
-  
-### 0.2.7
-  * (mrbungle64) Improved handling of messages (MQTT/XML)
+* (boriswerner) Separation of Ozmo 950 type bots (MQTT/JSON) from others (MQTT/XML and XMPP)
 
 ### 0.2.7
-  * (mrbungle64) Improved handling of messages (MQTT/XML)
+* (mrbungle64) Improved handling of messages (MQTT/XML)
+
+### 0.2.7
+* (mrbungle64) Improved handling of messages (MQTT/XML)
   
 ### 0.2.3
-  * (boriswerner) Improved support for Ozmo 950
+* (boriswerner) Improved support for Ozmo 950
 
 ### 0.2.2
-  * Bugfix release
+* (mrbungle64) Bugfix release
 
 ### 0.2.1
-  * (boriswerner) Basic clean & charge working (Ozmo 950)
+* (boriswerner) Basic clean & charge working (Ozmo 950)
 
 ### 0.2.0
-  * (boriswerner) Improved support for Ozmo 950
+* (boriswerner) Improved support for Ozmo 950
 
 ### 0.1.11
-  * Bugfix release
-  
+* (mrbungle64) Bugfix release
+
 ### 0.1.8
-  * Improved support for MQTT devices
-  * Implemented support for Ozmo 950
+* (mrbungle64) Improved support for MQTT devices
+* (mrbungle64) Implemented support for Ozmo 950
 
 ### 0.1.7
-  * Bugfix detecting MQTT devices
-  * Register features of known and supported models
-  
+* (mrbungle64) Bugfix detecting MQTT devices
+* (mrbungle64) Register features of known and supported models
+
 ### 0.1.6
-  * Fix package-lock.json
-  * A few minor changes
+* (mrbungle64) Fix package-lock.json
+* (mrbungle64) A few minor changes
 
 ### 0.1.5
-  * Bugfix
-  * A few minor changes
+* (mrbungle64) Bugfix
+* (mrbungle64) A few minor changes
 
 ### 0.1.4
-   * Implemented GetWaterLevel command
-   * Implemented SetWaterLevel command
+* (mrbungle64) Implemented GetWaterLevel command
+* (mrbungle64) Implemented SetWaterLevel command
 
 ### 0.1.3
-   * Implemented GetLifeSpan command
-   
+* (mrbungle64) Implemented GetLifeSpan command
+
 ### 0.1.2
-   * Implemented SpotArea command
-   * Implemented CustomArea command
+* (mrbungle64) Implemented SpotArea command
+* (mrbungle64) Implemented CustomArea command
 
 ### 0.1.1
-   * Implemented PlaySound command
+* (mrbungle64) Implemented PlaySound command
 
 ### 0.1.0
-  * Deebot Ozmo 930 is working
+* (mrbungle64) Deebot Ozmo 930 is working
 
 ### 0.0.2
-* Initial development release
+* (mrbungle64) Initial development release
 
 ## Thanks and credits
 * @joostth ([sucks.js](https://github.com/joostth/sucks.js))
