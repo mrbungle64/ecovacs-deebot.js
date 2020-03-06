@@ -356,6 +356,11 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "DeebotPosition":
                 this.bot._handle_deebot_position(event);
+                let deebotPosition = this.bot.deebot_position["x"] + "," + this.bot.deebot_position["y"];
+                if (this.bot.deebot_position["a"]) {
+                    deebotPosition = deebotPosition + "," + this.bot.deebot_position["a"];
+                }
+                this.emit('DeebotPosition', deebotPosition);
                 break;
             case "WaterLevel":
                 this.bot._handle_water_level(event);
