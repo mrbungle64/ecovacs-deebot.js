@@ -68,6 +68,7 @@ function getEventNameForCommandString(str) {
             return 'DustCaseST';
         case "chargeposition":
             return 'ChargePosition';
+        case "pos":
         case "deebotposition":
             return 'DeebotPosition';
         case "netinfo":
