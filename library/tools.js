@@ -53,32 +53,32 @@ function getEventNameForCommandString(str) {
         case 'charge':
         case 'chargestate':
             return 'ChargeState';
-        case "battery":
+        case 'battery':
         case 'batteryinfo':
             return 'BatteryInfo';
         case 'lifespan':
             return 'LifeSpan';
-        case "waterlevel":
-        case "waterpermeability":
-        case "waterinfo":
+        case 'waterlevel':
+        case 'waterpermeability':
+        case 'waterinfo':
             return 'WaterLevel';
-        case "waterboxinfo":
+        case 'waterboxinfo':
             return 'WaterBoxInfo';
-        case "dustcasest":
+        case 'dustcasest':
             return 'DustCaseST';
-        case "chargeposition":
+        case 'chargeposition':
             return 'ChargePosition';
-        case "pos":
-        case "deebotposition":
+        case 'pos':
+        case 'deebotposition':
             return 'DeebotPosition';
-        case "netinfo":
-        case "getnetinfo":
+        case 'netinfo':
+        case 'getnetinfo':
             return 'NetInfo';
-        case "error":
-        case "errors":
-            return "Error";
+        case 'error':
+        case 'errors':
+            return 'Error';
         default:
-            envLog("[tools] Unknown command name: %s str: %s", command, str);
+            envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;
     }
 }
