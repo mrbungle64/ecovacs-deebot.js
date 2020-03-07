@@ -234,6 +234,8 @@ class EcovacsXMPP extends EventEmitter {
     }
 
     disconnect() {
+        this.simpleXmpp.disconnect();
+        tools.envLog("[EcovacsXMPP] Closed XMPP Client");
     }
 }
 
