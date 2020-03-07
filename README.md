@@ -34,9 +34,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### These models should work
 * Deebot N79T
+* Deebot M88
 * Deebot 600/605
 
-## Releases
+## Changelog
 
 ### 0.3.5
 * (mrbungle64) Bugfixes for CleanReport (Ozmo 950), DeebotPosition and ChargePosition (XMPP devices)
