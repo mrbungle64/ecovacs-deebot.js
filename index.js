@@ -324,7 +324,7 @@ class EcovacsAPI {
     return crypto.publicEncrypt({
       key: EcovacsAPI.PUBLIC_KEY,
       padding: crypto.constants.RSA_PKCS1_PADDING
-    }, new Buffer(text)).toString('base64');
+    }, Buffer.from(text)).toString('base64');
   }
 
   static paramsToQueryList(params) {
