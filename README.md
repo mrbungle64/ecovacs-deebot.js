@@ -39,6 +39,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.3.6
+* (mrbungle64) A few changes and fixes
+
 ### 0.3.5
 * (mrbungle64) Bugfixes for CleanReport (Ozmo 950), DeebotPosition and ChargePosition (XMPP devices)
   
