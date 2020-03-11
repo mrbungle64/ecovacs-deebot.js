@@ -202,7 +202,7 @@ class VacBot_non950type {
   }
 
   _handle_deebot_position(event) {
-    if ((event.attrs) && (event.attrs['p']) && (event.attrs['a'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
       this.deebot_position = {
         x: event.attrs['p'].split(",")[0],
         y: event.attrs['p'].split(",")[1],
