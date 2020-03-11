@@ -104,21 +104,6 @@ class EcovacsMQTT extends EventEmitter {
         });
     }
 
-    _wrap_command_getPayload(action) {
-        tools.envLog("[EcovacsMQTT] wrap_command_getPayload args: ", action.args);
-
-        let xml = action.to_xml();
-        // Remove the td from ctl xml for RestAPI
-        tools.envLog("[EcovacsMQTT] wrap_command DOMParser().parseFromString: %s", xml.toString());
-        let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
-        payloadXml.documentElement.removeAttribute('td');
-
-        let payload = payloadXml.toString();
-        tools.envLog("[EcovacsMQTT] wrap_command payload: %s", payload);
-
-        return payload;
-    }
-
     _wrap_command(action, recipient) {
         return {
             'auth': {
@@ -137,6 +122,21 @@ class EcovacsMQTT extends EventEmitter {
             "toRes": this.vacuum['resource'],
             "toType": this.vacuum['class']
         }
+    }
+
+    _wrap_command_getPayload(action) {
+        tools.envLog("[EcovacsMQTT] wrap_command_getPayload args: ", action.args);
+
+        let xml = action.to_xml();
+        // Remove the td from ctl xml for RestAPI
+        tools.envLog("[EcovacsMQTT] wrap_command DOMParser().parseFromString: %s", xml.toString());
+        let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
+        payloadXml.documentElement.removeAttribute('td');
+
+        let payload = payloadXml.toString();
+        tools.envLog("[EcovacsMQTT] wrap_command payload: %s", payload);
+
+        return payload;
     }
 
     _call_ecovacs_device_api(params) {
@@ -257,7 +257,7 @@ class EcovacsMQTT extends EventEmitter {
                 this._handle_command(command, as_dict);
             }
         } else {
-            tools.envLog("[EcovacsMQTT] as_dict undefined");
+            tools.envLog("[EcovacsMQTT] as_dict contains no data");
         }
     }
 
@@ -324,13 +324,13 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "LifeSpan":
                 this.bot._handle_life_span(event.attrs);
-                if(this.bot.components["filter"]) {
+                if (this.bot.components["filter"]) {
                     this.emit("LifeSpan_filter", this.bot.components["filter"]);
                 }
-                if(this.bot.components["side_brush"]) {
+                if (this.bot.components["side_brush"]) {
                     this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
                 }
-                if(this.bot.components["main_brush"]) {
+                if (this.bot.components["main_brush"]) {
                     this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
                 }
                 break;
@@ -363,11 +363,10 @@ class EcovacsMQTT extends EventEmitter {
 
     //end session
     disconnect() {
-        tools.envLog("[EcovacsMQTT] Closing MQTT Client...");
-        try{
+        try {
             this.client.end();
             tools.envLog("[EcovacsMQTT] Closed MQTT Client");
-        } catch(e) {
+        } catch (e) {
             tools.envLog("[EcovacsMQTT] Error closing MQTT Client:  %s", e.toString());
         }
     }
