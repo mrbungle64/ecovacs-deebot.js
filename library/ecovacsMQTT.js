@@ -196,31 +196,28 @@ class EcovacsMQTT extends EventEmitter {
         });
     }
 
-    _handle_command_response(action, message) {
+    _handle_command_response(action, json) {
         let resp = null;
-        let command = action;
-        tools.envLog("[EcovacsMQTT] _handle_command_response() action: %s", action);
-
         if (action.hasOwnProperty('name')) {
-            command = action.name;
-            tools.envLog("[EcovacsMQTT] _handle_command_response() command: %s", command);
-        }
+            let command = action.name;
+            tools.envLog("[EcovacsMQTT] handle_command_response() command: %s", command);
 
-        if (message) {
-            tools.envLog("[EcovacsMQTT] _handle_command_response() message: %s", JSON.stringify(message, getCircularReplacer()));
-            if (message.hasOwnProperty('resp')) {
-                tools.envLog("[EcovacsMQTT] _handle_command_response() resp(0): %s", command, JSON.stringify(resp, getCircularReplacer()));
-                resp = this._command_to_dict_api(action, message['resp']);
-                tools.envLog("[EcovacsMQTT] _handle_command_response() resp(1): %s", command, JSON.stringify(resp, getCircularReplacer()));
+            if (json) {
+                tools.envLog("[EcovacsMQTT] handle_command_response() message: %s", JSON.stringify(json, getCircularReplacer()));
+                if (json.hasOwnProperty('resp')) {
+                    tools.envLog("[EcovacsMQTT] handle_command_response() json resp: %s", JSON.stringify(json['resp'], getCircularReplacer()));
+                    resp = this._command_to_dict_api(action, json['resp']);
+                    tools.envLog("[EcovacsMQTT] handle_command_response() resp (1): %s", JSON.stringify(resp, getCircularReplacer()));
+                }
+                else {
+                    resp = {
+                        'event': command,
+                        'data': json
+                    };
+                    tools.envLog("[EcovacsMQTT] handle_command_response() resp(2): %s", command, JSON.stringify(resp, getCircularReplacer()));
+                }
+                this._handle_command(command, resp);
             }
-            else {
-                resp = {
-                    'event': command,
-                    'data': message
-                };
-                tools.envLog("[EcovacsMQTT] _handle_command_response() resp(2): %s", command, JSON.stringify(resp, getCircularReplacer()));
-            }
-            this._handle_command(command, resp);
         }
     }
 
