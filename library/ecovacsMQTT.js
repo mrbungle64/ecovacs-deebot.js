@@ -222,47 +222,36 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _command_to_dict_api(action, xmlString) {
-        let result = {};
-        let name = null;
         let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
-        if (payloadXml.documentElement.hasChildNodes()) {
-            let firstChild = payloadXml.documentElement.firstChild;
-            name = firstChild.name.replace("Get", "");
-            if (name) {
-                result = Object.assign(result, firstChild.attributes);
-                //Fix for difference in XMPP vs API response
-                //Depending on the report will use the tag and add "report" to fit the mold of ozmo library
-                result['event'] = tools.getEventNameForCommandString(name);
-            } else {
-                result = Object.assign(result, payloadXml.documentElement.attributes);
-                result['event'] = action.name.replace("Get", "");
-                if (result.hasOwnProperty('ret')) { //Handle errors as needed
-                    if (result['ret'] === 'fail') {
-                        if (result['event'].toLowerCase() === "charge") { //So far only seen this with Charge, when already docked
-                            result['event'] = "ChargeState";
-                        }
-                    }
-                }
-                return result;
+        let xml = payloadXml.documentElement;
+        let attrs = {};
+        let name = null;
+        if (xml.hasChildNodes()) {
+            name = xml.firstChild.tagName;
+            for (let i = 0; i < xml.firstChild.attributes.length; i++) {
+                attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
+            }
+        } else if (xml.attributes) {
+            name = xml.tagName;
+            for (let i = 0; i < xml.attributes.length; i++) {
+                attrs[xml.attributes[i].name] = xml.attributes[i].value;
             }
         }
-    }
-
-    _dict_to_command(json) {
-        if (json.hasOwnProperty('ctl')) {
-            return json['ctl'];
+        let result = {};
+        if (name) {
+            result = {
+                'event': tools.getEventNameForCommandString(name),
+                'attrs': attrs
+            };
         }
-        else {
-            return json['event'];
-        }
+        return result;
     }
 
     _handle_message(topic, payload) {
         let as_dict = this._message_to_dict(topic, payload);
         if (as_dict) {
             tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
-
-            let command = this._dict_to_command(as_dict);
+            let command = as_dict['event'];
             if (command) {
                 tools.envLog("[EcovacsMQTT] command: %s", command);
                 this._handle_command(command, as_dict);
