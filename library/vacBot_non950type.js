@@ -144,8 +144,6 @@ class VacBot_non950type {
   }
 
   _handle_clean_report(event) {
-    this.clean_status = 'unknown';
-
     if (event.attrs) {
       let type = event.attrs['type'];
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
