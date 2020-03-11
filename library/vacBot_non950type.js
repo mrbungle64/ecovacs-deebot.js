@@ -356,8 +356,11 @@ class VacBot_non950type {
         this.send_command(new vacBotCommand.Charge());
         break;
       case "playsound":
-        this.send_command(new vacBotCommand.PlaySound());
-        break;
+        if (arguments.length <= 1) {
+          this.send_command(new vacBotCommand.PlaySound());
+        } else if (arguments.length === 2) {
+          this.send_command(new vacBotCommand.PlaySound(arguments[1]));
+        }
       case "getdeviceinfo":
       case "deviceinfo":
         this.send_command(new vacBotCommand.GetDeviceInfo());
