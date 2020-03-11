@@ -96,7 +96,7 @@ class EcovacsMQTT extends EventEmitter {
 
     send_command(action, recipient) {
         let c = this._wrap_command(action, recipient);
-        tools.envLog("[EcovacsMQTT] c: %s", JSON.stringify(c, getCircularReplacer()));
+        tools.envLog("[EcovacsMQTT] send_command: %s", JSON.stringify(c, getCircularReplacer()));
         this._call_ecovacs_device_api(c).then((json) => {
             this._handle_command_response(action, json);
         }).catch((e) => {
@@ -105,26 +105,21 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _wrap_command_getPayload(action) {
-        tools.envLog("[EcovacsMQTT] _wrap_command() args: ", action.args);
+        tools.envLog("[EcovacsMQTT] wrap_command_getPayload args: ", action.args);
 
         let xml = action.to_xml();
         // Remove the td from ctl xml for RestAPI
-        tools.envLog("[EcovacsMQTT] _wrap_command() DOMParser().parseFromString: %s", xml.toString());
+        tools.envLog("[EcovacsMQTT] wrap_command DOMParser().parseFromString: %s", xml.toString());
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
 
         let payload = payloadXml.toString();
-        tools.envLog("[EcovacsMQTT] _wrap_command() payload: %s", payload);
+        tools.envLog("[EcovacsMQTT] wrap_command payload: %s", payload);
 
         return payload;
     }
 
     _wrap_command(action, recipient) {
-        if (!action) {
-            tools.envLog("[EcovacsMQTT] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
-            return {};
-        }
-
         return {
             'auth': {
                 'realm': constants.REALM,
@@ -268,7 +263,6 @@ class EcovacsMQTT extends EventEmitter {
     _handle_message(topic, payload) {
         let as_dict = this._message_to_dict(topic, payload);
         if (as_dict) {
-
             tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
 
             let command = this._dict_to_command(as_dict);
@@ -283,14 +277,14 @@ class EcovacsMQTT extends EventEmitter {
 
     _message_to_dict(topic, xmlString) {
         let name = null;
-        tools.envLog("[EcovacsMQTT] _message_to_dict topic: %s", topic.name, " ", topic);
+        tools.envLog("[EcovacsMQTT] message_to_dict topic: %s", topic.name, " ", topic);
 
         if (!xmlString) {
-            tools.envLog("[EcovacsMQTT] _message_to_dict xmlString missing ... topic: %s", topic);
+            tools.envLog("[EcovacsMQTT] message_to_dict xmlString missing ... topic: %s", topic);
             return {};
         }
         //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
-        tools.envLog("[EcovacsMQTT] _message_to_dict() xmlString: %s", xmlString);
+        tools.envLog("[EcovacsMQTT] message_to_dict() xmlString: %s", xmlString);
         let xml = new DOMParser().parseFromString(xmlString, 'text/xml').documentElement;
         let result = {};
 
