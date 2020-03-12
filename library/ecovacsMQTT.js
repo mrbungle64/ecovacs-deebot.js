@@ -237,6 +237,15 @@ class EcovacsMQTT extends EventEmitter {
                 attrs[xml.attributes[i].name] = xml.attributes[i].value;
             }
         }
+        if (!name) {
+            if (!xml.attributes.getNamedItem('td')) {
+                // Handle response data with no 'td'
+                if (xml.attributes.getNamedItem('type')) {
+                    // single element with type and val seems to always be LifeSpan type
+                    name = "LifeSpan";
+                }
+            }
+        }
         let result = {};
         if (name) {
             result = {
@@ -281,7 +290,7 @@ class EcovacsMQTT extends EventEmitter {
                 name = "LifeSpan";
             } else if (xml.hasChildNodes()) {
                 // case where there is child element
-                name = xml.firstChild.name;
+                name = xml.firstChild.tagName;
             }
         } else if (xml.attributes) {
             // response includes 'td'
