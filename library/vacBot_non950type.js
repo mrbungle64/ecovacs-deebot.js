@@ -24,6 +24,7 @@ class VacBot_non950type {
     this.water_level = null;
     this.dustbox_info = null;
     this.waterbox_info = null;
+    this.sleep_status = null;
     this.components = {};
     this.ping_interval = null;
     this.error_event = null;
@@ -235,6 +236,13 @@ class VacBot_non950type {
     }
   }
 
+  _handle_sleep_status(event) {
+    if ((event.attrs) && (event.attrs['st'])) {
+      this.sleep_status = event.attrs['st'];
+      tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
+    }
+  }
+
   _handle_charge_state(event) {
     if ((event.attrs) && (event.attrs['type'])) {
       let chargemode = event.attrs['type'];
@@ -417,6 +425,9 @@ class VacBot_non950type {
       case "getchargerpos":
       case "getchargerposition":
         this.send_command(new vacBotCommand.GetChargerPos());
+        break;
+      case "getsleepstatus":
+        this.send_command(new vacBotCommand.GetSleepStatus());
         break;
     }
   }

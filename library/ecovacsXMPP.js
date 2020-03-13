@@ -83,11 +83,16 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if ((secondChild.attrs.hasOwnProperty('p')) && (secondChild.attrs.hasOwnProperty('a'))) {
-                        if (secondChild.attrs.id == "999999999") {
+                        if (secondChild.attrs.id === "999999999") {
                             command = 'ChargePosition';
                         }
                         else {
                             command = 'DeebotPosition';
+                        }
+                    }
+                    if ((secondChild.attrs.hasOwnProperty('st'))) {
+                        if (secondChild.attrs.id === "999999997") {
+                            command = 'SleepStatus';
                         }
                     }
                 }
@@ -148,6 +153,10 @@ class EcovacsXMPP extends EventEmitter {
                             this.bot._handle_net_info(secondChild.attrs);
                             this.emit("NetInfoIP", this.bot.netInfoIP);
                             this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
+                            break;
+                        case 'SleepStatus':
+                            this.bot._handle_sleep_status(secondChild);
+                            this.emit("SleepStatus", this.bot.sleep_status);
                             break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

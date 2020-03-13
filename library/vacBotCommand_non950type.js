@@ -221,6 +221,14 @@ class GetChargerPos extends VacBotCommand_non950type {
     }
 }
 
+class GetSleepStatus extends VacBotCommand_non950type {
+    constructor() {
+        super('GetSleepStatus', {
+            'id': '999999997'
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -245,3 +253,4 @@ module.exports.GetFirmwareVersion = GetFirmwareVersion;
 module.exports.GetPos = GetPos;
 module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;
+module.exports.GetSleepStatus = GetSleepStatus;

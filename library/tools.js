@@ -77,6 +77,8 @@ function getEventNameForCommandString(str) {
         case 'error':
         case 'errors':
             return 'Error';
+        case 'sleepstatus':
+            return 'SleepStatus';
         default:
             envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;
