@@ -103,9 +103,7 @@ class EcovacsXMPP extends EventEmitter {
                             break;
                         case 'CleanReport':
                             this.bot._handle_clean_report(secondChild.children[0]);
-                            if (this.bot.clean_status) {
-                                this.emit('CleanReport', this.bot.clean_status);
-                            }
+                            this.emit('CleanReport', this.bot.clean_status);
                             if (this.bot.fan_speed) {
                                 this.emit('FanSpeed', this.bot.fan_speed);
                             }
