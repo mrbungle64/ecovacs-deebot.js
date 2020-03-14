@@ -280,8 +280,11 @@ class EcovacsMQTT_JSON extends EventEmitter {
     _handle_command(command, event) {
         tools.envLog("[EcovacsMQTT_JSON] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
-        if(command.startsWith("on")) { //incoming events
+        if(command.startsWith("on")) { //incoming events (on)
             command = command.substring(2);
+        }
+        if(command.startsWith("report")) { //incoming events (report)
+            command = command.substring(6);
         }
         if(command.startsWith("get") ) { //remove from "get" commands
             command = command.substring(3);
@@ -299,6 +302,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
             case "cleaninfo":
                 this.bot._handle_clean_info(event);
                 this.emit("CleanReport", this.bot.clean_status);
+                this.emit("ChargeState", this.bot.charge_status);
                 break;
             case "cleanspeed":
             case "speed":
@@ -355,6 +359,10 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "setspeed":
                 this.bot.run('GetCleanSpeed');
+                break;
+            case 'sleep':
+                this.bot._handle_sleep_status(event);
+                this.emit("SleepStatus", this.bot.sleep_status);
                 break;
             case "error":
                 this.bot._handle_error(event);

@@ -169,6 +169,9 @@ class SetCleanSpeed extends VacBotCommand_950type {
 
 class SetWaterLevel extends VacBotCommand_950type {
     constructor(level) {
+        if (constants_type.WATER_LEVEL_TO_ECOVACS.hasOwnProperty(level)) {
+            level = constants_type.WATER_LEVEL_TO_ECOVACS[level];
+        }
         super('setWaterInfo', {
             'amount': level
         });
@@ -205,6 +208,12 @@ class GetCurrentMapName extends VacBotCommand_950type {
     }
 }
 
+class GetSleepStatus extends VacBotCommand_950type {
+    constructor() {
+        super('getSleep');
+    }
+}
+
 
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
@@ -231,3 +240,4 @@ module.exports.Relocate = Relocate;
 module.exports.GetCurrentMapName = GetCurrentMapName;
 module.exports.GetError = GetError;
 module.exports.GetNetInfo = GetNetInfo;
+module.exports.GetSleepStatus = GetSleepStatus;
