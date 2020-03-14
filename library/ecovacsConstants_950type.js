@@ -24,15 +24,16 @@ exports.CLEAN_ACTION_TO_ECOVACS = {
 //     'h': 'stop',
 // };
 
-// exports.CLEAN_MODE_FROM_ECOVACS = {
-//     'auto': 'auto',
-//     'border': 'edge',
-//     'spot': 'spot',
-//     'SpotArea': 'spot_area',
-//     'singleroom': 'single_room',
-//     'stop': 'stop',
-//     'going': 'returning'
-// };
+exports.CLEAN_MODE_FROM_ECOVACS = {
+    'auto': 'auto',
+    'customArea': 'custom_area',
+    'spot': 'spot',
+    'spotArea': 'spot_area',
+    'stop': 'stop',
+    'pause': 'pause',
+    'goCharging': 'returning',
+    'idle': 'idle'
+};
 
 
 exports.FAN_SPEED_TO_ECOVACS = {
