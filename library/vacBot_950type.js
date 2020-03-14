@@ -1,6 +1,6 @@
 const   constants_type = require('./ecovacsConstants_950type.js');
 const   vacBotCommand = require('./vacBotCommand_950type.js');
-
+const errorCodes = require('./errorCodes');
 const   tools = require('./tools.js');
 
 class VacBot_950type {
@@ -303,7 +303,18 @@ class VacBot_950type {
   }
 
   _handle_error(event) {
-    this.error_event = event['resultData']['code'];
+    
+    let errorCode = event['resultData']['code'];
+
+    // NoError: Robot is operational
+    if (errorCode == '0') {
+      this.error_event = '';
+      return;
+    } else if (errorCodes[errorCode]) { // known errorCode from library
+      this.error_event = errorCodes[errorCode];
+    } else {
+      this.error_event = 'unknown errorCode: ' + errorCode;
+    }
     tools.envLog("[VacBot] *** error_event = " + this.error_event);
   }
 
