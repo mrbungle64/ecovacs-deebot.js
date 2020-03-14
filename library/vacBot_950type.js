@@ -24,6 +24,7 @@ class VacBot_950type {
     this.battery_status = null;
     this.water_level = null;
     this.waterbox_info = null;
+    this.sleep_status = null;
     this.components = {};
     this.ping_interval = null;
     this.error_event = null;
@@ -59,6 +60,8 @@ class VacBot_950type {
       this.run('GetNetInfo');
       this.run('GetCurrentMapName');
       this.run('GetError');
+      this.run('GetSleepStatus');
+      
        //this.run('relocate');
       if (this.hasMoppingSystem()) {
         this.run('GetWaterLevel');
@@ -301,6 +304,10 @@ class VacBot_950type {
       console.error("[VacBot] couldn't parse charge status ", event);
     }
   }
+  _handle_sleep_status(event) {
+    this.sleep_status = event['resultData']['enable']
+    tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
+  }
 
   _handle_error(event) {
     
@@ -434,6 +441,9 @@ class VacBot_950type {
         break;
       case "getposition":
         this.send_command(new vacBotCommand.GetPosition());
+        break;
+      case "getsleepstatus":
+        this.send_command(new vacBotCommand.GetSleepStatus());
         break;
       case "setwaterlevel":
         if (arguments.length < 2) {

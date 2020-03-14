@@ -356,6 +356,10 @@ class EcovacsMQTT_JSON extends EventEmitter {
             case "setspeed":
                 this.bot.run('GetCleanSpeed');
                 break;
+            case 'sleep':
+                this.bot._handle_sleep_status(event);
+                this.emit("SleepStatus", this.bot.sleep_status);
+                break;
             case "error":
                 this.bot._handle_error(event);
                 this.emit("Error", this.bot.error_event);

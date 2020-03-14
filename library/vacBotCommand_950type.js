@@ -205,6 +205,12 @@ class GetCurrentMapName extends VacBotCommand_950type {
     }
 }
 
+class GetSleepStatus extends VacBotCommand_950type {
+    constructor() {
+        super('getSleep');
+    }
+}
+
 
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
@@ -231,3 +237,4 @@ module.exports.Relocate = Relocate;
 module.exports.GetCurrentMapName = GetCurrentMapName;
 module.exports.GetError = GetError;
 module.exports.GetNetInfo = GetNetInfo;
+module.exports.GetSleepStatus = GetSleepStatus;
