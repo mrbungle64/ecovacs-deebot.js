@@ -1,4 +1,5 @@
 const CODES = {
+    '0': 'NoError: Robot is operational',
     '100': 'NoError: Robot is operational',
     '101': 'BatteryLow: Low battery',
     '102': 'HostHang: Robot is off the floor',
@@ -23,6 +24,12 @@ const CODES = {
     '201': 'AirFilterUninstall:',
     '202': 'UltrasonicComponentAbnormal',
     '203': 'SmallWheelError',
+    '204': 'WheelHang',
+    '205': 'IonSterilizeExhausted',
+    '206': 'IonSterilizeAbnormal',
+    '207': 'IonSterilizeFault',
+    '601': 'ERROR_ClosedAIVISideAbnormal',
+    '602': 'ClosedAIVIRollAbnormal',
     'UNKNOW': 'unknown'
 };
 
