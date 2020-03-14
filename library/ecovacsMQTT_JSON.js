@@ -280,8 +280,11 @@ class EcovacsMQTT_JSON extends EventEmitter {
     _handle_command(command, event) {
         tools.envLog("[EcovacsMQTT_JSON] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
-        if(command.startsWith("on")) { //incoming events
+        if(command.startsWith("on")) { //incoming events (on)
             command = command.substring(2);
+        }
+        if(command.startsWith("report")) { //incoming events (report)
+            command = command.substring(6);
         }
         if(command.startsWith("get") ) { //remove from "get" commands
             command = command.substring(3);
