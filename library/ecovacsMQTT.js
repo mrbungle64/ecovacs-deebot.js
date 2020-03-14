@@ -334,6 +334,10 @@ class EcovacsMQTT extends EventEmitter {
                     this.emit("FanSpeed", this.bot.fan_speed);
                 }
                 break;
+            case 'Error':
+                this.bot._handle_error(event);
+                this.emit('Error', this.bot.error_event);
+                break;
             case "LifeSpan":
                 this.bot._handle_life_span(event.attrs);
                 if (this.bot.components["filter"]) {

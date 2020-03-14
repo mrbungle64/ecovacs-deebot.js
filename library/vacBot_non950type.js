@@ -275,15 +275,17 @@ class VacBot_non950type {
     if ((!errorCode) && (event.hasOwnProperty('errs'))) {
       errorCode = event['errs'];
     }
-    // NoError: Robot is operational
-    if (errorCode == '100') {
-      this.error_event = '';
-      return;
-    }
-    if (errorCodes[errorCode]) {
-      this.error_event = errorCodes[errorCode];
-    } else {
-      this.error_event = 'unknown errorCode: ' + errorCode;
+    if (errorCode) {
+      // NoError: Robot is operational
+      if (errorCode == '100') {
+        this.error_event = '';
+        return;
+      }
+      if (errorCodes[errorCode]) {
+        this.error_event = errorCodes[errorCode];
+      } else {
+        this.error_event = 'unknown errorCode: ' + errorCode;
+      }
     }
   }
 
