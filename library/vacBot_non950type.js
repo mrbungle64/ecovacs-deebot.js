@@ -194,7 +194,7 @@ class VacBot_non950type {
   }
 
   _handle_water_level(event) {
-    if ((event.attrs) && (event.attrs['v'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('v'))) {
       this.water_level = event.attrs['v'];
       tools.envLog("[VacBot] *** water_level = %s", this.water_level);
     }
@@ -212,7 +212,7 @@ class VacBot_non950type {
   }
 
   _handle_charge_position(event) {
-    if ((event.attrs) && (event.attrs['p']) && (event.attrs['a'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
       this.charge_position = {
         x: event.attrs['p'].split(",")[0],
         y: event.attrs['p'].split(",")[1],
@@ -223,21 +223,21 @@ class VacBot_non950type {
   }
 
   _handle_dustbox_info(event) {
-    if ((event.attrs) && (event.attrs['st'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
       this.dustbox_info = event.attrs['st'];
       tools.envLog("[VacBot] *** dustbox_info = " + this.dustbox_info);
     }
   }
 
   _handle_waterbox_info(event) {
-    if ((event.attrs) && (event.attrs['on'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('on'))) {
       this.waterbox_info = event.attrs['on'];
       tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
     }
   }
 
   _handle_sleep_status(event) {
-    if ((event.attrs) && (event.attrs['st'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
       this.sleep_status = event.attrs['st'];
       tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
     }
