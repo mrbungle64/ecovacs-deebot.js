@@ -35,6 +35,12 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'idle': 'idle'
 };
 
+exports.WATER_LEVEL_TO_ECOVACS = {
+    1: 1,     //low
+    2: 2,     //middle
+    3: 3,     //high
+    4: 4      //veryhigh
+};
 
 exports.FAN_SPEED_TO_ECOVACS = {
     1: 1000,  //silent
