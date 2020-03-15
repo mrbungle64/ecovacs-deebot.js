@@ -30,6 +30,9 @@ class VacBot_non950type {
     this.error_event = null;
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
+    this.cleanSum_squareMeters = null;
+    this.cleanSum_totalSeconds = null;
+    this.cleanSum_totalNumber = null;
 
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
@@ -257,6 +260,14 @@ class VacBot_non950type {
     }
   }
 
+  _handle_cleanSum(event) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('a')) && (event.attrs.hasOwnProperty('l')) && (event.attrs.hasOwnProperty('c'))) {
+      this.cleanSum_squareMeters = parseInt(event.attrs['a']);
+      this.cleanSum_totalSeconds = parseInt(event.attrs['l']);
+      this.cleanSum_totalNumber = parseInt(event.attrs['c']);
+    }
+  }
+
   _handle_error(event) {
     let errorCode = null;
     if (event.hasOwnProperty('errno')) {
@@ -430,6 +441,9 @@ class VacBot_non950type {
         break;
       case "getsleepstatus":
         this.send_command(new vacBotCommand.GetSleepStatus());
+        break;
+      case "getcleansum":
+        this.send_command(new vacBotCommand.GetCleanSum());
         break;
     }
   }
