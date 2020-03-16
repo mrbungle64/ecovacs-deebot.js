@@ -85,7 +85,8 @@ class SpotArea extends Clean {
 class CustomArea extends Clean {
     constructor(action = 'start', map_position = '', cleanings = 1) {
         if (map_position !== '') {
-            super('customArea', action, {'content': map_position, 'count': cleanings});
+            let cleaningAsNumber = parseInt(cleanings);
+            super('customArea', action, {'content': map_position, 'count': cleaningAsNumber});
         }
     }
 }
