@@ -95,6 +95,9 @@ class EcovacsXMPP extends EventEmitter {
                             command = 'SleepStatus';
                         }
                     }
+                    if ((secondChild.attrs.hasOwnProperty('a')) && (secondChild.attrs.hasOwnProperty('l')) && (secondChild.attrs.hasOwnProperty('c'))) {
+                        command = 'CleanSum';
+                    }
                 }
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
@@ -157,6 +160,12 @@ class EcovacsXMPP extends EventEmitter {
                         case 'SleepStatus':
                             this.bot._handle_sleep_status(secondChild);
                             this.emit("SleepStatus", this.bot.sleep_status);
+                            break;
+                        case 'CleanSum':
+                            this.bot._handle_cleanSum(secondChild);
+                            this.emit("CleanSum_squareMeters", this.bot.cleanSum_squareMeters);
+                            this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
+                            this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                             break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

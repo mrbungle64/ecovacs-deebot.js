@@ -30,6 +30,9 @@ class VacBot_non950type {
     this.error_event = null;
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
+    this.cleanSum_squareMeters = null;
+    this.cleanSum_totalSeconds = null;
+    this.cleanSum_totalNumber = null;
 
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
@@ -194,7 +197,7 @@ class VacBot_non950type {
   }
 
   _handle_water_level(event) {
-    if ((event.attrs) && (event.attrs['v'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('v'))) {
       this.water_level = event.attrs['v'];
       tools.envLog("[VacBot] *** water_level = %s", this.water_level);
     }
@@ -212,7 +215,7 @@ class VacBot_non950type {
   }
 
   _handle_charge_position(event) {
-    if ((event.attrs) && (event.attrs['p']) && (event.attrs['a'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
       this.charge_position = {
         x: event.attrs['p'].split(",")[0],
         y: event.attrs['p'].split(",")[1],
@@ -223,21 +226,21 @@ class VacBot_non950type {
   }
 
   _handle_dustbox_info(event) {
-    if ((event.attrs) && (event.attrs['st'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
       this.dustbox_info = event.attrs['st'];
       tools.envLog("[VacBot] *** dustbox_info = " + this.dustbox_info);
     }
   }
 
   _handle_waterbox_info(event) {
-    if ((event.attrs) && (event.attrs['on'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('on'))) {
       this.waterbox_info = event.attrs['on'];
       tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
     }
   }
 
   _handle_sleep_status(event) {
-    if ((event.attrs) && (event.attrs['st'])) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
       this.sleep_status = event.attrs['st'];
       tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
     }
@@ -254,6 +257,14 @@ class VacBot_non950type {
       }
     } else {
       console.error("[VacBot] couldn't parse charge status ", event);
+    }
+  }
+
+  _handle_cleanSum(event) {
+    if ((event.attrs) && (event.attrs.hasOwnProperty('a')) && (event.attrs.hasOwnProperty('l')) && (event.attrs.hasOwnProperty('c'))) {
+      this.cleanSum_squareMeters = parseInt(event.attrs['a']);
+      this.cleanSum_totalSeconds = parseInt(event.attrs['l']);
+      this.cleanSum_totalNumber = parseInt(event.attrs['c']);
     }
   }
 
@@ -275,15 +286,17 @@ class VacBot_non950type {
     if ((!errorCode) && (event.hasOwnProperty('errs'))) {
       errorCode = event['errs'];
     }
-    // NoError: Robot is operational
-    if (errorCode == '100') {
-      this.error_event = '';
-      return;
-    }
-    if (errorCodes[errorCode]) {
-      this.error_event = errorCodes[errorCode];
-    } else {
-      this.error_event = 'unknown errorCode: ' + errorCode;
+    if (errorCode) {
+      // NoError: Robot is operational
+      if (errorCode == '100') {
+        this.error_event = '';
+        return;
+      }
+      if (errorCodes[errorCode]) {
+        this.error_event = errorCodes[errorCode];
+      } else {
+        this.error_event = 'unknown errorCode: ' + errorCode;
+      }
     }
   }
 
@@ -428,6 +441,9 @@ class VacBot_non950type {
         break;
       case "getsleepstatus":
         this.send_command(new vacBotCommand.GetSleepStatus());
+        break;
+      case "getcleansum":
+        this.send_command(new vacBotCommand.GetCleanSum());
         break;
     }
   }

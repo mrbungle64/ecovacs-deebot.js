@@ -39,6 +39,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.3.8
+* Several enhancements and fixes
+
 ### 0.3.7
 * (mrbungle64) Bugfixes and some improvements (MQTT/XML)
 

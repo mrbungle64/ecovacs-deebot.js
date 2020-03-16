@@ -229,6 +229,12 @@ class GetSleepStatus extends VacBotCommand_non950type {
     }
 }
 
+class GetCleanSum extends VacBotCommand_non950type {
+    constructor() {
+        super('GetCleanSum');
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -254,3 +260,4 @@ module.exports.GetPos = GetPos;
 module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetCleanSum = GetCleanSum;
