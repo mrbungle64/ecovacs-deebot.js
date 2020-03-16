@@ -333,9 +333,9 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                if(this.bot.deebot_position["invalid"]==1) {
-                    this.bot._handle_error({"resultCode":"0","resultCodeMessage":"ok","resultData":{"code":[102]}});
-                    this.emit("Error", this.bot.error_event);
+                if(this.bot.deebot_position["invalid"]==1 && this.bot.relocation_state == 'ok') {
+                    this.bot.relocation_state = 'required';
+                    this.emit("RelocationState", this.bot.relocation_state);
                 } else {
                     this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
                 }
