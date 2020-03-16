@@ -227,6 +227,10 @@ class VacBot_950type {
         if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'returning') { //set charge state on returning to dock
           this.charge_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
           tools.envLog("[VacBot] *** charge_status = %s", this.charge_status);
+        } else if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'idle') {
+          //when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
+          //if this is not run, the status when canceling the return stays on 'returning'
+          this.run('GetChargeState');
         }
       }
     } else {
