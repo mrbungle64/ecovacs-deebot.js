@@ -333,9 +333,9 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                if(this.bot.deebot_position["invalid"]==1) {
-                    this.bot._handle_error({"resultCode":"0","resultCodeMessage":"ok","resultData":{"code":[102]}});
-                    this.emit("Error", this.bot.error_event);
+                if(this.bot.deebot_position["invalid"]==1 && this.bot.relocation_state == 'ok') {
+                    this.bot.relocation_state = 'required';
+                    this.emit("RelocationState", this.bot.relocation_state);
                 } else {
                     this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
                 }
@@ -367,6 +367,12 @@ class EcovacsMQTT_JSON extends EventEmitter {
             case "error":
                 this.bot._handle_error(event);
                 this.emit("Error", this.bot.error_event);
+                break;
+            case 'totalstats':
+                this.bot._handle_cleanSum(event);
+                this.emit("CleanSum_squareMeters", this.bot.cleanSum_squareMeters);
+                this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
+                this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);

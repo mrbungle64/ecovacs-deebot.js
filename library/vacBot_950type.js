@@ -34,12 +34,16 @@ class VacBot_950type {
     this.currentMapName = 'unknown';
     this.currentMapMID = null;
     this.currentMapIndex = null;
-
+    
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
     this.netInfoWifiSignal = null;
     this.netInfoMAC = null;
     
+    this.cleanSum_squareMeters = null;
+    this.cleanSum_totalSeconds = null;
+    this.cleanSum_totalNumber = null;
+
     tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
     const EcovacsMQTT = require('./ecovacsMQTT_JSON.js');
     this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address);
@@ -61,6 +65,8 @@ class VacBot_950type {
       this.run('GetCurrentMapName');
       this.run('GetError');
       this.run('GetSleepStatus');
+      
+      this.run('GetCleanSum');
       
        //this.run('relocate');
       if (this.hasMoppingSystem()) {
@@ -227,12 +233,22 @@ class VacBot_950type {
         if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'returning') { //set charge state on returning to dock
           this.charge_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
           tools.envLog("[VacBot] *** charge_status = %s", this.charge_status);
+        } else if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'idle') {
+          //when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
+          //if this is not run, the status when canceling the return stays on 'returning'
+          this.run('GetChargeState');
         }
       }
     } else {
       this.clean_status = 'error';
     }
     tools.envLog("[VacBot] *** clean_status = %s", this.clean_status);
+  }
+
+  _handle_cleanSum(event) {
+    this.cleanSum_squareMeters = parseInt(event['resultData']['area']);
+    this.cleanSum_totalSeconds = parseInt(event['resultData']['time']);
+    this.cleanSum_totalNumber = parseInt(event['resultData']['count']);
   }
 
   _handle_battery_info(event) {
@@ -361,8 +377,11 @@ class VacBot_950type {
       case "spotarea":
         if (arguments.length < 3) {
           return;
+        } else if (arguments.length == 3) {
+          this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
+        } else { // including number of cleanings
+          this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2], arguments[3]));
         }
-        this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
         break;
       case "customarea":
         if (arguments.length < 4) {
@@ -400,6 +419,9 @@ class VacBot_950type {
         break;
       case "getcleanspeed":
         this.send_command(new vacBotCommand.GetCleanSpeed());
+        break;
+      case "getcleansum":
+        this.send_command(new vacBotCommand.GetCleanSum());
         break;
       case "getchargestate":
         this.send_command(new vacBotCommand.GetChargeState());

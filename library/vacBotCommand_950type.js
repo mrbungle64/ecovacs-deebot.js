@@ -75,9 +75,10 @@ class Stop extends VacBotCommand_950type {
 }
 
 class SpotArea extends Clean {
-    constructor(action = 'start', area = '') {
+    constructor(action = 'start', area = '', cleanings = 1) {
         if (area !== '') {
-            super('spotArea', action, {'content': area, 'count': '1'});
+            let cleaningAsNumber = parseInt(cleanings);
+            super('spotArea', action, {'content': area, 'count': cleaningAsNumber});
         }
     }
 }
@@ -85,7 +86,8 @@ class SpotArea extends Clean {
 class CustomArea extends Clean {
     constructor(action = 'start', map_position = '', cleanings = 1) {
         if (map_position !== '') {
-            super('customArea', action, {'content': map_position, 'count': cleanings});
+            let cleaningAsNumber = parseInt(cleanings);
+            super('customArea', action, {'content': map_position, 'count': cleaningAsNumber});
         }
     }
 }
@@ -191,8 +193,9 @@ class GetPosition extends VacBotCommand_950type {
 }
 
 class PlaySound extends VacBotCommand_950type {
-    constructor(sid = '0') {
-        super('playSound', {'count': 1, 'sid': sid});
+    constructor(sid = 0) {
+        let sidAsNumber = parseInt(sid);
+        super('playSound', {'count': 1, 'sid': sidAsNumber});
     }
 }
 
@@ -201,7 +204,11 @@ class GetNetInfo extends VacBotCommand_950type {
         super('getNetInfo');
     }
 }
-
+class GetCleanSum extends VacBotCommand_950type {
+    constructor() {
+        super('getTotalStats');
+    }
+}
 class GetCurrentMapName extends VacBotCommand_950type {
     constructor(sid = '0') {
         super('getCachedMapInfo');
@@ -241,3 +248,4 @@ module.exports.GetCurrentMapName = GetCurrentMapName;
 module.exports.GetError = GetError;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetCleanSum = GetCleanSum;
