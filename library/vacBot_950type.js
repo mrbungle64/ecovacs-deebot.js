@@ -361,8 +361,11 @@ class VacBot_950type {
       case "spotarea":
         if (arguments.length < 3) {
           return;
+        } else if (arguments.length == 3) {
+          this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
+        } else { // including number of cleanings
+          this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2], arguments[3]));
         }
-        this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
         break;
       case "customarea":
         if (arguments.length < 4) {

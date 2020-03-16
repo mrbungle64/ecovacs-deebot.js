@@ -75,9 +75,10 @@ class Stop extends VacBotCommand_950type {
 }
 
 class SpotArea extends Clean {
-    constructor(action = 'start', area = '') {
+    constructor(action = 'start', area = '', cleanings = 1) {
         if (area !== '') {
-            super('spotArea', action, {'content': area, 'count': '1'});
+            let cleaningAsNumber = parseInt(cleanings);
+            super('spotArea', action, {'content': area, 'count': cleaningAsNumber});
         }
     }
 }
