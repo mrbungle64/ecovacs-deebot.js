@@ -204,7 +204,11 @@ class GetNetInfo extends VacBotCommand_950type {
         super('getNetInfo');
     }
 }
-
+class GetCleanSum extends VacBotCommand_950type {
+    constructor() {
+        super('getTotalStats');
+    }
+}
 class GetCurrentMapName extends VacBotCommand_950type {
     constructor(sid = '0') {
         super('getCachedMapInfo');
@@ -244,3 +248,4 @@ module.exports.GetCurrentMapName = GetCurrentMapName;
 module.exports.GetError = GetError;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetCleanSum = GetCleanSum;

@@ -368,6 +368,12 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.bot._handle_error(event);
                 this.emit("Error", this.bot.error_event);
                 break;
+            case 'totalstats':
+                this.bot._handle_cleanSum(event);
+                this.emit("CleanSum_squareMeters", this.bot.cleanSum_squareMeters);
+                this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
+                this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
+                break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
                 break;
