@@ -163,7 +163,7 @@ class EcovacsXMPP extends EventEmitter {
                             break;
                         case 'CleanSum':
                             this.bot._handle_cleanSum(secondChild);
-                            this.emit("CleanSum_squareMeters", this.bot.cleanSum_squareMeters);
+                            this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                             this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                             this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                             break;

@@ -30,7 +30,7 @@ class VacBot_non950type {
     this.error_event = null;
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
-    this.cleanSum_squareMeters = null;
+    this.cleanSum_totalSquareMeters = null;
     this.cleanSum_totalSeconds = null;
     this.cleanSum_totalNumber = null;
 
@@ -262,7 +262,7 @@ class VacBot_non950type {
 
   _handle_cleanSum(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('a')) && (event.attrs.hasOwnProperty('l')) && (event.attrs.hasOwnProperty('c'))) {
-      this.cleanSum_squareMeters = parseInt(event.attrs['a']);
+      this.cleanSum_totalSquareMeters = parseInt(event.attrs['a']);
       this.cleanSum_totalSeconds = parseInt(event.attrs['l']);
       this.cleanSum_totalNumber = parseInt(event.attrs['c']);
     }
