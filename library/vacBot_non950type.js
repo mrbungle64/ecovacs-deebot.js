@@ -18,6 +18,7 @@ class VacBot_non950type {
       y: null,
       a: null
     };
+    this.lastAreaValues = null;
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -165,6 +166,21 @@ class VacBot_non950type {
       }
       this.clean_status = type;
       tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
+
+      if (event.attrs.hasOwnProperty('p')) {
+        let pValues = event.attrs['p'];
+        const pattern = /^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/;
+        if (pattern.test(pValues)) {
+          const x1 = parseFloat(pValues.split(",")[0]).toFixed(1);
+          const y1 = parseFloat(pValues.split(",")[1]).toFixed(1);
+          const x2 = parseFloat(pValues.split(",")[2]).toFixed(1);
+          const y2 = parseFloat(pValues.split(",")[3]).toFixed(1);
+          this.lastAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
+          tools.envLog("[VacBot] *** lastAreaValues = " + pValues);
+        } else {
+          tools.envLog("[VacBot] *** lastAreaValues invalid pValues = " + pValues);
+        }
+      }
 
       if (event.attrs.hasOwnProperty('speed')) {
         let fan = event.attrs['speed'];

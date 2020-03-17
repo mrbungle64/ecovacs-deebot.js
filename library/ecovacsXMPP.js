@@ -115,6 +115,9 @@ class EcovacsXMPP extends EventEmitter {
                             if (this.bot.fan_speed) {
                                 this.emit('FanSpeed', this.bot.fan_speed);
                             }
+                            if (this.bot.lastAreaValues) {
+                                this.emit("LastAreaValues", this.bot.lastAreaValues);
+                            }
                             break;
                         case 'Error':
                             tools.envLog('[EcovacsXMPP] Received an error for action: %s', secondChild.attrs);
