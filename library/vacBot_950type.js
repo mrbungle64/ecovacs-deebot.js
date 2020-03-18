@@ -34,6 +34,8 @@ class VacBot_950type {
     this.currentMapName = 'unknown';
     this.currentMapMID = null;
     this.currentMapIndex = null;
+
+    this.mapInfo = null;
     
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
@@ -62,13 +64,13 @@ class VacBot_950type {
       this.run('GetPosition');
       this.run('GetCleanSpeed');
       this.run('GetNetInfo');
-      this.run('GetCurrentMapName');
+      //this.run('GetCurrentMapName'); //deprecated, processed with GetMapInfo
+      this.run('GetMapInfo');
       this.run('GetError');
       this.run('GetSleepStatus');
       
       this.run('GetCleanSum');
       
-       //this.run('relocate');
       if (this.hasMoppingSystem()) {
         this.run('GetWaterLevel');
       }
@@ -269,18 +271,22 @@ class VacBot_950type {
   _handle_cachedmapinfo(event) {
     this.currentMapName = 'unknown';
     if (event['resultCode'] == '0') {
-      for ( let map in event['resultData']['info']) {
+      
+      this.mapInfo = event['resultData']['info'];
+      for ( let mapIndex in event['resultData']['info']) {
         
-    tools.envLog("[VacBot] *** resultData = " + JSON.stringify(event['resultData']['info'][map]));
-        if (event['resultData']['info'][map]['using'] == 1) {
-          this.currentMapName = event['resultData']['info'][map]['name'];
-          this.currentMapMID = event['resultData']['info'][map]['mid'];
-          this.currentMapIndex = event['resultData']['info'][map]['index'];
+        if (event['resultData']['info'][mapIndex]['using'] == 1) {
+          this.currentMapName = event['resultData']['info'][mapIndex]['name'];
+          this.currentMapMID = event['resultData']['info'][mapIndex]['mid'];
+          this.currentMapIndex = event['resultData']['info'][mapIndex]['index'];
           break;
         }
       }
     }
     tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
+    tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
+    tools.envLog("[VacBot] *** currentMapIndex = " + this.currentMapIndex);
+    tools.envLog("[VacBot] *** mapInfo = " + JSON.stringify(this.mapInfo));
   }
 
   _handle_water_info(event) {
@@ -427,7 +433,8 @@ class VacBot_950type {
         this.send_command(new vacBotCommand.GetChargeState());
         break;
       case "getcurrentmapname":
-        this.send_command(new vacBotCommand.GetCurrentMapName());
+      case "getmapinfo":
+        this.send_command(new vacBotCommand.GetMapInfo());
         break;
       case "geterror":
         this.send_command(new vacBotCommand.GetError());

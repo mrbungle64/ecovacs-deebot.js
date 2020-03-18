@@ -209,9 +209,21 @@ class GetCleanSum extends VacBotCommand_950type {
         super('getTotalStats');
     }
 }
-class GetCurrentMapName extends VacBotCommand_950type {
-    constructor(sid = '0') {
+
+class GetMapInfo extends VacBotCommand_950type {
+    constructor() {
         super('getCachedMapInfo');
+    }
+}
+class GetMapSet extends VacBotCommand_950type {
+    constructor(mapID, type='ar') { //default type is spotAreas
+        super('getMapSet', {'mid': mapID, 'type': type});
+    }
+}
+
+class GetCurrentMapName extends GetMapInfo { //deprecated, use GetMapInfo instead
+    constructor() {
+        super();
     }
 }
 
@@ -220,7 +232,6 @@ class GetSleepStatus extends VacBotCommand_950type {
         super('getSleep');
     }
 }
-
 
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
@@ -244,6 +255,8 @@ module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.PlaySound = PlaySound;
 module.exports.Relocate = Relocate;
+module.exports.GetMapInfo = GetMapInfo;
+module.exports.GetMapSet = GetMapSet;
 module.exports.GetCurrentMapName = GetCurrentMapName;
 module.exports.GetError = GetError;
 module.exports.GetNetInfo = GetNetInfo;
