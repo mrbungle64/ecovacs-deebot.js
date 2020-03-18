@@ -286,8 +286,11 @@ class VacBot_non950type {
 
   _handle_error(event) {
     let errorCode = null;
-    if (event.hasOwnProperty('errno')) {
-        errorCode = event['errno'];
+    if (event.hasOwnProperty('code')) {
+      errorCode = event['code'];
+    }
+    if ((!errorCode) && (event.hasOwnProperty('errno'))) {
+      errorCode = event['errno'];
     }
     if ((!errorCode) && (event.hasOwnProperty('new'))) {
       errorCode = event['new'];

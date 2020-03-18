@@ -179,15 +179,9 @@ class EcovacsXMPP extends EventEmitter {
                     tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
                 }
             } else if (stanza.name === 'iq' && stanza.attrs.type === 'error' && !!stanza.children[0] && stanza.children[0].name === 'error' && !!stanza.children[0].children[0]) {
-                tools.envLog('[EcovacsXMPP] Response Error for request %s', stanza.attrs.id);
-                switch (stanza.children[0].attrs.code) {
-                    case '404':
-                        console.error('[EcovacsXMPP] Could not reach the device: [%s] %s', stanza.children[0].attrs.code, stanza.children[0].children[0].name);
-                        break;
-                    default:
-                        console.error('[EcovacsXMPP] Unknown error received: %s', JSON.stringify(stanza.children[0]));
-                        break;
-                }
+                tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
+                this.bot._handle_error(stanza.children[0].attrs);
+                this.emit('Error', this.bot.error_event);
             }
         });
 
