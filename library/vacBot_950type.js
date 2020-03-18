@@ -2,6 +2,7 @@ const   dictionary = require('./ecovacsConstants_950type.js');
 const   vacBotCommand = require('./vacBotCommand_950type.js');
 const   errorCodes = require('./errorCodes');
 const   tools = require('./tools.js');
+const   map = require('./mapTemplate.js');
 
 class VacBot_950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
@@ -35,7 +36,7 @@ class VacBot_950type {
     this.currentMapMID = null;
     this.currentMapIndex = null;
 
-    this.mapInfo = null;
+    this.maps = null;
     
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
@@ -272,21 +273,30 @@ class VacBot_950type {
     this.currentMapName = 'unknown';
     if (event['resultCode'] == '0') {
       
-      this.mapInfo = event['resultData']['info'];
+      this.maps = [];
       for ( let mapIndex in event['resultData']['info']) {
-        
+        this.maps.push(
+          new map.EcovacsMap(
+            event['resultData']['info'][mapIndex]['mid'],
+            event['resultData']['info'][mapIndex]['index'],
+            event['resultData']['info'][mapIndex]['name'],
+            event['resultData']['info'][mapIndex]['status'],
+            event['resultData']['info'][mapIndex]['using'],
+            event['resultData']['info'][mapIndex]['built']
+            
+          )
+        );
         if (event['resultData']['info'][mapIndex]['using'] == 1) {
           this.currentMapName = event['resultData']['info'][mapIndex]['name'];
           this.currentMapMID = event['resultData']['info'][mapIndex]['mid'];
           this.currentMapIndex = event['resultData']['info'][mapIndex]['index'];
-          break;
         }
       }
     }
     tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
     tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
     tools.envLog("[VacBot] *** currentMapIndex = " + this.currentMapIndex);
-    tools.envLog("[VacBot] *** mapInfo = " + JSON.stringify(this.mapInfo));
+    tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
   }
 
   _handle_water_info(event) {
