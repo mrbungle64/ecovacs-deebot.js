@@ -320,6 +320,10 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                 this.emit("Maps", this.bot.maps);
                 break;
+            case "mapset":
+                let mapSpotAreas = this.bot._handle_mapset(event);
+                this.emit("MapSpotAreas", mapSpotAreas);
+                break;
             case "lifespan":
                 this.bot._handle_life_span(event);
                 if(this.bot.components["filter"]) {

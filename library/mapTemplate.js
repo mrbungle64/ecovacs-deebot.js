@@ -36,10 +36,14 @@ class EcovacsMap {
 }
 
 class EcovacsMapSpotAreas {
-    constructor(mapID, mapSetID, mapSpotAreas) {
+    constructor(mapID, mapSetID) {
       this.mapID= mapID;
       this.mapSetID= mapSetID;
-      this.mapSpotAreas = mapSpotAreas;
+      this.mapSpotAreas = [];
+    }
+
+    push(mapSpotAreas) {
+        this.mapSpotAreas.push(mapSpotAreas);
     }
 
     toJSON() {
@@ -61,7 +65,6 @@ class EcovacsMapSpotArea {
         };
     }
 }
-
 
 class EcovacsMapSpotAreaInfo {
     constructor(mapID, mapSpotAreaID, mapSubType="0") {

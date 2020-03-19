@@ -215,6 +215,13 @@ class GetMapInfo extends VacBotCommand_950type {
         super('getCachedMapInfo');
     }
 }
+
+class GetMapSpotAreas extends VacBotCommand_950type {
+    constructor(mapID) {
+        super('getMapSet', {'mid': mapID, 'type': 'ar'});
+    }
+}
+
 class GetMapSet extends VacBotCommand_950type {
     constructor(mapID, type='ar') { //default type is spotAreas
         super('getMapSet', {'mid': mapID, 'type': type});
@@ -262,3 +269,4 @@ module.exports.GetError = GetError;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetMapSpotAreas = GetMapSpotAreas;

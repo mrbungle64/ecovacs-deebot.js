@@ -37,6 +37,7 @@ class VacBot_950type {
     this.currentMapIndex = null;
 
     this.maps = null;
+    this.mapSpotAreas = null;
     
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
@@ -283,9 +284,11 @@ class VacBot_950type {
             event['resultData']['info'][mapIndex]['status'],
             event['resultData']['info'][mapIndex]['using'],
             event['resultData']['info'][mapIndex]['built']
-            
           )
         );
+
+        this.send_command(new vacBotCommand.GetMapSpotAreas(event['resultData']['info'][mapIndex]['mid']));
+
         if (event['resultData']['info'][mapIndex]['using'] == 1) {
           this.currentMapName = event['resultData']['info'][mapIndex]['name'];
           this.currentMapMID = event['resultData']['info'][mapIndex]['mid'];
@@ -297,6 +300,24 @@ class VacBot_950type {
     tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
     tools.envLog("[VacBot] *** currentMapIndex = " + this.currentMapIndex);
     tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
+  }
+
+  _handle_mapset(event) {
+    if (event['resultCode'] == '0') {
+      if (event['resultData']['type'] == 'ar') { 
+        let mapSpotAreas = new map.EcovacsMapSpotAreas(event['resultData']['mid'], event['resultData']['msid']);
+        for ( let mapIndex in event['resultData']['subsets']) {
+          mapSpotAreas.push(new map.EcovacsMapSpotArea(event['resultData']['subsets'][mapIndex]['mssid']));
+          
+          //this.send_command(new vacBotCommand.GetMapSpotAreaInfo(event['resultData']['subsets'][mapIndex]['mssid']));
+
+        }
+        tools.envLog("[VacBot] *** mapSpotAreas = " + JSON.stringify(mapSpotAreas));
+        return mapSpotAreas;
+      }
+      tools.envLog("[VacBot] *** mapset type = " + JSON.stringify(event['resultData']['type']));
+      return event['resultData']['type'];
+    }
   }
 
   _handle_water_info(event) {
