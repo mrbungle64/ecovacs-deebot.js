@@ -18,6 +18,7 @@ class VacBot_non950type {
       y: null,
       a: null
     };
+    this.lastAreaValues = null;
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -30,7 +31,7 @@ class VacBot_non950type {
     this.error_event = null;
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
-    this.cleanSum_squareMeters = null;
+    this.cleanSum_totalSquareMeters = null;
     this.cleanSum_totalSeconds = null;
     this.cleanSum_totalNumber = null;
 
@@ -166,6 +167,21 @@ class VacBot_non950type {
       this.clean_status = type;
       tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
 
+      if (event.attrs.hasOwnProperty('p')) {
+        let pValues = event.attrs['p'];
+        const pattern = /^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/;
+        if (pattern.test(pValues)) {
+          const x1 = parseFloat(pValues.split(",")[0]).toFixed(1);
+          const y1 = parseFloat(pValues.split(",")[1]).toFixed(1);
+          const x2 = parseFloat(pValues.split(",")[2]).toFixed(1);
+          const y2 = parseFloat(pValues.split(",")[3]).toFixed(1);
+          this.lastAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
+          tools.envLog("[VacBot] *** lastAreaValues = " + pValues);
+        } else {
+          tools.envLog("[VacBot] *** lastAreaValues invalid pValues = " + pValues);
+        }
+      }
+
       if (event.attrs.hasOwnProperty('speed')) {
         let fan = event.attrs['speed'];
         if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
@@ -262,7 +278,7 @@ class VacBot_non950type {
 
   _handle_cleanSum(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('a')) && (event.attrs.hasOwnProperty('l')) && (event.attrs.hasOwnProperty('c'))) {
-      this.cleanSum_squareMeters = parseInt(event.attrs['a']);
+      this.cleanSum_totalSquareMeters = parseInt(event.attrs['a']);
       this.cleanSum_totalSeconds = parseInt(event.attrs['l']);
       this.cleanSum_totalNumber = parseInt(event.attrs['c']);
     }
@@ -270,8 +286,11 @@ class VacBot_non950type {
 
   _handle_error(event) {
     let errorCode = null;
-    if (event.hasOwnProperty('errno')) {
-        errorCode = event['errno'];
+    if (event.hasOwnProperty('code')) {
+      errorCode = event['code'];
+    }
+    if ((!errorCode) && (event.hasOwnProperty('errno'))) {
+      errorCode = event['errno'];
     }
     if ((!errorCode) && (event.hasOwnProperty('new'))) {
       errorCode = event['new'];

@@ -375,7 +375,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case 'totalstats':
                 this.bot._handle_cleanSum(event);
-                this.emit("CleanSum_squareMeters", this.bot.cleanSum_squareMeters);
+                this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;

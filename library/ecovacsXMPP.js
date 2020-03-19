@@ -115,6 +115,9 @@ class EcovacsXMPP extends EventEmitter {
                             if (this.bot.fan_speed) {
                                 this.emit('FanSpeed', this.bot.fan_speed);
                             }
+                            if (this.bot.lastAreaValues) {
+                                this.emit("LastAreaValues", this.bot.lastAreaValues);
+                            }
                             break;
                         case 'Error':
                             tools.envLog('[EcovacsXMPP] Received an error for action: %s', secondChild.attrs);
@@ -163,7 +166,7 @@ class EcovacsXMPP extends EventEmitter {
                             break;
                         case 'CleanSum':
                             this.bot._handle_cleanSum(secondChild);
-                            this.emit("CleanSum_squareMeters", this.bot.cleanSum_squareMeters);
+                            this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                             this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                             this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                             break;
@@ -176,15 +179,9 @@ class EcovacsXMPP extends EventEmitter {
                     tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
                 }
             } else if (stanza.name === 'iq' && stanza.attrs.type === 'error' && !!stanza.children[0] && stanza.children[0].name === 'error' && !!stanza.children[0].children[0]) {
-                tools.envLog('[EcovacsXMPP] Response Error for request %s', stanza.attrs.id);
-                switch (stanza.children[0].attrs.code) {
-                    case '404':
-                        console.error('[EcovacsXMPP] Could not reach the device: [%s] %s', stanza.children[0].attrs.code, stanza.children[0].children[0].name);
-                        break;
-                    default:
-                        console.error('[EcovacsXMPP] Unknown error received: %s', JSON.stringify(stanza.children[0]));
-                        break;
-                }
+                tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
+                this.bot._handle_error(stanza.children[0].attrs);
+                this.emit('Error', this.bot.error_event);
             }
         });
 

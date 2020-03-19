@@ -44,7 +44,7 @@ class VacBot_950type {
     this.netInfoWifiSignal = null;
     this.netInfoMAC = null;
     
-    this.cleanSum_squareMeters = null;
+    this.cleanSum_totalSquareMeters = null;
     this.cleanSum_totalSeconds = null;
     this.cleanSum_totalNumber = null;
 
@@ -250,7 +250,7 @@ class VacBot_950type {
   }
 
   _handle_cleanSum(event) {
-    this.cleanSum_squareMeters = parseInt(event['resultData']['area']);
+    this.cleanSum_totalSquareMeters = parseInt(event['resultData']['area']);
     this.cleanSum_totalSeconds = parseInt(event['resultData']['time']);
     this.cleanSum_totalNumber = parseInt(event['resultData']['count']);
   }
