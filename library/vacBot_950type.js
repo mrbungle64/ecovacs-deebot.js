@@ -274,9 +274,9 @@ class VacBot_950type {
     this.currentMapName = 'unknown';
     if (event['resultCode'] == '0') {
       
-      this.maps = [];
+      this.maps = {"maps": []};
       for ( let mapIndex in event['resultData']['info']) {
-        this.maps.push(
+        this.maps["maps"].push(
           new map.EcovacsMap(
             event['resultData']['info'][mapIndex]['mid'],
             event['resultData']['info'][mapIndex]['index'],
