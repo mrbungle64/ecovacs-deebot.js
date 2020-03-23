@@ -122,7 +122,8 @@ class EcovacsXMPP extends EventEmitter {
                         case 'Error':
                             tools.envLog('[EcovacsXMPP] Received an error for action: %s', secondChild.attrs);
                             this.bot._handle_error(secondChild.attrs);
-                            this.emit('Error', this.bot.error_event);
+                            this.emit('Error', this.bot.errorDescription);
+                            this.emit('ErrorCode', this.bot.errorCode);
                             break;
                         case 'LifeSpan':
                             tools.envLog('[EcovacsXMPP] Received an LifeSpan Stanza %s', JSON.stringify(secondChild.attrs));
@@ -181,7 +182,8 @@ class EcovacsXMPP extends EventEmitter {
             } else if (stanza.name === 'iq' && stanza.attrs.type === 'error' && !!stanza.children[0] && stanza.children[0].name === 'error' && !!stanza.children[0].children[0]) {
                 tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
                 this.bot._handle_error(stanza.children[0].attrs);
-                this.emit('Error', this.bot.error_event);
+                this.emit('Error', this.bot.errorDescription);
+                this.emit('ErrorCode', this.bot.errorCode);
             }
         });
 

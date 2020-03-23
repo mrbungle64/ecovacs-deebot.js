@@ -336,7 +336,8 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case 'Error':
                 this.bot._handle_error(event);
-                this.emit('Error', this.bot.error_event);
+                this.emit('Error', this.bot.errorDescription);
+                this.emit('ErrorCode', this.bot.errorCode);
                 break;
             case "LifeSpan":
                 this.bot._handle_life_span(event.attrs);
