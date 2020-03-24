@@ -56,27 +56,27 @@ class VacBot_950type {
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
-      this.run('GetBatteryState');
-      this.run('GetCleanState');
-      this.run('GetChargeState');
-      if (this.hasMainBrush()) {
-        this.run('GetLifeSpan', 'main_brush');
-      }
-      this.run('GetLifeSpan', 'side_brush');
-      this.run('GetLifeSpan', 'filter');
-      this.run('GetPosition');
-      this.run('GetCleanSpeed');
-      this.run('GetNetInfo');
-      //this.run('GetCurrentMapName'); //deprecated, processed with GetMapInfo
-      this.run('GetMapInfo');
-      this.run('GetError');
-      this.run('GetSleepStatus');
+      // this.run('GetBatteryState');
+      // this.run('GetCleanState');
+      // this.run('GetChargeState');
+      // if (this.hasMainBrush()) {
+      //   this.run('GetLifeSpan', 'main_brush');
+      // }
+      // this.run('GetLifeSpan', 'side_brush');
+      // this.run('GetLifeSpan', 'filter');
+      // this.run('GetPosition');
+      // this.run('GetCleanSpeed');
+      // this.run('GetNetInfo');
+      // //this.run('GetCurrentMapName'); //deprecated, processed with GetMapInfo
+      // this.run('GetMapInfo');
+      // this.run('GetError');
+      // this.run('GetSleepStatus');
       
-      this.run('GetCleanSum');
+      // this.run('GetCleanSum');
       
-      if (this.hasMoppingSystem()) {
-        this.run('GetWaterLevel');
-      }
+      // if (this.hasMoppingSystem()) {
+      //   this.run('GetWaterLevel');
+      // }
       
     });
   }
