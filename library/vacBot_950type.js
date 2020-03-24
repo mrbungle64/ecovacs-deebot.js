@@ -28,7 +28,8 @@ class VacBot_950type {
     this.sleep_status = null;
     this.components = {};
     this.ping_interval = null;
-    this.error_event = null;
+    this.errorCode = '0';
+    this.errorDescription = errorCodes[this.errorCode];
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
@@ -353,18 +354,15 @@ class VacBot_950type {
 
   _handle_error(event) {
     
-    let errorCode = event['resultData']['code'];
+    this.errorCode = event['resultData']['code'];
 
-    // NoError: Robot is operational
-    if (errorCode == '0') {
-      this.error_event = '';
-      return;
-    } else if (errorCodes[errorCode]) { // known errorCode from library
-      this.error_event = errorCodes[errorCode];
+    if (errorCodes[this.errorCode]) { // known errorCode from library
+      this.errorDescription = errorCodes[this.errorCode];
     } else {
-      this.error_event = 'unknown errorCode: ' + errorCode;
+      this.errorDescription = 'unknown errorCode: ' + this.errorCode;
     }
-    tools.envLog("[VacBot] *** error_event = " + this.error_event);
+    tools.envLog("[VacBot] *** errorCode = " + this.errorCode);
+    tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
   }
 
   _vacuum_address() {

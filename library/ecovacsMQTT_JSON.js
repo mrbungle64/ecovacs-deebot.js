@@ -371,7 +371,8 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "error":
                 this.bot._handle_error(event);
-                this.emit("Error", this.bot.error_event);
+                this.emit("Error", this.bot.errorDescription);
+                this.emit('ErrorCode', this.bot.errorCode);
                 break;
             case 'totalstats':
                 this.bot._handle_cleanSum(event);

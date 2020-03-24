@@ -29,7 +29,7 @@ class VacBot_non950type {
     this.components = {};
     this.ping_interval = null;
     this.errorCode = '0';
-    this.errorDescription = '';
+    this.errorDescription = errorCodes[this.errorCode];
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
     this.cleanSum_totalSquareMeters = null;
