@@ -288,7 +288,7 @@ class VacBot_950type {
           )
         );
 
-        this.send_command(new vacBotCommand.GetMapSpotAreas(event['resultData']['info'][mapIndex]['mid']));
+        //this.send_command(new vacBotCommand.GetMapSpotAreas(event['resultData']['info'][mapIndex]['mid']));
 
         if (event['resultData']['info'][mapIndex]['using'] == 1) {
           this.currentMapName = event['resultData']['info'][mapIndex]['name'];
