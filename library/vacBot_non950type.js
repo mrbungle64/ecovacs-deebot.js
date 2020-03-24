@@ -28,7 +28,8 @@ class VacBot_non950type {
     this.sleep_status = null;
     this.components = {};
     this.ping_interval = null;
-    this.error_event = null;
+    this.errorCode = '0';
+    this.errorDescription = '';
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
     this.cleanSum_totalSquareMeters = null;
@@ -285,36 +286,38 @@ class VacBot_non950type {
   }
 
   _handle_error(event) {
-    let errorCode = null;
+    this.errorCode = '0';
     if (event.hasOwnProperty('code')) {
-      errorCode = event['code'];
+      this.errorCode = event['code'];
     }
-    if ((!errorCode) && (event.hasOwnProperty('errno'))) {
-      errorCode = event['errno'];
+    if ((!this.errorCode) && (event.hasOwnProperty('errno'))) {
+      this.errorCode = event['errno'];
     }
-    if ((!errorCode) && (event.hasOwnProperty('new'))) {
-      errorCode = event['new'];
-      if ((errorCode == '') && (event['old'] !== '')) {
-        this.error_event = '';
+    if ((!this.errorCode) && (event.hasOwnProperty('new'))) {
+      this.errorCode = event['new'];
+      if ((this.errorCode == '') && (event['old'] !== '')) {
+        this.errorCode = '0';
+        this.errorDescription = '';
         return;
       }
     }
-    if ((!errorCode) && (event.hasOwnProperty('error'))) {
-      errorCode = event['error'];
+    if ((!this.errorCode) && (event.hasOwnProperty('error'))) {
+      this.errorCode = event['error'];
     }
-    if ((!errorCode) && (event.hasOwnProperty('errs'))) {
-      errorCode = event['errs'];
+    if ((!this.errorCode) && (event.hasOwnProperty('errs'))) {
+      this.errorCode = event['errs'];
     }
-    if (errorCode) {
+    if (this.errorCode) {
       // NoError: Robot is operational
-      if (errorCode == '100') {
-        this.error_event = '';
+      if (this.errorCode == '100') {
+        this.errorCode = '0';
+        this.errorDescription = '';
         return;
       }
-      if (errorCodes[errorCode]) {
-        this.error_event = errorCodes[errorCode];
+      if (errorCodes[this.errorCode]) {
+        this.errorDescription = errorCodes[this.errorCode];
       } else {
-        this.error_event = 'unknown errorCode: ' + errorCode;
+        this.errorDescription = 'unknown errorCode: ' + this.errorCode;
       }
     }
   }
