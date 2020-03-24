@@ -19,8 +19,8 @@ class EcovacsMap {
       this.mapIndex = mapIndex;
       this.mapName = mapName;
       this.mapStatus = mapStatus;
-      this.mapIsCurrentMap = mapIsCurrentMap;
-      this.mapIsBuilt = mapIsBuilt;
+      this.mapIsCurrentMap = mapIsCurrentMap==1?true:false;
+      this.mapIsBuilt = mapIsBuilt==1?true:false;
     }
 
     toJSON() {
