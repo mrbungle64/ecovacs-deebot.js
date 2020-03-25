@@ -340,13 +340,20 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                if(this.bot.deebot_position["invalid"]==1 && this.bot.relocation_state == 'ok') {
-                    this.bot.relocation_state = 'required';
-                    this.emit("RelocationState", this.bot.relocation_state);
-                } else {
-                    this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                if(this.bot.deebot_position["changeFlag"]) {
+                    if(this.bot.deebot_position["isInvalid"]==true && this.bot.relocation_state == 'ok') {
+                        this.bot.relocation_state = 'required';
+                        this.emit("RelocationState", this.bot.relocation_state);
+                    } else {
+                        this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                        this.emit("DeebotPositionIsInvalid", this.bot.deebot_position["isInvalid"]);
+                    }
+                    this.bot.deebot_position["changeFlag"]=false;
                 }
-                this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]); 
+                if(this.bot.charge_position["changeFlag"]) {
+                    this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]); 
+                    this.bot.charge_position["changeFlag"]=false;
+                }                
                 break;
             case "waterinfo":
                 this.bot._handle_water_info(event);

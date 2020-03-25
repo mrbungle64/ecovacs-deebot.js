@@ -12,12 +12,14 @@ class VacBot_950type {
       x: null,
       y: null,
       a: null,
-      invalid: 0
+      isInvalid: false,
+      changeFlag: false
     };
     this.charge_position = {
       x: null,
       y: null,
-      a: null
+      a: null,
+      changeFlag: false
     };
     this.fan_speed = null;
     this.relocation_state = null;
@@ -170,32 +172,49 @@ class VacBot_950type {
           //as deebotPos and chargePos can also appear in other messages (CleanReport)
           //the handling should be extracted to a seperate function
           if(event['resultData']['deebotPos']) {
-            this.deebot_position = {
-              x:event['resultData']['deebotPos']['x'], 
-              y:event['resultData']['deebotPos']['y'], 
-              a:event['resultData']['deebotPos']['a'], 
-              invalid:event['resultData']['deebotPos']['invalid']
-            };
-            tools.envLog("[VacBot] *** Deebot Position = "
-              + 'x=' + this.deebot_position.x
-              + ' y=' + this.deebot_position.y
-              + ' a=' + this.deebot_position.a
-              + ' invalid=' + this.deebot_position.invalid
-            );
+            // check if position changed
+            if(event['resultData']['deebotPos']['x'] != this.deebot_position.x
+              || event['resultData']['deebotPos']['y'] != this.deebot_position.y
+              || event['resultData']['deebotPos']['a'] != this.deebot_position.a
+              || event['resultData']['deebotPos']['invalid'] != this.deebot_position.isInvalid
+              )
+            {
+              this.deebot_position = {
+                x:event['resultData']['deebotPos']['x'], 
+                y:event['resultData']['deebotPos']['y'], 
+                a:event['resultData']['deebotPos']['a'], 
+                isInvalid:event['resultData']['deebotPos']['invalid']==1?true:false,
+                changeFlag: true
+              };
+              tools.envLog("[VacBot] *** Deebot Position = "
+                + 'x=' + this.deebot_position.x
+                + ' y=' + this.deebot_position.y
+                + ' a=' + this.deebot_position.a
+                + ' isInvalid=' + this.deebot_position.isInvalid
+              );
+            }
           }
           
           if(event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
             //there can be more than one charging station only handles first charging station
-            this.charge_position = { 
-              x:event['resultData']['chargePos'][0]['x'], 
-              y:event['resultData']['chargePos'][0]['y'], 
-              a:event['resultData']['chargePos'][0]['a']
-            };
-            tools.envLog("[VacBot] *** Charge Position = "
-              + 'x=' + this.charge_position.x
-              + ' y=' + this.charge_position.y
-              + ' a=' + this.charge_position.a
-            );
+            // check if position changed
+            if(event['resultData']['chargePos']['x'] != this.charge_position.x
+              || event['resultData']['chargePos']['y'] != this.charge_position.y
+              || event['resultData']['chargePos']['a'] != this.charge_position.a
+              )
+            {
+              this.charge_position = { 
+                x:event['resultData']['chargePos'][0]['x'], 
+                y:event['resultData']['chargePos'][0]['y'], 
+                a:event['resultData']['chargePos'][0]['a'],
+                changeFlag: true
+              };
+              tools.envLog("[VacBot] *** Charge Position = "
+                + 'x=' + this.charge_position.x
+                + ' y=' + this.charge_position.y
+                + ' a=' + this.charge_position.a
+              );
+            }
           }
           return;
         }
