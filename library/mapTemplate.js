@@ -1,3 +1,4 @@
+const tools = require('./tools.js');
 const SPOTAREA_SUBTYPES = {
     '0': {"en": "Default  (A, B, C...)", "de": "Standard (A, B, C...)"},
     '1': {"en": "Living room", "de": "Wohnzimmer"},
@@ -67,7 +68,7 @@ class EcovacsMapSpotArea {
 }
 
 class EcovacsMapSpotAreaInfo {
-    constructor(mapID, mapSpotAreaID, mapSubType="0") {
+    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType="0") {
       this.mapID= mapID;
       this.mapSpotAreaID= mapSpotAreaID;
       if(mapSubType == "0") {
@@ -75,13 +76,18 @@ class EcovacsMapSpotAreaInfo {
       } else {
         this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]["en"]; //#LANG#
       }
+      this.mapSpotAreaConnections = mapSpotAreaConnections;
+      this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
+      this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
     }
 
     toJSON() {
         return {
             mapID: this.mapID,
             mapSpotAreaID: this.mapSpotAreaID,
-            mapSpotAreaName: this.mapSpotAreaName
+            mapSpotAreaName: this.mapSpotAreaName,
+            mapSpotAreaConnections: this.mapSpotAreaConnections,
+            mapSpotAreaBoundaries: this.mapSpotAreaBoundaries
         };
     }
 }
@@ -114,17 +120,17 @@ class EcovacsMapVirtualWall {
 
 
 class EcovacsMapVirtualWallInfo {
-    constructor(mapID, mapVirtualWallID, mapVirtualWallDimensions) {
+    constructor(mapID, mapVirtualWallID, mapVirtualWallBoundaries) {
       this.mapID= mapID;
       this.mapVirtualWallID= mapVirtualWallID;
-      this.mapVirtualWallDimensions= mapVirtualWallDimensions;
+      this.mapVirtualWallBoundaries= mapVirtualWallBoundaries;
     }
 
     toJSON() {
         return {
             mapID: this.mapID,
             mapVirtualWallID: this.mapVirtualWallID,
-            mapVirtualWallDimensions: this.mapVirtualWallDimensions
+            mapVirtualWallBoundaries: this.mapVirtualWallBoundaries
         };
     }
 }
@@ -157,21 +163,54 @@ class EcovacsMapNoMoppingZone {
 
 
 class EcovacsMapNoMoppingZoneInfo {
-    constructor(mapID, mapNoMopZoneID, mapNoMopZoneIDDimensions) {
+    constructor(mapID, mapNoMopZoneID, mapNoMopZoneIDBoundaries) {
       this.mapID= mapID;
       this.mapNoMopZoneID= mapNoMopZoneID;
-      this.mapNoMopZoneIDDimensions= mapNoMopZoneIDDimensions;
+      this.mapNoMopZoneIDBoundaries= mapNoMopZoneIDBoundaries;
     }
 
     toJSON() {
         return {
             mapID: this.mapID,
             mapNoMopZoneID: this.mapNoMopZoneID,
-            mapNoMopZoneIDDimensions: this.mapNoMopZoneIDDimensions
+            mapNoMopZoneIDBoundaries: this.mapNoMopZoneIDBoundaries
         };
     }
 }
 
+function createCanvasFromCoordinates(coordinates, width=100, height=100) {
+    let coordinateArray = coordinates.split(";");
+    const { createCanvas } = require('canvas')
+    const canvas = createCanvas(width, height)
+    const ctx = canvas.getContext('2d')
+    //ctx.translate(0, 2500);
+    ctx.beginPath();
+    for (let i = 0; i < coordinateArray.length; i++) {
+        let xi = coordinateArray[i].split(',')[0];
+        let yi = coordinateArray[i].split(',')[1];
+        if(i==0) {
+            ctx.moveTo(xi, yi);
+        } else {
+            ctx.lineTo(xi, yi);
+        }
+    }
+    ctx.closePath();
+    return canvas;
+}
+
+function isPositionInSpotArea(position, spotAreaInfos) {
+    // Source: https://github.com/substack/point-in-polygon/blob/master/index.js
+    // ray-casting algorithm based on
+    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+    
+    tools.envLog("[isPositionInSpotArea] spotAreaInfos: "+ JSON.stringify(spotAreaInfos));
+    for(let infoID in spotAreaInfos) {
+        if(spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]),  parseInt(position[1]))) {
+            return spotAreaInfos[infoID]["mapSpotAreaID"];
+        }
+    }
+    return 'unknown';
+};
 
 module.exports.EcovacsMap = EcovacsMap;
 module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
@@ -183,3 +222,5 @@ module.exports.EcovacsMapVirtualWallInfo = EcovacsMapVirtualWallInfo;
 module.exports.EcovacsMapNoMoppingZones = EcovacsMapNoMoppingZones;
 module.exports.EcovacsMapNoMoppingZone = EcovacsMapNoMoppingZone;
 module.exports.EcovacsMapNoMoppingZoneInfo = EcovacsMapNoMoppingZoneInfo;
+module.exports.isPositionInSpotArea = isPositionInSpotArea;
+module.exports.createCanvasFromCoordinates = createCanvasFromCoordinates;

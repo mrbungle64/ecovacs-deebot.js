@@ -13,6 +13,7 @@ class VacBot_950type {
       y: null,
       a: null,
       isInvalid: false,
+      currentSpotAreaID: 'unknown',
       changeFlag: false
     };
     this.charge_position = {
@@ -40,6 +41,7 @@ class VacBot_950type {
     this.currentMapIndex = null;
 
     this.maps = null;
+    this.mapSpotAreaInfos = [];
     
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
@@ -179,17 +181,21 @@ class VacBot_950type {
               || event['resultData']['deebotPos']['invalid'] != this.deebot_position.isInvalid
               )
             {
+              let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
+              tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
               this.deebot_position = {
                 x:event['resultData']['deebotPos']['x'], 
                 y:event['resultData']['deebotPos']['y'], 
                 a:event['resultData']['deebotPos']['a'], 
                 isInvalid:event['resultData']['deebotPos']['invalid']==1?true:false,
+                currentSpotAreaID: currentSpotAreaID,
                 changeFlag: true
               };
               tools.envLog("[VacBot] *** Deebot Position = "
                 + 'x=' + this.deebot_position.x
                 + ' y=' + this.deebot_position.y
                 + ' a=' + this.deebot_position.a
+                + ' currentSpotAreaID=' + this.deebot_position.currentSpotAreaID
                 + ' isInvalid=' + this.deebot_position.isInvalid
               );
             }
@@ -198,9 +204,9 @@ class VacBot_950type {
           if(event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
             //there can be more than one charging station only handles first charging station
             // check if position changed
-            if(event['resultData']['chargePos']['x'] != this.charge_position.x
-              || event['resultData']['chargePos']['y'] != this.charge_position.y
-              || event['resultData']['chargePos']['a'] != this.charge_position.a
+            if(event['resultData']['chargePos'][0]['x'] != this.charge_position.x
+              || event['resultData']['chargePos'][0]['y'] != this.charge_position.y
+              || event['resultData']['chargePos'][0]['a'] != this.charge_position.a
               )
             {
               this.charge_position = { 
@@ -305,9 +311,6 @@ class VacBot_950type {
             event['resultData']['info'][mapIndex]['built']
           )
         );
-
-        //this.send_command(new vacBotCommand.GetMapSpotAreas(event['resultData']['info'][mapIndex]['mid']));
-
         if (event['resultData']['info'][mapIndex]['using'] == 1) {
           this.currentMapName = event['resultData']['info'][mapIndex]['name'];
           this.currentMapMID = event['resultData']['info'][mapIndex]['mid'];
@@ -329,25 +332,58 @@ class VacBot_950type {
           mapSpotAreas.push(new map.EcovacsMapSpotArea(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
-        return {mapsetType: 'MapSpotAreas', mapsetData: mapSpotAreas};
+        return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
       } else if (event['resultData']['type'] == 'vw') { 
         let mapVirtualWalls = new map.EcovacsMapVirtualWalls(event['resultData']['mid'], event['resultData']['msid']);
         for ( let mapIndex in event['resultData']['subsets']) {
           mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
-        return {mapsetType: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
+        return {mapsetEvent: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
       } else if (event['resultData']['type'] == 'mw') { 
         let mapNoMopZones = new map.EcovacsMapNoMopZones(event['resultData']['mid'], event['resultData']['msid']);
         for ( let mapIndex in event['resultData']['subsets']) {
           mapNoMopZones.push(new map.EcovacsMapNoMopZones(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapNoMopZones = " + JSON.stringify(mapNoMopZones));
-        return {mapsetType: 'MapNoMopZones', mapsetData: mapNoMopZones};
+        return {mapsetEvent: 'MapNoMopZones', mapsetData: mapNoMopZones};
       }
 
       tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
-      return {mapsetType: 'error'};
+      return {mapsetEvent: 'error'};
+    }
+  }
+
+  _handle_mapsubset(event) {
+    if (event['resultCode'] == '0') {
+      if (event['resultData']['type'] == 'ar') { 
+        let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
+          event['resultData']['mid'], 
+          event['resultData']['mssid'], 
+          event['resultData']['connections'], 
+          event['resultData']['value'], 
+          event['resultData']['subtype']
+        );
+        if(typeof this.mapSpotAreaInfos[event['resultData']['mid']] === 'undefined') {
+          tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + event['resultData']['mid']);
+          this.mapSpotAreaInfos[event['resultData']['mid']] = []; //initialize array for mapSpotAreaInfos if not existing
+        }
+        this.mapSpotAreaInfos[event['resultData']['mid']].push(mapSpotAreaInfo);
+        tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + event['resultData']['mid'] + " = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']]));
+        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
+        return {mapsubsetEvent: 'MapSpotAreaInfo', mapsubsetData: mapSpotAreaInfo};
+      } else if (event['resultData']['type'] == 'vw') { 
+        let mapVirtualWallInfo = new map.EcovacsMapVirtualWallInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['value']);
+        tools.envLog("[VacBot] *** MapVirtualWallInfo = " + JSON.stringify(mapVirtualWallInfo));
+        return {mapsubsetEvent: 'MapVirtualWallInfo', mapsubsetData: mapVirtualWallInfo};
+      } else if (event['resultData']['type'] == 'mw') { 
+        let mapNoMopZoneInfo = new map.EcovacsMapNoMopZoneInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['value']);
+        tools.envLog("[VacBot] *** MapNoMopZoneInfo = " + JSON.stringify(mapNoMopZoneInfo));
+        return {mapsubsetEvent: 'MapNoMopZoneInfo', mapsubsetData: mapNoMopZoneInfo};
+      }
+
+      tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
+      return {mapsubsetEvent: 'error'};
     }
   }
 
@@ -500,6 +536,13 @@ class VacBot_950type {
           return;
         } else if (arguments.length === 2) {
           this.send_command(new vacBotCommand.GetMapSpotAreas(arguments[1]));
+        }        
+        break;
+      case "getspotareainfo":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.GetMapSpotAreaInfo(arguments[1], arguments[2]));
         }        
         break;
       case "geterror":

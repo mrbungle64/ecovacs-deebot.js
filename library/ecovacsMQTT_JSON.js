@@ -321,10 +321,16 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.emit("Maps", this.bot.maps);
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
-                let result = this.bot._handle_mapset(event);
-                if(result["mapsetType"] != 'error'){
-                    this.emit(result["mapsetType"], result["mapsetData"]);
+                let mapset = this.bot._handle_mapset(event);
+                if(mapset["mapsetEvent"] != 'error'){
+                    this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }                
+                break;
+            case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
+                let mapsubset = this.bot._handle_mapsubset(event);
+                if(mapsubset["mapsubsetEvent"] != 'error'){
+                    this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                }
                 break;
             case "lifespan":
                 this.bot._handle_life_span(event);
@@ -341,12 +347,13 @@ class EcovacsMQTT_JSON extends EventEmitter {
             case "pos":
                 this.bot._handle_position(event);
                 if(this.bot.deebot_position["changeFlag"]) {
-                    if(this.bot.deebot_position["isInvalid"]==true && this.bot.relocation_state == 'ok') {
+                    if(this.bot.deebot_position["isInvalid"]==true && (this.bot.relocation_state == 'ok' || this.bot.relocation_state == null)) {
                         this.bot.relocation_state = 'required';
                         this.emit("RelocationState", this.bot.relocation_state);
                     } else {
                         this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
                         this.emit("DeebotPositionIsInvalid", this.bot.deebot_position["isInvalid"]);
+                        this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
                     }
                     this.bot.deebot_position["changeFlag"]=false;
                 }
