@@ -43,8 +43,8 @@ class EcovacsMapSpotAreas {
       this.mapSpotAreas = [];
     }
 
-    push(mapSpotAreas) {
-        this.mapSpotAreas.push(mapSpotAreas);
+    push(mapSpotArea) {
+        this.mapSpotAreas.push(mapSpotArea);
     }
 
     toJSON() {
@@ -94,9 +94,13 @@ class EcovacsMapSpotAreaInfo {
 
 
 class EcovacsMapVirtualWalls {
-    constructor(mapID, mapVirtualWalls) {
+    constructor(mapID) {
       this.mapID= mapID;
-      this.mapVirtualWalls = mapVirtualWalls;
+      this.mapVirtualWalls = [];
+    }
+
+    push(mapVirtualWall) {
+        this.mapVirtualWalls.push(mapVirtualWall);
     }
 
     toJSON() {
@@ -136,10 +140,14 @@ class EcovacsMapVirtualWallInfo {
 }
 
 
-class EcovacsMapNoMoppingZones {
-    constructor(mapID, mapNoMopZones) {
+class EcovacsMapNoMopZones {
+    constructor(mapID) {
       this.mapID= mapID;
-      this.mapNoMopZones = mapNoMopZones;
+      this.mapNoMopZones = [];
+    }
+
+    push(mapNoMopZone) {
+        this.mapNoMopZones.push(mapNoMopZone);
     }
 
     toJSON() {
@@ -149,7 +157,7 @@ class EcovacsMapNoMoppingZones {
         };
     }
 }
-class EcovacsMapNoMoppingZone {
+class EcovacsMapNoMopZone {
     constructor(mapNoMopZoneID) {
       this.mapNoMopZoneID= mapNoMopZoneID;
     }
@@ -162,7 +170,7 @@ class EcovacsMapNoMoppingZone {
 }
 
 
-class EcovacsMapNoMoppingZoneInfo {
+class EcovacsMapNoMopZoneInfo {
     constructor(mapID, mapNoMopZoneID, mapNoMopZoneIDBoundaries) {
       this.mapID= mapID;
       this.mapNoMopZoneID= mapNoMopZoneID;
@@ -219,8 +227,8 @@ module.exports.EcovacsMapSpotAreaInfo = EcovacsMapSpotAreaInfo;
 module.exports.EcovacsMapVirtualWalls = EcovacsMapVirtualWalls;
 module.exports.EcovacsMapVirtualWall = EcovacsMapVirtualWall;
 module.exports.EcovacsMapVirtualWallInfo = EcovacsMapVirtualWallInfo;
-module.exports.EcovacsMapNoMoppingZones = EcovacsMapNoMoppingZones;
-module.exports.EcovacsMapNoMoppingZone = EcovacsMapNoMoppingZone;
-module.exports.EcovacsMapNoMoppingZoneInfo = EcovacsMapNoMoppingZoneInfo;
+module.exports.EcovacsMapNoMopZones = EcovacsMapNoMopZones;
+module.exports.EcovacsMapNoMopZone = EcovacsMapNoMopZone;
+module.exports.EcovacsMapNoMopZoneInfo = EcovacsMapNoMopZoneInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
 module.exports.createCanvasFromCoordinates = createCanvasFromCoordinates;

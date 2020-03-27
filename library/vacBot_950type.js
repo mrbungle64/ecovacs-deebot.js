@@ -334,14 +334,14 @@ class VacBot_950type {
         tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
         return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
       } else if (event['resultData']['type'] == 'vw') { 
-        let mapVirtualWalls = new map.EcovacsMapVirtualWalls(event['resultData']['mid'], event['resultData']['msid']);
+        let mapVirtualWalls = new map.EcovacsMapVirtualWalls(event['resultData']['mid']);
         for ( let mapIndex in event['resultData']['subsets']) {
           mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
         return {mapsetEvent: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
       } else if (event['resultData']['type'] == 'mw') { 
-        let mapNoMopZones = new map.EcovacsMapNoMopZones(event['resultData']['mid'], event['resultData']['msid']);
+        let mapNoMopZones = new map.EcovacsMapNoMopZones(event['resultData']['mid']);
         for ( let mapIndex in event['resultData']['subsets']) {
           mapNoMopZones.push(new map.EcovacsMapNoMopZones(event['resultData']['subsets'][mapIndex]['mssid']));
         }
