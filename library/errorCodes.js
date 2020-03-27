@@ -29,6 +29,7 @@ const CODES = {
     '206': 'IonSterilizeAbnormal',
     '207': 'IonSterilizeFault',
     '404': 'Recipient unavailable',
+    '500': 'Request Timeout',
     '601': 'ERROR_ClosedAIVISideAbnormal',
     '602': 'ClosedAIVIRollAbnormal',
     'UNKNOW': 'unknown'

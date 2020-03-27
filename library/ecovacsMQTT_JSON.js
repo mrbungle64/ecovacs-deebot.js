@@ -193,12 +193,13 @@ class EcovacsMQTT_JSON extends EventEmitter {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT_JSON] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            this.bot._handle_error({resultData: {code: json['errno']}});
                             throw "failure code: {errno}".format({
                                 errno: json['errno']
                             });
                         }
                     } catch (e) {
-                        console.error("[EcovacsMQTT_JSON] " + e.toString());
+                        console.error("[EcovacsMQTT_JSON] error: " + e.toString());
                         reject(e);
                     }
                 });
@@ -206,7 +207,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
 
             req.on('error', (e) => {
                 console.error(`[EcoVacsAPI] problem with request: ${e.message}`);
-                reject(e);
+                reject(e); 
             });
 
             // write data to request body
