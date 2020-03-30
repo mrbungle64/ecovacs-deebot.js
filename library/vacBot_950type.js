@@ -70,7 +70,6 @@ class VacBot_950type {
       // this.run('GetPosition');
       // this.run('GetCleanSpeed');
       // this.run('GetNetInfo');
-      // //this.run('GetCurrentMapName'); //deprecated, processed with GetMaps
       // this.run('GetMaps');
       // this.run('GetError');
       // this.run('GetSleepStatus');
@@ -174,11 +173,12 @@ class VacBot_950type {
           //as deebotPos and chargePos can also appear in other messages (CleanReport)
           //the handling should be extracted to a seperate function
           if(event['resultData']['deebotPos']) {
-            // check if position changed
+            // check if position changed or currentSpotAreaID unknown
             if(event['resultData']['deebotPos']['x'] != this.deebot_position.x
               || event['resultData']['deebotPos']['y'] != this.deebot_position.y
               || event['resultData']['deebotPos']['a'] != this.deebot_position.a
               || event['resultData']['deebotPos']['invalid'] != this.deebot_position.isInvalid
+              || this.deebot_position.currentSpotAreaID == 'unknown'
               )
             {
               let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
@@ -527,7 +527,6 @@ class VacBot_950type {
       case "getchargestate":
         this.send_command(new vacBotCommand.GetChargeState());
         break;
-      case "getcurrentmapname":
       case "getmaps":
         this.send_command(new vacBotCommand.GetMaps());
         break;
