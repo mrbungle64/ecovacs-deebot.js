@@ -358,9 +358,11 @@ class VacBot_950type {
     if (event['resultCode'] == '0') {
       if (event['resultData']['type'] == 'ar') { 
         let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
-          event['resultData']['mid'], 
+          //TODO: filter out reportMapSubSet events (missing data)
+          //reportMapSubSet event comes without map reference, replace
+          event['resultData']['mid']==undefined ? this.currentMapMID : event['resultData']['mid'],  
           event['resultData']['mssid'], 
-          event['resultData']['connections'], 
+          event['resultData']['connections'], //reportMapSubSet event comes without connections
           event['resultData']['value'], 
           event['resultData']['subtype']
         );
