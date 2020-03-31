@@ -193,12 +193,13 @@ class EcovacsMQTT_JSON extends EventEmitter {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT_JSON] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            this.bot._handle_error({resultData: {code: json['errno']}});
                             throw "failure code: {errno}".format({
                                 errno: json['errno']
                             });
                         }
                     } catch (e) {
-                        console.error("[EcovacsMQTT_JSON] " + e.toString());
+                        console.error("[EcovacsMQTT_JSON] error: " + e.toString());
                         reject(e);
                     }
                 });
@@ -206,7 +207,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
 
             req.on('error', (e) => {
                 console.error(`[EcoVacsAPI] problem with request: ${e.message}`);
-                reject(e);
+                reject(e); 
             });
 
             // write data to request body
@@ -318,6 +319,19 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.emit("CurrentMapName", this.bot.currentMapName);
                 this.emit("CurrentMapMID", this.bot.currentMapMID);
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                this.emit("Maps", this.bot.maps);
+                break;
+            case "mapset": //handle spotAreas, virtualWalls, noMopZones
+                let mapset = this.bot._handle_mapset(event);
+                if(mapset["mapsetEvent"] != 'error'){
+                    this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
+                }                
+                break;
+            case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
+                let mapsubset = this.bot._handle_mapsubset(event);
+                if(mapsubset["mapsubsetEvent"] != 'error'){
+                    this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                }
                 break;
             case "lifespan":
                 this.bot._handle_life_span(event);
@@ -333,13 +347,21 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                if(this.bot.deebot_position["invalid"]==1 && this.bot.relocation_state == 'ok') {
-                    this.bot.relocation_state = 'required';
-                    this.emit("RelocationState", this.bot.relocation_state);
-                } else {
-                    this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                if(this.bot.deebot_position["changeFlag"]) {
+                    if(this.bot.deebot_position["isInvalid"]==true && (this.bot.relocation_state == 'ok' || this.bot.relocation_state == null)) {
+                        this.bot.relocation_state = 'required';
+                        this.emit("RelocationState", this.bot.relocation_state);
+                    } else {
+                        this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                        this.emit("DeebotPositionIsInvalid", this.bot.deebot_position["isInvalid"]);
+                        this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
+                    }
+                    this.bot.deebot_position["changeFlag"]=false;
                 }
-                this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]); 
+                if(this.bot.charge_position["changeFlag"]) {
+                    this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]); 
+                    this.bot.charge_position["changeFlag"]=false;
+                }                
                 break;
             case "waterinfo":
                 this.bot._handle_water_info(event);
@@ -366,7 +388,8 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case "error":
                 this.bot._handle_error(event);
-                this.emit("Error", this.bot.error_event);
+                this.emit("Error", this.bot.errorDescription);
+                this.emit('ErrorCode', this.bot.errorCode);
                 break;
             case 'totalstats':
                 this.bot._handle_cleanSum(event);
