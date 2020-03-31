@@ -39,6 +39,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.0
+* (boriswerner) Added map/spotArea template and functionality
+* (boriswerner) Added enhanced map/spotArea functionality for Ozmo 950
+
 ### 0.3.9
 * Several enhancements and fixes
 
