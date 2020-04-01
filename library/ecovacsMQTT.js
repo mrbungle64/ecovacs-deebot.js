@@ -246,6 +246,9 @@ class EcovacsMQTT extends EventEmitter {
                 }
             }
         }
+        if (name === 'ctl') {
+            name = action.name;
+        }
         let result = {};
         if (name) {
             result = {
@@ -359,12 +362,22 @@ class EcovacsMQTT extends EventEmitter {
                 }
                 this.emit('DeebotPosition', deebotPosition);
                 break;
+            case 'ChargePosition':
+                this.bot._handle_charge_position(event);
+                this.emit('ChargePosition', this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
+                break;
             case "WaterLevel":
                 this.bot._handle_water_level(event);
                 break;
             case 'DustCaseST':
                 this.bot._handle_dustbox_info(event);
                 this.emit('DustCaseInfo', this.bot.dustbox_info);
+                break;
+            case 'CleanSum':
+                this.bot._handle_cleanSum(event);
+                this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
+                this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
+                this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
