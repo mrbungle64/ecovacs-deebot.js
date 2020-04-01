@@ -290,22 +290,20 @@ class VacBot_non950type {
     if (event.hasOwnProperty('code')) {
       this.errorCode = event['code'];
     }
-    if ((!this.errorCode) && (event.hasOwnProperty('errno'))) {
+    if ((this.errorCode === '0') && (event.hasOwnProperty('errno'))) {
       this.errorCode = event['errno'];
     }
-    if ((!this.errorCode) && (event.hasOwnProperty('new'))) {
+    if ((this.errorCode === '0') && (event.hasOwnProperty('error'))) {
+      this.errorCode = event['error'];
+    }
+    if ((this.errorCode === '0') && (event.hasOwnProperty('errs'))) {
+      this.errorCode = event['errs'];
+    }
+    if ((this.errorCode === '0') && (event.hasOwnProperty('new'))) {
       this.errorCode = event['new'];
       if ((this.errorCode == '') && (event['old'] !== '')) {
         this.errorCode = '0';
-        this.errorDescription = '';
-        return;
       }
-    }
-    if ((!this.errorCode) && (event.hasOwnProperty('error'))) {
-      this.errorCode = event['error'];
-    }
-    if ((!this.errorCode) && (event.hasOwnProperty('errs'))) {
-      this.errorCode = event['errs'];
     }
     if (this.errorCode) {
       // NoError: Robot is operational
