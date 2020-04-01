@@ -34,13 +34,13 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
 };
 
 exports.FAN_SPEED_TO_ECOVACS = {
-    'normal': 'standard',
-    'high': 'strong'
+    2: 'standard', // normal
+    3: 'strong' // high
 };
 
 exports.FAN_SPEED_FROM_ECOVACS = {
-    'standard': 'normal',
-    'strong': 'high'
+    'standard': 2, // normal
+    'strong': 3 // high
 };
 
 exports.CHARGE_MODE_TO_ECOVACS = {
