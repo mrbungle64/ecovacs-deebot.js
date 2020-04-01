@@ -82,6 +82,8 @@ function getEventNameForCommandString(str) {
             return 'SleepStatus';
         case 'cleansum':
             return 'CleanSum';
+        case 'cleanspeed':
+            return 'CleanSpeed';
         default:
             envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;

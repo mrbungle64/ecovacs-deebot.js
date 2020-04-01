@@ -182,19 +182,21 @@ class VacBot_non950type {
           tools.envLog("[VacBot] *** lastAreaValues invalid pValues = " + pValues);
         }
       }
+    }
+  }
 
-      if (event.attrs.hasOwnProperty('speed')) {
-        let fan = event.attrs['speed'];
-        if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
-          fan = dictionary.FAN_SPEED_FROM_ECOVACS[fan];
-          this.fan_speed = fan;
-          tools.envLog("[VacBot] fan speed: ", fan);
-        } else {
-          tools.envLog("[VacBot] Unknown fan speed: ", fan);
-        }
+  _handle_clean_speed(event) {
+    if (event.attrs.hasOwnProperty('speed')) {
+      let fan = event.attrs['speed'];
+      if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
+        fan = dictionary.FAN_SPEED_FROM_ECOVACS[fan];
+        this.fan_speed = fan;
+        tools.envLog("[VacBot] fan speed: ", fan);
       } else {
-        tools.envLog("[VacBot] couldn't parse clean report ", event);
+        tools.envLog("[VacBot] Unknown fan speed: ", fan);
       }
+    } else {
+      tools.envLog("[VacBot] couldn't parse clean speed ", event);
     }
   }
 
