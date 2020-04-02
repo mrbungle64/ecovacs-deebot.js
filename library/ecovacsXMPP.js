@@ -98,9 +98,34 @@ class EcovacsXMPP extends EventEmitter {
                     if ((secondChild.attrs.hasOwnProperty('a')) && (secondChild.attrs.hasOwnProperty('l')) && (secondChild.attrs.hasOwnProperty('c'))) {
                         command = 'CleanSum';
                     }
+                    if ((secondChild.attrs.hasOwnProperty('i')) && (secondChild.attrs.hasOwnProperty('m'))) {
+                        let id = parseInt(secondChild.attrs.id);
+                        if (id === 999999998) {
+                            command = 'MapP';
+                        }
+                    }
+                    if (secondChild.attrs.hasOwnProperty('tp')) {
+                        let id = parseInt(secondChild.attrs.id);
+                        if (id === 999999996) {
+                            command = 'MapSet';
+                        }
+                    }
                 }
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
+                        case "MapP":
+                            this.bot._handle_cachedmapinfo(secondChild);
+                            this.emit("CurrentMapName", this.bot.currentMapName);
+                            this.emit("CurrentMapMID", this.bot.currentMapMID);
+                            this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                            this.emit("Maps", this.bot.maps);
+                            break;
+                        case "MapSet":
+                            let mapsubset = this.bot._handle_mapset(secondChild);
+                            if (mapsubset["mapsubsetEvent"] != 'error'){
+                                this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                            }
+                            break;
                         case 'ChargeState':
                             this.bot._handle_charge_state(secondChild.children[0]);
                             this.emit('ChargeState', this.bot.charge_status);

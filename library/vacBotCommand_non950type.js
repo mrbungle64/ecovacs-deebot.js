@@ -235,6 +235,39 @@ class GetCleanSum extends VacBotCommand_non950type {
     }
 }
 
+class GetMapM extends VacBotCommand_non950type {
+    constructor() {
+        super('GetMapM', {
+            'id': '999999998'
+        });
+    }
+}
+
+class PullMP extends VacBotCommand_non950type {
+    constructor(pid) {
+        if (pid) {
+            let id = 999999800 + pid;
+            super('PullMP', {
+                'id': id,
+                'pid': pid
+            });
+        }
+    }
+}
+
+class GetMapSet extends VacBotCommand_non950type {
+    // sa = spot areas
+    // vw = virtual walls
+    constructor(tp = 'sa') {
+        if (tp !== '') {
+            super('GetMapSet', {
+                'tp': tp,
+                'id': '999999996'
+            });
+        }
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -261,3 +294,6 @@ module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetMapM = GetMapM;
+module.exports.PullMP = PullMP;
+module.exports.GetMapSet = GetMapSet;

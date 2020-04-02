@@ -2,6 +2,7 @@ const dictionary = require('./ecovacsConstants_non950type');
 const vacBotCommand = require('./vacBotCommand_non950type');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
+const map = require('./mapTemplate.js');
 
 class VacBot_non950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
@@ -39,6 +40,13 @@ class VacBot_non950type {
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
+
+    this.currentMapName = 'standard';
+    this.currentMapMID = null;
+    this.currentMapIndex = 0;
+
+    this.maps = null;
+    this.mapSpotAreaInfos = [];
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -220,6 +228,46 @@ class VacBot_non950type {
       this.water_level = event.attrs['v'];
       tools.envLog("[VacBot] *** water_level = %s", this.water_level);
     }
+  }
+
+  _handle_cachedmapinfo(event) {
+    this.currentMapMID = event.attrs['i'];
+
+    this.maps = {
+      "maps": []
+    };
+    this.maps["maps"].push(
+        new map.EcovacsMap(event.attrs['i'], 0, this.currentMapName, true, true, true)
+    );
+
+    tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
+    tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
+    tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
+  }
+
+  _handle_mapset(event) {
+    if (event.attrs['tp'] === 'sa') {
+      let mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, event.attrs['msid']);
+      for (let mapIndex in event.children) {
+        if (event.children.hasOwnProperty(mapIndex)) {
+          mapSpotAreas.push(new map.EcovacsMapSpotArea(event.children[mapIndex].attrs['mid']));
+        }
+      }
+      tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
+      return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
+    } else if (event.attrs['tp'] === 'vw') {
+      let mapVirtualWalls = new map.EcovacsMapVirtualWalls(this.currentMapMID);
+      for (let mapIndex in event.children) {
+        if (event.children.hasOwnProperty(mapIndex)) {
+          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(event.children[mapIndex].attrs['mid']));
+        }
+      }
+      tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
+      return {mapsetEvent: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
+    }
+
+    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event.attrs['tp']));
+    return {mapsetEvent: 'error'};
   }
 
   _handle_deebot_position(event) {
@@ -466,6 +514,11 @@ class VacBot_non950type {
         break;
       case "getcleansum":
         this.send_command(new vacBotCommand.GetCleanSum());
+        break;
+      case "getmapdata":
+        this.send_command(new vacBotCommand.GetMapM());
+        this.send_command(new vacBotCommand.GetMapSet('sa'));
+        this.send_command(new vacBotCommand.GetMapSet('vw'));
         break;
     }
   }

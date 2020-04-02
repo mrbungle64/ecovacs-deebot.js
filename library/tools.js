@@ -84,6 +84,16 @@ function getEventNameForCommandString(str) {
             return 'CleanSum';
         case 'cleanspeed':
             return 'CleanSpeed';
+        case 'mapset':
+            return 'MapSet';
+        case 'mapp':
+            return 'MapP';
+        case 'getmapdata':
+            return 'GetMapData';
+        case 'pullmp':
+            return 'PullMP';
+        case 'pullm':
+            return 'PullM';
         default:
             envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;
