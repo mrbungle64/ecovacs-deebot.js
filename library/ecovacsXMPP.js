@@ -110,6 +110,12 @@ class EcovacsXMPP extends EventEmitter {
                             command = 'MapSet';
                         }
                     }
+                    if ((secondChild.attrs.hasOwnProperty('m'))) {
+                        let id = parseInt(secondChild.attrs.id);
+                        if ((id >= 999999900) && (id <= 999999979)) {
+                            command = 'PullM';
+                        }
+                    }
                 }
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
@@ -121,8 +127,14 @@ class EcovacsXMPP extends EventEmitter {
                             this.emit("Maps", this.bot.maps);
                             break;
                         case "MapSet":
-                            let mapsubset = this.bot._handle_mapset(secondChild);
-                            if (mapsubset["mapsubsetEvent"] != 'error'){
+                            let mapset = this.bot._handle_mapset(secondChild);
+                            if(mapset["mapsetEvent"] != 'error'){
+                                this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
+                            }
+                            break;
+                        case "PullM":
+                            let mapsubset = this.bot._handle_mapsubset(secondChild);
+                            if(mapsubset["mapsubsetEvent"] != 'error'){
                                 this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                             }
                             break;

@@ -255,6 +255,21 @@ class PullMP extends VacBotCommand_non950type {
     }
 }
 
+class PullM extends VacBotCommand_non950type {
+    constructor(pid, tp, msid, mid) {
+        let id = 999999900 + pid;
+        if (tp === 'vw') {
+            id = id + 40;
+        }
+        super('PullM', {
+            'id': id,
+            'tp': tp,
+            'msid': msid,
+            'mid': mid
+        });
+    }
+}
+
 class GetMapSet extends VacBotCommand_non950type {
     // sa = spot areas
     // vw = virtual walls
@@ -296,4 +311,5 @@ module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetCleanSum = GetCleanSum;
 module.exports.GetMapM = GetMapM;
 module.exports.PullMP = PullMP;
+module.exports.PullM = PullM;
 module.exports.GetMapSet = GetMapSet;

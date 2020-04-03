@@ -240,6 +240,8 @@ class VacBot_non950type {
         new map.EcovacsMap(event.attrs['i'], 0, this.currentMapName, true, true, true)
     );
 
+    this.run('GetMapSet');
+
     tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
     tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
     tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
@@ -250,24 +252,75 @@ class VacBot_non950type {
       let mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, event.attrs['msid']);
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
-          mapSpotAreas.push(new map.EcovacsMapSpotArea(event.children[mapIndex].attrs['mid']));
+          let mid = event.children[mapIndex].attrs['mid'];
+          mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
+          this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
         }
       }
       tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
-      return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
+      return {
+        mapsetEvent: 'MapSpotAreas',
+        mapsetData: mapSpotAreas
+      };
     } else if (event.attrs['tp'] === 'vw') {
       let mapVirtualWalls = new map.EcovacsMapVirtualWalls(this.currentMapMID);
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
-          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(event.children[mapIndex].attrs['mid']));
+          let mid = event.children[mapIndex].attrs['mid'];
+          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
+          this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
         }
       }
       tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
-      return {mapsetEvent: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
+      return {
+        mapsetEvent: 'MapVirtualWalls',
+        mapsetData: mapVirtualWalls
+      };
     }
 
     tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event.attrs['tp']));
-    return {mapsetEvent: 'error'};
+    return {
+      mapsetEvent: 'error'
+    };
+  }
+
+  _handle_mapsubset(event) {
+    const id = parseInt(event.attrs['id']) - 999999900;
+    const mData = event.attrs['m'];
+
+    tools.envLog("[VacBot] *** _handle_mapsubset " + JSON.stringify(event));
+    if (id <= 39) {
+      // spot areas ('sa')
+      let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
+          this.currentMapMID,
+          id,
+          '', //reportMapSubSet event comes without connections
+          mData,
+          '0'
+      );
+      if (typeof this.mapSpotAreaInfos[this.currentMapMID] === 'undefined') {
+        tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + this.currentMapMID);
+        this.mapSpotAreaInfos[this.currentMapMID] = []; //initialize array for mapSpotAreaInfos if not existing
+      }
+      this.mapSpotAreaInfos[this.currentMapMID].push(mapSpotAreaInfo);
+      //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + this.currentMapMID + " = " + JSON.stringify(this.mapSpotAreaInfos[this.currentMapMID]));
+      tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
+      return {
+        mapsubsetEvent: 'MapSpotAreaInfo',
+        mapsubsetData: mapSpotAreaInfo
+      };
+    } else if (id <= 79) {
+      // virtual walls ('vw')
+      let mapVirtualWallInfo = new map.EcovacsMapVirtualWallInfo(this.currentMapMID, id, mData);
+      tools.envLog("[VacBot] *** MapVirtualWallInfo = " + JSON.stringify(mapVirtualWallInfo));
+      return {
+        mapsubsetEvent: 'MapVirtualWallInfo',
+        mapsubsetData: mapVirtualWallInfo
+      };
+    }
+
+    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event.attrs['tp']));
+    return {mapsubsetEvent: 'error'};
   }
 
   _handle_deebot_position(event) {
@@ -515,10 +568,24 @@ class VacBot_non950type {
       case "getcleansum":
         this.send_command(new vacBotCommand.GetCleanSum());
         break;
-      case "getmapdata":
-        this.send_command(new vacBotCommand.GetMapM());
+      case "getmapset":
         this.send_command(new vacBotCommand.GetMapSet('sa'));
         this.send_command(new vacBotCommand.GetMapSet('vw'));
+        break;
+      case "getmapdata":
+        this.send_command(new vacBotCommand.GetMapM());
+        break;
+      case "pullmp":
+        if (arguments.length < 2) {
+          return;
+        }
+        this.send_command(new vacBotCommand.PullMP(arguments[1]));
+        break;
+      case "pullm":
+        if (arguments.length < 5) {
+          return;
+        }
+        this.send_command(new vacBotCommand.PullM(arguments[1],arguments[2],arguments[3],arguments[4]));
         break;
     }
   }
