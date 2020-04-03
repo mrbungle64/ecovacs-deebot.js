@@ -12,7 +12,9 @@ class VacBot_non950type {
       x: null,
       y: null,
       a: null,
-      invalid: 0
+      isInvalid: false,
+      currentSpotAreaID: 'unknown',
+      changeFlag: false
     };
     this.charge_position = {
       x: null,
@@ -325,10 +327,17 @@ class VacBot_non950type {
 
   _handle_deebot_position(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
+      const posX = event.attrs['p'].split(",")[0];
+      const posY = event.attrs['p'].split(",")[1];
+      const angle = event.attrs['a'];
+      let currentSpotAreaID = map.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
       this.deebot_position = {
-        x: event.attrs['p'].split(",")[0],
-        y: event.attrs['p'].split(",")[1],
-        a: event.attrs['a']
+        x: posX,
+        y: posY,
+        a: angle,
+        isInvalid: false,
+        currentSpotAreaID: currentSpotAreaID,
+        changeFlag: true
       };
       tools.envLog("[VacBot] *** deebot_position = %s", JSON.stringify(this.deebot_position));
     }

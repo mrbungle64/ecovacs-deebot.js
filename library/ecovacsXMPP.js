@@ -189,6 +189,7 @@ class EcovacsXMPP extends EventEmitter {
                         case 'DeebotPosition':
                             this.bot._handle_deebot_position(secondChild);
                             this.emit('DeebotPosition', this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                            this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
                             break;
                         case 'ChargePosition':
                             this.bot._handle_charge_position(secondChild);
