@@ -380,6 +380,10 @@ class EcovacsMQTT extends EventEmitter {
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;
+            case 'SleepStatus':
+                this.bot._handle_sleep_status(event);
+                this.emit("SleepStatus", this.bot.sleep_status);
+                break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
                 break;
