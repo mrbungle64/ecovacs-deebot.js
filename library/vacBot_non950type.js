@@ -527,6 +527,12 @@ class VacBot_non950type {
       case "cleanspeed":
         this.send_command(new vacBotCommand.GetCleanSpeed());
         break;
+      case "setcleanspeed":
+        if (arguments.length < 2) {
+          return;
+        }
+        this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
+        break;
       case "getchargestate":
       case "chargestate":
         this.send_command(new vacBotCommand.GetChargeState());
