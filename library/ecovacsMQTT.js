@@ -265,14 +265,14 @@ class EcovacsMQTT extends EventEmitter {
             result.attrs[firstChild.attributes[i].name] = firstChild.attributes[i].value;
             if (firstChild.childNodes) {
                 for (let c = 0; c < firstChild.childNodes.length; c++) {
-                    let newObj = {
+                    let childObject = {
                         'event': firstChild.childNodes[c].tagName,
                         'attrs': {}
                     };
                     for (let ca = 0; ca < firstChild.childNodes[c].attributes.length; ca++) {
-                        newObj['attrs'][firstChild.childNodes[c].attributes[ca].name] = firstChild.childNodes[c].attributes[ca].value;
+                        childObject['attrs'][firstChild.childNodes[c].attributes[ca].name] = firstChild.childNodes[c].attributes[ca].value;
                     }
-                    result.children.push(newObj);
+                    result.children.push(childObject);
                 }
             }
         }
@@ -280,59 +280,59 @@ class EcovacsMQTT extends EventEmitter {
         return result;
     }
 
-    _handle_command(command, result) {
+    _handle_command(command, event) {
         //tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         switch (tools.getEventNameForCommandString(command)) {
             case "MapP":
-                this.bot._handle_cachedmapinfo(result);
+                this.bot._handle_cachedmapinfo(event);
                 this.emit("CurrentMapName", this.bot.currentMapName);
                 this.emit("CurrentMapMID", this.bot.currentMapMID);
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                 this.emit("Maps", this.bot.maps);
                 break;
             case "MapSet":
-                let mapset = this.bot._handle_mapset(result);
+                let mapset = this.bot._handle_mapset(event);
                 if(mapset["mapsetEvent"] != 'error'){
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "PullM":
-                let mapsubset = this.bot._handle_mapsubset(result);
+                let mapsubset = this.bot._handle_mapsubset(event);
                 if(mapsubset["mapsubsetEvent"] != 'error'){
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
             case 'ChargeState':
-                this.bot._handle_charge_state(result.children[0]);
+                this.bot._handle_charge_state(event.children[0]);
                 this.emit('ChargeState', this.bot.charge_status);
                 break;
             case 'BatteryInfo':
-                this.bot._handle_battery_info(result.children[0]);
+                this.bot._handle_battery_info(event.children[0]);
                 this.emit('BatteryInfo', this.bot.battery_status);
                 break;
             case 'CleanReport':
-                if (result.children.length > 0) {
-                    this.bot._handle_clean_report(result.children[0]);
+                if (event.children.length > 0) {
+                    this.bot._handle_clean_report(event.children[0]);
                 } else {
-                    this.bot._handle_clean_report(result);
+                    this.bot._handle_clean_report(event);
                 }
                 this.emit('CleanReport', this.bot.clean_status);
-                if (this.bot.lastAreaValues) {
-                    this.emit("LastAreaValues", this.bot.lastAreaValues);
+                if (this.bot.lastUsedAreaValues) {
+                    this.emit("LastUsedAreaValues", this.bot.lastUsedAreaValues);
                 }
                 break;
             case "CleanSpeed":
-                this.bot._handle_clean_speed(result);
+                this.bot._handle_clean_speed(event);
                 this.emit("CleanSpeed", this.bot.fan_speed);
                 break;
             case 'Error':
-                this.bot._handle_error(result.attrs);
+                this.bot._handle_error(event.attrs);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 break;
             case 'LifeSpan':
-                this.bot._handle_life_span(result.attrs);
-                const component = dictionary.COMPONENT_FROM_ECOVACS[result.attrs.type];
+                this.bot._handle_life_span(event.attrs);
+                const component = dictionary.COMPONENT_FROM_ECOVACS[event.attrs.type];
                 if (component) {
                     if (this.bot.components[component]) {
                         this.emit('LifeSpan_' + component, this.bot.components[component]);
@@ -340,37 +340,37 @@ class EcovacsMQTT extends EventEmitter {
                 }
                 break;
             case 'WaterLevel':
-                this.bot._handle_water_level(result);
+                this.bot._handle_water_level(event);
                 this.emit('WaterLevel', this.bot.water_level);
                 break;
             case 'WaterBoxInfo':
-                this.bot._handle_waterbox_info(result);
+                this.bot._handle_waterbox_info(event);
                 this.emit('WaterBoxInfo', this.bot.waterbox_info);
                 break;
             case 'DustCaseST':
-                this.bot._handle_dustbox_info(result);
+                this.bot._handle_dustbox_info(event);
                 this.emit('DustCaseInfo', this.bot.dustbox_info);
                 break;
             case 'DeebotPosition':
-                this.bot._handle_deebot_position(result);
+                this.bot._handle_deebot_position(event);
                 this.emit('DeebotPosition', this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
                 this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
                 break;
             case 'ChargePosition':
-                this.bot._handle_charge_position(result);
+                this.bot._handle_charge_position(event);
                 this.emit('ChargePosition', this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
                 break;
             case 'NetInfo':
-                this.bot._handle_net_info(result.attrs);
+                this.bot._handle_net_info(event.attrs);
                 this.emit("NetInfoIP", this.bot.netInfoIP);
                 this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
                 break;
             case 'SleepStatus':
-                this.bot._handle_sleep_status(result);
+                this.bot._handle_sleep_status(event);
                 this.emit("SleepStatus", this.bot.sleep_status);
                 break;
             case 'CleanSum':
-                this.bot._handle_cleanSum(result);
+                this.bot._handle_cleanSum(event);
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);

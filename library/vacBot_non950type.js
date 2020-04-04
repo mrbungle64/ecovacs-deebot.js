@@ -21,7 +21,7 @@ class VacBot_non950type {
       y: null,
       a: null
     };
-    this.lastAreaValues = null;
+    this.lastUsedAreaValues = null;
     this.fan_speed = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -186,7 +186,7 @@ class VacBot_non950type {
           const y1 = parseFloat(pValues.split(",")[1]).toFixed(1);
           const x2 = parseFloat(pValues.split(",")[2]).toFixed(1);
           const y2 = parseFloat(pValues.split(",")[3]).toFixed(1);
-          this.lastAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
+          this.lastUsedAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
           tools.envLog("[VacBot] *** lastAreaValues = " + pValues);
         } else {
           tools.envLog("[VacBot] *** lastAreaValues invalid pValues = " + pValues);
