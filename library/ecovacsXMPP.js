@@ -155,7 +155,7 @@ class EcovacsXMPP extends EventEmitter {
                             break;
                         case "CleanSpeed":
                             this.bot._handle_clean_speed(secondChild.children[0]);
-                            this.emit("FanSpeed", this.bot.fan_speed);
+                            this.emit("CleanSpeed", this.bot.fan_speed);
                             break;
                         case 'Error':
                             this.bot._handle_error(secondChild.attrs);

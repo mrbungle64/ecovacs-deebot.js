@@ -201,9 +201,9 @@ class VacBot_non950type {
       if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
         fan = dictionary.FAN_SPEED_FROM_ECOVACS[fan];
         this.fan_speed = fan;
-        tools.envLog("[VacBot] fan speed: ", fan);
+        tools.envLog("[VacBot] clean speed: ", fan);
       } else {
-        tools.envLog("[VacBot] Unknown fan speed: ", fan);
+        tools.envLog("[VacBot] Unknown clean speed: ", fan);
       }
     } else {
       tools.envLog("[VacBot] couldn't parse clean speed ", event);
