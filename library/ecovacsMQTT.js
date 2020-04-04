@@ -322,7 +322,7 @@ class EcovacsMQTT extends EventEmitter {
                 }
                 break;
             case "CleanSpeed":
-                this.bot._handle_clean_speed(result.children[0]);
+                this.bot._handle_clean_speed(result);
                 this.emit("FanSpeed", this.bot.fan_speed);
                 break;
             case 'Error':

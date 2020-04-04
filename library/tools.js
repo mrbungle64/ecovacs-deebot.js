@@ -80,6 +80,7 @@ function getEventNameForCommandString(str) {
             return 'SleepStatus';
         case 'cleansum':
             return 'CleanSum';
+        case 'cleanstate':
         case 'cleanspeed':
             return 'CleanSpeed';
         case 'mapset':

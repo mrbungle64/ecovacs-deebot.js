@@ -162,7 +162,7 @@ class SetTime extends VacBotCommand_non950type {
 }
 
 class GetCleanSpeed extends VacBotCommand_non950type {
-    constructor(component) {
+    constructor() {
         super('GetCleanSpeed');
     }
 }
