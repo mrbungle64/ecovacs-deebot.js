@@ -96,7 +96,6 @@ class EcovacsMQTT extends EventEmitter {
 
     send_command(action, recipient) {
         let c = this._wrap_command(action, recipient);
-        tools.envLog("[EcovacsMQTT] send_command: %s", JSON.stringify(c, getCircularReplacer()));
         this._call_ecovacs_device_api(c).then((json) => {
             this._handle_command_response(action, json);
         }).catch((e) => {
@@ -125,17 +124,11 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _wrap_command_getPayload(action) {
-        tools.envLog("[EcovacsMQTT] wrap_command_getPayload args: ", action.args);
-
         let xml = action.to_xml();
         // Remove the td from ctl xml for RestAPI
-        tools.envLog("[EcovacsMQTT] wrap_command DOMParser().parseFromString: %s", xml.toString());
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
-
         let payload = payloadXml.toString();
-        tools.envLog("[EcovacsMQTT] wrap_command payload: %s", payload);
-
         return payload;
     }
 
@@ -150,7 +143,6 @@ class EcovacsMQTT extends EventEmitter {
             };
 
             url = new URL(url);
-            tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
             const reqOptions = {
                 hostname: url.hostname,
                 path: url.pathname,
@@ -190,7 +182,6 @@ class EcovacsMQTT extends EventEmitter {
             });
 
             // write data to request body
-            tools.envLog("[EcovacsMQTT] Sending", JSON.stringify(params, getCircularReplacer()));
             req.write(JSON.stringify(params));
             req.end();
         });

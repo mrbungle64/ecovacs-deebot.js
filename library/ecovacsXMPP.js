@@ -158,13 +158,11 @@ class EcovacsXMPP extends EventEmitter {
                             this.emit("FanSpeed", this.bot.fan_speed);
                             break;
                         case 'Error':
-                            tools.envLog('[EcovacsXMPP] Received an error for action: %s', secondChild.attrs);
                             this.bot._handle_error(secondChild.attrs);
                             this.emit('Error', this.bot.errorDescription);
                             this.emit('ErrorCode', this.bot.errorCode);
                             break;
                         case 'LifeSpan':
-                            tools.envLog('[EcovacsXMPP] Received an LifeSpan Stanza %s', JSON.stringify(secondChild.attrs));
                             this.bot._handle_life_span(secondChild.attrs);
                             const component = dictionary.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                             if (component) {
@@ -174,7 +172,6 @@ class EcovacsXMPP extends EventEmitter {
                             }
                             break;
                         case 'WaterLevel':
-                            tools.envLog('[EcovacsXMPP] Received an WaterLevel Stanza %s', secondChild.attrs);
                             this.bot._handle_water_level(secondChild);
                             this.emit('WaterLevel', this.bot.water_level);
                             break;

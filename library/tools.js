@@ -39,12 +39,10 @@ function isValidJsonString(str) {
 }
 
 function getEventNameForCommandString(str) {
-    envLog("[tools] getEventNameForCommandString() str: %s", str);
     let command = str.toLowerCase().replace(/^_+|_+$/g, '').replace("get","").replace("server", "");
     if(command.startsWith("on")) { //950 series incoming events
         command = command.substring(2);
     }
-    envLog("[tools] getEventNameForCommandString() command: %s", command);
     switch (command.toLowerCase()) {
         case 'clean':
         case 'cleanreport':
@@ -86,6 +84,7 @@ function getEventNameForCommandString(str) {
             return 'CleanSpeed';
         case 'mapset':
             return 'MapSet';
+        case 'mapm':
         case 'mapp':
             return 'MapP';
         case 'getmapdata':
