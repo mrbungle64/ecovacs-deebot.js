@@ -39,6 +39,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.2
+* (mrbungle64) Added map/spotArea template and functionality for Ozmo 930 and Deebot 900/901
+* (mrbungle64) Improved handling command response and MQTT messages
+
 ### 0.4.1
 * Several enhancements and fixes
 
