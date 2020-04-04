@@ -4,6 +4,7 @@ const URL = require('url').URL;
 const constants = require('./ecovacsConstants');
 const https = require('https');
 const DOMParser = require('xmldom').DOMParser;
+const dictionary = require('./ecovacsConstants_non950type');
 
 String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -190,190 +191,189 @@ class EcovacsMQTT extends EventEmitter {
     _handle_command_response(action, json) {
         let resp = null;
         if (action.hasOwnProperty('name')) {
-            let command = action.name;
-            tools.envLog("[EcovacsMQTT] handle_command_response() command: %s", command);
-
             if (json) {
-                tools.envLog("[EcovacsMQTT] handle_command_response() message: %s", JSON.stringify(json, getCircularReplacer()));
                 if (json.hasOwnProperty('resp')) {
-                    tools.envLog("[EcovacsMQTT] handle_command_response() json resp: %s", JSON.stringify(json['resp'], getCircularReplacer()));
-                    resp = this._command_to_dict_api(action, json['resp']);
-                    tools.envLog("[EcovacsMQTT] handle_command_response() resp (1): %s", JSON.stringify(resp, getCircularReplacer()));
+                    const oParser = new DOMParser();
+                    const xml = oParser.parseFromString(json['resp'], "text/xml");
+                    this._command_to_dict_api(action, xml);
                 }
-                else {
-                    resp = {
-                        'event': command,
-                        'data': json
-                    };
-                    tools.envLog("[EcovacsMQTT] handle_command_response() resp(2): %s", command, JSON.stringify(resp, getCircularReplacer()));
-                }
-                this._handle_command(command, resp);
             }
         }
     }
 
-    _command_to_dict_api(action, xmlString) {
-        let payloadXml = new DOMParser().parseFromString(xmlString, 'text/xml');
-        let xml = payloadXml.documentElement;
-        let attrs = {};
-        let name = null;
-        if (xml.hasChildNodes()) {
-            name = xml.firstChild.tagName;
-            for (let i = 0; i < xml.firstChild.attributes.length; i++) {
-                attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
-            }
-        } else if (xml.attributes) {
-            name = xml.tagName;
-            for (let i = 0; i < xml.attributes.length; i++) {
-                attrs[xml.attributes[i].name] = xml.attributes[i].value;
-            }
-        }
-        if (!name) {
-            if (!xml.attributes.getNamedItem('td')) {
-                // Handle response data with no 'td'
-                if (xml.attributes.getNamedItem('type')) {
-                    // single element with type and val seems to always be LifeSpan type
-                    name = "LifeSpan";
+    _command_to_dict_api(action, xml) {
+        const firstChild = xml.childNodes[0];
+        let result = {
+            'event': firstChild.tagName,
+            'attrs': action.args,
+            'children': []
+        };
+
+        for (let i = 0; i < firstChild.attributes.length; i++) {
+            result.attrs[firstChild.attributes[i].name] = firstChild.attributes[i].value;
+            if (firstChild.childNodes) {
+                for (let c = 0; c < firstChild.childNodes.length; c++) {
+                    let newObj = {
+                        'event': firstChild.childNodes[c].tagName,
+                        'attrs': {}
+                    };
+                    for (let ca = 0; ca < firstChild.childNodes[c].attributes.length; ca++) {
+                        newObj['attrs'][firstChild.childNodes[c].attributes[ca].name] = firstChild.childNodes[c].attributes[ca].value;
+                    }
+                    result.children.push(newObj);
                 }
             }
         }
-        if (name === 'ctl') {
-            name = action.name;
+        //tools.envLog("[EcovacsMQTT] handle_command_response() resp (1) action: %s", action);
+        // tools.envLog("[EcovacsMQTT] result: %s", JSON.stringify(result, getCircularReplacer()));
+        let command = action.name;
+        if (command) {
+            this._handle_command(command, result);
         }
-        let result = {};
-        if (name) {
-            result = {
-                'event': tools.getEventNameForCommandString(name),
-                'attrs': attrs
-            };
+        else {
+            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(result));
         }
-        return result;
     }
 
     _handle_message(topic, payload) {
+        tools.envLog("[EcovacsMQTT] topic: %s", JSON.stringify(topic, getCircularReplacer()));
+        tools.envLog("[EcovacsMQTT] payload: %s", JSON.stringify(payload, getCircularReplacer()));
         let as_dict = this._message_to_dict(topic, payload);
         if (as_dict) {
-            tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
+            //tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
             let command = as_dict['event'];
             if (command) {
-                tools.envLog("[EcovacsMQTT] command: %s", command);
+                //tools.envLog("[EcovacsMQTT] command: %s", command);
                 this._handle_command(command, as_dict);
             }
         } else {
-            tools.envLog("[EcovacsMQTT] as_dict contains no data");
+            //tools.envLog("[EcovacsMQTT] as_dict contains no data");
         }
     }
 
     _message_to_dict(topic, xmlString) {
-        let name = null;
-        tools.envLog("[EcovacsMQTT] message_to_dict topic: %s", topic.name, " ", topic);
+        const oParser = new DOMParser();
+        const xml = oParser.parseFromString(xmlString, "text/xml");
+        const firstChild = xml.childNodes[0];
+        let result = {
+            'event': firstChild.attributes.getNamedItem('td').value,
+            'attrs': {},
+            'children': []
+        };
 
-        if (!xmlString) {
-            tools.envLog("[EcovacsMQTT] message_to_dict xmlString missing ... topic: %s", topic);
-            return {};
-        }
-        //Convert from string to xml (like IOT rest calls), other than this it is similar to XMPP
-        tools.envLog("[EcovacsMQTT] message_to_dict() xmlString: %s", xmlString);
-        let xml = new DOMParser().parseFromString(xmlString, 'text/xml').documentElement;
-        let result = {};
-
-        if (!xml.attributes.getNamedItem('td')) {
-            // Handle response data with no 'td'
-            if (xml.attributes.getNamedItem('type')) {
-                // single element with type and val seems to always be LifeSpan type
-                name = "LifeSpan";
-            } else if (xml.hasChildNodes()) {
-                // case where there is child element
-                name = xml.firstChild.tagName;
-            }
-        } else if (xml.attributes) {
-            // response includes 'td'
-            name = xml.attributes.getNamedItem('td').value;
-        }
-
-        if (name) {
-            let attrs = {};
-            if (xml.hasChildNodes()) {
-                for (let i = 0; i < xml.firstChild.attributes.length; i++) {
-                    attrs[xml.firstChild.attributes[i].name] = xml.firstChild.attributes[i].value;
-                }
-            } else if (xml.attributes) {
-                for (let i = 0; i < xml.attributes.length; i++) {
-                    attrs[xml.attributes[i].name] = xml.attributes[i].value;
+        for (let i = 0; i < firstChild.attributes.length; i++) {
+            result.attrs[firstChild.attributes[i].name] = firstChild.attributes[i].value;
+            if (firstChild.childNodes) {
+                for (let c = 0; c < firstChild.childNodes.length; c++) {
+                    let newObj = {
+                        'event': firstChild.childNodes[c].tagName,
+                        'attrs': {}
+                    };
+                    for (let ca = 0; ca < firstChild.childNodes[c].attributes.length; ca++) {
+                        newObj['attrs'][firstChild.childNodes[c].attributes[ca].name] = firstChild.childNodes[c].attributes[ca].value;
+                    }
+                    result.children.push(newObj);
                 }
             }
-            result = {
-                'event': tools.getEventNameForCommandString(name),
-                'attrs': attrs
-            };
         }
-        return result
+        tools.envLog("[EcovacsMQTT] result: %s", JSON.stringify(result, getCircularReplacer()));
+        return result;
     }
 
-    _handle_command(command, event) {
-        tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
+    _handle_command(command, result) {
+        //tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         switch (tools.getEventNameForCommandString(command)) {
-            case "ChargeState":
-                this.bot._handle_charge_state(event);
-                this.emit("ChargeState", this.bot.charge_status);
+            case "MapP":
+                this.bot._handle_cachedmapinfo(result);
+                this.emit("CurrentMapName", this.bot.currentMapName);
+                this.emit("CurrentMapMID", this.bot.currentMapMID);
+                this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                this.emit("Maps", this.bot.maps);
                 break;
-            case "BatteryInfo":
-                this.bot._handle_battery_info(event);
-                this.emit("BatteryInfo", this.bot.battery_status);
+            case "MapSet":
+                let mapset = this.bot._handle_mapset(result);
+                if(mapset["mapsetEvent"] != 'error'){
+                    this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
+                }
                 break;
-            case "CleanReport":
-                this.bot._handle_clean_report(event);
-                this.emit("CleanReport", this.bot.clean_status);
+            case "PullM":
+                let mapsubset = this.bot._handle_mapsubset(result);
+                if(mapsubset["mapsubsetEvent"] != 'error'){
+                    this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                }
+                break;
+            case 'ChargeState':
+                this.bot._handle_charge_state(result.children[0]);
+                this.emit('ChargeState', this.bot.charge_status);
+                break;
+            case 'BatteryInfo':
+                this.bot._handle_battery_info(result.children[0]);
+                this.emit('BatteryInfo', this.bot.battery_status);
+                break;
+            case 'CleanReport':
+                if (result.children.length > 0) {
+                    this.bot._handle_clean_report(result.children[0]);
+                } else {
+                    this.bot._handle_clean_report(result);
+                }
+                this.emit('CleanReport', this.bot.clean_status);
+                if (this.bot.lastAreaValues) {
+                    this.emit("LastAreaValues", this.bot.lastAreaValues);
+                }
                 break;
             case "CleanSpeed":
-                this.bot._handle_clean_speed(event);
+                this.bot._handle_clean_speed(result.children[0]);
                 this.emit("FanSpeed", this.bot.fan_speed);
                 break;
             case 'Error':
-                this.bot._handle_error(event.attrs);
+                this.bot._handle_error(result.attrs);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 break;
-            case "LifeSpan":
-                this.bot._handle_life_span(event.attrs);
-                if (this.bot.components["filter"]) {
-                    this.emit("LifeSpan_filter", this.bot.components["filter"]);
-                }
-                if (this.bot.components["side_brush"]) {
-                    this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
-                }
-                if (this.bot.components["main_brush"]) {
-                    this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
+            case 'LifeSpan':
+                this.bot._handle_life_span(result.attrs);
+                const component = dictionary.COMPONENT_FROM_ECOVACS[result.attrs.type];
+                if (component) {
+                    if (this.bot.components[component]) {
+                        this.emit('LifeSpan_' + component, this.bot.components[component]);
+                    }
                 }
                 break;
-            case "DeebotPosition":
-                this.bot._handle_deebot_position(event);
-                let deebotPosition = this.bot.deebot_position["x"] + "," + this.bot.deebot_position["y"];
-                if (this.bot.deebot_position["a"]) {
-                    deebotPosition = deebotPosition + "," + this.bot.deebot_position["a"];
-                }
-                this.emit('DeebotPosition', deebotPosition);
+            case 'WaterLevel':
+                this.bot._handle_water_level(result);
+                this.emit('WaterLevel', this.bot.water_level);
                 break;
-            case 'ChargePosition':
-                this.bot._handle_charge_position(event);
-                this.emit('ChargePosition', this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
-                break;
-            case "WaterLevel":
-                this.bot._handle_water_level(event);
+            case 'WaterBoxInfo':
+                this.bot._handle_waterbox_info(result);
+                this.emit('WaterBoxInfo', this.bot.waterbox_info);
                 break;
             case 'DustCaseST':
-                this.bot._handle_dustbox_info(event);
+                this.bot._handle_dustbox_info(result);
                 this.emit('DustCaseInfo', this.bot.dustbox_info);
                 break;
+            case 'DeebotPosition':
+                this.bot._handle_deebot_position(result);
+                this.emit('DeebotPosition', this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
+                this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
+                break;
+            case 'ChargePosition':
+                this.bot._handle_charge_position(result);
+                this.emit('ChargePosition', this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
+                break;
+            case 'NetInfo':
+                this.bot._handle_net_info(result.attrs);
+                this.emit("NetInfoIP", this.bot.netInfoIP);
+                this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
+                break;
+            case 'SleepStatus':
+                this.bot._handle_sleep_status(result);
+                this.emit("SleepStatus", this.bot.sleep_status);
+                break;
             case 'CleanSum':
-                this.bot._handle_cleanSum(event);
+                this.bot._handle_cleanSum(result);
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
-                break;
-            case 'SleepStatus':
-                this.bot._handle_sleep_status(event);
-                this.emit("SleepStatus", this.bot.sleep_status);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);

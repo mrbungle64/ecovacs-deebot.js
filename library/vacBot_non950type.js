@@ -581,7 +581,7 @@ class VacBot_non950type {
         this.send_command(new vacBotCommand.GetMapSet('sa'));
         this.send_command(new vacBotCommand.GetMapSet('vw'));
         break;
-      case "getmapdata":
+      case "getmaps":
         this.send_command(new vacBotCommand.GetMapM());
         break;
       case "pullmp":
