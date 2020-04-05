@@ -189,75 +189,30 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _handle_command_response(action, json) {
-        let resp = null;
-        if (action.hasOwnProperty('name')) {
-            if (json) {
-                if (json.hasOwnProperty('resp')) {
-                    const oParser = new DOMParser();
-                    const xml = oParser.parseFromString(json['resp'], "text/xml");
-                    this._command_to_dict_api(action, xml);
-                }
-            }
-        }
-    }
-
-    _command_to_dict_api(action, xml) {
-        const firstChild = xml.childNodes[0];
-        let result = {
-            'event': firstChild.tagName,
-            'attrs': action.args,
-            'children': []
-        };
-
-        for (let i = 0; i < firstChild.attributes.length; i++) {
-            result.attrs[firstChild.attributes[i].name] = firstChild.attributes[i].value;
-            if (firstChild.childNodes) {
-                for (let c = 0; c < firstChild.childNodes.length; c++) {
-                    let newObj = {
-                        'event': firstChild.childNodes[c].tagName,
-                        'attrs': {}
-                    };
-                    for (let ca = 0; ca < firstChild.childNodes[c].attributes.length; ca++) {
-                        newObj['attrs'][firstChild.childNodes[c].attributes[ca].name] = firstChild.childNodes[c].attributes[ca].value;
-                    }
-                    result.children.push(newObj);
-                }
-            }
-        }
-        //tools.envLog("[EcovacsMQTT] handle_command_response() resp (1) action: %s", action);
-        // tools.envLog("[EcovacsMQTT] result: %s", JSON.stringify(result, getCircularReplacer()));
-        let command = action.name;
-        if (command) {
-            this._handle_command(command, result);
-        }
-        else {
+        if (json.hasOwnProperty('resp')) {
+            let result = this._command_to_dict(json['resp'], action);
+            this._handle_command(action.name, result);
+        } else {
             tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(result));
         }
     }
 
-    _handle_message(topic, payload) {
-        tools.envLog("[EcovacsMQTT] topic: %s", JSON.stringify(topic, getCircularReplacer()));
-        tools.envLog("[EcovacsMQTT] payload: %s", JSON.stringify(payload, getCircularReplacer()));
-        let as_dict = this._message_to_dict(topic, payload);
-        if (as_dict) {
-            //tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
-            let command = as_dict['event'];
-            if (command) {
-                //tools.envLog("[EcovacsMQTT] command: %s", command);
-                this._handle_command(command, as_dict);
-            }
-        } else {
-            //tools.envLog("[EcovacsMQTT] as_dict contains no data");
-        }
-    }
-
-    _message_to_dict(topic, xmlString) {
+    _command_to_dict(xmlString) {
         const oParser = new DOMParser();
         const xml = oParser.parseFromString(xmlString, "text/xml");
         const firstChild = xml.childNodes[0];
+        let attrs = {};
+        let event = null;
+        if (arguments.length > 1) {
+            event = firstChild.tagName;
+            const action = arguments[1];
+            attrs = action.args
+        } else {
+            event = firstChild.attributes.getNamedItem('td').value;
+        }
         let result = {
-            'event': firstChild.attributes.getNamedItem('td').value,
-            'attrs': {},
+            'event': event,
+            'attrs': attrs,
             'children': []
         };
 
@@ -276,8 +231,23 @@ class EcovacsMQTT extends EventEmitter {
                 }
             }
         }
-        tools.envLog("[EcovacsMQTT] result: %s", JSON.stringify(result, getCircularReplacer()));
         return result;
+    }
+
+    _handle_message(topic, payload) {
+        tools.envLog("[EcovacsMQTT] topic: %s", JSON.stringify(topic, getCircularReplacer()));
+        tools.envLog("[EcovacsMQTT] payload: %s", JSON.stringify(payload, getCircularReplacer()));
+        let as_dict = this._command_to_dict(payload);
+        if (as_dict) {
+            //tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
+            let command = as_dict['event'];
+            if (command) {
+                //tools.envLog("[EcovacsMQTT] command: %s", command);
+                this._handle_command(command, as_dict);
+            }
+        } else {
+            //tools.envLog("[EcovacsMQTT] as_dict contains no data");
+        }
     }
 
     _handle_command(command, event) {
