@@ -128,13 +128,13 @@ class EcovacsXMPP extends EventEmitter {
                             break;
                         case "MapSet":
                             let mapset = this.bot._handle_mapset(secondChild);
-                            if(mapset["mapsetEvent"] != 'error'){
+                            if (mapset["mapsetEvent"] !== 'error') {
                                 this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                             }
                             break;
                         case "PullM":
                             let mapsubset = this.bot._handle_mapsubset(secondChild);
-                            if(mapsubset["mapsubsetEvent"] != 'error'){
+                            if (mapsubset["mapsubsetEvent"] !== 'error') {
                                 this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                             }
                             break;

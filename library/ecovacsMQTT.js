@@ -77,7 +77,8 @@ class EcovacsMQTT extends EventEmitter {
         });
 
         this.client.on('message', (topic, message) => {
-            this._handle_message(topic, message.toString());
+            // topic not necessary to handle message
+            this._handle_message_payload(message.toString());
         });
 
         this.client.on('error', (error) => {
@@ -197,9 +198,7 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _handle_message(topic, payload) {
-        // topic not necessary to handle message
-        tools.envLog('[EcovacsMQTT] topic: %s', topic);
+    _handle_message_payload(payload) {
         let result = this._command_to_dict(payload);
         this._handle_command(result['event'], result);
     }
@@ -253,13 +252,13 @@ class EcovacsMQTT extends EventEmitter {
                 break;
             case "MapSet":
                 let mapset = this.bot._handle_mapset(event);
-                if(mapset["mapsetEvent"] != 'error'){
+                if (mapset["mapsetEvent"] !== 'error') {
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "PullM":
                 let mapsubset = this.bot._handle_mapsubset(event);
-                if(mapsubset["mapsubsetEvent"] != 'error'){
+                if (mapsubset["mapsubsetEvent"] !== 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
