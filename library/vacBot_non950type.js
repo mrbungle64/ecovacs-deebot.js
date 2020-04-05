@@ -48,6 +48,8 @@ class VacBot_non950type {
     this.currentMapIndex = 0;
 
     this.maps = null;
+    this.mapSpotAreaArray = [];
+    this.mapVirtualWallsArray = [];
     this.mapSpotAreaInfos = [];
 
     if (!this.useMqtt) {
@@ -255,8 +257,13 @@ class VacBot_non950type {
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
-          mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-          this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
+          const found = this.mapSpotAreaArray.find(element => element === mid);
+          if (!found) {
+            this.mapSpotAreaArray.push(mid);
+            mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
+            tools.envLog("[VacBot] *** mapSpotAreaArray = " + this.mapSpotAreaArray);
+            this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
+          }
         }
       }
       tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
@@ -269,8 +276,13 @@ class VacBot_non950type {
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
-          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
-          this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
+          const found = this.mapVirtualWallsArray.find(element => element === mid);
+          if (!found) {
+            this.mapVirtualWallsArray.push(mid);
+            mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
+            tools.envLog("[VacBot] *** mapVirtualWallsArray = " + this.mapVirtualWallsArray);
+            this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
+          }
         }
       }
       tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
