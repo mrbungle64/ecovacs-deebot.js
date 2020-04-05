@@ -193,8 +193,15 @@ class EcovacsMQTT extends EventEmitter {
             let result = this._command_to_dict(json['resp'], action);
             this._handle_command(action.name, result);
         } else {
-            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(result));
+            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json, getCircularReplacer()));
         }
+    }
+
+    _handle_message(topic, payload) {
+        // topic not necessary to handle message
+        tools.envLog('[EcovacsMQTT] topic: %s', topic);
+        let result = this._command_to_dict(payload);
+        this._handle_command(result['event'], result);
     }
 
     _command_to_dict(xmlString) {
@@ -232,22 +239,6 @@ class EcovacsMQTT extends EventEmitter {
             }
         }
         return result;
-    }
-
-    _handle_message(topic, payload) {
-        tools.envLog("[EcovacsMQTT] topic: %s", JSON.stringify(topic, getCircularReplacer()));
-        tools.envLog("[EcovacsMQTT] payload: %s", JSON.stringify(payload, getCircularReplacer()));
-        let as_dict = this._command_to_dict(payload);
-        if (as_dict) {
-            //tools.envLog("[EcovacsMQTT] as_dict: %s", JSON.stringify(as_dict, getCircularReplacer()));
-            let command = as_dict['event'];
-            if (command) {
-                //tools.envLog("[EcovacsMQTT] command: %s", command);
-                this._handle_command(command, as_dict);
-            }
-        } else {
-            //tools.envLog("[EcovacsMQTT] as_dict contains no data");
-        }
     }
 
     _handle_command(command, event) {
@@ -292,6 +283,7 @@ class EcovacsMQTT extends EventEmitter {
                 }
                 break;
             case "CleanSpeed":
+                tools.envLog("[EcovacsMQTT] CleanSpeed: %s", JSON.stringify(event, getCircularReplacer()));
                 this.bot._handle_clean_speed(event);
                 this.emit("CleanSpeed", this.bot.fan_speed);
                 break;
