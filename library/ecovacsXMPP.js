@@ -150,6 +150,7 @@ class EcovacsXMPP extends EventEmitter {
                             this.bot._handle_clean_report(secondChild.children[0]);
                             this.emit('CleanReport', this.bot.clean_status);
                             if (this.bot.lastUsedAreaValues) {
+                                tools.envLog('[EcovacsXMPP] LastUsedAreaValues: %s', this.bot.lastUsedAreaValues);
                                 this.emit("LastUsedAreaValues", this.bot.lastUsedAreaValues);
                             }
                             break;
