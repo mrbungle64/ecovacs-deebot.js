@@ -54,6 +54,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.4
+* Added support for Ozmo 920
+
 ### 0.4.3
 * (mrbungle64) Several enhancements and fixes
 
