@@ -304,7 +304,9 @@ class EcovacsAPI {
 
   getVacBot(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     let vacbot = null;
-    if(vacuum['class'] === 'yna5xi') {
+    // yna5xi = Ozmo 950
+    // vi829v = Ozmo 920
+    if ((vacuum['class'] === 'yna5xi') || (vacuum['class'] === 'vi829v')) {
       console.log('vacBot_950type identified');
       const VacBot_950type = require('./library/vacBot_950type');
       vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent);

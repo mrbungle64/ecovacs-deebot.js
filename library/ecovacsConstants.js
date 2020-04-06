@@ -19,6 +19,15 @@ exports.SupportedDevices = {
         "voice_report": true,
         'single_room': false
     },
+    "vi829v": {
+        "name": "DEEBOT OZMO 920",
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        'single_room': false
+    },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
         "main_brush": true,
