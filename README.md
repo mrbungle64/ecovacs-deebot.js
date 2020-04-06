@@ -41,6 +41,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot 710/711
 * Deebot 900/901
 * Deebot Ozmo 610
+* Deebot Ozmo 920
 * Deebot Ozmo 930
 * Deebot Ozmo 950
 
