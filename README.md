@@ -12,7 +12,22 @@ He documented his [findings on the protocol](http://github.com/wpietri/sucks/blo
 
 ## Installation
 
-	npm install ecovacs-deebot
+This adapter uses the canvas library which might require additional installations, otherwise the installation in iobroker might result in an error:
+```
+npm ERR! canvas@2.6.1 install: node-pre-gyp install --fallback-to-build npm ERR! Exit status 1
+```
+For linux based systems the following commands should be executed (a reboot might be necessary after the first line):
+```
+sudo apt-get update
+sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+sudo npm install canvas --unsafe-perm=true
+```
+For instructions for other systems visit https://www.npmjs.com/package/canvas#compiling
+
+Afterwards you can install the library with
+```
+npm install ecovacs-deebot
+```
 
 ## Usage
 
