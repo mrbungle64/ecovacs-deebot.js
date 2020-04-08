@@ -48,9 +48,9 @@ class VacBot_non950type {
     this.currentMapIndex = 0;
 
     this.maps = null;
-    this.mapSpotAreaArray = [];
-    this.mapVirtualWallsArray = [];
     this.mapSpotAreaInfos = [];
+
+    this.getMapSetExecuted = false;
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -235,20 +235,22 @@ class VacBot_non950type {
   }
 
   _handle_cachedmapinfo(event) {
-    this.currentMapMID = event.attrs['i'];
+    if (this.getMapSetExecuted) {
+      return;
+    }
 
+    this.currentMapMID = event.attrs['i'];
     this.maps = {
-      "maps": []
+      "maps": [
+        new map.EcovacsMap(
+            event.attrs['i'], 0, this.currentMapName, true, true, true)
+      ]
     };
-    this.maps["maps"].push(
-        new map.EcovacsMap(event.attrs['i'], 0, this.currentMapName, true, true, true)
-    );
 
     this.run('GetMapSet');
+    this.getMapSetExecuted = true;
 
-    tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
-    tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
-    tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
+    return this.maps;
   }
 
   _handle_mapset(event) {
@@ -257,13 +259,8 @@ class VacBot_non950type {
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
-          const found = this.mapSpotAreaArray.find(element => element === mid);
-          if (!found) {
-            this.mapSpotAreaArray.push(mid);
-            mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-            tools.envLog("[VacBot] *** mapSpotAreaArray = " + this.mapSpotAreaArray);
-            this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
-          }
+          mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
+          this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
         }
       }
       tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
@@ -276,13 +273,8 @@ class VacBot_non950type {
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
-          const found = this.mapVirtualWallsArray.find(element => element === mid);
-          if (!found) {
-            this.mapVirtualWallsArray.push(mid);
-            mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
-            tools.envLog("[VacBot] *** mapVirtualWallsArray = " + this.mapVirtualWallsArray);
-            this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
-          }
+          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
+          this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
         }
       }
       tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));

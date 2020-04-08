@@ -244,11 +244,13 @@ class EcovacsMQTT extends EventEmitter {
         //tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         switch (tools.getEventNameForCommandString(command)) {
             case "MapP":
-                this.bot._handle_cachedmapinfo(event);
-                this.emit("CurrentMapName", this.bot.currentMapName);
-                this.emit("CurrentMapMID", this.bot.currentMapMID);
-                this.emit("CurrentMapIndex", this.bot.currentMapIndex);
-                this.emit("Maps", this.bot.maps);
+                let mapinfo = this.bot._handle_cachedmapinfo(event);
+                if (mapinfo) {
+                    this.emit("CurrentMapName", this.bot.currentMapName);
+                    this.emit("CurrentMapMID", this.bot.currentMapMID);
+                    this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                    this.emit("Maps", this.bot.maps);
+                }
                 break;
             case "MapSet":
                 let mapset = this.bot._handle_mapset(event);
