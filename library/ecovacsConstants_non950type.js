@@ -75,3 +75,12 @@ exports.COMPONENT_FROM_ECOVACS = {
     'DustCaseHeap': 'filter',
     'heap': 'filter'
 };
+
+exports.ACTION = {
+    'backward': 'backward',
+    'forward': 'forward',
+    'left': 'SpinLeft',
+    'right': 'SpinRight',
+    'turn_around': 'trunAround',
+    'stop': 'stop'
+};

@@ -294,6 +294,21 @@ class SetCleanSpeed extends VacBotCommand_non950type {
     }
 }
 
+// Move forward	<ctl td="Move"><move action="forward"/></ctl>
+// Move backward	<ctl td="Move"><move action="backward"/></ctl>
+// Spin left 360 degrees	<ctl td="Move"><move action="SpinLeft"/></ctl>
+// Spin right 360 degrees	<ctl td="Move"><move action="SpinRight"/></ctl>
+// Turn 180 degrees	<ctl td="Move"><move action="TurnAround"/></ctl>
+// Stop the ongoing action	<ctl td="Move"><move action="stop"/></ctl>
+
+class Move extends VacBotCommand_non950type {
+    constructor(action) {
+        super("Move", {
+            'move': {'action': constants_type.ACTION[action]}
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -325,3 +340,4 @@ module.exports.PullMP = PullMP;
 module.exports.PullM = PullM;
 module.exports.GetMapSet = GetMapSet;
 module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.Move = Move;

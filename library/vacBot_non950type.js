@@ -604,7 +604,13 @@ class VacBot_non950type {
         if (arguments.length < 5) {
           return;
         }
-        this.send_command(new vacBotCommand.PullM(arguments[1],arguments[2],arguments[3],arguments[4]));
+        this.send_command(new vacBotCommand.PullM(arguments[1], arguments[2], arguments[3], arguments[4]));
+        break;
+      case "move":
+        if (arguments.length < 2) {
+          return;
+        }
+        this.send_command(new vacBotCommand.Move(arguments[1]));
         break;
     }
   }
