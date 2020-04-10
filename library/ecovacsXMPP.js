@@ -116,6 +116,9 @@ class EcovacsXMPP extends EventEmitter {
                             command = 'PullM';
                         }
                     }
+                    if (secondChild.children[0].name === 'CleanSt') {
+                        command = 'CleanLogs';
+                    }
                 }
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
@@ -207,6 +210,11 @@ class EcovacsXMPP extends EventEmitter {
                             this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                             this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                             this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
+                            break;
+                        case 'CleanLogs':
+                            tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(secondChild));
+                            this.bot._handle_cleanLogs(secondChild);
+                            tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog));
                             break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

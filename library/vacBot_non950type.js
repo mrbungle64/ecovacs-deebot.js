@@ -50,6 +50,8 @@ class VacBot_non950type {
     this.maps = null;
     this.mapSpotAreaInfos = [];
 
+    this.cleanLog = null;
+
     this.getMapSetExecuted = false;
 
     if (!this.useMqtt) {
@@ -401,6 +403,37 @@ class VacBot_non950type {
     }
   }
 
+  _handle_cleanLogs(event) {
+    if (event.attrs) {
+      this.cleanLog = [];
+      let count = event.children.length;
+      if (event.attrs.hasOwnProperty('count')) {
+          count = parseInt(event.attrs['count']);
+      }
+      for (let c = 0; c < count; c++) {
+        let childElement = event.children[c];
+        if ((childElement.attrs) && (childElement.attrs.hasOwnProperty('a')) && (childElement.attrs.hasOwnProperty('s')) && (childElement.attrs.hasOwnProperty('l'))) {
+          let squareMeters = parseInt(childElement.attrs['a']);
+          tools.envLog("[VacBot] cleanLogs %s: %s m2", c, squareMeters);
+          let timestamp = parseInt(childElement.attrs['s']);
+          let date = new Date(timestamp*1000);
+          tools.envLog("[VacBot] cleanLogs %s: %s", c, date.toString());
+          let len = parseInt(childElement.attrs['l']);
+          let hours = Math.floor(len / 3600);
+          let minutes = Math.floor((len % 3600) / 60);
+          let seconds = Math.floor(len % 60);
+          let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
+          tools.envLog("[VacBot] cleanLogs %s: %s", c, totalTimeString);
+          this.cleanLog.push({
+            'squareMeters': squareMeters,
+            'timestamp': timestamp,
+            'length': len
+          });
+        }
+      }
+    }
+  }
+
   _handle_error(event) {
     this.errorCode = '0';
     if (event.hasOwnProperty('code')) {
@@ -626,6 +659,13 @@ class VacBot_non950type {
         break;
       case "moveturnaround":
         this.send_command(new vacBotCommand.MoveTurnAround());
+        break;
+      case "getcleanlogs":
+        if (arguments.length < 2) {
+          this.send_command(new vacBotCommand.GetCleanLogs());
+        } else {
+          this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
+        }
         break;
     }
   }

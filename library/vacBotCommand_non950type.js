@@ -335,6 +335,14 @@ class MoveTurnAround extends Move {
     }
 }
 
+class GetCleanLogs extends VacBotCommand_non950type {
+    constructor(count = 3) {
+        super("GetCleanLogs", {
+            'count': count
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -372,3 +380,4 @@ module.exports.MoveForward = MoveForward;
 module.exports.MoveLeft = MoveLeft;
 module.exports.MoveRight = MoveRight;
 module.exports.MoveTurnAround = MoveTurnAround;
+module.exports.GetCleanLogs = GetCleanLogs;

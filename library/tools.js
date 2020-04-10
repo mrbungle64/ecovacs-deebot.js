@@ -94,6 +94,8 @@ function getEventNameForCommandString(str) {
             return 'PullMP';
         case 'pullm':
             return 'PullM';
+        case 'cleanlogs':
+            return 'CleanLogs';
         default:
             envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;
