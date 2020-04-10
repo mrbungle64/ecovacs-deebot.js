@@ -294,18 +294,44 @@ class SetCleanSpeed extends VacBotCommand_non950type {
     }
 }
 
-// Move forward	<ctl td="Move"><move action="forward"/></ctl>
-// Move backward	<ctl td="Move"><move action="backward"/></ctl>
-// Spin left 360 degrees	<ctl td="Move"><move action="SpinLeft"/></ctl>
-// Spin right 360 degrees	<ctl td="Move"><move action="SpinRight"/></ctl>
-// Turn 180 degrees	<ctl td="Move"><move action="TurnAround"/></ctl>
-// Stop the ongoing action	<ctl td="Move"><move action="stop"/></ctl>
-
 class Move extends VacBotCommand_non950type {
     constructor(action) {
+        if (constants_type.ACTION.hasOwnProperty(action)) {
+            action = constants_type.ACTION[action];
+        }
         super("Move", {
-            'move': {'action': constants_type.ACTION[action]}
+            'move': {'action': action}
         });
+    }
+}
+
+class MoveBackward extends Move {
+    constructor() {
+        super("backward");
+    }
+}
+
+class MoveForward extends Move {
+    constructor() {
+        super("forward");
+    }
+}
+
+class MoveLeft extends Move {
+    constructor() {
+        super("left");
+    }
+}
+
+class MoveRight extends Move {
+    constructor() {
+        super("right");
+    }
+}
+
+class MoveTurnAround extends Move {
+    constructor() {
+        super("turn_around");
     }
 }
 
@@ -341,3 +367,8 @@ module.exports.PullM = PullM;
 module.exports.GetMapSet = GetMapSet;
 module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.Move = Move;
+module.exports.MoveBackward = MoveBackward;
+module.exports.MoveForward = MoveForward;
+module.exports.MoveLeft = MoveLeft;
+module.exports.MoveRight = MoveRight;
+module.exports.MoveTurnAround = MoveTurnAround;

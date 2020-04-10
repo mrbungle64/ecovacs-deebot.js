@@ -612,6 +612,21 @@ class VacBot_non950type {
         }
         this.send_command(new vacBotCommand.Move(arguments[1]));
         break;
+      case "movebackward":
+        this.send_command(new vacBotCommand.MoveBackward());
+        break;
+      case "moveforward":
+        this.send_command(new vacBotCommand.MoveForward());
+        break;
+      case "moveleft":
+        this.send_command(new vacBotCommand.MoveLeft());
+        break;
+      case "moveright":
+        this.send_command(new vacBotCommand.MoveRight());
+        break;
+      case "moveturnaround":
+        this.send_command(new vacBotCommand.MoveTurnAround());
+        break;
     }
   }
 
