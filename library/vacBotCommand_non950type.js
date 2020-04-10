@@ -57,9 +57,12 @@ class Clean extends VacBotCommand_non950type {
 }
 
 function getReqID() {
-    // This is required for the Ozmo 930
-    rtnval = Math.floor(Math.random() * 99999999) + 1;
-    return rtnval.toString(); // return as string
+    let reqIdString = '';
+    for (let i = 0; i < 8; i++) {
+        rtnval = Math.floor(Math.random() * 10);
+        reqIdString = reqIdString + rtnval.toString();
+    }
+    return reqIdString.toString();
 }
 
 class Edge extends Clean {
