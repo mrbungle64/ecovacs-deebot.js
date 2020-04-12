@@ -7,8 +7,8 @@ const map = require('./mapTemplate.js');
 class VacBot_non950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     this.vacuum = vacuum;
-    this.clean_status = null;
-    this.deebot_position = {
+    this.cleanReport = null;
+    this.deebotPosition = {
       x: null,
       y: null,
       a: null,
@@ -16,19 +16,19 @@ class VacBot_non950type {
       currentSpotAreaID: 'unknown',
       changeFlag: false
     };
-    this.charge_position = {
+    this.chargePosition = {
       x: null,
       y: null,
       a: null
     };
     this.lastUsedAreaValues = null;
-    this.fan_speed = null;
-    this.charge_status = null;
-    this.battery_status = null;
-    this.water_level = null;
-    this.dustbox_info = null;
-    this.waterbox_info = null;
-    this.sleep_status = null;
+    this.cleanSpeed = null;
+    this.chargeStatus = null;
+    this.batteryInfo = null;
+    this.waterLevel = null;
+    this.dustcaseInfo = null;
+    this.waterboxInfo = null;
+    this.sleepStatus = null;
     this.components = {};
     this.ping_interval = null;
     this.errorCode = '0';
@@ -179,8 +179,8 @@ class VacBot_non950type {
       if (statustype === 'stop' || statustype === 'pause') {
         type = statustype
       }
-      this.clean_status = type;
-      tools.envLog("[VacBot] *** cleanStatus = " + this.clean_status);
+      this.cleanReport = type;
+      tools.envLog("[VacBot] *** cleanStatus = " + this.cleanReport);
 
       if (event.attrs.hasOwnProperty('last')) {
         tools.envLog("[VacBot] *** clean last = %s seconds" + event.attrs["last"]);
@@ -203,12 +203,12 @@ class VacBot_non950type {
     }
   }
 
-  _handle_clean_speed(event) {
+  _handle_cleanSpeed(event) {
     if (event.attrs.hasOwnProperty('speed')) {
       let fan = event.attrs['speed'];
       if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
         fan = dictionary.FAN_SPEED_FROM_ECOVACS[fan];
-        this.fan_speed = fan;
+        this.cleanSpeed = fan;
         tools.envLog("[VacBot] cleanSpeed: ", fan);
       } else {
         tools.envLog("[VacBot] Unknown clean speed: ", fan);
@@ -226,8 +226,8 @@ class VacBot_non950type {
       value = parseFloat(event.attrs['power']);
     }
     try {
-      this.battery_status = value;
-      tools.envLog("[VacBot] *** batteryInfo = %d\%", this.battery_status);
+      this.batteryInfo = value;
+      tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
     } catch (e) {
       console.error("[VacBot] couldn't parse battery info ", event);
     }
@@ -235,8 +235,8 @@ class VacBot_non950type {
 
   _handle_waterLevel(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('v'))) {
-      this.water_level = event.attrs['v'];
-      tools.envLog("[VacBot] *** waterLevel = %s", this.water_level);
+      this.waterLevel = event.attrs['v'];
+      tools.envLog("[VacBot] *** waterLevel = %s", this.waterLevel);
     }
   }
 
@@ -341,7 +341,7 @@ class VacBot_non950type {
       const posY = event.attrs['p'].split(",")[1];
       const angle = event.attrs['a'];
       let currentSpotAreaID = map.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
-      this.deebot_position = {
+      this.deebotPosition = {
         x: posX,
         y: posY,
         a: angle,
@@ -349,39 +349,39 @@ class VacBot_non950type {
         currentSpotAreaID: currentSpotAreaID,
         changeFlag: true
       };
-      tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebot_position));
+      tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
     }
   }
 
   _handle_chargePosition(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
-      this.charge_position = {
+      this.chargePosition = {
         x: event.attrs['p'].split(",")[0],
         y: event.attrs['p'].split(",")[1],
         a: event.attrs['a']
       };
-      tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.charge_position));
+      tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.chargePosition));
     }
   }
 
   _handle_dustcaseInfo(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
-      this.dustbox_info = event.attrs['st'];
-      tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustbox_info);
+      this.dustcaseInfo = event.attrs['st'];
+      tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustcaseInfo);
     }
   }
 
   _handle_waterboxInfo(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('on'))) {
-      this.waterbox_info = event.attrs['on'];
-      tools.envLog("[VacBot] *** waterboxInfo = " + this.waterbox_info);
+      this.waterboxInfo = event.attrs['on'];
+      tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
     }
   }
 
   _handle_sleepStatus(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
-      this.sleep_status = event.attrs['st'];
-      tools.envLog("[VacBot] *** sleepStatus = " + this.sleep_status);
+      this.sleepStatus = event.attrs['st'];
+      tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
     }
   }
 
@@ -389,8 +389,8 @@ class VacBot_non950type {
     if ((event.attrs) && (event.attrs['type'])) {
       let chargemode = event.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode]) {
-        this.charge_status = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
-        tools.envLog("[VacBot] *** chargeStatus = " + this.charge_status)
+        this.chargeStatus = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
+        tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus)
       } else {
         console.error("[VacBot] Unknown charging status '%s'", chargemode);
       }
