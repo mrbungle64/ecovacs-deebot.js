@@ -121,7 +121,7 @@ class VacBot_non950type {
     this.ecovacs.on(name, func);
   }
 
-  _handle_life_span(event) {
+  _handle_lifeSpan(event) {
     let type = null;
     if (event.hasOwnProperty('type')) {
       // type attribute must be trimmed because of Deebot M88
@@ -146,13 +146,13 @@ class VacBot_non950type {
       lifespan = parseInt(event['left']) / 60; // This works e.g. for a D901
     }
     if (lifespan) {
-      tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
+      tools.envLog("[VacBot] lifeSpan %s: %s", type, lifespan);
       this.components[type] = lifespan;
     }
     tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
   }
 
-  _handle_net_info(event) {
+  _handle_netInfo(event) {
     if (event.hasOwnProperty('wi')) {
       this.netInfoIP = event['wi'];
       tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
@@ -163,7 +163,7 @@ class VacBot_non950type {
     }
   }
 
-  _handle_clean_report(event) {
+  _handle_cleanReport(event) {
     if (event.attrs) {
       let type = event.attrs['type'];
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
@@ -180,7 +180,11 @@ class VacBot_non950type {
         type = statustype
       }
       this.clean_status = type;
-      tools.envLog("[VacBot] *** clean_status = " + this.clean_status);
+      tools.envLog("[VacBot] *** cleanStatus = " + this.clean_status);
+
+      if (event.attrs.hasOwnProperty('last')) {
+        tools.envLog("[VacBot] *** clean last = %s seconds" + event.attrs["last"]);
+      }
 
       if (event.attrs.hasOwnProperty('p')) {
         let pValues = event.attrs['p'];
@@ -205,7 +209,7 @@ class VacBot_non950type {
       if (dictionary.FAN_SPEED_FROM_ECOVACS[fan]) {
         fan = dictionary.FAN_SPEED_FROM_ECOVACS[fan];
         this.fan_speed = fan;
-        tools.envLog("[VacBot] clean speed: ", fan);
+        tools.envLog("[VacBot] cleanSpeed: ", fan);
       } else {
         tools.envLog("[VacBot] Unknown clean speed: ", fan);
       }
@@ -214,7 +218,7 @@ class VacBot_non950type {
     }
   }
 
-  _handle_battery_info(event) {
+  _handle_batteryInfo(event) {
     let value = null;
     if (event.hasOwnProperty('ctl')) {
       value = event['ctl']['battery']['power'];
@@ -223,20 +227,20 @@ class VacBot_non950type {
     }
     try {
       this.battery_status = value;
-      tools.envLog("[VacBot] *** battery_status = %d\%", this.battery_status);
+      tools.envLog("[VacBot] *** batteryInfo = %d\%", this.battery_status);
     } catch (e) {
-      console.error("[VacBot] couldn't parse battery status ", event);
+      console.error("[VacBot] couldn't parse battery info ", event);
     }
   }
 
-  _handle_water_level(event) {
+  _handle_waterLevel(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('v'))) {
       this.water_level = event.attrs['v'];
-      tools.envLog("[VacBot] *** water_level = %s", this.water_level);
+      tools.envLog("[VacBot] *** waterLevel = %s", this.water_level);
     }
   }
 
-  _handle_cachedmapinfo(event) {
+  _handle_mapP(event) {
     if (this.getMapSetExecuted) {
       return;
     }
@@ -255,7 +259,7 @@ class VacBot_non950type {
     return this.maps;
   }
 
-  _handle_mapset(event) {
+  _handle_mapSet(event) {
     if (event.attrs['tp'] === 'sa') {
       let mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, event.attrs['msid']);
       for (let mapIndex in event.children) {
@@ -292,7 +296,7 @@ class VacBot_non950type {
     };
   }
 
-  _handle_mapsubset(event) {
+  _handle_pullM(event) {
     const id = parseInt(event.attrs['id']) - 999999900;
     const mData = event.attrs['m'];
 
@@ -331,7 +335,7 @@ class VacBot_non950type {
     return {mapsubsetEvent: 'error'};
   }
 
-  _handle_deebot_position(event) {
+  _handle_deebotPosition(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
       const posX = event.attrs['p'].split(",")[0];
       const posY = event.attrs['p'].split(",")[1];
@@ -345,48 +349,48 @@ class VacBot_non950type {
         currentSpotAreaID: currentSpotAreaID,
         changeFlag: true
       };
-      tools.envLog("[VacBot] *** deebot_position = %s", JSON.stringify(this.deebot_position));
+      tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebot_position));
     }
   }
 
-  _handle_charge_position(event) {
+  _handle_chargePosition(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
       this.charge_position = {
         x: event.attrs['p'].split(",")[0],
         y: event.attrs['p'].split(",")[1],
         a: event.attrs['a']
       };
-      tools.envLog("[VacBot] *** charge_position = %s", JSON.stringify(this.charge_position));
+      tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.charge_position));
     }
   }
 
-  _handle_dustbox_info(event) {
+  _handle_dustcaseInfo(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
       this.dustbox_info = event.attrs['st'];
-      tools.envLog("[VacBot] *** dustbox_info = " + this.dustbox_info);
+      tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustbox_info);
     }
   }
 
-  _handle_waterbox_info(event) {
+  _handle_waterboxInfo(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('on'))) {
       this.waterbox_info = event.attrs['on'];
-      tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
+      tools.envLog("[VacBot] *** waterboxInfo = " + this.waterbox_info);
     }
   }
 
-  _handle_sleep_status(event) {
+  _handle_sleepStatus(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('st'))) {
       this.sleep_status = event.attrs['st'];
-      tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
+      tools.envLog("[VacBot] *** sleepStatus = " + this.sleep_status);
     }
   }
 
-  _handle_charge_state(event) {
+  _handle_chargeState(event) {
     if ((event.attrs) && (event.attrs['type'])) {
       let chargemode = event.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode]) {
         this.charge_status = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
-        tools.envLog("[VacBot] *** charge_status = " + this.charge_status)
+        tools.envLog("[VacBot] *** chargeStatus = " + this.charge_status)
       } else {
         console.error("[VacBot] Unknown charging status '%s'", chargemode);
       }

@@ -123,34 +123,34 @@ class EcovacsXMPP extends EventEmitter {
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
                         case "MapP":
-                            this.bot._handle_cachedmapinfo(secondChild);
+                            this.bot._handle_mapP(secondChild);
                             this.emit("CurrentMapName", this.bot.currentMapName);
                             this.emit("CurrentMapMID", this.bot.currentMapMID);
                             this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                             this.emit("Maps", this.bot.maps);
                             break;
                         case "MapSet":
-                            let mapset = this.bot._handle_mapset(secondChild);
+                            let mapset = this.bot._handle_mapSet(secondChild);
                             if (mapset["mapsetEvent"] !== 'error') {
                                 this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                             }
                             break;
                         case "PullM":
-                            let mapsubset = this.bot._handle_mapsubset(secondChild);
+                            let mapsubset = this.bot._handle_pullM(secondChild);
                             if (mapsubset["mapsubsetEvent"] !== 'error') {
                                 this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                             }
                             break;
                         case 'ChargeState':
-                            this.bot._handle_charge_state(secondChild.children[0]);
+                            this.bot._handle_chargeState(secondChild.children[0]);
                             this.emit('ChargeState', this.bot.charge_status);
                             break;
                         case 'BatteryInfo':
-                            this.bot._handle_battery_info(secondChild.children[0]);
+                            this.bot._handle_batteryInfo(secondChild.children[0]);
                             this.emit('BatteryInfo', this.bot.battery_status);
                             break;
                         case 'CleanReport':
-                            this.bot._handle_clean_report(secondChild.children[0]);
+                            this.bot._handle_cleanReport(secondChild.children[0]);
                             this.emit('CleanReport', this.bot.clean_status);
                             if (this.bot.lastUsedAreaValues) {
                                 tools.envLog('[EcovacsXMPP] LastUsedAreaValues: %s', this.bot.lastUsedAreaValues);
@@ -158,7 +158,7 @@ class EcovacsXMPP extends EventEmitter {
                             }
                             break;
                         case "CleanSpeed":
-                            this.bot._handle_clean_speed(secondChild.children[0]);
+                            this.bot._handle_cleanSpeed(secondChild.children[0]);
                             this.emit("CleanSpeed", this.bot.fan_speed);
                             break;
                         case 'Error':
@@ -167,7 +167,7 @@ class EcovacsXMPP extends EventEmitter {
                             this.emit('ErrorCode', this.bot.errorCode);
                             break;
                         case 'LifeSpan':
-                            this.bot._handle_life_span(secondChild.attrs);
+                            this.bot._handle_lifeSpan(secondChild.attrs);
                             const component = dictionary.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                             if (component) {
                                 if (this.bot.components[component]) {
@@ -176,33 +176,33 @@ class EcovacsXMPP extends EventEmitter {
                             }
                             break;
                         case 'WaterLevel':
-                            this.bot._handle_water_level(secondChild);
+                            this.bot._handle_waterLevel(secondChild);
                             this.emit('WaterLevel', this.bot.water_level);
                             break;
                         case 'WaterBoxInfo':
-                            this.bot._handle_waterbox_info(secondChild);
+                            this.bot._handle_waterboxInfo(secondChild);
                             this.emit('WaterBoxInfo', this.bot.waterbox_info);
                             break;
                         case 'DustCaseST':
-                            this.bot._handle_dustbox_info(secondChild);
+                            this.bot._handle_dustcaseInfo(secondChild);
                             this.emit('DustCaseInfo', this.bot.dustbox_info);
                             break;
                         case 'DeebotPosition':
-                            this.bot._handle_deebot_position(secondChild);
+                            this.bot._handle_deebotPosition(secondChild);
                             this.emit('DeebotPosition', this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
                             this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
                             break;
                         case 'ChargePosition':
-                            this.bot._handle_charge_position(secondChild);
+                            this.bot._handle_chargePosition(secondChild);
                             this.emit('ChargePosition', this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
                             break;
                         case 'NetInfo':
-                            this.bot._handle_net_info(secondChild.attrs);
+                            this.bot._handle_netInfo(secondChild.attrs);
                             this.emit("NetInfoIP", this.bot.netInfoIP);
                             this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
                             break;
                         case 'SleepStatus':
-                            this.bot._handle_sleep_status(secondChild);
+                            this.bot._handle_sleepStatus(secondChild);
                             this.emit("SleepStatus", this.bot.sleep_status);
                             break;
                         case 'CleanSum':
