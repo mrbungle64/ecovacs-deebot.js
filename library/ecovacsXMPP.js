@@ -116,7 +116,7 @@ class EcovacsXMPP extends EventEmitter {
                             command = 'PullM';
                         }
                     }
-                    if (secondChild.children[0].name === 'CleanSt') {
+                    if ((secondChild.children[0]) && (secondChild.children[0].name === 'CleanSt')) {
                         command = 'CleanLogs';
                     }
                 }
