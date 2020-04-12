@@ -81,4 +81,12 @@ exports.COMPONENT_FROM_ECOVACS = {
     'heap': 'filter'
 };
 
+exports.MOVE_ACTION = {
+    'backward': 'backward',
+    'forward': 'forward',
+    'left': 'SpinLeft',
+    'right': 'SpinRight',
+    'turn_around': 'trunAround',
+    'stop': 'stop'
+};
 

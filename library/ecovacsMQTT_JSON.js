@@ -2,7 +2,6 @@ const EventEmitter = require('events');
 const tools = require('./tools.js');
 const URL = require('url').URL;
 const constants = require('./ecovacsConstants');
-const dictionary = require('./ecovacsConstants_950type');
 const https = require('https');
 
 String.prototype.format = function () {
@@ -16,7 +15,7 @@ String.prototype.format = function () {
 };
 
 class EcovacsMQTT_JSON extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, country, server_port) {
         super();
         this.mqtt = require('mqtt');
         this.client = null;
@@ -29,6 +28,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
         this.username = this.user + '@' + this.domain;
         this.clientId = this.username + '/' + this.resource;
         this.secret = secret;
+        this.country = country;
         this.continent = continent;
         this.vacuum = vacuum;
 
@@ -95,7 +95,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
     send_command(action, recipient) {
         let c = this._wrap_command(action, recipient);
         tools.envLog("[EcovacsMQTT_JSON] c: %s", JSON.stringify(c, getCircularReplacer()));
-        this._call_ecovacs_device_api(c).then((json) => {
+        this._call_ecovacs_device_api(c, action.api).then((json) => {
             this._handle_command_response(action, json);
         }).catch((e) => {
             tools.envLog("[EcovacsMQTT_JSON] error send_command: %s", e.toString());
@@ -131,32 +131,52 @@ class EcovacsMQTT_JSON extends EventEmitter {
             tools.envLog("[EcovacsMQTT_JSON] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
             return {};
         }
+        if (action.api == constants.IOTDEVMANAGERAPI) {
+            return {
+                'auth': {
+                    'realm': constants.REALM,
+                    'resource': this.resource,
+                    'token': this.secret,
+                    'userid': this.user,
+                    'with': 'users',
+                },
+                "cmdName": action.name,
+                "payload": this._wrap_command_getPayload(action),
 
-        return {
-            'auth': {
-                'realm': constants.REALM,
-                'resource': this.resource,
-                'token': this.secret,
-                'userid': this.user,
-                'with': 'users',
-            },
-            "cmdName": action.name,
-            "payload": this._wrap_command_getPayload(action),
-
-            "payloadType": "j",
-            "td": "q",
-            "toId": recipient,
-            "toRes": this.vacuum['resource'],
-            "toType": this.vacuum['class']
+                "payloadType": "j",
+                "td": "q",
+                "toId": recipient,
+                "toRes": this.vacuum['resource'],
+                "toType": this.vacuum['class']
+            }
+        }
+        if (action.api == constants.LGLOGAPI) {
+            return {
+                "did": recipient,
+                "country": this.country,
+                "td": action.name,
+                "auth": {
+                    "token": this.secret,
+                    "resource": this.resource,
+                    "userid": this.user,
+                    "with": "users",
+                    "realm": constants.REALM
+                },
+                "resource": "BTKk"
+            }
         }
     }
 
-    _call_ecovacs_device_api(params) {
+    _call_ecovacs_device_api(params, api) {
         return new Promise((resolve, reject) => {
-            let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
+            let url = (constants.PORTAL_URL_FORMAT + '/' + api).format({
                 continent: this.continent
             });
-            url = url + "?mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'] + "&cv=1.67.3&t=a&av=1.3.1";
+            url = url + "?cv=1.67.3&t=a&av=1.3.1";
+            if (api == constants.IOTDEVMANAGERAPI) {
+                url = url + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
+            }
+            
             let headers = {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(JSON.stringify(params))
@@ -187,6 +207,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 });
                 res.on('end', () => {
                     try {
+                        //tools.envLog("[EcovacsMQTT_JSON] call raw response %s", rawData);
                         const json = JSON.parse(rawData);
                         tools.envLog("[EcovacsMQTT_JSON] call response %s", JSON.stringify(json, getCircularReplacer()));
                         if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
@@ -220,7 +241,6 @@ class EcovacsMQTT_JSON extends EventEmitter {
     }
 
     _handle_command_response(action, message) {
-        let resp = null;
         let command = action.name;
         //action.args: arguments of the initial command that was sent
         tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() action: %s", action);
@@ -229,12 +249,15 @@ class EcovacsMQTT_JSON extends EventEmitter {
         if (message) {
             tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() message: %s", JSON.stringify(message, getCircularReplacer()));
             
-            if (message.hasOwnProperty('resp')) {
+            if (action.api == constants.IOTDEVMANAGERAPI && message.hasOwnProperty('resp')) {
                 tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
                 this._handle_message(command, message['resp'], "response");
+            } else if (action.api == constants.LGLOGAPI) {
+                tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
+                this._handle_message(command, message, "logResponse");
             }
             else {
-                tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() no resp-element");
+                tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() invalid response");
             }
         }
     }
@@ -252,22 +275,30 @@ class EcovacsMQTT_JSON extends EventEmitter {
         let eventName = topic;
         let resultCode = "0";
         let resultCodeMessage = "ok";
+        let resultData = message;
 
         if(type=="incoming"){
             // topic: iot/atr/onBattery/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/j
             eventName = topic.split('/')[2]; //parse 3rd element from string iot/atr/onPos/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/
             // message: {"header":{"pri":1,"tzm":480,"ts":"1581849631152","ver":"0.0.1","fwVer":"1.7.6","hwVer":"0.1.1"},"body":{"data":{"value":99,"isLow":0}}}
             message = JSON.parse(message);
-            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message message: %s", message);
+            resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
+            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message incoming: %s", message);
         }
         if(type=="response") {
-            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message message: %s", JSON.stringify(message, getCircularReplacer()));
+            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message response: %s", JSON.stringify(message, getCircularReplacer()));
             // message: {"header":{"pri":1,"tzm":480,"ts":"1581849460440","ver":"0.0.1","fwVer":"1.7.6","hwVer":"0.1.1"},
             // "body":{"code":0,"msg":"ok","data":{"enable":0,"amount":4}}}
-            resultCode = message['body']['code']; //nur bei responses
-            resultCodeMessage = message['body']['msg']; //nur bei responses
+            resultCode = message['body']['code'];
+            resultCodeMessage = message['body']['msg'];
+            resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
         }
-        let resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
+        if(type=="logResponse") {
+            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message logResponse: %s", JSON.stringify(message, getCircularReplacer()));
+            //{"ret":"ok","log":{"ts":1586430548,"last":1826,"area":32,"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a1","imageUrl":"https://portal-eu.ecouser.net/api/lg/image/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a","type":"auto","stopReason":2}}
+            //{"ret":"ok","map":{"ts":1586294523,"imageUrl":"https://portal-eu.ecouser.net/api/lg/offmap/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a1a1"}}
+            resultCodeMessage = message['ret'];
+        }                
 
         tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _message_to_dict eventName: %s", eventName);
         tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _message_to_dict resultCode: %s", resultCode);
@@ -398,6 +429,12 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
+                break;
+            case 'cleanlogs':
+            case 'lastcleanlog':
+                tools.envLog("[EcovacsMQTT] Logs: %s", JSON.stringify(event, getCircularReplacer()));
+                this.bot._handle_cleanLogs(event);
+                tools.envLog("[EcovacsMQTT] Logs: %s", this.bot.cleanLog);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);

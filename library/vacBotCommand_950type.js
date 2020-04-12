@@ -1,10 +1,12 @@
 const tools = require('./tools.js'),
-    constants_type = require('./ecovacsConstants_950type.js');
+    constants_type = require('./ecovacsConstants_950type.js'),
+    constants = require('./ecovacsConstants.js');
 
 class VacBotCommand_950type {
-    constructor(name, args = {}) {
+    constructor(name, args = {}, api = constants.IOTDEVMANAGERAPI) {
         this.name = name;
         this.args = Object.assign(args, { 'id': getReqID() });
+        this.api = api;
     }
 
     toString() {
@@ -96,6 +98,45 @@ class Charge extends VacBotCommand_950type {
     constructor() {
         super('charge', {'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']}
         );
+    }
+}
+
+class Move extends VacBotCommand_950type {
+    constructor(action) {
+        if (constants_type.MOVE_ACTION.hasOwnProperty(action)) {
+            action = constants_type.ACTION[action];
+        }
+        super("move", {'act': action});
+    }
+}
+
+class MoveBackward extends Move {
+    constructor() {
+        super("backward");
+    }
+}
+
+class MoveForward extends Move {
+    constructor() {
+        super("forward");
+    }
+}
+
+class MoveLeft extends Move {
+    constructor() {
+        super("left");
+    }
+}
+
+class MoveRight extends Move {
+    constructor() {
+        super("right");
+    }
+}
+
+class MoveTurnAround extends Move {
+    constructor() {
+        super("turn_around");
     }
 }
 
@@ -263,6 +304,12 @@ class GetSleepStatus extends VacBotCommand_950type {
     }
 }
 
+class GetCleanLogs extends VacBotCommand_950type {
+    constructor(count = 3) {
+        super("GetCleanLogs", {'count': count}, constants.LGLOGAPI);
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -272,6 +319,12 @@ module.exports.Stop = Stop;
 module.exports.Pause = Pause;
 module.exports.Resume = Resume;
 module.exports.Charge = Charge;
+module.exports.Move = Move;
+module.exports.MoveBackward = MoveBackward;
+module.exports.MoveForward = MoveForward;
+module.exports.MoveLeft = MoveLeft;
+module.exports.MoveRight = MoveRight;
+module.exports.MoveTurnAround = MoveTurnAround;
 module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
@@ -297,3 +350,4 @@ module.exports.GetMapNoMopZones = GetMapNoMopZones;
 module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapVirtualWallInfo = GetMapVirtualWallInfo;
 module.exports.GetMapNoMopZoneInfo = GetMapNoMopZoneInfo;
+module.exports.GetCleanLogs = GetCleanLogs;
