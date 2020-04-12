@@ -359,6 +359,7 @@ class EcovacsMQTT extends EventEmitter {
     //end session
     disconnect() {
         try {
+            clearInterval(this.bot.ping_interval);
             this.client.end();
             tools.envLog("[EcovacsMQTT] Closed MQTT Client");
         } catch (e) {

@@ -298,6 +298,7 @@ class EcovacsXMPP extends EventEmitter {
     }
 
     disconnect() {
+        clearInterval(this.bot.ping_interval);
         this.simpleXmpp.disconnect();
         tools.envLog("[EcovacsXMPP] Closed XMPP Client");
     }
