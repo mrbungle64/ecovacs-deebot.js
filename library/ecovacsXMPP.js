@@ -14,7 +14,7 @@ String.prototype.format = function () {
 };
 
 class EcovacsXMPP extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
         super();
         this.simpleXmpp = require('simple-xmpp');
 
@@ -24,6 +24,7 @@ class EcovacsXMPP extends EventEmitter {
         this.resource = resource;
         this.secret = secret;
         this.continent = continent;
+        this.country = country;
         this.vacuum = vacuum;
 
         this.iter = 1;

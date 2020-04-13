@@ -346,6 +346,12 @@ class GetCleanLogs extends VacBotCommand_non950type {
     }
 }
 
+class GetLogApiCleanLogs extends VacBotCommand_non950type {
+    constructor() {
+        super("GetLogApiCleanLogs");
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -384,3 +390,4 @@ module.exports.MoveLeft = MoveLeft;
 module.exports.MoveRight = MoveRight;
 module.exports.MoveTurnAround = MoveTurnAround;
 module.exports.GetCleanLogs = GetCleanLogs;
+module.exports.GetLogApiCleanLogs = GetLogApiCleanLogs;

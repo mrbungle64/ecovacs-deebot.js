@@ -5,7 +5,7 @@ const tools = require('./tools');
 const map = require('./mapTemplate.js');
 
 class VacBot_non950type {
-  constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
+  constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     this.vacuum = vacuum;
     this.cleanReport = null;
     this.deebotPosition = {
@@ -50,18 +50,18 @@ class VacBot_non950type {
     this.maps = null;
     this.mapSpotAreaInfos = [];
 
-    this.cleanLog = null;
+    this.cleanLog = [];
 
     this.getMapSetExecuted = false;
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
       const EcovacsXMPP = require('./ecovacsXMPP.js');
-      this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
     } else {
       tools.envLog("[VacBot] Using EcovacsIOTMQ");
       const EcovacsMQTT = require('./ecovacsMQTT.js');
-      this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address);
+      this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
     }
 
     this.ecovacs.on("ready", () => {
@@ -409,31 +409,51 @@ class VacBot_non950type {
 
   _handle_cleanLogs(event) {
     if (event.attrs) {
-      this.cleanLog = [];
       let count = event.children.length;
       if (event.attrs.hasOwnProperty('count')) {
-          count = parseInt(event.attrs['count']);
+        count = parseInt(event.attrs['count']);
       }
       for (let c = 0; c < count; c++) {
         let childElement = event.children[c];
-        if ((childElement.attrs) && (childElement.attrs.hasOwnProperty('a')) && (childElement.attrs.hasOwnProperty('s')) && (childElement.attrs.hasOwnProperty('l'))) {
-          let squareMeters = parseInt(childElement.attrs['a']);
-          tools.envLog("[VacBot] cleanLogs %s: %s m2", c, squareMeters);
-          let timestamp = parseInt(childElement.attrs['s']);
-          let date = new Date(timestamp*1000);
-          tools.envLog("[VacBot] cleanLogs %s: %s", c, date.toString());
-          let len = parseInt(childElement.attrs['l']);
-          let hours = Math.floor(len / 3600);
-          let minutes = Math.floor((len % 3600) / 60);
-          let seconds = Math.floor(len % 60);
-          let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
-          tools.envLog("[VacBot] cleanLogs %s: %s", c, totalTimeString);
-          this.cleanLog.push({
-            'squareMeters': squareMeters,
-            'timestamp': timestamp,
-            'length': len
-          });
+        tools.envLog('[VacBot] children: %s', JSON.stringify(childElement));
+        let timestamp = null;
+        let id = null;
+        let squareMeters = null;
+        let length = null;
+        let type = null;
+        let imageURL = null;
+        let stopReason = null;
+        if (childElement.attrs) {
+          timestamp = parseInt(childElement.attrs['s']);
+          id = timestamp + '@' + this.vacuum['resource'];
+          squareMeters = parseInt(childElement.attrs['a']);
+          length = parseInt(childElement.attrs['l']);
+          //type = parseInt(childElement.attrs['t']);
+          //stopReason = parseInt(childElement.attrs['f']);
+        } else {
+          timestamp = parseInt(childElement['ts']);
+          id = childElement['id'];
+          squareMeters = parseInt(childElement['area']);
+          length = parseInt(childElement['last']);
+          type = parseInt(childElement['type']);
+          imageURL = childElement['imageURL'];
         }
+        tools.envLog("[VacBot] cleanLogs %s: %s m2", c, squareMeters);
+        let date = new Date(timestamp * 1000);
+        tools.envLog("[VacBot] cleanLogs %s: %s", c, date.toString());
+        let hours = Math.floor(length / 3600);
+        let minutes = Math.floor((length % 3600) / 60);
+        let seconds = Math.floor(length % 60);
+        let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
+        tools.envLog("[VacBot] cleanLogs %s: %s", c, totalTimeString);
+        this.cleanLog[id] = {
+          'squareMeters': squareMeters,
+          'timestamp': timestamp,
+          'length': length,
+          'imageURL': imageURL,
+          'type': type,
+          'stopReason': stopReason
+        };
       }
     }
   }
@@ -663,6 +683,9 @@ class VacBot_non950type {
         break;
       case "moveturnaround":
         this.send_command(new vacBotCommand.MoveTurnAround());
+        break;
+      case "getlogapicleanlogs":
+        this.send_command(new vacBotCommand.GetLogApiCleanLogs());
         break;
       case "getcleanlogs":
         if (arguments.length < 2) {
