@@ -15,7 +15,7 @@ String.prototype.format = function () {
 };
 
 class EcovacsMQTT_JSON extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, country, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
         super();
         this.mqtt = require('mqtt');
         this.client = null;

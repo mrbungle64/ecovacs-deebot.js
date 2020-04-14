@@ -5,7 +5,7 @@ const   tools = require('./tools.js');
 const   map = require('./mapTemplate.js');
 
 class VacBot_950type {
-  constructor(user, hostname, resource, secret, vacuum, continent, server_address = null, country = 'DE') {
+  constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     this.vacuum = vacuum;
     this.clean_status = null;
     this.deebot_position = {
@@ -56,7 +56,7 @@ class VacBot_950type {
 
     tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
     const EcovacsMQTT = require('./ecovacsMQTT_JSON.js');
-    this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address, country);
+    this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 
 
     this.ecovacs.on("ready", () => {
