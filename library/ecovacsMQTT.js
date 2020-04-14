@@ -17,7 +17,7 @@ String.prototype.format = function () {
 };
 
 class EcovacsMQTT extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, vacuum, server_address, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
         super();
         this.mqtt = require('mqtt');
         this.client = null;
@@ -31,6 +31,7 @@ class EcovacsMQTT extends EventEmitter {
         this.clientId = this.username + '/' + this.resource;
         this.secret = secret;
         this.continent = continent;
+        this.country = country;
         this.vacuum = vacuum;
 
         if (!server_address) {
@@ -106,6 +107,21 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _wrap_command(action, recipient) {
+        if (action.name === 'GetLogApiCleanLogs') {
+            return {
+                'auth': {
+                    'realm': constants.REALM,
+                    'resource': this.resource,
+                    'token': this.secret,
+                    'userid': this.user,
+                    'with': 'users',
+                },
+                "did": recipient,
+                "country": this.country,
+                "td": "GetCleanLogs",
+                "resource": this.vacuum['resource']
+            }
+        }
         return {
             'auth': {
                 'realm': constants.REALM,
@@ -136,7 +152,11 @@ class EcovacsMQTT extends EventEmitter {
 
     _call_ecovacs_device_api(params) {
         return new Promise((resolve, reject) => {
-            let url = (constants.PORTAL_URL_FORMAT + '/' + constants.IOTDEVMANAGERAPI).format({
+            let api = constants.IOTDEVMANAGERAPI;
+            if (!params['cmdName']) {
+                api = constants.LGLOGAPI;
+            }
+            let url = (constants.PORTAL_URL_FORMAT + '/' + api).format({
                 continent: this.continent
             });
             let headers = {
@@ -190,8 +210,22 @@ class EcovacsMQTT extends EventEmitter {
     }
 
     _handle_command_response(action, json) {
+        let result = {};
         if (json.hasOwnProperty('resp')) {
-            let result = this._command_to_dict(json['resp'], action);
+            result = this._command_to_dict(json['resp'], action);
+            this._handle_command(action.name, result);
+        } else if (json.hasOwnProperty('logs')) {
+            const children = [];
+            for (let i=0; i < 20; i++) {
+                children.push(json.logs[i]);
+            }
+            result = {
+                'event': 'CleanLogs',
+                'attrs': {
+                    'count': 20
+                },
+                'children': children
+            };
             this._handle_command(action.name, result);
         } else {
             tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json, getCircularReplacer()));
@@ -342,7 +376,7 @@ class EcovacsMQTT extends EventEmitter {
             case 'CleanLogs':
                 tools.envLog("[EcovacsMQTT] Logs: %s", JSON.stringify(event, getCircularReplacer()));
                 this.bot._handle_cleanLogs(event);
-                tools.envLog("[EcovacsMQTT] Logs: %s", JSON.stringify(this.bot.cleanLog));
+                tools.envLog("[EcovacsMQTT] Logs: %s", this.bot.cleanLog);
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
