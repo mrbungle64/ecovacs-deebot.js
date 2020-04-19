@@ -103,9 +103,11 @@ class Charge extends VacBotCommand_950type {
 
 class Move extends VacBotCommand_950type {
     constructor(action) {
+        console.log(action);
         if (constants_type.MOVE_ACTION.hasOwnProperty(action)) {
-            action = constants_type.ACTION[action];
+            action = constants_type.MOVE_ACTION[action];
         }
+        console.log(action);
         super("move", {'act': action});
     }
 }
