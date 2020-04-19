@@ -243,12 +243,25 @@ class EcovacsMQTT extends EventEmitter {
         const firstChild = xml.childNodes[0];
         let attrs = {};
         let event = null;
+        console.log('TEST' +  xml);
         if (arguments.length > 1) {
             event = firstChild.tagName;
             const action = arguments[1];
             attrs = action.args
         } else {
-            event = firstChild.attributes.getNamedItem('td').value;
+            if (firstChild.attributes == undefined)
+            {
+                let unknownResult = {
+                    'event': 'unknown',
+                    'attrs': '',
+                    'children': []
+                };
+                return unknownResult;
+            }
+            else
+            {
+                event = firstChild.attributes.getNamedItem('td').value;
+            }
         }
         let result = {
             'event': event,
