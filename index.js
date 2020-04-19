@@ -3,7 +3,7 @@ const https = require('https'),
   crypto = require('crypto'),
   fs = require('fs'),
   constants = require('./library/ecovacsConstants.js'),
-
+  uniqid = require('uniqid'),
   tools = require('./library/tools.js'),
   countries = require('./countries.js');
 
@@ -116,7 +116,7 @@ class EcovacsAPI {
           params[key] = args[key];
         }
       }
-      params['requestId'] = EcovacsAPI.md5(Number.parseFloat(Date.now() / 1000).toFixed(0));
+      params['requestId'] = EcovacsAPI.md5(uniqid());
       let url = (EcovacsAPI.MAIN_URL_FORMAT + "/" + func).format(this.meta);
       url = new URL(url);
       url.search = this.__sign(params).join('&');
@@ -307,11 +307,11 @@ class EcovacsAPI {
     // yna5xi = Ozmo 950
     // vi829v = Ozmo 920
     if ((vacuum['class'] === 'yna5xi') || (vacuum['class'] === 'vi829v')) {
-      console.log('vacBot_950type identified');
+      tools.envLog('vacBot_950type identified');
       const VacBot_950type = require('./library/vacBot_950type');
       vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent);
     } else {
-      console.log('vacBot_non950type identified');
+      tools.envLog('vacBot_non950type identified');
       const VacBot_non950type = require('./library/vacBot_non950type');
       vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent);
     }

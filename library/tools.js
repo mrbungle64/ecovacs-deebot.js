@@ -47,6 +47,7 @@ function getEventNameForCommandString(str) {
         case 'clean':
         case 'cleanreport':
         case 'cleaninfo':
+        case 'cleanstate':
             return 'CleanReport';
         case 'charge':
         case 'chargestate':
@@ -80,7 +81,6 @@ function getEventNameForCommandString(str) {
             return 'SleepStatus';
         case 'cleansum':
             return 'CleanSum';
-        case 'cleanstate':
         case 'cleanspeed':
             return 'CleanSpeed';
         case 'mapset':
