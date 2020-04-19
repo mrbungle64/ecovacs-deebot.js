@@ -8,6 +8,8 @@ class VacBot_950type {
   constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     this.vacuum = vacuum;
     this.clean_status = null;
+    this.is_ready = false;
+
     this.deebot_position = {
       x: null,
       y: null,
@@ -59,6 +61,7 @@ class VacBot_950type {
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
+      this.is_ready = true;
       // this.run('GetBatteryState');
       // this.run('GetCleanState');
       // this.run('GetChargeState');
@@ -591,6 +594,7 @@ class VacBot_950type {
 
   disconnect() {
     this.ecovacs.disconnect();
+    this.is_ready = false;
   }
 }
 
