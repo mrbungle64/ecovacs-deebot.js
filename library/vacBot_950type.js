@@ -408,9 +408,9 @@ class VacBot_950type {
           tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + event['resultData']['mid']);
           this.mapSpotAreaInfos[event['resultData']['mid']] = []; //initialize array for mapSpotAreaInfos if not existing
         }
-        this.mapSpotAreaInfos[event['resultData']['mid']].push(mapSpotAreaInfo);
+        this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapSpotAreaInfo;
         tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + event['resultData']['mid'] + " = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']]));
-        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
+        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']]));
         return {mapsubsetEvent: 'MapSpotAreaInfo', mapsubsetData: mapSpotAreaInfo};
       } else if (event['resultData']['type'] == 'vw') { 
         let mapVirtualWallInfo = new map.EcovacsMapVirtualWallInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['value']);
