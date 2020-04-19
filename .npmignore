@@ -24,3 +24,5 @@ tsconfig.json
 
 # npm package files
 package-lock.json
+
+example/myInfo.js
