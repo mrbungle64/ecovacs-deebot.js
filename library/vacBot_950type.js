@@ -301,8 +301,8 @@ class VacBot_950type {
           this.cleanLog[logs[logIndex]['id']] = {
             'squareMeters': squareMeters,
             'timestamp': timestamp,
-            'length': len,
-            'imageURL': logs[logIndex]['imageUrl'],
+            'lastTime': len,
+            'imageUrl': logs[logIndex]['imageUrl'],
             'type': logs[logIndex]['type'],
             'stopReason': logs[logIndex]['stopReason']
           };
