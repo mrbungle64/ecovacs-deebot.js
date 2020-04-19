@@ -19,6 +19,14 @@ function getProductIotMap() {
     return constants.EcoVacsHomeProducts;
 }
 
+function getTimeString(time) {
+    let hours = Math.floor(time / 3600);
+    let minutes = Math.floor((time % 3600) / 60);
+    let seconds = Math.floor(time % 60);
+    let timeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
+    return timeString;
+}
+
 function isObject(val) {
     if (val === null) {
         return false;
@@ -127,3 +135,4 @@ module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getProductIotMap = getProductIotMap;
+module.exports.getTimeString = getTimeString;

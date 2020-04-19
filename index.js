@@ -313,7 +313,7 @@ class EcovacsAPI {
     } else {
       tools.envLog('vacBot_non950type identified');
       const VacBot_non950type = require('./library/vacBot_non950type');
-      vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent);
+      vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent, this.country);
     }
     return vacbot;
   }

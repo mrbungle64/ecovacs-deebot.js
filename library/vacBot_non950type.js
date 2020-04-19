@@ -417,44 +417,54 @@ class VacBot_non950type {
       }
       for (let c = 0; c < count; c++) {
         let childElement = event.children[c];
-        tools.envLog('[VacBot] children: %s', JSON.stringify(childElement));
-        let timestamp = null;
-        let id = null;
-        let squareMeters = null;
-        let length = null;
-        let type = null;
-        let imageURL = null;
-        let stopReason = null;
+        let timestamp;
         if (childElement.attrs) {
           timestamp = parseInt(childElement.attrs['s']);
-          id = timestamp + '@' + this.vacuum['resource'];
-          squareMeters = parseInt(childElement.attrs['a']);
-          length = parseInt(childElement.attrs['l']);
-          //type = parseInt(childElement.attrs['t']);
-          //stopReason = parseInt(childElement.attrs['f']);
         } else {
           timestamp = parseInt(childElement['ts']);
-          id = childElement['id'];
-          squareMeters = parseInt(childElement['area']);
-          length = parseInt(childElement['last']);
-          type = parseInt(childElement['type']);
-          imageURL = childElement['imageURL'];
         }
-        tools.envLog("[VacBot] cleanLogs %s: %s m2", c, squareMeters);
+        let key = timestamp + '@' + this.vacuum['resource'];
+        if (!this.cleanLog[key]) {
+          this.cleanLog[key] = {};
+        }
+        let id = this.cleanLog[key]['id'];
+        let squareMeters = this.cleanLog[key]['squareMeters'];
+        let lastTime = this.cleanLog[key]['last'];
+        let type = this.cleanLog[key]['type'];
+        let imageUrl = this.cleanLog[key]['imageUrl'];
+        let stopReason = this.cleanLog[key]['stopReason'];
+        let trigger = this.cleanLog[key]['trigger'];
+        if (childElement.attrs) {
+          timestamp = parseInt(childElement.attrs['s']);
+          squareMeters = parseInt(childElement.attrs['a']);
+          lastTime = parseInt(childElement.attrs['l']);
+          if (dictionary.STOP_REASON[childElement.attrs['f']]) {
+            stopReason = dictionary.STOP_REASON[childElement.attrs['f']];
+          }
+          if (dictionary.TRIGGER[childElement.attrs['t']]) {
+            trigger = dictionary.TRIGGER[childElement.attrs['t']];
+          }
+        } else {
+          id = childElement['id'];
+          timestamp = parseInt(childElement['ts']);
+          squareMeters = parseInt(childElement['area']);
+          lastTime = parseInt(childElement['last']);
+          type = childElement['type'];
+          imageUrl = childElement['imageUrl'];
+        }
         let date = new Date(timestamp * 1000);
-        tools.envLog("[VacBot] cleanLogs %s: %s", c, date.toString());
-        let hours = Math.floor(length / 3600);
-        let minutes = Math.floor((length % 3600) / 60);
-        let seconds = Math.floor(length % 60);
-        let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
-        tools.envLog("[VacBot] cleanLogs %s: %s", c, totalTimeString);
-        this.cleanLog[id] = {
-          'squareMeters': squareMeters,
+        let totalTimeString = tools.getTimeString(lastTime);
+        this.cleanLog[key] = {
+          'id': id,
           'timestamp': timestamp,
-          'length': length,
-          'imageURL': imageURL,
+          'date': date,
+          'lastTime': lastTime,
+          'totalTimeString': totalTimeString,
+          'squareMeters': squareMeters,
+          'imageUrl': imageUrl,
+          'stopReason': stopReason,
           'type': type,
-          'stopReason': stopReason
+          'trigger': trigger
         };
       }
     }
