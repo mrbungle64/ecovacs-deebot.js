@@ -5,7 +5,7 @@ const   tools = require('./tools.js');
 const   map = require('./mapTemplate.js');
 
 class VacBot_950type {
-  constructor(user, hostname, resource, secret, vacuum, continent, server_address = null) {
+  constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     this.vacuum = vacuum;
     this.clean_status = null;
     this.is_ready = false;
@@ -44,6 +44,8 @@ class VacBot_950type {
 
     this.maps = null;
     this.mapSpotAreaInfos = [];
+
+    this.cleanLog = [];
     
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
@@ -56,7 +58,7 @@ class VacBot_950type {
 
     tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
     const EcovacsMQTT = require('./ecovacsMQTT_JSON.js');
-    this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, vacuum, server_address);
+    this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 
 
     this.ecovacs.on("ready", () => {
@@ -277,6 +279,42 @@ class VacBot_950type {
     tools.envLog("[VacBot] *** clean_status = %s", this.clean_status);
   }
 
+  _handle_cleanLogs(event) {
+    if (event['resultCode'] == '0') {
+      let logs = [];
+      if(event['resultData'].hasOwnProperty('logs')) {
+        logs = event['resultData']['logs'];
+      } else if(event['resultData'].hasOwnProperty('log')) {
+        logs = event['resultData']['log'];
+      }
+
+      for ( let logIndex in logs) {
+        if(!this.cleanLog[logs[logIndex]['id']] ) { //log not yet existing
+          let squareMeters = parseInt(logs[logIndex]['area']);
+          tools.envLog("[VacBot] cleanLogs %s: %s m2", logIndex, squareMeters);
+          let timestamp = parseInt(logs[logIndex]['ts']);
+          let date = new Date(timestamp*1000);
+          tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, date.toString());
+          let len = parseInt(logs[logIndex]['last']);
+          let hours = Math.floor(len / 3600);
+          let minutes = Math.floor((len % 3600) / 60);
+          let seconds = Math.floor(len % 60);
+          let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
+          tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
+          this.cleanLog[logs[logIndex]['id']] = {
+            'squareMeters': squareMeters,
+            'timestamp': timestamp,
+            'lastTime': len,
+            'imageUrl': logs[logIndex]['imageUrl'],
+            'type': logs[logIndex]['type'],
+            'stopReason': logs[logIndex]['stopReason']
+          };
+        }
+      }
+    }
+    tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
+  }
+
   _handle_cleanSum(event) {
     this.cleanSum_totalSquareMeters = parseInt(event['resultData']['area']);
     this.cleanSum_totalSeconds = parseInt(event['resultData']['time']);
@@ -373,9 +411,9 @@ class VacBot_950type {
           tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + event['resultData']['mid']);
           this.mapSpotAreaInfos[event['resultData']['mid']] = []; //initialize array for mapSpotAreaInfos if not existing
         }
-        this.mapSpotAreaInfos[event['resultData']['mid']].push(mapSpotAreaInfo);
+        this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapSpotAreaInfo;
         tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + event['resultData']['mid'] + " = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']]));
-        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
+        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']]));
         return {mapsubsetEvent: 'MapSpotAreaInfo', mapsubsetData: mapSpotAreaInfo};
       } else if (event['resultData']['type'] == 'vw') { 
         let mapVirtualWallInfo = new map.EcovacsMapVirtualWallInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['value']);
@@ -507,7 +545,28 @@ class VacBot_950type {
       case "charge":
         this.send_command(new vacBotCommand.Charge());
         break;
-      case "relocate":
+        case "move":
+          if (arguments.length < 2) {
+            return;
+          }
+          this.send_command(new vacBotCommand.Move(arguments[1]));
+          break;
+        case "movebackward":
+          this.send_command(new vacBotCommand.MoveBackward());
+          break;
+        case "moveforward":
+          this.send_command(new vacBotCommand.MoveForward());
+          break;
+        case "moveleft":
+          this.send_command(new vacBotCommand.MoveLeft());
+          break;
+        case "moveright":
+          this.send_command(new vacBotCommand.MoveRight());
+          break;
+        case "moveturnaround":
+          this.send_command(new vacBotCommand.MoveTurnAround());
+          break;
+        case "relocate":
         this.send_command(new vacBotCommand.Relocate());
         break;
       case "playsound":
@@ -587,6 +646,13 @@ class VacBot_950type {
           return;
         }
         this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
+        break;
+      case "getcleanlogs":
+        if (arguments.length < 2) {
+          this.send_command(new vacBotCommand.GetCleanLogs());
+        } else {
+          this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
+        }
         break;
     }
   

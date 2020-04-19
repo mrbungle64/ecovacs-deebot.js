@@ -309,7 +309,7 @@ class EcovacsAPI {
     if ((vacuum['class'] === 'yna5xi') || (vacuum['class'] === 'vi829v')) {
       tools.envLog('vacBot_950type identified');
       const VacBot_950type = require('./library/vacBot_950type');
-      vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent);
+      vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent, this.country);
     } else {
       tools.envLog('vacBot_non950type identified');
       const VacBot_non950type = require('./library/vacBot_non950type');
