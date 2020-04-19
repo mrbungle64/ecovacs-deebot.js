@@ -55,6 +55,12 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.5
+* (nicoduj) Fixed `Failure code 0002` error
+* Implemented move commands
+* Some work on implementation of handling cleanLogs
+* Several enhancements and fixes
+
 ### 0.4.4
 * Added support for Ozmo 920
 
