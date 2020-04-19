@@ -84,3 +84,29 @@ exports.ACTION = {
     'turn_around': 'trunAround',
     'stop': 'stop'
 };
+
+exports.STOP_REASON = {
+    's': 'clean_successful',
+    'r': 'battery_low',
+    'a': 'stopped_by_app',
+    'i': 'stopped_by_remote_control',
+    'b': 'stopped_by_button',
+    'w': 'stopped_by_warning',
+    'f': 'stopped_by_no_disturb',
+    'm': 'stopped_by_clearmap',
+    'n': 'stopped_by_no_path',
+    'u': 'stopped_by_not_in_map',
+    'v': 'stopped_by_virtual_wall'
+};
+
+exports.TRIGGER = {
+    'a': 'app',
+    'i': 'remote_control',
+    'b': 'button',
+    's': 'schedule',
+    'p': 'schedule_from_app',
+    'q': 'schedule_from_device',
+    'bp': 'pause_from_break',
+    'dnd': 'pause_from_disturb',
+    'e': 'error'
+};
