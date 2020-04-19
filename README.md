@@ -55,6 +55,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.6
+* (nicoduj) Bugfix release
+
 ### 0.4.5
 * (nicoduj) Fixed `Failure code 0002` error
 * Implemented move commands
