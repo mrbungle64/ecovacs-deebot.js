@@ -337,6 +337,9 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.bot._handle_clean_info(event);
                 this.emit("CleanReport", this.bot.clean_status);
                 this.emit("ChargeState", this.bot.charge_status);
+                if (this.bot.lastAreaValues) {
+                    this.emit("LastAreaValues", this.bot.lastAreaValues);
+                }
                 break;
             case "cleanspeed":
             case "speed":

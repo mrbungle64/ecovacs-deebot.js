@@ -25,6 +25,7 @@ class VacBot_950type {
       changeFlag: false
     };
     this.fan_speed = null;
+    this.lastAreaValues = null;
     this.relocation_state = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -259,6 +260,9 @@ class VacBot_950type {
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['type']];
         } else {
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
+        }
+        if (event['resultData']['cleanState']['type'] == 'customArea') {
+          lastAreaValues = event['resultData']['cleanState']['content'];
         }
       } else if (event['resultData']['trigger'] === 'alert') {
         this.clean_status = 'alert';
