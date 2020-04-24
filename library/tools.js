@@ -105,6 +105,11 @@ function getEventNameForCommandString(str) {
         case 'cleanlogs':
         case 'logapicleanlogs':
             return 'CleanLogs';
+        case 'off':
+        case 'getonoff':
+            return 'GetOnOff';
+        case 'setonoff':
+            return 'SetOnOff';
         default:
             envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;

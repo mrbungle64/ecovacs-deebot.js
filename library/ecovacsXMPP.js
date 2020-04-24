@@ -219,6 +219,12 @@ class EcovacsXMPP extends EventEmitter {
                                 tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog[i]));
                             }
                             break;
+                        case 'GetOnOff':
+                            tools.envLog("[EcovacsMQTT] GetOnOff: %s", JSON.stringify(secondChild));
+                            break;
+                        case 'SetOnOff':
+                            tools.envLog("[EcovacsMQTT] SetOnOff: %s", JSON.stringify(secondChild));
+                            break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
                             break;

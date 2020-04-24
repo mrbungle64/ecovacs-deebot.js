@@ -352,6 +352,23 @@ class GetLogApiCleanLogs extends VacBotCommand_non950type {
     }
 }
 
+class GetOnOff extends VacBotCommand_non950type {
+    constructor(type = 's') {
+        super('GetOnOff', {
+            't': type
+        });
+    }
+}
+
+class SetOnOff extends VacBotCommand_non950type {
+    constructor(type = 's', on = 1) {
+        super('SetOnOff', {
+            't': type,
+            'on': on
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -391,3 +408,5 @@ module.exports.MoveRight = MoveRight;
 module.exports.MoveTurnAround = MoveTurnAround;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLogApiCleanLogs = GetLogApiCleanLogs;
+module.exports.GetOnOff = GetOnOff;
+module.exports.SetOnOff = SetOnOff;

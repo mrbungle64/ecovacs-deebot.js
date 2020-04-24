@@ -699,6 +699,22 @@ class VacBot_non950type {
       case "getlogapicleanlogs":
         this.send_command(new vacBotCommand.GetLogApiCleanLogs());
         break;
+      case "getonoff":
+        if (arguments.length < 2) {
+          this.send_command(new vacBotCommand.GetOnOff());
+        } else {
+          this.send_command(new vacBotCommand.GetOnOff(arguments[1]));
+        }
+        break;
+      case "setonoff":
+        if (arguments.length < 2) {
+          this.send_command(new vacBotCommand.SetOnOff());
+        } else if (arguments.length < 3) {
+          this.send_command(new vacBotCommand.SetOnOff(arguments[1]));
+        } else {
+          this.send_command(new vacBotCommand.SetOnOff(arguments[1],arguments[2]));
+        }
+        break;
       case "getcleanlogs":
         if (arguments.length < 2) {
           this.send_command(new vacBotCommand.GetCleanLogs());
