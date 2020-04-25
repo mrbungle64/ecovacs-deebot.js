@@ -39,6 +39,10 @@ class VacBot_non950type {
     this.cleanSum_totalSquareMeters = null;
     this.cleanSum_totalSeconds = null;
     this.cleanSum_totalNumber = null;
+    // OnOff
+    this.doNotDisturbEnabled = null;
+    this.continuousCleaningEnabled = null;
+    this.voiceReportDisabled = null;
 
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
@@ -241,7 +245,6 @@ class VacBot_non950type {
   }
 
   _handle_mapP(event) {
-
     this.currentMapMID = event.attrs['i'];
     this.maps = {
       "maps": [
@@ -249,9 +252,7 @@ class VacBot_non950type {
             event.attrs['i'], 0, this.currentMapName, true, true, true)
       ]
     };
-
     this.run('GetMapSet');
-
     return this.maps;
   }
 
@@ -386,7 +387,7 @@ class VacBot_non950type {
       let chargemode = event.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode]) {
         this.chargeStatus = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
-        tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus)
+        tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus);
       } else {
         console.error("[VacBot] Unknown charging status '%s'", chargemode);
       }
@@ -460,6 +461,27 @@ class VacBot_non950type {
           'type': type,
           'trigger': trigger
         };
+      }
+    }
+  }
+
+  _handle_onOff(event) {
+    tools.envLog("[VacBot] *** _handleOnOff = " + JSON.stringify(event));
+    if ((event.attrs.hasOwnProperty('on'))) {
+      let id = parseInt(event.attrs.id);
+      switch (id) {
+        case 999999990:
+          this.doNotDisturbEnabled = event.attrs.on;
+          tools.envLog("[VacBot] *** doNotDisturbEnabled = " + this.doNotDisturbEnabled);
+          break;
+        case 999999991:
+          this.continuousCleaningEnabled = event.attrs.on;
+          tools.envLog("[VacBot] *** continuousCleaningEnabled = " + this.continuousCleaningEnabled);
+          break;
+        case 999999992:
+          this.voiceReportDisabled = event.attrs.on;
+          tools.envLog("[VacBot] *** voiceReportDisabled = " + this.voiceReportDisabled);
+          break;
       }
     }
   }

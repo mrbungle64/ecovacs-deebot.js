@@ -354,8 +354,11 @@ class GetLogApiCleanLogs extends VacBotCommand_non950type {
 
 class GetOnOff extends VacBotCommand_non950type {
     constructor(type = 's') {
+        const tid = (type === 'b') ? 0 : (type === 'g') ? 1 : 2;
+        let id = 999999990 + tid;
         super('GetOnOff', {
-            't': type
+            't': type,
+            'id': id
         });
     }
 }
