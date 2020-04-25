@@ -45,13 +45,13 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot Ozmo 930
 * Deebot Ozmo 950
 
-### These models should work partially
-* Deebot Ozmo 900
-
 ### These models should work
+* Deebot N79S
 * Deebot N79T
 * Deebot M88
 * Deebot 600/605
+* Deebot Ozmo 900
+* Deebot Ozmo Slim 10
 
 ## Changelog
 
