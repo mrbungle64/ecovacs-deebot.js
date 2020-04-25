@@ -53,8 +53,6 @@ class VacBot_non950type {
 
     this.cleanLog = [];
 
-    this.getMapSetExecuted = false;
-
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
       const EcovacsXMPP = require('./ecovacsXMPP.js');
@@ -243,9 +241,6 @@ class VacBot_non950type {
   }
 
   _handle_mapP(event) {
-    if (this.getMapSetExecuted) {
-      return;
-    }
 
     this.currentMapMID = event.attrs['i'];
     this.maps = {
@@ -256,7 +251,6 @@ class VacBot_non950type {
     };
 
     this.run('GetMapSet');
-    this.getMapSetExecuted = true;
 
     return this.maps;
   }
@@ -316,7 +310,7 @@ class VacBot_non950type {
         tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + this.currentMapMID);
         this.mapSpotAreaInfos[this.currentMapMID] = []; //initialize array for mapSpotAreaInfos if not existing
       }
-      this.mapSpotAreaInfos[this.currentMapMID].push(mapSpotAreaInfo);
+      this.mapSpotAreaInfos[this.currentMapMID][id] = mapSpotAreaInfo;
       //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + this.currentMapMID + " = " + JSON.stringify(this.mapSpotAreaInfos[this.currentMapMID]));
       tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
       return {
