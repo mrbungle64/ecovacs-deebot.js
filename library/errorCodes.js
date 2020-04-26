@@ -1,5 +1,6 @@
 const CODES = {
     '0': 'NoError: Robot is operational',
+    '3': 'RequestOAuthError: Authentication error',
     '100': 'NoError: Robot is operational',
     '101': 'BatteryLow: Low battery',
     '102': 'HostHang: Robot is off the floor',
