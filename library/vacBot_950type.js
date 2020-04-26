@@ -25,6 +25,7 @@ class VacBot_950type {
       changeFlag: false
     };
     this.fan_speed = null;
+    this.lastAreaValues = null;
     this.relocation_state = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -260,8 +261,14 @@ class VacBot_950type {
         } else {
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
         }
+        if (event['resultData']['cleanState']['type'] == 'customArea') {
+          this.lastAreaValues = event['resultData']['cleanState']['content'];
+        } else {
+          this.lastAreaValues = null;
+        }
       } else if (event['resultData']['trigger'] === 'alert') {
         this.clean_status = 'alert';
+        this.lastAreaValues = null;
       } else {
         this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
         if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'returning') { //set charge state on returning to dock
@@ -272,6 +279,7 @@ class VacBot_950type {
           //if this is not run, the status when canceling the return stays on 'returning'
           this.run('GetChargeState');
         }
+        this.lastAreaValues = null;
       }
     } else {
       this.clean_status = 'error';
