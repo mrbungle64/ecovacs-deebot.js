@@ -238,7 +238,7 @@ class GetPosition extends VacBotCommand_950type {
 class PlaySound extends VacBotCommand_950type {
     constructor(sid = 0) {
         let sidAsNumber = parseInt(sid);
-        super('playSound', {'count': 1, 'sid': sidAsNumber});
+        super('playSound', {'sid': sidAsNumber}); //removed count attribute as it has no effect
     }
 }
 
