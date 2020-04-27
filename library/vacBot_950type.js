@@ -160,7 +160,7 @@ class VacBot_950type {
         try {
           type = dictionary.COMPONENT_FROM_ECOVACS[type];
         } catch (e) {
-          console.error("[VacBot] Unknown component type: ", event);
+          tools.envLog("[VacBot] Unknown component type: ", event);
         }
         tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
         
@@ -231,7 +231,7 @@ class VacBot_950type {
           return;
         }
         if (!event) {
-          console.error("[VacBot] _handle_deebot_position event undefined");
+          tools.envLog("[VacBot] _handle_deebot_position event undefined");
         }
   }
   _handle_fan_speed(event) {
@@ -460,7 +460,7 @@ class VacBot_950type {
       }
       return;
     } else {
-      console.error("[VacBot] couldn't parse charge status ", event);
+      tools.envLog("[VacBot] couldn't parse charge status ", event);
     }
   }
 
