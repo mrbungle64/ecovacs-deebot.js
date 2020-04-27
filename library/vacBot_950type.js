@@ -471,7 +471,7 @@ class VacBot_950type {
 
   _handle_error(event) {
     
-    this.errorCode = event['resultData']['code'];
+    this.errorCode = event['resultData']['code'].toString();
 
     if (errorCodes[this.errorCode]) { // known errorCode from library
       this.errorDescription = errorCodes[this.errorCode];
