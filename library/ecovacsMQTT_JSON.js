@@ -222,14 +222,14 @@ class EcovacsMQTT_JSON extends EventEmitter {
                             });
                         }
                     } catch (e) {
-                        console.error("[EcovacsMQTT_JSON] error: " + e.toString());
+                        tools.envLog("[EcovacsMQTT_JSON] error: " + e.toString());
                         reject(e);
                     }
                 });
             });
 
             req.on('error', (e) => {
-                console.error(`[EcoVacsAPI] problem with request: ${e.message}`);
+                tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
                 reject(e); 
             });
 

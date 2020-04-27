@@ -192,14 +192,14 @@ class EcovacsMQTT extends EventEmitter {
                             });
                         }
                     } catch (e) {
-                        console.error("[EcovacsMQTT] " + e.toString());
+                        tools.envLog("[EcovacsMQTT] " + e.toString());
                         reject(e);
                     }
                 });
             });
 
             req.on('error', (e) => {
-                console.error(`[EcoVacsAPI] problem with request: ${e.message}`);
+                tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
                 reject(e);
             });
 

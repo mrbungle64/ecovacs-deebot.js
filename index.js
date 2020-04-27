@@ -134,7 +134,7 @@ class EcovacsAPI {
             `Status Code: ${statusCode}`);
         }
         if (error) {
-          console.error("[EcovacsAPI] " + error.message);
+          tools.envLog("[EcovacsAPI] " + error.message);
           res.resume();
           return;
         }
@@ -165,12 +165,12 @@ class EcovacsAPI {
               }));
             }
           } catch (e) {
-            console.error("[EcovacsAPI] " + e.message);
+            tools.envLog("[EcovacsAPI] " + e.message);
             reject(e);
           }
         });
       }).on('error', (e) => {
-        console.error(`[EcoVacsAPI] Got error: ${e.message}`);
+        tools.envLog(`[EcoVacsAPI] Got error: ${e.message}`);
         reject(e);
       });
     });
@@ -251,14 +251,14 @@ class EcovacsAPI {
               }
             }
           } catch (e) {
-            console.error("[EcovacsAPI] " + e.message);
+            tools.envLog("[EcovacsAPI] " + e.message);
             reject(e);
           }
         });
       });
 
       req.on('error', (e) => {
-        console.error(`[EcoVacsAPI] problem with request: ${e.message}`);
+        tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
         reject(e);
       });
 

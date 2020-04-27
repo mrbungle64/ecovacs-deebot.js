@@ -133,7 +133,7 @@ class VacBot_non950type {
     }
 
     if (!type) {
-      console.error("[VacBot] Unknown component type: ", event);
+      tools.envLog("[VacBot] Unknown component type: ", event);
       return;
     }
 
@@ -231,7 +231,7 @@ class VacBot_non950type {
       this.batteryInfo = value;
       tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
     } catch (e) {
-      console.error("[VacBot] couldn't parse battery info ", event);
+      tools.envLog("[VacBot] couldn't parse battery info ", event);
     }
   }
 
@@ -394,10 +394,10 @@ class VacBot_non950type {
         this.chargeStatus = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
         tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus)
       } else {
-        console.error("[VacBot] Unknown charging status '%s'", chargemode);
+        tools.envLog("[VacBot] Unknown charging status '%s'", chargemode);
       }
     } else {
-      console.error("[VacBot] couldn't parse charge status ", event);
+      tools.envLog("[VacBot] couldn't parse charge status ", event);
     }
   }
 
