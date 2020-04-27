@@ -393,6 +393,15 @@ class EcovacsMQTT extends EventEmitter {
                     tools.envLog("[EcovacsMQTT] Logs: %s", JSON.stringify(this.bot.cleanLog[i], getCircularReplacer()));
                 }
                 break;
+            case 'GetOnOff':
+                this.bot._handle_onOff(event);
+                this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
+                this.emit("ContinuousCleaningEnabled", this.bot.continuousCleaningEnabled);
+                this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
+                break;
+            case 'SetOnOff':
+                tools.envLog("[EcovacsMQTT] SetOnOff: %s", JSON.stringify(event, getCircularReplacer()));
+                break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);
                 break;

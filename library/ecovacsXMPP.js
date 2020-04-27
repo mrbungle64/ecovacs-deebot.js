@@ -79,7 +79,10 @@ class EcovacsXMPP extends EventEmitter {
                         }
                     }
                     if (secondChild.attrs.hasOwnProperty('on')) {
-                        if (secondChild.attrs.on) {
+                        let id = parseInt(secondChild.attrs.id);
+                        if ((id >= 999999990) && (id <= 999999992)) {
+                            command = 'GetOnOff';
+                        } else {
                             command = 'WaterBoxInfo';
                         }
                     }
@@ -218,6 +221,15 @@ class EcovacsXMPP extends EventEmitter {
                             for (let i in this.bot.cleanLog) {
                                 tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog[i]));
                             }
+                            break;
+                        case 'GetOnOff':
+                            this.bot._handle_onOff(secondChild);
+                            this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
+                            this.emit("ContinuousCleaningEnabled", this.bot.continuousCleaningEnabled);
+                            this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
+                            break;
+                        case 'SetOnOff':
+                            tools.envLog("[EcovacsMQTT] SetOnOff: %s", JSON.stringify(secondChild));
                             break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

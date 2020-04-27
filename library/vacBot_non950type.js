@@ -39,6 +39,10 @@ class VacBot_non950type {
     this.cleanSum_totalSquareMeters = null;
     this.cleanSum_totalSeconds = null;
     this.cleanSum_totalNumber = null;
+    // OnOff
+    this.doNotDisturbEnabled = null;
+    this.continuousCleaningEnabled = null;
+    this.voiceReportDisabled = null;
 
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
@@ -52,8 +56,6 @@ class VacBot_non950type {
     this.mapSpotAreaInfos = [];
 
     this.cleanLog = [];
-
-    this.getMapSetExecuted = false;
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -139,7 +141,12 @@ class VacBot_non950type {
 
     let lifespan = null;
     if ((event.hasOwnProperty('val')) && (event.hasOwnProperty('total'))) {
-      lifespan = parseInt(event['val']) / parseInt(event['total']) * 100;
+      if (this.deviceClass === '165' /* DEEBOT N79T/W */) {
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
+        lifespan = parseInt(event['val']);
+      } else {
+        lifespan = parseInt(event['val']) / parseInt(event['total']) * 100;
+      }
     } else if (event.hasOwnProperty('val')) {
       lifespan = parseInt(event['val']) / 100;
     } else if (event.hasOwnProperty('left') && (event.hasOwnProperty('total'))) {
@@ -243,10 +250,6 @@ class VacBot_non950type {
   }
 
   _handle_mapP(event) {
-    if (this.getMapSetExecuted) {
-      return;
-    }
-
     this.currentMapMID = event.attrs['i'];
     this.maps = {
       "maps": [
@@ -254,10 +257,7 @@ class VacBot_non950type {
             event.attrs['i'], 0, this.currentMapName, true, true, true)
       ]
     };
-
     this.run('GetMapSet');
-    this.getMapSetExecuted = true;
-
     return this.maps;
   }
 
@@ -316,7 +316,7 @@ class VacBot_non950type {
         tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + this.currentMapMID);
         this.mapSpotAreaInfos[this.currentMapMID] = []; //initialize array for mapSpotAreaInfos if not existing
       }
-      this.mapSpotAreaInfos[this.currentMapMID].push(mapSpotAreaInfo);
+      this.mapSpotAreaInfos[this.currentMapMID][id] = mapSpotAreaInfo;
       //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + this.currentMapMID + " = " + JSON.stringify(this.mapSpotAreaInfos[this.currentMapMID]));
       tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
       return {
@@ -392,7 +392,7 @@ class VacBot_non950type {
       let chargemode = event.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode]) {
         this.chargeStatus = dictionary.CHARGE_MODE_FROM_ECOVACS[chargemode];
-        tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus)
+        tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus);
       } else {
         console.error("[VacBot] Unknown charging status '%s'", chargemode);
       }
@@ -466,6 +466,27 @@ class VacBot_non950type {
           'type': type,
           'trigger': trigger
         };
+      }
+    }
+  }
+
+  _handle_onOff(event) {
+    tools.envLog("[VacBot] *** _handleOnOff = " + JSON.stringify(event));
+    if ((event.attrs.hasOwnProperty('on'))) {
+      let id = parseInt(event.attrs.id);
+      switch (id) {
+        case 999999990:
+          this.doNotDisturbEnabled = event.attrs.on;
+          tools.envLog("[VacBot] *** doNotDisturbEnabled = " + this.doNotDisturbEnabled);
+          break;
+        case 999999991:
+          this.continuousCleaningEnabled = event.attrs.on;
+          tools.envLog("[VacBot] *** continuousCleaningEnabled = " + this.continuousCleaningEnabled);
+          break;
+        case 999999992:
+          this.voiceReportDisabled = event.attrs.on;
+          tools.envLog("[VacBot] *** voiceReportDisabled = " + this.voiceReportDisabled);
+          break;
       }
     }
   }
@@ -698,6 +719,22 @@ class VacBot_non950type {
         break;
       case "getlogapicleanlogs":
         this.send_command(new vacBotCommand.GetLogApiCleanLogs());
+        break;
+      case "getonoff":
+        if (arguments.length < 2) {
+          this.send_command(new vacBotCommand.GetOnOff());
+        } else {
+          this.send_command(new vacBotCommand.GetOnOff(arguments[1]));
+        }
+        break;
+      case "setonoff":
+        if (arguments.length < 2) {
+          this.send_command(new vacBotCommand.SetOnOff());
+        } else if (arguments.length < 3) {
+          this.send_command(new vacBotCommand.SetOnOff(arguments[1]));
+        } else {
+          this.send_command(new vacBotCommand.SetOnOff(arguments[1],arguments[2]));
+        }
         break;
       case "getcleanlogs":
         if (arguments.length < 2) {
