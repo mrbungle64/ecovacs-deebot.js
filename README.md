@@ -35,7 +35,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Models
 
-### Theses models are known to work
+### These models are known to work
 * Deebot N79T/W
 * Deebot Slim 2
 * Deebot 601
