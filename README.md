@@ -36,24 +36,27 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Models
 
 ### Theses models are known to work
+* Deebot N79T/W
 * Deebot Slim 2
 * Deebot 601
 * Deebot 710/711
 * Deebot 900/901
 * Deebot Ozmo 610
+* Deebot Ozmo 900
 * Deebot Ozmo 920
 * Deebot Ozmo 930
 * Deebot Ozmo 950
 
 ### These models should work
 * Deebot N79S
-* Deebot N79T
 * Deebot M88
 * Deebot 600/605
-* Deebot Ozmo 900
 * Deebot Ozmo Slim 10
 
 ## Changelog
+
+### 0.4.7
+* Several enhancements and fixes
 
 ### 0.4.6
 * (nicoduj) Bugfix release
