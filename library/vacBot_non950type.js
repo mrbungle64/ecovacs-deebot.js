@@ -56,6 +56,8 @@ class VacBot_non950type {
     this.mapSpotAreaInfos = [];
 
     this.cleanLog = [];
+    this.cleanLog_lastImageUrl = null;
+    this.cleanLog_lastImageTimestamp = null;
 
     if (!this.useMqtt) {
       tools.envLog("[VacBot] Using EcovacsXMPP");
@@ -454,6 +456,14 @@ class VacBot_non950type {
         }
         let date = new Date(timestamp * 1000);
         let totalTimeString = tools.getTimeString(lastTime);
+
+        if ((c === 0) && (imageUrl)) {
+          this.cleanLog_lastImageUrl = imageUrl;
+          this.cleanLog_lastImageTimestamp = timestamp;
+          tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+          tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+        }
+
         this.cleanLog[key] = {
           'id': id,
           'timestamp': timestamp,
