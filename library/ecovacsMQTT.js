@@ -187,6 +187,13 @@ class EcovacsMQTT extends EventEmitter {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            this.bot._handle_error({code: json['errno']});
+                            this.emit("Error", this.bot.errorDescription);
+                            this.emit('ErrorCode', this.bot.errorCode);
+                            if (json['errno'] == 3) { //request oauth error
+                                this.emit("disconnect", true);
+                                this.disconnect();
+                            }
                             throw "failure code: {errno}".format({
                                 errno: json['errno']
                             });
