@@ -218,8 +218,15 @@ class EcovacsXMPP extends EventEmitter {
                         case 'CleanLogs':
                             tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(secondChild));
                             this.bot._handle_cleanLogs(secondChild);
+                            let cleanLog = [];
                             for (let i in this.bot.cleanLog) {
-                                tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog[i]));
+                                if (this.bot.cleanLog.hasOwnProperty(i)) {
+                                    cleanLog.push(this.bot.cleanLog[i]);
+                                    tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog[i], getCircularReplacer()));
+                                }
+                            }
+                            if (cleanLog.length) {
+                                this.emit("CleanLog", cleanLog);
                             }
                             break;
                         case 'GetOnOff':
