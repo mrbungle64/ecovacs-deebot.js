@@ -222,7 +222,7 @@ class EcovacsXMPP extends EventEmitter {
                             for (let i in this.bot.cleanLog) {
                                 if (this.bot.cleanLog.hasOwnProperty(i)) {
                                     cleanLog.push(this.bot.cleanLog[i]);
-                                    tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog[i], getCircularReplacer()));
+                                    tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(this.bot.cleanLog[i]));
                                 }
                             }
                             if (cleanLog.length) {
