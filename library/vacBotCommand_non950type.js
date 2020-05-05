@@ -339,7 +339,7 @@ class MoveTurnAround extends Move {
 }
 
 class GetCleanLogs extends VacBotCommand_non950type {
-    constructor(count = 3) {
+    constructor(count = 20) {
         super("GetCleanLogs", {
             'count': count
         });
