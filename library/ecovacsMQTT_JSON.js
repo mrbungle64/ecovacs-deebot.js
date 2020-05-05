@@ -439,9 +439,18 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 break;
             case 'cleanlogs':
             case 'lastcleanlog':
-                tools.envLog("[EcovacsMQTT] Logs: %s", JSON.stringify(event, getCircularReplacer()));
+                tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
                 this.bot._handle_cleanLogs(event);
-                tools.envLog("[EcovacsMQTT] Logs: %s", this.bot.cleanLog);
+                let cleanLog = [];
+                for (let i in this.bot.cleanLog) {
+                    if (this.bot.cleanLog.hasOwnProperty(i)) {
+                        cleanLog.push(this.bot.cleanLog[i]);
+                        tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(this.bot.cleanLog[i], getCircularReplacer()));
+                    }
+                }
+                if (cleanLog.length) {
+                    this.emit("CleanLog", cleanLog);
+                }
                 if (this.bot.cleanLog_lastImageUrl) {
                     this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
                     this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
