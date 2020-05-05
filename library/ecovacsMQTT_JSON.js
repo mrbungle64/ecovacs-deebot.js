@@ -442,6 +442,10 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 tools.envLog("[EcovacsMQTT] Logs: %s", JSON.stringify(event, getCircularReplacer()));
                 this.bot._handle_cleanLogs(event);
                 tools.envLog("[EcovacsMQTT] Logs: %s", this.bot.cleanLog);
+                if (this.bot.cleanLog_lastImageUrl) {
+                    this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                }
                 break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);

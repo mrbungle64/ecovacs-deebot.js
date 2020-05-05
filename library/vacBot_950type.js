@@ -47,7 +47,9 @@ class VacBot_950type {
     this.mapSpotAreaInfos = [];
 
     this.cleanLog = [];
-    
+    this.cleanLog_lastImageUrl = null;
+    this.cleanLog_lastImageTimestamp = null;
+
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
     this.netInfoWifiSignal = null;
@@ -296,6 +298,8 @@ class VacBot_950type {
         logs = event['resultData']['log'];
       }
 
+      this.cleanLog_lastImageUrl = null;
+      this.cleanLog_lastImageTimestamp = null;
       for ( let logIndex in logs) {
         if(!this.cleanLog[logs[logIndex]['id']] ) { //log not yet existing
           let squareMeters = parseInt(logs[logIndex]['area']);
@@ -309,11 +313,20 @@ class VacBot_950type {
           let seconds = Math.floor(len % 60);
           let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
           tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
+          let imageUrl = logs[logIndex]['imageUrl'];
+
+          if ((!this.cleanLog_lastImageUrl) && (imageUrl)) {
+            this.cleanLog_lastImageUrl = imageUrl;
+            this.cleanLog_lastImageTimestamp = timestamp;
+            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+          }
+
           this.cleanLog[logs[logIndex]['id']] = {
             'squareMeters': squareMeters,
             'timestamp': timestamp,
             'lastTime': len,
-            'imageUrl': logs[logIndex]['imageUrl'],
+            'imageUrl': imageUrl,
             'type': logs[logIndex]['type'],
             'stopReason': logs[logIndex]['stopReason']
           };
