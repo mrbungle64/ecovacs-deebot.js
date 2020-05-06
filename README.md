@@ -56,6 +56,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.10
+* Several minor changes
+
 ### 0.4.9
 * Bugfix release
 
