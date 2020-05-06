@@ -1,4 +1,5 @@
 const dictionary = require('./ecovacsConstants_non950type');
+const constants = require('./ecovacsConstants.js');
 const vacBotCommand = require('./vacBotCommand_non950type');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
@@ -47,6 +48,8 @@ class VacBot_non950type {
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
+    this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
+    this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
 
     this.currentMapName = 'standard';
     this.currentMapMID = null;

@@ -747,5 +747,177 @@ exports.EcoVacsHomeProducts = {
             },
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5da834a8d66cd10001f58265"
         }
-    }
+    },
+    "m7lqzi": {
+		"product": {
+			"_id": "5c653edf7b93c700013f12cc",
+			"materialNo": "113-1708-0001",
+			"name": "ATMOBOT Pro",
+			"icon": "5d2c63a5ba13eb00013feab7",
+			"UILogicId": "AA_30G",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5d2c63a5ba13eb00013feab7"
+		}
+	},
+    "4f0c4e": {
+		"product": {
+			"_id": "5d2c5fcd4d60de0001eaf2a5",
+			"materialNo": "70200000227",
+			"name": "AT01",
+			"icon": "5d2d996c4d60de0001eaf2b5",
+			"UILogicId": "AT_01G",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5d2d996c4d60de0001eaf2b5"
+		}
+	},
+    "q1v5dn": {
+		"product": {
+			"_id": "5d312ae18d8d430001817002",
+			"materialNo": "70200000228",
+			"name": "AT01",
+			"icon": "5d83375f6b6a570001569e26",
+			"UILogicId": "AT_01G",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5d83375f6b6a570001569e26"
+		}
+	},
+    "x5d34r": {
+		"product": {
+			"_id": "5de0d86ed88546000195239a",
+			"materialNo": "110-1913-0101",
+			"name": "DEEBOT OZMO T8 AIVI",
+			"icon": "5df6d1f10136c00001cb1fe4",
+			"UILogicId": "DX_AIG",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": true,
+				"alexa": true
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5df6d1f10136c00001cb1fe4"
+		}
+	},
+	"1qdu4z": {
+		"product": {
+			"_id": "5de9b7f50136c00001cb1f96",
+			"materialNo": "117-1923-0101",
+			"name": "AT80K",
+			"icon": "5e71c7df298f0d9cabfef86f",
+			"UILogicId": "AT80",
+			"ota": false,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e71c7df298f0d9cabfef86f"
+		}
+	},
+	"jh3ry2": {
+		"product": {
+			"_id": "5de9b77f0136c00001cb1f8e",
+			"materialNo": "113-1931-0003",
+			"name": "AVA",
+			"icon": "5e7abef7298f0d9b31fef996",
+			"UILogicId": "ATMOBOT_AVA",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e7abef7298f0d9b31fef996"
+		}
+	},
+	"hsgwhi": {
+		"product": {
+			"_id": "5de9b6fb787cdf0001ef98ac",
+			"materialNo": "113-1931-0001",
+			"name": "ANDY",
+			"icon": "5e731a4a06f6de700464c69d",
+			"UILogicId": "ATMOBOT_ANDY",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e731a4a06f6de700464c69d"
+		}
+	},
+	"9rft3c": {
+		"product": {
+			"_id": "5e14196a6e71b80001b60fda",
+			"materialNo": "191165",
+			"name": "DEEBOT OZMO T5",
+			"icon": "5e1d1e06f024120001a329b4",
+			"UILogicId": "DX_9G",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e1d1e06f024120001a329b4"
+		}
+	},
+	"jffnlf": {
+		"product": {
+			"_id": "5e53208426be716edf4b55cf",
+			"materialNo": "130-6311-1702",
+			"name": "DEEBOT N3 MAX",
+			"icon": "5e53207a26be71596c4b55cd",
+			"UILogicId": "DU_6G",
+			"ota": true,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": false,
+				"alexa": false
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e53207a26be71596c4b55cd"
+		}
+	},
+	"ar5bjb": {
+		"product": {
+			"_id": "5e58a73d36e8f3cab08f031f",
+			"materialNo": "130-6211-0610",
+			"name": "DEEBOT 665",
+			"icon": "5e58a2df36e8f39e318f031d",
+			"UILogicId": "D_661",
+			"ota": false,
+			"supportType": {
+				"share": true,
+				"tmjl": false,
+				"assistant": true,
+				"alexa": true
+			},
+			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e58a2df36e8f39e318f031d"
+		}
+	}
 };
