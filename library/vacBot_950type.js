@@ -1,4 +1,5 @@
 const   dictionary = require('./ecovacsConstants_950type.js');
+const   constants = require('./ecovacsConstants.js');
 const   vacBotCommand = require('./vacBotCommand_950type.js');
 const   errorCodes = require('./errorCodes');
 const   tools = require('./tools.js');
@@ -25,7 +26,7 @@ class VacBot_950type {
       changeFlag: false
     };
     this.fan_speed = null;
-    this.lastAreaValues = null;
+    this.lastUsedAreaValues = null;
     this.relocation_state = null;
     this.charge_status = null;
     this.battery_status = null;
@@ -39,6 +40,8 @@ class VacBot_950type {
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
+    this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
+    this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
     this.currentMapName = 'unknown';
     this.currentMapMID = null;
     this.currentMapIndex = null;
@@ -67,38 +70,8 @@ class VacBot_950type {
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
       this.is_ready = true;
-      // this.run('GetBatteryState');
-      // this.run('GetCleanState');
-      // this.run('GetChargeState');
-      // if (this.hasMainBrush()) {
-      //   this.run('GetLifeSpan', 'main_brush');
-      // }
-      // this.run('GetLifeSpan', 'side_brush');
-      // this.run('GetLifeSpan', 'filter');
-      // this.run('GetPosition');
-      // this.run('GetCleanSpeed');
-      // this.run('GetNetInfo');
-      // this.run('GetMaps');
-      // this.run('GetError');
-      // this.run('GetSleepStatus');
-      
-      // this.run('GetCleanSum');
-      
-      // if (this.hasMoppingSystem()) {
-      //   this.run('GetWaterLevel');
-      // }
-      
     });
   }
-
-  // isOzmo950() {
-  //   tools.envLog("[VacBot] deviceClass: %s", this.deviceClass);
-  //   if (this.deviceClass === 'yna5xi') {
-  //     tools.envLog("[VacBot] Ozmo 950 detected");
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   isSupportedDevice() {
     const devices = JSON.parse(JSON.stringify(tools.getSupportedDevices()));
@@ -264,13 +237,13 @@ class VacBot_950type {
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
         }
         if (event['resultData']['cleanState']['type'] == 'customArea') {
-          this.lastAreaValues = event['resultData']['cleanState']['content'];
+          this.lastUsedAreaValues = event['resultData']['cleanState']['content'];
         } else {
-          this.lastAreaValues = null;
+          this.lastUsedAreaValues = null;
         }
       } else if (event['resultData']['trigger'] === 'alert') {
         this.clean_status = 'alert';
-        this.lastAreaValues = null;
+        this.lastUsedAreaValues = null;
       } else {
         this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
         if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'returning') { //set charge state on returning to dock
@@ -281,7 +254,7 @@ class VacBot_950type {
           //if this is not run, the status when canceling the return stays on 'returning'
           this.run('GetChargeState');
         }
-        this.lastAreaValues = null;
+        this.lastUsedAreaValues = null;
       }
     } else {
       this.clean_status = 'error';
