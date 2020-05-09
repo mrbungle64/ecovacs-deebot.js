@@ -127,11 +127,13 @@ class EcovacsXMPP extends EventEmitter {
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
                         case "MapP":
-                            this.bot._handle_mapP(secondChild);
-                            this.emit("CurrentMapName", this.bot.currentMapName);
-                            this.emit("CurrentMapMID", this.bot.currentMapMID);
-                            this.emit("CurrentMapIndex", this.bot.currentMapIndex);
-                            this.emit("Maps", this.bot.maps);
+                            let mapinfo = this.bot._handle_mapP(secondChild);
+                            if (mapinfo) {
+                                this.emit("CurrentMapName", this.bot.currentMapName);
+                                this.emit("CurrentMapMID", this.bot.currentMapMID);
+                                this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                                this.emit("Maps", this.bot.maps);
+                            }
                             break;
                         case "MapSet":
                             let mapset = this.bot._handle_mapSet(secondChild);

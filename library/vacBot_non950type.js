@@ -57,6 +57,7 @@ class VacBot_non950type {
 
     this.maps = null;
     this.mapSpotAreaInfos = [];
+    this.getMapSetExecuted = false;
 
     this.cleanLog = [];
     this.cleanLog_lastImageUrl = null;
@@ -255,6 +256,9 @@ class VacBot_non950type {
   }
 
   _handle_mapP(event) {
+    if (this.getMapSetExecuted) {
+      return;
+    }
     this.currentMapMID = event.attrs['i'];
     this.maps = {
       "maps": [
@@ -263,6 +267,7 @@ class VacBot_non950type {
       ]
     };
     this.run('GetMapSet');
+    this.getMapSetExecuted = true;
     return this.maps;
   }
 
