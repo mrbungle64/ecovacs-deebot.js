@@ -263,6 +263,7 @@ class VacBot_950type {
   }
 
   _handle_cleanLogs(event) {
+    tools.envLog("[VacBot] _handle_cleanLogs");
     if (event['resultCode'] == '0') {
       let logs = [];
       if(event['resultData'].hasOwnProperty('logs')) {
@@ -271,8 +272,6 @@ class VacBot_950type {
         logs = event['resultData']['log'];
       }
 
-      this.cleanLog_lastImageUrl = null;
-      this.cleanLog_lastImageTimestamp = null;
       for ( let logIndex in logs) {
         if(!this.cleanLog[logs[logIndex]['id']] ) { //log not yet existing
           let squareMeters = parseInt(logs[logIndex]['area']);
@@ -288,13 +287,6 @@ class VacBot_950type {
           tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
           let imageUrl = logs[logIndex]['imageUrl'];
 
-          if ((!this.cleanLog_lastImageUrl) && (imageUrl)) {
-            this.cleanLog_lastImageUrl = imageUrl;
-            this.cleanLog_lastImageTimestamp = timestamp;
-            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
-          }
-
           this.cleanLog[logs[logIndex]['id']] = {
             'squareMeters': squareMeters,
             'timestamp': timestamp,
@@ -307,6 +299,17 @@ class VacBot_950type {
       }
     }
     tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
+  }
+  _handle_lastCleanLog(event) {
+    tools.envLog("[VacBot] _handle_lastCleanLog");
+    if (event['resultCode'] == '0') {
+      if(event['resultData'].hasOwnProperty('log')) {
+        this.cleanLog_lastImageTimestamp = parseInt(event['resultData']['log']['ts']);
+        this.cleanLog_lastImageUrl = event['resultData']['log']['imageUrl'];
+        tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+        tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+      }
+    }
   }
 
   _handle_cleanSum(event) {
@@ -647,6 +650,7 @@ class VacBot_950type {
         } else {
           this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
         }
+        this.send_command(new vacBotCommand.GetLastCleanLog());
         break;
     }
   

@@ -439,7 +439,6 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;
             case 'cleanlogs':
-            case 'lastcleanlog':
                 tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
                 this.bot._handle_cleanLogs(event);
                 let cleanLog = [];
@@ -452,6 +451,11 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 if (cleanLog.length) {
                     this.emit("CleanLog", cleanLog);
                 }
+                break;
+            case 'lastcleanlog':
+                tools.envLog("[EcovacsMQTT_JSON] lastcleanlog: %s", JSON.stringify(event, getCircularReplacer()));
+                this.bot._handle_lastCleanLog(event);
+                
                 if (this.bot.cleanLog_lastImageUrl) {
                     this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
                     this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
