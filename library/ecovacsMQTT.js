@@ -25,9 +25,9 @@ class EcovacsMQTT extends EventEmitter {
         this.bot = bot;
         this.user = user;
         this.hostname = hostname;
-        this.domain = this.hostname.split(".")[0]; // MQTT is using domain without tld extension
+        this.customdomain = this.hostname.split(".")[0]; // MQTT is using domain without tld extension
         this.resource = resource;
-        this.username = this.user + '@' + this.domain;
+        this.username = this.user + '@' + this.customdomain;
         this.clientId = this.username + '/' + this.resource;
         this.secret = secret;
         this.continent = continent;
