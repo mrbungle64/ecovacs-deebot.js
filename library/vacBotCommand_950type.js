@@ -311,6 +311,11 @@ class GetCleanLogs extends VacBotCommand_950type {
         super("GetCleanLogs", {'count': count}, constants.LGLOGAPI);
     }
 }
+class GetLastCleanLog extends VacBotCommand_950type {
+    constructor() {
+        super("GetLastCleanLog", {}, constants.LGLOGAPI);
+    }
+}
 
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
@@ -353,3 +358,4 @@ module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapVirtualWallInfo = GetMapVirtualWallInfo;
 module.exports.GetMapNoMopZoneInfo = GetMapNoMopZoneInfo;
 module.exports.GetCleanLogs = GetCleanLogs;
+module.exports.GetLastCleanLog = GetLastCleanLog;
