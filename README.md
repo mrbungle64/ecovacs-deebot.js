@@ -56,6 +56,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.12
+* (boriswerner) Control which API call is used for lastCleanMap & timestamp (Ozmo 920/950)
+
 ### 0.4.11
 * Several enhancements and fixes
 
