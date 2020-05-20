@@ -451,14 +451,20 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 if (cleanLog.length) {
                     this.emit("CleanLog", cleanLog);
                 }
+                if(!this.bot.lastCleanLogUseAlternativeAPICall) {
+                    this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                }
                 break;
             case 'lastcleanlog':
                 tools.envLog("[EcovacsMQTT_JSON] lastcleanlog: %s", JSON.stringify(event, getCircularReplacer()));
-                this.bot._handle_lastCleanLog(event);
+                if (this.bot.lastCleanLogUseAlternativeAPICall) {
+                    this.bot._handle_lastCleanLog(event);
                 
-                if (this.bot.cleanLog_lastImageUrl) {
-                    this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
-                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                    if (this.bot.cleanLog_lastImageUrl) {
+                        this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                        this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                    }
                 }
                 break;
             default:

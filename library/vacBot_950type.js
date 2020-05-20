@@ -45,6 +45,7 @@ class VacBot_950type {
     this.currentMapName = 'unknown';
     this.currentMapMID = null;
     this.currentMapIndex = null;
+    this.lastCleanLogUseAlternativeAPICall = false;
 
     this.maps = null;
     this.mapSpotAreaInfos = [];
@@ -286,7 +287,13 @@ class VacBot_950type {
           let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
           tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
           let imageUrl = logs[logIndex]['imageUrl'];
-
+          if ((!this.lastCleanLogUseAlternativeAPICall) 
+              && (this.cleanLog_lastImageTimestamp < timestamp || (!this.cleanLog_lastImageTimestamp))) {	
+            this.cleanLog_lastImageUrl = imageUrl;	
+            this.cleanLog_lastImageTimestamp = timestamp;	
+            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);	
+            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);	
+          }
           this.cleanLog[logs[logIndex]['id']] = {
             'squareMeters': squareMeters,
             'timestamp': timestamp,
@@ -296,6 +303,8 @@ class VacBot_950type {
             'stopReason': logs[logIndex]['stopReason']
           };
         }
+        
+        
       }
     }
     tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
@@ -645,11 +654,15 @@ class VacBot_950type {
         this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         break;
       case "getcleanlogs":
-        if (arguments.length < 2) {
-          this.send_command(new vacBotCommand.GetCleanLogs());
-        } else {
-          this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
-        }
+        this.lastCleanLogUseAlternativeAPICall = false;
+        this.send_command(new vacBotCommand.GetCleanLogs());
+        break;
+      case "getcleanlogswithoutlastinfo":
+        this.lastCleanLogUseAlternativeAPICall = true;
+        this.send_command(new vacBotCommand.GetCleanLogs());
+        break;
+      case "getlastcleanloginfo":
+        this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetLastCleanLog());
         break;
     }
