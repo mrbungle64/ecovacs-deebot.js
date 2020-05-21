@@ -450,6 +450,8 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 }
                 if (cleanLog.length) {
                     this.emit("CleanLog", cleanLog);
+                } else {
+                    this.emit("Debug", "CleanLog is empty: " + JSON.stringify(event, getCircularReplacer())); //for debugging
                 }
                 if(!this.bot.lastCleanLogUseAlternativeAPICall) {
                     this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
