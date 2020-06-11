@@ -10,6 +10,15 @@ exports.PRODUCTAPI = 'pim/product';
 exports.REALM = 'ecouser.net';
 
 exports.SupportedDevices = {
+    "ls1ok3": {
+        "name": "DEEBOT 900 Series",
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": false,
+        "voice_report": true,
+        'single_room': false
+    },
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
         "main_brush": true,
@@ -85,15 +94,6 @@ exports.KnownDevices = {
         "voice_report": true,
         'single_room': false
     },
-    "ls1ok3": {
-        "name": "DEEBOT 900 Series",
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": false,
-        "voice_report": true,
-        'single_room': false
-    },
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
         "main_brush": true,
@@ -114,6 +114,15 @@ exports.KnownDevices = {
     },
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        'single_room': false
+    },
+    "x5d34r": {
+        "name": "DEEBOT OZMO T8 AIVI",
         "main_brush": true,
         "spot_area": true,
         "custom_area": true,
