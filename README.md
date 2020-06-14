@@ -30,26 +30,31 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Models
 
-### These models are known to work
-* Deebot N79T/W
+### Supported models
 * Deebot Slim 2
-* Deebot 601
-* Deebot 710/711
 * Deebot 900/901
-* Deebot Ozmo 610
-* Deebot Ozmo 900
-* Deebot Ozmo 920
 * Deebot Ozmo 930
 * Deebot Ozmo 950
 
+### These models are known to work
+* Deebot N79
+* Deebot 601
+* Deebot 710/711
+* Deebot Ozmo 610
+* Deebot Ozmo 900
+* Deebot Ozmo 920
+* Deebot Ozmo T8 AIVI
+
 ### These models should work
-* Deebot N79S
 * Deebot M88
 * Deebot 600/605
-* Deebot Ozmo Slim 10
 * Deebot Ozmo 960
+* Deebot Ozmo Slim 10
 
 ## Changelog
+
+### 0.4.15
+* Added configuration for Ozmo T8 AIVI
 
 ### 0.4.14
 * Initial Support for Ozmo T8 AIVI
