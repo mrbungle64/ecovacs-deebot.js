@@ -5,17 +5,14 @@
 [![npm](https://img.shields.io/npm/dt/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
 [![Travis-CI](https://travis-ci.org/mrbungle64/ecovacs-deebot.js.svg?branch=master)](https://travis-ci.org/mrbungle64/ecovacs-deebot.js)
 
-A JavaScript port based on [sucks.js](https://github.com/joostth/sucks.js) of the python project [sucks](https://github.com/wpietri/sucks) and [ozmo](https://github.com/Ligio/ozmo)
-to drive an Ecovacs Deebot (Ozmo) robot vacuum.
+A Node.js library for running Ecovacs Deebot vacuum cleaner robots.
 
 ## Installation
 
-This adapter uses the canvas library which might require additional installations, otherwise the installation in iobroker might result in an error:
-```
-npm ERR! canvas@2.6.1 install: node-pre-gyp install --fallback-to-build npm ERR! Exit status 1
-```
-For linux based systems the following commands should be executed (a reboot might be necessary after the second line):
-```
+This library uses the canvas library which might require additional installations, otherwise the installation might result in an error.
+
+For Debian-based Linux systems the following commands should be executed (a reboot might be necessary after the second line):
+```bash
 sudo apt-get update
 sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 sudo npm install canvas --unsafe-perm=true
@@ -23,7 +20,7 @@ sudo npm install canvas --unsafe-perm=true
 For instructions for other systems visit https://www.npmjs.com/package/canvas#compiling
 
 Afterwards you can install the library with
-```
+```bash
 npm install ecovacs-deebot
 ```
 
@@ -195,24 +192,16 @@ Information on how to use this library can be found [here](https://github.com/mr
 * (mrbungle64) Initial development release
 
 ## Thanks and credits
+
 * @joostth ([sucks.js](https://github.com/joostth/sucks.js))
 * @wpietri ([sucks](https://github.com/wpietri/sucks))
 * @bmartin5692 ([sucks](https://github.com/bmartin5692/sucks), [bumber](https://github.com/bmartin5692/bumper))
 * @Ligio ([ozmo](https://github.com/Ligio/ozmo))
 * @And3rsL ([Deebotozmo](https://github.com/And3rsL/Deebotozmo))
 
-## Dedication
-
 All credits for originally figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
 
-The example code about uses the following additional resources:
-* [node-machine-id](https://www.npmjs.com/package/node-machine-id) which
-  provides an easy way to create a unique identifier for the machine running
-  the code.
-* [https://ipinfo.io/](https://ipinfo.io/) which provides a json API for IP address information
-  and is free to use for testing or non-commercial use up to 1000 requests
-  per day.
-
 ## License
+
 GNU GENERAL PUBLIC LICENSE
