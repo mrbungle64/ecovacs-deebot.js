@@ -11,7 +11,7 @@ String.prototype.format = function () {
   if (arguments.length === 0) {
     return this;
   }
-  var args = arguments['0'];
+  let args = arguments['0'];
   return this.replace(/{(\w+)}/g, function (match, number) {
     return typeof args[number] != 'undefined' ? args[number] : match;
   });
@@ -48,19 +48,19 @@ class EcovacsAPI {
   connect(account_id, password_hash) {
     return new Promise((resolve, reject) => {
       let login_info = null;
-      this.__call_main_api('user/login', {
+      this.call_main_api('user/login', {
         'account': EcovacsAPI.encrypt(account_id),
         'password': EcovacsAPI.encrypt(password_hash)
       }).then((info) => {
         login_info = info;
         this.uid = login_info.uid;
         this.login_access_token = login_info.accessToken;
-        this.__call_main_api('user/getAuthCode', {
+        this.call_main_api('user/getAuthCode', {
           'uid': this.uid,
           'accessToken': this.login_access_token
         }).then((token) => {
           this.auth_code = token['authCode'];
-          this.__call_login_by_it_token().then((login) => {
+          this.call_login_by_it_token().then((login) => {
             this.user_access_token = login['token'];
             this.uid = login['userId'];
             tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
@@ -80,13 +80,13 @@ class EcovacsAPI {
     });
   }
 
-  __sign(params) {
+  sign(params) {
     let result = JSON.parse(JSON.stringify(params));
     result['authTimespan'] = Date.now();
     result['authTimeZone'] = 'GMT-8';
 
     let sign_on = JSON.parse(JSON.stringify(this.meta));
-    for (var key in result) {
+    for (let key in result) {
       if (result.hasOwnProperty(key)) {
         sign_on[key] = result[key];
       }
@@ -107,11 +107,11 @@ class EcovacsAPI {
     return EcovacsAPI.paramsToQueryList(result);
   }
 
-  __call_main_api(func, args) {
+  call_main_api(func, args) {
     return new Promise((resolve, reject) => {
       tools.envLog("[EcovacsAPI] calling main api %s with %s", func, JSON.stringify(args));
       let params = {};
-      for (var key in args) {
+      for (let key in args) {
         if (args.hasOwnProperty(key)) {
           params[key] = args[key];
         }
@@ -119,7 +119,7 @@ class EcovacsAPI {
       params['requestId'] = EcovacsAPI.md5(uniqid());
       let url = (EcovacsAPI.MAIN_URL_FORMAT + "/" + func).format(this.meta);
       url = new URL(url);
-      url.search = this.__sign(params).join('&');
+      url.search = this.sign(params).join('&');
       tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
 
       https.get(url.href, (res) => {
@@ -176,7 +176,7 @@ class EcovacsAPI {
     });
   }
 
-  __call_portal_api(api, func, args) {
+  call_portal_api(api, func, args) {
     return new Promise((resolve, reject) => {
       tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
       let params = {
@@ -236,7 +236,7 @@ class EcovacsAPI {
               if (json['error'] === 'set token error.') {
                 if (retryAttempts <= 3) {
                   tools.envLog("[EcovacsAPI] loginByItToken set token error, trying again (%s/3)", retryAttempts);
-                  return this.__call_portal_api(api, func, args, retryAttempts);
+                  return this.call_portal_api(api, func, args, retryAttempts);
                 } else {
                   tools.envLog("[EcovacsAPI] loginByItToken set token error, failed after %s attempts", retryAttempts);
                 }
@@ -269,8 +269,8 @@ class EcovacsAPI {
     });
   }
 
-  __call_login_by_it_token() {
-    return this.__call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken', {
+  call_login_by_it_token() {
+    return this.call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken', {
       'country': this.meta['country'].toUpperCase(),
       'resource': this.resource,
       'realm': EcovacsAPI.REALM,
@@ -281,7 +281,7 @@ class EcovacsAPI {
 
   getDevices() {
     return new Promise((resolve, reject) => {
-      this.__call_portal_api(EcovacsAPI.USERSAPI, 'GetDeviceList', {
+      this.call_portal_api(EcovacsAPI.USERSAPI, 'GetDeviceList', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -303,7 +303,7 @@ class EcovacsAPI {
   }
 
   getVacBot(user, hostname, resource, secret, vacuum, continent, server_address = null) {
-    let vacbot = null;
+    let vacbot;
     // yna5xi = Ozmo 950
     // vi829v = Ozmo 920
     // x5d34r = Ozmo T8 AIVI
@@ -357,8 +357,6 @@ EcovacsAPI.LGLOGAPI = constants.LGLOGAPI;
 EcovacsAPI.PRODUCTAPI = constants.PRODUCTAPI;
 
 EcovacsAPI.REALM = constants.REALM;
-
-
 
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.countries = countries;

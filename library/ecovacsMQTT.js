@@ -146,8 +146,7 @@ class EcovacsMQTT extends EventEmitter {
         // Remove the td from ctl xml for RestAPI
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
-        let payload = payloadXml.toString();
-        return payload;
+        return payloadXml.toString();
     }
 
     _call_ecovacs_device_api(params) {
@@ -256,17 +255,13 @@ class EcovacsMQTT extends EventEmitter {
             const action = arguments[1];
             attrs = action.args
         } else {
-            if (firstChild.attributes == undefined)
-            {
-                let unknownResult = {
+            if (firstChild.attributes == undefined) {
+                return {
                     'event': 'unknown',
                     'attrs': '',
                     'children': []
                 };
-                return unknownResult;
-            }
-            else
-            {
+            } else {
                 event = firstChild.attributes.getNamedItem('td').value;
             }
         }

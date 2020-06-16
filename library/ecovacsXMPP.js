@@ -7,7 +7,7 @@ String.prototype.format = function () {
     if (arguments.length === 0) {
         return this;
     }
-    var args = arguments['0'];
+    let args = arguments['0'];
     return this.replace(/{(\w+)}/g, function (match, number) {
         return typeof args[number] != 'undefined' ? args[number] : match;
     });
@@ -309,7 +309,7 @@ class EcovacsXMPP extends EventEmitter {
 
     send_ping(to) {
         let id = this.iter++;
-        var e = new Element('iq', {
+        let e = new Element('iq', {
             id: id,
             to: to,
             from: this._my_address(),
