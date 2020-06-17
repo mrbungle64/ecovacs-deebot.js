@@ -672,6 +672,7 @@ class VacBot_950type {
   disconnect() {
     this.ecovacs.disconnect();
     this.is_ready = false;
+    clearInterval(this.ping_interval)
   }
 }
 
