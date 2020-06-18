@@ -48,8 +48,12 @@ class VacBot_non950type {
     this.ecovacs = null;
     this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
     this.deviceClass = vacuum['class'];
-    this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
-    this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
+    this.deviceModel = this.deviceClass;
+    this.deviceImageURL = '';
+    if (constants.EcoVacsHomeProducts[this.deviceClass]) {
+      this.deviceModel = constants.EcoVacsHomeProducts[this.deviceClass]['product']['name'];
+      this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
+    }
 
     this.currentMapName = 'standard';
     this.currentMapMID = null;
