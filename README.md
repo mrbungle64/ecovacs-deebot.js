@@ -11,10 +11,13 @@ A Node.js library for running Ecovacs Deebot vacuum cleaner robots.
 
 This library uses the canvas library which might require additional installations, otherwise the installation might result in an error.
 
-For Debian-based Linux systems the following commands should be executed (a reboot might be necessary after the second line):
+For Debian-based Linux systems the following commands should be executed:
 ```bash
 sudo apt-get update
 sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+```
+A reboot might be necessary before executing the next command
+```bash
 sudo npm install canvas --unsafe-perm=true
 ```
 For instructions for other systems visit https://www.npmjs.com/package/canvas#compiling
@@ -31,12 +34,12 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Models
 
 ### Supported models
-* Deebot Slim 2
 * Deebot 900/901
 * Deebot Ozmo 930
 * Deebot Ozmo 950
 
 ### These models are known to work
+* Deebot Slim 2
 * Deebot N79
 * Deebot 601
 * Deebot 710/711
