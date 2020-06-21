@@ -294,7 +294,7 @@ class EcovacsXMPP extends EventEmitter {
         let iqElement = new Element('iq', {
             id: id,
             to: recipient,
-            from: this._my_address(),
+            from: this.getMyAddress(),
             type: 'set'
         });
         iqElement.c('query', {
@@ -303,7 +303,7 @@ class EcovacsXMPP extends EventEmitter {
         return iqElement;
     }
 
-    _my_address() {
+    getMyAddress() {
         return this.user + '@' + this.hostname + '/' + this.resource;
     }
 
@@ -312,7 +312,7 @@ class EcovacsXMPP extends EventEmitter {
         let e = new Element('iq', {
             id: id,
             to: to,
-            from: this._my_address(),
+            from: this.getMyAddress(),
             type: 'get'
         });
         e.c('query', {

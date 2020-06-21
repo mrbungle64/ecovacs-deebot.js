@@ -421,11 +421,9 @@ class EcovacsMQTT extends EventEmitter {
         }
     }
 
-    _my_address() {
-        return this.user + '@' + this.hostname + '/' + this.resource;
+    send_ping(to) {
+        return true;
     }
-
-    send_ping(to) {}
 
     //end session
     disconnect() {
