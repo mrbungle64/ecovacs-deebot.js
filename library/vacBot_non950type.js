@@ -515,35 +515,19 @@ class VacBot_non950type {
 
   _handle_error(event) {
     this.errorCode = '0';
-    if (event.hasOwnProperty('code')) {
-      this.errorCode = event['code'];
-    }
-    if ((this.errorCode === '0') && (event.hasOwnProperty('errno'))) {
-      this.errorCode = event['errno'];
-    }
-    if ((this.errorCode === '0') && (event.hasOwnProperty('error'))) {
-      this.errorCode = event['error'];
-    }
-    if ((this.errorCode === '0') && (event.hasOwnProperty('errs'))) {
-      this.errorCode = event['errs'];
-    }
-    if ((this.errorCode === '0') && (event.hasOwnProperty('new'))) {
-      this.errorCode = event['new'];
-      if ((this.errorCode == '') && (event['old'] !== '')) {
-        this.errorCode = '0';
-      }
-    }
-    if (this.errorCode) {
-      // NoError: Robot is operational
-      if (this.errorCode == '100') {
-        this.errorCode = '0';
-        this.errorDescription = '';
+    this.errorDescription = '';
+
+    let attrs = ['new', 'code', 'errno', 'error', 'errs'];
+    for (const attr of attrs) {
+      if (event.hasOwnProperty(attr) && (event[attr] !== '')) {
+        // 100 = "NoError: Robot is operational"
+        this.errorCode = (event[attr] === '100') ? '0' : event[attr];
+        if (errorCodes[this.errorCode]) {
+          this.errorDescription = errorCodes[this.errorCode];
+        } else {
+          this.errorDescription = 'unknown errorCode: ' + this.errorCode;
+        }
         return;
-      }
-      if (errorCodes[this.errorCode]) {
-        this.errorDescription = errorCodes[this.errorCode];
-      } else {
-        this.errorDescription = 'unknown errorCode: ' + this.errorCode;
       }
     }
   }
