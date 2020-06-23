@@ -108,12 +108,30 @@ class VacBot_non950type {
     return this.getDeviceProperty('main_brush');
   }
 
-  hasSpotAreas() {
+  hasEdgeCleaningMode() {
+    return (!this.hasSpotFeature());
+  }
+
+  hasSpotCleaningMode() {
+    return hasEdgeCleaningMode();
+  }
+
+  hasSpotAreaCleaningMode() {
     return this.getDeviceProperty('spot_area');
   }
 
-  hasCustomAreas() {
+  // Deprecated
+  hasSpotAreas() {
+    return hasSpotAreaFeature();
+  }
+
+  hasCustomAreaCleaningMode() {
     return this.getDeviceProperty('custom_area');
+  }
+
+  // Deprecated
+  hasCustomAreas() {
+    return this.hasCustomAreaFeature();
   }
 
   hasMoppingSystem() {
