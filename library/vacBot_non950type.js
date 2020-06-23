@@ -109,11 +109,11 @@ class VacBot_non950type {
   }
 
   hasEdgeCleaningMode() {
-    return (!this.hasSpotFeature());
+    return (!this.hasSpotAreaCleaningMode());
   }
 
   hasSpotCleaningMode() {
-    return hasEdgeCleaningMode();
+    return (!this.hasSpotAreaCleaningMode());
   }
 
   hasSpotAreaCleaningMode() {
@@ -122,7 +122,7 @@ class VacBot_non950type {
 
   // Deprecated
   hasSpotAreas() {
-    return hasSpotAreaFeature();
+    return hasSpotAreaCleaningMode();
   }
 
   hasCustomAreaCleaningMode() {
