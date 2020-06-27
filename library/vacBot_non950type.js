@@ -122,7 +122,7 @@ class VacBot_non950type {
 
   // Deprecated
   hasSpotAreas() {
-    return hasSpotAreaCleaningMode();
+    return this.hasSpotAreaCleaningMode();
   }
 
   hasCustomAreaCleaningMode() {
