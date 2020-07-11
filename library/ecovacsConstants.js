@@ -130,6 +130,15 @@ exports.KnownDevices = {
         "voice_report": true,
         'single_room': false
     },
+    "155": {
+        "name": "DEEBOT N79S/SE",
+        "main_brush": true,
+        "spot_area": false,
+        "custom_area": false,
+        "mopping_system": false,
+        "voice_report": false,
+        'single_room': false
+    },
     "165": {
         "name": "DEEBOT N79T/W",
         "main_brush": true,
