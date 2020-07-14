@@ -923,6 +923,10 @@ module.exports = {
     "name": "Uganda",
     "continent": "AF"
   },
+  "UK": {
+    "name": "United Kingdom",
+    "continent": "EU"
+  },
   "UM": {
     "name": "U.S. Minor Outlying Islands",
     "continent": "OC"
