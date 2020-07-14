@@ -372,6 +372,16 @@ class SetOnOff extends VacBotCommand_non950type {
     }
 }
 
+// Untested
+class ResetLifeSpan extends VacBotCommand_non950type {
+    constructor(component, val = 100) {
+        super('ResetLifeSpan', {
+            'type': constants_type.COMPONENT_TO_ECOVACS[component],
+            'val': val
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -386,6 +396,7 @@ module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetWaterLevel = GetWaterLevel;
