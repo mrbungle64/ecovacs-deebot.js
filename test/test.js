@@ -122,7 +122,7 @@ describe('API tools', function () {
       assert.ok(ecovacsDeebot.countries);
     });
 
-    it('should export the continent for 250 countries', function () {
+    it('should export the continent for 251 country codes', function () {
       let iter = 0;
       for (let key in ecovacsDeebot.countries) {
         if (ecovacsDeebot.countries.hasOwnProperty(key)) {
@@ -131,7 +131,7 @@ describe('API tools', function () {
           }
         }
       }
-      assert.equal(iter, 250);
+      assert.equal(iter, 251);
     })
   });
 });
