@@ -1,15 +1,15 @@
 const dictionary = require('./ecovacsConstants_non950type');
-const constants = require('./ecovacsConstants.js');
 const vacBotCommand = require('./vacBotCommand_non950type');
+const VacBot = require('./vacBot');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
 const map = require('./mapTemplate.js');
 
-class VacBot_non950type {
+class VacBot_non950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
-    this.vacuum = vacuum;
+    super(user, hostname, resource, secret, vacuum, continent, country, server_address);
+
     this.cleanReport = null;
-    this.is_ready = false;
     this.deebotPosition = {
       x: null,
       y: null,
@@ -32,7 +32,6 @@ class VacBot_non950type {
     this.waterboxInfo = null;
     this.sleepStatus = null;
     this.components = {};
-    this.ping_interval = null;
     this.errorCode = '0';
     this.errorDescription = errorCodes[this.errorCode];
     this.netInfoIP = null;
@@ -40,20 +39,11 @@ class VacBot_non950type {
     this.cleanSum_totalSquareMeters = null;
     this.cleanSum_totalSeconds = null;
     this.cleanSum_totalNumber = null;
+
     // OnOff
     this.doNotDisturbEnabled = null;
     this.continuousCleaningEnabled = null;
     this.voiceReportDisabled = null;
-
-    this.ecovacs = null;
-    this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
-    this.deviceClass = vacuum['class'];
-    this.deviceModel = this.deviceClass;
-    this.deviceImageURL = '';
-    if (constants.EcoVacsHomeProducts[this.deviceClass]) {
-      this.deviceModel = constants.EcoVacsHomeProducts[this.deviceClass]['product']['name'];
-      this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
-    }
 
     this.currentMapName = 'standard';
     this.currentMapMID = null;
@@ -67,15 +57,8 @@ class VacBot_non950type {
     this.cleanLog_lastImageUrl = null;
     this.cleanLog_lastImageTimestamp = null;
 
-    if (!this.useMqtt) {
-      tools.envLog("[VacBot] Using EcovacsXMPP");
-      const EcovacsXMPP = require('./ecovacsXMPP.js');
-      this.ecovacs = new EcovacsXMPP(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
-    } else {
-      tools.envLog("[VacBot] Using EcovacsIOTMQ");
-      const EcovacsMQTT = require('./ecovacsMQTT.js');
-      this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
-    }
+    const LibraryForProtocol = this.getLibraryForProtocol();
+    this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 
     this.ecovacs.on("ready", () => {
       tools.envLog("[VacBot] Ready event!");
@@ -83,68 +66,9 @@ class VacBot_non950type {
     });
   }
 
-  isSupportedDevice() {
-    const devices = JSON.parse(JSON.stringify(tools.getSupportedDevices()));
-    return devices.hasOwnProperty(this.deviceClass);
-  }
-
-  isKnownDevice() {
-    const devices = JSON.parse(JSON.stringify(tools.getKnownDevices()));
-    return devices.hasOwnProperty(this.deviceClass) || this.isSupportedDevice();
-  }
-
-  getDeviceProperty(property) {
-    const devices = JSON.parse(JSON.stringify(tools.getAllKnownDevices()));
-    if (devices.hasOwnProperty(this.deviceClass)) {
-      const device = devices[this.deviceClass];
-      if (device.hasOwnProperty(property)) {
-        return device[property];
-      }
-    }
-    return false;
-  }
-
-  hasMainBrush() {
-    return this.getDeviceProperty('main_brush');
-  }
-
-  hasEdgeCleaningMode() {
-    return (!this.hasSpotAreaCleaningMode());
-  }
-
-  hasSpotCleaningMode() {
-    return (!this.hasSpotAreaCleaningMode());
-  }
-
-  hasSpotAreaCleaningMode() {
-    return this.getDeviceProperty('spot_area');
-  }
-
-  // Deprecated
-  hasSpotAreas() {
-    return this.hasSpotAreaCleaningMode();
-  }
-
-  hasCustomAreaCleaningMode() {
-    return this.getDeviceProperty('custom_area');
-  }
-
-  // Deprecated
-  hasCustomAreas() {
-    return this.hasCustomAreaFeature();
-  }
-
-  hasMoppingSystem() {
-    return this.getDeviceProperty('mopping_system');
-  }
-
-  hasVoiceReports() {
-    return this.getDeviceProperty('voice_report');
-  }
-
   connect_and_wait_until_ready() {
     this.ecovacs.connect_and_wait_until_ready();
-    this.ping_interval = setInterval(() => {
+    this.pingInterval = setInterval(() => {
       this.ecovacs.send_ping(this._vacuum_address());
     }, 30000);
   }
@@ -572,23 +496,9 @@ class VacBot_non950type {
     }
   }
 
-  send_ping() {
-    try {
-      if (!this.useMqtt) {
-        this.ecovacs.send_ping(this._vacuum_address());
-      } else if (this.useMqtt) {
-        if (!this.ecovacs.send_ping()) {
-          throw new Error("Ping did not reach VacBot");
-        }
-      }
-    } catch (e) {
-      throw new Error("Ping did not reach VacBot");
-    }
-  }
-
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
-
+    let component;
     switch (action.toLowerCase()) {
       case "clean":
         if (arguments.length <= 1) {
@@ -667,8 +577,20 @@ class VacBot_non950type {
         if (arguments.length < 2) {
           return;
         }
-        let component = arguments[1];
+        component = arguments[1];
         this.send_command(new vacBotCommand.GetLifeSpan(component));
+        break;
+      case "resetlifespan":
+        if (arguments.length < 2) {
+          return;
+        }
+        component = arguments[1];
+        if (arguments.length === 2) {
+          this.send_command(new vacBotCommand.ResetLifeSpan(component));
+        } else if (arguments.length === 3) {
+          let val = arguments[2];
+          this.send_command(new vacBotCommand.ResetLifeSpan(component, val));
+        }
         break;
       case "getwaterlevel":
         this.send_command(new vacBotCommand.GetWaterLevel());
@@ -771,12 +693,6 @@ class VacBot_non950type {
         }
         break;
     }
-  }
-
-  disconnect() {
-    this.ecovacs.disconnect();
-    this.is_ready = false;
-    clearInterval(this.ping_interval);
   }
 }
 
