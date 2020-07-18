@@ -56,6 +56,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.17
+* Several enhancements and fixes. Especially for N79S/SE and N79T/W
+
 ### 0.4.16
 * Bugfix release
 
