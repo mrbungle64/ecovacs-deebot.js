@@ -624,6 +624,12 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetSleepStatus());
         break;
       case "getcleansum":
+        if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
+          // DEEBOT N79S/SE (deviceClass 155)
+          // DEEBOT N79T/W (deviceClass 165)
+          // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
+          break;
+        }
         this.send_command(new vacBotCommand.GetCleanSum());
         break;
       case "getmapset":
