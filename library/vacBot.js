@@ -18,15 +18,15 @@ class VacBot {
     }
 
     getLibraryForProtocol() {
-        if (!this.useMqtt) {
-            tools.envLog("[VacBot] Using EcovacsXMPP");
-            return require('./ecovacsXMPP.js');
-        } else if (this.is950type()) {
+        if (this.is950type()) {
+            tools.envLog("[VacBot] Using EcovacsIOTMQ");
+            return require('./ecovacsMQTT_JSON.js');
+        } else if (this.useMqtt) {
             tools.envLog("[VacBot] Using EcovacsIOTMQ");
             return require('./ecovacsMQTT.js');
         } else {
-            tools.envLog("[VacBot] Using EcovacsIOTMQ");
-            return require('./ecovacsMQTT.js');
+            tools.envLog("[VacBot] Using EcovacsXMPP");
+            return require('./ecovacsXMPP.js');
         }
     }
 
