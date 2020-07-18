@@ -692,10 +692,22 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "getcleanlogs":
-        if (arguments.length < 2) {
-          this.send_command(new vacBotCommand.GetCleanLogs());
-        } else {
-          this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
+        if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
+          // DEEBOT N79S/SE (deviceClass 155)
+          // DEEBOT N79T/W (deviceClass 165)
+          // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
+          if (arguments.length < 2) {
+            this.send_command(new vacBotCommand.GetLogs());
+          } else {
+            this.send_command(new vacBotCommand.GetLogs(arguments[1]));
+          }
+        }
+        else {
+          if (arguments.length < 2) {
+            this.send_command(new vacBotCommand.GetCleanLogs());
+          } else {
+            this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
+          }
         }
         break;
     }
