@@ -381,11 +381,21 @@ class SetOnOff extends VacBotCommand_non950type {
 }
 
 // Untested
-class ResetLifeSpan extends VacBotCommand_non950type {
+// Seems to be N79 Series only
+class SetLifeSpan extends VacBotCommand_non950type {
     constructor(component, val = 100) {
-        super('ResetLifeSpan', {
+        super('SetLifeSpan', {
             'type': constants_type.COMPONENT_TO_ECOVACS[component],
             'val': val
+        });
+    }
+}
+
+// Tested von Deebot 901
+class ResetLifeSpan extends VacBotCommand_non950type {
+    constructor(component) {
+        super('ResetLifeSpan', {
+            'type': constants_type.COMPONENT_TO_ECOVACS[component]
         });
     }
 }
@@ -405,6 +415,7 @@ module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.ResetLifeSpan = ResetLifeSpan;
+module.exports.SetLifeSpan = SetLifeSpan;
 module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetWaterLevel = GetWaterLevel;

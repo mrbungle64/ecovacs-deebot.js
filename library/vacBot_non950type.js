@@ -581,15 +581,25 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
       case "resetlifespan":
+        // Tested von Deebot 901
+        if (arguments.length < 2) {
+          return;
+        }
+        component = arguments[1];
+        this.send_command(new vacBotCommand.ResetLifeSpan(component));
+        break;
+      case "setlifespan":
+        // Untested
+        // Seems to be N79 Series only
         if (arguments.length < 2) {
           return;
         }
         component = arguments[1];
         if (arguments.length === 2) {
-          this.send_command(new vacBotCommand.ResetLifeSpan(component));
+          this.send_command(new vacBotCommand.SetLifeSpan(component));
         } else if (arguments.length === 3) {
           let val = arguments[2];
-          this.send_command(new vacBotCommand.ResetLifeSpan(component, val));
+          this.send_command(new vacBotCommand.SetLifeSpan(component, val));
         }
         break;
       case "getwaterlevel":
