@@ -46,15 +46,19 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot Ozmo 610
 * Deebot Ozmo 900
 * Deebot Ozmo 920
-* Deebot Ozmo T8 AIVI
+* Deebot Ozmo T8 (AIVI)
+* Deebot Ozmo Slim 10
 
 ### These models should work
 * Deebot M88
 * Deebot 600/605
 * Deebot Ozmo 960
-* Deebot Ozmo Slim 10
 
 ## Changelog
+
+### 0.4.18
+* Update dependencies
+* ResetLifeSpan and SetLifeSpan (non Ozmo 950)
 
 ### 0.4.17
 * Several enhancements and fixes. Especially for N79S/SE and N79T/W
