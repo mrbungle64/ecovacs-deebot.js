@@ -56,6 +56,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.19
+* Added support for Ozmo T8 (without AIVI)
+
 ### 0.4.18
 * Update dependencies
 * ResetLifeSpan and SetLifeSpan (non Ozmo 950)
