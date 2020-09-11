@@ -121,6 +121,15 @@ exports.KnownDevices = {
         "voice_report": true,
         'single_room': false
     },
+    "h18jkh": {
+        "name": "DEEBOT OZMO T8",
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        'single_room': false
+    },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
         "main_brush": true,
@@ -819,6 +828,23 @@ exports.EcoVacsHomeProducts = {
 			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5d83375f6b6a570001569e26"
 		}
 	},
+    "h18jkh": {
+        "product": {
+            "_id": "unknown",
+            "materialNo": "unknown",
+            "name": "DEEBOT OZMO T8",
+            "icon": "unknown",
+            "UILogicId": "unknown",
+            "ota": true,
+            "supportType": {
+                "share": true,
+                "tmjl": false,
+                "assistant": true,
+                "alexa": true
+            },
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5df6d1f10136c00001cb1fe4"
+        }
+    },
     "x5d34r": {
 		"product": {
 			"_id": "5de0d86ed88546000195239a",

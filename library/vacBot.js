@@ -35,10 +35,15 @@ class VacBot {
     }
 
     is950type() {
-        // yna5xi = Ozmo 950
-        // vi829v = Ozmo 920
-        // x5d34r = Ozmo T8 AIVI
-        return ((this.deviceClass === 'yna5xi') || (this.deviceClass === 'vi829v') || (this.deviceClass === 'x5d34r'))
+        switch (this.deviceClass) {
+            case 'yna5xi': // Ozmo 950
+            case 'vi829v': // Ozmo 920
+            case 'h18jkh': // Ozmo T8
+            case 'x5d34r': // Ozmo T8 AIVI
+                return true;
+            default:
+                return false;
+        }
     }
 
     isSupportedDevice() {
