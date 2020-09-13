@@ -187,6 +187,9 @@ class EcovacsMapNoMopZoneInfo {
 }
 
 function createCanvasFromCoordinates(coordinates, width=100, height=100) {
+    if (!isCanvasModuleAvailable()) {
+        return null;
+    }
     let coordinateArray = coordinates.split(";");
     const { createCanvas } = require('canvas')
     const canvas = createCanvas(width, height)
@@ -210,15 +213,28 @@ function isPositionInSpotArea(position, spotAreaInfos) {
     // Source: https://github.com/substack/point-in-polygon/blob/master/index.js
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-    
+
     tools.envLog("[isPositionInSpotArea] spotAreaInfos: "+ JSON.stringify(spotAreaInfos));
-    for(let infoID in spotAreaInfos) {
-        if(spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]),  parseInt(position[1]))) {
-            return spotAreaInfos[infoID]["mapSpotAreaID"];
+    if (isCanvasModuleAvailable) {
+        for (let infoID in spotAreaInfos) {
+            if (spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]), parseInt(position[1]))) {
+                return spotAreaInfos[infoID]["mapSpotAreaID"];
+            }
         }
     }
     return 'unknown';
-};
+}
+
+function isCanvasModuleAvailable() {
+    try {
+        tools.envLog("[canvas] canvas is available: ");
+        require.resolve('canvas');
+        return true;
+    } catch (e) {
+        tools.envLog("[canvas] canvas is not available: ");
+        return false;
+    }
+}
 
 module.exports.EcovacsMap = EcovacsMap;
 module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
@@ -231,4 +247,4 @@ module.exports.EcovacsMapNoMopZones = EcovacsMapNoMopZones;
 module.exports.EcovacsMapNoMopZone = EcovacsMapNoMopZone;
 module.exports.EcovacsMapNoMopZoneInfo = EcovacsMapNoMopZoneInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
-module.exports.createCanvasFromCoordinates = createCanvasFromCoordinates;
+module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
