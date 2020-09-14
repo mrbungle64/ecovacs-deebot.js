@@ -15,13 +15,13 @@ const SPOTAREA_SUBTYPES = {
 };
 
 class EcovacsMap {
-    constructor(mapID, mapIndex, mapName, mapStatus, mapIsCurrentMap=1, mapIsBuilt=1 ) {
-      this.mapID= mapID;
-      this.mapIndex = mapIndex;
-      this.mapName = mapName;
-      this.mapStatus = mapStatus;
-      this.mapIsCurrentMap = mapIsCurrentMap==1?true:false;
-      this.mapIsBuilt = mapIsBuilt==1?true:false;
+    constructor(mapID, mapIndex, mapName, mapStatus, mapIsCurrentMap = 1, mapIsBuilt = 1) {
+        this.mapID = mapID;
+        this.mapIndex = mapIndex;
+        this.mapName = mapName;
+        this.mapStatus = mapStatus;
+        this.mapIsCurrentMap = mapIsCurrentMap == 1 ? true : false;
+        this.mapIsBuilt = mapIsBuilt == 1 ? true : false;
     }
 
     toJSON() {
@@ -38,9 +38,9 @@ class EcovacsMap {
 
 class EcovacsMapSpotAreas {
     constructor(mapID, mapSetID) {
-      this.mapID= mapID;
-      this.mapSetID= mapSetID;
-      this.mapSpotAreas = [];
+        this.mapID = mapID;
+        this.mapSetID = mapSetID;
+        this.mapSpotAreas = [];
     }
 
     push(mapSpotArea) {
@@ -55,9 +55,10 @@ class EcovacsMapSpotAreas {
         };
     }
 }
+
 class EcovacsMapSpotArea {
     constructor(mapSpotAreaID) {
-      this.mapSpotAreaID= mapSpotAreaID;
+        this.mapSpotAreaID = mapSpotAreaID;
     }
 
     toJSON() {
@@ -68,17 +69,17 @@ class EcovacsMapSpotArea {
 }
 
 class EcovacsMapSpotAreaInfo {
-    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType="0") {
-      this.mapID= mapID;
-      this.mapSpotAreaID= mapSpotAreaID;
-      if(mapSubType == "0") {
-        this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
-      } else {
-        this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]["en"]; //#LANG#
-      }
-      this.mapSpotAreaConnections = mapSpotAreaConnections;
-      this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
-      this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
+    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = "0") {
+        this.mapID = mapID;
+        this.mapSpotAreaID = mapSpotAreaID;
+        if (mapSubType == "0") {
+            this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
+        } else {
+            this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]["en"]; //#LANG#
+        }
+        this.mapSpotAreaConnections = mapSpotAreaConnections;
+        this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
+        this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
     }
 
     toJSON() {
@@ -92,11 +93,10 @@ class EcovacsMapSpotAreaInfo {
     }
 }
 
-
 class EcovacsMapVirtualWalls {
     constructor(mapID) {
-      this.mapID= mapID;
-      this.mapVirtualWalls = [];
+        this.mapID = mapID;
+        this.mapVirtualWalls = [];
     }
 
     push(mapVirtualWall) {
@@ -110,9 +110,10 @@ class EcovacsMapVirtualWalls {
         };
     }
 }
+
 class EcovacsMapVirtualWall {
     constructor(mapVirtualWallID) {
-      this.mapVirtualWallID= mapVirtualWallID;
+        this.mapVirtualWallID = mapVirtualWallID;
     }
 
     toJSON() {
@@ -122,12 +123,11 @@ class EcovacsMapVirtualWall {
     }
 }
 
-
 class EcovacsMapVirtualWallInfo {
     constructor(mapID, mapVirtualWallID, mapVirtualWallBoundaries) {
-      this.mapID= mapID;
-      this.mapVirtualWallID= mapVirtualWallID;
-      this.mapVirtualWallBoundaries= mapVirtualWallBoundaries;
+        this.mapID = mapID;
+        this.mapVirtualWallID = mapVirtualWallID;
+        this.mapVirtualWallBoundaries = mapVirtualWallBoundaries;
     }
 
     toJSON() {
@@ -139,11 +139,10 @@ class EcovacsMapVirtualWallInfo {
     }
 }
 
-
 class EcovacsMapNoMopZones {
     constructor(mapID) {
-      this.mapID= mapID;
-      this.mapNoMopZones = [];
+        this.mapID = mapID;
+        this.mapNoMopZones = [];
     }
 
     push(mapNoMopZone) {
@@ -157,9 +156,10 @@ class EcovacsMapNoMopZones {
         };
     }
 }
+
 class EcovacsMapNoMopZone {
     constructor(mapNoMopZoneID) {
-      this.mapNoMopZoneID= mapNoMopZoneID;
+        this.mapNoMopZoneID = mapNoMopZoneID;
     }
 
     toJSON() {
@@ -169,12 +169,11 @@ class EcovacsMapNoMopZone {
     }
 }
 
-
 class EcovacsMapNoMopZoneInfo {
     constructor(mapID, mapNoMopZoneID, mapNoMopZoneIDBoundaries) {
-      this.mapID= mapID;
-      this.mapNoMopZoneID= mapNoMopZoneID;
-      this.mapNoMopZoneIDBoundaries= mapNoMopZoneIDBoundaries;
+        this.mapID = mapID;
+        this.mapNoMopZoneID = mapNoMopZoneID;
+        this.mapNoMopZoneIDBoundaries = mapNoMopZoneIDBoundaries;
     }
 
     toJSON() {
@@ -186,20 +185,20 @@ class EcovacsMapNoMopZoneInfo {
     }
 }
 
-function createCanvasFromCoordinates(coordinates, width=100, height=100) {
+function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
     if (!isCanvasModuleAvailable()) {
         return null;
     }
     let coordinateArray = coordinates.split(";");
-    const { createCanvas } = require('canvas')
-    const canvas = createCanvas(width, height)
-    const ctx = canvas.getContext('2d')
+    const {createCanvas} = require('canvas');
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext('2d');
     //ctx.translate(0, 2500);
     ctx.beginPath();
     for (let i = 0; i < coordinateArray.length; i++) {
         let xi = coordinateArray[i].split(',')[0];
         let yi = coordinateArray[i].split(',')[1];
-        if(i==0) {
+        if (i === 0) {
             ctx.moveTo(xi, yi);
         } else {
             ctx.lineTo(xi, yi);
@@ -214,7 +213,7 @@ function isPositionInSpotArea(position, spotAreaInfos) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 
-    tools.envLog("[isPositionInSpotArea] spotAreaInfos: "+ JSON.stringify(spotAreaInfos));
+    tools.envLog("[isPositionInSpotArea] spotAreaInfos: " + JSON.stringify(spotAreaInfos));
     if (isCanvasModuleAvailable()) {
         for (let infoID in spotAreaInfos) {
             if (spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]), parseInt(position[1]))) {
@@ -227,11 +226,9 @@ function isPositionInSpotArea(position, spotAreaInfos) {
 
 function isCanvasModuleAvailable() {
     try {
-        tools.envLog("[canvas] canvas is available: ");
         require.resolve('canvas');
         return true;
     } catch (e) {
-        tools.envLog("[canvas] canvas is not available: ");
         return false;
     }
 }
