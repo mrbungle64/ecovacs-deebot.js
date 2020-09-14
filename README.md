@@ -9,7 +9,8 @@ A Node.js library for running Ecovacs Deebot vacuum cleaner robots.
 
 ## Installation
 
-This library uses the canvas library which might require additional installations, otherwise the installation might result in an error.
+This library uses the canvas library which might require additional installations.
+For the full functional range please install the following packages.
 
 For Debian-based Linux systems the following commands should be executed:
 ```bash
