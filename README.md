@@ -57,6 +57,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.21
+* Update some dependencies
+* Bugfix for Ozmo T8 (without AIVI)
+
 ### 0.4.20
 * Removed canvas from dependencies
 
