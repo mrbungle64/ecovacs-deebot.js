@@ -42,7 +42,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 ### These models are known to work
 * Deebot Slim 2
 * Deebot N79
-* Deebot 601
+* Deebot 600/601
 * Deebot 710/711
 * Deebot Ozmo 610
 * Deebot Ozmo 900
@@ -52,7 +52,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### These models should work
 * Deebot M88
-* Deebot 600/605
+* Deebot 605
 * Deebot Ozmo 960
 
 ## Changelog
