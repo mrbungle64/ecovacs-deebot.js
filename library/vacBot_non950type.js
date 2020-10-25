@@ -52,6 +52,7 @@ class VacBot_non950type extends VacBot {
     this.maps = null;
     this.mapSpotAreaInfos = [];
     this.getMapSetExecuted = false;
+    this.getPullMExecuted = [];
 
     this.cleanLog = [];
     this.cleanLog_lastImageUrl = null;
@@ -227,7 +228,10 @@ class VacBot_non950type extends VacBot {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
           mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-          this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
+          if (!this.getPullMExecuted['sa' + mid]) {
+            this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
+            this.getPullMExecuted['sa' + mid] = true;
+          }
         }
       }
       tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
@@ -241,7 +245,10 @@ class VacBot_non950type extends VacBot {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
           mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
-          this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
+          if (!this.getPullMExecuted['vw' + mid]) {
+            this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
+            this.getPullMExecuted['vw' + mid] = true;
+          }
         }
       }
       tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
