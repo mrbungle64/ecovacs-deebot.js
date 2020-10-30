@@ -665,6 +665,10 @@ class VacBot_950type {
         this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetLastCleanLog());
         break;
+      case "getcleanlogspullcleanf":
+        this.lastCleanLogUseAlternativeAPICall = true;
+        this.send_command(new vacBotCommand.GetCleanLogsPullCleanF());
+        break;
     }
   
   }

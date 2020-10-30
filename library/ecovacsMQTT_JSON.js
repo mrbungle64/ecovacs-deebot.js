@@ -151,6 +151,22 @@ class EcovacsMQTT_JSON extends EventEmitter {
             }
         }
         if (action.api == constants.LGLOGAPI) {
+            if(action.name == 'Pull') { //temporary quickndirty to test new function
+                return {
+                    "did": recipient,
+                    "country": this.country,
+                    "td": action.name,
+                    "k": "db.CleanF", "asc": true, "limit": 20,
+                    "auth": {
+                        "token": this.secret,
+                        "resource": this.resource,
+                        "userid": this.user,
+                        "with": "users",
+                        "realm": constants.REALM
+                    },
+                    "resource": "BTKk"
+                }
+            } else 
             return {
                 "did": recipient,
                 "country": this.country,
@@ -468,6 +484,9 @@ class EcovacsMQTT_JSON extends EventEmitter {
                         this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
                     }
                 }
+                break;
+            case 'pull':
+                tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
                 break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
