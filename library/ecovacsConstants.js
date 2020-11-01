@@ -130,6 +130,15 @@ exports.KnownDevices = {
         "voice_report": true,
         'single_room': false
     },
+    "55aiho": {
+        "name": "DEEBOT OZMO T8+",
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        'single_room': false
+    },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
         "main_brush": true,

@@ -39,6 +39,7 @@ class VacBot {
             case 'yna5xi': // Ozmo 950
             case 'vi829v': // Ozmo 920
             case 'h18jkh': // Ozmo T8
+            case '55aiho': // Ozmo T8+
             case 'x5d34r': // Ozmo T8 AIVI
                 return true;
             default:
