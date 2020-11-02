@@ -75,8 +75,8 @@ class EcovacsMapSpotAreaInfo {
     constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = "0") {
         this.mapID = mapID;
         this.mapSpotAreaID = mapSpotAreaID;
-        if (mapSubType == "0") {
-            this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
+        if (mapSubType == "0" || !SPOTAREA_SUBTYPES[mapSubType]["en"]) { //if default naming or ID not found in list of names
+            this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID)); //return character representation (0=A, 1=B, etc.)
         } else {
             this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]["en"]; //#LANG#
         }
