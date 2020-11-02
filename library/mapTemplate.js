@@ -11,7 +11,10 @@ const SPOTAREA_SUBTYPES = {
     '8': {"en": "Lounge", "de": "Lounge"},
     '9': {"en": "Storeroom", "de": "Lagerraum"},
     '10': {"en": "Kids room", "de": "Kinderzimmer"},
-    '11': {"en": "Sunroom", "de": "Wintergarten"}
+    '11': {"en": "Sunroom", "de": "Wintergarten"},
+    '12': {"en": "Corridor", "de": "Flur"},
+    '13': {"en": "Balcony", "de": "Balkon"},
+    '14': {"en": "Gym", "de": "Fitnessstudio"}
 };
 
 class EcovacsMap {
