@@ -58,8 +58,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
-### 0.4.22
+### 0.4.23
 * (mrbungle64) Added support for Ozmo T8+
+
+### 0.4.22
 * (boriswerner) Added new spotAreaNames (950 type)
 
 ### 0.4.21
