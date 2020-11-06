@@ -837,6 +837,23 @@ exports.EcoVacsHomeProducts = {
 			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5d83375f6b6a570001569e26"
 		}
 	},
+    "h55aiho": {
+        "product": {
+            "_id": "unknown",
+            "materialNo": "unknown",
+            "name": "DEEBOT OZMO T8+",
+            "icon": "unknown",
+            "UILogicId": "unknown",
+            "ota": true,
+            "supportType": {
+                "share": true,
+                "tmjl": false,
+                "assistant": true,
+                "alexa": true
+            },
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5df6d1f10136c00001cb1fe4"
+        }
+    },
     "h18jkh": {
         "product": {
             "_id": "unknown",
