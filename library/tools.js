@@ -1,5 +1,18 @@
 const constants = require('./ecovacsConstants');
 
+function is950type(deviceClass) {
+    switch (deviceClass) {
+        case 'yna5xi': // Ozmo 950
+        case 'vi829v': // Ozmo 920
+        case 'h18jkh': // Ozmo T8
+        case '55aiho': // Ozmo T8+
+        case 'x5d34r': // Ozmo T8 AIVI
+            return true;
+        default:
+            return false;
+    }
+}
+
 function getAllKnownDevices() {
     let devices = {};
     devices = Object.assign(devices, getSupportedDevices());
@@ -141,3 +154,4 @@ module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getProductIotMap = getProductIotMap;
 module.exports.getTimeString = getTimeString;
+module.exports.is950type = is950type;
