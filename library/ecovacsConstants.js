@@ -837,7 +837,7 @@ exports.EcoVacsHomeProducts = {
 			"iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5d83375f6b6a570001569e26"
 		}
 	},
-    "h55aiho": {
+    "55aiho": {
         "product": {
             "_id": "unknown",
             "materialNo": "unknown",
