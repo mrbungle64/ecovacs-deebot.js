@@ -1,3 +1,5 @@
+![Logo](ecovacs-deebot.png)
+
 # ecovacs-deebot.js
 
 [![npm](http://img.shields.io/npm/v/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
@@ -244,6 +246,12 @@ Information on how to use this library can be found [here](https://github.com/mr
 All credits for originally figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
 
+## Disclaimer
+
+I am in no way affiliated with ECOVACS.
+
 ## License
 
 GNU GENERAL PUBLIC LICENSE
+
+Copyright (c) 2020 Sascha Hölzel <mrb1232@posteo.de>
