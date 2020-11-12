@@ -95,6 +95,22 @@ class VacBot_950type {
     return false;
   }
 
+  hasSpotAreaCleaningMode() {
+    return this.getDeviceProperty('spot_area');
+  }
+
+  hasEdgeCleaningMode() {
+    return (!this.hasSpotAreaCleaningMode());
+  }
+
+  hasSpotCleaningMode() {
+    return (!this.hasSpotAreaCleaningMode());
+  }
+
+  hasCustomAreaCleaningMode() {
+    return this.getDeviceProperty('custom_area');
+  }
+
   hasMainBrush() {
     return this.getDeviceProperty('main_brush');
   }
