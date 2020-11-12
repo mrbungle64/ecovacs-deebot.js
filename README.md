@@ -60,6 +60,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.4.26
+* Bugfix release
+
 ### 0.4.25
 * Bugfix release
 
