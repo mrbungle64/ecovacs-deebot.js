@@ -3,7 +3,7 @@ const vacBotCommand = require('./vacBotCommand_non950type');
 const VacBot = require('./vacBot');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
-const map = require('./mapTemplate.js');
+const map = require('./mapTemplate');
 
 class VacBot_non950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {

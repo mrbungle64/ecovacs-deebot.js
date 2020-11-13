@@ -1,8 +1,9 @@
-const dictionary = require('./ecovacsConstants_950type.js');
-const vacBotCommand = require('./vacBotCommand_950type.js');
+const dictionary = require('./ecovacsConstants_950type');
+const vacBotCommand = require('./vacBotCommand_950type');
 const VacBot = require('./vacBot');
-const tools = require('./tools.js');
-const map = require('./mapTemplate.js');
+const errorCodes = require('./errorCodes');
+const tools = require('./tools');
+const map = require('./mapTemplate');
 
 class VacBot_950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
