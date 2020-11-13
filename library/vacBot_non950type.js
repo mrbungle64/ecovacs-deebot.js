@@ -10,19 +10,6 @@ class VacBot_non950type extends VacBot {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
     this.cleanReport = null;
-    this.deebotPosition = {
-      x: null,
-      y: null,
-      a: null,
-      isInvalid: false,
-      currentSpotAreaID: 'unknown',
-      changeFlag: false
-    };
-    this.chargePosition = {
-      x: null,
-      y: null,
-      a: null
-    };
     this.cleanSpeed = null;
     this.chargeStatus = null;
     this.batteryInfo = null;

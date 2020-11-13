@@ -11,21 +11,6 @@ class VacBot_950type extends VacBot {
 
     this.clean_status = null;
     this.is_ready = false;
-
-    this.deebot_position = {
-      x: null,
-      y: null,
-      a: null,
-      isInvalid: false,
-      currentSpotAreaID: 'unknown',
-      changeFlag: false
-    };
-    this.charge_position = {
-      x: null,
-      y: null,
-      a: null,
-      changeFlag: false
-    };
     this.fan_speed = null;
     this.relocation_state = null;
     this.charge_status = null;

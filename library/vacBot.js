@@ -25,6 +25,21 @@ class VacBot {
         this.currentMapIndex = null;
         this.lastUsedAreaValues = null;
 
+        this.deebotPosition = {
+            x: null,
+            y: null,
+            a: null,
+            isInvalid: false,
+            currentSpotAreaID: 'unknown',
+            changeFlag: false
+        };
+        this.charge_position = {
+            x: null,
+            y: null,
+            a: null,
+            changeFlag: false
+        };
+
         this.cleanSum_totalSquareMeters = null;
         this.cleanSum_totalSeconds = null;
         this.cleanSum_totalNumber = null;
