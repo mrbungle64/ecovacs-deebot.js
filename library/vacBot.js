@@ -102,6 +102,10 @@ class VacBot {
         return tools.is950type(this.deviceClass);
     }
 
+    isN79series() {
+        return tools.isN79series(this.deviceClass);
+    }
+
     isSupportedDevice() {
         const devices = JSON.parse(JSON.stringify(tools.getSupportedDevices()));
         return devices.hasOwnProperty(this.deviceClass);

@@ -13,6 +13,17 @@ function is950type(deviceClass) {
     }
 }
 
+function isN79series(deviceClass) {
+    switch (deviceClass) {
+        case '126': // N79
+        case '155': // N79S/SE
+        case '165': // N79T/W
+            return true;
+        default:
+            return false;
+    }
+}
+
 function getAllKnownDevices() {
     let devices = {};
     devices = Object.assign(devices, getSupportedDevices());
@@ -155,3 +166,4 @@ module.exports.getKnownDevices = getKnownDevices;
 module.exports.getProductIotMap = getProductIotMap;
 module.exports.getTimeString = getTimeString;
 module.exports.is950type = is950type;
+module.exports.isN79type = isN79type;

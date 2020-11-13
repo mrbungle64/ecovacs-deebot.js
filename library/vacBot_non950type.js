@@ -37,11 +37,9 @@ class VacBot_non950type extends VacBot {
 
     let lifespan = null;
     if ((event.hasOwnProperty('val')) && (event.hasOwnProperty('total'))) {
-      // DEEBOT N79S/SE (deviceClass 155)
-      // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
-      // DEEBOT N79T/W (deviceClass 165)
-      // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
-      if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
+      if (this.isN79series()) {
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
         lifespan = parseInt(event['val']);
       } else {
         lifespan = parseInt(event['val']) / parseInt(event['total']) * 100;
