@@ -15,6 +15,15 @@ class VacBot {
             this.deviceModel = constants.EcoVacsHomeProducts[this.deviceClass]['product']['name'];
             this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
         }
+        this.errorCode = '0';
+        this.components = {};
+
+        this.maps = null;
+        this.mapSpotAreaInfos = [];
+        this.currentMapName = 'unknown';
+        this.currentMapMID = null;
+        this.currentMapIndex = null;
+        this.lastUsedAreaValues = null;
     }
 
     getLibraryForProtocol() {

@@ -27,26 +27,17 @@ class VacBot_950type extends VacBot {
       changeFlag: false
     };
     this.fan_speed = null;
-    this.lastUsedAreaValues = null;
     this.relocation_state = null;
     this.charge_status = null;
     this.battery_status = null;
     this.water_level = null;
     this.waterbox_info = null;
     this.sleep_status = null;
-    this.components = {};
-    this.errorCode = '0';
     this.errorDescription = errorCodes[this.errorCode];
     this.useMqtt = true;
     this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
     this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
-    this.currentMapName = 'unknown';
-    this.currentMapMID = null;
-    this.currentMapIndex = null;
     this.lastCleanLogUseAlternativeAPICall = false;
-
-    this.maps = null;
-    this.mapSpotAreaInfos = [];
 
     this.cleanLog = [];
     this.cleanLog_lastImageUrl = null;

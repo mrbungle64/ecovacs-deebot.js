@@ -23,7 +23,6 @@ class VacBot_non950type extends VacBot {
       y: null,
       a: null
     };
-    this.lastUsedAreaValues = null;
     this.cleanSpeed = null;
     this.chargeStatus = null;
     this.batteryInfo = null;
@@ -31,8 +30,6 @@ class VacBot_non950type extends VacBot {
     this.dustcaseInfo = null;
     this.waterboxInfo = null;
     this.sleepStatus = null;
-    this.components = {};
-    this.errorCode = '0';
     this.errorDescription = errorCodes[this.errorCode];
     this.netInfoIP = null;
     this.netInfoWifiSSID = null;
@@ -45,12 +42,6 @@ class VacBot_non950type extends VacBot {
     this.continuousCleaningEnabled = null;
     this.voiceReportDisabled = null;
 
-    this.currentMapName = 'standard';
-    this.currentMapMID = null;
-    this.currentMapIndex = 0;
-
-    this.maps = null;
-    this.mapSpotAreaInfos = [];
     this.getMapSetExecuted = false;
 
     this.cleanLog = [];
