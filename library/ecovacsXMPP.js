@@ -9,14 +9,6 @@ class EcovacsXMPP extends Ecovacs {
 
         this.simpleXmpp = require('simple-xmpp');
 
-        if (!server_address) {
-            this.server_address = 'msg-{continent}.ecouser.net'.format({
-                continent: continent
-            });
-        } else {
-            this.server_address = server_address;
-        }
-
         this.simpleXmpp.on('online', (event) => {
             tools.envLog('[EcovacsXMPP] Session start');
             this.session_start(event);

@@ -15,14 +15,6 @@ class EcovacsMQTT_JSON extends Ecovacs {
         this.username = user + '@' + this.customdomain;
         this.clientId = this.username + '/' + resource;
 
-        if (!server_address) {
-            this.server_address = 'mq-{continent}.ecouser.net'.format({
-                continent: continent
-            });
-        } else {
-            this.server_address = server_address;
-        }
-
         let options = {
             clientId: this.clientId,
             username: this.username,
