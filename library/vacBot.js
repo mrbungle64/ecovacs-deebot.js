@@ -3,9 +3,9 @@ const tools = require('./tools');
 
 class VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country, server_address = null) {
-
         this.ecovacs = null;
         this.vacuum = vacuum;
+
         this.pingInterval = null;
         this.useMqtt = this.useMqttProtocol();
         this.deviceClass = vacuum['class'];
@@ -24,6 +24,19 @@ class VacBot {
         this.currentMapMID = null;
         this.currentMapIndex = null;
         this.lastUsedAreaValues = null;
+
+        this.cleanSum_totalSquareMeters = null;
+        this.cleanSum_totalSeconds = null;
+        this.cleanSum_totalNumber = null;
+
+        this.cleanLog = [];
+        this.cleanLog_lastImageUrl = null;
+        this.cleanLog_lastImageTimestamp = null;
+
+        this.netInfoIP = null;
+        this.netInfoWifiSSID = null;
+        this.netInfoWifiSignal = null;
+        this.netInfoMAC = null;
     }
 
     getLibraryForProtocol() {

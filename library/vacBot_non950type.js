@@ -31,11 +31,6 @@ class VacBot_non950type extends VacBot {
     this.waterboxInfo = null;
     this.sleepStatus = null;
     this.errorDescription = errorCodes[this.errorCode];
-    this.netInfoIP = null;
-    this.netInfoWifiSSID = null;
-    this.cleanSum_totalSquareMeters = null;
-    this.cleanSum_totalSeconds = null;
-    this.cleanSum_totalNumber = null;
 
     // OnOff
     this.doNotDisturbEnabled = null;
@@ -43,10 +38,6 @@ class VacBot_non950type extends VacBot {
     this.voiceReportDisabled = null;
 
     this.getMapSetExecuted = false;
-
-    this.cleanLog = [];
-    this.cleanLog_lastImageUrl = null;
-    this.cleanLog_lastImageTimestamp = null;
 
     const LibraryForProtocol = this.getLibraryForProtocol();
     this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);

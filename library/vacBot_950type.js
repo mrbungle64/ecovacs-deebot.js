@@ -39,19 +39,6 @@ class VacBot_950type extends VacBot {
     this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
     this.lastCleanLogUseAlternativeAPICall = false;
 
-    this.cleanLog = [];
-    this.cleanLog_lastImageUrl = null;
-    this.cleanLog_lastImageTimestamp = null;
-
-    this.netInfoIP = null;
-    this.netInfoWifiSSID = null;
-    this.netInfoWifiSignal = null;
-    this.netInfoMAC = null;
-
-    this.cleanSum_totalSquareMeters = null;
-    this.cleanSum_totalSeconds = null;
-    this.cleanSum_totalNumber = null;
-
     tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
     const EcovacsMQTT = require('./ecovacsMQTT_JSON.js');
     this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
