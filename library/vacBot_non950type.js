@@ -18,11 +18,6 @@ class VacBot_non950type extends VacBot {
     this.waterboxInfo = null;
     this.sleepStatus = null;
 
-    // OnOff
-    this.doNotDisturbEnabled = null;
-    this.continuousCleaningEnabled = null;
-    this.voiceReportDisabled = null;
-
     this.getMapSetExecuted = false;
 
     const LibraryForProtocol = this.getLibraryForProtocol();

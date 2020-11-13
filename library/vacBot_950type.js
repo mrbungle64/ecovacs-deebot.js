@@ -10,7 +10,6 @@ class VacBot_950type extends VacBot {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
     this.clean_status = null;
-    this.is_ready = false;
     this.fan_speed = null;
     this.relocation_state = null;
     this.charge_status = null;
@@ -579,12 +578,6 @@ class VacBot_950type extends VacBot {
         this.send_command(new vacBotCommand.GetLastCleanLog());
         break;
     }
-  }
-
-  disconnect() {
-    this.ecovacs.disconnect();
-    this.is_ready = false;
-    clearInterval(this.pingInterval)
   }
 }
 

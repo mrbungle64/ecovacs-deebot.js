@@ -6,6 +6,7 @@ class VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country, server_address = null) {
         this.ecovacs = null;
         this.vacuum = vacuum;
+        this.is_ready = false;
 
         this.pingInterval = null;
         this.useMqtt = this.useMqttProtocol();
@@ -54,6 +55,11 @@ class VacBot {
         this.netInfoWifiSSID = null;
         this.netInfoWifiSignal = null;
         this.netInfoMAC = null;
+
+        // OnOff
+        this.doNotDisturbEnabled = null;
+        this.continuousCleaningEnabled = null;
+        this.voiceReportDisabled = null;
     }
 
     getLibraryForProtocol() {
@@ -157,7 +163,7 @@ class VacBot {
     disconnect() {
         this.ecovacs.disconnect();
         this.is_ready = false;
-        clearInterval(this.pingInterval);
+        clearInterval(this.pingInterval)
     }
 }
 
