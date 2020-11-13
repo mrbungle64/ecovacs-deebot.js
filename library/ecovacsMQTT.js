@@ -1,4 +1,4 @@
-const EventEmitter = require('events');
+const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const URL = require('url').URL;
 const constants = require('./ecovacsConstants');
@@ -6,33 +6,16 @@ const https = require('https');
 const DOMParser = require('xmldom').DOMParser;
 const dictionary = require('./ecovacsConstants_non950type');
 
-String.prototype.format = function () {
-    if (arguments.length === 0) {
-        return this;
-    }
-    let args = arguments['0'];
-    return this.replace(/{(\w+)}/g, function (match, number) {
-        return typeof args[number] != 'undefined' ? args[number] : match;
-    });
-};
-
-class EcovacsMQTT extends EventEmitter {
+class EcovacsMQTT extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
-        super();
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+
         this.mqtt = require('mqtt');
         this.client = null;
 
-        this.bot = bot;
-        this.user = user;
-        this.hostname = hostname;
-        this.customdomain = this.hostname.split(".")[0]; // MQTT is using domain without tld extension
-        this.resource = resource;
-        this.username = this.user + '@' + this.customdomain;
-        this.clientId = this.username + '/' + this.resource;
-        this.secret = secret;
-        this.continent = continent;
-        this.country = country;
-        this.vacuum = vacuum;
+        this.customdomain = hostname.split(".")[0]; // MQTT is using domain without tld extension
+        this.username = user + '@' + this.customdomain;
+        this.clientId = this.username + '/' + resource;
 
         if (!server_address) {
             this.server_address = 'mq-{continent}.ecouser.net'.format({

@@ -1,33 +1,13 @@
-const EventEmitter = require('events');
+const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const Element = require('ltx').Element;
 const dictionary = require('./ecovacsConstants_non950type.js');
 
-String.prototype.format = function () {
-    if (arguments.length === 0) {
-        return this;
-    }
-    let args = arguments['0'];
-    return this.replace(/{(\w+)}/g, function (match, number) {
-        return typeof args[number] != 'undefined' ? args[number] : match;
-    });
-};
-
-class EcovacsXMPP extends EventEmitter {
+class EcovacsXMPP extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
-        super();
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+
         this.simpleXmpp = require('simple-xmpp');
-
-        this.bot = bot;
-        this.user = user;
-        this.hostname = hostname;
-        this.resource = resource;
-        this.secret = secret;
-        this.continent = continent;
-        this.country = country;
-        this.vacuum = vacuum;
-
-        this.iter = 1;
 
         if (!server_address) {
             this.server_address = 'msg-{continent}.ecouser.net'.format({
