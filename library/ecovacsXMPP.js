@@ -241,14 +241,6 @@ class EcovacsXMPP extends Ecovacs {
         });
     }
 
-    session_start(event) {
-        tools.envLog('[EcovacsXMPP] ----------------- starting session ----------------');
-        tools.envLog('[EcovacsXMPP] event = {event}'.format({
-            event: JSON.stringify(event)
-        }));
-        this.emit('ready', event);
-    }
-
     connect_and_wait_until_ready() {
         tools.envLog('[EcovacsXMPP] Connecting as %s to %s', this.user + '@' + this.hostname, this.server_address + ':' + this.server_port);
         this.simpleXmpp.connect({

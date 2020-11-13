@@ -25,6 +25,10 @@ class Ecovacs extends EventEmitter {
 
         this.iter = 1;
     }
+
+    session_start(event) {
+        this.emit("ready", event);
+    }
 }
 
 module.exports = Ecovacs;
