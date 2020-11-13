@@ -1,9 +1,8 @@
-const   dictionary = require('./ecovacsConstants_950type.js');
-const   constants = require('./ecovacsConstants.js');
-const   vacBotCommand = require('./vacBotCommand_950type.js');
-const   VacBot = require('./vacBot');
-const   tools = require('./tools.js');
-const   map = require('./mapTemplate.js');
+const dictionary = require('./ecovacsConstants_950type.js');
+const vacBotCommand = require('./vacBotCommand_950type.js');
+const VacBot = require('./vacBot');
+const tools = require('./tools.js');
+const map = require('./mapTemplate.js');
 
 class VacBot_950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
@@ -19,8 +18,6 @@ class VacBot_950type extends VacBot {
     this.waterbox_info = null;
     this.sleep_status = null;
     this.useMqtt = true;
-    this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
-    this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
     this.lastCleanLogUseAlternativeAPICall = false;
 
     tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
