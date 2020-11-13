@@ -24,6 +24,8 @@ class Ecovacs extends EventEmitter {
         this.vacuum = vacuum;
 
         this.iter = 1;
+
+        this.server_port = server_port;
     }
 
     session_start(event) {

@@ -4,7 +4,7 @@ const Element = require('ltx').Element;
 const dictionary = require('./ecovacsConstants_non950type.js');
 
 class EcovacsXMPP extends Ecovacs {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
         this.simpleXmpp = require('simple-xmpp');
@@ -15,12 +15,6 @@ class EcovacsXMPP extends Ecovacs {
             });
         } else {
             this.server_address = server_address;
-        }
-
-        if (!server_port) {
-            this.server_port = 5223
-        } else {
-            this.server_port = server_port;
         }
 
         this.simpleXmpp.on('online', (event) => {

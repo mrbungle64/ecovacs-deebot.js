@@ -7,7 +7,7 @@ const DOMParser = require('xmldom').DOMParser;
 const dictionary = require('./ecovacsConstants_non950type');
 
 class EcovacsMQTT extends Ecovacs {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
         this.mqtt = require('mqtt');
@@ -24,14 +24,6 @@ class EcovacsMQTT extends Ecovacs {
         } else {
             this.server_address = server_address;
         }
-
-        if (!server_port) {
-            this.server_port = 8883
-        } else {
-            this.server_port = server_port;
-        }
-
-        //var caFile = fs.readFileSync(__dirname + "/key.pem", "utf8");
 
         let options = {
             clientId: this.clientId,

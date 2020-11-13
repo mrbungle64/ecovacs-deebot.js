@@ -1,36 +1,19 @@
-const EventEmitter = require('events');
+const Ecovacs = require('./ecovacs');
 const tools = require('./tools.js');
 const URL = require('url').URL;
 const constants = require('./ecovacsConstants');
 const https = require('https');
 
-String.prototype.format = function () {
-    if (arguments.length === 0) {
-        return this;
-    }
-    var args = arguments['0'];
-    return this.replace(/{(\w+)}/g, function (match, number) {
-        return typeof args[number] != 'undefined' ? args[number] : match;
-    });
-};
+class EcovacsMQTT_JSON extends Ecovacs {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
-class EcovacsMQTT_JSON extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
-        super();
         this.mqtt = require('mqtt');
         this.client = null;
 
-        this.bot = bot;
-        this.user = user;
-        this.hostname = hostname;
-        this.customdomain = this.hostname.split(".")[0]; // MQTT is using domain without tld extension
-        this.resource = resource;
-        this.username = this.user + '@' + this.customdomain;
-        this.clientId = this.username + '/' + this.resource;
-        this.secret = secret;
-        this.country = country;
-        this.continent = continent;
-        this.vacuum = vacuum;
+        this.customdomain = hostname.split(".")[0]; // MQTT is using domain without tld extension
+        this.username = user + '@' + this.customdomain;
+        this.clientId = this.username + '/' + resource;
 
         if (!server_address) {
             this.server_address = 'mq-{continent}.ecouser.net'.format({
@@ -38,12 +21,6 @@ class EcovacsMQTT_JSON extends EventEmitter {
             });
         } else {
             this.server_address = server_address;
-        }
-
-        if (!server_port) {
-            this.server_port = 8883
-        } else {
-            this.server_port = server_port;
         }
 
         let options = {
@@ -106,7 +83,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
         let payload = null;
 
         tools.envLog("[EcovacsMQTT_JSON] _wrap_command() args: ", JSON.stringify(action.args, getCircularReplacer()));
-    
+
         // All requests need to have this header -- not sure about timezone and ver
         let payloadRequest = {};
         payloadRequest['header'] = {};
@@ -122,7 +99,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
 
         payload = payloadRequest;
         tools.envLog("[EcovacsMQTT_JSON] _wrap_command() payload: %s", JSON.stringify(payload, getCircularReplacer()));
-        
+
         return payload;
     }
 
@@ -176,13 +153,13 @@ class EcovacsMQTT_JSON extends EventEmitter {
             if (api == constants.IOTDEVMANAGERAPI) {
                 url = url + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
             }
-            
+
             let headers = {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(JSON.stringify(params))
             };
             headers = Object.assign(headers, { 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)' });
-            
+
             url = new URL(url);
             tools.envLog(`[EcovacsMQTT_JSON] Calling ${url.href}`);
             const reqOptions = {
@@ -234,7 +211,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
 
             req.on('error', (e) => {
                 tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
-                reject(e); 
+                reject(e);
             });
 
             // write data to request body
@@ -252,7 +229,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
 
         if (message) {
             tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() message: %s", JSON.stringify(message, getCircularReplacer()));
-            
+
             if (action.api == constants.IOTDEVMANAGERAPI && message.hasOwnProperty('resp')) {
                 tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
                 this._handle_message(command, message['resp'], "response");
@@ -302,7 +279,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
             //{"ret":"ok","log":{"ts":1586430548,"last":1826,"area":32,"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a1","imageUrl":"https://portal-eu.ecouser.net/api/lg/image/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a","type":"auto","stopReason":2}}
             //{"ret":"ok","map":{"ts":1586294523,"imageUrl":"https://portal-eu.ecouser.net/api/lg/offmap/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a1a1"}}
             resultCodeMessage = message['ret'];
-        }                
+        }
 
         tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _message_to_dict eventName: %s", eventName);
         tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _message_to_dict resultCode: %s", resultCode);
@@ -366,7 +343,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 let mapset = this.bot._handle_mapset(event);
                 if(mapset["mapsetEvent"] != 'error'){
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
-                }                
+                }
                 break;
             case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = this.bot._handle_mapsubset(event);
@@ -400,9 +377,9 @@ class EcovacsMQTT_JSON extends EventEmitter {
                     this.bot.deebot_position["changeFlag"]=false;
                 }
                 if(this.bot.charge_position["changeFlag"]) {
-                    this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]); 
+                    this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
                     this.bot.charge_position["changeFlag"]=false;
-                }                
+                }
                 break;
             case "waterinfo":
                 this.bot._handle_water_info(event);
@@ -462,7 +439,7 @@ class EcovacsMQTT_JSON extends EventEmitter {
                 tools.envLog("[EcovacsMQTT_JSON] lastcleanlog: %s", JSON.stringify(event, getCircularReplacer()));
                 if (this.bot.lastCleanLogUseAlternativeAPICall) {
                     this.bot._handle_lastCleanLog(event);
-                
+
                     if (this.bot.cleanLog_lastImageUrl) {
                         this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
                         this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
