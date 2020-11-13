@@ -421,25 +421,6 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  _vacuum_address() {
-    if (!this.useMqtt) {
-      return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
-    } else {
-      return this.vacuum['did'];
-    }
-  }
-
-  send_command(action) {
-    tools.envLog("[VacBot] Sending command `%s`", action.name);
-    if (!this.useMqtt) {
-      this.ecovacs.send_command(action.to_xml(), this._vacuum_address());
-    } else {
-      // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
-      // IOTMQ devices need the full action for additional parsing
-      this.ecovacs.send_command(action, this._vacuum_address());
-    }
-  }
-
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
     let component;

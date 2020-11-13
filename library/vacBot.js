@@ -169,13 +169,32 @@ class VacBot {
         }
     }
 
+    _vacuum_address() {
+        if (!this.useMqtt) {
+            return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
+        } else {
+            return this.vacuum['did'];
+        }
+    }
+
+    send_command(action) {
+        tools.envLog("[VacBot] Sending command `%s`", action.name);
+        if (!this.useMqtt) {
+            this.ecovacs.send_command(action.to_xml(), this._vacuum_address());
+        } else {
+            // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
+            // IOTMQ devices need the full action for additional parsing
+            this.ecovacs.send_command(action, this._vacuum_address());
+        }
+    }
+
     send_ping() {
         try {
             if (!this.ecovacs.send_ping()) {
                 throw new Error("Ping did not reach VacBot");
             }
         } catch (e) {
-            throw new Error("Error while sending ping to VacBot: " + e.toString());
+            throw new Error("Ping did not reach VacBot");
         }
     }
 

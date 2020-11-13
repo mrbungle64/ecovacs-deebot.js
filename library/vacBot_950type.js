@@ -105,6 +105,7 @@ class VacBot_950type extends VacBot {
           tools.envLog("[VacBot] _handle_deebot_position event undefined");
         }
   }
+
   _handle_fan_speed(event) {
     this.fan_speed = dictionary.FAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
     //this.fan_speed = event['resultData']['speed'];
@@ -202,6 +203,7 @@ class VacBot_950type extends VacBot {
     }
     tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
   }
+
   _handle_lastCleanLog(event) {
     tools.envLog("[VacBot] _handle_lastCleanLog");
     if (event['resultCode'] == '0') {
@@ -369,31 +371,6 @@ class VacBot_950type extends VacBot {
     }
     tools.envLog("[VacBot] *** errorCode = " + this.errorCode);
     tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
-  }
-
-  _vacuum_address() {
-    if (!this.useMqtt) {
-      return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
-    } else {
-      return this.vacuum['did'];
-    }
-  }
-
-  send_command(action) {
-    tools.envLog("[VacBot] Sending command `%s`", action.name);
-    // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
-    // IOTMQ devices need the full action for additional parsing
-    this.ecovacs.send_command(action, this._vacuum_address());
-  }
-
-  send_ping() {
-    try {
-      if (!this.ecovacs.send_ping()) {
-        throw new Error("Ping did not reach VacBot");
-      }
-    } catch (e) {
-      throw new Error("Ping did not reach VacBot");
-    }
   }
 
   run(action) {
