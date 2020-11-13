@@ -51,10 +51,6 @@ class EcovacsMQTT_JSON extends Ecovacs {
         });
     }
 
-    session_start(event) {
-        this.emit("ready", event);
-    }
-
     connect_and_wait_until_ready() {
         this.on("ready", (event) => {
             this.send_ping(this.bot._vacuum_address());
@@ -234,7 +230,6 @@ class EcovacsMQTT_JSON extends Ecovacs {
             }
         }
     }
-
 
     _handle_message(topic, message, type="incoming") {
 
@@ -442,10 +437,6 @@ class EcovacsMQTT_JSON extends Ecovacs {
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
                 break;
         }
-    }
-
-    _my_address() {
-        return this.user + '@' + this.hostname + '/' + this.resource;
     }
 
     send_ping(to) {}
