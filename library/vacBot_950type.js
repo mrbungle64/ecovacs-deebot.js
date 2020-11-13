@@ -11,35 +11,14 @@ class VacBot_950type extends VacBot {
 
     this.clean_status = null;
     this.fan_speed = null;
-    this.relocation_state = null;
     this.charge_status = null;
     this.battery_status = null;
     this.water_level = null;
     this.waterbox_info = null;
     this.sleep_status = null;
-    this.useMqtt = true;
+
+    this.relocation_state = null;
     this.lastCleanLogUseAlternativeAPICall = false;
-
-    tools.envLog("[VacBot] Using EcovacsIOTMQ_JSON");
-    const EcovacsMQTT = require('./ecovacsMQTT_JSON.js');
-    this.ecovacs = new EcovacsMQTT(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
-
-
-    this.ecovacs.on("ready", () => {
-      tools.envLog("[VacBot] Ready event!");
-      this.is_ready = true;
-    });
-  }
-
-  connect_and_wait_until_ready() {
-    this.ecovacs.connect_and_wait_until_ready();
-    this.pingInterval = setInterval(() => {
-      this.ecovacs.send_ping(this._vacuum_address());
-    }, 30000);
-  }
-
-  on(name, func) {
-    this.ecovacs.on(name, func);
   }
 
   _handle_life_span(event) {

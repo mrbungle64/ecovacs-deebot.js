@@ -14,30 +14,11 @@ class VacBot_non950type extends VacBot {
     this.chargeStatus = null;
     this.batteryInfo = null;
     this.waterLevel = null;
-    this.dustcaseInfo = null;
     this.waterboxInfo = null;
     this.sleepStatus = null;
 
+    this.dustcaseInfo = null;
     this.getMapSetExecuted = false;
-
-    const LibraryForProtocol = this.getLibraryForProtocol();
-    this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
-
-    this.ecovacs.on("ready", () => {
-      tools.envLog("[VacBot] Ready event!");
-      this.is_ready = true;
-    });
-  }
-
-  connect_and_wait_until_ready() {
-    this.ecovacs.connect_and_wait_until_ready();
-    this.pingInterval = setInterval(() => {
-      this.ecovacs.send_ping(this._vacuum_address());
-    }, 30000);
-  }
-
-  on(name, func) {
-    this.ecovacs.on(name, func);
   }
 
   _handle_lifeSpan(event) {

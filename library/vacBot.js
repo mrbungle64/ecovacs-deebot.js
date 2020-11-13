@@ -60,6 +60,25 @@ class VacBot {
         this.doNotDisturbEnabled = null;
         this.continuousCleaningEnabled = null;
         this.voiceReportDisabled = null;
+
+        const LibraryForProtocol = this.getLibraryForProtocol();
+        this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
+
+        this.ecovacs.on("ready", () => {
+            tools.envLog("[VacBot] Ready event!");
+            this.is_ready = true;
+        });
+    }
+
+    connect_and_wait_until_ready() {
+        this.ecovacs.connect_and_wait_until_ready();
+        this.pingInterval = setInterval(() => {
+            this.ecovacs.send_ping(this._vacuum_address());
+        }, 30000);
+    }
+
+    on(name, func) {
+        this.ecovacs.on(name, func);
     }
 
     getLibraryForProtocol() {
