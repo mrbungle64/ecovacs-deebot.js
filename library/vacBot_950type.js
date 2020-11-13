@@ -5,9 +5,10 @@ const   errorCodes = require('./errorCodes');
 const   tools = require('./tools.js');
 const   map = require('./mapTemplate.js');
 
-class VacBot_950type {
+class VacBot_950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
-    this.vacuum = vacuum;
+    super(user, hostname, resource, secret, vacuum, continent, country, server_address);
+
     this.clean_status = null;
     this.is_ready = false;
 
@@ -37,9 +38,7 @@ class VacBot_950type {
     this.ping_interval = null;
     this.errorCode = '0';
     this.errorDescription = errorCodes[this.errorCode];
-    this.ecovacs = null;
-    this.useMqtt = (vacuum['company'] === 'eco-ng') ? true : false;
-    this.deviceClass = vacuum['class'];
+    this.useMqtt = true;
     this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
     this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];
     this.currentMapName = 'unknown';
@@ -72,63 +71,6 @@ class VacBot_950type {
       tools.envLog("[VacBot] Ready event!");
       this.is_ready = true;
     });
-  }
-
-  isSupportedDevice() {
-    const devices = JSON.parse(JSON.stringify(tools.getSupportedDevices()));
-    return devices.hasOwnProperty(this.deviceClass);
-  }
-
-  isKnownDevice() {
-    const devices = JSON.parse(JSON.stringify(tools.getKnownDevices()));
-    return devices.hasOwnProperty(this.deviceClass) || this.isSupportedDevice();
-  }
-
-  getDeviceProperty(property) {
-    const devices = JSON.parse(JSON.stringify(tools.getAllKnownDevices()));
-    if (devices.hasOwnProperty(this.deviceClass)) {
-      const device = devices[this.deviceClass];
-      if (device.hasOwnProperty(property)) {
-        return device[property];
-      }
-    }
-    return false;
-  }
-
-  hasSpotAreaCleaningMode() {
-    return this.getDeviceProperty('spot_area');
-  }
-
-  hasEdgeCleaningMode() {
-    return (!this.hasSpotAreaCleaningMode());
-  }
-
-  hasSpotCleaningMode() {
-    return (!this.hasSpotAreaCleaningMode());
-  }
-
-  hasCustomAreaCleaningMode() {
-    return this.getDeviceProperty('custom_area');
-  }
-
-  hasMainBrush() {
-    return this.getDeviceProperty('main_brush');
-  }
-
-  hasSpotAreas() {
-    return this.getDeviceProperty('spot_area');
-  }
-
-  hasCustomAreas() {
-    return this.getDeviceProperty('custom_area');
-  }
-
-  hasMoppingSystem() {
-    return this.getDeviceProperty('mopping_system');
-  }
-
-  hasVoiceReports() {
-    return this.getDeviceProperty('voice_report');
   }
 
   connect_and_wait_until_ready() {
