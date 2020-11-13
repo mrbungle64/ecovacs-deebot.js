@@ -1,5 +1,6 @@
 const constants = require('./ecovacsConstants.js');
 const tools = require('./tools');
+const errorCodes = require('./errorCodes');
 
 class VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country, server_address = null) {
@@ -15,8 +16,9 @@ class VacBot {
             this.deviceModel = constants.EcoVacsHomeProducts[this.deviceClass]['product']['name'];
             this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
         }
-        this.errorCode = '0';
         this.components = {};
+        this.errorCode = '0';
+        this.errorDescription = errorCodes[this.errorCode];
 
         this.maps = null;
         this.mapSpotAreaInfos = [];

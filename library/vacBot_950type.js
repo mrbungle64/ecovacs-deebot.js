@@ -1,7 +1,7 @@
 const   dictionary = require('./ecovacsConstants_950type.js');
 const   constants = require('./ecovacsConstants.js');
 const   vacBotCommand = require('./vacBotCommand_950type.js');
-const   errorCodes = require('./errorCodes');
+const   VacBot = require('./vacBot');
 const   tools = require('./tools.js');
 const   map = require('./mapTemplate.js');
 
@@ -18,7 +18,6 @@ class VacBot_950type extends VacBot {
     this.water_level = null;
     this.waterbox_info = null;
     this.sleep_status = null;
-    this.errorDescription = errorCodes[this.errorCode];
     this.useMqtt = true;
     this.deviceModel = constants.EcoVacsHomeProducts[vacuum['class']]['product']['name'];
     this.deviceImageURL = constants.EcoVacsHomeProducts[vacuum['class']]['product']['iconUrl'];

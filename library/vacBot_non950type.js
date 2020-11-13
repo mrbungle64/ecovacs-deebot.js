@@ -17,7 +17,6 @@ class VacBot_non950type extends VacBot {
     this.dustcaseInfo = null;
     this.waterboxInfo = null;
     this.sleepStatus = null;
-    this.errorDescription = errorCodes[this.errorCode];
 
     // OnOff
     this.doNotDisturbEnabled = null;
