@@ -166,4 +166,4 @@ module.exports.getKnownDevices = getKnownDevices;
 module.exports.getProductIotMap = getProductIotMap;
 module.exports.getTimeString = getTimeString;
 module.exports.is950type = is950type;
-module.exports.isN79type = isN79type;
+module.exports.isN79series = isN79series;
