@@ -1,4 +1,4 @@
-const Ecovacs = require('./ecovacs');
+const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools');
 const URL = require('url').URL;
 const constants = require('./ecovacsConstants');
@@ -6,7 +6,7 @@ const https = require('https');
 const DOMParser = require('xmldom').DOMParser;
 const dictionary = require('./ecovacsConstants_non950type');
 
-class EcovacsMQTT extends Ecovacs {
+class EcovacsMQTT_XML extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
@@ -54,11 +54,7 @@ class EcovacsMQTT extends Ecovacs {
         });
     }
 
-    connect_and_wait_until_ready() {
-        this.on("ready", (event) => {
-            this.send_ping(this.bot._vacuum_address());
-        });
-    }
+
 
     send_command(action, recipient) {
         let c = this._wrap_command(action, recipient);
@@ -425,4 +421,4 @@ function getCircularReplacer() {
     };
 }
 
-module.exports = EcovacsMQTT;
+module.exports = EcovacsMQTT_XML;

@@ -86,8 +86,8 @@ class VacBot {
             tools.envLog("[VacBot] Using ecovacsMQTT_JSON");
             return require('./ecovacsMQTT_JSON.js');
         } else if (this.useMqtt) {
-            tools.envLog("[VacBot] Using ecovacsMQTT");
-            return require('./ecovacsMQTT.js');
+            tools.envLog("[VacBot] Using EcovacsMQTT_XML");
+            return require('./ecovacsMQTT_XML.js');
         } else {
             tools.envLog("[VacBot] Using ecovacsXMPP");
             return require('./ecovacsXMPP.js');
