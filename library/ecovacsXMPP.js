@@ -20,12 +20,12 @@ class EcovacsXMPP extends Ecovacs {
         });
 
         this.simpleXmpp.on('stanza', (stanza) => {
-            tools.envLog('stanza: %s', stanza.toString());
+            tools.envLog('[EcovacsXMPP] stanza: %s', stanza.toString());
             if (stanza.name === 'iq' && (stanza.attrs.type === 'set' || stanza.attrs.type === 'result') && !!stanza.children[0] && stanza.children[0].name === 'query' && !!stanza.children[0].children[0]) {
                 let firstChild = stanza.children[0];
-                tools.envLog('firstChild: %s', firstChild.toString());
+                tools.envLog('[EcovacsXMPP] firstChild: %s', firstChild.toString());
                 let secondChild = firstChild.children[0];
-                tools.envLog('secondChild: %s', secondChild.toString());
+                tools.envLog('[EcovacsXMPP] secondChild: %s', secondChild.toString());
                 let command = secondChild.attrs.td;
                 if (!command) {
                     if (secondChild.children[0]) {
@@ -204,7 +204,7 @@ class EcovacsXMPP extends Ecovacs {
                             this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
                             break;
                         case 'SetOnOff':
-                            tools.envLog("[EcovacsMQTT] SetOnOff: %s", JSON.stringify(secondChild));
+                            tools.envLog("[EcovacsXMPP] SetOnOff: %s", JSON.stringify(secondChild));
                             break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

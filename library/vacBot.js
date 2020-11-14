@@ -83,13 +83,13 @@ class VacBot {
 
     getLibraryForProtocol() {
         if (this.is950type()) {
-            tools.envLog("[VacBot] Using EcovacsIOTMQ");
+            tools.envLog("[VacBot] Using ecovacsMQTT_JSON");
             return require('./ecovacsMQTT_JSON.js');
         } else if (this.useMqtt) {
-            tools.envLog("[VacBot] Using EcovacsIOTMQ");
+            tools.envLog("[VacBot] Using ecovacsMQTT");
             return require('./ecovacsMQTT.js');
         } else {
-            tools.envLog("[VacBot] Using EcovacsXMPP");
+            tools.envLog("[VacBot] Using ecovacsXMPP");
             return require('./ecovacsXMPP.js');
         }
     }

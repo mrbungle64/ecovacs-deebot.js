@@ -504,7 +504,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
       case "resetlifespan":
-        // Tested von Deebot 901
+        // Tested von Deebot 901 and Ozmo 930
         if (arguments.length < 2) {
           return;
         }
@@ -512,8 +512,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.ResetLifeSpan(component));
         break;
       case "setlifespan":
-        // Untested
-        // Seems to be N79 Series only
+        // Untested - seems to be only for the N79 series
         if (arguments.length < 2) {
           return;
         }
@@ -557,9 +556,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetSleepStatus());
         break;
       case "getcleansum":
-        if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
-          // DEEBOT N79S/SE (deviceClass 155)
-          // DEEBOT N79T/W (deviceClass 165)
+        if (this.isN79series()) {
           // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
           break;
         }
@@ -625,9 +622,7 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "getcleanlogs":
-        if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
-          // DEEBOT N79S/SE (deviceClass 155)
-          // DEEBOT N79T/W (deviceClass 165)
+        if (this.isN79series()) {
           // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
           if (arguments.length < 2) {
             this.send_command(new vacBotCommand.GetLogs());
