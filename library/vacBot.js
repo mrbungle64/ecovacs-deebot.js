@@ -173,14 +173,6 @@ class VacBot {
         }
     }
 
-    _vacuum_address() {
-        if (!this.useMqtt) {
-            return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
-        } else {
-            return this.vacuum['did'];
-        }
-    }
-
     send_command(action) {
         tools.envLog("[VacBot] Sending command `%s`", action.name);
         if (!this.useMqtt) {
