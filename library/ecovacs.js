@@ -23,8 +23,6 @@ class Ecovacs extends EventEmitter {
         this.country = country;
         this.vacuum = vacuum;
 
-        this.iter = 1;
-
         if (!server_address) {
             let prefix = this.bot.useMqtt ? 'mq' : 'msg';
             this.server_address = '{prefix}-{continent}.ecouser.net'.format({

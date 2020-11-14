@@ -7,6 +7,8 @@ class EcovacsXMPP extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
+        this.iqElementId = 1;
+
         this.simpleXmpp = require('simple-xmpp');
 
         this.simpleXmpp.on('online', (event) => {
@@ -15,7 +17,7 @@ class EcovacsXMPP extends Ecovacs {
         });
 
         this.simpleXmpp.on('close', () => {
-            tools.envLog('[EcovacsXMPP] I\'m disconnected :(');
+            tools.envLog('[EcovacsXMPP] Session disconnected');
             this.emit('closed');
         });
 
@@ -248,7 +250,7 @@ class EcovacsXMPP extends Ecovacs {
     }
 
     _wrap_command(xml, recipient) {
-        let id = this.iter++;
+        let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
             to: recipient,
@@ -266,7 +268,7 @@ class EcovacsXMPP extends Ecovacs {
     }
 
     send_ping(to) {
-        let id = this.iter++;
+        let id = this.iqElementId++;
         let e = new Element('iq', {
             id: id,
             to: to,
