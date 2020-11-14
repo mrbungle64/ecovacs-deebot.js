@@ -60,16 +60,15 @@ class EcovacsMQTT extends Ecovacs {
         });
     }
 
-    send_ping(to) {
-        return true;
-    }
+    send_ping(to) {}
 
     //end session
     disconnect() {
+        tools.envLog("[EcovacsMQTT] Closing MQTT Client...");
         try {
             this.client.end();
             tools.envLog("[EcovacsMQTT] Closed MQTT Client");
-        } catch (e) {
+        } catch(e) {
             tools.envLog("[EcovacsMQTT] Error closing MQTT Client:  %s", e.toString());
         }
     }
