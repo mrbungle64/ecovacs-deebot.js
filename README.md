@@ -58,6 +58,12 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot Ozmo 960
 * Deebot Ozmo T8 (+)
 
+## Known issues
+
+* There are some reports that currently empty cleaning logs are being delivered by Ecovacs for Ozmo 920/950 and Ozmo T8/T8+/T8 AIVI.
+* There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug.
+* The "pause" button does not work with Deebot 710/711.
+
 ## Changelog
 
 ### 0.4.26
