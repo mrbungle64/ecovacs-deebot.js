@@ -14,6 +14,18 @@ function is950type(deviceClass) {
     }
 }
 
+// Generate a somewhat random string for request id with 8 chars.
+// Works similar to ecovacs app
+// This is required for e.g. the Ozmo 930
+function getReqID() {
+    let reqIdString = '';
+    for (let i = 0; i < 8; i++) {
+        rtnval = Math.floor(Math.random() * 10);
+        reqIdString = reqIdString + rtnval.toString();
+    }
+    return reqIdString.toString();
+}
+
 function isN79series(deviceClass) {
     switch (deviceClass) {
         case '126': // N79
@@ -168,3 +180,4 @@ module.exports.getProductIotMap = getProductIotMap;
 module.exports.getTimeString = getTimeString;
 module.exports.is950type = is950type;
 module.exports.isN79series = isN79series;
+module.exports.getReqID = getReqID;

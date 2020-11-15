@@ -6,7 +6,7 @@ class VacBotCommand_non950type {
     constructor(name, args = {}) {
         this.name = name;
         if (!args.hasOwnProperty('id')) {
-            args = Object.assign(args, { 'id': getReqID() })
+            args = Object.assign(args, { 'id': tools.getReqID() })
         }
         this.args = args;
     }
@@ -53,15 +53,6 @@ class Clean extends VacBotCommand_non950type {
             'clean': initCmd
         })
     }
-}
-
-function getReqID() {
-    let reqIdString = '';
-    for (let i = 0; i < 8; i++) {
-        rtnval = Math.floor(Math.random() * 10);
-        reqIdString = reqIdString + rtnval.toString();
-    }
-    return reqIdString.toString();
 }
 
 class Edge extends Clean {

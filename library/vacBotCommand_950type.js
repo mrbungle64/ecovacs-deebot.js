@@ -5,7 +5,10 @@ const tools = require('./tools.js'),
 class VacBotCommand_950type {
     constructor(name, args = {}, api = constants.IOTDEVMANAGERAPI) {
         this.name = name;
-        this.args = Object.assign(args, { 'id': getReqID() });
+        if (!args.hasOwnProperty('id')) {
+            args = Object.assign(args, { 'id': tools.getReqID() })
+        }
+        this.args = args;
         this.api = api;
     }
 
@@ -32,17 +35,6 @@ class Clean extends VacBotCommand_950type {
         tools.envLog('initCmd %s', initCmd);
         super('clean', initCmd);
     }
-}
-
-function getReqID(customid = '0') {
-    // Generate a somewhat random string for request id, with minium 8 chars. Works similar to ecovacs app
-    // This is required for the Ozmo 930
-    if (customid !== '0') {
-        rtnval = customid; // return provided id as string
-    } else {
-        rtnval = Math.floor(Math.random() * 99999999) + 1;
-    }
-    return rtnval.toString(); // return as string
 }
 
 class Edge extends Clean {
