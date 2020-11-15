@@ -9,7 +9,7 @@ const password = "a1b2c3d4";
 const countrycode = 'DE';
 
 const password_hash = EcoVacsAPI.md5(password);
-const device_id = EcoVacsAPI.md5(nodeMachineId.machineIdSync());
+const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync());
 const countries = sucks.countries;
 const continent = countries[countrycode].continent.toLowerCase();
 console.log(continent);
@@ -93,7 +93,7 @@ api.connect(email, password_hash).then(() => {
             vacbot.run('GetBatteryState');
             vacbot.run('GetWaterLevel');
         }, 60000);
-        
+
             //
             // Catch ctrl-c to exit program
             //

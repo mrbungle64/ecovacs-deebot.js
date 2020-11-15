@@ -316,6 +316,10 @@ class EcovacsAPI {
     return vacbot;
   }
 
+  static getDeviceId(machineId, deviceNumber = 0) {
+    return EcovacsAPI.md5(machineId + deviceNumber.toString());
+  }
+
   static md5(text) {
     return crypto.createHash('md5').update(text).digest("hex");
   }
