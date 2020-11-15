@@ -55,7 +55,6 @@ Information on how to use this library can be found [here](https://github.com/mr
 ### These models should work
 * Deebot M88
 * Deebot 605
-* Deebot Ozmo 960
 * Deebot Ozmo T8 (+)
 
 ## Known issues
