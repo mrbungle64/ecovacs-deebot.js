@@ -16,20 +16,25 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         this._call_ecovacs_device_api(c).then((json) => {
             this._handle_command_response(action, json);
         }).catch((e) => {
-            tools.envLog("[EcovacsMQTT] error send_command: %s", e.toString());
+            tools.envLog("[EcovacsMQTT_XML] error send_command: %s", e.toString());
         });
     }
 
     _wrap_command(action, recipient) {
+        if (!action) {
+            tools.envLog("[EcovacsMQTT_XML] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
+            return {};
+        }
+        const auth = {
+            'realm': constants.REALM,
+            'resource': this.resource,
+            'token': this.secret,
+            'userid': this.user,
+            'with': 'users',
+        };
         if (action.name === 'GetLogApiCleanLogs') {
             return {
-                'auth': {
-                    'realm': constants.REALM,
-                    'resource': this.resource,
-                    'token': this.secret,
-                    'userid': this.user,
-                    'with': 'users',
-                },
+                'auth': auth,
                 "did": recipient,
                 "country": this.country,
                 "td": "GetCleanLogs",
@@ -37,16 +42,9 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             }
         }
         return {
-            'auth': {
-                'realm': constants.REALM,
-                'resource': this.resource,
-                'token': this.secret,
-                'userid': this.user,
-                'with': 'users',
-            },
+            'auth': auth,
             "cmdName": action.name,
             "payload": this._wrap_command_getPayload(action),
-
             "payloadType": "x",
             "td": "q",
             "toId": recipient,
@@ -165,7 +163,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         }
     }
 
-    _handle_message(topic, payload, type="incoming") {
+    _handle_message(topic, payload, type= "incoming") {
         let result = this._command_to_dict(payload);
         this._handle_command(result['event'], result);
     }
