@@ -8,8 +8,8 @@ const ecovacsDeebot = require('../index.js')
 
 let account_id = myInfo ? myInfo.ACCOUNT_ID : "email@domain.com"
   , password = myInfo ? myInfo.PASSWORD : "a1b2c3d4"
-  , password_hash = EcoVacsAPI.getDeviceId(password)
-  , device_id = EcoVacsAPI.md5(nodeMachineId.machineIdSync())
+  , password_hash = EcoVacsAPI.md5(password)
+  , device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync())
   , country = myInfo ? myInfo.COUNTRY : null
   , continent = myInfo ? myInfo.CONTINENT : null;
 
