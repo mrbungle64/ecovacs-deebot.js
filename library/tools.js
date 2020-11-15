@@ -6,6 +6,7 @@ function is950type(deviceClass) {
         case 'vi829v': // Ozmo 920
         case 'h18jkh': // Ozmo T8
         case '55aiho': // Ozmo T8+
+        case 'fqxoiu': // Ozmo T8 Plus
         case 'x5d34r': // Ozmo T8 AIVI
             return true;
         default:
