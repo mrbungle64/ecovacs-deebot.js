@@ -1,3 +1,5 @@
+![Logo](ecovacs-deebot.png)
+
 # ecovacs-deebot.js
 
 [![npm](http://img.shields.io/npm/v/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
@@ -53,10 +55,30 @@ Information on how to use this library can be found [here](https://github.com/mr
 ### These models should work
 * Deebot M88
 * Deebot 605
-* Deebot Ozmo 960
 * Deebot Ozmo T8 (+)
 
+## Known issues
+
+* There are some reports that currently empty cleaning logs are being delivered by Ecovacs for Ozmo 920/950 and Ozmo T8/T8+/T8 AIVI.
+* There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug.
+* The "pause" button does not work with Deebot 710/711.
+
 ## Changelog
+
+### 0.4.26
+* Bugfix release
+
+### 0.4.25
+* Bugfix release
+
+### 0.4.24
+* Bugfix release
+
+### 0.4.23
+* Added support for Ozmo T8+
+
+### 0.4.22
+* (boriswerner) Added new spotAreaNames (950 type)
 
 ### 0.4.21
 * Update some dependencies
@@ -232,6 +254,12 @@ Information on how to use this library can be found [here](https://github.com/mr
 All credits for originally figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
 
+## Disclaimer
+
+I am in no way affiliated with ECOVACS.
+
 ## License
 
 GNU GENERAL PUBLIC LICENSE
+
+Copyright (c) 2020 Sascha Hölzel <mrb1232@posteo.de>

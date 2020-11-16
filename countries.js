@@ -1,4 +1,8 @@
 module.exports = {
+  "WW": {
+    "name": "World-wide",
+    "continent": "WW"
+  },
   "AD": {
     "name": "Andorra",
     "continent": "EU"

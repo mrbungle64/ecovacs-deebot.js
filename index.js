@@ -304,11 +304,7 @@ class EcovacsAPI {
 
   getVacBot(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     let vacbot;
-    // yna5xi = Ozmo 950
-    // vi829v = Ozmo 920
-    // h18jkh = Ozmo T8
-    // x5d34r = Ozmo T8 AIVI
-    if ((vacuum['class'] === 'yna5xi') || (vacuum['class'] === 'vi829v') || (vacuum['class'] === 'x5d34r') || (vacuum['class'] === 'h18jkh')) {
+    if (tools.is950type(vacuum['class'])) {
       tools.envLog('vacBot_950type identified');
       const VacBot_950type = require('./library/vacBot_950type');
       vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent, this.country);
@@ -318,6 +314,10 @@ class EcovacsAPI {
       vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent, this.country);
     }
     return vacbot;
+  }
+
+  static getDeviceId(machineId, deviceNumber = 0) {
+    return EcovacsAPI.md5(machineId + deviceNumber.toString());
   }
 
   static md5(text) {

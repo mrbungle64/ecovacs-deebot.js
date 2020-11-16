@@ -9,7 +9,7 @@ const ecovacsDeebot = require('../index.js')
 let account_id = myInfo ? myInfo.ACCOUNT_ID : "email@domain.com"
   , password = myInfo ? myInfo.PASSWORD : "a1b2c3d4"
   , password_hash = EcoVacsAPI.md5(password)
-  , device_id = EcoVacsAPI.md5(nodeMachineId.machineIdSync())
+  , device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync())
   , country = myInfo ? myInfo.COUNTRY : null
   , continent = myInfo ? myInfo.CONTINENT : null;
 
@@ -50,9 +50,9 @@ httpGetJson('http://ipinfo.io/json').then((json) => {
 
        vacbot.run("batterystate");
        vacbot.run("clean");
-       
-       
-       
+
+
+
        setTimeout(() => {
         vacbot.run("stop");
         vacbot.run("charge");

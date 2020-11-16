@@ -3,79 +3,22 @@ const vacBotCommand = require('./vacBotCommand_non950type');
 const VacBot = require('./vacBot');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
-const map = require('./mapTemplate.js');
+const map = require('./mapTemplate');
 
 class VacBot_non950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
     this.cleanReport = null;
-    this.deebotPosition = {
-      x: null,
-      y: null,
-      a: null,
-      isInvalid: false,
-      currentSpotAreaID: 'unknown',
-      changeFlag: false
-    };
-    this.chargePosition = {
-      x: null,
-      y: null,
-      a: null
-    };
-    this.lastUsedAreaValues = null;
     this.cleanSpeed = null;
     this.chargeStatus = null;
     this.batteryInfo = null;
     this.waterLevel = null;
-    this.dustcaseInfo = null;
     this.waterboxInfo = null;
     this.sleepStatus = null;
-    this.components = {};
-    this.errorCode = '0';
-    this.errorDescription = errorCodes[this.errorCode];
-    this.netInfoIP = null;
-    this.netInfoWifiSSID = null;
-    this.cleanSum_totalSquareMeters = null;
-    this.cleanSum_totalSeconds = null;
-    this.cleanSum_totalNumber = null;
 
-    // OnOff
-    this.doNotDisturbEnabled = null;
-    this.continuousCleaningEnabled = null;
-    this.voiceReportDisabled = null;
-
-    this.currentMapName = 'standard';
-    this.currentMapMID = null;
-    this.currentMapIndex = 0;
-
-    this.maps = null;
-    this.mapSpotAreaInfos = [];
+    this.dustcaseInfo = null;
     this.getMapSetExecuted = false;
-    this.getPullMExecuted = [];
-
-    this.cleanLog = [];
-    this.cleanLog_lastImageUrl = null;
-    this.cleanLog_lastImageTimestamp = null;
-
-    const LibraryForProtocol = this.getLibraryForProtocol();
-    this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
-
-    this.ecovacs.on("ready", () => {
-      tools.envLog("[VacBot] Ready event!");
-      this.is_ready = true;
-    });
-  }
-
-  connect_and_wait_until_ready() {
-    this.ecovacs.connect_and_wait_until_ready();
-    this.pingInterval = setInterval(() => {
-      this.ecovacs.send_ping(this._vacuum_address());
-    }, 30000);
-  }
-
-  on(name, func) {
-    this.ecovacs.on(name, func);
   }
 
   _handle_lifeSpan(event) {
@@ -94,11 +37,9 @@ class VacBot_non950type extends VacBot {
 
     let lifespan = null;
     if ((event.hasOwnProperty('val')) && (event.hasOwnProperty('total'))) {
-      // DEEBOT N79S/SE (deviceClass 155)
-      // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
-      // DEEBOT N79T/W (deviceClass 165)
-      // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
-      if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
+      if (this.isN79series()) {
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
         lifespan = parseInt(event['val']);
       } else {
         lifespan = parseInt(event['val']) / parseInt(event['total']) * 100;
@@ -228,10 +169,7 @@ class VacBot_non950type extends VacBot {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
           mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-          if (!this.getPullMExecuted['sa' + mid]) {
-            this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
-            this.getPullMExecuted['sa' + mid] = true;
-          }
+          this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
         }
       }
       tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
@@ -245,10 +183,7 @@ class VacBot_non950type extends VacBot {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
           mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
-          if (!this.getPullMExecuted['vw' + mid]) {
-            this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
-            this.getPullMExecuted['vw' + mid] = true;
-          }
+          this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
         }
       }
       tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
@@ -484,25 +419,6 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  _vacuum_address() {
-    if (!this.useMqtt) {
-      return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
-    } else {
-      return this.vacuum['did'];
-    }
-  }
-
-  send_command(action) {
-    tools.envLog("[VacBot] Sending command `%s`", action.name);
-    if (!this.useMqtt) {
-      this.ecovacs.send_command(action.to_xml(), this._vacuum_address());
-    } else {
-      // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
-      // IOTMQ devices need the full action for additional parsing
-      this.ecovacs.send_command(action, this._vacuum_address());
-    }
-  }
-
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
     let component;
@@ -588,7 +504,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
       case "resetlifespan":
-        // Tested von Deebot 901
+        // Tested von Deebot 901 and Ozmo 930
         if (arguments.length < 2) {
           return;
         }
@@ -596,8 +512,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.ResetLifeSpan(component));
         break;
       case "setlifespan":
-        // Untested
-        // Seems to be N79 Series only
+        // Untested - seems to be only for the N79 series
         if (arguments.length < 2) {
           return;
         }
@@ -641,9 +556,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetSleepStatus());
         break;
       case "getcleansum":
-        if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
-          // DEEBOT N79S/SE (deviceClass 155)
-          // DEEBOT N79T/W (deviceClass 165)
+        if (this.isN79series()) {
           // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
           break;
         }
@@ -709,9 +622,7 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "getcleanlogs":
-        if ((this.deviceClass === '155') || (this.deviceClass === '165')) {
-          // DEEBOT N79S/SE (deviceClass 155)
-          // DEEBOT N79T/W (deviceClass 165)
+        if (this.isN79series()) {
           // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
           if (arguments.length < 2) {
             this.send_command(new vacBotCommand.GetLogs());

@@ -1,47 +1,15 @@
-const EventEmitter = require('events');
+const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const Element = require('ltx').Element;
 const dictionary = require('./ecovacsConstants_non950type.js');
 
-String.prototype.format = function () {
-    if (arguments.length === 0) {
-        return this;
-    }
-    let args = arguments['0'];
-    return this.replace(/{(\w+)}/g, function (match, number) {
-        return typeof args[number] != 'undefined' ? args[number] : match;
-    });
-};
+class EcovacsXMPP extends Ecovacs {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
-class EcovacsXMPP extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
-        super();
+        this.iqElementId = 1;
+
         this.simpleXmpp = require('simple-xmpp');
-
-        this.bot = bot;
-        this.user = user;
-        this.hostname = hostname;
-        this.resource = resource;
-        this.secret = secret;
-        this.continent = continent;
-        this.country = country;
-        this.vacuum = vacuum;
-
-        this.iter = 1;
-
-        if (!server_address) {
-            this.server_address = 'msg-{continent}.ecouser.net'.format({
-                continent: continent
-            });
-        } else {
-            this.server_address = server_address;
-        }
-
-        if (!server_port) {
-            this.server_port = 5223
-        } else {
-            this.server_port = server_port;
-        }
 
         this.simpleXmpp.on('online', (event) => {
             tools.envLog('[EcovacsXMPP] Session start');
@@ -49,17 +17,17 @@ class EcovacsXMPP extends EventEmitter {
         });
 
         this.simpleXmpp.on('close', () => {
-            tools.envLog('[EcovacsXMPP] I\'m disconnected :(');
+            tools.envLog('[EcovacsXMPP] Session disconnected');
             this.emit('closed');
         });
 
         this.simpleXmpp.on('stanza', (stanza) => {
-            tools.envLog('stanza: %s', stanza.toString());
+            tools.envLog('[EcovacsXMPP] stanza: %s', stanza.toString());
             if (stanza.name === 'iq' && (stanza.attrs.type === 'set' || stanza.attrs.type === 'result') && !!stanza.children[0] && stanza.children[0].name === 'query' && !!stanza.children[0].children[0]) {
                 let firstChild = stanza.children[0];
-                tools.envLog('firstChild: %s', firstChild.toString());
+                tools.envLog('[EcovacsXMPP] firstChild: %s', firstChild.toString());
                 let secondChild = firstChild.children[0];
-                tools.envLog('secondChild: %s', secondChild.toString());
+                tools.envLog('[EcovacsXMPP] secondChild: %s', secondChild.toString());
                 let command = secondChild.attrs.td;
                 if (!command) {
                     if (secondChild.children[0]) {
@@ -238,7 +206,7 @@ class EcovacsXMPP extends EventEmitter {
                             this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
                             break;
                         case 'SetOnOff':
-                            tools.envLog("[EcovacsMQTT] SetOnOff: %s", JSON.stringify(secondChild));
+                            tools.envLog("[EcovacsXMPP] SetOnOff: %s", JSON.stringify(secondChild));
                             break;
                         default:
                             tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
@@ -259,14 +227,6 @@ class EcovacsXMPP extends EventEmitter {
         this.simpleXmpp.on('error', (e) => {
             tools.envLog('[EcovacsXMPP] Error:', e);
         });
-    }
-
-    session_start(event) {
-        tools.envLog('[EcovacsXMPP] ----------------- starting session ----------------');
-        tools.envLog('[EcovacsXMPP] event = {event}'.format({
-            event: JSON.stringify(event)
-        }));
-        this.emit('ready', event);
     }
 
     connect_and_wait_until_ready() {
@@ -290,7 +250,7 @@ class EcovacsXMPP extends EventEmitter {
     }
 
     _wrap_command(xml, recipient) {
-        let id = this.iter++;
+        let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
             to: recipient,
@@ -308,7 +268,7 @@ class EcovacsXMPP extends EventEmitter {
     }
 
     send_ping(to) {
-        let id = this.iter++;
+        let id = this.iqElementId++;
         let e = new Element('iq', {
             id: id,
             to: to,
@@ -322,7 +282,6 @@ class EcovacsXMPP extends EventEmitter {
     }
 
     disconnect() {
-        clearInterval(this.bot.ping_interval);
         this.simpleXmpp.disconnect();
         tools.envLog("[EcovacsXMPP] Closed XMPP Client");
     }

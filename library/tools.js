@@ -1,5 +1,42 @@
 const constants = require('./ecovacsConstants');
 
+function is950type(deviceClass) {
+    switch (deviceClass) {
+        case 'yna5xi': // Ozmo 950
+        case 'vi829v': // Ozmo 920
+        case 'h18jkh': // Ozmo T8
+        case '55aiho': // Ozmo T8+
+        case 'fqxoiu': // Ozmo T8 Plus
+        case 'x5d34r': // Ozmo T8 AIVI
+            return true;
+        default:
+            return false;
+    }
+}
+
+// Generate a somewhat random string for request id with 8 chars.
+// Works similar to ecovacs app
+// This is required for e.g. the Ozmo 930
+function getReqID() {
+    let reqIdString = '';
+    for (let i = 0; i < 8; i++) {
+        rtnval = Math.floor(Math.random() * 10);
+        reqIdString = reqIdString + rtnval.toString();
+    }
+    return reqIdString.toString();
+}
+
+function isN79series(deviceClass) {
+    switch (deviceClass) {
+        case '126': // N79
+        case '155': // N79S/SE
+        case '165': // N79T/W
+            return true;
+        default:
+            return false;
+    }
+}
+
 function getAllKnownDevices() {
     let devices = {};
     devices = Object.assign(devices, getSupportedDevices());
@@ -141,3 +178,6 @@ module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getProductIotMap = getProductIotMap;
 module.exports.getTimeString = getTimeString;
+module.exports.is950type = is950type;
+module.exports.isN79series = isN79series;
+module.exports.getReqID = getReqID;
