@@ -320,20 +320,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                if(this.bot.deebot_position["changeFlag"]) {
-                    if(this.bot.deebot_position["isInvalid"]==true && (this.bot.relocation_state == 'ok' || this.bot.relocation_state == null)) {
+                if(this.bot.deebotPosition["changeFlag"]) {
+                    if(this.bot.deebotPosition["isInvalid"]==true && (this.bot.relocation_state == 'ok' || this.bot.relocation_state == null)) {
                         this.bot.relocation_state = 'required';
                         this.emit("RelocationState", this.bot.relocation_state);
                     } else {
-                        this.emit("DeebotPosition", this.bot.deebot_position["x"]+","+this.bot.deebot_position["y"]+","+this.bot.deebot_position["a"]);
-                        this.emit("DeebotPositionIsInvalid", this.bot.deebot_position["isInvalid"]);
-                        this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebot_position["currentSpotAreaID"]);
+                        this.emit("DeebotPosition", this.bot.deebotPosition["x"]+","+this.bot.deebotPosition["y"]+","+this.bot.deebotPosition["a"]);
+                        this.emit("DeebotPositionIsInvalid", this.bot.deebotPosition["isInvalid"]);
+                        this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
                     }
-                    this.bot.deebot_position["changeFlag"]=false;
+                    this.bot.deebotPosition["changeFlag"]=false;
                 }
-                if(this.bot.charge_position["changeFlag"]) {
-                    this.emit("ChargePosition", this.bot.charge_position["x"]+","+this.bot.charge_position["y"]+","+this.bot.charge_position["a"]);
-                    this.bot.charge_position["changeFlag"]=false;
+                if(this.bot.chargePosition["changeFlag"]) {
+                    this.emit("ChargePosition", this.bot.chargePosition["x"]+","+this.bot.chargePosition["y"]+","+this.bot.chargePosition["a"]);
+                    this.bot.chargePosition["changeFlag"]=false;
                 }
                 break;
             case "waterinfo":

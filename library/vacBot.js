@@ -36,7 +36,7 @@ class VacBot {
             currentSpotAreaID: 'unknown',
             changeFlag: false
         };
-        this.charge_position = {
+        this.chargePosition = {
             x: null,
             y: null,
             a: null,
