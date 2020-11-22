@@ -1,11 +1,12 @@
-const https = require('https'),
-  URL = require('url').URL,
-  crypto = require('crypto'),
-  fs = require('fs'),
-  constants = require('./library/ecovacsConstants.js'),
-  uniqid = require('uniqid'),
-  tools = require('./library/tools.js'),
-  countries = require('./countries.js');
+const https = require('https');
+const URL = require('url').URL;
+const crypto = require('crypto');
+const fs = require('fs');
+const constants = require('./library/ecovacsConstants.js');
+const uniqid = require('uniqid');
+const tools = require('./library/tools.js');
+const countries = require('./countries.js');
+const packageInfo = require('./package.json');
 
 String.prototype.format = function () {
   if (arguments.length === 0) {
@@ -314,6 +315,10 @@ class EcovacsAPI {
       vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent, this.country);
     }
     return vacbot;
+  }
+
+  getVersion() {
+    return packageInfo.version;
   }
 
   static getDeviceId(machineId, deviceNumber = 0) {
