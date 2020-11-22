@@ -277,14 +277,14 @@ class VacBot_950type extends VacBot {
       } else if (event['resultData']['type'] == 'vw') {
         let mapVirtualWalls = new map.EcovacsMapVirtualWalls(event['resultData']['mid']);
         for ( let mapIndex in event['resultData']['subsets']) {
-          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(event['resultData']['subsets'][mapIndex]['mssid']));
+          mapVirtualWalls.push(new map.EcovacsMapVirtualWall(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
         return {mapsetEvent: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
       } else if (event['resultData']['type'] == 'mw') {
         let mapNoMopZones = new map.EcovacsMapNoMopZones(event['resultData']['mid']);
         for ( let mapIndex in event['resultData']['subsets']) {
-          mapNoMopZones.push(new map.EcovacsMapNoMopZones(event['resultData']['subsets'][mapIndex]['mssid']));
+          mapNoMopZones.push(new map.EcovacsMapNoMopZone(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapNoMopZones = " + JSON.stringify(mapNoMopZones));
         return {mapsetEvent: 'MapNoMopZones', mapsetData: mapNoMopZones};
@@ -480,6 +480,62 @@ class VacBot_950type extends VacBot {
           return;
         } else if (arguments.length === 3) {
           this.send_command(new vacBotCommand.GetMapSpotAreaInfo(arguments[1], arguments[2]));
+        }
+        break;
+      case "getvirtualwalls":
+        if (arguments.length <= 1) {
+          return;
+        } else if (arguments.length === 2) {
+          this.send_command(new vacBotCommand.GetMapVirtualWalls(arguments[1]));
+        }
+        break;
+      case "getvirtualwallinfo":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.GetMapVirtualWallInfo(arguments[1], arguments[2]));
+        }
+        break;
+      case "deletevirtualwall":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.DeleteMapVirtualWall(arguments[1], arguments[2]));
+        }
+        break;
+      case "deletenomopzone":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.DeleteMapNoMopZone(arguments[1], arguments[2]));
+        }
+        break;
+      case "addvirtualwall":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.AddMapVirtualWall(arguments[1], arguments[2]));
+        }
+        break;
+      case "addnomopzone":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.AddMapNoMopZone(arguments[1], arguments[2]));
+        }
+        break;
+      case "getnomopzones":
+        if (arguments.length <= 1) {
+          return;
+        } else if (arguments.length === 2) {
+          this.send_command(new vacBotCommand.GetMapNoMopZones(arguments[1]));
+        }
+        break;
+      case "getnomopzoneinfo":
+        if (arguments.length <= 2) {
+          return;
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.GetMapNoMopZoneInfo(arguments[1], arguments[2]));
         }
         break;
       case "geterror":
