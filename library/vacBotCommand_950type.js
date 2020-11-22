@@ -275,6 +275,16 @@ class GetMapSubSet extends VacBotCommand_950type {
         super('getMapSubSet', {'mid': mapID, 'mssid': mapSubSetID, 'type': type});
     }
 }
+class DeleteMapSubSet extends VacBotCommand_950type {
+    constructor(mapID, mapSubSetID, type='vw') { //default type is delete virtualWall
+        super('setMapSubSet', {'act': 'del', 'mid': mapID, 'mssid': mapSubSetID, 'type': type});
+    }
+}
+class AddMapSubSet extends VacBotCommand_950type {
+    constructor(mapID, boundaries, type='vw') { //default type is virtualWall
+        super('setMapSubSet', {'act': 'add', 'mid': mapID, 'type': type, 'value': boundaries});
+    }
+}
 class GetMapSpotAreaInfo extends GetMapSubSet {
     constructor(mapID, mapSubSetID) {
         super(mapID, mapSubSetID, 'ar');
@@ -288,6 +298,26 @@ class GetMapVirtualWallInfo extends GetMapSubSet {
 class GetMapNoMopZoneInfo extends GetMapSubSet {
     constructor(mapID, mapSubSetID) {
         super(mapID, mapSubSetID, 'mw');
+    }
+}
+class DeleteMapVirtualWall extends DeleteMapSubSet {
+    constructor(mapID, mapSubSetID) {
+        super(mapID, mapSubSetID, 'vw');
+    }
+}
+class DeleteMapNoMopZone extends DeleteMapSubSet {
+    constructor(mapID, mapSubSetID) {
+        super(mapID, mapSubSetID, 'mw');
+    }
+}
+class AddMapVirtualWall extends AddMapSubSet {
+    constructor(mapID, boundaries) {
+        super(mapID, boundaries, 'vw');
+    }
+}
+class AddMapNoMopZone extends AddMapSubSet {
+    constructor(mapID, boundaries) {
+        super(mapID, boundaries, 'mw');
     }
 }
 
@@ -354,6 +384,10 @@ module.exports.GetMapNoMopZones = GetMapNoMopZones;
 module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapVirtualWallInfo = GetMapVirtualWallInfo;
 module.exports.GetMapNoMopZoneInfo = GetMapNoMopZoneInfo;
+module.exports.DeleteMapVirtualWall = DeleteMapVirtualWall;
+module.exports.DeleteMapNoMopZone = DeleteMapNoMopZone;
+module.exports.AddMapVirtualWall = AddMapVirtualWall;
+module.exports.AddMapNoMopZone = AddMapNoMopZone;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetCleanLogsPullCleanF = GetCleanLogsPullCleanF;
