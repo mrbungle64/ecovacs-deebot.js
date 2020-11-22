@@ -299,12 +299,18 @@ class GetSleepStatus extends VacBotCommand_950type {
 
 class GetCleanLogs extends VacBotCommand_950type {
     constructor(count = 3) {
-        super("GetCleanLogs", {'count': count}, constants.LGLOGAPI);
+        super('GetCleanLogs', {'count': count}, constants.LGLOGAPI);
     }
 }
 class GetLastCleanLog extends VacBotCommand_950type {
     constructor() {
-        super("GetLastCleanLog", {}, constants.LGLOGAPI);
+        super('GetLastCleanLog', {}, constants.LGLOGAPI);
+    }
+}
+
+class GetCleanLogsPullCleanF extends VacBotCommand_950type {
+    constructor() {
+        super('Pull', {}, constants.LGLOGAPI);
     }
 }
 
@@ -350,3 +356,4 @@ module.exports.GetMapVirtualWallInfo = GetMapVirtualWallInfo;
 module.exports.GetMapNoMopZoneInfo = GetMapNoMopZoneInfo;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLastCleanLog = GetLastCleanLog;
+module.exports.GetCleanLogsPullCleanF = GetCleanLogsPullCleanF;

@@ -51,16 +51,16 @@ class VacBot_950type extends VacBot {
           //the handling should be extracted to a seperate function
           if (event['resultData']['deebotPos']) {
             // check if position changed or currentSpotAreaID unknown
-            if (event['resultData']['deebotPos']['x'] != this.deebot_position.x
-              || event['resultData']['deebotPos']['y'] != this.deebot_position.y
-              || event['resultData']['deebotPos']['a'] != this.deebot_position.a
-              || event['resultData']['deebotPos']['invalid'] != this.deebot_position.isInvalid
-              || this.deebot_position.currentSpotAreaID == 'unknown'
+            if (event['resultData']['deebotPos']['x'] != this.deebotPosition.x
+              || event['resultData']['deebotPos']['y'] != this.deebotPosition.y
+              || event['resultData']['deebotPos']['a'] != this.deebotPosition.a
+              || event['resultData']['deebotPos']['invalid'] != this.deebotPosition.isInvalid
+              || this.deebotPosition.currentSpotAreaID == 'unknown'
               )
             {
               let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
               tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
-              this.deebot_position = {
+              this.deebotPosition = {
                 x:event['resultData']['deebotPos']['x'],
                 y:event['resultData']['deebotPos']['y'],
                 a:event['resultData']['deebotPos']['a'],
@@ -69,11 +69,11 @@ class VacBot_950type extends VacBot {
                 changeFlag: true
               };
               tools.envLog("[VacBot] *** Deebot Position = "
-                + 'x=' + this.deebot_position.x
-                + ' y=' + this.deebot_position.y
-                + ' a=' + this.deebot_position.a
-                + ' currentSpotAreaID=' + this.deebot_position.currentSpotAreaID
-                + ' isInvalid=' + this.deebot_position.isInvalid
+                + 'x=' + this.deebotPosition.x
+                + ' y=' + this.deebotPosition.y
+                + ' a=' + this.deebotPosition.a
+                + ' currentSpotAreaID=' + this.deebotPosition.currentSpotAreaID
+                + ' isInvalid=' + this.deebotPosition.isInvalid
               );
             }
           }
@@ -81,21 +81,21 @@ class VacBot_950type extends VacBot {
           if (event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
             //there can be more than one charging station only handles first charging station
             // check if position changed
-            if (event['resultData']['chargePos'][0]['x'] != this.charge_position.x
-              || event['resultData']['chargePos'][0]['y'] != this.charge_position.y
-              || event['resultData']['chargePos'][0]['a'] != this.charge_position.a
+            if (event['resultData']['chargePos'][0]['x'] != this.chargePosition.x
+              || event['resultData']['chargePos'][0]['y'] != this.chargePosition.y
+              || event['resultData']['chargePos'][0]['a'] != this.chargePosition.a
               )
             {
-              this.charge_position = {
+              this.chargePosition = {
                 x:event['resultData']['chargePos'][0]['x'],
                 y:event['resultData']['chargePos'][0]['y'],
                 a:event['resultData']['chargePos'][0]['a'],
                 changeFlag: true
               };
               tools.envLog("[VacBot] *** Charge Position = "
-                + 'x=' + this.charge_position.x
-                + ' y=' + this.charge_position.y
-                + ' a=' + this.charge_position.a
+                + 'x=' + this.chargePosition.x
+                + ' y=' + this.chargePosition.y
+                + ' a=' + this.chargePosition.a
               );
             }
           }
@@ -532,6 +532,10 @@ class VacBot_950type extends VacBot {
       case "getlastcleanloginfo":
         this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetLastCleanLog());
+        break;
+      case "getcleanlogspullcleanf":
+        this.lastCleanLogUseAlternativeAPICall = true;
+        this.send_command(new vacBotCommand.GetCleanLogsPullCleanF());
         break;
     }
   }
