@@ -253,6 +253,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if(command.startsWith("on")) { //incoming events (on)
             command = command.substring(2);
         }
+        if(command.startsWith("off")) { //incoming events for (3rd) unknown/unsaved map
+            command = command.substring(3);
+        }
         if(command.startsWith("report")) { //incoming events (report)
             command = command.substring(6);
         }
