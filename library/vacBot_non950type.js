@@ -178,18 +178,18 @@ class VacBot_non950type extends VacBot {
         mapsetData: mapSpotAreas
       };
     } else if (event.attrs['tp'] === 'vw') {
-      let mapVirtualWalls = new map.EcovacsMapVirtualWalls(this.currentMapMID);
+      this.mapVirtualBoundaries[this.currentMapMID] = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
           let mid = event.children[mapIndex].attrs['mid'];
-          mapVirtualWalls.push(new map.EcovacsMapVirtualWalls(mid));
+          this.mapVirtualBoundaries[this.currentMapMID].push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
           this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
         }
       }
-      tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
+      tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[this.currentMapMID]));
       return {
-        mapsetEvent: 'MapVirtualWalls',
-        mapsetData: mapVirtualWalls
+        mapsetEvent: 'MapVirtualBoundaries',
+        mapsetData: this.mapVirtualBoundaries[this.currentMapMID]
       };
     }
 
@@ -226,11 +226,16 @@ class VacBot_non950type extends VacBot {
       };
     } else if (id <= 79) {
       // virtual walls ('vw')
-      let mapVirtualWallInfo = new map.EcovacsMapVirtualWallInfo(this.currentMapMID, id, mData);
-      tools.envLog("[VacBot] *** MapVirtualWallInfo = " + JSON.stringify(mapVirtualWallInfo));
+      let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, 'vw', id, mData);
+      if (typeof this.mapVirtualBoundaryInfos[this.currentMapMID] === 'undefined') {
+        tools.envLog("[VacBot] *** initialize mapVirtualBoundaryInfos for map " + this.currentMapMID);
+        this.mapVirtualBoundaryInfos[this.currentMapMID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
+      }
+      this.mapVirtualBoundaryInfos[this.currentMapMID][id] = mapVirtualBoundaryInfo;
+      tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
       return {
-        mapsubsetEvent: 'MapVirtualWallInfo',
-        mapsubsetData: mapVirtualWallInfo
+        mapsubsetEvent: 'MapVirtualBoundaryInfo',
+        mapsubsetData: mapVirtualBoundaryInfo
       };
     }
 

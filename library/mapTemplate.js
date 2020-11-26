@@ -96,97 +96,59 @@ class EcovacsMapSpotAreaInfo {
     }
 }
 
-class EcovacsMapVirtualWalls {
+class EcovacsMapVirtualBoundaries {
     constructor(mapID) {
         this.mapID = mapID;
         this.mapVirtualWalls = [];
-    }
-
-    push(mapVirtualWall) {
-        this.mapVirtualWalls.push(mapVirtualWall);
-    }
-
-    toJSON() {
-        return {
-            mapID: this.mapID,
-            mapVirtualWalls: this.mapVirtualWalls
-        };
-    }
-}
-
-class EcovacsMapVirtualWall {
-    constructor(mapVirtualWallID) {
-        this.mapVirtualWallID = mapVirtualWallID;
-    }
-
-    toJSON() {
-        return {
-            mapVirtualWallID: this.mapVirtualWallID
-        };
-    }
-}
-
-class EcovacsMapVirtualWallInfo {
-    constructor(mapID, mapVirtualWallID, mapVirtualWallBoundaries) {
-        this.mapID = mapID;
-        this.mapVirtualWallID = mapVirtualWallID;
-        this.mapVirtualWallBoundaries = mapVirtualWallBoundaries;
-    }
-
-    toJSON() {
-        return {
-            mapID: this.mapID,
-            mapVirtualWallID: this.mapVirtualWallID,
-            mapVirtualWallBoundaries: this.mapVirtualWallBoundaries
-        };
-    }
-}
-
-class EcovacsMapNoMopZones {
-    constructor(mapID) {
-        this.mapID = mapID;
         this.mapNoMopZones = [];
     }
 
-    push(mapNoMopZone) {
-        this.mapNoMopZones.push(mapNoMopZone);
+    push(mapVirtualBoundary, mapVirtualBoundaryType = 'vw') {
+        if(mapVirtualBoundaryType == 'vw') {
+            this.mapVirtualWalls.push(mapVirtualBoundary);
+        } else if(mapVirtualBoundaryType == 'mw') {
+            this.mapNoMopZones.push(mapVirtualBoundary);
+        }
     }
-
     toJSON() {
         return {
             mapID: this.mapID,
+            mapVirtualWalls: this.mapVirtualWalls,
             mapNoMopZones: this.mapNoMopZones
         };
     }
 }
 
-class EcovacsMapNoMopZone {
-    constructor(mapNoMopZoneID) {
-        this.mapNoMopZoneID = mapNoMopZoneID;
+class EcovacsMapVirtualBoundary {
+    constructor(mapVirtualBoundaryID) {
+        this.mapVirtualBoundaryID = mapVirtualBoundaryID;
     }
-
     toJSON() {
         return {
-            mapNoMopZoneID: this.mapNoMopZoneID
+            mapVirtualBoundaryID: this.mapVirtualBoundaryID
         };
     }
 }
 
-class EcovacsMapNoMopZoneInfo {
-    constructor(mapID, mapNoMopZoneID, mapNoMopZoneIDBoundaries) {
+class EcovacsMapVirtualBoundaryInfo {
+    constructor(mapID, mapVirtualBoundaryID, mapVirtualBoundaryType, mapVirtualBoundaryCoordinates) {
         this.mapID = mapID;
-        this.mapNoMopZoneID = mapNoMopZoneID;
-        this.mapNoMopZoneIDBoundaries = mapNoMopZoneIDBoundaries;
+        this.mapVirtualBoundaryID = mapVirtualBoundaryID;
+        this.mapVirtualBoundaryType = mapVirtualBoundaryType;
+        this.mapVirtualBoundaryCoordinates = mapVirtualBoundaryCoordinates;
     }
 
     toJSON() {
         return {
             mapID: this.mapID,
-            mapNoMopZoneID: this.mapNoMopZoneID,
-            mapNoMopZoneIDBoundaries: this.mapNoMopZoneIDBoundaries
+            mapVirtualBoundaryID: this.mapVirtualBoundaryID,
+            mapVirtualBoundaryType: this.mapVirtualBoundaryType,
+            mapVirtualBoundaryCoordinates: this.mapVirtualBoundaryCoordinates
         };
     }
 }
+
+
 
 function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
     if (!isCanvasModuleAvailable()) {
@@ -240,11 +202,8 @@ module.exports.EcovacsMap = EcovacsMap;
 module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
 module.exports.EcovacsMapSpotArea = EcovacsMapSpotArea;
 module.exports.EcovacsMapSpotAreaInfo = EcovacsMapSpotAreaInfo;
-module.exports.EcovacsMapVirtualWalls = EcovacsMapVirtualWalls;
-module.exports.EcovacsMapVirtualWall = EcovacsMapVirtualWall;
-module.exports.EcovacsMapVirtualWallInfo = EcovacsMapVirtualWallInfo;
-module.exports.EcovacsMapNoMopZones = EcovacsMapNoMopZones;
-module.exports.EcovacsMapNoMopZone = EcovacsMapNoMopZone;
-module.exports.EcovacsMapNoMopZoneInfo = EcovacsMapNoMopZoneInfo;
+module.exports.EcovacsMapVirtualBoundaries = EcovacsMapVirtualBoundaries;
+module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
+module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;

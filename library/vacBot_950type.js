@@ -274,20 +274,17 @@ class VacBot_950type extends VacBot {
         }
         tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
         return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
-      } else if (event['resultData']['type'] == 'vw') {
-        let mapVirtualWalls = new map.EcovacsMapVirtualWalls(event['resultData']['mid']);
-        for ( let mapIndex in event['resultData']['subsets']) {
-          mapVirtualWalls.push(new map.EcovacsMapVirtualWall(event['resultData']['subsets'][mapIndex]['mssid']));
+      } else if (event['resultData']['type'] == 'vw' || event['resultData']['type'] == 'mw') {
+        if (typeof this.mapVirtualBoundaries[event['resultData']['mid']] === 'undefined') {
+          //tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + event['resultData']['mid']);
+          this.mapVirtualBoundaries[event['resultData']['mid']] = new map.EcovacsMapVirtualBoundaries(event['resultData']['mid']);  //initialize array for mapVirtualBoundaries if not existing
         }
-        tools.envLog("[VacBot] *** MapVirtualWalls = " + JSON.stringify(mapVirtualWalls));
-        return {mapsetEvent: 'MapVirtualWalls', mapsetData: mapVirtualWalls};
-      } else if (event['resultData']['type'] == 'mw') {
-        let mapNoMopZones = new map.EcovacsMapNoMopZones(event['resultData']['mid']);
         for ( let mapIndex in event['resultData']['subsets']) {
-          mapNoMopZones.push(new map.EcovacsMapNoMopZone(event['resultData']['subsets'][mapIndex]['mssid']));
+          //tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + event['resultData']['subsets'][mapIndex]['mssid']);
+          this.mapVirtualBoundaries[event['resultData']['mid']].push(new map.EcovacsMapVirtualBoundary(event['resultData']['subsets'][mapIndex]['mssid']), event['resultData']['type']);
         }
-        tools.envLog("[VacBot] *** MapNoMopZones = " + JSON.stringify(mapNoMopZones));
-        return {mapsetEvent: 'MapNoMopZones', mapsetData: mapNoMopZones};
+        tools.envLog("[VacBot] *** mapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[event['resultData']['mid']]));
+        return {mapsetEvent: 'MapVirtualBoundaries', mapsetData: this.mapVirtualBoundaries[event['resultData']['mid']]};
       }
 
       tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
@@ -308,21 +305,22 @@ class VacBot_950type extends VacBot {
           event['resultData']['subtype']
         );
         if (typeof this.mapSpotAreaInfos[event['resultData']['mid']] === 'undefined') {
-          tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + event['resultData']['mid']);
+          //tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + event['resultData']['mid']);
           this.mapSpotAreaInfos[event['resultData']['mid']] = []; //initialize array for mapSpotAreaInfos if not existing
         }
         this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapSpotAreaInfo;
-        tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + event['resultData']['mid'] + " = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']]));
-        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']]));
+        //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + event['resultData']['mid'] + " = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']]));
+        //tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']]));
         return {mapsubsetEvent: 'MapSpotAreaInfo', mapsubsetData: mapSpotAreaInfo};
-      } else if (event['resultData']['type'] == 'vw') {
-        let mapVirtualWallInfo = new map.EcovacsMapVirtualWallInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['value']);
-        tools.envLog("[VacBot] *** MapVirtualWallInfo = " + JSON.stringify(mapVirtualWallInfo));
-        return {mapsubsetEvent: 'MapVirtualWallInfo', mapsubsetData: mapVirtualWallInfo};
-      } else if (event['resultData']['type'] == 'mw') {
-        let mapNoMopZoneInfo = new map.EcovacsMapNoMopZoneInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['value']);
-        tools.envLog("[VacBot] *** MapNoMopZoneInfo = " + JSON.stringify(mapNoMopZoneInfo));
-        return {mapsubsetEvent: 'MapNoMopZoneInfo', mapsubsetData: mapNoMopZoneInfo};
+      } else if (event['resultData']['type'] == 'vw' || event['resultData']['type'] == 'mw') {
+        let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['type'], event['resultData']['value']);
+        if (typeof this.mapVirtualBoundaryInfos[event['resultData']['mid']] === 'undefined') {
+          //tools.envLog("[VacBot] *** initialize mapVirtualBoundaryInfos for map " + event['resultData']['mid']);
+          this.mapVirtualBoundaryInfos[event['resultData']['mid']] = []; //initialize array for mapVirtualBoundaryInfos if not existing
+        }
+        this.mapVirtualBoundaryInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapVirtualBoundaryInfo;
+        tools.envLog("[VacBot] *** mapVirtualBoundary = " + JSON.stringify(mapVirtualBoundaryInfo));
+        return {mapsubsetEvent: 'MapVirtualBoundary', mapsubsetData: mapVirtualBoundaryInfo};
       }
 
       tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
@@ -419,28 +417,28 @@ class VacBot_950type extends VacBot {
       case "charge":
         this.send_command(new vacBotCommand.Charge());
         break;
-        case "move":
-          if (arguments.length < 2) {
-            return;
-          }
-          this.send_command(new vacBotCommand.Move(arguments[1]));
-          break;
-        case "movebackward":
-          this.send_command(new vacBotCommand.MoveBackward());
-          break;
-        case "moveforward":
-          this.send_command(new vacBotCommand.MoveForward());
-          break;
-        case "moveleft":
-          this.send_command(new vacBotCommand.MoveLeft());
-          break;
-        case "moveright":
-          this.send_command(new vacBotCommand.MoveRight());
-          break;
-        case "moveturnaround":
-          this.send_command(new vacBotCommand.MoveTurnAround());
-          break;
-        case "relocate":
+      case "move":
+        if (arguments.length < 2) {
+          return;
+        }
+        this.send_command(new vacBotCommand.Move(arguments[1]));
+        break;
+      case "movebackward":
+        this.send_command(new vacBotCommand.MoveBackward());
+        break;
+      case "moveforward":
+        this.send_command(new vacBotCommand.MoveForward());
+        break;
+      case "moveleft":
+        this.send_command(new vacBotCommand.MoveLeft());
+        break;
+      case "moveright":
+        this.send_command(new vacBotCommand.MoveRight());
+        break;
+      case "moveturnaround":
+        this.send_command(new vacBotCommand.MoveTurnAround());
+        break;
+      case "relocate":
         this.send_command(new vacBotCommand.Relocate());
         break;
       case "playsound":
@@ -482,60 +480,37 @@ class VacBot_950type extends VacBot {
           this.send_command(new vacBotCommand.GetMapSpotAreaInfo(arguments[1], arguments[2]));
         }
         break;
-      case "getvirtualwalls":
+      case "getvirtualboundaries":
         if (arguments.length <= 1) {
           return;
         } else if (arguments.length === 2) {
-          this.send_command(new vacBotCommand.GetMapVirtualWalls(arguments[1]));
+          this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'vw'));
+          this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'mw'));
+        } else if (arguments.length === 3) {
+          this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], arguments[2]));
         }
         break;
-      case "getvirtualwallinfo":
+      case "getvirtualboundaryinfo":
+        if (arguments.length <= 3) {
+          return;
+        } else if (arguments.length === 4) {
+          this.send_command(new vacBotCommand.GetMapVirtualBoundaryInfo(arguments[1], arguments[2], arguments[3]));
+        }
+        break;
+      case "deletevirtualboundary":
+        if (arguments.length <= 3) {
+          return;
+        } else if (arguments.length === 4) {
+          this.send_command(new vacBotCommand.DeleteMapVirtualBoundary(arguments[1], arguments[2], arguments[3]));
+        }
+        break;
+      case "addvirtualboundary":
         if (arguments.length <= 2) {
           return;
         } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.GetMapVirtualWallInfo(arguments[1], arguments[2]));
-        }
-        break;
-      case "deletevirtualwall":
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.DeleteMapVirtualWall(arguments[1], arguments[2]));
-        }
-        break;
-      case "deletenomopzone":
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.DeleteMapNoMopZone(arguments[1], arguments[2]));
-        }
-        break;
-      case "addvirtualwall":
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.AddMapVirtualWall(arguments[1], arguments[2]));
-        }
-        break;
-      case "addnomopzone":
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.AddMapNoMopZone(arguments[1], arguments[2]));
-        }
-        break;
-      case "getnomopzones":
-        if (arguments.length <= 1) {
-          return;
-        } else if (arguments.length === 2) {
-          this.send_command(new vacBotCommand.GetMapNoMopZones(arguments[1]));
-        }
-        break;
-      case "getnomopzoneinfo":
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.GetMapNoMopZoneInfo(arguments[1], arguments[2]));
+          this.send_command(new vacBotCommand.AddMapVirtualBoundary(arguments[1], arguments[2], 'vw'));
+        } else if (arguments.length === 4) {
+          this.send_command(new vacBotCommand.AddMapVirtualBoundary(arguments[1], arguments[2], arguments[3]));
         }
         break;
       case "geterror":

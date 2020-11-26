@@ -22,7 +22,9 @@ class VacBot {
         this.errorDescription = errorCodes[this.errorCode];
 
         this.maps = null;
+        this.mapVirtualBoundaries = [];
         this.mapSpotAreaInfos = [];
+        this.mapVirtualBoundaryInfos = [];
         this.currentMapName = 'unknown';
         this.currentMapMID = null;
         this.currentMapIndex = null;
