@@ -23,6 +23,7 @@ class VacBot {
 
         this.maps = null;
         this.mapVirtualBoundaries = [];
+        this.mapVirtualBoundariesResponses = []; // response from vw, mw per mapID
         this.mapSpotAreaInfos = [];
         this.mapVirtualBoundaryInfos = [];
         this.currentMapName = 'unknown';

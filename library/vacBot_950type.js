@@ -276,15 +276,27 @@ class VacBot_950type extends VacBot {
         return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
       } else if (event['resultData']['type'] == 'vw' || event['resultData']['type'] == 'mw') {
         if (typeof this.mapVirtualBoundaries[event['resultData']['mid']] === 'undefined') {
-          //tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + event['resultData']['mid']);
+          tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + event['resultData']['mid']);
           this.mapVirtualBoundaries[event['resultData']['mid']] = new map.EcovacsMapVirtualBoundaries(event['resultData']['mid']);  //initialize array for mapVirtualBoundaries if not existing
+          this.mapVirtualBoundariesResponses[event['resultData']['mid']][0] = false;
+          this.mapVirtualBoundariesResponses[event['resultData']['mid']][1] = false;
         }
         for ( let mapIndex in event['resultData']['subsets']) {
-          //tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + event['resultData']['subsets'][mapIndex]['mssid']);
-          this.mapVirtualBoundaries[event['resultData']['mid']].push(new map.EcovacsMapVirtualBoundary(event['resultData']['subsets'][mapIndex]['mssid']), event['resultData']['type']);
+          tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + event['resultData']['subsets'][mapIndex]['mssid']);
+          this.mapVirtualBoundaries[event['resultData']['mid']].push(new map.EcovacsMapVirtualBoundary(event['resultData']['subsets'][mapIndex]['mssid'], event['resultData']['type']));
+        }
+        if (event['resultData']['type'] == 'vw') {
+          this.mapVirtualBoundariesResponses[event['resultData']['mid']][0] = true;
+        } else if (event['resultData']['type'] == 'mw') {
+          this.mapVirtualBoundariesResponses[event['resultData']['mid']][1] = true;
         }
         tools.envLog("[VacBot] *** mapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[event['resultData']['mid']]));
-        return {mapsetEvent: 'MapVirtualBoundaries', mapsetData: this.mapVirtualBoundaries[event['resultData']['mid']]};
+        if (this.mapVirtualBoundariesResponses[event['resultData']['mid']][0] && this.mapVirtualBoundariesResponses[event['resultData']['mid']][1]) { //only return if both responses were processed
+          return {mapsetEvent: 'MapVirtualBoundaries', mapsetData: this.mapVirtualBoundaries[event['resultData']['mid']]};
+        } else {
+          tools.envLog("[VacBot] *** skip message for map  " + event['resultData']['mid']);
+          return {mapsetEvent: 'skip'};
+        }
       }
 
       tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
@@ -484,10 +496,16 @@ class VacBot_950type extends VacBot {
         if (arguments.length <= 1) {
           return;
         } else if (arguments.length === 2) {
+          if (typeof this.mapVirtualBoundariesResponses[arguments[1]] === 'undefined') {
+            tools.envLog("[VacBot] *** initialize mapVirtualBoundariesResponses for map " + arguments[1]);
+            this.mapVirtualBoundariesResponses[arguments[1]] = [false, false];
+          } else {
+            this.mapVirtualBoundariesResponses[arguments[1]][0] = false; 
+            this.mapVirtualBoundariesResponses[arguments[1]][1] = false; 
+          }
+          
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'vw'));
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'mw'));
-        } else if (arguments.length === 3) {
-          this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], arguments[2]));
         }
         break;
       case "getvirtualboundaryinfo":

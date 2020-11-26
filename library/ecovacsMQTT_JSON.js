@@ -299,13 +299,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot._handle_mapset(event);
-                if(mapset["mapsetEvent"] != 'error'){
+                if(mapset["mapsetEvent"] != 'error' || mapset["mapsetEvent"] != 'skip'){ //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = this.bot._handle_mapsubset(event);
-                if(mapsubset["mapsubsetEvent"] != 'error'){
+                if(mapsubset["mapsubsetEvent"] != 'error') { 
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;

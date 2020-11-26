@@ -120,12 +120,14 @@ class EcovacsMapVirtualBoundaries {
 }
 
 class EcovacsMapVirtualBoundary {
-    constructor(mapVirtualBoundaryID) {
+    constructor(mapVirtualBoundaryID, mapVirtualBoundaryType) {
         this.mapVirtualBoundaryID = mapVirtualBoundaryID;
+        this.mapVirtualBoundaryType = mapVirtualBoundaryType;
     }
     toJSON() {
         return {
-            mapVirtualBoundaryID: this.mapVirtualBoundaryID
+            mapVirtualBoundaryID: this.mapVirtualBoundaryID,
+            mapVirtualBoundaryType: this.mapVirtualBoundaryType
         };
     }
 }
