@@ -38,6 +38,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### Supported models
 * Deebot 900/901
+* Deebot Ozmo 920
 * Deebot Ozmo 930
 * Deebot Ozmo 950
 
@@ -48,7 +49,6 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot 710/711
 * Deebot Ozmo 610
 * Deebot Ozmo 900
-* Deebot Ozmo 920
 * Deebot Ozmo T8 AIVI
 * Deebot Ozmo Slim 10
 
@@ -64,6 +64,11 @@ Information on how to use this library can be found [here](https://github.com/mr
 * The "pause" button does not work with Deebot 710/711.
 
 ## Changelog
+
+### 0.5.0
+* Lots of code refactoring
+* Fix problem running multiple devices
+* Added support for more Ozmo T8 models
 
 ### 0.4.24 - 0.4.26
 * Bugfix releases
