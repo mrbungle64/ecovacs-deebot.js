@@ -439,16 +439,14 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.Spot());
         break;
       case "spotarea":
-        if (arguments.length < 3) {
-          return;
+        if (arguments.length >= 3) {
+          this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
         }
-        this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
         break;
       case "customarea":
-        if (arguments.length < 4) {
-          return;
+        if (arguments.length >= 4) {
+          this.send_command(new vacBotCommand.CustomArea(arguments[1], arguments[2], arguments[3]));
         }
-        this.send_command(new vacBotCommand.CustomArea(arguments[1], arguments[2], arguments[3]));
         break;
       case "stop":
         this.send_command(new vacBotCommand.Stop());
@@ -465,9 +463,8 @@ class VacBot_non950type extends VacBot {
       case "playsound":
         if (arguments.length <= 1) {
           this.send_command(new vacBotCommand.PlaySound());
-        } else if (arguments.length === 2) {
-          this.send_command(new vacBotCommand.PlaySound(arguments[1]));
         }
+        this.send_command(new vacBotCommand.PlaySound(arguments[1]));
         break;
       case "getdeviceinfo":
       case "deviceinfo":
@@ -482,10 +479,9 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetCleanSpeed());
         break;
       case "setcleanspeed":
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         }
-        this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         break;
       case "getchargestate":
       case "chargestate":
@@ -497,19 +493,17 @@ class VacBot_non950type extends VacBot {
         break;
       case "getlifespan":
       case "lifespan":
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          component = arguments[1];
+          this.send_command(new vacBotCommand.GetLifeSpan(component));
         }
-        component = arguments[1];
-        this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
       case "resetlifespan":
         // Tested von Deebot 901 and Ozmo 930
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          component = arguments[1];
+          this.send_command(new vacBotCommand.ResetLifeSpan(component));
         }
-        component = arguments[1];
-        this.send_command(new vacBotCommand.ResetLifeSpan(component));
         break;
       case "setlifespan":
         // Untested - seems to be only for the N79 series
@@ -528,10 +522,9 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetWaterLevel());
         break;
       case "setwaterlevel":
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         }
-        this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         break;
       case "getwaterboxinfo":
         this.send_command(new vacBotCommand.GetWaterBoxInfo());
@@ -570,16 +563,14 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetMapM());
         break;
       case "pullmp":
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.PullMP(arguments[1]));
         }
-        this.send_command(new vacBotCommand.PullMP(arguments[1]));
         break;
       case "pullm":
-        if (arguments.length < 5) {
-          return;
+        if (arguments.length >= 5) {
+          this.send_command(new vacBotCommand.PullM(arguments[1], arguments[2], arguments[3], arguments[4]));
         }
-        this.send_command(new vacBotCommand.PullM(arguments[1], arguments[2], arguments[3], arguments[4]));
         break;
       case "move":
         if (arguments.length < 2) {
