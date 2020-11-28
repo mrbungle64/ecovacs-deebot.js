@@ -40,16 +40,17 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 "td": "GetCleanLogs",
                 "resource": this.vacuum['resource']
             }
-        }
-        return {
-            'auth': auth,
-            "cmdName": action.name,
-            "payload": this._wrap_command_getPayload(action),
-            "payloadType": "x",
-            "td": "q",
-            "toId": recipient,
-            "toRes": this.vacuum['resource'],
-            "toType": this.vacuum['class']
+        } else {
+            return {
+                'auth': auth,
+                "cmdName": action.name,
+                "payload": this._wrap_command_getPayload(action),
+                "payloadType": "x",
+                "td": "q",
+                "toId": recipient,
+                "toRes": this.vacuum['resource'],
+                "toType": this.vacuum['class']
+            }
         }
     }
 
@@ -169,8 +170,8 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     _command_to_dict(xmlString) {
-        const oParser = new DOMParser();
-        const xml = oParser.parseFromString(xmlString, "text/xml");
+        const domParser = new DOMParser();
+        const xml = domParser.parseFromString(xmlString, "text/xml");
         const firstChild = xml.childNodes[0];
         let attrs = {};
         let event = null;
@@ -180,7 +181,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             const action = arguments[1];
             attrs = action.args
         } else {
-            if (firstChild.attributes == undefined) {
+            if (firstChild.attributes === undefined) {
                 return {
                     'event': 'unknown',
                     'attrs': '',
