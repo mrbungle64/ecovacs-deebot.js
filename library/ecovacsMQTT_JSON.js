@@ -81,7 +81,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         "with": "users",
                         "realm": constants.REALM
                     },
-                    "resource": "BTKk"
+                    "resource": this.vacuum['resource']
                 }
             } else 
             return {
@@ -95,7 +95,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     "with": "users",
                     "realm": constants.REALM
                 },
-                "resource": "BTKk"
+                "resource": this.vacuum['resource']
             }
         }
     }
