@@ -331,8 +331,8 @@ class VacBot_950type extends VacBot {
           this.mapVirtualBoundaryInfos[event['resultData']['mid']] = []; //initialize array for mapVirtualBoundaryInfos if not existing
         }
         this.mapVirtualBoundaryInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapVirtualBoundaryInfo;
-        tools.envLog("[VacBot] *** mapVirtualBoundary = " + JSON.stringify(mapVirtualBoundaryInfo));
-        return {mapsubsetEvent: 'MapVirtualBoundary', mapsubsetData: mapVirtualBoundaryInfo};
+        tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
+        return {mapsubsetEvent: 'MapVirtualBoundaryInfo', mapsubsetData: mapVirtualBoundaryInfo};
       }
 
       tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
