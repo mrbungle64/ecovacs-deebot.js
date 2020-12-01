@@ -6,14 +6,12 @@ class EcovacsMQTT extends Ecovacs {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
         this.mqtt = require('mqtt');
-        this.client = null;
 
         this.customdomain = hostname.split(".")[0]; // MQTT is using domain without tld extension
         this.username = user + '@' + this.customdomain;
-        this.clientId = this.username + '/' + resource;
 
         let options = {
-            clientId: this.clientId,
+            clientId: this.username + '/' + resource,
             username: this.username,
             password: this.secret,
             rejectUnauthorized: false
