@@ -81,7 +81,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         "with": "users",
                         "realm": constants.REALM
                     },
-                    "resource": "BTKk"
+                    "resource": this.vacuum['resource']
                 }
             } else 
             return {
@@ -95,7 +95,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     "with": "users",
                     "realm": constants.REALM
                 },
-                "resource": "BTKk"
+                "resource": this.vacuum['resource']
             }
         }
     }
@@ -253,6 +253,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if(command.startsWith("on")) { //incoming events (on)
             command = command.substring(2);
         }
+        if(command.startsWith("off")) { //incoming events for (3rd) unknown/unsaved map
+            command = command.substring(3);
+        }
         if(command.startsWith("report")) { //incoming events (report)
             command = command.substring(6);
         }
@@ -296,13 +299,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot._handle_mapset(event);
-                if(mapset["mapsetEvent"] != 'error'){
+                if(mapset["mapsetEvent"] != 'error' || mapset["mapsetEvent"] != 'skip'){ //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = this.bot._handle_mapsubset(event);
-                if(mapsubset["mapsubsetEvent"] != 'error'){
+                if(mapsubset["mapsubsetEvent"] != 'error') { 
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;

@@ -260,14 +260,9 @@ class GetMapSpotAreas extends GetMapSet {
         super(mapID, 'ar');
     }
 }
-class GetMapVirtualWalls extends GetMapSet {
-    constructor(mapID) {
-        super(mapID, 'vw');
-    }
-}
-class GetMapNoMopZones extends GetMapSet {
-    constructor(mapID) {
-        super(mapID, 'mw');
+class GetMapVirtualBoundaries extends GetMapSet {
+    constructor(mapID, mapVirtualBoundaryType = 'vw') {
+        super(mapID, mapVirtualBoundaryType);
     }
 }
 class GetMapSubSet extends VacBotCommand_950type {
@@ -281,8 +276,8 @@ class DeleteMapSubSet extends VacBotCommand_950type {
     }
 }
 class AddMapSubSet extends VacBotCommand_950type {
-    constructor(mapID, boundaries, type='vw') { //default type is virtualWall
-        super('setMapSubSet', {'act': 'add', 'mid': mapID, 'type': type, 'value': boundaries});
+    constructor(mapID, coordinates, mapSubSetType='vw') { //default type is virtualWall
+        super('setMapSubSet', {'act': 'add', 'mid': mapID, 'type': mapSubSetType, 'value': coordinates});
     }
 }
 class GetMapSpotAreaInfo extends GetMapSubSet {
@@ -290,34 +285,19 @@ class GetMapSpotAreaInfo extends GetMapSubSet {
         super(mapID, mapSubSetID, 'ar');
     }
 }
-class GetMapVirtualWallInfo extends GetMapSubSet {
-    constructor(mapID, mapSubSetID) {
-        super(mapID, mapSubSetID, 'vw');
+class GetMapVirtualBoundaryInfo extends GetMapSubSet {
+    constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
+        super(mapID, mapSubSetID, mapVirtualBoundaryType);
     }
 }
-class GetMapNoMopZoneInfo extends GetMapSubSet {
-    constructor(mapID, mapSubSetID) {
-        super(mapID, mapSubSetID, 'mw');
+class DeleteMapVirtualBoundary extends DeleteMapSubSet {
+    constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
+        super(mapID, mapSubSetID, mapVirtualBoundaryType);
     }
 }
-class DeleteMapVirtualWall extends DeleteMapSubSet {
-    constructor(mapID, mapSubSetID) {
-        super(mapID, mapSubSetID, 'vw');
-    }
-}
-class DeleteMapNoMopZone extends DeleteMapSubSet {
-    constructor(mapID, mapSubSetID) {
-        super(mapID, mapSubSetID, 'mw');
-    }
-}
-class AddMapVirtualWall extends AddMapSubSet {
-    constructor(mapID, boundaries) {
-        super(mapID, boundaries, 'vw');
-    }
-}
-class AddMapNoMopZone extends AddMapSubSet {
-    constructor(mapID, boundaries) {
-        super(mapID, boundaries, 'mw');
+class AddMapVirtualBoundary extends AddMapSubSet {
+    constructor(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
+        super(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType);
     }
 }
 
@@ -379,15 +359,11 @@ module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetCleanSum = GetCleanSum;
 module.exports.GetMapSpotAreas = GetMapSpotAreas;
-module.exports.GetMapVirtualWalls = GetMapVirtualWalls;
-module.exports.GetMapNoMopZones = GetMapNoMopZones;
 module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
-module.exports.GetMapVirtualWallInfo = GetMapVirtualWallInfo;
-module.exports.GetMapNoMopZoneInfo = GetMapNoMopZoneInfo;
-module.exports.DeleteMapVirtualWall = DeleteMapVirtualWall;
-module.exports.DeleteMapNoMopZone = DeleteMapNoMopZone;
-module.exports.AddMapVirtualWall = AddMapVirtualWall;
-module.exports.AddMapNoMopZone = AddMapNoMopZone;
+module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
+module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
+module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
+module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetCleanLogsPullCleanF = GetCleanLogsPullCleanF;
