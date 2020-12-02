@@ -222,6 +222,16 @@ exports.KnownDevices = {
         "mopping_system": false,
         "voice_report": false,
         'single_room': false
+    },
+    "ipzjy0": {
+        "name": "DEEBOT U2",
+        "950type": true,
+        "main_brush": true,
+        "spot_area": false,
+        "custom_area": false,
+        "mopping_system": false,
+        "voice_report": true,
+        'single_room': false
     }
 };
 
