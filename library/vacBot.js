@@ -102,7 +102,11 @@ class VacBot {
     }
 
     is950type() {
-        return tools.is950type(this.deviceClass);
+        return this.getDeviceProperty('950type');
+    }
+
+    isNot950type() {
+        return (!this.is950type());
     }
 
     isN79series() {
@@ -110,24 +114,15 @@ class VacBot {
     }
 
     isSupportedDevice() {
-        const devices = JSON.parse(JSON.stringify(tools.getSupportedDevices()));
-        return devices.hasOwnProperty(this.deviceClass);
+        return tools.isSupportedDevice(this.deviceClass);
     }
 
     isKnownDevice() {
-        const devices = JSON.parse(JSON.stringify(tools.getKnownDevices()));
-        return devices.hasOwnProperty(this.deviceClass) || this.isSupportedDevice();
+        return tools.isKnownDevice(this.deviceClass);
     }
 
     getDeviceProperty(property) {
-        const devices = JSON.parse(JSON.stringify(tools.getAllKnownDevices()));
-        if (devices.hasOwnProperty(this.deviceClass)) {
-            const device = devices[this.deviceClass];
-            if (device.hasOwnProperty(property)) {
-                return device[property];
-            }
-        }
-        return false;
+        return tools.getDeviceProperty(this.deviceClass, property);
     }
 
     hasMainBrush() {

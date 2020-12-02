@@ -1,17 +1,7 @@
 const constants = require('./ecovacsConstants');
 
 function is950type(deviceClass) {
-    switch (deviceClass) {
-        case 'yna5xi': // Ozmo 950
-        case 'vi829v': // Ozmo 920
-        case 'h18jkh': // Ozmo T8
-        case '55aiho': // Ozmo T8+
-        case 'fqxoiu': // Ozmo T8 Plus
-        case 'x5d34r': // Ozmo T8 AIVI
-            return true;
-        default:
-            return false;
-    }
+    return getDeviceProperty(deviceClass, '950type');
 }
 
 // Generate a somewhat random string for request id with 8 chars.
@@ -54,6 +44,27 @@ function getKnownDevices() {
 
 function getProductIotMap() {
     return constants.EcoVacsHomeProducts;
+}
+
+function isSupportedDevice(deviceClass) {
+    const devices = JSON.parse(JSON.stringify(getSupportedDevices()));
+    return devices.hasOwnProperty(deviceClass);
+}
+
+function isKnownDevice(deviceClass) {
+    const devices = JSON.parse(JSON.stringify(getKnownDevices()));
+    return devices.hasOwnProperty(deviceClass) || isSupportedDevice();
+}
+
+function getDeviceProperty(deviceClass, property) {
+    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    if (devices.hasOwnProperty(deviceClass)) {
+        const device = devices[deviceClass];
+        if (device.hasOwnProperty(property)) {
+            return device[property];
+        }
+    }
+    return false;
 }
 
 function getTimeString(time) {
@@ -177,6 +188,9 @@ module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getProductIotMap = getProductIotMap;
+module.exports.isSupportedDevice = isSupportedDevice;
+module.exports.isKnownDevice = isKnownDevice;
+module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getTimeString = getTimeString;
 module.exports.is950type = is950type;
 module.exports.isN79series = isN79series;

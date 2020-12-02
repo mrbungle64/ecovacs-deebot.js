@@ -321,6 +321,14 @@ class EcovacsAPI {
     return packageInfo.version;
   }
 
+  static isDeviceClass950type(deviceClass) {
+    return tools.is950type(deviceClass);
+  }
+
+  static isDeviceClassNot950type(deviceClass) {
+    return (!tools.is950type(deviceClass));
+  }
+
   static getDeviceId(machineId, deviceNumber = 0) {
     return EcovacsAPI.md5(machineId + deviceNumber.toString());
   }
