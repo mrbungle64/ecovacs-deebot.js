@@ -59,7 +59,10 @@ function isKnownDevice(deviceClass) {
 function getDeviceProperty(deviceClass, property) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
-        const device = devices[deviceClass];
+        let device = devices[deviceClass];
+        if ((!device.hasOwnProperty(property)) && (device.hasOwnProperty('deviceClassLink'))) {
+            device = devices[device['deviceClassLink']];
+        }
         if (device.hasOwnProperty(property)) {
             return device[property];
         }
