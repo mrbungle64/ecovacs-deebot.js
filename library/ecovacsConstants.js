@@ -32,13 +32,7 @@ exports.SupportedDevices = {
     },
     "vi829v": {
         "name": "DEEBOT OZMO 920",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "yna5xi"
     },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
@@ -145,63 +139,27 @@ exports.KnownDevices = {
     },
     "b742vd": {
         "name": "DEEBOT OZMO T8",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "h18jkh"
     },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "h18jkh"
     },
     "55aiho": {
         "name": "DEEBOT OZMO T8+",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "h18jkh"
     },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "h18jkh"
     },
     "tpnwyu": {
         "name": "DEEBOT OZMO T8 AIVI +",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "h18jkh"
     },
     "34vhpm": {
         "name": "DEEBOT OZMO T8 AIVI +",
-        "950type": true,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        'single_room': false
+        "deviceClassLink": "h18jkh"
     },
     "155": {
         "name": "DEEBOT N79S/SE",
@@ -215,13 +173,7 @@ exports.KnownDevices = {
     },
     "165": {
         "name": "DEEBOT N79T/W",
-        "950type": false,
-        "main_brush": true,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
-        "voice_report": false,
-        'single_room': false
+        "deviceClassLink": "155"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
@@ -232,6 +184,56 @@ exports.KnownDevices = {
         "mopping_system": false,
         "voice_report": true,
         'single_room': false
+    },
+    "rvo6ev": {
+        "name": "DEEBOT U2",
+        "deviceClassLink": "ipzjy0"
+    },
+    "wlqdkp": {
+        "name": "DEEBOT U2",
+        "deviceClassLink": "ipzjy0"
+    },
+    "nq9yhl": {
+        "name": "DEEBOT U2 PRO"
+    },
+    "y2qy3m": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "7j1tu6": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "ts2ofl": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "c0lwyn": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "d4v1pm": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "u6eqoa": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "12baap": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "u4h1uk": {
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "nq9yhl"
+    },
+    "1zqysa": {
+        "name": "DEEBOT U2 POWER"
+    },
+    "chmi0g": {
+        "name": "DEEBOT U2 POWER",
+        "deviceClassLink": "1zqysa"
     }
 };
 
