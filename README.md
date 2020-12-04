@@ -65,6 +65,13 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.5.1 (alpha)
+* Initial support for Deebot U2 series
+* Added some more device classes for T8 and U2 models
+* Improved handling of device classes
+* (boriswerner) Fixed cleaning log for 950 type models
+* (boriswerner) VirtualBoundaries handling
+
 ### 0.5.0
 * Lots of code refactoring
 * Fix problem running multiple devices
