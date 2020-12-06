@@ -61,15 +61,15 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Known issues
 
-* There are some reports that currently empty cleaning logs are being delivered by Ecovacs for Ozmo 920/950 and Ozmo T8/T8+/T8 AIVI.
-* There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug.
-* The "pause" button does not work with Deebot 710/711.
+* There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug
+* "pause" does not work with Deebot 710/711
+* "stop" does not work with Deebot 711s
 
 ## Changelog
 
 ### 0.5.1 (alpha)
 * Initial support for Deebot U2 series
-* Added some more device classes for T8 and U2 models
+* Improved support for T8 models
 * Improved handling of device classes
 * (boriswerner) Fixed cleaning log for 950 type models
 * (boriswerner) VirtualBoundaries handling
