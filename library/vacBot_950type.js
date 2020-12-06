@@ -128,17 +128,21 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] _handle_clean_info");
     if (event['resultCode'] == '0') {
       if (event['resultData']['state'] === 'clean') {
+        let type = event['resultData']['cleanState']['type'];
+        if (typeof event['resultData']['cleanState']['content'] === "object") {
+          type = event['resultData']['cleanState']['content']['type'];
+        }
         if (event['resultData']['cleanState']['motionState'] === 'working') {
-          let type = event['resultData']['cleanState']['type'];
-          if (event['resultData']['cleanState']['content'] === "object") {
-            type = event['resultData']['cleanState']['content']['type'];
-          }
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
         } else {
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
         }
-        if (event['resultData']['cleanState']['type'] == 'customArea') {
-          this.lastUsedAreaValues = event['resultData']['cleanState']['content'];
+        if (type === 'customArea') {
+          if (typeof event['resultData']['cleanState']['content'] === "object") {
+            this.lastUsedAreaValues = event['resultData']['cleanState']['content']['value'];
+          } else {
+            this.lastUsedAreaValues = event['resultData']['cleanState']['content'];
+          }
         } else {
           this.lastUsedAreaValues = null;
         }
@@ -504,10 +508,10 @@ class VacBot_950type extends VacBot {
             tools.envLog("[VacBot] *** initialize mapVirtualBoundariesResponses for map " + arguments[1]);
             this.mapVirtualBoundariesResponses[arguments[1]] = [false, false];
           } else {
-            this.mapVirtualBoundariesResponses[arguments[1]][0] = false; 
-            this.mapVirtualBoundariesResponses[arguments[1]][1] = false; 
+            this.mapVirtualBoundariesResponses[arguments[1]][0] = false;
+            this.mapVirtualBoundariesResponses[arguments[1]][1] = false;
           }
-          
+
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'vw'));
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'mw'));
         }
