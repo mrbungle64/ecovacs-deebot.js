@@ -250,17 +250,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     _handle_command(command, event) {
         tools.envLog("[EcovacsMQTT_JSON] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
-        if(command.startsWith("on")) { //incoming events (on)
+        if (command.startsWith("on")) { //incoming events (on)
             command = command.substring(2);
         }
-        if(command.startsWith("off")) { //incoming events for (3rd) unknown/unsaved map
+        if (command.startsWith("off")) { //incoming events for (3rd) unknown/unsaved map
             command = command.substring(3);
         }
-        if(command.startsWith("report")) { //incoming events (report)
+        if (command.startsWith("report")) { //incoming events (report)
             command = command.substring(6);
         }
-        if(command.startsWith("get") ) { //remove from "get" commands
+        if (command.startsWith("get")) { //remove from "get" commands
             command = command.substring(3);
+        }
+        if (command.endsWith("_v2")) { // OZMO T8
+            command = command.slice(0, -3);
         }
         switch (command) {
             case "chargestate":
