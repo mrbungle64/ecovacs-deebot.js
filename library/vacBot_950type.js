@@ -129,7 +129,11 @@ class VacBot_950type extends VacBot {
     if (event['resultCode'] == '0') {
       if (event['resultData']['state'] === 'clean') {
         if (event['resultData']['cleanState']['motionState'] === 'working') {
-          this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['type']];
+          let type = event['resultData']['cleanState']['type'];
+          if (event['resultData']['cleanState']['content'] === "object") {
+            type = event['resultData']['cleanState']['content']['type'];
+          }
+          this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
         } else {
           this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
         }
