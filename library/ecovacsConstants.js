@@ -181,7 +181,7 @@ exports.KnownDevices = {
         "main_brush": true,
         "spot_area": false,
         "custom_area": false,
-        "mopping_system": false,
+        "mopping_system": true,
         "voice_report": true,
         'single_room': false
     },
