@@ -44,7 +44,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### These models are known to work
 * Deebot Slim 2
-* Deebot N79
+* Deebot N79 series
 * Deebot 600/601
 * Deebot 710/711
 * Deebot U2
@@ -67,7 +67,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
-### 0.5.1 (alpha)
+### 0.5.1 (beta)
 * Initial support for Deebot U2 series
 * Improved support for T8 models
 * Improved handling of device classes
