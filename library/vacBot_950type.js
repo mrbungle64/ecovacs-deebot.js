@@ -314,31 +314,35 @@ class VacBot_950type extends VacBot {
 
   _handle_mapsubset(event) {
     if (event['resultCode'] == '0') {
-      if (event['resultData']['type'] == 'ar') {
+      let mapMID = event['resultData']['mid'];
+      if (isNaN(mapMID)) {
+        mapMID = this.currentMapMID;
+      }
+      if (event['resultData']['type'] === 'ar') {
+        //TODO: filter out reportMapSubSet events (missing data)
+        //reportMapSubSet event comes without map reference, replace
         let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
-          //TODO: filter out reportMapSubSet events (missing data)
-          //reportMapSubSet event comes without map reference, replace
-          event['resultData']['mid']==undefined ? this.currentMapMID : event['resultData']['mid'],
+            mapMID,
           event['resultData']['mssid'],
           event['resultData']['connections'], //reportMapSubSet event comes without connections
           event['resultData']['value'],
           event['resultData']['subtype']
         );
-        if (typeof this.mapSpotAreaInfos[event['resultData']['mid']] === 'undefined') {
+        if (typeof this.mapSpotAreaInfos[mapMID] === 'undefined') {
           //tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + event['resultData']['mid']);
-          this.mapSpotAreaInfos[event['resultData']['mid']] = []; //initialize array for mapSpotAreaInfos if not existing
+          this.mapSpotAreaInfos[mapMID] = []; //initialize array for mapSpotAreaInfos if not existing
         }
-        this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapSpotAreaInfo;
+        this.mapSpotAreaInfos[mapMID][event['resultData']['mssid']] = mapSpotAreaInfo;
         //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + event['resultData']['mid'] + " = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']]));
         //tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(this.mapSpotAreaInfos[event['resultData']['mid']][event['resultData']['mssid']]));
         return {mapsubsetEvent: 'MapSpotAreaInfo', mapsubsetData: mapSpotAreaInfo};
-      } else if (event['resultData']['type'] == 'vw' || event['resultData']['type'] == 'mw') {
-        let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(event['resultData']['mid'], event['resultData']['mssid'], event['resultData']['type'], event['resultData']['value']);
-        if (typeof this.mapVirtualBoundaryInfos[event['resultData']['mid']] === 'undefined') {
+      } else if (event['resultData']['type'] === 'vw' || event['resultData']['type'] === 'mw') {
+        let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(mapMID, event['resultData']['mssid'], event['resultData']['type'], event['resultData']['value']);
+        if (typeof this.mapVirtualBoundaryInfos[mapMID] === 'undefined') {
           //tools.envLog("[VacBot] *** initialize mapVirtualBoundaryInfos for map " + event['resultData']['mid']);
-          this.mapVirtualBoundaryInfos[event['resultData']['mid']] = []; //initialize array for mapVirtualBoundaryInfos if not existing
+          this.mapVirtualBoundaryInfos[mapMID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
         }
-        this.mapVirtualBoundaryInfos[event['resultData']['mid']][event['resultData']['mssid']] = mapVirtualBoundaryInfo;
+        this.mapVirtualBoundaryInfos[mapMID][event['resultData']['mssid']] = mapVirtualBoundaryInfo;
         tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
         return {mapsubsetEvent: 'MapVirtualBoundaryInfo', mapsubsetData: mapVirtualBoundaryInfo};
       }
