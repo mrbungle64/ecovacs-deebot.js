@@ -321,6 +321,10 @@ class EcovacsAPI {
     return packageInfo.version;
   }
 
+  static isCanvasModuleAvailable() {
+    return tools.isCanvasModuleAvailable();
+  }
+
   static isDeviceClass950type(deviceClass) {
     return tools.is950type(deviceClass);
   }

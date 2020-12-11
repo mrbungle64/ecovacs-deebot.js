@@ -150,10 +150,8 @@ class EcovacsMapVirtualBoundaryInfo {
     }
 }
 
-
-
 function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
-    if (!isCanvasModuleAvailable()) {
+    if (!tools.isCanvasModuleAvailable()) {
         return null;
     }
     let coordinateArray = coordinates.split(";");
@@ -181,7 +179,7 @@ function isPositionInSpotArea(position, spotAreaInfos) {
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 
     tools.envLog("[isPositionInSpotArea] spotAreaInfos: " + JSON.stringify(spotAreaInfos));
-    if (isCanvasModuleAvailable()) {
+    if (tools.isCanvasModuleAvailable()) {
         for (let infoID in spotAreaInfos) {
             if (spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]), parseInt(position[1]))) {
                 return spotAreaInfos[infoID]["mapSpotAreaID"];
@@ -189,15 +187,6 @@ function isPositionInSpotArea(position, spotAreaInfos) {
         }
     }
     return 'unknown';
-}
-
-function isCanvasModuleAvailable() {
-    try {
-        require.resolve('canvas');
-        return true;
-    } catch (e) {
-        return false;
-    }
 }
 
 module.exports.EcovacsMap = EcovacsMap;
@@ -208,4 +197,3 @@ module.exports.EcovacsMapVirtualBoundaries = EcovacsMapVirtualBoundaries;
 module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
 module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
-module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;

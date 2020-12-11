@@ -1,5 +1,14 @@
 const constants = require('./ecovacsConstants');
 
+function isCanvasModuleAvailable() {
+    try {
+        require.resolve('canvas');
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 function is950type(deviceClass) {
     return getDeviceProperty(deviceClass, '950type');
 }
@@ -198,3 +207,4 @@ module.exports.getTimeString = getTimeString;
 module.exports.is950type = is950type;
 module.exports.isN79series = isN79series;
 module.exports.getReqID = getReqID;
+module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
