@@ -30,6 +30,11 @@ Afterwards you can install the library with
 npm install ecovacs-deebot
 ```
 
+If you want to install this library explicitly without canvas you can install it with
+```bash
+npm install ecovacs-deebot --no-optional
+```
+
 ## Usage
 
 Information on how to use this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki).
