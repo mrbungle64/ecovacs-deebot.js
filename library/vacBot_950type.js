@@ -275,34 +275,46 @@ class VacBot_950type extends VacBot {
 
   _handle_mapset(event) {
     if (event['resultCode'] == '0') {
-      if (event['resultData']['type'] == 'ar') {
-        let mapSpotAreas = new map.EcovacsMapSpotAreas(event['resultData']['mid'], event['resultData']['msid']);
-        for ( let mapIndex in event['resultData']['subsets']) {
+      let mapMID = event['resultData']['mid'];
+      if (isNaN(mapMID)) {
+        if (this.currentMapMID) {
+          mapMID = this.currentMapMID;
+        } else {
+          tools.envLog("[VacBot] *** mid is not a number. Skipping message for map");
+          return {mapsetEvent: 'skip'};
+        }
+      }
+      if (event['resultData']['type'] === 'ar') {
+        let mapSpotAreas = new map.EcovacsMapSpotAreas(mapMID, event['resultData']['msid']);
+        for (let mapIndex in event['resultData']['subsets']) {
           mapSpotAreas.push(new map.EcovacsMapSpotArea(event['resultData']['subsets'][mapIndex]['mssid']));
         }
         tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
         return {mapsetEvent: 'MapSpotAreas', mapsetData: mapSpotAreas};
-      } else if (event['resultData']['type'] == 'vw' || event['resultData']['type'] == 'mw') {
-        if (typeof this.mapVirtualBoundaries[event['resultData']['mid']] === 'undefined') {
-          tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + event['resultData']['mid']);
-          this.mapVirtualBoundaries[event['resultData']['mid']] = new map.EcovacsMapVirtualBoundaries(event['resultData']['mid']);  //initialize array for mapVirtualBoundaries if not existing
-          this.mapVirtualBoundariesResponses[event['resultData']['mid']][0] = false;
-          this.mapVirtualBoundariesResponses[event['resultData']['mid']][1] = false;
+      } else if (event['resultData']['type'] === 'vw' || event['resultData']['type'] === 'mw') {
+        if (typeof this.mapVirtualBoundaries[mapMID] === 'undefined') {
+          tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + mapMID);
+          this.mapVirtualBoundaries[mapMID] = new map.EcovacsMapVirtualBoundaries(mapMID);  //initialize array for mapVirtualBoundaries if not existing
+          this.mapVirtualBoundariesResponses[mapMID][0] = false;
+          this.mapVirtualBoundariesResponses[mapMID][1] = false;
         }
-        for ( let mapIndex in event['resultData']['subsets']) {
+        for (let mapIndex in event['resultData']['subsets']) {
           tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + event['resultData']['subsets'][mapIndex]['mssid']);
-          this.mapVirtualBoundaries[event['resultData']['mid']].push(new map.EcovacsMapVirtualBoundary(event['resultData']['subsets'][mapIndex]['mssid'], event['resultData']['type']));
+          this.mapVirtualBoundaries[mapMID].push(new map.EcovacsMapVirtualBoundary(event['resultData']['subsets'][mapIndex]['mssid'], event['resultData']['type']));
         }
-        if (event['resultData']['type'] == 'vw') {
-          this.mapVirtualBoundariesResponses[event['resultData']['mid']][0] = true;
-        } else if (event['resultData']['type'] == 'mw') {
-          this.mapVirtualBoundariesResponses[event['resultData']['mid']][1] = true;
+        if (event['resultData']['type'] === 'vw') {
+          this.mapVirtualBoundariesResponses[mapMID][0] = true;
+        } else if (event['resultData']['type'] === 'mw') {
+          this.mapVirtualBoundariesResponses[mapMID][1] = true;
         }
-        tools.envLog("[VacBot] *** mapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[event['resultData']['mid']]));
-        if (this.mapVirtualBoundariesResponses[event['resultData']['mid']][0] && this.mapVirtualBoundariesResponses[event['resultData']['mid']][1]) { //only return if both responses were processed
-          return {mapsetEvent: 'MapVirtualBoundaries', mapsetData: this.mapVirtualBoundaries[event['resultData']['mid']]};
+        tools.envLog("[VacBot] *** mapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[mapMID]));
+        if (this.mapVirtualBoundariesResponses[mapMID][0] && this.mapVirtualBoundariesResponses[mapMID][1]) { //only return if both responses were processed
+          return {
+            mapsetEvent: 'MapVirtualBoundaries',
+            mapsetData: this.mapVirtualBoundaries[mapMID]
+          };
         } else {
-          tools.envLog("[VacBot] *** skip message for map  " + event['resultData']['mid']);
+          tools.envLog("[VacBot] *** skip message for map  " + mapMID);
           return {mapsetEvent: 'skip'};
         }
       }
