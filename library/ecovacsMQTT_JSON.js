@@ -83,7 +83,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     },
                     "resource": this.vacuum['resource']
                 }
-            } else 
+            } else
             return {
                 "did": recipient,
                 "country": this.country,
@@ -268,7 +268,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         switch (command) {
             case "chargestate":
                 this.bot._handle_charge_state(event);
-                this.emit("ChargeState", this.bot.charge_status);
+                if (this.bot.charge_status) {
+                    this.emit("ChargeState", this.bot.charge_status);
+                }
                 break;
             case "battery":
             case "batteryinfo":
@@ -308,7 +310,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = this.bot._handle_mapsubset(event);
-                if(mapsubset["mapsubsetEvent"] != 'error') { 
+                if(mapsubset["mapsubsetEvent"] != 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;

@@ -384,7 +384,6 @@ class VacBot_950type extends VacBot {
       if (status) {
         this.charge_status = status;
       }
-      return;
     } else {
       tools.envLog("[VacBot] couldn't parse charge status ", event);
     }
