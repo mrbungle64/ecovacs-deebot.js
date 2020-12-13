@@ -381,7 +381,7 @@ class SetLifeSpan extends VacBotCommand_non950type {
     }
 }
 
-// Tested von Deebot 901
+// Tested on Deebot 901 and Ozmo 930
 class ResetLifeSpan extends VacBotCommand_non950type {
     constructor(component) {
         super('ResetLifeSpan', {

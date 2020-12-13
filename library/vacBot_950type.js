@@ -570,6 +570,11 @@ class VacBot_950type extends VacBot {
         let component = arguments[1];
         this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
+      case "resetlifespan":
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.ResetLifeSpan(arguments[1]));
+        }
+        break;
       case "getwaterlevel":
       case "getwaterboxinfo":
       case "getwaterinfo":

@@ -169,6 +169,14 @@ class GetLifeSpan extends VacBotCommand_950type {
     }
 }
 
+class ResetLifeSpan extends VacBotCommand_950type {
+    constructor(component) {
+        super('resetLifeSpan', {
+            'type': constants_type.COMPONENT_TO_ECOVACS[component]
+        });
+    }
+}
+
 class SetTime extends VacBotCommand_950type {
     constructor(timestamp, timezone) {
         super('setTime', {
@@ -344,6 +352,7 @@ module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.GetPosition = GetPosition;
 module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
