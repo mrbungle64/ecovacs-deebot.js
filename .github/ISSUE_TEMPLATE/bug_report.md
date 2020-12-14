@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Library version and source** (please complete the following information):
+**Library version** (please complete the following information):
  - Version: [e.g. "0.5.0"]
 
 **Deebot model** (please complete the following information):
