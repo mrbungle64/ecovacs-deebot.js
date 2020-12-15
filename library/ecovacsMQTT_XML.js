@@ -334,12 +334,15 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 break;
             case 'GetOnOff':
                 this.bot._handle_onOff(event);
-                this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
-                this.emit("ContinuousCleaningEnabled", this.bot.continuousCleaningEnabled);
-                this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
-                break;
-            case 'SetOnOff':
-                tools.envLog("[EcovacsMQTT] SetOnOff: %s", JSON.stringify(event, getCircularReplacer()));
+                if (this.bot.doNotDisturbEnabled) {
+                    this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
+                }
+                if (this.bot.continuousCleaningEnabled) {
+                    this.emit("ContinuousCleaningEnabled", this.bot.continuousCleaningEnabled);
+                }
+                if (this.bot.voiceReportDisabled) {
+                    this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
+                }
                 break;
             default:
                 tools.envLog("[EcovacsMQTT] Unknown command received: %s", command);

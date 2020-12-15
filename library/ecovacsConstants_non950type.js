@@ -76,6 +76,18 @@ exports.COMPONENT_FROM_ECOVACS = {
     'heap': 'filter'
 };
 
+exports.ON_OFF_TO_ECOVACS = {
+    'do_not_disturb': 'b',
+    'continuous_cleaning': 'g',
+    'silence_voice_report': 's'
+};
+
+exports.ON_OFF_FROM_ECOVACS = {
+    'b': 'do_not_disturb',
+    'g': 'continuous_cleaning',
+    's': 'silence_voice_report'
+};
+
 exports.ACTION = {
     'backward': 'backward',
     'forward': 'forward',

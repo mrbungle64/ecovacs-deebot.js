@@ -578,10 +578,9 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "move":
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.Move(arguments[1]));
         }
-        this.send_command(new vacBotCommand.Move(arguments[1]));
         break;
       case "movebackward":
         this.send_command(new vacBotCommand.MoveBackward());
@@ -602,9 +601,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetLogApiCleanLogs());
         break;
       case "getonoff":
-        if (arguments.length < 2) {
-          this.send_command(new vacBotCommand.GetOnOff());
-        } else {
+        if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.GetOnOff(arguments[1]));
         }
         break;

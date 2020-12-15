@@ -72,7 +72,12 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
-### 0.5.1 (beta)
+### 0.5.2 (alpha)
+* Implement ResetLifeSpan for 950 type models
+* Bump some dependencies
+* Several enhancements and fixes
+
+### 0.5.1
 * Initial support for Deebot U2 series
 * Improved support for T8 models
 * Improved handling of device classes
