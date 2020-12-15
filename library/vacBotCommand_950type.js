@@ -332,6 +332,20 @@ class GetCleanLogsPullCleanF extends VacBotCommand_950type {
     }
 }
 
+class GetVolume extends VacBotCommand_950type {
+    constructor() {
+        super('getVolume');
+    }
+}
+
+class SetVolume extends VacBotCommand_950type {
+    constructor(volume = 1) {
+        super('setVolume', {
+            'volume': volume
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -376,3 +390,5 @@ module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetCleanLogsPullCleanF = GetCleanLogsPullCleanF;
+module.exports.GetVolume = GetVolume;
+module.exports.SetVolume = SetVolume;

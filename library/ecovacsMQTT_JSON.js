@@ -355,7 +355,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
                 this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
                 this.emit("NetInfoMAC", this.bot.netInfoMAC);
-
                 break;
             case "setwaterinfo":
                 this.bot.run('GetWaterLevel');
@@ -366,6 +365,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'sleep':
                 this.bot._handle_sleep_status(event);
                 this.emit("SleepStatus", this.bot.sleep_status);
+                break;
+            case 'volume':
+                this.bot._handle_volume(event);
+                this.emit("Volume", this.bot.volume);
                 break;
             case "error":
                 this.bot._handle_error(event);

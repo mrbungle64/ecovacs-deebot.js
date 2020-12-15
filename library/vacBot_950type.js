@@ -16,6 +16,7 @@ class VacBot_950type extends VacBot {
     this.water_level = null;
     this.waterbox_info = null;
     this.sleep_status = null;
+    this.volume = 0;
 
     this.relocation_state = null;
     this.lastCleanLogUseAlternativeAPICall = false;
@@ -371,6 +372,13 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** water_level = " + this.water_level);
   }
 
+  _handle_volume(event) {
+    if (event.hasOwnProperty('resultData')) {
+      this.volume = event['resultData']['volume'];
+      tools.envLog("[VacBot] *** volume = " + this.volume);
+    }
+  }
+
   _handle_charge_state(event) {
     if (event.hasOwnProperty('resultData')) {
       let status = null;
@@ -613,6 +621,14 @@ class VacBot_950type extends VacBot {
       case "getcleanlogspullcleanf":
         this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetCleanLogsPullCleanF());
+        break;
+      case "getvolume":
+        this.send_command(new vacBotCommand.GetVolume());
+        break;
+      case "setvolume":
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.SetVolume(arguments[1]));
+        }
         break;
     }
   }
