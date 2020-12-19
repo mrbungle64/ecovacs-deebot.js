@@ -200,24 +200,17 @@ class VacBot_non950type extends VacBot {
   }
 
   _handle_pullM(event) {
-    const id = parseInt(event.attrs['id']) - 999999900;
-    const mData = event.attrs['m'];
-
+    const mssid = parseInt(event.attrs['id']) - 999999900;
+    const value = event.attrs['m'];
     tools.envLog("[VacBot] *** _handle_mapsubset " + JSON.stringify(event));
     if (id <= 39) {
       // spot areas ('sa')
-      let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
-          this.currentMapMID,
-          id,
-          '', //reportMapSubSet event comes without connections
-          mData,
-          '0'
-      );
+      let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mssid, '', value, '0');
       if (typeof this.mapSpotAreaInfos[this.currentMapMID] === 'undefined') {
         tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + this.currentMapMID);
         this.mapSpotAreaInfos[this.currentMapMID] = []; //initialize array for mapSpotAreaInfos if not existing
       }
-      this.mapSpotAreaInfos[this.currentMapMID][id] = mapSpotAreaInfo;
+      this.mapSpotAreaInfos[this.currentMapMID][mssid] = mapSpotAreaInfo;
       //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + this.currentMapMID + " = " + JSON.stringify(this.mapSpotAreaInfos[this.currentMapMID]));
       tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
       return {
@@ -226,12 +219,12 @@ class VacBot_non950type extends VacBot {
       };
     } else if (id <= 79) {
       // virtual walls ('vw')
-      let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, 'vw', id, mData);
+      let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mssid, 'vw', value);
       if (typeof this.mapVirtualBoundaryInfos[this.currentMapMID] === 'undefined') {
         tools.envLog("[VacBot] *** initialize mapVirtualBoundaryInfos for map " + this.currentMapMID);
         this.mapVirtualBoundaryInfos[this.currentMapMID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
       }
-      this.mapVirtualBoundaryInfos[this.currentMapMID][id] = mapVirtualBoundaryInfo;
+      this.mapVirtualBoundaryInfos[this.currentMapMID][mssid] = mapVirtualBoundaryInfo;
       tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
       return {
         mapsubsetEvent: 'MapVirtualBoundaryInfo',
