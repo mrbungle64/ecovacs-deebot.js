@@ -200,10 +200,14 @@ class VacBot_non950type extends VacBot {
   }
 
   _handle_pullM(event) {
-    const mssid = parseInt(event.attrs['id']) - 999999900;
+    const id = parseInt(event.attrs['id']) - 999999900;
+    let mssid = id;
+    if (event.attrs.hasOwnProperty('mid')) {
+      mssid = event.attrs['mid'];
+    }
     const value = event.attrs['m'];
     tools.envLog("[VacBot] *** _handle_mapsubset " + JSON.stringify(event));
-    if (mssid <= 39) {
+    if (id <= 39) {
       // spot areas ('sa')
       let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mssid, '', value, '0');
       if (typeof this.mapSpotAreaInfos[this.currentMapMID] === 'undefined') {
@@ -217,7 +221,8 @@ class VacBot_non950type extends VacBot {
         mapsubsetEvent: 'MapSpotAreaInfo',
         mapsubsetData: mapSpotAreaInfo
       };
-    } else if (mssid <= 79) {
+    } else if (id <= 79) {
+      mssid = id - 40;
       // virtual walls ('vw')
       let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mssid, 'vw', value);
       if (typeof this.mapVirtualBoundaryInfos[this.currentMapMID] === 'undefined') {
