@@ -597,9 +597,6 @@ class VacBot_non950type extends VacBot {
       case "moveturnaround":
         this.send_command(new vacBotCommand.MoveTurnAround());
         break;
-      case "getlogapicleanlogs":
-        this.send_command(new vacBotCommand.GetLogApiCleanLogs());
-        break;
       case "getonoff":
         if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.GetOnOff(arguments[1]));
@@ -615,19 +612,16 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "getcleanlogs":
-        if (this.isN79series()) {
-          // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
-          if (arguments.length < 2) {
+      case "getlogapicleanlogs":
+        if (this.useMqtt) {
+          this.send_command(new vacBotCommand.GetLogApiCleanLogs());
+        } else {
+          if (this.isN79series()) {
+            // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
             this.send_command(new vacBotCommand.GetLogs());
-          } else {
-            this.send_command(new vacBotCommand.GetLogs(arguments[1]));
           }
-        }
-        else {
-          if (arguments.length < 2) {
-            this.send_command(new vacBotCommand.GetCleanLogs());
-          } else {
-            this.send_command(new vacBotCommand.GetCleanLogs(arguments[1]));
+          else {
+              this.send_command(new vacBotCommand.GetCleanLogs());
           }
         }
         break;
