@@ -429,7 +429,7 @@ class VacBot_non950type extends VacBot {
     let component;
     switch (action.toLowerCase()) {
       case "clean":
-        if (arguments.length <= 1) {
+        if (arguments.length === 1) {
           this.send_command(new vacBotCommand.Clean());
         } else if (arguments.length === 2) {
           this.send_command(new vacBotCommand.Clean(arguments[1]));
@@ -466,10 +466,11 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.Charge());
         break;
       case "playsound":
-        if (arguments.length <= 1) {
+        if (arguments.length === 1) {
           this.send_command(new vacBotCommand.PlaySound());
+        } else {
+          this.send_command(new vacBotCommand.PlaySound(arguments[1]));
         }
-        this.send_command(new vacBotCommand.PlaySound(arguments[1]));
         break;
       case "getdeviceinfo":
       case "deviceinfo":
@@ -499,28 +500,21 @@ class VacBot_non950type extends VacBot {
       case "getlifespan":
       case "lifespan":
         if (arguments.length >= 2) {
-          component = arguments[1];
-          this.send_command(new vacBotCommand.GetLifeSpan(component));
+          this.send_command(new vacBotCommand.GetLifeSpan(arguments[1]));
         }
         break;
       case "resetlifespan":
         // Tested von Deebot 901 and Ozmo 930
         if (arguments.length >= 2) {
-          component = arguments[1];
-          this.send_command(new vacBotCommand.ResetLifeSpan(component));
+          this.send_command(new vacBotCommand.ResetLifeSpan(arguments[1]));
         }
         break;
       case "setlifespan":
         // Untested - seems to be only for the N79 series
-        if (arguments.length < 2) {
-          return;
-        }
-        component = arguments[1];
         if (arguments.length === 2) {
-          this.send_command(new vacBotCommand.SetLifeSpan(component));
+          this.send_command(new vacBotCommand.SetLifeSpan(arguments[1]));
         } else if (arguments.length === 3) {
-          let val = arguments[2];
-          this.send_command(new vacBotCommand.SetLifeSpan(component, val));
+          this.send_command(new vacBotCommand.SetLifeSpan(arguments[1], arguments[2]));
         }
         break;
       case "getwaterlevel":
@@ -603,9 +597,9 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "setonoff":
-        if (arguments.length < 2) {
+        if (arguments.length === 1) {
           this.send_command(new vacBotCommand.SetOnOff());
-        } else if (arguments.length < 3) {
+        } else if (arguments.length === 2) {
           this.send_command(new vacBotCommand.SetOnOff(arguments[1]));
         } else {
           this.send_command(new vacBotCommand.SetOnOff(arguments[1],arguments[2]));
@@ -619,9 +613,8 @@ class VacBot_non950type extends VacBot {
           if (this.isN79series()) {
             // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
             this.send_command(new vacBotCommand.GetLogs());
-          }
-          else {
-              this.send_command(new vacBotCommand.GetCleanLogs());
+          } else {
+            this.send_command(new vacBotCommand.GetCleanLogs());
           }
         }
         break;
