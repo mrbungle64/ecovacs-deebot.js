@@ -73,7 +73,8 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Changelog
 
 ### 0.5.2 (alpha)
-* Implement ResetLifeSpan for 950 type models
+* Implement ResetLifeSpan, SetVolume and GetVolume for 950 type models
+* Implement OnOff for non 950 type MQTT models
 * Bump some dependencies
 * Several enhancements and fixes
 

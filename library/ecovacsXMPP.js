@@ -201,9 +201,15 @@ class EcovacsXMPP extends Ecovacs {
                             break;
                         case 'GetOnOff':
                             this.bot._handle_onOff(secondChild);
-                            this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
-                            this.emit("ContinuousCleaningEnabled", this.bot.continuousCleaningEnabled);
-                            this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
+                            if (this.bot.doNotDisturbEnabled) {
+                                this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
+                            }
+                            if (this.bot.continuousCleaningEnabled) {
+                                this.emit("ContinuousCleaningEnabled", this.bot.continuousCleaningEnabled);
+                            }
+                            if (this.bot.voiceReportDisabled) {
+                                this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
+                            }
                             break;
                         case 'SetOnOff':
                             tools.envLog("[EcovacsXMPP] SetOnOff: %s", JSON.stringify(secondChild));
