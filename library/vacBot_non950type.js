@@ -470,9 +470,6 @@ class VacBot_non950type extends VacBot {
           this.send_command(new vacBotCommand.PlaySound(arguments[1]));
         }
         break;
-      case "GetDeviceInfo".toLowerCase():
-        this.send_command(new vacBotCommand.GetDeviceInfo());
-        break;
       case "GetCleanState".toLowerCase():
       case "CleanState".toLowerCase():
         this.send_command(new vacBotCommand.GetCleanState());
@@ -526,9 +523,6 @@ class VacBot_non950type extends VacBot {
       case "GetWaterBoxInfo".toLowerCase():
         this.send_command(new vacBotCommand.GetWaterBoxInfo());
         break;
-      case "GetFirmwareVersion".toLowerCase():
-        this.send_command(new vacBotCommand.GetFirmwareVersion());
-        break;
       case "GetNetInfo".toLowerCase():
         this.send_command(new vacBotCommand.GetNetInfo());
         break;
@@ -536,8 +530,6 @@ class VacBot_non950type extends VacBot {
       case "GetPosition".toLowerCase():
         this.send_command(new vacBotCommand.GetPos());
         break;
-      case "GetChargePos".toLowerCase():
-      case "GetChargePosition".toLowerCase():
       case "GetChargerPos".toLowerCase():
       case "GetChargerPosition".toLowerCase():
         this.send_command(new vacBotCommand.GetChargerPos());
@@ -595,11 +587,7 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "SetOnOff".toLowerCase():
-        if (arguments.length === 1) {
-          this.send_command(new vacBotCommand.SetOnOff());
-        } else if (arguments.length === 2) {
-          this.send_command(new vacBotCommand.SetOnOff(arguments[1]));
-        } else {
+        if (arguments.length === 3) {
           this.send_command(new vacBotCommand.SetOnOff(arguments[1],arguments[2]));
         }
         break;
