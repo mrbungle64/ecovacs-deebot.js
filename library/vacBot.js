@@ -1,6 +1,7 @@
 const constants = require('./ecovacsConstants.js');
 const tools = require('./tools');
 const errorCodes = require('./errorCodes');
+const i18n = require('./i18n');
 
 class VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country, server_address = null) {
@@ -196,6 +197,10 @@ class VacBot {
         this.ecovacs.disconnect();
         this.is_ready = false;
         clearInterval(this.pingInterval)
+    }
+
+    getAreaName_i18n(name, languageCode = 'en') {
+        return i18n.getSpotAreaName(name, languageCode);
     }
 }
 
