@@ -67,12 +67,13 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Known issues
 
 * There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug
-* "pause" does not work with Deebot 710/711
-* "stop" does not work with Deebot 711s
+* "Pause" command does not work with Deebot 710/711
+* "Stop" command does not work with Deebot 711s
+* "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
 
-### 0.5.2 (alpha)
+### 0.5.2 (beta)
 * Implement ResetLifeSpan, SetVolume and GetVolume for 950 type models
 * Implement OnOff for non 950 type MQTT models
 * Implement method to get translated spot area names
