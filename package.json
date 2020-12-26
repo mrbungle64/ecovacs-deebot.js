@@ -1,18 +1,17 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.5.2-beta.1",
+  "version": "0.5.2",
   "description": "Javascript library to drive an Ecovacs Deebot robot vacuum",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha",
     "test_windows": "SET NODE_ENV=test && mocha",
-    "appTest": "NODE_ENV=dev node example/app.js"
+    "appTest": "NODE_ENV=dev node example/app2.js"
   },
   "keywords": [
     "ecovacs",
     "deebot",
-    "ozmo",
-    "sucks"
+    "ozmo"
   ],
   "author": "Sascha Hölzel",
   "license": "GPL-3.0",

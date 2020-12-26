@@ -73,7 +73,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
-### 0.5.2 (beta)
+### 0.5.2
 * Implement ResetLifeSpan, SetVolume and GetVolume for 950 type models
 * Implement OnOff for non 950 type MQTT models
 * Implement method to get translated spot area names
