@@ -7,8 +7,12 @@ assignees: ''
 
 ---
 
-**Library version** (please complete the following information):
- - Version: [e.g. "0.5.0"]
+**Software version** (please complete the following information):
+- Library version: [e.g. "0.5.0", "0.5.2-alpha.6"]
+- Source: [e.g. "npm", "GitHub"]
+- Node.js version: [e.g. "v10.23.0"]
+- Operating system: [e.g. "Linux", "Windows 10"]
+- Hardware: [e.g. "Raspberry Pi 4"]
 
 **Deebot model** (please complete the following information):
  - Model name: [e.g. "Deebot Ozmo 950"]
