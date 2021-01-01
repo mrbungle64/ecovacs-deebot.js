@@ -43,7 +43,7 @@ class EcovacsMQTT extends Ecovacs {
         });
 
         this.client.on('error', (error) => {
-            ecovacsMQTT.emit('error', error.toString());
+            ecovacsMQTT.emit('error', error);
         });
     }
 
