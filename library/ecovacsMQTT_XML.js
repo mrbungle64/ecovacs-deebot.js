@@ -235,7 +235,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 break;
             case "PullM":
                 let mapsubset = this.bot._handle_pullM(event);
-                if (mapsubset["mapsubsetEvent"] !== 'error') {
+                if (mapsubset && (mapsubset["mapsubsetEvent"] !== 'error')) {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;

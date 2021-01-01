@@ -111,7 +111,7 @@ class EcovacsXMPP extends Ecovacs {
                             break;
                         case "PullM":
                             let mapsubset = this.bot._handle_pullM(secondChild);
-                            if (mapsubset["mapsubsetEvent"] !== 'error') {
+                            if (mapsubset && (mapsubset["mapsubsetEvent"] !== 'error')) {
                                 this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                             }
                             break;

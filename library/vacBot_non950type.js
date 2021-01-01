@@ -16,9 +16,7 @@ class VacBot_non950type extends VacBot {
     this.waterLevel = null;
     this.waterboxInfo = null;
     this.sleepStatus = null;
-
     this.dustcaseInfo = null;
-    this.getMapSetExecuted = false;
   }
 
   _handle_lifeSpan(event) {
@@ -147,18 +145,10 @@ class VacBot_non950type extends VacBot {
   }
 
   _handle_mapP(event) {
-    if (this.getMapSetExecuted) {
-      return;
-    }
     this.currentMapMID = event.attrs['i'];
-    this.maps = {
-      "maps": [
-        new map.EcovacsMap(
-            event.attrs['i'], 0, this.currentMapName, true, true, true)
-      ]
-    };
+    const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
+    this.maps = {"maps": [ecovacsMap]};
     this.run('GetMapSet');
-    this.getMapSetExecuted = true;
     return this.maps;
   }
 
@@ -200,45 +190,83 @@ class VacBot_non950type extends VacBot {
   }
 
   _handle_pullM(event) {
-    const id = parseInt(event.attrs['id']) - 999999900;
-    let mssid = id;
-    if (event.attrs.hasOwnProperty('mid')) {
-      mssid = event.attrs['mid'];
-    }
+    tools.envLog("[VacBot] *** _handle_pullM " + JSON.stringify(event));
+    let mid = this.pullM_getMid(event);
+    let type = this.pullM_getType(event);
     const value = event.attrs['m'];
-    tools.envLog("[VacBot] *** _handle_mapsubset " + JSON.stringify(event));
-    if (id <= 39) {
-      // spot areas ('sa')
-      let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mssid, '', value, '0');
-      if (typeof this.mapSpotAreaInfos[this.currentMapMID] === 'undefined') {
-        tools.envLog("[VacBot] *** initialize mapSpotAreaInfos for map " + this.currentMapMID);
-        this.mapSpotAreaInfos[this.currentMapMID] = []; //initialize array for mapSpotAreaInfos if not existing
+    if (!isNaN(mid) && (type !== '')) {
+      if (type === 'sa') {
+        let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value, '0');
+        if (!this.mapSpotAreaInfos[this.currentMapMID]) {
+          this.mapSpotAreaInfos[this.currentMapMID] = [];
+        }
+        if (this.mapSpotAreaInfos[this.currentMapMID][mid]) {
+          return null;
+        }
+        this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
+        tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
+        return {
+          mapsubsetEvent: 'MapSpotAreaInfo',
+          mapsubsetData: mapSpotAreaInfo
+        };
+      } else if (type === 'vw') {
+        let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mid, 'vw', value);
+        if (!this.mapVirtualBoundaryInfos[this.currentMapMID]) {
+          this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
+        }
+        if (this.mapVirtualBoundaryInfos[this.currentMapMID][mid]) {
+          return;
+        }
+        this.mapVirtualBoundaryInfos[this.currentMapMID][mid] = mapVirtualBoundaryInfo;
+        tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
+        return {
+          mapsubsetEvent: 'MapVirtualBoundaryInfo',
+          mapsubsetData: mapVirtualBoundaryInfo
+        };
       }
-      this.mapSpotAreaInfos[this.currentMapMID][mssid] = mapSpotAreaInfo;
-      //tools.envLog("[VacBot] *** MapSpotAreaInfosArray for map " + this.currentMapMID + " = " + JSON.stringify(this.mapSpotAreaInfos[this.currentMapMID]));
-      tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
-      return {
-        mapsubsetEvent: 'MapSpotAreaInfo',
-        mapsubsetData: mapSpotAreaInfo
-      };
-    } else if (id <= 79) {
-      mssid = id - 40;
-      // virtual walls ('vw')
-      let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mssid, 'vw', value);
-      if (typeof this.mapVirtualBoundaryInfos[this.currentMapMID] === 'undefined') {
-        tools.envLog("[VacBot] *** initialize mapVirtualBoundaryInfos for map " + this.currentMapMID);
-        this.mapVirtualBoundaryInfos[this.currentMapMID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
-      }
-      this.mapVirtualBoundaryInfos[this.currentMapMID][mssid] = mapVirtualBoundaryInfo;
-      tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
-      return {
-        mapsubsetEvent: 'MapVirtualBoundaryInfo',
-        mapsubsetData: mapVirtualBoundaryInfo
-      };
+    } else {
+      tools.envLog("[VacBot] *** _handle_pullM Missing mid or type");
     }
+    return {
+      mapsubsetEvent: 'error',
+      mapsubsetData: null
+    };
+  }
 
-    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event.attrs['tp']));
-    return {mapsubsetEvent: 'error'};
+  pullM_getId(event) {
+    return (parseInt(event.attrs['id']) - 999999900);
+  }
+
+  pullM_getMid(event) {
+    if (event.attrs.hasOwnProperty('mid')) {
+      // MQTT
+      return parseInt(event.attrs['mid']);
+    } else if (!this.useMqtt) {
+      // XMPP
+      const id = this.pullM_getId(event);
+      if (id <= 39) {
+        return id;
+      } else if (id <= 79) {
+        return (id - 40);
+      }
+    }
+    return null;
+  }
+
+  pullM_getType(event) {
+    if (event.attrs.hasOwnProperty('mid') && event.attrs.hasOwnProperty('tp')) {
+      // MQTT
+      return event.attrs['tp'];
+    } else if (!this.useMqtt) {
+      // XMPP
+      const id = this.pullM_getId(event);
+      if (id <= 39) {
+        return 'sa';
+      } else if (id <= 79) {
+        return 'vw';
+      }
+    }
+    return '';
   }
 
   _handle_deebotPosition(event) {
