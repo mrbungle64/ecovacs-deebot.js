@@ -146,6 +146,7 @@ class VacBot_non950type extends VacBot {
 
   _handle_mapP(event) {
     this.currentMapMID = event.attrs['i'];
+    this.currentMapIndex = 1;
     const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
     this.maps = {"maps": [ecovacsMap]};
     this.run('GetMapSet');
