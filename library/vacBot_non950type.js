@@ -47,7 +47,7 @@ class VacBot_non950type extends VacBot {
     } else if (event.hasOwnProperty('left') && (event.hasOwnProperty('total'))) {
       lifespan = parseInt(event['left']) / parseInt(event['total']) * 100; // This works e.g. for a Ozmo 930
     } else if (event.hasOwnProperty('left')) {
-      lifespan = parseInt(event['left']) / 60; // This works e.g. for a D901
+      lifespan = parseInt(event['left']) / 60; // This works e.g. for a Deebot 900/901
     }
     if (lifespan) {
       tools.envLog("[VacBot] lifeSpan %s: %s", type, lifespan);
@@ -73,15 +73,15 @@ class VacBot_non950type extends VacBot {
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
         type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
-      let statustype = null;
+      let action = '';
       if (event.attrs['st']) {
-        statustype = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
       }
       else if (event.attrs['act']) {
-        statustype = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
+        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
       }
-      if (statustype === 'stop' || statustype === 'pause') {
-        type = statustype
+      if (action === 'stop' || action === 'pause') {
+        type = action
       }
       this.cleanReport = type;
       tools.envLog("[VacBot] *** cleanStatus = " + this.cleanReport);
