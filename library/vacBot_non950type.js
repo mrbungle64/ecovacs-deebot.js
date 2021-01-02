@@ -149,17 +149,24 @@ class VacBot_non950type extends VacBot {
     const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
     this.maps = {"maps": [ecovacsMap]};
     this.run('GetMapSet');
+    this.mapSpotAreaInfos[this.currentMapMID] = [];
+    this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
     return this.maps;
   }
 
   _handle_mapSet(event) {
     if (event.attrs['tp'] === 'sa') {
-      let mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, event.attrs['msid']);
+      const msid = parseInt(event.attrs['msid']);
+      const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, msid);
+      let spotAreas = [];
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
-          let mid = event.children[mapIndex].attrs['mid'];
-          mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-          this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
+          let mid = parseInt(event.children[mapIndex].attrs['mid']);
+          if (!spotAreas[mid]) {
+            mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
+            this.run('PullM', mid, 'sa', this.currentMapMID, mid);
+            spotAreas[mid] = true;
+          }
         }
       }
       tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
@@ -168,18 +175,22 @@ class VacBot_non950type extends VacBot {
         mapsetData: mapSpotAreas
       };
     } else if (event.attrs['tp'] === 'vw') {
-      this.mapVirtualBoundaries[this.currentMapMID] = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
+      const mapVirtualBoundaries = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
+      let virtualBoundaries = [];
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
-          let mid = event.children[mapIndex].attrs['mid'];
-          this.mapVirtualBoundaries[this.currentMapMID].push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
-          this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
+          let mid = parseInt(event.children[mapIndex].attrs['mid']);
+          if (!virtualBoundaries[mid]) {
+            mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
+            this.run('PullM', mid, 'vw', this.currentMapMID, mid);
+            virtualBoundaries[mid] = true;
+          }
         }
       }
-      tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[this.currentMapMID]));
+      tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(mapVirtualBoundaries));
       return {
         mapsetEvent: 'MapVirtualBoundaries',
-        mapsetData: this.mapVirtualBoundaries[this.currentMapMID]
+        mapsetData: mapVirtualBoundaries
       };
     }
 
@@ -197,12 +208,6 @@ class VacBot_non950type extends VacBot {
     if (!isNaN(mid) && (type !== '')) {
       if (type === 'sa') {
         let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value, '0');
-        if (!this.mapSpotAreaInfos[this.currentMapMID]) {
-          this.mapSpotAreaInfos[this.currentMapMID] = [];
-        }
-        if (this.mapSpotAreaInfos[this.currentMapMID][mid]) {
-          return null;
-        }
         this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
         tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
         return {
@@ -211,12 +216,6 @@ class VacBot_non950type extends VacBot {
         };
       } else if (type === 'vw') {
         let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mid, 'vw', value);
-        if (!this.mapVirtualBoundaryInfos[this.currentMapMID]) {
-          this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
-        }
-        if (this.mapVirtualBoundaryInfos[this.currentMapMID][mid]) {
-          return;
-        }
         this.mapVirtualBoundaryInfos[this.currentMapMID][mid] = mapVirtualBoundaryInfo;
         tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
         return {
@@ -271,19 +270,21 @@ class VacBot_non950type extends VacBot {
 
   _handle_deebotPosition(event) {
     if ((event.attrs) && (event.attrs.hasOwnProperty('p')) && (event.attrs.hasOwnProperty('a'))) {
-      const posX = event.attrs['p'].split(",")[0];
-      const posY = event.attrs['p'].split(",")[1];
-      const angle = event.attrs['a'];
-      let currentSpotAreaID = map.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
-      this.deebotPosition = {
-        x: posX,
-        y: posY,
-        a: angle,
-        isInvalid: false,
-        currentSpotAreaID: currentSpotAreaID,
-        changeFlag: true
-      };
-      tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
+      if (this.mapSpotAreaInfos[this.currentMapMID]) {
+        const posX = event.attrs['p'].split(",")[0];
+        const posY = event.attrs['p'].split(",")[1];
+        const angle = event.attrs['a'];
+        let currentSpotAreaID = map.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
+        this.deebotPosition = {
+          x: posX,
+          y: posY,
+          a: angle,
+          isInvalid: false,
+          currentSpotAreaID: currentSpotAreaID,
+          changeFlag: true
+        };
+        tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
+      }
     }
   }
 
