@@ -157,15 +157,15 @@ class VacBot_non950type extends VacBot {
 
   _handle_mapSet(event) {
     if (event.attrs['tp'] === 'sa') {
-      const msid = parseInt(event.attrs['msid']);
+      const msid = event.attrs['msid'];
       const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, msid);
       let spotAreas = [];
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
-          let mid = parseInt(event.children[mapIndex].attrs['mid']);
+          let mid = event.children[mapIndex].attrs['mid'];
           if (!spotAreas[mid]) {
             mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-            this.run('PullM', mid, 'sa', this.currentMapMID, mid);
+            this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
             spotAreas[mid] = true;
           }
         }
@@ -180,10 +180,10 @@ class VacBot_non950type extends VacBot {
       let virtualBoundaries = [];
       for (let mapIndex in event.children) {
         if (event.children.hasOwnProperty(mapIndex)) {
-          let mid = parseInt(event.children[mapIndex].attrs['mid']);
+          let mid = event.children[mapIndex].attrs['mid'];
           if (!virtualBoundaries[mid]) {
             mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
-            this.run('PullM', mid, 'vw', this.currentMapMID, mid);
+            this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
             virtualBoundaries[mid] = true;
           }
         }
@@ -206,7 +206,7 @@ class VacBot_non950type extends VacBot {
     let mid = this.pullM_getMid(event);
     let type = this.pullM_getType(event);
     const value = event.attrs['m'];
-    if (!isNaN(mid) && (type !== '')) {
+    if (type !== '') {
       if (type === 'sa') {
         let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value, '0');
         this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
@@ -239,8 +239,8 @@ class VacBot_non950type extends VacBot {
   pullM_getMid(event) {
     if (event.attrs.hasOwnProperty('mid')) {
       // MQTT
-      return parseInt(event.attrs['mid']);
-    } else if (!this.useMqtt) {
+      return event.attrs['mid'];
+    } else {
       // XMPP
       const id = this.pullM_getId(event);
       if (id <= 39) {
@@ -256,7 +256,7 @@ class VacBot_non950type extends VacBot {
     if (event.attrs.hasOwnProperty('mid') && event.attrs.hasOwnProperty('tp')) {
       // MQTT
       return event.attrs['tp'];
-    } else if (!this.useMqtt) {
+    } else {
       // XMPP
       const id = this.pullM_getId(event);
       if (id <= 39) {
