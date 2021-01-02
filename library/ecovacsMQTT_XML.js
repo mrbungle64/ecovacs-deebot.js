@@ -292,8 +292,10 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 break;
             case 'DeebotPosition':
                 this.bot._handle_deebotPosition(event);
-                this.emit('DeebotPosition', this.bot.deebotPosition["x"]+","+this.bot.deebotPosition["y"]+","+this.bot.deebotPosition["a"]);
-                this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
+                if (this.bot.deebotPosition["x"] && this.bot.deebotPosition["y"]) {
+                    this.emit('DeebotPosition', this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
+                    this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
+                }
                 break;
             case 'ChargePosition':
                 this.bot._handle_chargePosition(event);

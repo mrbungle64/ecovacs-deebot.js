@@ -227,8 +227,7 @@ class VacBot_non950type extends VacBot {
       tools.envLog("[VacBot] *** _handle_pullM Missing mid or type");
     }
     return {
-      mapsubsetEvent: 'error',
-      mapsubsetData: null
+      mapsubsetEvent: 'error'
     };
   }
 
