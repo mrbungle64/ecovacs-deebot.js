@@ -213,7 +213,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let resultCodeMessage = "ok";
         let resultData = message;
 
-        if(type=="incoming"){
+        if (type === "incoming") {
             // topic: iot/atr/onBattery/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/j
             eventName = topic.split('/')[2]; //parse 3rd element from string iot/atr/onPos/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/
             // message: {"header":{"pri":1,"tzm":480,"ts":"1581849631152","ver":"0.0.1","fwVer":"1.7.6","hwVer":"0.1.1"},"body":{"data":{"value":99,"isLow":0}}}
@@ -221,7 +221,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
             tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message incoming: %s", message);
         }
-        if(type=="response") {
+        if (type === "response") {
             tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message response: %s", JSON.stringify(message, getCircularReplacer()));
             // message: {"header":{"pri":1,"tzm":480,"ts":"1581849460440","ver":"0.0.1","fwVer":"1.7.6","hwVer":"0.1.1"},
             // "body":{"code":0,"msg":"ok","data":{"enable":0,"amount":4}}}
@@ -229,7 +229,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             resultCodeMessage = message['body']['msg'];
             resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
         }
-        if(type=="logResponse") {
+        if (type === "logResponse") {
             tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] _handle_message logResponse: %s", JSON.stringify(message, getCircularReplacer()));
             //{"ret":"ok","log":{"ts":1586430548,"last":1826,"area":32,"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a1","imageUrl":"https://portal-eu.ecouser.net/api/lg/image/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a","type":"auto","stopReason":2}}
             //{"ret":"ok","map":{"ts":1586294523,"imageUrl":"https://portal-eu.ecouser.net/api/lg/offmap/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee@1111111111@1a1a1a1"}}
@@ -244,7 +244,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let result = {"resultCode":resultCode, "resultCodeMessage":resultCodeMessage, "resultData":resultData};
 
         this._handle_command(eventName, result);
-
     }
 
     _handle_command(command, event) {
@@ -304,44 +303,44 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot._handle_mapset(event);
-                if(mapset["mapsetEvent"] != 'error' || mapset["mapsetEvent"] != 'skip'){ //skip if not both boundary types are already processed
+                if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = this.bot._handle_mapsubset(event);
-                if(mapsubset["mapsubsetEvent"] != 'error') {
+                if (mapsubset["mapsubsetEvent"] !== 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
             case "lifespan":
                 this.bot._handle_life_span(event);
-                if(this.bot.components["filter"]) {
+                if (this.bot.components["filter"]) {
                     this.emit("LifeSpan_filter", this.bot.components["filter"]);
                 }
-                if(this.bot.components["side_brush"]) {
+                if (this.bot.components["side_brush"]) {
                     this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
                 }
-                if(this.bot.components["main_brush"]) {
+                if (this.bot.components["main_brush"]) {
                     this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
                 }
                 break;
             case "pos":
                 this.bot._handle_position(event);
-                if(this.bot.deebotPosition["changeFlag"]) {
-                    if(this.bot.deebotPosition["isInvalid"]==true && (this.bot.relocation_state == 'ok' || this.bot.relocation_state == null)) {
+                if (this.bot.deebotPosition["changeFlag"]) {
+                    if ((this.bot.deebotPosition["isInvalid"] === true) && ((this.bot.relocation_state === 'ok') || (this.bot.relocation_state === null))) {
                         this.bot.relocation_state = 'required';
                         this.emit("RelocationState", this.bot.relocation_state);
-                    } else {
-                        this.emit("DeebotPosition", this.bot.deebotPosition["x"]+","+this.bot.deebotPosition["y"]+","+this.bot.deebotPosition["a"]);
+                    } else if (this.bot.deebotPosition["x"] && this.bot.deebotPosition["y"]) {
+                        this.emit("DeebotPosition", this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
                         this.emit("DeebotPositionIsInvalid", this.bot.deebotPosition["isInvalid"]);
                         this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
                     }
-                    this.bot.deebotPosition["changeFlag"]=false;
+                    this.bot.deebotPosition["changeFlag"] = false;
                 }
-                if(this.bot.chargePosition["changeFlag"]) {
-                    this.emit("ChargePosition", this.bot.chargePosition["x"]+","+this.bot.chargePosition["y"]+","+this.bot.chargePosition["a"]);
-                    this.bot.chargePosition["changeFlag"]=false;
+                if (this.bot.chargePosition["changeFlag"]) {
+                    this.emit("ChargePosition", this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]);
+                    this.bot.chargePosition["changeFlag"] = false;
                 }
                 break;
             case "waterinfo":
