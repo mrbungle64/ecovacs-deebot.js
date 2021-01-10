@@ -73,7 +73,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
-### 0.5.3 (alpha)
+### 0.5.3
 * some refactoring and code improvements
 
 ### 0.5.2
