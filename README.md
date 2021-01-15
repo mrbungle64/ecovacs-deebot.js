@@ -7,7 +7,7 @@
 [![npm](https://img.shields.io/npm/dt/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
 [![Travis-CI](https://travis-ci.org/mrbungle64/ecovacs-deebot.js.svg?branch=master)](https://travis-ci.org/mrbungle64/ecovacs-deebot.js)
 
-A Node.js library for running Ecovacs Deebot vacuum cleaner robots.
+Library for running Ecovacs Deebot vacuum cleaner robots
 
 ## Installation
 
