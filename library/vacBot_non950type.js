@@ -347,63 +347,65 @@ class VacBot_non950type extends VacBot {
       let count = event.children.length;
       for (let c = 0; c < count; c++) {
         let childElement = event.children[c];
-        let timestamp;
-        if (childElement.attrs) {
-          timestamp = parseInt(childElement.attrs['s']);
-        } else {
-          timestamp = parseInt(childElement['ts']);
-        }
-        let key = timestamp + '@' + this.vacuum['resource'];
-        if (!this.cleanLog[key]) {
-          this.cleanLog[key] = {};
-        }
-        let id = this.cleanLog[key]['id'];
-        let squareMeters = this.cleanLog[key]['squareMeters'];
-        let lastTime = this.cleanLog[key]['last'];
-        let type = this.cleanLog[key]['type'];
-        let imageUrl = this.cleanLog[key]['imageUrl'];
-        let stopReason = this.cleanLog[key]['stopReason'];
-        let trigger = this.cleanLog[key]['trigger'];
-        if (childElement.attrs) {
-          timestamp = parseInt(childElement.attrs['s']);
-          squareMeters = parseInt(childElement.attrs['a']);
-          lastTime = parseInt(childElement.attrs['l']);
-          if (dictionary.STOP_REASON[childElement.attrs['f']]) {
-            stopReason = dictionary.STOP_REASON[childElement.attrs['f']];
+        if (childElement) {
+          let timestamp;
+          if (childElement.attrs) {
+            timestamp = parseInt(childElement.attrs['s']);
+          } else {
+            timestamp = parseInt(childElement['ts']);
           }
-          if (dictionary.TRIGGER[childElement.attrs['t']]) {
-            trigger = dictionary.TRIGGER[childElement.attrs['t']];
+          let key = timestamp + '@' + this.vacuum['resource'];
+          if (!this.cleanLog[key]) {
+            this.cleanLog[key] = {};
           }
-        } else {
-          id = childElement['id'];
-          timestamp = parseInt(childElement['ts']);
-          squareMeters = parseInt(childElement['area']);
-          lastTime = parseInt(childElement['last']);
-          type = childElement['type'];
-          imageUrl = childElement['imageUrl'];
-        }
-        let date = new Date(timestamp * 1000);
-        let totalTimeString = tools.getTimeString(lastTime);
+          let id = this.cleanLog[key]['id'];
+          let squareMeters = this.cleanLog[key]['squareMeters'];
+          let lastTime = this.cleanLog[key]['last'];
+          let type = this.cleanLog[key]['type'];
+          let imageUrl = this.cleanLog[key]['imageUrl'];
+          let stopReason = this.cleanLog[key]['stopReason'];
+          let trigger = this.cleanLog[key]['trigger'];
+          if (childElement.attrs) {
+            timestamp = parseInt(childElement.attrs['s']);
+            squareMeters = parseInt(childElement.attrs['a']);
+            lastTime = parseInt(childElement.attrs['l']);
+            if (dictionary.STOP_REASON[childElement.attrs['f']]) {
+              stopReason = dictionary.STOP_REASON[childElement.attrs['f']];
+            }
+            if (dictionary.TRIGGER[childElement.attrs['t']]) {
+              trigger = dictionary.TRIGGER[childElement.attrs['t']];
+            }
+          } else {
+            id = childElement['id'];
+            timestamp = parseInt(childElement['ts']);
+            squareMeters = parseInt(childElement['area']);
+            lastTime = parseInt(childElement['last']);
+            type = childElement['type'];
+            imageUrl = childElement['imageUrl'];
+          }
+          let date = new Date(timestamp * 1000);
+          let totalTimeString = tools.getTimeString(lastTime);
 
-        if ((c === 0) && (imageUrl)) {
-          this.cleanLog_lastImageUrl = imageUrl;
-          this.cleanLog_lastImageTimestamp = timestamp;
-          tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-          tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
-        }
+          if ((c === 0) && (imageUrl)) {
+            this.cleanLog_lastImageUrl = imageUrl;
+            this.cleanLog_lastImageTimestamp = timestamp;
+            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+          }
 
-        this.cleanLog[key] = {
-          'id': id,
-          'timestamp': timestamp,
-          'date': date,
-          'lastTime': lastTime,
-          'totalTimeString': totalTimeString,
-          'squareMeters': squareMeters,
-          'imageUrl': imageUrl,
-          'stopReason': stopReason,
-          'type': type,
-          'trigger': trigger
-        };
+          this.cleanLog[key] = {
+            'id': id,
+            'timestamp': timestamp,
+            'date': date,
+            'lastTime': lastTime,
+            'totalTimeString': totalTimeString,
+            'squareMeters': squareMeters,
+            'imageUrl': imageUrl,
+            'stopReason': stopReason,
+            'type': type,
+            'trigger': trigger
+          };
+        }
       }
     }
   }
