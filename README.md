@@ -73,6 +73,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.5.4 (alpha)
+* Bugfix for cleaning logs (non 950 type)
+
 ### 0.5.3
 * some refactoring and code improvements
 
