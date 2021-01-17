@@ -74,10 +74,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Changelog
 
 ### 0.5.4 (alpha)
-* Bugfix for cleaning logs (non 950 type)
+* Some fixes for cleaning logs (non 950 type)
 
 ### 0.5.3
-* some refactoring and code improvements
+* Some refactoring and code improvements
 
 ### 0.5.2
 * Implement ResetLifeSpan, SetVolume and GetVolume for 950 type models

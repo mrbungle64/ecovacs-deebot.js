@@ -23,8 +23,8 @@ class EcovacsMap {
         this.mapIndex = mapIndex;
         this.mapName = mapName;
         this.mapStatus = mapStatus;
-        this.mapIsCurrentMap = mapIsCurrentMap == 1 ? true : false;
-        this.mapIsBuilt = mapIsBuilt == 1 ? true : false;
+        this.mapIsCurrentMap = Number(mapIsCurrentMap) === 1 ? true : false;
+        this.mapIsBuilt = Number(mapIsBuilt) === 1 ? true : false;
     }
 
     toJSON() {
@@ -75,8 +75,10 @@ class EcovacsMapSpotAreaInfo {
     constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = "0") {
         this.mapID = mapID;
         this.mapSpotAreaID = mapSpotAreaID;
-        if (mapSubType == "0" || !SPOTAREA_SUBTYPES[mapSubType]["en"]) { //if default naming or ID not found in list of names
-            this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID)); //return character representation (0=A, 1=B, etc.)
+        if (mapSubType == "0" || !SPOTAREA_SUBTYPES[mapSubType]["en"]) {
+            // if default naming or ID not found in list of names
+            // return character representation (0=A, 1=B, etc.)
+            this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
         } else {
             this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]["en"]; //#LANG#
         }
@@ -104,9 +106,9 @@ class EcovacsMapVirtualBoundaries {
     }
 
     push(mapVirtualBoundary, mapVirtualBoundaryType = 'vw') {
-        if(mapVirtualBoundaryType == 'vw') {
+        if(mapVirtualBoundaryType === 'vw') {
             this.mapVirtualWalls.push(mapVirtualBoundary);
-        } else if(mapVirtualBoundaryType == 'mw') {
+        } else if(mapVirtualBoundaryType === 'mw') {
             this.mapNoMopZones.push(mapVirtualBoundary);
         }
     }
