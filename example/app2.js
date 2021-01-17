@@ -54,18 +54,8 @@ api.connect(email, password_hash).then(() => {
             vacbot.on('DustCaseInfo', (value) => {
                 console.log('[app2.js] DustCaseInfo: ' + value);
             });
-            vacbot.on('FirmwareVersion', (version) => {
-                console.log('[app2.js] FirmwareVersion: ' + version);
-            });
             vacbot.on('Error', (value) => {
                 console.log('[app2.js] Error: ' + value);
-            });
-            vacbot.on('NetInfoIP', (value) => {
-                console.log('[app2.js] NetInfoIP: ' + value);
-            });
-            // MQTT
-            vacbot.on('message', (event) => {
-                console.log('[app2.js] message: ' + event);
             });
         });
         vacbot.connect_and_wait_until_ready();
@@ -81,17 +71,21 @@ api.connect(email, password_hash).then(() => {
 
         setTimeout(() => {
             vacbot.run('Clean');
-            vacbot.run('GetLifeSpan', 'main_brush');
+            if (vacbot.hasMainBrush()) {
+                vacbot.run('GetLifeSpan', 'main_brush');
+            }
             vacbot.run('GetLifeSpan', 'side_brush');
             vacbot.run('GetLifeSpan', 'filter');
-            vacbot.run('GetNetInfo');
+            vacbot.run('GetCleanLogs');
         }, 6000);
 
         setInterval(() => {
             vacbot.run('GetCleanState');
             vacbot.run('GetChargeState');
             vacbot.run('GetBatteryState');
-            vacbot.run('GetWaterLevel');
+            if (vacbot.hasMoppingSystem()) {
+                vacbot.run('GetWaterLevel');
+            }
         }, 60000);
 
             //
