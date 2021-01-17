@@ -345,9 +345,6 @@ class VacBot_non950type extends VacBot {
   _handle_cleanLogs(event) {
     if (event.attrs) {
       let count = event.children.length;
-      if (event.attrs.hasOwnProperty('count')) {
-        count = parseInt(event.attrs['count']);
-      }
       for (let c = 0; c < count; c++) {
         let childElement = event.children[c];
         let timestamp;
