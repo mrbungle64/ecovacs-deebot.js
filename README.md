@@ -51,7 +51,6 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot Slim 2
 * Deebot N79 series
 * Deebot 600/601
-* Deebot 710/711
 * Deebot U2
 * Deebot Ozmo 610
 * Deebot Ozmo 900
@@ -59,21 +58,21 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot Ozmo T8 AIVI
 * Deebot Ozmo Slim 10
 
-### These models should work
+### These models should work (partially)
 * Deebot M88
 * Deebot 605
+* Deebot 710/711
 * Deebot U2 Pro/Power
 
 ## Known issues
 
 * There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug
-* "Pause" command does not work with Deebot 710/711
-* "Stop" command does not work with Deebot 711s
+* Some cleaning commands may not work with Deebot 710/711/711s
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
 
-### 0.5.4 (alpha)
+### 0.5.4
 * Some fixes for cleaning logs (non 950 type)
 
 ### 0.5.3
