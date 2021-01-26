@@ -55,8 +55,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot Ozmo 610
 * Deebot Ozmo 900
 * Deebot Ozmo T5
-* Deebot Ozmo T8/T8+
-* Deebot Ozmo T8 AIVI
+* Deebot Ozmo T8 series
 * Deebot Ozmo Slim 10
 
 ### These models should work (partially)
@@ -72,6 +71,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
+
+### 0.5.5 (alpha)
+* Added OZMO T5 and some more T8 models
 
 ### 0.5.4
 * Some fixes for cleaning logs (non 950 type)
