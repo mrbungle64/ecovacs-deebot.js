@@ -137,6 +137,10 @@ exports.KnownDevices = {
         "voice_report": true,
         'single_room': false
     },
+    "9rft3c": {
+        "name": "DEEBOT OZMO T5",
+        "deviceClassLink": "yna5xi"
+    },
     "b742vd": {
         "name": "DEEBOT OZMO T8",
         "deviceClassLink": "h18jkh"

@@ -54,6 +54,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot U2
 * Deebot Ozmo 610
 * Deebot Ozmo 900
+* Deebot Ozmo T5
 * Deebot Ozmo T8/T8+
 * Deebot Ozmo T8 AIVI
 * Deebot Ozmo Slim 10
