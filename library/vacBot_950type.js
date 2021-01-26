@@ -23,7 +23,7 @@ class VacBot_950type extends VacBot {
   }
 
   _handle_life_span(event) {
-    if (event['resultCode'] == '0') {
+    if (event['resultCode'] === 0) {
       for ( let component in event['resultData']) {
         let type = event['resultData'][component]["type"];
         let left = event['resultData'][component]["left"];
@@ -40,13 +40,11 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
       }
     }
-    return;
-
   }
 
   _handle_position(event) {
         // Deebot Ozmo 950
-        if (event['resultCode'] == '0') {
+        if (event['resultCode'] === 0) {
 
           //as deebotPos and chargePos can also appear in other messages (CleanReport)
           //the handling should be extracted to a seperate function
@@ -127,7 +125,7 @@ class VacBot_950type extends VacBot {
 
   _handle_clean_info(event) {
     tools.envLog("[VacBot] _handle_clean_info");
-    if (event['resultCode'] == '0') {
+    if (event['resultCode'] === 0) {
       if (event['resultData']['state'] === 'clean') {
         let type = event['resultData']['cleanState']['type'];
         if (typeof event['resultData']['cleanState']['content'] === "object") {
@@ -152,10 +150,10 @@ class VacBot_950type extends VacBot {
         this.lastUsedAreaValues = null;
       } else {
         this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
-        if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'returning') { //set charge state on returning to dock
+        if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'returning') { //set charge state on returning to dock
           this.charge_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
           tools.envLog("[VacBot] *** charge_status = %s", this.charge_status);
-        } else if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] == 'idle') {
+        } else if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'idle') {
           //when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
           //if this is not run, the status when canceling the return stays on 'returning'
           this.run('GetChargeState');
@@ -170,7 +168,7 @@ class VacBot_950type extends VacBot {
 
   _handle_cleanLogs(event) {
     tools.envLog("[VacBot] _handle_cleanLogs");
-    if (event['resultCode'] == '0') {
+    if (event['resultCode'] === 0) {
       let logs = [];
       if(event['resultData'].hasOwnProperty('logs')) {
         logs = event['resultData']['logs'];
@@ -215,7 +213,7 @@ class VacBot_950type extends VacBot {
 
   _handle_lastCleanLog(event) {
     tools.envLog("[VacBot] _handle_lastCleanLog");
-    if (event['resultCode'] == '0') {
+    if (event['resultCode'] === 0) {
       if (event['resultData'].hasOwnProperty('log')) {
         this.cleanLog_lastImageTimestamp = parseInt(event['resultData']['log']['ts']);
         this.cleanLog_lastImageUrl = event['resultData']['log']['imageUrl'];
@@ -393,7 +391,7 @@ class VacBot_950type extends VacBot {
   _handle_charge_state(event) {
     if (event.hasOwnProperty('resultData')) {
       let status = null;
-      if (event['resultCode'] == '0') {
+      if (event['resultCode'] === 0) {
         if (event['resultData']['isCharging'] == '1') {
           status = 'charging';
         } else if (event['resultData']['isCharging'] == '0') {
@@ -447,7 +445,7 @@ class VacBot_950type extends VacBot {
       case "spotarea":
         if (arguments.length < 3) {
           return;
-        } else if (arguments.length == 3) {
+        } else if (arguments.length === 3) {
           this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
         } else { // including number of cleanings
           this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2], arguments[3]));
