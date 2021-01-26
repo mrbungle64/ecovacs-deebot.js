@@ -250,21 +250,25 @@ class VacBot_950type extends VacBot {
     this.currentMapName = 'unknown';
     if (event['resultCode'] === 0) {
       this.maps = {"maps": []};
-      for ( let mapIndex in event['resultData']['info']) {
-        this.maps["maps"].push(
-          new map.EcovacsMap(
-            event['resultData']['info'][mapIndex]['mid'],
-            event['resultData']['info'][mapIndex]['index'],
-            event['resultData']['info'][mapIndex]['name'],
-            event['resultData']['info'][mapIndex]['status'],
-            event['resultData']['info'][mapIndex]['using'],
-            event['resultData']['info'][mapIndex]['built']
-          )
-        );
-        if (event['resultData']['info'][mapIndex]['using'] == 1) {
-          this.currentMapName = event['resultData']['info'][mapIndex]['name'];
-          this.currentMapMID = event['resultData']['info'][mapIndex]['mid'];
-          this.currentMapIndex = event['resultData']['info'][mapIndex]['index'];
+      const infoEvent = event['resultData']['info'];
+      for (let mapIndex in infoEvent) {
+        if (infoEvent.hasOwnProperty(mapIndex)) {
+          this.maps["maps"].push(
+              new map.EcovacsMap(
+                  infoEvent[mapIndex]['mid'],
+                  infoEvent[mapIndex]['index'],
+                  infoEvent[mapIndex]['name'],
+                  infoEvent[mapIndex]['status'],
+                  infoEvent[mapIndex]['using'],
+                  infoEvent[mapIndex]['built']
+              )
+          );
+          if (infoEvent[mapIndex]['using'] === 1) {
+            tools.envLog("[VacBot] *** YEAH");
+            this.currentMapName = infoEvent[mapIndex]['name'];
+            this.currentMapMID = infoEvent[mapIndex]['mid'];
+            this.currentMapIndex = infoEvent[mapIndex]['index'];
+          }
         }
       }
     }
