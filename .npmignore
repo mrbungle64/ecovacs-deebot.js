@@ -26,3 +26,5 @@ tsconfig.json
 package-lock.json
 
 example/myInfo.js
+
+library/map/
