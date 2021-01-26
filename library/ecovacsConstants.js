@@ -161,6 +161,26 @@ exports.KnownDevices = {
         "name": "DEEBOT OZMO T8 AIVI +",
         "deviceClassLink": "h18jkh"
     },
+    "wgxm70": {
+        "name": "DEEBOT T8",
+        "deviceClassLink": "h18jkh"
+    },
+    "bs40nz": {
+        "name": "DEEBOT T8 AIVI",
+        "deviceClassLink": "h18jkh"
+    },
+    "a1nNMoAGAsH": {
+        "name": "DEEBOT T8 MAX",
+        "deviceClassLink": "h18jkh"
+    },
+    "vdehg6": {
+        "name": "DEEBOT T8 AIVI +",
+        "deviceClassLink": "h18jkh"
+    },
+    "no61kx": {
+        "name": "DEEBOT T8 POWER",
+        "deviceClassLink": "h18jkh"
+    },
     "155": {
         "name": "DEEBOT N79S/SE",
         "950type": false,
