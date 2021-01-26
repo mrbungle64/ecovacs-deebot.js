@@ -43,71 +43,65 @@ class VacBot_950type extends VacBot {
   }
 
   _handle_position(event) {
-        // Deebot Ozmo 950
-        if (event['resultCode'] === 0) {
-
-          //as deebotPos and chargePos can also appear in other messages (CleanReport)
-          //the handling should be extracted to a seperate function
-          if (event['resultData']['deebotPos']) {
-            // check if position changed or currentSpotAreaID unknown
-            if (event['resultData']['deebotPos']['x'] != this.deebotPosition.x
-              || event['resultData']['deebotPos']['y'] != this.deebotPosition.y
-              || event['resultData']['deebotPos']['a'] != this.deebotPosition.a
-              || event['resultData']['deebotPos']['invalid'] != this.deebotPosition.isInvalid
-              || this.deebotPosition.currentSpotAreaID == 'unknown'
-              )
-            {
-              let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
-              tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
-              this.deebotPosition = {
-                x:event['resultData']['deebotPos']['x'],
-                y:event['resultData']['deebotPos']['y'],
-                a:event['resultData']['deebotPos']['a'],
-                isInvalid:event['resultData']['deebotPos']['invalid']==1?true:false,
-                currentSpotAreaID: currentSpotAreaID,
-                changeFlag: true
-              };
-              tools.envLog("[VacBot] *** Deebot Position = "
-                + 'x=' + this.deebotPosition.x
-                + ' y=' + this.deebotPosition.y
-                + ' a=' + this.deebotPosition.a
-                + ' currentSpotAreaID=' + this.deebotPosition.currentSpotAreaID
-                + ' isInvalid=' + this.deebotPosition.isInvalid
-              );
-            }
-          }
-
-          if (event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
-            //there can be more than one charging station only handles first charging station
-            // check if position changed
-            if (event['resultData']['chargePos'][0]['x'] != this.chargePosition.x
-              || event['resultData']['chargePos'][0]['y'] != this.chargePosition.y
-              || event['resultData']['chargePos'][0]['a'] != this.chargePosition.a
-              )
-            {
-              this.chargePosition = {
-                x:event['resultData']['chargePos'][0]['x'],
-                y:event['resultData']['chargePos'][0]['y'],
-                a:event['resultData']['chargePos'][0]['a'],
-                changeFlag: true
-              };
-              tools.envLog("[VacBot] *** Charge Position = "
-                + 'x=' + this.chargePosition.x
-                + ' y=' + this.chargePosition.y
-                + ' a=' + this.chargePosition.a
-              );
-            }
-          }
-          return;
+    if (event['resultCode'] === 0) {
+      //as deebotPos and chargePos can also appear in other messages (CleanReport)
+      //the handling should be extracted to a seperate function
+      if (event['resultData']['deebotPos']) {
+        // check if position changed or currentSpotAreaID unknown
+        if (event['resultData']['deebotPos']['x'] != this.deebotPosition.x
+            || event['resultData']['deebotPos']['y'] != this.deebotPosition.y
+            || event['resultData']['deebotPos']['a'] != this.deebotPosition.a
+            || event['resultData']['deebotPos']['invalid'] != this.deebotPosition.isInvalid
+            || this.deebotPosition.currentSpotAreaID == 'unknown'
+        ) {
+          let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
+          tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
+          this.deebotPosition = {
+            x: event['resultData']['deebotPos']['x'],
+            y: event['resultData']['deebotPos']['y'],
+            a: event['resultData']['deebotPos']['a'],
+            isInvalid: event['resultData']['deebotPos']['invalid'] == 1 ? true : false,
+            currentSpotAreaID: currentSpotAreaID,
+            changeFlag: true
+          };
+          tools.envLog("[VacBot] *** Deebot Position = "
+              + 'x=' + this.deebotPosition.x
+              + ' y=' + this.deebotPosition.y
+              + ' a=' + this.deebotPosition.a
+              + ' currentSpotAreaID=' + this.deebotPosition.currentSpotAreaID
+              + ' isInvalid=' + this.deebotPosition.isInvalid
+          );
         }
-        if (!event) {
-          tools.envLog("[VacBot] _handle_deebot_position event undefined");
+      }
+
+      if (event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
+        //there can be more than one charging station only handles first charging station
+        // check if position changed
+        if (event['resultData']['chargePos'][0]['x'] != this.chargePosition.x
+            || event['resultData']['chargePos'][0]['y'] != this.chargePosition.y
+            || event['resultData']['chargePos'][0]['a'] != this.chargePosition.a
+        ) {
+          this.chargePosition = {
+            x: event['resultData']['chargePos'][0]['x'],
+            y: event['resultData']['chargePos'][0]['y'],
+            a: event['resultData']['chargePos'][0]['a'],
+            changeFlag: true
+          };
+          tools.envLog("[VacBot] *** Charge Position = "
+              + 'x=' + this.chargePosition.x
+              + ' y=' + this.chargePosition.y
+              + ' a=' + this.chargePosition.a
+          );
         }
+      }
+    }
+    if (!event) {
+      tools.envLog("[VacBot] _handle_deebot_position event undefined");
+    }
   }
 
   _handle_fan_speed(event) {
     this.fan_speed = dictionary.FAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
-    //this.fan_speed = event['resultData']['speed'];
     tools.envLog("[VacBot] *** fan_speed = %s", this.fan_speed);
   }
 
@@ -168,43 +162,47 @@ class VacBot_950type extends VacBot {
 
   _handle_cleanLogs(event) {
     tools.envLog("[VacBot] _handle_cleanLogs");
-    if (event['resultCode'] === 0) {
+    // Unlike the others, resultCode seems to be a string
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       let logs = [];
-      if(event['resultData'].hasOwnProperty('logs')) {
+      if (event['resultData'].hasOwnProperty('logs')) {
         logs = event['resultData']['logs'];
-      } else if(event['resultData'].hasOwnProperty('log')) {
+      } else if (event['resultData'].hasOwnProperty('log')) {
         logs = event['resultData']['log'];
       }
 
-      for ( let logIndex in logs) {
-        if (!this.cleanLog[logs[logIndex]['id']] ) { //log not yet existing
-          let squareMeters = parseInt(logs[logIndex]['area']);
-          tools.envLog("[VacBot] cleanLogs %s: %s m2", logIndex, squareMeters);
-          let timestamp = parseInt(logs[logIndex]['ts']);
-          let date = new Date(timestamp*1000);
-          tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, date.toString());
-          let len = parseInt(logs[logIndex]['last']);
-          let hours = Math.floor(len / 3600);
-          let minutes = Math.floor((len % 3600) / 60);
-          let seconds = Math.floor(len % 60);
-          let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
-          tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
-          let imageUrl = logs[logIndex]['imageUrl'];
-          if ((!this.lastCleanLogUseAlternativeAPICall)
-              && (this.cleanLog_lastImageTimestamp < timestamp || (!this.cleanLog_lastImageTimestamp))) {
-            this.cleanLog_lastImageUrl = imageUrl;
-            this.cleanLog_lastImageTimestamp = timestamp;
-            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+      for (let logIndex in logs) {
+        if (logs.hasOwnProperty(logIndex)) {
+          if (!this.cleanLog[logs[logIndex]['id']]) { //log not yet existing
+            let squareMeters = parseInt(logs[logIndex]['area']);
+            tools.envLog("[VacBot] cleanLogs %s: %s m2", logIndex, squareMeters);
+            let timestamp = parseInt(logs[logIndex]['ts']);
+            let date = new Date(timestamp * 1000);
+            tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, date.toString());
+            let len = parseInt(logs[logIndex]['last']);
+            let hours = Math.floor(len / 3600);
+            let minutes = Math.floor((len % 3600) / 60);
+            let seconds = Math.floor(len % 60);
+            let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
+            tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
+            let imageUrl = logs[logIndex]['imageUrl'];
+            if ((!this.lastCleanLogUseAlternativeAPICall)
+                && (this.cleanLog_lastImageTimestamp < timestamp || (!this.cleanLog_lastImageTimestamp))) {
+              this.cleanLog_lastImageUrl = imageUrl;
+              this.cleanLog_lastImageTimestamp = timestamp;
+              tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+              tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+            }
+            this.cleanLog[logs[logIndex]['id']] = {
+              'squareMeters': squareMeters,
+              'timestamp': timestamp,
+              'lastTime': len,
+              'imageUrl': imageUrl,
+              'type': logs[logIndex]['type'],
+              'stopReason': logs[logIndex]['stopReason']
+            };
           }
-          this.cleanLog[logs[logIndex]['id']] = {
-            'squareMeters': squareMeters,
-            'timestamp': timestamp,
-            'lastTime': len,
-            'imageUrl': imageUrl,
-            'type': logs[logIndex]['type'],
-            'stopReason': logs[logIndex]['stopReason']
-          };
         }
       }
     }
