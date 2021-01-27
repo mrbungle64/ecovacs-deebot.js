@@ -23,7 +23,8 @@ class VacBot_950type extends VacBot {
   }
 
   _handle_life_span(event) {
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       for ( let component in event['resultData']) {
         let type = event['resultData'][component]["type"];
         let left = event['resultData'][component]["left"];
@@ -43,7 +44,8 @@ class VacBot_950type extends VacBot {
   }
 
   _handle_position(event) {
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       //as deebotPos and chargePos can also appear in other messages (CleanReport)
       //the handling should be extracted to a seperate function
       if (event['resultData']['deebotPos']) {
@@ -119,7 +121,8 @@ class VacBot_950type extends VacBot {
 
   _handle_clean_info(event) {
     tools.envLog("[VacBot] _handle_clean_info");
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       if (event['resultData']['state'] === 'clean') {
         let type = event['resultData']['cleanState']['type'];
         if (typeof event['resultData']['cleanState']['content'] === "object") {
@@ -211,7 +214,8 @@ class VacBot_950type extends VacBot {
 
   _handle_lastCleanLog(event) {
     tools.envLog("[VacBot] _handle_lastCleanLog");
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       if (event['resultData'].hasOwnProperty('log')) {
         this.cleanLog_lastImageTimestamp = parseInt(event['resultData']['log']['ts']);
         this.cleanLog_lastImageUrl = event['resultData']['log']['imageUrl'];
@@ -244,7 +248,8 @@ class VacBot_950type extends VacBot {
 
   _handle_cachedmapinfo(event) {
     this.currentMapName = 'unknown';
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       this.maps = {"maps": []};
       const infoEvent = event['resultData']['info'];
       for (let mapIndex in infoEvent) {
@@ -275,7 +280,8 @@ class VacBot_950type extends VacBot {
   }
 
   _handle_mapset(event) {
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       let mapMID = event['resultData']['mid'];
       if (isNaN(mapMID)) {
         if (this.currentMapMID) {
@@ -331,7 +337,8 @@ class VacBot_950type extends VacBot {
   }
 
   _handle_mapsubset(event) {
-    if (event['resultCode'] === 0) {
+    const resultCode = parseInt(event['resultCode']);
+    if (resultCode === 0) {
       let mapMID = event['resultData']['mid'];
       if (isNaN(mapMID)) {
         mapMID = this.currentMapMID;
@@ -389,10 +396,12 @@ class VacBot_950type extends VacBot {
   _handle_charge_state(event) {
     if (event.hasOwnProperty('resultData')) {
       let status = null;
-      if (event['resultCode'] === 0) {
-        if (event['resultData']['isCharging'] == '1') {
+      const resultCode = parseInt(event['resultCode']);
+      if (resultCode === 0) {
+        const isCharging = parseInt(event['resultData']['isCharging']);
+        if (isCharging === 1) {
           status = 'charging';
-        } else if (event['resultData']['isCharging'] == '0') {
+        } else if (isCharging === 0) {
           status = 'idle';
         }
       }
