@@ -74,7 +74,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### 0.5.5 (alpha)
 * Added OZMO T5 and some more T8 models
-* Some code refactoring
+* Several enhancements and fixes
 
 ### 0.5.4
 * Some fixes for cleaning logs (non 950 type)
