@@ -218,46 +218,48 @@ exports.KnownDevices = {
         "deviceClassLink": "ipzjy0"
     },
     "nq9yhl": {
-        "name": "DEEBOT U2 PRO"
+        "name": "DEEBOT U2 PRO",
+        "deviceClassLink": "ipzjy0"
     },
     "y2qy3m": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "7j1tu6": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "ts2ofl": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "c0lwyn": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "d4v1pm": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "u6eqoa": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "12baap": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "u4h1uk": {
         "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "nq9yhl"
+        "deviceClassLink": "ipzjy0"
     },
     "1zqysa": {
-        "name": "DEEBOT U2 POWER"
+        "name": "DEEBOT U2 POWER",
+        "deviceClassLink": "ipzjy0"
     },
     "chmi0g": {
         "name": "DEEBOT U2 POWER",
-        "deviceClassLink": "1zqysa"
+        "deviceClassLink": "ipzjy0"
     }
 };
 
