@@ -147,12 +147,13 @@ class VacBot_950type extends VacBot {
         this.lastUsedAreaValues = null;
       } else {
         this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
-        if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'returning') { //set charge state on returning to dock
+        if (dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'returning') {
+          // set charge state on returning to dock
           this.charge_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
           tools.envLog("[VacBot] *** charge_status = %s", this.charge_status);
-        } else if(dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'idle') {
-          //when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
-          //if this is not run, the status when canceling the return stays on 'returning'
+        } else if (dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'idle') {
+          // when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
+          // if this is not run, the status when canceling the return stays on 'returning'
           this.run('GetChargeState');
         }
         this.lastUsedAreaValues = null;
@@ -375,7 +376,9 @@ class VacBot_950type extends VacBot {
       }
 
       tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event['resultData']['type']));
-      return {mapsubsetEvent: 'error'};
+      return {
+        mapsubsetEvent: 'error'
+      };
     }
   }
 
@@ -420,8 +423,8 @@ class VacBot_950type extends VacBot {
 
   _handle_error(event) {
     this.errorCode = event['resultData']['code'].toString();
-
-    if (errorCodes[this.errorCode]) { // known errorCode from library
+    // known errorCode from library
+    if (errorCodes[this.errorCode]) {
       this.errorDescription = errorCodes[this.errorCode];
     } else {
       this.errorDescription = 'unknown errorCode: ' + this.errorCode;
@@ -432,7 +435,6 @@ class VacBot_950type extends VacBot {
 
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
-
     switch (action.toLowerCase()) {
       case "clean":
         if (arguments.length <= 1) {
