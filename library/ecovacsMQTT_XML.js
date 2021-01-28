@@ -181,7 +181,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             const action = arguments[1];
             attrs = action.args
         } else {
-            if (firstChild.attributes === undefined) {
+            if (!firstChild || (firstChild.attributes === undefined)) {
                 return {
                     'event': 'unknown',
                     'attrs': '',
