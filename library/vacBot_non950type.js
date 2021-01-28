@@ -17,6 +17,8 @@ class VacBot_non950type extends VacBot {
     this.waterboxInfo = null;
     this.sleepStatus = null;
     this.dustcaseInfo = null;
+
+    this.getMapsExecuted = false;
   }
 
   _handle_lifeSpan(event) {
@@ -145,6 +147,10 @@ class VacBot_non950type extends VacBot {
   }
 
   _handle_mapP(event) {
+    // Execute only if the GetMaps cmd was received
+    if (this.handleMapExecuted) {
+      return null;
+    }
     this.currentMapMID = event.attrs['i'];
     this.currentMapIndex = 1;
     const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
@@ -152,6 +158,7 @@ class VacBot_non950type extends VacBot {
     this.run('GetMapSet');
     this.mapSpotAreaInfos[this.currentMapMID] = [];
     this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
+    this.handleMapExecuted = true;
     return this.maps;
   }
 
@@ -577,6 +584,7 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetMapSet('vw'));
         break;
       case "GetMaps".toLowerCase():
+        this.handleMapExecuted = false;
         this.send_command(new vacBotCommand.GetMapM());
         break;
       case "PullMP".toLowerCase():

@@ -180,7 +180,6 @@ function isPositionInSpotArea(position, spotAreaInfos) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 
-    tools.envLog("[isPositionInSpotArea] spotAreaInfos: " + JSON.stringify(spotAreaInfos));
     if (tools.isCanvasModuleAvailable()) {
         for (let infoID in spotAreaInfos) {
             if (spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]), parseInt(position[1]))) {
