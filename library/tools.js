@@ -96,19 +96,19 @@ function isObject(val) {
 
 function isValidJsonString(str) {
     try {
-        envLog("[tools] isValidJsonString() str: %s", str);
+        envLog('[tools] isValidJsonString() str: %s', str);
         JSON.parse(str);
     } catch (e) {
-        envLog("[tools] isValidJsonString() false");
+        envLog('[tools] isValidJsonString() false');
         return false;
     }
-    envLog("[tools] isValidJsonString() true");
+    envLog('[tools] isValidJsonString() true');
     return true;
 }
 
 function getEventNameForCommandString(str) {
-    let command = str.toLowerCase().replace(/^_+|_+$/g, '').replace("get","").replace("server", "");
-    if(command.startsWith("on")) { //950 series incoming events
+    let command = str.toLowerCase().replace(/^_+|_+$/g, '').replace('get','').replace('server', '');
+    if (command.startsWith('on')) { //950 series incoming events
         command = command.substring(2);
     }
     switch (command.toLowerCase()) {
@@ -177,16 +177,16 @@ function getEventNameForCommandString(str) {
 }
 
 envLog = function () {
-    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev") {
-        if (arguments[0]=="[DEBUG_INCOMING_RAW]" || arguments[0]=="[DEBUG_INCOMING]") {
+    if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
+        if ((arguments[0] === '[DEBUG_INCOMING_RAW]') || (arguments[0] === '[DEBUG_INCOMING]')) {
             console.log.apply(this, [...arguments].slice(1)); //to keep things as is for dev
-         } else {
+        } else {
             console.log.apply(this, arguments);
-         }
+        }
     } else {
-        if (process.env.NODE_ENV === "DEBUG_INCOMING_RAW" && arguments[0]=="[DEBUG_INCOMING_RAW]") { // only process debug messages
+        if ((process.env.NODE_ENV === 'DEBUG_INCOMING_RAW') && (arguments[0] === '[DEBUG_INCOMING_RAW]')) { // only process debug messages
             console.log.apply(this, [...arguments].slice(1));
-        }else if (process.env.NODE_ENV === "DEBUG_INCOMING" && arguments[0]=="[DEBUG_INCOMING]") { // only process debug messages
+        } else if ((process.env.NODE_ENV === 'DEBUG_INCOMING') && (arguments[0] === '[DEBUG_INCOMING]')) { // only process debug messages
             console.log.apply(this, [...arguments].slice(1));
         }
     }

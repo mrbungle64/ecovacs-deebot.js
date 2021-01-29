@@ -100,7 +100,6 @@ function httpGetJson(url) {
         // consume response data to free up memory
         res.resume();
         throw error;
-        return;
       }
 
       res.setEncoding('utf8');

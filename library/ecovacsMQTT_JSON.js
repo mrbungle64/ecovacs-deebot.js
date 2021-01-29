@@ -20,7 +20,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     _wrap_command_getPayload(action) {
-        let payload = null;
+        let payload;
 
         tools.envLog("[EcovacsMQTT_JSON] _wrap_command() args: ", JSON.stringify(action.args, getCircularReplacer()));
 
@@ -48,7 +48,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             tools.envLog("[EcovacsMQTT_JSON] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
             return {};
         }
-        if (action.api == constants.IOTDEVMANAGERAPI) {
+        if (action.api === constants.IOTDEVMANAGERAPI) {
             return {
                 'auth': {
                     'realm': constants.REALM,
@@ -67,8 +67,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 "toType": this.vacuum['class']
             }
         }
-        if (action.api == constants.LGLOGAPI) {
-            if(action.name == 'Pull') { //temporary quickndirty to test new function
+        if (action.api === constants.LGLOGAPI) {
+            if(action.name === 'Pull') { //temporary quickndirty to test new function
                 return {
                     "did": recipient,
                     "country": this.country,
@@ -106,7 +106,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 continent: this.continent
             });
             url = url + "?cv=1.67.3&t=a&av=1.3.1";
-            if (api == constants.IOTDEVMANAGERAPI) {
+            if (api === constants.IOTDEVMANAGERAPI) {
                 url = url + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
             }
 
@@ -186,10 +186,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (message) {
             tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() message: %s", JSON.stringify(message, getCircularReplacer()));
 
-            if (action.api == constants.IOTDEVMANAGERAPI && message.hasOwnProperty('resp')) {
+            if ((action.api === constants.IOTDEVMANAGERAPI) && message.hasOwnProperty('resp')) {
                 tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
                 this._handle_message(command, message['resp'], "response");
-            } else if (action.api == constants.LGLOGAPI) {
+            } else if (action.api === constants.LGLOGAPI) {
                 tools.envLog("[EcovacsMQTT_JSON] _handle_command_response() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
                 this._handle_message(command, message, "logResponse");
             }

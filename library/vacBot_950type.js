@@ -54,7 +54,7 @@ class VacBot_950type extends VacBot {
             || event['resultData']['deebotPos']['y'] != this.deebotPosition.y
             || event['resultData']['deebotPos']['a'] != this.deebotPosition.a
             || event['resultData']['deebotPos']['invalid'] != this.deebotPosition.isInvalid
-            || this.deebotPosition.currentSpotAreaID == 'unknown'
+            || this.deebotPosition.currentSpotAreaID === 'unknown'
         ) {
           let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
           tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);

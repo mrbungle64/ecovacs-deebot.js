@@ -125,7 +125,7 @@ class VacBot_non950type extends VacBot {
   }
 
   _handle_batteryInfo(event) {
-    let value = null;
+    let value;
     if (event.hasOwnProperty('ctl')) {
       value = event['ctl']['battery']['power'];
     } else {
