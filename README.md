@@ -73,6 +73,9 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.5.6 (alpha)
+* Some fixes
+
 ### 0.5.5
 * Added OZMO T5 and some more T8 models
 * Several enhancements and fixes
