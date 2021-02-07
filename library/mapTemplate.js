@@ -188,8 +188,9 @@ function isPositionInSpotArea(position, spotAreaInfos) {
                 }
             }
         }
+        return 'unknown';
     }
-    return 'unknown';
+    return 'void';
 }
 
 module.exports.EcovacsMap = EcovacsMap;
