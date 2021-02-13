@@ -25,7 +25,11 @@ class Ecovacs extends EventEmitter {
 
         if (!server_address) {
             let prefix = this.bot.useMqtt ? 'mq' : 'msg';
-            this.server_address = '{prefix}-{continent}.ecouser.net'.format({
+            let mainUrl = '{prefix}-{continent}.ecouser.net';
+            if (this.country.toLowerCase() === 'cn') {
+                mainUrl = '{prefix}.ecouser.net';
+            }
+            this.server_address = mainUrl.format({
                 prefix: prefix,
                 continent: continent
             });
