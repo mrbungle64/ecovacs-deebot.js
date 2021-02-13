@@ -193,7 +193,7 @@ module.exports = {
   },
   "CN": {
     "name": "China",
-    "continent": "AS"
+    "continent": "WW"
   },
   "CO": {
     "name": "Colombia",
