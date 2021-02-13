@@ -73,6 +73,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Changelog
 
+### 0.6.0 (alpha)
+* Switch to newer app version login 
+* Support for Chinese server login
+
 ### 0.5.6
 * Some improvements for handling charge status
 
