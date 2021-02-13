@@ -34,24 +34,29 @@ class EcovacsAPI {
 
     this.meta = {
       'country': country,
-      'lang': 'en',
+      'lang': 'EN',
       'deviceId': device_id,
-      'appCode': 'i_eco_e',
-      'appVersion': '1.3.5',
-      'channel': 'c_googleplay',
+      'appCode': 'global_e',
+      'appVersion': '1.6.3',
+      'channel': 'google_play',
       'deviceType': '1'
     };
     this.resource = device_id.substr(0, 8);
     this.country = country;
     this.continent = continent;
+    this.device_id = device_id;
   }
 
   connect(account_id, password_hash) {
     return new Promise((resolve, reject) => {
       let login_info = null;
-      this.call_main_api('user/login', {
-        'account': EcovacsAPI.encrypt(account_id),
-        'password': EcovacsAPI.encrypt(password_hash)
+      let login_path = 'user/login';
+      if (this.country.toLowerCase() === 'cn') {
+        login_path = 'user/loginCheckMobile';
+      }
+      this.call_main_api(login_path, {
+        'account': account_id,
+        'password': password_hash
       }).then((info) => {
         login_info = info;
         this.uid = login_info.uid;
@@ -108,26 +113,62 @@ class EcovacsAPI {
     return EcovacsAPI.paramsToQueryList(result);
   }
 
-  call_main_api(func, args) {
+  signAuth(params) {
+    let result = JSON.parse(JSON.stringify(params));
+    result['authTimespan'] = Date.now();
+
+    let paramsSignIn = JSON.parse(JSON.stringify(result));
+    paramsSignIn['openId'] = 'global';
+
+    let sign_on_text = EcovacsAPI.AUTH_CLIENT_KEY;
+    let keys = Object.keys(paramsSignIn);
+    keys.sort();
+    for (let i = 0; i < keys.length; i++) {
+      let k = keys[i];
+      sign_on_text += k + "=" + paramsSignIn[k];
+    }
+    sign_on_text += EcovacsAPI.AUTH_CLIENT_SECRET;
+
+    result['authAppkey'] = EcovacsAPI.AUTH_CLIENT_KEY;
+    result['authSign'] = EcovacsAPI.md5(sign_on_text);
+
+    return EcovacsAPI.paramsToQueryList(result);
+  }
+
+  call_main_api(loginPath, args) {
     return new Promise((resolve, reject) => {
-      tools.envLog("[EcovacsAPI] calling main api %s with %s", func, JSON.stringify(args));
+      tools.envLog("[EcovacsAPI] calling main api %s with %s", loginPath, JSON.stringify(args));
       let params = {};
       for (let key in args) {
         if (args.hasOwnProperty(key)) {
           params[key] = args[key];
         }
       }
-      params['requestId'] = EcovacsAPI.md5(uniqid());
-      let url = (EcovacsAPI.MAIN_URL_FORMAT + "/" + func).format(this.meta);
-      url = new URL(url);
-      url.search = this.sign(params).join('&');
-      tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
+      let mainUrlFormat = EcovacsAPI.MAIN_URL_FORMAT;
+      if (loginPath === 'user/getAuthCode') {
+        mainUrlFormat = EcovacsAPI.PORTAL_GLOBAL_AUTHCODE;
+        params['bizType'] = 'ECOVACS_IOT';
+        params['deviceId'] = this.device_id;
+      } else {
+        params['requestId'] = EcovacsAPI.md5(uniqid());
+      }
+      if (this.country.toLowerCase() === 'cn') {
+        mainUrlFormat = mainUrlFormat.replace('.com','.cn');
+      }
+      let url;
+      if (loginPath === 'user/getAuthCode') {
+        url = new URL((mainUrlFormat).format(this.meta));
+        url.search = this.signAuth(params).join('&');
+      } else {
+        url = new URL((mainUrlFormat + "/" + loginPath).format(this.meta));
+        url.search = this.sign(params).join('&');
+      }
+      tools.envLog(`[EcoVacsAPI] call_main_api calling ${url.href}`);
 
       https.get(url.href, (res) => {
         const {
           statusCode
         } = res;
-        const contentType = res.headers['content-type'];
 
         let error;
         if (statusCode !== 200) {
@@ -157,11 +198,11 @@ class EcovacsAPI {
             } else if (json.code === '0002') {
               throw new Error("Failure code 0002");
             } else {
-              tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
+              tools.envLog("[EcovacsAPI] call to %s failed with %s", loginPath, JSON.stringify(json));
               throw new Error("Failure code {msg} ({code}) for call {func} and parameters {param}".format({
                 msg: json['msg'],
                 code: json['code'],
-                func: func,
+                loginPath: loginPath,
                 param: JSON.stringify(args)
               }));
             }
@@ -201,7 +242,11 @@ class EcovacsAPI {
         retryAttempts = arguments.retryAttempts + 1;
       }
 
-      let url = (EcovacsAPI.PORTAL_URL_FORMAT + "/" + api).format({
+      let portalUrlFormat = EcovacsAPI.PORTAL_URL_FORMAT;
+      if (this.country.toLowerCase() === 'cn') {
+        portalUrlFormat = EcovacsAPI.PORTAL_URL_FORMAT_CN;
+      }
+      let url = (portalUrlFormat + "/" + api).format({
         continent: continent
       });
       url = new URL(url);
@@ -271,12 +316,21 @@ class EcovacsAPI {
   }
 
   call_login_by_it_token() {
+    let org = 'ECOWW';
+    let country = this.country.toUpperCase();
+    if (this.country.toLowerCase() === 'cn') {
+      org = 'ECOCN';
+      country = 'Chinese';
+    }
     return this.call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken', {
-      'country': this.meta['country'].toUpperCase(),
-      'resource': this.resource,
-      'realm': EcovacsAPI.REALM,
+      'edition': 'ECOGLOBLE',
       'userId': this.uid,
-      'token': this.auth_code
+      'token': this.auth_code,
+      'realm': EcovacsAPI.REALM,
+      'resource': this.resource,
+      'org': org,
+      'last': '',
+      'country': country
     });
   }
 
@@ -363,13 +417,17 @@ class EcovacsAPI {
   }
 }
 
-EcovacsAPI.CLIENT_KEY = "eJUWrzRv34qFSaYk";
-EcovacsAPI.SECRET = "Cyu5jcR4zyK6QEPn1hdIGXB5QIDAQABMA0GC";
+EcovacsAPI.CLIENT_KEY = constants.CLIENT_KEY;
+EcovacsAPI.SECRET = constants.SECRET;
+EcovacsAPI.AUTH_CLIENT_KEY = constants.AUTH_CLIENT_KEY;
+EcovacsAPI.AUTH_CLIENT_SECRET = constants.AUTH_CLIENT_SECRET;
 EcovacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
 
 EcovacsAPI.MAIN_URL_FORMAT = constants.MAIN_URL_FORMAT;
 EcovacsAPI.USER_URL_FORMAT = constants.USER_URL_FORMAT;
 EcovacsAPI.PORTAL_URL_FORMAT = constants.PORTAL_URL_FORMAT;
+EcovacsAPI.PORTAL_URL_FORMAT_CN = constants.PORTAL_URL_FORMAT_CN;
+EcovacsAPI.PORTAL_GLOBAL_AUTHCODE = constants.PORTAL_GLOBAL_AUTHCODE;
 EcovacsAPI.USERSAPI = constants.USERSAPI;
 
 // IOT Device Manager - This provides control of "IOT" products via RestAPI, some bots use this instead of XMPP

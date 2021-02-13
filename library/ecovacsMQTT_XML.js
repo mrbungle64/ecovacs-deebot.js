@@ -70,7 +70,11 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             } else {
                 tools.envLog("[EcovacsMQTT] cmdName: ", params['cmdName']);
             }
-            let url = (constants.PORTAL_URL_FORMAT + '/' + api).format({
+            let portalUrlFormat = constants.PORTAL_URL_FORMAT;
+            if (this.country.toLowerCase() === 'cn') {
+                portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
+            }
+            let url = (portalUrlFormat + '/' + api).format({
                 continent: this.continent
             });
             let headers = {
