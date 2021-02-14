@@ -346,6 +346,22 @@ class SetVolume extends VacBotCommand_950type {
     }
 }
 
+// T8 +/plus only
+class GetAutoEmpty extends VacBotCommand_950type {
+    constructor() {
+        super('getAutoEmpty');
+    }
+}
+
+// T8 +/plus only
+class SetAutoEmpty extends VacBotCommand_950type {
+    constructor(enable = 0) {
+        super('setAutoEmpty', {
+            'enable': enable
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -392,3 +408,5 @@ module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetCleanLogsPullCleanF = GetCleanLogsPullCleanF;
 module.exports.GetVolume = GetVolume;
 module.exports.SetVolume = SetVolume;
+module.exports.GetAutoEmpty = GetAutoEmpty;
+module.exports.SetAutoEmpty = SetAutoEmpty;

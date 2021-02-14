@@ -16,8 +16,8 @@ class VacBot_950type extends VacBot {
     this.water_level = null;
     this.waterbox_info = null;
     this.sleep_status = null;
+    this.autoEmpty = null;
     this.volume = 0;
-
     this.relocation_state = null;
     this.lastCleanLogUseAlternativeAPICall = false;
   }
@@ -424,6 +424,11 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
   }
 
+  _handle_autoEmpty(event) {
+    this.autoEmpty = event['resultData']['enable']
+    tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
+  }
+
   _handle_error(event) {
     this.errorCode = event['resultData']['code'].toString();
     // known errorCode from library
@@ -649,6 +654,13 @@ class VacBot_950type extends VacBot {
       case "setvolume":
         if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.SetVolume(arguments[1]));
+        }
+      case "getautoempty":
+        this.send_command(new vacBotCommand.GetAutoEmpty());
+        break;
+      case "setautoempty":
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.SetAutoEmpty(arguments[1]));
         }
         break;
     }
