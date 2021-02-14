@@ -460,19 +460,17 @@ class VacBot_950type extends VacBot {
         this.send_command(new vacBotCommand.Spot());
         break;
       case "SpotArea".toLowerCase():
-        if (arguments.length < 3) {
-          return;
-        } else if (arguments.length === 3) {
+        if (arguments.length === 3) {
           this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2]));
-        } else { // including number of cleanings
+        } else if (arguments.length >= 4) {
+          // including number of cleanings
           this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2], arguments[3]));
         }
         break;
       case "CustomArea".toLowerCase():
-        if (arguments.length < 4) {
-          return;
+        if (arguments.length >= 4) {
+          this.send_command(new vacBotCommand.CustomArea(arguments[1], arguments[2], arguments[3]));
         }
-        this.send_command(new vacBotCommand.CustomArea(arguments[1], arguments[2], arguments[3]));
         break;
       case "Stop".toLowerCase():
         this.send_command(new vacBotCommand.Stop());
@@ -487,10 +485,9 @@ class VacBot_950type extends VacBot {
         this.send_command(new vacBotCommand.Charge());
         break;
       case "Move".toLowerCase():
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.Move(arguments[1]));
         }
-        this.send_command(new vacBotCommand.Move(arguments[1]));
         break;
       case "MoveBackward".toLowerCase():
         this.send_command(new vacBotCommand.MoveBackward());
@@ -536,23 +533,17 @@ class VacBot_950type extends VacBot {
         this.send_command(new vacBotCommand.GetMaps());
         break;
       case "GetSpotAreas".toLowerCase():
-        if (arguments.length <= 1) {
-          return;
-        } else if (arguments.length === 2) {
+        if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.GetMapSpotAreas(arguments[1]));
         }
         break;
       case "GetSpotAreaInfo".toLowerCase():
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
+        if (arguments.length >= 3) {
           this.send_command(new vacBotCommand.GetMapSpotAreaInfo(arguments[1], arguments[2]));
         }
         break;
       case "GetVirtualBoundaries".toLowerCase():
-        if (arguments.length <= 1) {
-          return;
-        } else if (arguments.length === 2) {
+        if (arguments.length === 2) {
           if (typeof this.mapVirtualBoundariesResponses[arguments[1]] === 'undefined') {
             tools.envLog("[VacBot] *** initialize mapVirtualBoundariesResponses for map " + arguments[1]);
             this.mapVirtualBoundariesResponses[arguments[1]] = [false, false];
@@ -560,31 +551,24 @@ class VacBot_950type extends VacBot {
             this.mapVirtualBoundariesResponses[arguments[1]][0] = false;
             this.mapVirtualBoundariesResponses[arguments[1]][1] = false;
           }
-
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'vw'));
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'mw'));
         }
         break;
       case "GetVirtualBoundaryInfo".toLowerCase():
-        if (arguments.length <= 3) {
-          return;
-        } else if (arguments.length === 4) {
+        if (arguments.length >= 4) {
           this.send_command(new vacBotCommand.GetMapVirtualBoundaryInfo(arguments[1], arguments[2], arguments[3]));
         }
         break;
       case "DeleteVirtualBoundary".toLowerCase():
-        if (arguments.length <= 3) {
-          return;
-        } else if (arguments.length === 4) {
+        if (arguments.length >= 4) {
           this.send_command(new vacBotCommand.DeleteMapVirtualBoundary(arguments[1], arguments[2], arguments[3]));
         }
         break;
       case "AddVirtualBoundary".toLowerCase():
-        if (arguments.length <= 2) {
-          return;
-        } else if (arguments.length === 3) {
+        if (arguments.length === 3) {
           this.send_command(new vacBotCommand.AddMapVirtualBoundary(arguments[1], arguments[2], 'vw'));
-        } else if (arguments.length === 4) {
+        } else if (arguments.length >= 4) {
           this.send_command(new vacBotCommand.AddMapVirtualBoundary(arguments[1], arguments[2], arguments[3]));
         }
         break;
@@ -598,11 +582,9 @@ class VacBot_950type extends VacBot {
         this.send_command(new vacBotCommand.GetNetInfo());
         break;
       case "GetLifeSpan".toLowerCase():
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.GetLifeSpan(arguments[1]));
         }
-        let component = arguments[1];
-        this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
       case "ResetLifeSpan".toLowerCase():
         if (arguments.length >= 2) {
@@ -621,16 +603,14 @@ class VacBot_950type extends VacBot {
         this.send_command(new vacBotCommand.GetSleepStatus());
         break;
       case "SetWaterLevel".toLowerCase():
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         }
-        this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         break;
       case "SetCleanSpeed".toLowerCase():
-        if (arguments.length < 2) {
-          return;
+        if (arguments.length >= 2) {
+          this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         }
-        this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         break;
       case "GetCleanLogs".toLowerCase():
         this.lastCleanLogUseAlternativeAPICall = false;

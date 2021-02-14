@@ -623,7 +623,7 @@ class VacBot_non950type extends VacBot {
         }
         break;
       case "SetOnOff".toLowerCase():
-        if (arguments.length === 3) {
+        if (arguments.length >= 3) {
           this.send_command(new vacBotCommand.SetOnOff(arguments[1],arguments[2]));
         }
         break;
