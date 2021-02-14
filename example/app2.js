@@ -4,7 +4,7 @@ const nodeMachineId = require('node-machine-id');
 const EcoVacsAPI = sucks.EcoVacsAPI;
 const VacBot = sucks.VacBot;
 
-const email = "email@domain.com";
+const account_id = "email@domain.com";
 const password = "a1b2c3d4";
 const countrycode = 'DE';
 
@@ -15,7 +15,7 @@ const continent = countries[countrycode].continent.toLowerCase();
 console.log(continent);
 
 const api = new EcoVacsAPI(device_id, countrycode, continent);
-api.connect(email, password_hash).then(() => {
+api.connect(account_id, password_hash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[0];
         console.log(vacuum);

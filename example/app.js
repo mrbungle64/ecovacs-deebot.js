@@ -5,6 +5,8 @@ const ecovacsDeebot = require('../index.js')
   , countries = ecovacsDeebot.countries
   , myInfo = require('./myInfo.js');
 
+// This example app is deprecated
+// Please don't use it anymore :)
 
 let account_id = myInfo ? myInfo.ACCOUNT_ID : "email@domain.com"
   , password = myInfo ? myInfo.PASSWORD : "a1b2c3d4"

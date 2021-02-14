@@ -193,8 +193,8 @@ class EcovacsAPI {
             if (json.code === '0000') {
               resolve(json.data);
             } else if (json.code === '1005') {
-              tools.envLog("[EcovacsAPI] incorrect email or password");
-              throw new Error("incorrect email or password");
+              tools.envLog("[EcovacsAPI] incorrect account id or password");
+              throw new Error("incorrect account id or password");
             } else if (json.code === '0002') {
               throw new Error("Failure code 0002");
             } else {
