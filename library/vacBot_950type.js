@@ -444,7 +444,7 @@ class VacBot_950type extends VacBot {
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
     switch (action.toLowerCase()) {
-      case "clean":
+      case "Clean".toLowerCase():
         if (arguments.length <= 1) {
           this.send_command(new vacBotCommand.Clean());
         } else if (arguments.length === 2) {
@@ -453,13 +453,13 @@ class VacBot_950type extends VacBot {
           this.send_command(new vacBotCommand.Clean(arguments[1], arguments[2]));
         }
         break;
-      case "edge":
+      case "Edge".toLowerCase():
         this.send_command(new vacBotCommand.Edge());
         break;
-      case "spot":
+      case "Spot".toLowerCase():
         this.send_command(new vacBotCommand.Spot());
         break;
-      case "spotarea":
+      case "SpotArea".toLowerCase():
         if (arguments.length < 3) {
           return;
         } else if (arguments.length === 3) {
@@ -468,88 +468,88 @@ class VacBot_950type extends VacBot {
           this.send_command(new vacBotCommand.SpotArea(arguments[1], arguments[2], arguments[3]));
         }
         break;
-      case "customarea":
+      case "CustomArea".toLowerCase():
         if (arguments.length < 4) {
           return;
         }
         this.send_command(new vacBotCommand.CustomArea(arguments[1], arguments[2], arguments[3]));
         break;
-      case "stop":
+      case "Stop".toLowerCase():
         this.send_command(new vacBotCommand.Stop());
         break;
-      case "pause":
+      case "Pause".toLowerCase():
         this.send_command(new vacBotCommand.Pause());
         break;
-      case "resume":
+      case "Resume".toLowerCase():
         this.send_command(new vacBotCommand.Resume());
         break;
-      case "charge":
+      case "Charge".toLowerCase():
         this.send_command(new vacBotCommand.Charge());
         break;
-      case "move":
+      case "Move".toLowerCase():
         if (arguments.length < 2) {
           return;
         }
         this.send_command(new vacBotCommand.Move(arguments[1]));
         break;
-      case "movebackward":
+      case "MoveBackward".toLowerCase():
         this.send_command(new vacBotCommand.MoveBackward());
         break;
-      case "moveforward":
+      case "MoveForward".toLowerCase():
         this.send_command(new vacBotCommand.MoveForward());
         break;
-      case "moveleft":
+      case "MoveLeft".toLowerCase():
         this.send_command(new vacBotCommand.MoveLeft());
         break;
-      case "moveright":
+      case "MoveRight".toLowerCase():
         this.send_command(new vacBotCommand.MoveRight());
         break;
-      case "moveturnaround":
+      case "MoveTurnAround".toLowerCase():
         this.send_command(new vacBotCommand.MoveTurnAround());
         break;
-      case "relocate":
+      case "Relocate".toLowerCase():
         this.send_command(new vacBotCommand.Relocate());
         break;
-      case "playsound":
+      case "PlaySound".toLowerCase():
         if (arguments.length <= 1) {
           this.send_command(new vacBotCommand.PlaySound());
         } else if (arguments.length === 2) {
           this.send_command(new vacBotCommand.PlaySound(arguments[1]));
         }
         break;
-      case "getdeviceinfo":
+      case "GetDeviceInfo".toLowerCase():
         this.send_command(new vacBotCommand.GetDeviceInfo());
         break;
-      case "getcleanstate":
+      case "GetCleanState".toLowerCase():
         this.send_command(new vacBotCommand.GetCleanState());
         break;
-      case "getcleanspeed":
+      case "GetCleanSpeed".toLowerCase():
         this.send_command(new vacBotCommand.GetCleanSpeed());
         break;
-      case "getcleansum":
+      case "GetCleanSum".toLowerCase():
         this.send_command(new vacBotCommand.GetCleanSum());
         break;
-      case "getchargestate":
+      case "GetChargeState".toLowerCase():
         this.send_command(new vacBotCommand.GetChargeState());
         break;
-      case "getmaps":
+      case "GetMaps".toLowerCase():
         this.send_command(new vacBotCommand.GetMaps());
         break;
-      case "getspotareas":
+      case "GetSpotAreas".toLowerCase():
         if (arguments.length <= 1) {
           return;
         } else if (arguments.length === 2) {
           this.send_command(new vacBotCommand.GetMapSpotAreas(arguments[1]));
         }
         break;
-      case "getspotareainfo":
+      case "GetSpotAreaInfo".toLowerCase():
         if (arguments.length <= 2) {
           return;
         } else if (arguments.length === 3) {
           this.send_command(new vacBotCommand.GetMapSpotAreaInfo(arguments[1], arguments[2]));
         }
         break;
-      case "getvirtualboundaries":
+      case "GetVirtualBoundaries".toLowerCase():
         if (arguments.length <= 1) {
           return;
         } else if (arguments.length === 2) {
@@ -565,21 +565,21 @@ class VacBot_950type extends VacBot {
           this.send_command(new vacBotCommand.GetMapVirtualBoundaries(arguments[1], 'mw'));
         }
         break;
-      case "getvirtualboundaryinfo":
+      case "GetVirtualBoundaryInfo".toLowerCase():
         if (arguments.length <= 3) {
           return;
         } else if (arguments.length === 4) {
           this.send_command(new vacBotCommand.GetMapVirtualBoundaryInfo(arguments[1], arguments[2], arguments[3]));
         }
         break;
-      case "deletevirtualboundary":
+      case "DeleteVirtualBoundary".toLowerCase():
         if (arguments.length <= 3) {
           return;
         } else if (arguments.length === 4) {
           this.send_command(new vacBotCommand.DeleteMapVirtualBoundary(arguments[1], arguments[2], arguments[3]));
         }
         break;
-      case "addvirtualboundary":
+      case "AddVirtualBoundary".toLowerCase():
         if (arguments.length <= 2) {
           return;
         } else if (arguments.length === 3) {
@@ -588,77 +588,78 @@ class VacBot_950type extends VacBot {
           this.send_command(new vacBotCommand.AddMapVirtualBoundary(arguments[1], arguments[2], arguments[3]));
         }
         break;
-      case "geterror":
+      case "GetError".toLowerCase():
         this.send_command(new vacBotCommand.GetError());
         break;
-      case "getbatterystate":
+      case "GetBatteryState".toLowerCase():
         this.send_command(new vacBotCommand.GetBatteryState());
         break;
-      case "getnetinfo":
+      case "GetNetInfo".toLowerCase():
         this.send_command(new vacBotCommand.GetNetInfo());
         break;
-      case "getlifespan":
+      case "GetLifeSpan".toLowerCase():
         if (arguments.length < 2) {
           return;
         }
         let component = arguments[1];
         this.send_command(new vacBotCommand.GetLifeSpan(component));
         break;
-      case "resetlifespan":
+      case "ResetLifeSpan".toLowerCase():
         if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.ResetLifeSpan(arguments[1]));
         }
         break;
-      case "getwaterlevel":
-      case "getwaterboxinfo":
-      case "getwaterinfo":
+      case "GetWaterlevel".toLowerCase():
+      case "GetWaterboxInfo".toLowerCase():
+      case "GetWaterInfo".toLowerCase():
         this.send_command(new vacBotCommand.GetWaterInfo());
         break;
-      case "getposition":
+      case "GetPosition".toLowerCase():
         this.send_command(new vacBotCommand.GetPosition());
         break;
-      case "getsleepstatus":
+      case "GetSleepStatus".toLowerCase():
         this.send_command(new vacBotCommand.GetSleepStatus());
         break;
-      case "setwaterlevel":
+      case "SetWaterLevel".toLowerCase():
         if (arguments.length < 2) {
           return;
         }
         this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         break;
-      case "setcleanspeed":
+      case "SetCleanSpeed".toLowerCase():
         if (arguments.length < 2) {
           return;
         }
         this.send_command(new vacBotCommand.SetCleanSpeed(arguments[1]));
         break;
-      case "getcleanlogs":
+      case "GetCleanLogs".toLowerCase():
         this.lastCleanLogUseAlternativeAPICall = false;
         this.send_command(new vacBotCommand.GetCleanLogs());
         break;
-      case "getcleanlogswithoutlastinfo":
+      case "GetCleanLogsWithoutLastInfo".toLowerCase():
         this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetCleanLogs());
         break;
-      case "getlastcleanloginfo":
+      case "GetLastCleanLogInfo".toLowerCase():
         this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetLastCleanLog());
         break;
-      case "getcleanlogspullcleanf":
+      case "GetCleanLogsPullCleanF".toLowerCase():
         this.lastCleanLogUseAlternativeAPICall = true;
         this.send_command(new vacBotCommand.GetCleanLogsPullCleanF());
         break;
-      case "getvolume":
+      case "GetVolume".toLowerCase():
         this.send_command(new vacBotCommand.GetVolume());
         break;
-      case "setvolume":
+      case "SetVolume".toLowerCase():
         if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.SetVolume(arguments[1]));
         }
-      case "getautoempty":
+        break;
+      case "GetAutoEmpty".toLowerCase():
         this.send_command(new vacBotCommand.GetAutoEmpty());
         break;
-      case "setautoempty":
+      case "SetAutoEmpty".toLowerCase():
         if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.SetAutoEmpty(arguments[1]));
         }
