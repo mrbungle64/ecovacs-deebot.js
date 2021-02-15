@@ -237,7 +237,7 @@ class GetPosition extends VacBotCommand_950type {
 class PlaySound extends VacBotCommand_950type {
     constructor(sid = 0) {
         let sidAsNumber = parseInt(sid);
-        super('playSound', {'sid': sidAsNumber}); //removed count attribute as it has no effect
+        super('playSound', {'sid': sidAsNumber});
     }
 }
 
@@ -259,50 +259,59 @@ class GetMaps extends VacBotCommand_950type {
 }
 
 class GetMapSet extends VacBotCommand_950type {
-    constructor(mapID, type='ar') { //default type is spotAreas
+    constructor(mapID, type='ar') {
         super('getMapSet', {'mid': mapID, 'type': type});
     }
 }
+
 class GetMapSpotAreas extends GetMapSet {
     constructor(mapID) {
         super(mapID, 'ar');
     }
 }
+
 class GetMapVirtualBoundaries extends GetMapSet {
     constructor(mapID, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapVirtualBoundaryType);
     }
 }
+
 class GetMapSubSet extends VacBotCommand_950type {
     constructor(mapID, mapSubSetID, type='ar') { //default type is spotAreas
         super('getMapSubSet', {'mid': mapID, 'mssid': mapSubSetID, 'type': type});
     }
 }
+
 class DeleteMapSubSet extends VacBotCommand_950type {
     constructor(mapID, mapSubSetID, type='vw') { //default type is delete virtualWall
         super('setMapSubSet', {'act': 'del', 'mid': mapID, 'mssid': mapSubSetID, 'type': type});
     }
 }
+
 class AddMapSubSet extends VacBotCommand_950type {
     constructor(mapID, coordinates, mapSubSetType='vw') { //default type is virtualWall
         super('setMapSubSet', {'act': 'add', 'mid': mapID, 'type': mapSubSetType, 'value': coordinates});
     }
 }
+
 class GetMapSpotAreaInfo extends GetMapSubSet {
     constructor(mapID, mapSubSetID) {
         super(mapID, mapSubSetID, 'ar');
     }
 }
+
 class GetMapVirtualBoundaryInfo extends GetMapSubSet {
     constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
         super(mapID, mapSubSetID, mapVirtualBoundaryType);
     }
 }
+
 class DeleteMapVirtualBoundary extends DeleteMapSubSet {
     constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
         super(mapID, mapSubSetID, mapVirtualBoundaryType);
     }
 }
+
 class AddMapVirtualBoundary extends AddMapSubSet {
     constructor(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
         super(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType);
@@ -320,6 +329,7 @@ class GetCleanLogs extends VacBotCommand_950type {
         super('GetCleanLogs', {'count': count}, constants.LGLOGAPI);
     }
 }
+
 class GetLastCleanLog extends VacBotCommand_950type {
     constructor() {
         super('GetLastCleanLog', {}, constants.LGLOGAPI);

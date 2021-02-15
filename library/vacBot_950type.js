@@ -445,7 +445,7 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] action: %s", action);
     switch (action.toLowerCase()) {
       case "Clean".toLowerCase():
-        if (arguments.length <= 1) {
+        if (arguments.length === 1) {
           this.send_command(new vacBotCommand.Clean());
         } else if (arguments.length === 2) {
           this.send_command(new vacBotCommand.Clean(arguments[1]));

@@ -459,7 +459,6 @@ class VacBot_non950type extends VacBot {
 
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
-    let component;
     switch (action.toLowerCase()) {
       case "Clean".toLowerCase():
         if (arguments.length === 1) {
@@ -547,13 +546,13 @@ class VacBot_non950type extends VacBot {
           this.send_command(new vacBotCommand.SetLifeSpan(arguments[1], arguments[2]));
         }
         break;
-      case "GetWaterLevel".toLowerCase():
-        this.send_command(new vacBotCommand.GetWaterLevel());
-        break;
       case "SetWaterLevel".toLowerCase():
         if (arguments.length >= 2) {
           this.send_command(new vacBotCommand.SetWaterLevel(arguments[1]));
         }
+        break;
+      case "GetWaterLevel".toLowerCase():
+        this.send_command(new vacBotCommand.GetWaterLevel());
         break;
       case "GetWaterBoxInfo".toLowerCase():
         this.send_command(new vacBotCommand.GetWaterBoxInfo());
@@ -563,7 +562,7 @@ class VacBot_non950type extends VacBot {
         break;
       case "GetPos".toLowerCase():
       case "GetPosition".toLowerCase():
-        this.send_command(new vacBotCommand.GetPos());
+        this.send_command(new vacBotCommand.GetPosition());
         break;
       case "GetChargerPos".toLowerCase():
       case "GetChargerPosition".toLowerCase():
@@ -573,11 +572,10 @@ class VacBot_non950type extends VacBot {
         this.send_command(new vacBotCommand.GetSleepStatus());
         break;
       case "GetCleanSum".toLowerCase():
-        if (this.isN79series()) {
+        if (!this.isN79series()) {
           // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
-          break;
+          this.send_command(new vacBotCommand.GetCleanSum());
         }
-        this.send_command(new vacBotCommand.GetCleanSum());
         break;
       case "GetMapSet".toLowerCase():
         this.send_command(new vacBotCommand.GetMapSet('sa'));

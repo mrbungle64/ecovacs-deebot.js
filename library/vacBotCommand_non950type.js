@@ -200,7 +200,7 @@ class GetFirmwareVersion extends VacBotCommand_non950type {
     }
 }
 
-class GetPos extends VacBotCommand_non950type {
+class GetPosition extends VacBotCommand_non950type {
     constructor() {
         super('GetPos');
     }
@@ -384,7 +384,6 @@ class SetLifeSpan extends VacBotCommand_non950type {
     }
 }
 
-// Tested on Deebot 901 and Ozmo 930
 class ResetLifeSpan extends VacBotCommand_non950type {
     constructor(component) {
         super('ResetLifeSpan', {
@@ -416,7 +415,7 @@ module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.PlaySound = PlaySound;
 module.exports.GetFirmwareVersion = GetFirmwareVersion;
-module.exports.GetPos = GetPos;
+module.exports.GetPosition = GetPosition;
 module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetSleepStatus = GetSleepStatus;
