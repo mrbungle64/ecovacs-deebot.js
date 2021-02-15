@@ -77,6 +77,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 * New login process (credits to [@And3rsL](https://github.com/And3rsL))
   * Support for newer app version login 
   * Support for Chinese server login
+* Implemented AutoEmpty commands for T8+/plus
 
 ### 0.5.6
 * Some improvements for handling charge status
