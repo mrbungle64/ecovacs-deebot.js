@@ -154,6 +154,10 @@ exports.KnownDevices = {
         "name": "DEEBOT OZMO T8",
         "deviceClassLink": "h18jkh"
     },
+    "0bdtzz": {
+        "name": "DEEBOT OZMO T8 PURE",
+        "deviceClassLink": "h18jkh"
+    },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
         "deviceClassLink": "h18jkh"
@@ -192,6 +196,46 @@ exports.KnownDevices = {
     },
     "no61kx": {
         "name": "DEEBOT T8 POWER",
+        "deviceClassLink": "h18jkh"
+    },
+    "jffnlf": {
+        "name": "DEEBOT N3 MAX",
+        "deviceClassLink": "h18jkh"
+    },
+    "r5zxjr": {
+        "name": "DEEBOT N7",
+        "deviceClassLink": "h18jkh"
+    },
+    "n6cwdb": {
+        "name": "DEEBOT N8",
+        "deviceClassLink": "h18jkh"
+    },
+    "r5y7re": {
+        "name": "DEEBOT N8",
+        "deviceClassLink": "h18jkh"
+    },
+    "ty84oi": {
+        "name": "DEEBOT N8",
+        "deviceClassLink": "h18jkh"
+    },
+    "36xnxf": {
+        "name": "DEEBOT N8",
+        "deviceClassLink": "h18jkh"
+    },
+    "snxbvc": {
+        "name": "DEEBOT N8 PRO",
+        "deviceClassLink": "h18jkh"
+    },
+    "yu362x": {
+        "name": "DEEBOT N8 PRO",
+        "deviceClassLink": "h18jkh"
+    },
+    "7bryc5": {
+        "name": "DEEBOT N8+",
+        "deviceClassLink": "h18jkh"
+    },
+    "b2jqs4": {
+        "name": "DEEBOT N8+",
         "deviceClassLink": "h18jkh"
     },
     "155": {
@@ -601,6 +645,14 @@ exports.EcoVacsHomeProducts = {
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e8e93a7032edd3f5ec66d4a"
         }
     },
+    "0bdtzz": {
+        "product": {
+            "_id": "5fa105c6d16a99000667eb54",
+            "name": "DEEBOT OZMO T8 PURE",
+            "icon": "5fa105bbd16a99000667eb52",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5fa105bbd16a99000667eb52"
+        }
+    },
     "x5d34r": {
         "product": {
             "_id": "5de0d86ed88546000195239a",
@@ -631,6 +683,86 @@ exports.EcoVacsHomeProducts = {
             "name": "DEEBOT T8",
             "icon": "5edf2bbedb28cc00062f8bd7",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5edf2bbedb28cc00062f8bd7"
+        }
+    },
+    "jffnlf": {
+        "product": {
+            "_id": "5e53208426be716edf4b55cf",
+            "name": "DEEBOT N3 MAX",
+            "icon": "5e53207a26be71596c4b55cd",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e53207a26be71596c4b55cd"
+        }
+    },
+    "r5zxjr": {
+        "product": {
+            "_id": "5fa2441169320300086ff812",
+            "name": "DEEBOT N7",
+            "icon": "5fb47555c7260e00085859dd",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5fb47555c7260e00085859dd"
+        }
+    },
+    "n6cwdb": {
+        "product": {
+            "_id": "5f729454a541bd000881cc7b",
+            "name": "DEEBOT N8",
+            "icon": "5f8d00c863b43d0008cdcc11",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5f8d00c863b43d0008cdcc11"
+        }
+    },
+    "r5y7re": {
+        "product": {
+            "_id": "5fa4b1f8c7260e000858584b",
+            "name": "DEEBOT N8",
+            "icon": "5fa4b1ee69320300086ff815",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5fa4b1ee69320300086ff815"
+        }
+    },
+    "ty84oi": {
+        "product": {
+            "_id": "5fbcac79c7260e0008585c94",
+            "name": "DEEBOT N8",
+            "icon": "5feaeb685f437d0008e0e00d",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb685f437d0008e0e00d"
+        }
+    },
+    "36xnxf": {
+        "product": {
+            "_id": "5fbcacf369320300086ffa63",
+            "name": "DEEBOT N8",
+            "icon": "5feaeb79e3a1890008c0507c",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb79e3a1890008c0507c"
+        }
+    },
+    "snxbvc": {
+        "product": {
+            "_id": "5fa4e31dd16a99000667eb94",
+            "name": "DEEBOT N8 PRO",
+            "icon": "5fbc7d44d16a99000667edf7",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5fbc7d44d16a99000667edf7"
+        }
+    },
+    "yu362x": {
+        "product": {
+            "_id": "5fbc7da39601440008b2446d",
+            "name": "DEEBOT N8 PRO",
+            "icon": "5fbc7da0c7260e0008585c8d",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5fbc7da0c7260e0008585c8d"
+        }
+    },
+    "7bryc5": {
+        "product": {
+            "_id": "5fa4e248c7260e0008585850",
+            "name": "DEEBOT N8+",
+            "icon": "5fb474d4d16a99000667edd9",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5fb474d4d16a99000667edd9"
+        }
+    },
+    "b2jqs4": {
+        "product": {
+            "_id": "5fbc7cc69601440008b24469",
+            "name": "DEEBOT N8+",
+            "icon": "5feaeb27d4cb3a0006679047",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb27d4cb3a0006679047"
         }
     },
     "p5nx9u": {
