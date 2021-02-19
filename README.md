@@ -47,23 +47,23 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot OZMO 930
 * Deebot OZMO 950
 
-### These models are known to work
+### These models should work properly or at least partially
+
 * Deebot Slim 2
 * Deebot N79 series
-* Deebot 600/601
+* Deebot M88
+* Deebot 600/601/605
+* Deebot 710/711/711s
 * Deebot 900
-* Deebot U2
 * Deebot OZMO 610
 * Deebot OZMO 900
 * Deebot OZMO T5
 * Deebot OZMO T8 series
 * Deebot OZMO Slim 10
-
-### These models should work (partially)
-* Deebot M88
-* Deebot 605
-* Deebot 710/711
-* Deebot U2 Pro/Power
+* Deebot N3 MAX
+* Deebot N7
+* Deebot N8 series
+* Deebot U2 series
 
 ## Known issues
 
