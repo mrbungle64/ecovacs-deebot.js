@@ -5,6 +5,7 @@
 [![npm](http://img.shields.io/npm/v/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
 [![npm](https://img.shields.io/npm/dm/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
 [![npm](https://img.shields.io/npm/dt/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
+[![Dependency Status](https://img.shields.io/david/mrbungle64/ecovacs-deebot.js.svg)](https://david-dm.org/mrbungle64/ecovacs-deebot.js)
 [![Travis-CI](https://travis-ci.org/mrbungle64/ecovacs-deebot.js.svg?branch=master)](https://travis-ci.org/mrbungle64/ecovacs-deebot.js)
 
 Library for running Ecovacs Deebot vacuum cleaner robots
@@ -35,6 +36,8 @@ If you want to install this library explicitly without canvas you can install it
 npm install ecovacs-deebot --no-optional
 ```
 
+It is recommended to use version 10.x, 12.x or 14.x of Node.js. The minimum required version is 10.x
+
 ## Usage
 
 Information on how to use this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki).
@@ -42,6 +45,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Models
 
 ### Supported models
+
 * Deebot 901
 * Deebot OZMO 920
 * Deebot OZMO 930
