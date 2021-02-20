@@ -7,10 +7,5 @@ node_js:
   - '10'
   - '12'
   - '14'
-
-before_install:
-  - npm install -g nyc mocha codeclimate-test-reporter
-
-after_success:
-  - nyc --reporter=lcov npm test
-  - nyc report --reporter=lcov
+script:
+  - 'npm run test:package'
