@@ -164,6 +164,10 @@ class VacBot {
         return this.getDeviceProperty('voice_report');
     }
 
+    hasAutoEmptyStation() {
+        return this.getDeviceProperty('auto_empty_station');
+    }
+
     _vacuum_address() {
         if (!this.useMqtt) {
             return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
