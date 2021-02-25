@@ -8,6 +8,7 @@ class EcovacsXMPP extends Ecovacs {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
         this.iqElementId = 1;
+        this.pingInterval = null;
 
         this.simpleXmpp = require('simple-xmpp');
 
@@ -237,7 +238,7 @@ class EcovacsXMPP extends Ecovacs {
         });
     }
 
-    connect_and_wait_until_ready() {
+    connect() {
         tools.envLog('[EcovacsXMPP] Connecting as %s to %s', this.user + '@' + this.hostname, this.server_address + ':' + this.server_port);
         this.simpleXmpp.connect({
             jid: this.user + '@' + this.hostname,
@@ -246,7 +247,14 @@ class EcovacsXMPP extends Ecovacs {
             port: this.server_port
         });
 
+        if (!this.pingInterval) {
+            this.pingInterval = setInterval(() => {
+                this.send_ping(this.bot._vacuum_address());
+            }, 30000);
+        }
+
         this.on('ready', (event) => {
+            tools.envLog('[EcovacsMQTT] received ready event');
             this.send_ping(this.bot._vacuum_address());
         });
     }
@@ -291,6 +299,8 @@ class EcovacsXMPP extends Ecovacs {
 
     disconnect() {
         this.simpleXmpp.disconnect();
+        clearInterval(this.pingInterval);
+        this.pingInterval = null;
         tools.envLog("[EcovacsXMPP] Closed XMPP Client");
     }
 }

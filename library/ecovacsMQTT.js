@@ -47,13 +47,11 @@ class EcovacsMQTT extends Ecovacs {
         });
     }
 
-    connect_and_wait_until_ready() {
+    connect() {
         this.on("ready", (event) => {
-            this.send_ping(this.bot._vacuum_address());
+            tools.envLog('[EcovacsMQTT] received ready event');
         });
     }
-
-    send_ping(to) {}
 
     //end session
     disconnect() {

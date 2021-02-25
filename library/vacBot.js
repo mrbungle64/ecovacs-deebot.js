@@ -9,7 +9,6 @@ class VacBot {
         this.vacuum = vacuum;
         this.is_ready = false;
 
-        this.pingInterval = null;
         this.useMqtt = this.useMqttProtocol();
         this.deviceClass = vacuum['class'];
         this.deviceModel = this.deviceClass;
@@ -74,11 +73,13 @@ class VacBot {
         });
     }
 
+    // Deprecated but keep this method for now
     connect_and_wait_until_ready() {
-        this.ecovacs.connect_and_wait_until_ready();
-        this.pingInterval = setInterval(() => {
-            this.ecovacs.send_ping(this._vacuum_address());
-        }, 30000);
+        this.connect();
+    }
+
+    connect() {
+        this.ecovacs.connect();
     }
 
     on(name, func) {
@@ -200,7 +201,6 @@ class VacBot {
     disconnect() {
         this.ecovacs.disconnect();
         this.is_ready = false;
-        clearInterval(this.pingInterval)
     }
 
     getAreaName_i18n(name, languageCode = 'en') {
