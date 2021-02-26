@@ -17,8 +17,6 @@ class VacBot_non950type extends VacBot {
     this.waterboxInfo = null;
     this.sleepStatus = null;
     this.dustcaseInfo = null;
-
-    this.getMapsExecuted = false;
   }
 
   _handle_lifeSpan(event) {

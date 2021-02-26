@@ -70,7 +70,7 @@ class Stop extends VacBotCommand_950type {
 class SpotArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
         if (area !== '') {
-            let cleaningAsNumber = parseInt(cleanings);
+            let cleaningAsNumber = Number(cleanings);
             super('spotArea', action, {'content': area, 'count': cleaningAsNumber});
         }
     }
@@ -79,7 +79,7 @@ class SpotArea extends Clean {
 class CustomArea extends Clean {
     constructor(action = 'start', map_position = '', cleanings = 1) {
         if (map_position !== '') {
-            let cleaningAsNumber = parseInt(cleanings);
+            let cleaningAsNumber = Number(cleanings);
             super('customArea', action, {'content': map_position, 'count': cleaningAsNumber});
         }
     }
@@ -236,7 +236,7 @@ class GetPosition extends VacBotCommand_950type {
 
 class PlaySound extends VacBotCommand_950type {
     constructor(sid = 0) {
-        let sidAsNumber = parseInt(sid);
+        let sidAsNumber = Number(sid);
         super('playSound', {'sid': sidAsNumber});
     }
 }

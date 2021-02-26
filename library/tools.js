@@ -18,6 +18,7 @@ function is950type(deviceClass) {
 // This is required for e.g. the Ozmo 930
 function getReqID() {
     let reqIdString = '';
+    let rtnval = '';
     for (let i = 0; i < 8; i++) {
         rtnval = Math.floor(Math.random() * 10);
         reqIdString = reqIdString + rtnval.toString();

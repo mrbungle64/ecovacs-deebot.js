@@ -113,15 +113,13 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                             this.bot._handle_error({code: json['errno']});
                             this.emit("Error", this.bot.errorDescription);
                             this.emit('ErrorCode', this.bot.errorCode);
-                            if (json['errno'] == 3) { // request oauth error
+                            // Error code 3 = request oauth error
+                            if (json['errno'] == 3) {
                                 this.emit("disconnect", true);
                                 this.disconnect();
                             }
-                            if (json['errno'] == 500) { // wait for response timed out
-                                // this.client.reconnect();
-                                // this.emit("disconnect", true);
-                                // this.disconnect();
-                            } else {
+                            // Error code 500 = wait for response timed out (see issue #19)
+                            if (json['errno'] != 500) {
                                 throw "failure code: {errno}".format({
                                     errno: json['errno']
                                 });
