@@ -249,23 +249,23 @@ class EcovacsXMPP extends Ecovacs {
 
         if (!this.pingInterval) {
             this.pingInterval = setInterval(() => {
-                this.send_ping(this.bot._vacuum_address());
+                this.sendPing(this.bot.vacuumAddress());
             }, 30000);
         }
 
         this.on('ready', (event) => {
             tools.envLog('[EcovacsMQTT] received ready event');
-            this.send_ping(this.bot._vacuum_address());
+            this.sendPing(this.bot.vacuumAddress());
         });
     }
 
-    send_command(xml, recipient) {
-        let result = this._wrap_command(xml, recipient);
+    sendCommand(xml, recipient) {
+        let result = this.wrap_command(xml, recipient);
         tools.envLog('[EcovacsXMPP] Sending xml:', result.toString());
         this.simpleXmpp.conn.send(result);
     }
 
-    _wrap_command(xml, recipient) {
+    wrap_command(xml, recipient) {
         let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
@@ -283,7 +283,7 @@ class EcovacsXMPP extends Ecovacs {
         return this.user + '@' + this.hostname + '/' + this.resource;
     }
 
-    send_ping(to) {
+    sendPing(to) {
         let id = this.iqElementId++;
         let e = new Element('iq', {
             id: id,

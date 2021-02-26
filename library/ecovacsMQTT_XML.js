@@ -11,18 +11,18 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
     }
 
-    send_command(action, recipient) {
-        let c = this._wrap_command(action, recipient);
-        this._call_ecovacs_device_api(c).then((json) => {
-            this._handle_command_response(action, json);
+    sendCommand(action, recipient) {
+        let c = this.wrapCommand(action, recipient);
+        this.callEcovacsDeviceAPI(c).then((json) => {
+            this.handleCommandResponse(action, json);
         }).catch((e) => {
-            tools.envLog("[EcovacsMQTT_XML] error send_command: %s", e.toString());
+            tools.envLog("[EcovacsMQTT_XML] error sendCommand: %s", e.toString());
         });
     }
 
-    _wrap_command(action, recipient) {
+    wrapCommand(action, recipient) {
         if (!action) {
-            tools.envLog("[EcovacsMQTT_XML] _wrap_command action missing: %s", JSON.stringify(action, getCircularReplacer()));
+            tools.envLog("[EcovacsMQTT_XML] wrapCommand action missing: %s", JSON.stringify(action, getCircularReplacer()));
             return {};
         }
         const auth = {
@@ -44,7 +44,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             return {
                 'auth': auth,
                 "cmdName": action.name,
-                "payload": this._wrap_command_getPayload(action),
+                "payload": this.wrapCommand_getPayload(action),
                 "payloadType": "x",
                 "td": "q",
                 "toId": recipient,
@@ -54,7 +54,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         }
     }
 
-    _wrap_command_getPayload(action) {
+    wrapCommand_getPayload(action) {
         let xml = action.to_xml();
         // Remove the td from ctl xml for RestAPI
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
@@ -62,7 +62,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         return payloadXml.toString();
     }
 
-    _call_ecovacs_device_api(params) {
+    callEcovacsDeviceAPI(params) {
         return new Promise((resolve, reject) => {
             let api = constants.IOTDEVMANAGERAPI;
             if (!params['cmdName']) {
@@ -143,14 +143,14 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         });
     }
 
-    _handle_command_response(action, json) {
+    handleCommandResponse(action, json) {
         let result = {};
         if (json.hasOwnProperty('resp')) {
-            result = this._command_to_dict(json['resp'], action);
-            this._handle_command(action.name, result);
+            result = this.command_to_dict(json['resp'], action);
+            this.handle_command(action.name, result);
         } else if (json.hasOwnProperty('logs')) {
             const children = [];
-            for (let i=0; i < 20; i++) {
+            for (let i = 0; i < 20; i++) {
                 children.push(json.logs[i]);
             }
             result = {
@@ -160,24 +160,24 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 },
                 'children': children
             };
-            this._handle_command(action.name, result);
+            this.handle_command(action.name, result);
         } else {
             tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json, getCircularReplacer()));
         }
     }
 
-    _handle_message(topic, payload, type= "incoming") {
-        let result = this._command_to_dict(payload);
-        this._handle_command(result['event'], result);
+    handleMessage(topic, payload, type = "incoming") {
+        let result = this.command_to_dict(payload);
+        this.handle_command(result['event'], result);
     }
 
-    _command_to_dict(xmlString) {
+    command_to_dict(xmlString) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
         const firstChild = xml.childNodes[0];
         let attrs = {};
         let event = null;
-        tools.envLog('[EcovacsMQTT] xml received: %s',xml);
+        tools.envLog('[EcovacsMQTT] xml received: %s', xml);
         if (arguments.length > 1) {
             event = firstChild.tagName;
             const action = arguments[1];
@@ -217,8 +217,8 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         return result;
     }
 
-    _handle_command(command, event) {
-        //tools.envLog("[EcovacsMQTT] _handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
+    handle_command(command, event) {
+        //tools.envLog("[EcovacsMQTT] handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         switch (tools.getEventNameForCommandString(command)) {
             case "MapP":
                 let mapinfo = this.bot._handle_mapP(event);
@@ -301,7 +301,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 break;
             case 'ChargePosition':
                 this.bot._handle_chargePosition(event);
-                this.emit('ChargePosition', this.bot.chargePosition["x"]+","+this.bot.chargePosition["y"]+","+this.bot.chargePosition["a"]);
+                this.emit('ChargePosition', this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]);
                 break;
             case 'NetInfo':
                 this.bot._handle_netInfo(event.attrs);

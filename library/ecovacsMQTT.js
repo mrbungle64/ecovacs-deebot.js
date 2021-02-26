@@ -39,7 +39,7 @@ class EcovacsMQTT extends Ecovacs {
 
         this.client.on('message', (topic, message) => {
             tools.envLog('[EcovacsMQTT] message.toString(): ', message.toString());
-            this._handle_message(topic, message.toString(), "incoming");
+            this.handleMessage(topic, message.toString(), "incoming");
         });
 
         this.client.on('error', (error) => {
