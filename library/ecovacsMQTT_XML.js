@@ -146,7 +146,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     handleCommandResponse(action, json) {
         let result = {};
         if (json.hasOwnProperty('resp')) {
-            result = this.command_to_dict(json['resp'], action);
+            result = this.command_xml2dict(json['resp'], action);
             this.handle_command(action.name, result);
         } else if (json.hasOwnProperty('logs')) {
             const children = [];
@@ -167,11 +167,11 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     handleMessage(topic, payload, type = "incoming") {
-        let result = this.command_to_dict(payload);
+        let result = this.command_xml2dict(payload);
         this.handle_command(result['event'], result);
     }
 
-    command_to_dict(xmlString) {
+    command_xml2dict(xmlString) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
         const firstChild = xml.childNodes[0];
@@ -218,7 +218,6 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     handle_command(command, event) {
-        //tools.envLog("[EcovacsMQTT] handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         switch (tools.getEventNameForCommandString(command)) {
             case "MapP":
                 let mapinfo = this.bot._handle_mapP(event);

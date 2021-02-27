@@ -249,13 +249,13 @@ class EcovacsXMPP extends Ecovacs {
 
         if (!this.pingInterval) {
             this.pingInterval = setInterval(() => {
-                this.sendPing(this.bot.vacuumAddress());
+                this.sendPing(this.bot.getVacBotDeviceId());
             }, 30000);
         }
 
         this.on('ready', (event) => {
             tools.envLog('[EcovacsMQTT] received ready event');
-            this.sendPing(this.bot.vacuumAddress());
+            this.sendPing(this.bot.getVacBotDeviceId());
         });
     }
 

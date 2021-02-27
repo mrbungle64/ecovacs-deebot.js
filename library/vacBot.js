@@ -169,7 +169,7 @@ class VacBot {
         return this.getDeviceProperty('auto_empty_station');
     }
 
-    vacuumAddress() {
+    getVacBotDeviceId() {
         if (!this.useMqtt) {
             return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
         } else {
@@ -180,11 +180,11 @@ class VacBot {
     sendCommand(action) {
         tools.envLog("[VacBot] Sending command `%s`", action.name);
         if (!this.useMqtt) {
-            this.ecovacs.sendCommand(action.to_xml(), this.vacuumAddress());
+            this.ecovacs.sendCommand(action.to_xml(), this.getVacBotDeviceId());
         } else {
             // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
             // IOTMQ devices need the full action for additional parsing
-            this.ecovacs.sendCommand(action, this.vacuumAddress());
+            this.ecovacs.sendCommand(action, this.getVacBotDeviceId());
         }
     }
 
