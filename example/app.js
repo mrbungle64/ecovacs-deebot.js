@@ -76,7 +76,7 @@ httpGetJson('http://ipinfo.io/json').then((json) => {
           console.log("Notification '%s': %s", values.type, values.act);
         });
       });
-      vacbot.connect_and_wait_until_ready();
+      vacbot.connect();
     });
   }).catch((e) => {
     console.error("Failure in connecting!");

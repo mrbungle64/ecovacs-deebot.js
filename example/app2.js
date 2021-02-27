@@ -1,8 +1,7 @@
-//const sucks = require('sucks');
-const sucks = require('./../index');
+const ecovacsDeebot = require('./../index');
 const nodeMachineId = require('node-machine-id');
-const EcoVacsAPI = sucks.EcoVacsAPI;
-const VacBot = sucks.VacBot;
+const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
+const VacBot = ecovacsDeebot.VacBot;
 
 const account_id = "email@domain.com";
 const password = "a1b2c3d4";
@@ -10,7 +9,7 @@ const countrycode = 'DE';
 
 const password_hash = EcoVacsAPI.md5(password);
 const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync());
-const countries = sucks.countries;
+const countries = ecovacsDeebot.countries;
 const continent = countries[countrycode].continent.toLowerCase();
 console.log(continent);
 
@@ -58,16 +57,22 @@ api.connect(account_id, password_hash).then(() => {
                 console.log('[app2.js] Error: ' + value);
             });
         });
-        vacbot.connect_and_wait_until_ready();
 
+        vacbot.connect();
+
+        console.log('[app2.js] name: ' + vacbot.getDeviceProperty('name'));
         console.log('[app2.js] isKnownDevice: ' + vacbot.isKnownDevice());
         console.log('[app2.js] isSupportedDevice: ' + vacbot.isSupportedDevice());
-        console.log('[app2.js] name: ' + vacbot.getDeviceProperty('name'));
+        console.log('[app2.js] is950type: ' + vacbot.is950type());
+        console.log('[app2.js] isNot950type: ' + vacbot.isNot950type());
         console.log('[app2.js] hasMainBrush: ' + vacbot.hasMainBrush());
-        console.log('[app2.js] hasSpotAreas: ' + vacbot.hasSpotAreas());
-        console.log('[app2.js] hasCustomAreas: ' + vacbot.hasCustomAreas());
+        console.log('[app2.js] hasEdgeCleaningMode: ' + vacbot.hasEdgeCleaningMode());
+        console.log('[app2.js] hasSpotCleaningMode: ' + vacbot.hasSpotCleaningMode());
+        console.log('[app2.js] hasSpotAreaCleaningMode: ' + vacbot.hasSpotAreaCleaningMode());
+        console.log('[app2.js] hasCustomAreaCleaningMode: ' + vacbot.hasCustomAreaCleaningMode());
         console.log('[app2.js] hasMoppingSystem: ' + vacbot.hasMoppingSystem());
         console.log('[app2.js] hasVoiceReports: ' + vacbot.hasVoiceReports());
+        console.log('[app2.js] hasAutoEmptyStation: ' + vacbot.hasAutoEmptyStation());
 
         setTimeout(() => {
             vacbot.run('Clean');
