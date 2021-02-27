@@ -96,7 +96,7 @@ class EcovacsXMPP extends Ecovacs {
                 if (command) {
                     switch (tools.getEventNameForCommandString(command)) {
                         case "MapP":
-                            let mapinfo = this.bot._handle_mapP(secondChild);
+                            let mapinfo = this.bot.handle_mapP(secondChild);
                             if (mapinfo) {
                                 this.emit("CurrentMapName", this.bot.currentMapName);
                                 this.emit("CurrentMapMID", this.bot.currentMapMID);
@@ -105,27 +105,27 @@ class EcovacsXMPP extends Ecovacs {
                             }
                             break;
                         case "MapSet":
-                            let mapset = this.bot._handle_mapSet(secondChild);
+                            let mapset = this.bot.handle_mapSet(secondChild);
                             if (mapset["mapsetEvent"] !== 'error') {
                                 this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                             }
                             break;
                         case "PullM":
-                            let mapsubset = this.bot._handle_pullM(secondChild);
+                            let mapsubset = this.bot.handle_pullM(secondChild);
                             if (mapsubset && (mapsubset["mapsubsetEvent"] !== 'error')) {
                                 this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                             }
                             break;
                         case 'ChargeState':
-                            this.bot._handle_chargeState(secondChild.children[0]);
+                            this.bot.handle_chargeState(secondChild.children[0]);
                             this.emit('ChargeState', this.bot.chargeStatus);
                             break;
                         case 'BatteryInfo':
-                            this.bot._handle_batteryInfo(secondChild.children[0]);
+                            this.bot.handle_batteryInfo(secondChild.children[0]);
                             this.emit('BatteryInfo', this.bot.batteryInfo);
                             break;
                         case 'CleanReport':
-                            this.bot._handle_cleanReport(secondChild.children[0]);
+                            this.bot.handle_cleanReport(secondChild.children[0]);
                             this.emit('CleanReport', this.bot.cleanReport);
                             if (this.bot.lastUsedAreaValues) {
                                 tools.envLog('[EcovacsXMPP] LastUsedAreaValues: %s', this.bot.lastUsedAreaValues);
@@ -133,16 +133,16 @@ class EcovacsXMPP extends Ecovacs {
                             }
                             break;
                         case "CleanSpeed":
-                            this.bot._handle_cleanSpeed(secondChild.children[0]);
+                            this.bot.handle_cleanSpeed(secondChild.children[0]);
                             this.emit("CleanSpeed", this.bot.cleanSpeed);
                             break;
                         case 'Error':
-                            this.bot._handle_error(secondChild.attrs);
+                            this.bot.handle_error(secondChild.attrs);
                             this.emit('Error', this.bot.errorDescription);
                             this.emit('ErrorCode', this.bot.errorCode);
                             break;
                         case 'LifeSpan':
-                            this.bot._handle_lifeSpan(secondChild.attrs);
+                            this.bot.handle_lifespan(secondChild.attrs);
                             const component = dictionary.COMPONENT_FROM_ECOVACS[secondChild.attrs.type];
                             if (component) {
                                 if (this.bot.components[component]) {
@@ -151,46 +151,46 @@ class EcovacsXMPP extends Ecovacs {
                             }
                             break;
                         case 'WaterLevel':
-                            this.bot._handle_waterLevel(secondChild);
+                            this.bot.handle_waterLevel(secondChild);
                             this.emit('WaterLevel', this.bot.waterLevel);
                             break;
                         case 'WaterBoxInfo':
-                            this.bot._handle_waterboxInfo(secondChild);
+                            this.bot.handle_waterboxInfo(secondChild);
                             this.emit('WaterBoxInfo', this.bot.waterboxInfo);
                             break;
                         case 'DustCaseST':
-                            this.bot._handle_dustcaseInfo(secondChild);
+                            this.bot.handle_dustcaseInfo(secondChild);
                             this.emit('DustCaseInfo', this.bot.dustcaseInfo);
                             break;
                         case 'DeebotPosition':
-                            this.bot._handle_deebotPosition(secondChild);
+                            this.bot.handle_deebotPosition(secondChild);
                             if (this.bot.deebotPosition["x"] && this.bot.deebotPosition["y"]) {
                                 this.emit('DeebotPosition', this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
                                 this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
                             }
                             break;
                         case 'ChargePosition':
-                            this.bot._handle_chargePosition(secondChild);
+                            this.bot.handle_chargePosition(secondChild);
                             this.emit('ChargePosition', this.bot.chargePosition["x"]+","+this.bot.chargePosition["y"]+","+this.bot.chargePosition["a"]);
                             break;
                         case 'NetInfo':
-                            this.bot._handle_netInfo(secondChild.attrs);
+                            this.bot.handle_netInfo(secondChild.attrs);
                             this.emit("NetInfoIP", this.bot.netInfoIP);
                             this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
                             break;
                         case 'SleepStatus':
-                            this.bot._handle_sleepStatus(secondChild);
+                            this.bot.handle_sleepStatus(secondChild);
                             this.emit("SleepStatus", this.bot.sleepStatus);
                             break;
                         case 'CleanSum':
-                            this.bot._handle_cleanSum(secondChild);
+                            this.bot.handle_cleanSum(secondChild);
                             this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                             this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                             this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                             break;
                         case 'CleanLogs':
                             tools.envLog("[EcovacsXMPP] Logs: %s", JSON.stringify(secondChild));
-                            this.bot._handle_cleanLogs(secondChild);
+                            this.bot.handle_cleanLogs(secondChild);
                             let cleanLog = [];
                             for (let i in this.bot.cleanLog) {
                                 if (this.bot.cleanLog.hasOwnProperty(i)) {
@@ -203,7 +203,7 @@ class EcovacsXMPP extends Ecovacs {
                             }
                             break;
                         case 'GetOnOff':
-                            this.bot._handle_onOff(secondChild);
+                            this.bot.handle_onOff(secondChild);
                             if (this.bot.doNotDisturbEnabled) {
                                 this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
                             }
@@ -227,7 +227,7 @@ class EcovacsXMPP extends Ecovacs {
                 }
             } else if (stanza.name === 'iq' && stanza.attrs.type === 'error' && !!stanza.children[0] && stanza.children[0].name === 'error' && !!stanza.children[0].children[0]) {
                 tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
-                this.bot._handle_error(stanza.children[0].attrs);
+                this.bot.handle_error(stanza.children[0].attrs);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
             }

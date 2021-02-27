@@ -9,41 +9,43 @@ class VacBot_950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
-    this.clean_status = null;
-    this.fan_speed = null;
-    this.charge_status = null;
-    this.battery_status = null;
-    this.water_level = null;
-    this.waterbox_info = null;
-    this.sleep_status = null;
+    this.cleanStatus = null;
+    this.cleanSpeed = null;
+    this.chargeStatus = null;
+    this.batteryStatus = null;
+    this.waterLevel = null;
+    this.waterboxInfo = null;
+    this.sleepStatus = null;
     this.autoEmpty = null;
     this.volume = 0;
-    this.relocation_state = null;
+    this.relocationState = null;
     this.lastCleanLogUseAlternativeAPICall = false;
   }
 
-  _handle_life_span(event) {
+  handle_lifespan(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
-      for ( let component in event['resultData']) {
-        let type = event['resultData'][component]["type"];
-        let left = event['resultData'][component]["left"];
-        let total = event['resultData'][component]["total"];
-        let lifespan =  parseInt(left) / parseInt(total) * 100;
-        try {
-          type = dictionary.COMPONENT_FROM_ECOVACS[type];
-        } catch (e) {
-          tools.envLog("[VacBot] Unknown component type: ", event);
-        }
-        tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
+      for (let component in event['resultData']) {
+        if (event['resultData'].hasOwnProperty(component)) {
+          let type = event['resultData'][component]["type"];
+          let left = event['resultData'][component]["left"];
+          let total = event['resultData'][component]["total"];
+          let lifespan = parseInt(left) / parseInt(total) * 100;
+          try {
+            type = dictionary.COMPONENT_FROM_ECOVACS[type];
+          } catch (e) {
+            tools.envLog("[VacBot] Unknown component type: ", event);
+          }
+          tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
 
-        this.components[type] = lifespan;
-        tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
+          this.components[type] = lifespan;
+          tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
+        }
       }
     }
   }
 
-  _handle_position(event) {
+  handle_deebotPosition(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       //as deebotPos and chargePos can also appear in other messages (CleanReport)
@@ -98,16 +100,16 @@ class VacBot_950type extends VacBot {
       }
     }
     if (!event) {
-      tools.envLog("[VacBot] _handle_deebot_position event undefined");
+      tools.envLog("[VacBot] handle_deebotPosition event undefined");
     }
   }
 
-  _handle_fan_speed(event) {
-    this.fan_speed = dictionary.FAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
-    tools.envLog("[VacBot] *** fan_speed = %s", this.fan_speed);
+  handle_cleanSpeed(event) {
+    this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
+    tools.envLog("[VacBot] *** cleanSpeed = %s", this.cleanSpeed);
   }
 
-  _handle_net_info(event) {
+  handle_netInfo(event) {
     this.netInfoIP = event['resultData']['ip'];
     this.netInfoWifiSSID = event['resultData']['ssid'];
     this.netInfoWifiSignal = event['resultData']['rssi'];
@@ -119,8 +121,8 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** netInfoMAC = %s", this.netInfoMAC);
   }
 
-  _handle_clean_info(event) {
-    tools.envLog("[VacBot] _handle_clean_info");
+  handle_cleanInfo(event) {
+    tools.envLog("[VacBot] handle_cleanInfo");
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       if (event['resultData']['state'] === 'clean') {
@@ -129,9 +131,9 @@ class VacBot_950type extends VacBot {
           type = event['resultData']['cleanState']['content']['type'];
         }
         if (event['resultData']['cleanState']['motionState'] === 'working') {
-          this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
+          this.cleanStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
         } else {
-          this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
+          this.cleanStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
         }
         if (type === 'customArea') {
           if (typeof event['resultData']['cleanState']['content'] === "object") {
@@ -143,16 +145,16 @@ class VacBot_950type extends VacBot {
           this.lastUsedAreaValues = null;
         }
       } else if (event['resultData']['trigger'] === 'alert') {
-        this.clean_status = 'alert';
+        this.cleanStatus = 'alert';
         this.lastUsedAreaValues = null;
       } else {
-        this.clean_status = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
+        this.cleanStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
         if (dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'returning') {
           // set charge state on returning to dock
           const chargeStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
           if (chargeStatus) {
-            this.charge_status = chargeStatus;
-            tools.envLog("[VacBot] *** charge_status = %s", this.charge_status);
+            this.chargeStatus = chargeStatus;
+            tools.envLog("[VacBot] *** chargeStatus = %s", this.chargeStatus);
           }
         } else if (dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'idle') {
           // when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
@@ -162,13 +164,13 @@ class VacBot_950type extends VacBot {
         this.lastUsedAreaValues = null;
       }
     } else {
-      this.clean_status = 'error';
+      this.cleanStatus = 'error';
     }
-    tools.envLog("[VacBot] *** clean_status = %s", this.clean_status);
+    tools.envLog("[VacBot] *** cleanStatus = %s", this.cleanStatus);
   }
 
-  _handle_cleanLogs(event) {
-    tools.envLog("[VacBot] _handle_cleanLogs");
+  handle_cleanLogs(event) {
+    tools.envLog("[VacBot] handle_cleanLogs");
     // Unlike the others, resultCode seems to be a string
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
@@ -216,8 +218,8 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
   }
 
-  _handle_lastCleanLog(event) {
-    tools.envLog("[VacBot] _handle_lastCleanLog");
+  handle_lastCleanLog(event) {
+    tools.envLog("[VacBot] handle_lastCleanLog");
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       if (event['resultData'].hasOwnProperty('log')) {
@@ -229,28 +231,28 @@ class VacBot_950type extends VacBot {
     }
   }
 
-  _handle_cleanSum(event) {
+  handle_cleanSum(event) {
     this.cleanSum_totalSquareMeters = parseInt(event['resultData']['area']);
     this.cleanSum_totalSeconds = parseInt(event['resultData']['time']);
     this.cleanSum_totalNumber = parseInt(event['resultData']['count']);
   }
 
-  _handle_battery_info(event) {
-    this.battery_status = event['resultData']['value'];
-    tools.envLog("[VacBot] *** battery_status = %d\%", this.battery_status);
+  handle_batteryInfo(event) {
+    this.batteryStatus = event['resultData']['value'];
+    tools.envLog("[VacBot] *** batteryStatus = %d\%", this.batteryStatus);
   }
 
-  _handle_water_level(event) {
-    this.water_level = event['resultData']['amount'];
-    tools.envLog("[VacBot] *** water_level = %s", this.water_level);
+  handle_waterLevel(event) {
+    this.waterLevel = event['resultData']['amount'];
+    tools.envLog("[VacBot] *** waterLevel = %s", this.waterLevel);
   }
 
-  _handle_relocation_state(event) {
-    this.relocation_state = event['resultData']['state'];
-    tools.envLog("[VacBot] *** relocation_state = " + this.relocation_state);
+  handle_relocationState(event) {
+    this.relocationState = event['resultData']['state'];
+    tools.envLog("[VacBot] *** relocationState = " + this.relocationState);
   }
 
-  _handle_cachedmapinfo(event) {
+  handle_cachedmapinfo(event) {
     this.currentMapName = 'unknown';
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
@@ -283,7 +285,7 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
   }
 
-  _handle_mapset(event) {
+  handle_mapset(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       let mapMID = event['resultData']['mid'];
@@ -340,7 +342,7 @@ class VacBot_950type extends VacBot {
     }
   }
 
-  _handle_mapsubset(event) {
+  handle_mapsubset(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       let mapMID = event['resultData']['mid'];
@@ -385,21 +387,21 @@ class VacBot_950type extends VacBot {
     }
   }
 
-  _handle_water_info(event) {
-    this.water_level = event['resultData']['amount'];
-    this.waterbox_info = event['resultData']['enable'];
-    tools.envLog("[VacBot] *** waterbox_info = " + this.waterbox_info);
-    tools.envLog("[VacBot] *** water_level = " + this.water_level);
+  handle_waterInfo(event) {
+    this.waterLevel = event['resultData']['amount'];
+    this.waterboxInfo = event['resultData']['enable'];
+    tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
+    tools.envLog("[VacBot] *** waterLevel = " + this.waterLevel);
   }
 
-  _handle_volume(event) {
+  handle_volume(event) {
     if (event.hasOwnProperty('resultData')) {
       this.volume = event['resultData']['volume'];
       tools.envLog("[VacBot] *** volume = " + this.volume);
     }
   }
 
-  _handle_charge_state(event) {
+  handle_chargestate(event) {
     if (event.hasOwnProperty('resultData')) {
       let status = null;
       const resultCode = parseInt(event['resultCode']);
@@ -412,24 +414,24 @@ class VacBot_950type extends VacBot {
         }
       }
       if (status) {
-        this.charge_status = status;
+        this.chargeStatus = status;
       }
     } else {
       tools.envLog("[VacBot] couldn't parse charge status ", event);
     }
   }
 
-  _handle_sleep_status(event) {
-    this.sleep_status = event['resultData']['enable']
-    tools.envLog("[VacBot] *** sleep_status = " + this.sleep_status);
+  handle_sleepStatus(event) {
+    this.sleepStatus = event['resultData']['enable']
+    tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
   }
 
-  _handle_autoEmpty(event) {
+  handle_autoEmpty(event) {
     this.autoEmpty = event['resultData']['enable']
     tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
   }
 
-  _handle_error(event) {
+  handle_error(event) {
     this.errorCode = event['resultData']['code'].toString();
     // known errorCode from library
     if (errorCodes[this.errorCode]) {

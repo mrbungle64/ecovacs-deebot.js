@@ -33,14 +33,14 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'going': 'returning'
 };
 
-exports.FAN_SPEED_TO_ECOVACS = {
+exports.CLEAN_SPEED_TO_ECOVACS = {
     1: 'standard', // normal
     2: 'standard', // normal
     3: 'strong', // high
     4: 'strong' // high
 };
 
-exports.FAN_SPEED_FROM_ECOVACS = {
+exports.CLEAN_SPEED_FROM_ECOVACS = {
     'standard': 2, // normal
     'strong': 3 // high
 };

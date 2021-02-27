@@ -42,14 +42,14 @@ exports.WATER_LEVEL_TO_ECOVACS = {
     4: 4      //veryhigh
 };
 
-exports.FAN_SPEED_TO_ECOVACS = {
+exports.CLEAN_SPEED_TO_ECOVACS = {
     1: 1000,  //silent
     2: 0,     //normal
     3: 1,     //high
     4: 2      //veryhigh
 };
 
-exports.FAN_SPEED_FROM_ECOVACS = {
+exports.CLEAN_SPEED_FROM_ECOVACS = {
     1000: 1, //silent
     0: 2,    //normal
     1: 3,    //high

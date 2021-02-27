@@ -139,7 +139,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT_JSON] call failed with %s", JSON.stringify(json, getCircularReplacer()));
-                            this.bot._handle_error({resultData: {code: json['errno']}});
+                            this.bot.handle_error({resultData: {code: json['errno']}});
                             this.emit("Error", this.bot.errorDescription);
                             this.emit('ErrorCode', this.bot.errorCode);
                             // Error code 3 = request oauth error
@@ -228,11 +228,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
         let result = {"resultCode": resultCode, "resultCodeMessage": resultCodeMessage, "resultData": resultData};
 
-        this.handle_command(eventName, result);
+        this.handleCommand(eventName, result);
     }
 
-    handle_command(command, event) {
-        tools.envLog("[EcovacsMQTT_JSON] handle_command() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
+    handleCommand(command, event) {
+        tools.envLog("[EcovacsMQTT_JSON] handleCommand() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
         //incoming events (on)
         if (command.startsWith("on")) {
@@ -257,21 +257,21 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
         switch (command) {
             case "chargestate":
-                this.bot._handle_charge_state(event);
-                if (this.bot.charge_status) {
-                    this.emit("ChargeState", this.bot.charge_status);
+                this.bot.handle_chargeState(event);
+                if (this.bot.chargeStatus) {
+                    this.emit("ChargeState", this.bot.chargeStatus);
                 }
                 break;
             case "battery":
             case "batteryinfo":
-                this.bot._handle_battery_info(event);
-                this.emit("BatteryInfo", this.bot.battery_status);
+                this.bot.handle_batteryInfo(event);
+                this.emit("BatteryInfo", this.bot.batteryStatus);
                 break;
             case "cleaninfo":
-                this.bot._handle_clean_info(event);
-                this.emit("CleanReport", this.bot.clean_status);
-                if (this.bot.charge_status) {
-                    this.emit("ChargeState", this.bot.charge_status);
+                this.bot.handle_cleanInfo(event);
+                this.emit("CleanReport", this.bot.cleanStatus);
+                if (this.bot.chargeStatus) {
+                    this.emit("ChargeState", this.bot.chargeStatus);
                 }
                 if (this.bot.lastUsedAreaValues) {
                     tools.envLog('[EcovacsMQTT_JSON] LastUsedAreaValues: %s', this.bot.lastUsedAreaValues);
@@ -280,34 +280,34 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "cleanspeed":
             case "speed":
-                this.bot._handle_fan_speed(event);
-                this.emit("CleanSpeed", this.bot.fan_speed);
+                this.bot.handle_cleanSpeed(event);
+                this.emit("CleanSpeed", this.bot.cleanSpeed);
                 break;
             case "relocationstate":
-                this.bot._handle_relocation_state(event);
-                this.emit("RelocationState", this.bot.relocation_state);
+                this.bot.handle_relocationState(event);
+                this.emit("RelocationState", this.bot.relocationState);
                 break;
             case "cachedmapinfo":
-                this.bot._handle_cachedmapinfo(event);
+                this.bot.handle_cachedmapinfo(event);
                 this.emit("CurrentMapName", this.bot.currentMapName);
                 this.emit("CurrentMapMID", this.bot.currentMapMID);
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                 this.emit("Maps", this.bot.maps);
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
-                let mapset = this.bot._handle_mapset(event);
+                let mapset = this.bot.handle_mapset(event);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "mapsubset": //handle spotAreas, virtualWalls, noMopZones
-                let mapsubset = this.bot._handle_mapsubset(event);
+                let mapsubset = this.bot.handle_mapsubset(event);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
             case "lifespan":
-                this.bot._handle_life_span(event);
+                this.bot.handle_lifespan(event);
                 if (this.bot.components["filter"]) {
                     this.emit("LifeSpan_filter", this.bot.components["filter"]);
                 }
@@ -319,11 +319,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "pos":
-                this.bot._handle_position(event);
+                this.bot.handle_deebotPosition(event);
                 if (this.bot.deebotPosition["changeFlag"]) {
-                    if ((this.bot.deebotPosition["isInvalid"] === true) && ((this.bot.relocation_state === 'ok') || (this.bot.relocation_state === null))) {
-                        this.bot.relocation_state = 'required';
-                        this.emit("RelocationState", this.bot.relocation_state);
+                    if ((this.bot.deebotPosition["isInvalid"] === true) && ((this.bot.relocationState === 'ok') || (this.bot.relocationState === null))) {
+                        this.bot.relocationState = 'required';
+                        this.emit("RelocationState", this.bot.relocationState);
                     } else if (this.bot.deebotPosition["x"] && this.bot.deebotPosition["y"]) {
                         this.emit("DeebotPosition", this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
                         this.emit("DeebotPositionIsInvalid", this.bot.deebotPosition["isInvalid"]);
@@ -337,12 +337,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "waterinfo":
-                this.bot._handle_water_info(event);
-                this.emit("WaterBoxInfo", this.bot.waterbox_info);
-                this.emit("WaterLevel", this.bot.water_level);
+                this.bot.handle_waterInfo(event);
+                this.emit("WaterBoxInfo", this.bot.waterboxInfo);
+                this.emit("WaterLevel", this.bot.waterLevel);
                 break;
             case "netinfo":
-                this.bot._handle_net_info(event);
+                this.bot.handle_netInfo(event);
                 this.emit("NetInfoIP", this.bot.netInfoIP);
                 this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
                 this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
@@ -355,31 +355,31 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.run('GetCleanSpeed');
                 break;
             case 'sleep':
-                this.bot._handle_sleep_status(event);
-                this.emit("SleepStatus", this.bot.sleep_status);
+                this.bot.handle_sleepStatus(event);
+                this.emit("SleepStatus", this.bot.sleepStatus);
                 break;
             case 'autoempty':
-                this.bot._handle_autoEmpty(event);
+                this.bot.handle_autoEmpty(event);
                 this.emit("AutoEmpty", this.bot.autoEmpty);
                 break;
             case 'volume':
-                this.bot._handle_volume(event);
+                this.bot.handle_volume(event);
                 this.emit("Volume", this.bot.volume);
                 break;
             case "error":
-                this.bot._handle_error(event);
+                this.bot.handle_error(event);
                 this.emit("Error", this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 break;
             case 'totalstats':
-                this.bot._handle_cleanSum(event);
+                this.bot.handle_cleanSum(event);
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;
             case 'cleanlogs':
                 tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
-                this.bot._handle_cleanLogs(event);
+                this.bot.handle_cleanLogs(event);
                 let cleanLog = [];
                 for (let i in this.bot.cleanLog) {
                     if (this.bot.cleanLog.hasOwnProperty(i)) {
@@ -400,7 +400,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'lastcleanlog':
                 tools.envLog("[EcovacsMQTT_JSON] lastcleanlog: %s", JSON.stringify(event, getCircularReplacer()));
                 if (this.bot.lastCleanLogUseAlternativeAPICall) {
-                    this.bot._handle_lastCleanLog(event);
+                    this.bot.handle_lastCleanLog(event);
 
                     if (this.bot.cleanLog_lastImageUrl) {
                         this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);

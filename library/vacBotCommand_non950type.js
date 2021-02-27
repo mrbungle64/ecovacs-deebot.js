@@ -278,8 +278,8 @@ class GetMapSet extends VacBotCommand_non950type {
 
 class SetCleanSpeed extends VacBotCommand_non950type {
     constructor(level) {
-        if (constants_type.FAN_SPEED_TO_ECOVACS.hasOwnProperty(level)) {
-            level = constants_type.FAN_SPEED_TO_ECOVACS[level];
+        if (constants_type.CLEAN_SPEED_TO_ECOVACS.hasOwnProperty(level)) {
+            level = constants_type.CLEAN_SPEED_TO_ECOVACS[level];
         }
         super('SetCleanSpeed', {
             'speed': level
