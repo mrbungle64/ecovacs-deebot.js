@@ -41,54 +41,49 @@ class VacBot_950type extends VacBot {
   handle_deebotPosition(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
-      //as deebotPos and chargePos can also appear in other messages (CleanReport)
-      //the handling should be extracted to a seperate function
-      if (event['resultData']['deebotPos']) {
+      // as deebotPos and chargePos can also appear in other messages (CleanReport)
+      // the handling should be extracted to a seperate function
+      const deebotPos = event['resultData']['deebotPos'];
+      if (deebotPos) {
         // check if position changed or currentSpotAreaID unknown
-        if (event['resultData']['deebotPos']['x'] != this.deebotPosition.x
-            || event['resultData']['deebotPos']['y'] != this.deebotPosition.y
-            || event['resultData']['deebotPos']['a'] != this.deebotPosition.a
-            || event['resultData']['deebotPos']['invalid'] != this.deebotPosition.isInvalid
+        let changed = (deebotPos['x'] !== this.deebotPosition.x
+            || deebotPos['y'] !== this.deebotPosition.y
+            || deebotPos['a'] !== this.deebotPosition.a
+            || deebotPos['invalid'] !== this.deebotPosition.isInvalid
             || this.deebotPosition.currentSpotAreaID === 'unknown'
-        ) {
-          let currentSpotAreaID = map.isPositionInSpotArea([[event['resultData']['deebotPos']['x']], event['resultData']['deebotPos']['y']], this.mapSpotAreaInfos[this.currentMapMID]);
+        );
+        if (changed) {
+          let currentSpotAreaID = map.isPositionInSpotArea([[deebotPos['x']], deebotPos['y']], this.mapSpotAreaInfos[this.currentMapMID]);
+          let isInvalid = Number(deebotPos['invalid']) === 1 ? true : false;
           tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
           this.deebotPosition = {
-            x: event['resultData']['deebotPos']['x'],
-            y: event['resultData']['deebotPos']['y'],
-            a: event['resultData']['deebotPos']['a'],
-            isInvalid: event['resultData']['deebotPos']['invalid'] == 1 ? true : false,
+            x: deebotPos['x'],
+            y: deebotPos['y'],
+            a: deebotPos['a'],
+            isInvalid: isInvalid,
             currentSpotAreaID: currentSpotAreaID,
             changeFlag: true
           };
-          tools.envLog("[VacBot] *** Deebot Position = "
-              + 'x=' + this.deebotPosition.x
-              + ' y=' + this.deebotPosition.y
-              + ' a=' + this.deebotPosition.a
-              + ' currentSpotAreaID=' + this.deebotPosition.currentSpotAreaID
-              + ' isInvalid=' + this.deebotPosition.isInvalid
-          );
+          tools.envLog("[VacBot] *** deebotPosition = " + JSON.stringify(this.deebotPosition));
         }
       }
-
-      if (event['resultData']['chargePos']) { //is only available in some DeebotPosition messages (e.g. on start cleaning)
-        //there can be more than one charging station only handles first charging station
+      // is only available in some DeebotPosition messages (e.g. on start cleaning)
+      // there can be more than one charging station only handles first charging station
+      const chargePos = event['resultData']['chargePos'];
+      if (chargePos) {
         // check if position changed
-        if (event['resultData']['chargePos'][0]['x'] != this.chargePosition.x
-            || event['resultData']['chargePos'][0]['y'] != this.chargePosition.y
-            || event['resultData']['chargePos'][0]['a'] != this.chargePosition.a
-        ) {
+        let changed = (chargePos[0]['x'] !== this.chargePosition.x
+            || chargePos[0]['y'] !== this.chargePosition.y
+            || chargePos[0]['a'] !== this.chargePosition.a
+        );
+        if (changed) {
           this.chargePosition = {
-            x: event['resultData']['chargePos'][0]['x'],
-            y: event['resultData']['chargePos'][0]['y'],
-            a: event['resultData']['chargePos'][0]['a'],
+            x: chargePos[0]['x'],
+            y: chargePos[0]['y'],
+            a: chargePos[0]['a'],
             changeFlag: true
           };
-          tools.envLog("[VacBot] *** Charge Position = "
-              + 'x=' + this.chargePosition.x
-              + ' y=' + this.chargePosition.y
-              + ' a=' + this.chargePosition.a
-          );
+          tools.envLog("[VacBot] *** chargePosition = " + JSON.stringify(this.chargePosition));
         }
       }
     }
