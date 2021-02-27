@@ -78,9 +78,8 @@ Information on how to use this library can be found [here](https://github.com/mr
 ## Changelog
 
 ### 0.6.0 (alpha)
-* New login process (credits to [@And3rsL](https://github.com/And3rsL))
-  * Support for newer app version login 
-  * Support for Chinese server login
+* Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
+* Support for Chinese server login
 * Implemented AutoEmpty commands for T8+/plus
 * Initial support for some more models (e.g. N3, N7 and N8 series)
 
