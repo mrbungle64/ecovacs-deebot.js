@@ -9,13 +9,6 @@ class VacBot_950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
-    this.cleanStatus = null;
-    this.cleanSpeed = null;
-    this.chargeStatus = null;
-    this.batteryStatus = null;
-    this.waterLevel = null;
-    this.waterboxInfo = null;
-    this.sleepStatus = null;
     this.autoEmpty = null;
     this.volume = 0;
     this.relocationState = null;
@@ -131,9 +124,9 @@ class VacBot_950type extends VacBot {
           type = event['resultData']['cleanState']['content']['type'];
         }
         if (event['resultData']['cleanState']['motionState'] === 'working') {
-          this.cleanStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
+          this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
         } else {
-          this.cleanStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
+          this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['cleanState']['motionState']];
         }
         if (type === 'customArea') {
           if (typeof event['resultData']['cleanState']['content'] === "object") {
@@ -145,10 +138,10 @@ class VacBot_950type extends VacBot {
           this.lastUsedAreaValues = null;
         }
       } else if (event['resultData']['trigger'] === 'alert') {
-        this.cleanStatus = 'alert';
+        this.cleanReport = 'alert';
         this.lastUsedAreaValues = null;
       } else {
-        this.cleanStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
+        this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
         if (dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']] === 'returning') {
           // set charge state on returning to dock
           const chargeStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[event['resultData']['state']];
@@ -164,9 +157,9 @@ class VacBot_950type extends VacBot {
         this.lastUsedAreaValues = null;
       }
     } else {
-      this.cleanStatus = 'error';
+      this.cleanReport = 'error';
     }
-    tools.envLog("[VacBot] *** cleanStatus = %s", this.cleanStatus);
+    tools.envLog("[VacBot] *** cleanReport = %s", this.cleanReport);
   }
 
   handle_cleanLogs(event) {
@@ -238,8 +231,8 @@ class VacBot_950type extends VacBot {
   }
 
   handle_batteryInfo(event) {
-    this.batteryStatus = event['resultData']['value'];
-    tools.envLog("[VacBot] *** batteryStatus = %d\%", this.batteryStatus);
+    this.batteryInfo = event['resultData']['value'];
+    tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
   }
 
   handle_waterLevel(event) {
@@ -401,7 +394,7 @@ class VacBot_950type extends VacBot {
     }
   }
 
-  handle_chargestate(event) {
+  handle_chargeState(event) {
     if (event.hasOwnProperty('resultData')) {
       let status = null;
       const resultCode = parseInt(event['resultCode']);

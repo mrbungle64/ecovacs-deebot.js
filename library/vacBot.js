@@ -31,6 +31,14 @@ class VacBot {
         this.currentMapIndex = null;
         this.lastUsedAreaValues = null;
 
+        this.batteryInfo = null;
+        this.cleanReport = null;
+        this.chargeStatus = null;
+        this.cleanSpeed = null;
+        this.waterLevel = null;
+        this.waterboxInfo = null;
+        this.sleepStatus = null;
+
         this.deebotPosition = {
             x: null,
             y: null,

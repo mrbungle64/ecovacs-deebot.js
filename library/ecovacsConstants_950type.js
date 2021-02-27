@@ -5,7 +5,6 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'edge': 'edge',
     'spot': 'spot',
     'spotArea': 'spotArea',
-    //'single_room': 'singleroom', //REM
     'stop': 'stop',
     'customArea': 'customArea'
 };
@@ -16,13 +15,6 @@ exports.CLEAN_ACTION_TO_ECOVACS = {
     'resume': 'resume',
     'stop': 'stop',
 };
-
-// exports.CLEAN_ACTION_FROM_ECOVACS = {
-//     's': 'start',
-//     'p': 'pause',
-//     'r': 'resume',
-//     'h': 'stop',
-// };
 
 exports.CLEAN_MODE_FROM_ECOVACS = {
     'auto': 'auto',

@@ -31,8 +31,8 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('CleanReport', (state) => {
                 console.log('[app2.js] CleanReport: ' + state);
             });
-            vacbot.on('BatteryInfo', (batterystatus) => {
-                let battery = Math.round(batterystatus);
+            vacbot.on('BatteryInfo', (value) => {
+                let battery = Math.round(value);
                 console.log('[app2.js] BatteryInfo: ' + battery);
             });
             vacbot.on('LifeSpan_filter', (level) => {

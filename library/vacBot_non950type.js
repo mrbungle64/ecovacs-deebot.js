@@ -9,13 +9,6 @@ class VacBot_non950type extends VacBot {
   constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
-    this.cleanReport = null;
-    this.cleanSpeed = null;
-    this.chargeStatus = null;
-    this.batteryInfo = null;
-    this.waterLevel = null;
-    this.waterboxInfo = null;
-    this.sleepStatus = null;
     this.dustcaseInfo = null;
   }
 
@@ -84,7 +77,7 @@ class VacBot_non950type extends VacBot {
         type = action
       }
       this.cleanReport = type;
-      tools.envLog("[VacBot] *** cleanStatus = " + this.cleanReport);
+      tools.envLog("[VacBot] *** cleanReport = " + this.cleanReport);
 
       if (event.attrs.hasOwnProperty('last')) {
         tools.envLog("[VacBot] *** clean last = %s seconds" + event.attrs["last"]);
