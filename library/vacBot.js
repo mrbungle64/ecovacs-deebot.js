@@ -200,14 +200,9 @@ class VacBot {
         }
     }
 
+    // Deprecated
     sendPing() {
-        try {
-            if (!this.ecovacs.sendPing()) {
-                throw new Error("Ping did not reach VacBot");
-            }
-        } catch (e) {
-            throw new Error("Ping did not reach VacBot");
-        }
+        this.ecovacs.sendPing();
     }
 
     disconnect() {

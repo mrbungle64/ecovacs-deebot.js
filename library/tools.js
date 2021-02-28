@@ -108,69 +108,28 @@ function isValidJsonString(str) {
 }
 
 function getEventNameForCommandString(str) {
-    let command = str.toLowerCase().replace(/^_+|_+$/g, '').replace('get','').replace('server', '');
-    if (command.startsWith('on')) { //950 series incoming events
+    let command = str.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
+    if (command.startsWith('On') && (command !== 'OnOff')) { //950 series incoming events
         command = command.substring(2);
     }
     switch (command.toLowerCase()) {
-        case 'clean':
-        case 'cleanreport':
         case 'cleaninfo':
         case 'cleanstate':
             return 'CleanReport';
-        case 'charge':
-        case 'chargestate':
-            return 'ChargeState';
         case 'battery':
-        case 'batteryinfo':
             return 'BatteryInfo';
-        case 'lifespan':
-            return 'LifeSpan';
-        case 'waterlevel':
         case 'waterpermeability':
-        case 'waterinfo':
-            return 'WaterLevel';
-        case 'waterboxinfo':
-            return 'WaterBoxInfo';
-        case 'dustcasest':
-            return 'DustCaseST';
-        case 'chargeposition':
+            return 'WaterInfo';
         case 'chargerpos':
             return 'ChargePosition';
         case 'pos':
-        case 'deebotposition':
             return 'DeebotPosition';
-        case 'netinfo':
-        case 'getnetinfo':
-            return 'NetInfo';
-        case 'error':
         case 'errors':
             return 'Error';
-        case 'sleepstatus':
-            return 'SleepStatus';
-        case 'cleansum':
-            return 'CleanSum';
-        case 'cleanspeed':
-            return 'CleanSpeed';
-        case 'mapset':
-            return 'MapSet';
         case 'mapm':
-        case 'mapp':
             return 'MapP';
-        case 'getmapdata':
-            return 'GetMapData';
-        case 'pullmp':
-            return 'PullMP';
-        case 'pullm':
-            return 'PullM';
-        case 'cleanlogs':
         case 'logapicleanlogs':
             return 'CleanLogs';
-        case 'off':
-        case 'getonoff':
-            return 'GetOnOff';
-        case 'setonoff':
-            return 'SetOnOff';
         default:
             envLog('[tools] Unknown command name: %s str: %s', command, str);
             return command;

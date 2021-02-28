@@ -55,27 +55,6 @@ class Ecovacs extends EventEmitter {
 
     handleCommand(command, event) {
         switch (tools.getEventNameForCommandString(command)) {
-            case "MapP":
-                let mapinfo = this.bot.handle_mapP(event);
-                if (mapinfo) {
-                    this.emit("CurrentMapName", this.bot.currentMapName);
-                    this.emit("CurrentMapMID", this.bot.currentMapMID);
-                    this.emit("CurrentMapIndex", this.bot.currentMapIndex);
-                    this.emit("Maps", this.bot.maps);
-                }
-                break;
-            case "MapSet":
-                let mapset = this.bot.handle_mapSet(event);
-                if (mapset["mapsetEvent"] !== 'error') {
-                    this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
-                }
-                break;
-            case "PullM":
-                let mapsubset = this.bot.handle_pullM(event);
-                if (mapsubset && (mapsubset["mapsubsetEvent"] !== 'error')) {
-                    this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
-                }
-                break;
             case 'ChargeState':
                 this.bot.handle_chargeState(event.children[0]);
                 this.emit('ChargeState', this.bot.chargeStatus);
@@ -92,7 +71,6 @@ class Ecovacs extends EventEmitter {
                 }
                 this.emit('CleanReport', this.bot.cleanReport);
                 if (this.bot.lastUsedAreaValues) {
-                    tools.envLog('[EcovacsXMPP] LastUsedAreaValues: %s', this.bot.lastUsedAreaValues);
                     this.emit("LastUsedAreaValues", this.bot.lastUsedAreaValues);
                 }
                 break;
@@ -104,10 +82,9 @@ class Ecovacs extends EventEmitter {
                 }
                 this.emit("CleanSpeed", this.bot.cleanSpeed);
                 break;
-            case 'Error':
-                this.bot.handle_error(event.attrs);
-                this.emit('Error', this.bot.errorDescription);
-                this.emit('ErrorCode', this.bot.errorCode);
+            case "RelocationState":
+                this.bot.handle_relocationState(event);
+                this.emit("RelocationState", this.bot.relocationState);
                 break;
             case 'LifeSpan':
                 this.bot.handle_lifespan(event.attrs);
@@ -117,18 +94,6 @@ class Ecovacs extends EventEmitter {
                         this.emit('LifeSpan_' + component, this.bot.components[component]);
                     }
                 }
-                break;
-            case 'WaterLevel':
-                this.bot.handle_waterLevel(event);
-                this.emit('WaterLevel', this.bot.waterLevel);
-                break;
-            case 'WaterBoxInfo':
-                this.bot.handle_waterboxInfo(event);
-                this.emit('WaterBoxInfo', this.bot.waterboxInfo);
-                break;
-            case 'DustCaseST':
-                this.bot.handle_dustcaseInfo(event);
-                this.emit('DustCaseInfo', this.bot.dustcaseInfo);
                 break;
             case 'DeebotPosition':
                 this.bot.handle_deebotPosition(event);
@@ -141,6 +106,14 @@ class Ecovacs extends EventEmitter {
                 this.bot.handle_chargePosition(event);
                 this.emit('ChargePosition', this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]);
                 break;
+            case 'WaterLevel':
+                this.bot.handle_waterLevel(event);
+                this.emit('WaterLevel', this.bot.waterLevel);
+                break;
+            case 'WaterBoxInfo':
+                this.bot.handle_waterboxInfo(event);
+                this.emit('WaterBoxInfo', this.bot.waterboxInfo);
+                break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
                 this.emit("NetInfoIP", this.bot.netInfoIP);
@@ -149,6 +122,11 @@ class Ecovacs extends EventEmitter {
             case 'SleepStatus':
                 this.bot.handle_sleepStatus(event);
                 this.emit("SleepStatus", this.bot.sleepStatus);
+                break;
+            case 'Error':
+                this.bot.handle_error(event.attrs);
+                this.emit('Error', this.bot.errorDescription);
+                this.emit('ErrorCode', this.bot.errorCode);
                 break;
             case 'CleanSum':
                 this.bot.handle_cleanSum(event);
@@ -173,7 +151,32 @@ class Ecovacs extends EventEmitter {
                     this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
                 }
                 break;
-            case 'GetOnOff':
+            case "MapP":
+                let mapinfo = this.bot.handle_mapP(event);
+                if (mapinfo) {
+                    this.emit("CurrentMapName", this.bot.currentMapName);
+                    this.emit("CurrentMapMID", this.bot.currentMapMID);
+                    this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                    this.emit("Maps", this.bot.maps);
+                }
+                break;
+            case "MapSet":
+                let mapset = this.bot.handle_mapSet(event);
+                if (mapset["mapsetEvent"] !== 'error') {
+                    this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
+                }
+                break;
+            case "PullM":
+                let mapsubset = this.bot.handle_pullM(event);
+                if (mapsubset && (mapsubset["mapsubsetEvent"] !== 'error')) {
+                    this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                }
+                break;
+            case 'DustCaseST':
+                this.bot.handle_dustcaseInfo(event);
+                this.emit('DustCaseInfo', this.bot.dustcaseInfo);
+                break;
+            case 'OnOff':
                 this.bot.handle_onOff(event);
                 if (this.bot.doNotDisturbEnabled) {
                     this.emit("DoNotDisturbEnabled", this.bot.doNotDisturbEnabled);
@@ -184,9 +187,6 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.voiceReportDisabled) {
                     this.emit("VoiceReportDisabled", this.bot.voiceReportDisabled);
                 }
-                break;
-            case 'SetOnOff':
-                tools.envLog("[EcovacsXMPP] SetOnOff: %s", JSON.stringify(event));
                 break;
             default:
                 tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(event));
