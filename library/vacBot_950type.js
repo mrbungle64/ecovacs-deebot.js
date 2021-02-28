@@ -109,8 +109,8 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** netInfoMAC = %s", this.netInfoMAC);
   }
 
-  handle_cleanInfo(event) {
-    tools.envLog("[VacBot] handle_cleanInfo");
+  handle_cleanReport(event) {
+    tools.envLog("[VacBot] handle_cleanReport");
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       if (event['resultData']['state'] === 'clean') {
