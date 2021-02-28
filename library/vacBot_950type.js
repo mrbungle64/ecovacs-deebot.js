@@ -240,7 +240,7 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** relocationState = " + this.relocationState);
   }
 
-  handle_cachedmapinfo(event) {
+  handle_cachedMapInfo(event) {
     this.currentMapName = 'unknown';
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
@@ -273,7 +273,7 @@ class VacBot_950type extends VacBot {
     tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
   }
 
-  handle_mapset(event) {
+  handle_mapSet(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       let mapMID = event['resultData']['mid'];
@@ -330,7 +330,7 @@ class VacBot_950type extends VacBot {
     }
   }
 
-  handle_mapsubset(event) {
+  handle_mapSubset(event) {
     const resultCode = parseInt(event['resultCode']);
     if (resultCode === 0) {
       let mapMID = event['resultData']['mid'];
