@@ -138,6 +138,7 @@ class VacBot_non950type extends VacBot {
   }
 
   handle_mapP(event) {
+    tools.envLog("[VacBot] *** handle_mapP " + JSON.stringify(event));
     // Execute only if the GetMaps cmd was received
     if (this.handleMapExecuted) {
       return null;
@@ -154,6 +155,7 @@ class VacBot_non950type extends VacBot {
   }
 
   handle_mapSet(event) {
+    tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(event));
     if (event.attrs['tp'] === 'sa') {
       const msid = event.attrs['msid'];
       const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, msid);
@@ -202,10 +204,10 @@ class VacBot_non950type extends VacBot {
   handle_pullM(event) {
     tools.envLog("[VacBot] *** handle_pullM " + JSON.stringify(event));
     if (event.attrs && event.attrs.hasOwnProperty('m')) {
-      let mid = this.pullM_getMid(event);
-      let type = this.pullM_getType(event);
       const value = event.attrs['m'];
-      if (type) {
+      const mid = this.pullM_getMid(event);
+      const type = this.pullM_getType(event);
+      if ((mid !== '') && (type !== '')) {
         if (type === 'sa') {
           let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value, '0');
           this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
@@ -236,7 +238,7 @@ class VacBot_non950type extends VacBot {
     if (event.attrs && event.attrs.hasOwnProperty('id')) {
       return (parseInt(event.attrs['id']) - 999999900);
     } else {
-      return null;
+      return '';
     }
   }
 
@@ -247,7 +249,7 @@ class VacBot_non950type extends VacBot {
     } else {
       // XMPP
       const id = this.pullM_getId(event);
-      if (id) {
+      if (id !== '') {
         if (id <= 39) {
           return id;
         } else if (id <= 79) {
@@ -255,7 +257,7 @@ class VacBot_non950type extends VacBot {
         }
       }
     }
-    return null;
+    return '';
   }
 
   pullM_getType(event) {
@@ -265,7 +267,7 @@ class VacBot_non950type extends VacBot {
     } else {
       // XMPP
       const id = this.pullM_getId(event);
-      if (id) {
+      if (id !== '') {
         if (id <= 39) {
           return 'sa';
         } else if (id <= 79) {
@@ -273,7 +275,7 @@ class VacBot_non950type extends VacBot {
         }
       }
     }
-    return null;
+    return '';
   }
 
   handle_deebotPosition(event) {
