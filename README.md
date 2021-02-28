@@ -82,6 +82,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Support for Chinese server login
 * Implemented AutoEmpty commands for T8+/plus
 * Initial support for some more models (e.g. N3, N7 and N8 series)
+* Quite a lot refactoring
 
 ### 0.5.6
 * Some improvements for handling charge status
