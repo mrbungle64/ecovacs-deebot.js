@@ -67,10 +67,10 @@ class VacBot_non950type extends VacBot {
         type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
       let action = '';
-      if (event.attrs['st']) {
+      if (event.attrs.hasOwnProperty('st')) {
         action = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
       }
-      else if (event.attrs['act']) {
+      else if (event.attrs.hasOwnProperty('act')) {
         action = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
       }
       if (action === 'stop' || action === 'pause') {
@@ -140,59 +140,62 @@ class VacBot_non950type extends VacBot {
   handle_mapP(event) {
     tools.envLog("[VacBot] *** handle_mapP " + JSON.stringify(event));
     // Execute only if the GetMaps cmd was received
-    if (this.handleMapExecuted) {
+    if (!this.handleMapExecuted && event.attrs && event.attrs.hasOwnProperty('i')) {
+      this.currentMapMID = event.attrs['i'];
+      this.currentMapIndex = 1;
+      const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
+      this.maps = {"maps": [ecovacsMap]};
+      this.run('GetMapSet');
+      this.mapSpotAreaInfos[this.currentMapMID] = [];
+      this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
+      this.handleMapExecuted = true;
+      return this.maps;
+    } else {
       return null;
     }
-    this.currentMapMID = event.attrs['i'];
-    this.currentMapIndex = 1;
-    const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
-    this.maps = {"maps": [ecovacsMap]};
-    this.run('GetMapSet');
-    this.mapSpotAreaInfos[this.currentMapMID] = [];
-    this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
-    this.handleMapExecuted = true;
-    return this.maps;
   }
 
   handle_mapSet(event) {
     tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(event));
-    if (event.attrs['tp'] === 'sa') {
-      const msid = event.attrs['msid'];
-      const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, msid);
-      let spotAreas = [];
-      for (let mapIndex in event.children) {
-        if (event.children.hasOwnProperty(mapIndex)) {
-          let mid = event.children[mapIndex].attrs['mid'];
-          if (!spotAreas[mid]) {
-            mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-            this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
-            spotAreas[mid] = true;
+    if (event.attrs && event.attrs.hasOwnProperty('tp')) {
+      if (event.attrs['tp'] === 'sa') {
+        const msid = event.attrs['msid'];
+        const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, msid);
+        let spotAreas = [];
+        for (let mapIndex in event.children) {
+          if (event.children.hasOwnProperty(mapIndex)) {
+            let mid = event.children[mapIndex].attrs['mid'];
+            if (!spotAreas[mid]) {
+              mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
+              this.run('PullM', parseInt(mid), 'sa', this.currentMapMID, mid);
+              spotAreas[mid] = true;
+            }
           }
         }
-      }
-      tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
-      return {
-        mapsetEvent: 'MapSpotAreas',
-        mapsetData: mapSpotAreas
-      };
-    } else if (event.attrs['tp'] === 'vw') {
-      const mapVirtualBoundaries = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
-      let virtualBoundaries = [];
-      for (let mapIndex in event.children) {
-        if (event.children.hasOwnProperty(mapIndex)) {
-          let mid = event.children[mapIndex].attrs['mid'];
-          if (!virtualBoundaries[mid]) {
-            mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
-            this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
-            virtualBoundaries[mid] = true;
+        tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
+        return {
+          mapsetEvent: 'MapSpotAreas',
+          mapsetData: mapSpotAreas
+        };
+      } else if (event.attrs['tp'] === 'vw') {
+        const mapVirtualBoundaries = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
+        let virtualBoundaries = [];
+        for (let mapIndex in event.children) {
+          if (event.children.hasOwnProperty(mapIndex)) {
+            let mid = event.children[mapIndex].attrs['mid'];
+            if (!virtualBoundaries[mid]) {
+              mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
+              this.run('PullM', parseInt(mid), 'vw', this.currentMapMID, mid);
+              virtualBoundaries[mid] = true;
+            }
           }
         }
+        tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(mapVirtualBoundaries));
+        return {
+          mapsetEvent: 'MapVirtualBoundaries',
+          mapsetData: mapVirtualBoundaries
+        };
       }
-      tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(mapVirtualBoundaries));
-      return {
-        mapsetEvent: 'MapVirtualBoundaries',
-        mapsetData: mapVirtualBoundaries
-      };
     }
 
     tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event.attrs['tp']));
