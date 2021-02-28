@@ -28,6 +28,10 @@ class VacBotCommand_non950type {
         return ctl;
     }
 
+    getId() {
+        return this.args['id'];
+    }
+
     toString() {
         return this.command_name() + ' command';
     }
@@ -208,17 +212,13 @@ class GetPosition extends VacBotCommand_non950type {
 
 class GetChargerPos extends VacBotCommand_non950type {
     constructor() {
-        super('GetChargerPos', {
-            'id': '999999999'
-        });
+        super('GetChargerPos');
     }
 }
 
 class GetSleepStatus extends VacBotCommand_non950type {
     constructor() {
-        super('GetSleepStatus', {
-            'id': '999999997'
-        });
+        super('GetSleepStatus');
     }
 }
 
@@ -230,9 +230,7 @@ class GetCleanSum extends VacBotCommand_non950type {
 
 class GetMapM extends VacBotCommand_non950type {
     constructor() {
-        super('GetMapM', {
-            'id': '999999998'
-        });
+        super('GetMapM');
     }
 }
 
@@ -269,8 +267,7 @@ class GetMapSet extends VacBotCommand_non950type {
     constructor(tp = 'sa') {
         if (tp !== '') {
             super('GetMapSet', {
-                'tp': tp,
-                'id': '999999996'
+                'tp': tp
             });
         }
     }

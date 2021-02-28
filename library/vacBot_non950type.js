@@ -282,8 +282,8 @@ class VacBot_non950type extends VacBot {
   }
 
   handle_deebotPosition(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('p') && event.attrs.hasOwnProperty('a')) {
-      if (this.mapSpotAreaInfos[this.currentMapMID]) {
+    tools.envLog("[VacBot] *** deebotPosition event: %s", JSON.stringify(event));
+    if (event.attrs && event.attrs.hasOwnProperty('p')) {
         const posX = event.attrs['p'].split(",")[0];
         const posY = event.attrs['p'].split(",")[1];
         const angle = event.attrs['a'];
@@ -298,7 +298,6 @@ class VacBot_non950type extends VacBot {
         };
         tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
       }
-    }
   }
 
   handle_chargePosition(event) {

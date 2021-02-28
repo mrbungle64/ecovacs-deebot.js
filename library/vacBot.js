@@ -72,6 +72,8 @@ class VacBot {
         this.continuousCleaningEnabled = null;
         this.voiceReportDisabled = null;
 
+        this.commandsSent = [];
+
         const LibraryForProtocol = this.getLibraryForProtocol();
         this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 
@@ -186,10 +188,12 @@ class VacBot {
     }
 
     sendCommand(action) {
-        tools.envLog("[VacBot] Sending command `%s`", action.name);
         if (!this.useMqtt) {
+            this.commandsSent[action.getId()] = action.name;
+            tools.envLog("[VacBot] Sending command `%s` with id %s", action.name, action.getId());
             this.ecovacs.sendCommand(action.to_xml(), this.getVacBotDeviceId());
         } else {
+            tools.envLog("[VacBot] Sending command `%s`", action.name);
             // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
             // IOTMQ devices need the full action for additional parsing
             this.ecovacs.sendCommand(action, this.getVacBotDeviceId());
