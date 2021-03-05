@@ -25,8 +25,8 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('ChargeState', (state) => {
                 console.log('[app2.js] ChargeState: ' + state);
             });
-            vacbot.on('FanSpeed', (speed) => {
-                console.log('[app2.js] FanSpeed: ' + speed);
+            vacbot.on('CleanSpeed', (speed) => {
+                console.log('[app2.js] CleanSpeed: ' + speed);
             });
             vacbot.on('CleanReport', (state) => {
                 console.log('[app2.js] CleanReport: ' + state);
@@ -55,6 +55,26 @@ api.connect(account_id, password_hash).then(() => {
             });
             vacbot.on('Error', (value) => {
                 console.log('[app2.js] Error: ' + value);
+            });
+            vacbot.on('DoNotDisturbEnabled', (value) => {
+                const doNotDisturb = (parseInt(value) === 1);
+                console.log('[app2.js] DoNotDisturbEnabled: ' + doNotDisturb);
+            });
+            vacbot.on('ContinuousCleaningEnabled', (value) => {
+                const continuousCleaning = (parseInt(value) === 1);
+                console.log('[app2.js] ContinuousCleaningEnabled: ' + continuousCleaning);
+            });
+            vacbot.on('Volume', (value) => {
+                console.log('[app2.js] Volume: ' + value);
+            });
+            vacbot.on('ChargePosition', (chargePosition) => {
+                console.log('[app2.js] ChargePosition: ' + chargePosition);
+            });
+            vacbot.on('DeebotPosition', (deebotPosition) => {
+                console.log('[app2.js] DeebotPosition: ' + deebotPosition);
+            });
+            vacbot.on('LastUsedAreaValues', (values) => {
+                console.log('[app2.js] LastUsedAreaValues: ' + values);
             });
         });
 
