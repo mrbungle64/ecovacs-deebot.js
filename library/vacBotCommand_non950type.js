@@ -389,6 +389,22 @@ class ResetLifeSpan extends VacBotCommand_non950type {
     }
 }
 
+// Tested with
+// - OZMO 930 (it works)
+// - Deebot 901 (does not work)
+class RenameSpotArea extends VacBotCommand_non950type {
+    constructor(msid, mid, name) {
+        super('RenameM', {
+            'tp': 'sa',
+            'msid': msid,
+            'm': {
+                'mid': mid,
+                'n': name
+            }
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -433,3 +449,4 @@ module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLogApiCleanLogs = GetLogApiCleanLogs;
 module.exports.GetOnOff = GetOnOff;
 module.exports.SetOnOff = SetOnOff;
+module.exports.RenameSpotArea = RenameSpotArea;

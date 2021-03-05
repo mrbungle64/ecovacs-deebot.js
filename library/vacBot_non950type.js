@@ -644,6 +644,11 @@ class VacBot_non950type extends VacBot {
           }
         }
         break;
+      case "RenameSpotArea".toLowerCase():
+        if (arguments.length >= 4) {
+          this.sendCommand(new vacBotCommand.RenameSpotArea(arguments[1],arguments[2],arguments[3]));
+        }
+        break;
     }
   }
 }
