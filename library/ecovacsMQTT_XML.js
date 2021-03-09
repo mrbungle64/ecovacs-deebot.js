@@ -12,8 +12,12 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     sendCommand(action, recipient) {
+        let api = constants.IOTDEVMANAGERAPI;
+        if (action.name === 'GetLogApiCleanLogs') {
+            api = constants.LGLOGAPI;
+        }
         let c = this.wrapCommand(action, recipient);
-        this.callEcovacsDeviceAPI(c).then((json) => {
+        this.callEcovacsDeviceAPI(c, api).then((json) => {
             this.handleCommandResponse(action, json);
         }).catch((e) => {
             tools.envLog("[EcovacsMQTT_XML] error sendCommand: %s", e.toString());
@@ -60,87 +64,6 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
         return payloadXml.toString();
-    }
-
-    callEcovacsDeviceAPI(params) {
-        return new Promise((resolve, reject) => {
-            let api = constants.IOTDEVMANAGERAPI;
-            if (!params['cmdName']) {
-                api = constants.LGLOGAPI;
-            } else {
-                tools.envLog("[EcovacsMQTT] cmdName: ", params['cmdName']);
-            }
-            let portalUrlFormat = constants.PORTAL_URL_FORMAT;
-            if (this.country.toLowerCase() === 'cn') {
-                portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
-            }
-            let url = (portalUrlFormat + '/' + api).format({
-                continent: this.continent
-            });
-            let headers = {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(JSON.stringify(params))
-            };
-
-            url = new URL(url);
-            const reqOptions = {
-                hostname: url.hostname,
-                path: url.pathname,
-                method: 'POST',
-                headers: headers
-            };
-            tools.envLog("[EcovacsMQTT] Sending POST: ", JSON.stringify(reqOptions, getCircularReplacer()));
-
-            const req = https.request(reqOptions, (res) => {
-                res.setEncoding('utf8');
-                res.setTimeout(6000);
-                let rawData = '';
-                res.on('data', (chunk) => {
-                    rawData += chunk;
-                });
-                res.on('end', () => {
-                    try {
-                        const json = JSON.parse(rawData);
-                        if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
-                            if (this.bot.errorCode != "0") {
-                                this.bot.handle_error({code: "0"});
-                                this.emit("Error", this.bot.errorDescription);
-                                this.emit('ErrorCode', this.bot.errorCode);
-                            }
-                            resolve(json);
-                        } else {
-                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
-                            this.bot.handle_error({code: json['errno']});
-                            this.emit("Error", this.bot.errorDescription);
-                            this.emit('ErrorCode', this.bot.errorCode);
-                            // Error code 3 = request oauth error
-                            if (json['errno'] == 3) {
-                                this.emit("disconnect", true);
-                                this.disconnect();
-                            }
-                            // Error code 500 = wait for response timed out (see issue #19)
-                            if (json['errno'] != 500) {
-                                throw "failure code: {errno}".format({
-                                    errno: json['errno']
-                                });
-                            }
-                        }
-                    } catch (e) {
-                        tools.envLog("[EcovacsMQTT] " + e.toString());
-                        reject(e);
-                    }
-                });
-            });
-
-            req.on('error', (e) => {
-                tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
-                reject(e);
-            });
-
-            // write data to request body
-            req.write(JSON.stringify(params));
-            req.end();
-        });
     }
 
     handleCommandResponse(action, json) {
