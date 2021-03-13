@@ -34,7 +34,7 @@ const CODES = {
     '500': 'Request Timeout',
     '601': 'ERROR_ClosedAIVISideAbnormal',
     '602': 'ClosedAIVIRollAbnormal',
-    'UNKNOW': 'unknown'
+    'resultCode': 'resultCode'
 };
 
 module.exports = CODES;

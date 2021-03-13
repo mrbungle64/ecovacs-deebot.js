@@ -32,6 +32,7 @@ class VacBot {
         this.lastUsedAreaValues = null;
 
         this.batteryInfo = null;
+        this.batteryIsLow = null;
         this.cleanReport = null;
         this.chargeStatus = null;
         this.cleanSpeed = null;
