@@ -122,7 +122,6 @@ api.connect(account_id, password_hash).then(() => {
         console.log('[app2.js] hasAutoEmptyStation: ' + vacbot.hasAutoEmptyStation());
 
         setTimeout(() => {
-            vacbot.run('Clean');
             if (vacbot.hasMainBrush()) {
                 vacbot.run('GetLifeSpan', 'main_brush');
             }
