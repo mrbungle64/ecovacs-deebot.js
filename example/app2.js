@@ -76,6 +76,33 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('LastUsedAreaValues', (values) => {
                 console.log('[app2.js] LastUsedAreaValues: ' + values);
             });
+            vacbot.on('Maps', (maps) => {
+                console.log('[app2.js] Maps: ' + JSON.stringify(maps));
+                for (const i in maps['maps']) {
+                    const mapID = maps['maps'][i]['mapID'];
+                    vacbot.run('GetSpotAreas', mapID);
+                }
+            });
+            vacbot.on('MapSpotAreas', (spotAreas) => {
+                console.log('[app2.js] MapSpotAreas: ' + JSON.stringify(spotAreas));
+                for (const i in spotAreas['mapSpotAreas']) {
+                    const spotAreaID = spotAreas['mapSpotAreas'][i]['mapSpotAreaID'];
+                    vacbot.run('GetSpotAreaInfo', spotAreas['mapID'], spotAreaID);
+                }
+            });
+            vacbot.on('MapSpotAreaInfo', (area) => {
+                console.log('[app2.js] MapSpotAreaInfo: ' + JSON.stringify(area));
+            });
+            vacbot.on('CurrentMapName', (value) => {
+                console.log('[app2.js] CurrentMapName: ' + value);
+            });
+            vacbot.on('CurrentMapMID', (mapID) => {
+                console.log('[app2.js] CurrentMapMID: ' + mapID);
+                vacbot.run('GetSpotAreas', mapID);
+            });
+            vacbot.on('CurrentMapIndex', (value) => {
+                console.log('[app2.js] CurrentMapIndex: ' + value);
+            });
         });
 
         vacbot.connect();
@@ -110,6 +137,9 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetBatteryState');
             if (vacbot.hasMoppingSystem()) {
                 vacbot.run('GetWaterLevel');
+            }
+            if (vacbot.hasSpotAreas()) {
+                vacbot.run('GetMaps');
             }
         }, 60000);
 
