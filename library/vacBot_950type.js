@@ -276,12 +276,11 @@ class VacBot_950type extends VacBot {
                 mapsetEvent: 'MapSpotAreas',
                 mapsetData: mapSpotAreas
             };
-        } else if (event['resultData']['type'] === 'vw' || event['resultData']['type'] === 'mw') {
+        } else if ((event['resultData']['type'] === 'vw') || (event['resultData']['type'] === 'mw')) {
             if (typeof this.mapVirtualBoundaries[mapMID] === 'undefined') {
                 tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + mapMID);
                 this.mapVirtualBoundaries[mapMID] = new map.EcovacsMapVirtualBoundaries(mapMID);  //initialize array for mapVirtualBoundaries if not existing
-                this.mapVirtualBoundariesResponses[mapMID][0] = false;
-                this.mapVirtualBoundariesResponses[mapMID][1] = false;
+                this.mapVirtualBoundariesResponses[mapMID] = [false, false];
             }
             for (let mapIndex in event['resultData']['subsets']) {
                 tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + event['resultData']['subsets'][mapIndex]['mssid']);
@@ -333,7 +332,7 @@ class VacBot_950type extends VacBot {
                 mapsubsetEvent: 'MapSpotAreaInfo',
                 mapsubsetData: mapSpotAreaInfo
             };
-        } else if (event['resultData']['type'] === 'vw' || event['resultData']['type'] === 'mw') {
+        } else if ((event['resultData']['type'] === 'vw') || (event['resultData']['type'] === 'mw')) {
             let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(mapMID, event['resultData']['mssid'], event['resultData']['type'], event['resultData']['value']);
             if (typeof this.mapVirtualBoundaryInfos[mapMID] === 'undefined') {
                 this.mapVirtualBoundaryInfos[mapMID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
