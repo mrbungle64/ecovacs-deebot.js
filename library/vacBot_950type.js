@@ -171,11 +171,15 @@ class VacBot_950type extends VacBot {
                         tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
                         let imageUrl = logs[logIndex]['imageUrl'];
                         if ((!this.lastCleanLogUseAlternativeAPICall)
-                            && (this.cleanLog_lastImageTimestamp < timestamp || (!this.cleanLog_lastImageTimestamp))) {
+                            && (this.cleanLog_lastTimestamp < timestamp || (!this.cleanLog_lastTimestamp))) {
                             this.cleanLog_lastImageUrl = imageUrl;
-                            this.cleanLog_lastImageTimestamp = timestamp;
+                            this.cleanLog_lastTimestamp = timestamp;
+                            this.cleanLog_lastSquareMeters = squareMeters;
+                            this.cleanLog_lastTotalTimeString = totalTimeString;
                             tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-                            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+                            tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
+                            tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
+                            tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
                         }
                         this.cleanLog[logs[logIndex]['id']] = {
                             'squareMeters': squareMeters,
@@ -195,10 +199,10 @@ class VacBot_950type extends VacBot {
     handle_lastCleanLog(event) {
         tools.envLog("[VacBot] handle_lastCleanLog");
         if (event['resultData'].hasOwnProperty('log')) {
-            this.cleanLog_lastImageTimestamp = parseInt(event['resultData']['log']['ts']);
+            this.cleanLog_lastTimestamp = parseInt(event['resultData']['log']['ts']);
             this.cleanLog_lastImageUrl = event['resultData']['log']['imageUrl'];
             tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+            tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
         }
     }
 

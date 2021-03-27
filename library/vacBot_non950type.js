@@ -398,11 +398,17 @@ class VacBot_non950type extends VacBot {
           let date = new Date(timestamp * 1000);
           let totalTimeString = tools.getTimeString(lastTime);
 
-          if ((c === 0) && (imageUrl)) {
-            this.cleanLog_lastImageUrl = imageUrl;
-            this.cleanLog_lastImageTimestamp = timestamp;
-            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-            tools.envLog("[VacBot] *** cleanLog_lastImageTimestamp = " + this.cleanLog_lastImageTimestamp);
+          if (c === 0) {
+            if (imageUrl) {
+              this.cleanLog_lastImageUrl = imageUrl;
+              tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+            }
+            this.cleanLog_lastTimestamp = timestamp;
+            this.cleanLog_lastSquareMeters = squareMeters;
+            this.cleanLog_lastTotalTimeString = totalTimeString;
+            tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
+            tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
+            tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
           }
 
           this.cleanLog[key] = {

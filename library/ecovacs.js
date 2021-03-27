@@ -145,10 +145,13 @@ class Ecovacs extends EventEmitter {
                 }
                 if (cleanLog.length) {
                     this.emit("CleanLog", cleanLog);
+                    this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                    this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                    this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
                 }
                 if (this.bot.cleanLog_lastImageUrl) {
                     this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
-                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
                 }
                 break;
             case "MapP":

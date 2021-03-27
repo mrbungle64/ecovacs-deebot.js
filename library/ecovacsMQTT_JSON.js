@@ -325,7 +325,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 if (!this.bot.lastCleanLogUseAlternativeAPICall) {
                     this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
-                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
+                    this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                    this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                    this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
                 }
                 break;
             case 'lastcleanlog':
@@ -333,9 +336,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (this.bot.lastCleanLogUseAlternativeAPICall) {
                     this.bot.handle_lastCleanLog(event);
 
+                    if (this.bot.cleanLog_lastTimestamp) {
+                        this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                        this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                        this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
+                    }
                     if (this.bot.cleanLog_lastImageUrl) {
                         this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
-                        this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastImageTimestamp);
+                        this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
                     }
                 }
                 break;
