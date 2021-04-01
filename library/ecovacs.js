@@ -75,7 +75,7 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             case "CleanSpeed":
-                if (event.children) {
+                if (event.children && (event.children.length > 0)) {
                     this.bot.handle_cleanSpeed(event.children[0]);
                 } else {
                     this.bot.handle_cleanSpeed(event);
