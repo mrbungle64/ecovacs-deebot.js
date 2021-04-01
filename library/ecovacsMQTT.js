@@ -81,7 +81,7 @@ class EcovacsMQTT extends Ecovacs {
             }
 
             url = new URL(url);
-            tools.envLog(`[EcovacsMQTT_JSON] Calling ${url.href}`);
+            tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
             const reqOptions = {
                 hostname: url.hostname,
                 path: url.pathname,
@@ -100,11 +100,11 @@ class EcovacsMQTT extends Ecovacs {
                 res.on('end', () => {
                     try {
                         const json = JSON.parse(rawData);
-                        tools.envLog("[EcovacsMQTT_JSON] call response %s", JSON.stringify(json, getCircularReplacer()));
+                        tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
                         if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
                             resolve(json);
                         } else {
-                            tools.envLog("[EcovacsMQTT_JSON] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
                             if (this.bot.is950type()) {
                                 this.bot.handle_error({resultData: {code: json['errno']}});
                             } else {
@@ -125,7 +125,7 @@ class EcovacsMQTT extends Ecovacs {
                             }
                         }
                     } catch (e) {
-                        tools.envLog("[EcovacsMQTT_JSON] error: " + e.toString());
+                        tools.envLog("[EcovacsMQTT] error: " + e.toString());
                         reject(e);
                     }
                 });
@@ -137,7 +137,7 @@ class EcovacsMQTT extends Ecovacs {
             });
 
             // write data to request body
-            tools.envLog("[EcovacsMQTT_JSON] Sending", JSON.stringify(params, getCircularReplacer()));
+            tools.envLog("[EcovacsMQTT] Sending", JSON.stringify(params, getCircularReplacer()));
             req.write(JSON.stringify(params));
             req.end();
         });
