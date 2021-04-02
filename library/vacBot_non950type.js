@@ -143,7 +143,7 @@ class VacBot_non950type extends VacBot {
     if (!this.handleMapExecuted && event.attrs && event.attrs.hasOwnProperty('i')) {
       this.currentMapMID = event.attrs['i'];
       this.currentMapIndex = 1;
-      const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, true);
+      const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, 1);
       this.maps = {"maps": [ecovacsMap]};
       this.run('GetMapSet');
       this.mapSpotAreaInfos[this.currentMapMID] = [];
@@ -254,9 +254,9 @@ class VacBot_non950type extends VacBot {
       const id = this.pullM_getId(event);
       if (id !== '') {
         if (id <= 39) {
-          return id;
+          return id.toString();
         } else if (id <= 79) {
-          return (id - 40);
+          return (id - 40).toString();
         }
       }
     }
