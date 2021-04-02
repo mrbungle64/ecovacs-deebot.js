@@ -83,13 +83,14 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.6.0 (alpha)
+### 0.6.0 (beta)
 * Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
 * Support for Chinese server login
 * Implemented AutoEmpty commands for T8+/plus
 * Added some cleaning log values
 * Initial support for some more models (e.g. N3, N7 and N8 series)
 * Quite a lot refactoring and code consolidation
+* Improved example apps
 
 ### 0.5.6
 * Some improvements for handling charge status
@@ -123,71 +124,8 @@ There is of course no claim to full functionality.
 * Fix problem running multiple devices
 * Added support for more Ozmo T8 models
 
-### 0.4.24 - 0.4.26
-* Bugfix releases
-
-### 0.4.23
-* Added support for Ozmo T8+
-
-### 0.4.22
-* (boriswerner) Added new spotAreaNames (950 type)
-
-### 0.4.21
-* Update some dependencies
-* Bugfix for Ozmo T8 (without AIVI)
-
-### 0.4.20
-* Removed canvas from dependencies
-
-### 0.4.19
-* Added support for Ozmo T8 (without AIVI)
-
-### 0.4.18
-* Update dependencies
-* ResetLifeSpan and SetLifeSpan (non Ozmo 950)
-
-### 0.4.17
-* Several enhancements and fixes. Especially for N79S/SE and N79T/W
-
-### 0.4.16
-* Bugfix release
-
-### 0.4.14 - 0.4.15
-* Added support for Ozmo T8 AIVI
-
-### 0.4.13
-* (boriswerner) Emit error on missing cleanlog (Ozmo 920/950)
-
-### 0.4.12
-* (boriswerner) Control which API call is used for lastCleanMap & timestamp (Ozmo 920/950)
-
-### 0.4.11
-* Several enhancements and fixes
-
-### 0.4.6 - 0.4.10
-* Implemented cleaning logs
-* Several enhancements and fixes
-
-### 0.4.5
-* (nicoduj) Fixed `Failure code 0002` error
-* Implemented move commands
-* Some work on implementation of handling cleanLogs
-* Several enhancements and fixes
-
-### 0.4.4
-* Added support for Ozmo 920
-
-### 0.4.1 - 0.4.3
-* Added map/spotArea template and functionality for Ozmo 930 and Deebot 900/901
-* Improved handling command response and MQTT messages
-* Several enhancements and fixes
-
-### 0.4.0
-* (boriswerner) Added map/spotArea template and functionality
-* (boriswerner) Added enhanced map/spotArea functionality for Ozmo 950
-
-### 0.0.2 - 0.3.9
-* [Changelog archive](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Changelog-(archive)#039)
+### 0.0.2 - 0.4.26
+* [Changelog archive](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Changelog-(archive))
 
 ## Thanks and credits
 
