@@ -12,35 +12,13 @@ Library for running Ecovacs Deebot vacuum cleaner robots
 
 ## Installation
 
-This library uses the [node-canvas](https://www.npmjs.com/package/canvas) library for some map-related functionality which may require the installation of some additional packages.
-This is optional and not necessary for models without map functionality, but for full functional range please install the following packages.
-
-For Debian-based Linux systems the following commands should be executed:
-```bash
-sudo apt-get update
-sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-```
-A reboot might be necessary before executing the next command
-```bash
-sudo npm install canvas --unsafe-perm=true
-```
-For instructions for other systems visit https://www.npmjs.com/package/canvas#compiling
-
-Afterwards you can install the library with
-```bash
-npm install ecovacs-deebot
-```
-
-If you want to install this library explicitly without canvas you can install it with
-```bash
-npm install ecovacs-deebot --no-optional
-```
+Information on how to install this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Installation).
 
 It is recommended to use version 10.x, 12.x or 14.x of Node.js. The minimum required version is 10.x
 
 ## Usage
 
-Information on how to use this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki).
+Information on how to use this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Usage).
 
 ## Models
 
