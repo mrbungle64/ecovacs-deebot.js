@@ -81,6 +81,7 @@ api.connect(account_id, password_hash).then(() => {
                 for (const i in maps['maps']) {
                     const mapID = maps['maps'][i]['mapID'];
                     vacbot.run('GetSpotAreas', mapID);
+                    vacbot.run('GetVirtualBoundaries', mapID);
                 }
             });
             vacbot.on('MapSpotAreas', (spotAreas) => {
@@ -92,6 +93,23 @@ api.connect(account_id, password_hash).then(() => {
             });
             vacbot.on('MapSpotAreaInfo', (area) => {
                 console.log('[app2.js] MapSpotAreaInfo: ' + JSON.stringify(area));
+            });
+            vacbot.on('MapVirtualBoundaries', (virtualBoundaries) => {
+                console.log('[app2.js] MapVirtualBoundaries: ' + JSON.stringify(virtualBoundaries));
+                const mapID = virtualBoundaries['mapID'];
+                const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
+                const virtualBoundaryArray = [];
+                for (const i in virtualBoundariesCombined) {
+                    virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
+                }
+                for (const i in virtualBoundaryArray) {
+                    const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
+                    const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
+                    vacbot.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
+                }
+            });
+            vacbot.on('MapVirtualBoundaryInfo', (virtualBoundary) => {
+                console.log('[app2.js] MapVirtualBoundaryInfo: ' + JSON.stringify(virtualBoundary));
             });
             vacbot.on('CurrentMapName', (value) => {
                 console.log('[app2.js] CurrentMapName: ' + value);
