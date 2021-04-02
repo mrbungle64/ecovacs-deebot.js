@@ -279,12 +279,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
                 this.emit("NetInfoMAC", this.bot.netInfoMAC);
                 break;
-            case "setwaterinfo":
-                this.bot.run('GetWaterLevel');
-                break;
-            case "setspeed":
-                this.bot.run('GetCleanSpeed');
-                break;
             case 'sleep':
                 this.bot.handle_sleepStatus(event);
                 this.emit("SleepStatus", this.bot.sleepStatus);
