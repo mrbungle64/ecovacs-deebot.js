@@ -1,126 +1,58 @@
-const ecovacsDeebot = require('../index.js')
-  , EcoVacsAPI = ecovacsDeebot.EcoVacsAPI
-  , nodeMachineId = require('node-machine-id')
-  , http = require('http')
-  , countries = ecovacsDeebot.countries
-  , myInfo = require('./myInfo.js');
+const ecovacsDeebot = require('./../index');
+const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
+const nodeMachineId = require('node-machine-id');
 
-// This example app is deprecated
-// Please don't use it anymore :)
+// The account_id is your Ecovacs ID or email address.
+const account_id = "email@domain.com";
+const password = "a1b2c3d4";
 
-let account_id = myInfo ? myInfo.ACCOUNT_ID : "email@domain.com"
-  , password = myInfo ? myInfo.PASSWORD : "a1b2c3d4"
-  , password_hash = EcoVacsAPI.md5(password)
-  , device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync())
-  , country = myInfo ? myInfo.COUNTRY : null
-  , continent = myInfo ? myInfo.CONTINENT : null;
+const deviceID = 0; // The first vacuum from your account
 
+// You need to provide a device ID uniquely identifying the
+// machine you're using to connect, the country you're in.
+// The module exports a countries object which contains a mapping
+// between country codes and continent codes.
+const countryCode = "de"; // If it doesn't appear to work try "ww", their world-wide catchall.
+const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceID);
+const continent = ecovacsDeebot.countries[countryCode.toUpperCase()].continent.toLowerCase();
 
-httpGetJson('http://ipinfo.io/json').then((json) => {
-  country = json['country'].toUpperCase();
+let api = new EcoVacsAPI(device_id, countryCode, continent);
 
-  if (!countries[country]) {
-    throw "Unrecognized country code";
-  }
-  if (!countries[country].continent) {
-    throw "Continent unknown for this country code";
-  }
+// The password_hash is an md5 hash of your Ecovacs password.
+const password_hash = EcoVacsAPI.md5(password);
 
-  continent = countries[country].continent.toUpperCase();
+// This logs you in through the HTTP API and retrieves the required
+// access tokens from the server side. This allows you to requests
+// the devices linked to your account to prepare connectivity to your vacuum.
+api.connect(account_id, password_hash).then(() => {
 
-  console.log("Device ID: %s", device_id);
-  console.log("Account ID: %s", account_id);
-  console.log("Encrypted account ID: %s", EcoVacsAPI.encrypt(account_id));
-  console.log("Password hash: %s", password_hash);
-  console.log("Encrypted password hash: %s", EcoVacsAPI.encrypt(password_hash));
-  console.log("Country: %s", country);
-  console.log("Continent: %s", continent);
+  api.devices().then((devices) => {
+    console.log("Devices:", JSON.stringify(devices));
 
-  let api = new EcoVacsAPI(device_id, country, continent);
+    let vacuum = devices[deviceID];
+    let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
 
-  // Login
-  api.connect(account_id, password_hash).then(() => {
-    console.log("Connected!");
-    // Get devices
-    api.devices().then((devices) => {
+    // Once the session has started the bot will fire a 'ready' event.
+    // At this point you can request information from your vacuum or send actions to it.
+    vacbot.on("ready", (event) => {
+      console.log("vacbot ready");
 
-      let vacuum = devices[0];
-      let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+      vacbot.run("BatteryState");
+      vacbot.run("GetCleanState");
+      vacbot.run("GetChargeState");
 
-      vacbot.on("ready", (event) => {
-       console.log("Vacbot ready");
-
-       vacbot.run("batterystate");
-       vacbot.run("clean");
-
-
-
-       setTimeout(() => {
-        vacbot.run("stop");
-        vacbot.run("charge");
-      }, 10000);
-
-       vacbot.on("BatteryInfo", (battery) => {
-          console.log("Battery level: %d\%", Math.round(battery.power));
-        });
-
-        vacbot.on("CleanReport", (clean_status) => {
-          console.log("Clean status: %s", clean_status);
-        });
-
-        vacbot.on("ChargeState", (charge_status) => {
-          console.log("Charge status: %s", charge_status);
-        });
-
-        vacbot.on("PushRobotNotify", (values) => {
-          console.log("Notification '%s': %s", values.type, values.act);
-        });
+      vacbot.on("BatteryInfo", (battery) => {
+        console.log("Battery level: " + Math.round(battery));
       });
-      vacbot.connect();
+      vacbot.on('CleanReport', (value) => {
+        console.log("Clean status: " + value);
+      });
+      vacbot.on('ChargeState', (value) => {
+        console.log("Charge status: " + value);
+      });
     });
-  }).catch((e) => {
-    console.error("Failure in connecting!");
+    vacbot.connect();
   });
+}).catch((e) => {
+  console.error("Failure in connecting!");
 });
-
-function httpGetJson(url) {
-  return new Promise((resolve, reject) => {
-    http.get(url, (res) => {
-      const statusCode = res.statusCode;
-      const contentType = res.headers['content-type'];
-
-      let error;
-      if (statusCode !== 200) {
-        error = new Error('Request Failed.\n' +
-          `Status Code: ${statusCode}`);
-      } else if (!/^application\/json/.test(contentType)) {
-        error = new Error('Invalid content-type.\n' +
-          `Expected application/json but received ${contentType}`);
-      }
-      if (error) {
-        console.error("[App]", error.message);
-        // consume response data to free up memory
-        res.resume();
-        throw error;
-      }
-
-      res.setEncoding('utf8');
-      let rawData = '';
-      res.on('data', (chunk) => {
-        rawData += chunk;
-      });
-      res.on('end', function () {
-        try {
-          const json = JSON.parse(rawData);
-          resolve(json);
-        } catch (e) {
-          console.error("[App]", e.message);
-          reject(e);
-        }
-      });
-    }).on('error', (e) => {
-      console.error(`Got error: ${e.message}`);
-      reject(e);
-    });
-  });
-}
