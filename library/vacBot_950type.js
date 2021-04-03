@@ -393,9 +393,11 @@ class VacBot_950type extends VacBot {
     }
 
     handle_stats(event) {
-        this.currentStats_cleanedArea = event['resultData']['area'];
-        this.currentStats_cleanedSeconds = event['resultData']['time'];
-        this.currentStats_cleanType = event['resultData']['type'];
+        this.currentStats = {
+            'cleanedArea': event['resultData']['area'],
+            'cleanedSeconds': event['resultData']['time'],
+            'cleanType': event['resultData']['type']
+        }
     }
 
     handle_error(event) {

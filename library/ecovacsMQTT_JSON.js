@@ -189,17 +189,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         switch (command) {
             case "stats":
                 this.bot.handle_stats(event);
-                if (this.bot.currentStats_cleanedArea) {
-                    this.emit("CurrentStats_cleanedArea", this.bot.currentStats_cleanedArea);
-                    this.bot.currentStats_cleanedArea = null;
-                }
-                if (this.bot.currentStats_cleanedSeconds) {
-                    this.emit("CurrentStats_cleanedSeconds", this.bot.currentStats_cleanedSeconds);
-                    this.bot.currentStats_cleanedSeconds = null;
-                }
-                if (this.bot.currentStats_cleanType) {
-                    this.emit("CurrentStats_cleanType", this.bot.currentStats_cleanType);
-                    this.bot.currentStats_cleanType = null;
+                if (this.bot.currentStats) {
+                    this.emit("CurrentStats", this.bot.currentStats);
+                    this.bot.currentStats = null;
                 }
                 break;
             case "chargestate":

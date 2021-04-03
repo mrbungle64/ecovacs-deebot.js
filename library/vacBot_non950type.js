@@ -450,14 +450,15 @@ class VacBot_non950type extends VacBot {
   }
 
   handle_stats(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('l')) {
-      this.currentStats_cleanedSeconds = parseInt(event.attrs.l);
-    }
-    if (event.attrs && event.attrs.hasOwnProperty('a')) {
-      this.currentStats_cleanedArea = parseInt(event.attrs.a);
-    }
-    if (event.attrs && event.attrs.hasOwnProperty('type')) {
-      this.currentStats_cleanType = event.attrs.type;
+    if (event.attrs) {
+      const area = parseInt(event.attrs.a);
+      const seconds = parseInt(event.attrs.l);
+      const type = event.attrs.type;
+      this.currentStats = {
+        'cleanedArea': area,
+        'cleanedSeconds': seconds,
+        'cleanType': type
+      }
     }
   }
 
