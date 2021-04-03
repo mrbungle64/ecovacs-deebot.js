@@ -392,6 +392,12 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
     }
 
+    handle_stats(event) {
+        this.currentStats_cleanedArea = event['resultData']['area'];
+        this.currentStats_cleanedSeconds = event['resultData']['time'];
+        this.currentStats_cleanType = event['resultData']['type'];
+    }
+
     handle_error(event) {
         this.errorCode = event['resultData']['code'].toString();
         // known errorCode from library
