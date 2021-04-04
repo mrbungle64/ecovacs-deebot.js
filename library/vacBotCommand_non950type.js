@@ -237,9 +237,7 @@ class GetMapM extends VacBotCommand_non950type {
 class PullMP extends VacBotCommand_non950type {
     constructor(pid) {
         if (pid) {
-            let id = 999999800 + pid;
             super('PullMP', {
-                'id': id,
                 'pid': pid
             });
         }
@@ -248,12 +246,7 @@ class PullMP extends VacBotCommand_non950type {
 
 class PullM extends VacBotCommand_non950type {
     constructor(pid, tp, msid, mid) {
-        let id = 999999900 + pid;
-        if (tp === 'vw') {
-            id = id + 40;
-        }
         super('PullM', {
-            'id': id,
             'tp': tp,
             'msid': msid,
             'mid': mid
@@ -350,11 +343,8 @@ class GetLogApiCleanLogs extends VacBotCommand_non950type {
 class GetOnOff extends VacBotCommand_non950type {
     constructor(type) {
         type = constants_type.ON_OFF_TO_ECOVACS[type];
-        const tid = (type === 'b') ? 0 : (type === 'g') ? 1 : 2;
-        let id = 999999990 + tid;
         super('GetOnOff', {
-            't': type,
-            'id': id
+            't': type
         });
     }
 }

@@ -12,6 +12,10 @@ class VacBotCommand_950type {
         this.api = api;
     }
 
+    getId() {
+        return this.args['id'];
+    }
+
     toString() {
         return this.command_name() + ' command';
     }

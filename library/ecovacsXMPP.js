@@ -31,16 +31,15 @@ class EcovacsXMPP extends Ecovacs {
                 tools.envLog('[EcovacsXMPP] secondChild: %s', secondChild.toString());
                 let command = null;
                 if (secondChild.attrs) {
-                    if (secondChild.attrs.hasOwnProperty('id') && (this.bot.commandsSent[secondChild.attrs.id])) {
-                        command = this.bot.commandsSent[secondChild.attrs.id];
-                        delete this.bot.commandsSent[secondChild.attrs.id];
+                    if (secondChild.attrs.id && (this.bot.commandsSent[secondChild.attrs.id])) {
+                        const action = this.bot.commandsSent[secondChild.attrs.id];
+                        command = action.name;
                     } else {
                         command = secondChild.attrs.td;
                     }
-                }
-                tools.envLog('[EcovacsXMPP] command: %s', command);
-                if (command) {
-                    this.handleCommand(command, secondChild)
+                    tools.envLog('[EcovacsXMPP] command: %s', command);
+                    this.handleCommand(command, secondChild);
+                    delete this.bot.commandsSent[secondChild.attrs.id];
                 }
                 else {
                     tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

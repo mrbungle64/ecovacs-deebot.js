@@ -28,7 +28,7 @@ class VacBot {
         this.mapVirtualBoundaryInfos = [];
         this.currentMapName = 'unknown';
         this.currentMapMID = null;
-        this.currentMapIndex = null;
+        this.currentMapIndex = 0;
         this.lastUsedAreaValues = null;
 
         this.batteryInfo = null;
@@ -193,8 +193,10 @@ class VacBot {
     }
 
     sendCommand(action) {
+        if (!this.is950type()) {
+            this.commandsSent[action.getId()] = action;
+        }
         if (!this.useMqtt) {
-            this.commandsSent[action.getId()] = action.name;
             tools.envLog("[VacBot] Sending command `%s` with id %s", action.name, action.getId());
             this.ecovacs.sendCommand(action.to_xml(), this.getVacBotDeviceId());
         } else {

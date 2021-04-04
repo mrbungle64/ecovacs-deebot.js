@@ -142,25 +142,25 @@ class VacBot_non950type extends VacBot {
     // Execute only if the GetMaps cmd was received
     if (!this.handleMapExecuted && event.attrs && event.attrs.hasOwnProperty('i')) {
       this.currentMapMID = event.attrs['i'];
-      this.currentMapIndex = 1;
       const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, 1);
-      this.maps = {"maps": [ecovacsMap]};
+      this.maps = {
+        "maps": [ecovacsMap]
+      };
       this.run('GetMapSet');
       this.mapSpotAreaInfos[this.currentMapMID] = [];
       this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
       this.handleMapExecuted = true;
       return this.maps;
-    } else {
-      return null;
     }
+    return null;
   }
 
   handle_mapSet(event) {
     tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(event));
     if (event.attrs && event.attrs.hasOwnProperty('tp')) {
       if (event.attrs['tp'] === 'sa') {
-        const msid = event.attrs['msid'];
-        const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, msid);
+        const mapSetID = event.attrs['msid'];
+        const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, mapSetID);
         let spotAreas = [];
         for (let mapIndex in event.children) {
           if (event.children.hasOwnProperty(mapIndex)) {
@@ -237,27 +237,15 @@ class VacBot_non950type extends VacBot {
     };
   }
 
-  pullM_getId(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('id')) {
-      return (parseInt(event.attrs['id']) - 999999900);
-    } else {
-      return '';
-    }
-  }
-
   pullM_getMid(event) {
     if (event.attrs.hasOwnProperty('mid')) {
       // MQTT
       return event.attrs['mid'];
     } else {
       // XMPP
-      const id = this.pullM_getId(event);
-      if (id !== '') {
-        if (id <= 39) {
-          return id.toString();
-        } else if (id <= 79) {
-          return (id - 40).toString();
-        }
+      const action = this.commandsSent[event.attrs.id];
+      if (action.args && action.args.mid) {
+        return action.args.mid;
       }
     }
     return '';
@@ -269,13 +257,9 @@ class VacBot_non950type extends VacBot {
       return event.attrs['tp'];
     } else {
       // XMPP
-      const id = this.pullM_getId(event);
-      if (id !== '') {
-        if (id <= 39) {
-          return 'sa';
-        } else if (id <= 79) {
-          return 'vw';
-        }
+      const action = this.commandsSent[event.attrs.id];
+      if (action.args && action.args.tp) {
+        return action.args.tp;
       }
     }
     return '';
@@ -431,20 +415,25 @@ class VacBot_non950type extends VacBot {
   handle_onOff(event) {
     tools.envLog("[VacBot] *** handleOnOff = " + JSON.stringify(event));
     if (event.attrs && event.attrs.hasOwnProperty('on')) {
-      let id = parseInt(event.attrs.id);
-      switch (id) {
-        case 999999990:
-          this.doNotDisturbEnabled = event.attrs.on;
-          tools.envLog("[VacBot] *** doNotDisturbEnabled = " + this.doNotDisturbEnabled);
-          break;
-        case 999999991:
-          this.continuousCleaningEnabled = event.attrs.on;
-          tools.envLog("[VacBot] *** continuousCleaningEnabled = " + this.continuousCleaningEnabled);
-          break;
-        case 999999992:
-          this.voiceReportDisabled = event.attrs.on;
-          tools.envLog("[VacBot] *** voiceReportDisabled = " + this.voiceReportDisabled);
-          break;
+      let type = null;
+      const action = this.commandsSent[event.attrs.id];
+      if (action.args && action.args.t) {
+        type = dictionary.ON_OFF_FROM_ECOVACS[action.args.t];
+      }
+      if (type) {
+        const on = event.attrs.on;
+        tools.envLog("[VacBot] *** " + type + " = " + on);
+        switch (type) {
+          case 'do_not_disturb':
+            this.doNotDisturbEnabled = on;
+            break;
+          case 'continuous_cleaning':
+            this.continuousCleaningEnabled = on;
+            break;
+          case 'silence_voice_report':
+            this.voiceReportDisabled = on;
+            break;
+        }
       }
     }
   }
