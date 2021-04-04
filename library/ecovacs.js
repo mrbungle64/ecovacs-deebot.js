@@ -161,8 +161,8 @@ class Ecovacs extends EventEmitter {
                     this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
                 }
                 break;
-            case "MapP":
-                let mapinfo = this.bot.handle_mapP(event);
+            case "CachedMapInfo":
+                let mapinfo = this.bot.handle_cachedMapInfo(event);
                 if (mapinfo) {
                     this.emit("CurrentMapName", this.bot.currentMapName);
                     this.emit("CurrentMapMID", this.bot.currentMapMID);
@@ -176,8 +176,8 @@ class Ecovacs extends EventEmitter {
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
-            case "PullM":
-                let mapsubset = this.bot.handle_pullM(event);
+            case "MapSubSet":
+                let mapsubset = this.bot.handle_mapSubset(event);
                 if (mapsubset && (mapsubset["mapsubsetEvent"] !== 'error')) {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }

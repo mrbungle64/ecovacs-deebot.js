@@ -127,7 +127,10 @@ function getEventNameForCommandString(str) {
         case 'errors':
             return 'Error';
         case 'mapm':
-            return 'MapP';
+        case 'mapp':
+            return 'CachedMapInfo';
+        case 'pullm':
+            return 'MapSubSet';
         case 'logapicleanlogs':
             return 'CleanLogs';
         default:

@@ -137,8 +137,8 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_mapP(event) {
-    tools.envLog("[VacBot] *** handle_mapP " + JSON.stringify(event));
+  handle_cachedMapInfo(event) {
+    tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(event));
     // Execute only if the GetMaps cmd was received
     if (!this.handleMapExecuted && event.attrs && event.attrs.hasOwnProperty('i')) {
       this.currentMapMID = event.attrs['i'];
@@ -204,8 +204,8 @@ class VacBot_non950type extends VacBot {
     };
   }
 
-  handle_pullM(event) {
-    tools.envLog("[VacBot] *** handle_pullM " + JSON.stringify(event));
+  handle_mapSubset(event) {
+    tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(event));
     if (event.attrs && event.attrs.hasOwnProperty('m')) {
       const value = event.attrs['m'];
       const mid = this.pullM_getMid(event);
@@ -229,7 +229,7 @@ class VacBot_non950type extends VacBot {
           };
         }
       } else {
-        tools.envLog("[VacBot] *** handle_pullM Missing mid or type");
+        tools.envLog("[VacBot] *** handle_mapSubset Missing mid or type");
       }
     }
     return {
