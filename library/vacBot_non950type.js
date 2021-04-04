@@ -208,9 +208,21 @@ class VacBot_non950type extends VacBot {
     tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(event));
     if (event.attrs && event.attrs.hasOwnProperty('m')) {
       const value = event.attrs['m'];
-      const mid = this.pullM_getMid(event);
-      const type = this.pullM_getType(event);
-      if ((mid !== '') && (type !== '')) {
+      let mid = '';
+      let type = '';
+      if (event.attrs.hasOwnProperty('mid')) {
+        // MQTT
+        mid = event.attrs['mid'];
+        type = event.attrs['tp'];
+      } else {
+        // XMPP
+        const action = this.commandsSent[event.attrs.id];
+        if (action.args && action.args.mid && action.args.tp) {
+          mid = action.args.mid;
+          type = action.args.tp;
+        }
+      }
+      if (mid && type) {
         if (type === 'sa') {
           let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value, '0');
           this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
@@ -235,34 +247,6 @@ class VacBot_non950type extends VacBot {
     return {
       mapsubsetEvent: 'error'
     };
-  }
-
-  pullM_getMid(event) {
-    if (event.attrs.hasOwnProperty('mid')) {
-      // MQTT
-      return event.attrs['mid'];
-    } else {
-      // XMPP
-      const action = this.commandsSent[event.attrs.id];
-      if (action.args && action.args.mid) {
-        return action.args.mid;
-      }
-    }
-    return '';
-  }
-
-  pullM_getType(event) {
-    if (event.attrs.hasOwnProperty('mid') && event.attrs.hasOwnProperty('tp')) {
-      // MQTT
-      return event.attrs['tp'];
-    } else {
-      // XMPP
-      const action = this.commandsSent[event.attrs.id];
-      if (action.args && action.args.tp) {
-        return action.args.tp;
-      }
-    }
-    return '';
   }
 
   handle_deebotPosition(event) {
