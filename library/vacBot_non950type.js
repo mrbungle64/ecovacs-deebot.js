@@ -334,7 +334,7 @@ class VacBot_non950type extends VacBot {
           } else {
             timestamp = parseInt(childElement['ts']);
           }
-          let key = timestamp + '@' + this.vacuum['resource'];
+          let key = timestamp;
           if (!this.cleanLog[key]) {
             this.cleanLog[key] = {};
           }
