@@ -329,24 +329,19 @@ class VacBot_non950type extends VacBot {
         let childElement = event.children[c];
         if (childElement) {
           let timestamp;
+          let id;
+          let squareMeters;
+          let lastTime;
+          let type;
+          let imageUrl;
+          let stopReason;
+          let trigger;
           if (childElement.attrs) {
             timestamp = parseInt(childElement.attrs['s']);
           } else {
             timestamp = parseInt(childElement['ts']);
           }
-          let key = timestamp;
-          if (!this.cleanLog[key]) {
-            this.cleanLog[key] = {};
-          }
-          let id = this.cleanLog[key]['id'];
-          let squareMeters = this.cleanLog[key]['squareMeters'];
-          let lastTime = this.cleanLog[key]['last'];
-          let type = this.cleanLog[key]['type'];
-          let imageUrl = this.cleanLog[key]['imageUrl'];
-          let stopReason = this.cleanLog[key]['stopReason'];
-          let trigger = this.cleanLog[key]['trigger'];
           if (childElement.attrs) {
-            timestamp = parseInt(childElement.attrs['s']);
             squareMeters = parseInt(childElement.attrs['a']);
             lastTime = parseInt(childElement.attrs['l']);
             if (dictionary.STOP_REASON[childElement.attrs['f']]) {
@@ -357,7 +352,6 @@ class VacBot_non950type extends VacBot {
             }
           } else {
             id = childElement['id'];
-            timestamp = parseInt(childElement['ts']);
             squareMeters = parseInt(childElement['area']);
             lastTime = parseInt(childElement['last']);
             type = childElement['type'];
@@ -379,7 +373,7 @@ class VacBot_non950type extends VacBot {
             tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
           }
 
-          this.cleanLog[key] = {
+          this.cleanLog[timestamp] = {
             'id': id,
             'timestamp': timestamp,
             'date': date,
