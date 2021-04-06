@@ -187,6 +187,7 @@ class Ecovacs extends EventEmitter {
                     this.emit('LastCleanLogs', {
                         'timestamp': this.bot.cleanLog_lastTimestamp,
                         'squareMeters': this.bot.cleanLog_lastSquareMeters,
+                        'totalTime': this.bot.cleanLog_lastTotalTime,
                         'totalTimeString': this.bot.cleanLog_lastTotalTimeString,
                         'imageUrl': this.bot.cleanLog_lastImageUrl
                     });

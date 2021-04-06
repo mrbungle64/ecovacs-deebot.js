@@ -271,7 +271,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                             'x': this.bot.deebotPosition['x'],
                             'y': this.bot.deebotPosition['y'],
                             'a': this.bot.deebotPosition['a'],
-                            'invalid': 0,
+                            'invalid': this.bot.deebotPosition['isInvalid'],
                             'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"]
                         });
                     }
@@ -362,7 +362,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('LastCleanLogs', {
                         'timestamp': this.bot.cleanLog_lastTimestamp,
                         'squareMeters': this.bot.cleanLog_lastSquareMeters,
-                        'totalTimeString': this.bot.cleanLog_lastTotalTimeString,
+                        'totalTime': this.bot.cleanLog_lastTotalTime,
+                        'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
                         'imageUrl': this.bot.cleanLog_lastImageUrl
                     });
                 }
