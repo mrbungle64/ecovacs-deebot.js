@@ -107,11 +107,25 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.deebotPosition["x"] && this.bot.deebotPosition["y"]) {
                     this.emit('DeebotPosition', this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
                     this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
+                    this.emit('Position', {
+                        'coords': this.bot.deebotPosition['x'] + "," + this.bot.deebotPosition['y'] + "," + this.bot.deebotPosition['a'],
+                        'x': this.bot.deebotPosition['x'],
+                        'y': this.bot.deebotPosition['y'],
+                        'a': this.bot.deebotPosition['a'],
+                        'invalid': 0,
+                        'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"]
+                    });
                 }
                 break;
             case 'ChargePosition':
                 this.bot.handle_chargePosition(event);
                 this.emit('ChargePosition', this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]);
+                this.emit('ChargingPosition', {
+                    'coords': this.bot.chargePosition['x'] + "," + this.bot.chargePosition['y'] + "," + this.bot.chargePosition['a'],
+                    'x': this.bot.deebotPosition['x'],
+                    'y': this.bot.deebotPosition['y'],
+                    'a': this.bot.deebotPosition['a']
+                });
                 break;
             case 'WaterLevel':
                 this.bot.handle_waterLevel(event);
@@ -125,6 +139,12 @@ class Ecovacs extends EventEmitter {
                 this.bot.handle_netInfo(event.attrs);
                 this.emit("NetInfoIP", this.bot.netInfoIP);
                 this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
+                this.emit("NetworkInfo", {
+                    'ip': this.bot.netInfoIP,
+                    'mac': null,
+                    'wifiSSID': this.bot.netInfoWifiSSID,
+                    'wifiSignal': null,
+                });
                 break;
             case 'SleepStatus':
                 this.bot.handle_sleepStatus(event);
@@ -134,12 +154,21 @@ class Ecovacs extends EventEmitter {
                 this.bot.handle_error(event.attrs);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
+                this.emit('LastError', {
+                    'error': this.bot.errorDescription,
+                    'code': this.bot.errorCode
+                });
                 break;
             case 'CleanSum':
                 this.bot.handle_cleanSum(event);
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
+                this.emit('CleanSum', {
+                    'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
+                    'totalSeconds': this.bot.cleanSum_totalSeconds,
+                    'totalNumber': this.bot.cleanSum_totalNumber,
+                });
                 break;
             case 'CleanLogs':
                 this.bot.handle_cleanLogs(event);
@@ -155,6 +184,12 @@ class Ecovacs extends EventEmitter {
                     this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
                     this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
                     this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
+                    this.emit('LastCleanLogs', {
+                        'timestamp': this.bot.cleanLog_lastTimestamp,
+                        'squareMeters': this.bot.cleanLog_lastSquareMeters,
+                        'totalTimeString': this.bot.cleanLog_lastTotalTimeString,
+                        'imageUrl': this.bot.cleanLog_lastImageUrl
+                    });
                 }
                 if (this.bot.cleanLog_lastImageUrl) {
                     this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
