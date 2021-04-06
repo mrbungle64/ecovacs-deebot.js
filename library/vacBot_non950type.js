@@ -377,7 +377,7 @@ class VacBot_non950type extends VacBot {
             'id': id,
             'timestamp': timestamp,
             'date': date,
-            'lastTime': lastTime,
+            'totalTime': lastTime,
             'totalTimeString': totalTimeString,
             'squareMeters': squareMeters,
             'imageUrl': imageUrl,

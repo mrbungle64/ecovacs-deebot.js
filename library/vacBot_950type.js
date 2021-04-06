@@ -175,16 +175,19 @@ class VacBot_950type extends VacBot {
                             this.cleanLog_lastImageUrl = imageUrl;
                             this.cleanLog_lastTimestamp = timestamp;
                             this.cleanLog_lastSquareMeters = squareMeters;
+                            this.cleanLog_lastTotalTime = len;
                             this.cleanLog_lastTotalTimeString = totalTimeString;
                             tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
                             tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
                             tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
+                            tools.envLog("[VacBot] *** cleanLog_lastTotalTime = " + this.cleanLog_lastTotalTime);
                             tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
                         }
                         this.cleanLog[logs[logIndex]['id']] = {
                             'squareMeters': squareMeters,
                             'timestamp': timestamp,
-                            'lastTime': len,
+                            'totalTime': len,
+                            'totalTimeFormatted': totalTimeString,
                             'imageUrl': imageUrl,
                             'type': logs[logIndex]['type'],
                             'stopReason': logs[logIndex]['stopReason']
