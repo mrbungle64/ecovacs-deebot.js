@@ -12,7 +12,6 @@ class VacBot_950type extends VacBot {
         this.autoEmpty = null;
         this.volume = 0;
         this.relocationState = null;
-        this.lastCleanLogUseAlternativeAPICall = false;
     }
 
     handle_lifespan(event) {
@@ -588,20 +587,7 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             case "GetCleanLogs".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = false;
                 this.sendCommand(new vacBotCommand.GetCleanLogs());
-                break;
-            case "GetCleanLogsWithoutLastInfo".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = true;
-                this.sendCommand(new vacBotCommand.GetCleanLogs());
-                break;
-            case "GetLastCleanLogInfo".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = true;
-                this.sendCommand(new vacBotCommand.GetLastCleanLog());
-                break;
-            case "GetCleanLogsPullCleanF".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = true;
-                this.sendCommand(new vacBotCommand.GetCleanLogsPullCleanF());
                 break;
             case "GetVolume".toLowerCase():
                 this.sendCommand(new vacBotCommand.GetVolume());

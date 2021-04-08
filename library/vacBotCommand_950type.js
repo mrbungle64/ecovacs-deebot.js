@@ -340,12 +340,6 @@ class GetLastCleanLog extends VacBotCommand_950type {
     }
 }
 
-class GetCleanLogsPullCleanF extends VacBotCommand_950type {
-    constructor() {
-        super('Pull', {}, constants.LGLOGAPI);
-    }
-}
-
 class GetVolume extends VacBotCommand_950type {
     constructor() {
         super('getVolume');
@@ -419,7 +413,6 @@ module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetLastCleanLog = GetLastCleanLog;
-module.exports.GetCleanLogsPullCleanF = GetCleanLogsPullCleanF;
 module.exports.GetVolume = GetVolume;
 module.exports.SetVolume = SetVolume;
 module.exports.GetAutoEmpty = GetAutoEmpty;
