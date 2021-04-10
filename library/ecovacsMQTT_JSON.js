@@ -246,19 +246,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "lifespan":
                 this.bot.handle_lifespan(event);
-                var r = {};
                 if (this.bot.components["filter"]) {
-                    r["filter"] = this.bot.components["filter"];
+                    this.emit("LifeSpan_filter", this.bot.components["filter"]);
                 }
                 if (this.bot.components["side_brush"]) {
-                    r["sideBrush"] = this.bot.components["side_brush"];
+                    this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
                 }
                 if (this.bot.components["main_brush"]) {
-                    r["mainBrush"] = this.bot.components["main_brush"];
+                    this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
                 }
-
-                if (this.bot.components["filter"] || this.bot.components["side_brush"] || this.bot.components["main_brush"])
-                    this.emit("LifeSpanStats", r);
                 break;
             case "pos":
                 this.bot.handle_deebotPosition(event);
@@ -267,36 +263,28 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         this.bot.relocationState = 'required';
                         this.emit("RelocationState", this.bot.relocationState);
                     } else if (this.bot.deebotPosition["x"] && this.bot.deebotPosition["y"]) {
-                        this.emit("Position", {
-                            coords: this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"],
-                            invalid: this.bot.deebotPosition["isInvalid"],
-                            spotAreaID: this.bot.deebotPosition["currentSpotAreaID"]
-                        });
+                        this.emit("DeebotPosition", this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
+                        this.emit("DeebotPositionIsInvalid", this.bot.deebotPosition["isInvalid"]);
+                        this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
                     }
                     this.bot.deebotPosition["changeFlag"] = false;
                 }
                 if (this.bot.chargePosition["changeFlag"]) {
-                    this.emit("ChargePosition", {
-                        coords: this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]
-                    });
+                    this.emit("ChargePosition", this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]);
                     this.bot.chargePosition["changeFlag"] = false;
                 }
                 break;
             case "waterinfo":
                 this.bot.handle_waterInfo(event);
-                this.emit("WaterInfo", {
-                    status: this.bot.waterboxInfo,
-                    level: this.bot.waterLevel
-                });
+                this.emit("WaterBoxInfo", this.bot.waterboxInfo);
+                this.emit("WaterLevel", this.bot.waterLevel);
                 break;
             case "netinfo":
                 this.bot.handle_netInfo(event);
-                this.emit("NetworkInfo", {
-                    ip: this.bot.netInfoIP,
-                    mac: this.bot.netInfoMAC,
-                    wifiSSID: this.bot.netInfoWifiSSID,
-                    wifiSignal: this.bot.netInfoWifiSignal,
-                });
+                this.emit("NetInfoIP", this.bot.netInfoIP);
+                this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
+                this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
+                this.emit("NetInfoMAC", this.bot.netInfoMAC);
                 break;
             case 'sleep':
                 this.bot.handle_sleepStatus(event);
@@ -317,11 +305,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'totalstats':
                 this.bot.handle_cleanSum(event);
-                this.emit("CleanSum", {
-                    squareMeters: this.bot.cleanSum_totalSquareMeters,
-                    seconds: this.bot.cleanSum_totalSeconds,
-                    number: this.bot.cleanSum_totalNumber,
-                });
+                this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
+                this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
+                this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 break;
             case 'cleanlogs':
                 tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
@@ -338,17 +324,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 } else {
                     this.emit("Debug", "CleanLog is empty: " + JSON.stringify(event, getCircularReplacer())); //for debugging
                 }
-
                 if (!this.bot.lastCleanLogUseAlternativeAPICall) {
-                    this.emit("LastCleanLogs", {
-                        timestamp: this.bot.cleanLog_lastTimestamp,
-                        squareMeters: this.bot.cleanLog_lastSquareMeters,
-                        totalTime: this.bot.cleanLog_lastTotalTime,
-                        totalTimeFormatted: this.bot.cleanLog_lastTotalTimeString,
-                        imageUrl: this.bot.cleanLog_lastImageUrl
-                        // type
-                        // stopReason
-                    });
+                    this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
+                    this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                    this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                    this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
                 }
                 break;
             case 'lastcleanlog':
@@ -356,15 +337,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (this.bot.lastCleanLogUseAlternativeAPICall) {
                     this.bot.handle_lastCleanLog(event);
 
-                    this.emit("LastCleanLogs", {
-                        timestamp: this.bot.cleanLog_lastTimestamp,
-                        squareMeters: this.bot.cleanLog_lastSquareMeters,
-                        totalTime: this.bot.cleanLog_lastTotalTime,
-                        totalTimeFormatted: this.bot.cleanLog_lastTotalTimeString,
-                        imageUrl: this.bot.cleanLog_lastImageUrl
-                        // type
-                        // stopReason
-                    });
+                    if (this.bot.cleanLog_lastTimestamp) {
+                        this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                        this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                        this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
+                    }
+                    if (this.bot.cleanLog_lastImageUrl) {
+                        this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                        this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
+                    }
                 }
                 break;
             case 'pull':

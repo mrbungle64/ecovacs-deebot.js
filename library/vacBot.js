@@ -62,7 +62,6 @@ class VacBot {
         this.cleanLog = [];
         this.cleanLog_lastImageUrl = null;
         this.cleanLog_lastTimestamp = null;
-        this.cleanLog_lastTotalTime = null;
         this.cleanLog_lastTotalTimeString = null;
         this.cleanLog_lastSquareMeters = null;
 
