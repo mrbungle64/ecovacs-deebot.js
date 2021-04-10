@@ -217,6 +217,14 @@ exports.KnownDevices = {
         "name": "DEEBOT T8 POWER",
         "deviceClassLink": "h18jkh"
     },
+    "ucn2xe": {
+        "name": "DEEBOT T9",
+        "deviceClassLink": "h18jkh"
+    },
+    "lhbd50": {
+        "name": "DEEBOT T9+",
+        "deviceClassLink": "h18jkh"
+    },
     "jffnlf": {
         "name": "DEEBOT N3 MAX",
         "deviceClassLink": "h18jkh"
@@ -715,6 +723,22 @@ exports.EcoVacsHomeProducts = {
             "name": "DEEBOT T8",
             "icon": "5edf2bbedb28cc00062f8bd7",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5edf2bbedb28cc00062f8bd7"
+        }
+    },
+    "ucn2xe": {
+        "product": {
+            "_id": "5f8819156cf8de0008ed7c0d",
+            "name": "DEEBOT T9",
+            "icon": "603f510e3b03f50007b6c2c9",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/603f510e3b03f50007b6c2c9"
+        }
+    },
+    "lhbd50": {
+        "product": {
+            "_id": "5f88195e6cf8de0008ed7c11",
+            "name": "DEEBOT T9+",
+            "icon": "603f51243b03f50007b6c2ca",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/603f51243b03f50007b6c2ca"
         }
     },
     "jffnlf": {
