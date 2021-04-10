@@ -378,7 +378,9 @@ class VacBot_non950type extends VacBot {
             'timestamp': timestamp,
             'date': date,
             'lastTime': lastTime,
+            'totalTime': lastTime,
             'totalTimeString': totalTimeString,
+            'totalTimeFormatted': totalTimeString,
             'squareMeters': squareMeters,
             'imageUrl': imageUrl,
             'stopReason': stopReason,
@@ -432,7 +434,6 @@ class VacBot_non950type extends VacBot {
   handle_error(event) {
     this.errorCode = '0';
     this.errorDescription = '';
-
     let attrs = ['new', 'code', 'errno', 'error', 'errs'];
     for (const attr of attrs) {
       if (event.hasOwnProperty(attr) && (event[attr] !== '')) {

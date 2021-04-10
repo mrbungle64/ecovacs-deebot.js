@@ -12,7 +12,6 @@ class VacBot_950type extends VacBot {
         this.autoEmpty = null;
         this.volume = 0;
         this.relocationState = null;
-        this.lastCleanLogUseAlternativeAPICall = false;
     }
 
     handle_lifespan(event) {
@@ -170,21 +169,24 @@ class VacBot_950type extends VacBot {
                         let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
                         tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
                         let imageUrl = logs[logIndex]['imageUrl'];
-                        if ((!this.lastCleanLogUseAlternativeAPICall)
-                            && (this.cleanLog_lastTimestamp < timestamp || (!this.cleanLog_lastTimestamp))) {
+                        if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
                             this.cleanLog_lastImageUrl = imageUrl;
                             this.cleanLog_lastTimestamp = timestamp;
                             this.cleanLog_lastSquareMeters = squareMeters;
+                            this.cleanLog_lastTotalTime = len;
                             this.cleanLog_lastTotalTimeString = totalTimeString;
                             tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
                             tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
                             tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
+                            tools.envLog("[VacBot] *** cleanLog_lastTotalTime = " + this.cleanLog_lastTotalTime);
                             tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
                         }
                         this.cleanLog[logs[logIndex]['id']] = {
                             'squareMeters': squareMeters,
                             'timestamp': timestamp,
                             'lastTime': len,
+                            'totalTime': len,
+                            'totalTimeFormatted': totalTimeString,
                             'imageUrl': imageUrl,
                             'type': logs[logIndex]['type'],
                             'stopReason': logs[logIndex]['stopReason']
@@ -584,20 +586,7 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             case "GetCleanLogs".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = false;
                 this.sendCommand(new vacBotCommand.GetCleanLogs());
-                break;
-            case "GetCleanLogsWithoutLastInfo".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = true;
-                this.sendCommand(new vacBotCommand.GetCleanLogs());
-                break;
-            case "GetLastCleanLogInfo".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = true;
-                this.sendCommand(new vacBotCommand.GetLastCleanLog());
-                break;
-            case "GetCleanLogsPullCleanF".toLowerCase():
-                this.lastCleanLogUseAlternativeAPICall = true;
-                this.sendCommand(new vacBotCommand.GetCleanLogsPullCleanF());
                 break;
             case "GetVolume".toLowerCase():
                 this.sendCommand(new vacBotCommand.GetVolume());
