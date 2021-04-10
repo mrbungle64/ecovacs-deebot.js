@@ -266,25 +266,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         this.emit("DeebotPosition", this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
                         this.emit("DeebotPositionIsInvalid", this.bot.deebotPosition["isInvalid"]);
                         this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
-                        this.emit('Position', {
-                            'coords': this.bot.deebotPosition['x'] + "," + this.bot.deebotPosition['y'] + "," + this.bot.deebotPosition['a'],
-                            'x': this.bot.deebotPosition['x'],
-                            'y': this.bot.deebotPosition['y'],
-                            'a': this.bot.deebotPosition['a'],
-                            'invalid': this.bot.deebotPosition['isInvalid'],
-                            'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"]
-                        });
                     }
                     this.bot.deebotPosition["changeFlag"] = false;
                 }
                 if (this.bot.chargePosition["changeFlag"]) {
                     this.emit("ChargePosition", this.bot.chargePosition["x"] + "," + this.bot.chargePosition["y"] + "," + this.bot.chargePosition["a"]);
-                    this.emit('ChargingPosition', {
-                        'coords': this.bot.chargePosition['x'] + "," + this.bot.chargePosition['y'] + "," + this.bot.chargePosition['a'],
-                        'x': this.bot.deebotPosition['x'],
-                        'y': this.bot.deebotPosition['y'],
-                        'a': this.bot.deebotPosition['a']
-                    });
                     this.bot.chargePosition["changeFlag"] = false;
                 }
                 break;
@@ -299,12 +285,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
                 this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
                 this.emit("NetInfoMAC", this.bot.netInfoMAC);
-                this.emit("NetworkInfo", {
-                    'ip': this.bot.netInfoIP,
-                    'mac': this.bot.netInfoMAC,
-                    'wifiSSID': this.bot.netInfoWifiSSID,
-                    'wifiSignal': this.bot.netInfoWifiSignal,
-                });
                 break;
             case 'sleep':
                 this.bot.handle_sleepStatus(event);
@@ -322,21 +302,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_error(event);
                 this.emit("Error", this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
-                this.emit('LastError', {
-                    'error': this.bot.errorDescription,
-                    'code': this.bot.errorCode
-                });
                 break;
             case 'totalstats':
                 this.bot.handle_cleanSum(event);
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
-                this.emit('CleanSum', {
-                    'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
-                    'totalSeconds': this.bot.cleanSum_totalSeconds,
-                    'totalNumber': this.bot.cleanSum_totalNumber,
-                });
                 break;
             case 'cleanlogs':
                 tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
@@ -353,18 +324,29 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 } else {
                     this.emit("Debug", "CleanLog is empty: " + JSON.stringify(event, getCircularReplacer())); //for debugging
                 }
-                this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
-                this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
-                this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
-                this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
-                this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
-                this.emit('LastCleanLogs', {
-                    'timestamp': this.bot.cleanLog_lastTimestamp,
-                    'squareMeters': this.bot.cleanLog_lastSquareMeters,
-                    'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
-                    'imageUrl': this.bot.cleanLog_lastImageUrl
-                });
+                if (!this.bot.lastCleanLogUseAlternativeAPICall) {
+                    this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                    this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
+                    this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                    this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                    this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
+                }
+                break;
+            case 'lastcleanlog':
+                tools.envLog("[EcovacsMQTT_JSON] lastcleanlog: %s", JSON.stringify(event, getCircularReplacer()));
+                if (this.bot.lastCleanLogUseAlternativeAPICall) {
+                    this.bot.handle_lastCleanLog(event);
+
+                    if (this.bot.cleanLog_lastTimestamp) {
+                        this.emit("CleanLog_lastTimestamp", this.bot.cleanLog_lastTimestamp);
+                        this.emit("CleanLog_lastSquareMeters", this.bot.cleanLog_lastSquareMeters);
+                        this.emit("CleanLog_lastTotalTimeString", this.bot.cleanLog_lastTotalTimeString);
+                    }
+                    if (this.bot.cleanLog_lastImageUrl) {
+                        this.emit("CleanLog_lastImageUrl", this.bot.cleanLog_lastImageUrl);
+                        this.emit("CleanLog_lastImageTimestamp", this.bot.cleanLog_lastTimestamp); // Deprecated
+                    }
+                }
                 break;
             case 'pull':
                 tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
