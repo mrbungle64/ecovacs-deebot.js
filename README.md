@@ -66,7 +66,7 @@ There is of course no claim to full functionality.
 * Support for Chinese server login
 * Implemented AutoEmpty commands for T8+/plus
 * Added some cleaning log values and cleaning stats
-* Initial support for some more models (e.g. N3, N7 and N8 series)
+* Initial support for some more models (e.g. N3, N7, N8, T9 series)
 * Quite a lot refactoring and code consolidation
 * Improved example apps
 
