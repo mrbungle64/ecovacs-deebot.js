@@ -183,6 +183,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_error(event);
                 this.emit("Error", command + ': ' + resultCode);
                 this.emit('ErrorCode', 'resultCode');
+                this.emit('LastError', {
+                    'error': this.bot.errorDescription,
+                    'code': this.bot.errorCode
+                });
                 return;
             }
         }
@@ -246,15 +250,22 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "lifespan":
                 this.bot.handle_lifespan(event);
+                var r = {};
                 if (this.bot.components["filter"]) {
                     this.emit("LifeSpan_filter", this.bot.components["filter"]);
+                    r["filter"] = this.bot.components["filter"];
                 }
                 if (this.bot.components["side_brush"]) {
                     this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
+                    r["sideBrush"] = this.bot.components["side_brush"];
                 }
                 if (this.bot.components["main_brush"]) {
                     this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
+                    r["mainBrush"] = this.bot.components["main_brush"];
                 }
+
+                if (this.bot.components["filter"] || this.bot.components["side_brush"] || this.bot.components["main_brush"])
+                    this.emit("LifeSpanStats", r);
                 break;
             case "pos":
                 this.bot.handle_deebotPosition(event);
@@ -292,6 +303,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_waterInfo(event);
                 this.emit("WaterBoxInfo", this.bot.waterboxInfo);
                 this.emit("WaterLevel", this.bot.waterLevel);
+
+                this.emit("WaterInfo", {
+                    'enabled': this.bot.waterboxInfo,
+                    'level': this.bot.waterLevel
+                });
                 break;
             case "netinfo":
                 this.bot.handle_netInfo(event);
