@@ -101,6 +101,8 @@ class Ecovacs extends EventEmitter {
                         this.emit('LifeSpan_' + component, this.bot.components[component]);
                     }
                 }
+
+                // TODO: port global LifeSpan event from ecovacsMQTT_JSON.js
                 break;
             case 'DeebotPosition':
                 this.bot.handle_deebotPosition(event);
@@ -130,10 +132,18 @@ class Ecovacs extends EventEmitter {
             case 'WaterLevel':
                 this.bot.handle_waterLevel(event);
                 this.emit('WaterLevel', this.bot.waterLevel);
+                this.emit("WaterInfo", {
+                    'enabled': this.bot.waterboxInfo,
+                    'level': this.bot.waterLevel
+                });
                 break;
             case 'WaterBoxInfo':
                 this.bot.handle_waterboxInfo(event);
                 this.emit('WaterBoxInfo', this.bot.waterboxInfo);
+                this.emit("WaterInfo", {
+                    'enabled': this.bot.waterboxInfo,
+                    'level': this.bot.waterLevel
+                });
                 break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
@@ -168,6 +178,8 @@ class Ecovacs extends EventEmitter {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
                     'totalNumber': this.bot.cleanSum_totalNumber,
+                    'totalTime': this.bot.cleanLog_lastTotalTime,
+                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
                 });
                 break;
             case 'CleanLogs':
