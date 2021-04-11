@@ -179,7 +179,7 @@ class Ecovacs extends EventEmitter {
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
                     'totalNumber': this.bot.cleanSum_totalNumber,
                     'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
+                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString
                 });
                 break;
             case 'CleanLogs':
@@ -200,7 +200,7 @@ class Ecovacs extends EventEmitter {
                         'timestamp': this.bot.cleanLog_lastTimestamp,
                         'squareMeters': this.bot.cleanLog_lastSquareMeters,
                         'totalTime': this.bot.cleanLog_lastTotalTime,
-                        'totalTimeString': this.bot.cleanLog_lastTotalTimeString,
+                        'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
                         'imageUrl': this.bot.cleanLog_lastImageUrl
                     });
                 }

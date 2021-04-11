@@ -350,10 +350,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
                 this.emit('CleanSum', {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
-                    'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
                     'totalNumber': this.bot.cleanSum_totalNumber,
+                    'totalTime': this.bot.cleanLog_lastTotalTime,
+                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString
                 });
                 break;
             case 'cleanlogs':
