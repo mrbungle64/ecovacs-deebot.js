@@ -101,8 +101,13 @@ class Ecovacs extends EventEmitter {
                         this.emit('LifeSpan_' + component, this.bot.components[component]);
                     }
                 }
-
-                // TODO: port global LifeSpan event from ecovacsMQTT_JSON.js
+                if (this.bot.components["filter"] && this.bot.components["side_brush"] && (this.bot.components["main_brush"] || !this.bot.hasMainBrush())) {
+                    this.emit("LifeSpan", {
+                        "filter": this.bot.components["filter"],
+                        "side_brush": this.bot.components["side_brush"],
+                        "main_brush": this.bot.components["main_brush"]
+                    });
+                }
                 break;
             case 'DeebotPosition':
                 this.bot.handle_deebotPosition(event);
@@ -147,8 +152,8 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
-                this.emit('NetInfoIP', this.bot.netInfoIP);
-                this.emit('NetInfoWifiSSID', this.bot.netInfoWifiSSID);
+                this.emit('NetInfoIP', this.bot.netInfoIP); // Deprecated
+                this.emit('NetInfoWifiSSID', this.bot.netInfoWifiSSID); // Deprecated
                 this.emit('NetworkInfo', {
                     'ip': this.bot.netInfoIP,
                     'mac': null,
@@ -171,9 +176,9 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'CleanSum':
                 this.bot.handle_cleanSum(event);
-                this.emit('CleanSum_totalSquareMeters', this.bot.cleanSum_totalSquareMeters);
-                this.emit('CleanSum_totalSeconds', this.bot.cleanSum_totalSeconds);
-                this.emit('CleanSum_totalNumber', this.bot.cleanSum_totalNumber);
+                this.emit('CleanSum_totalSquareMeters', this.bot.cleanSum_totalSquareMeters); // Deprecated
+                this.emit('CleanSum_totalSeconds', this.bot.cleanSum_totalSeconds); // Deprecated
+                this.emit('CleanSum_totalNumber', this.bot.cleanSum_totalNumber); // Deprecated
                 this.emit('CleanSum', {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
