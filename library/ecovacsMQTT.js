@@ -88,7 +88,7 @@ class EcovacsMQTT extends Ecovacs {
                 method: 'POST',
                 headers: headers
             };
-            tools.envLog("[EcovacsMQTT] Sending POST to", JSON.stringify(reqOptions, getCircularReplacer()));
+            tools.envLog("[EcovacsMQTT] Sending POST to ", JSON.stringify(reqOptions, getCircularReplacer()));
 
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
@@ -105,34 +105,37 @@ class EcovacsMQTT extends Ecovacs {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            const errorCode = json['errno'];
+                            const errorCodeObj = {code: errorCode};
                             if (this.bot.is950type()) {
-                                this.bot.handle_error({resultData: {code: json['errno']}});
+                                this.bot.handle_error({resultData: errorCodeObj});
                             } else {
-                                this.bot.handle_error({code: json['errno']});
-                            }
-                            this.emit("Error", this.bot.errorDescription);
-                            this.emit('ErrorCode', this.bot.errorCode);
-                            // Error code 3 = request oauth error
-                            if (json['errno'] == 3) {
-                                this.emit("disconnect", true);
-                                this.disconnect();
+                                this.bot.handle_error(errorCodeObj);
                             }
                             // Error code 500 = wait for response timed out (see issue #19)
-                            if (json['errno'] != 500) {
-                                throw "failure code: {errno}".format({
-                                    errno: json['errno']
-                                });
+                            if (this.bot.errorCode !== '500') {
+                                this.emitLastError();
+                                reject(errorCodeObj);
                             }
                         }
                     } catch (e) {
-                        tools.envLog("[EcovacsMQTT] error: " + e.toString());
+                        this.bot.errorDescription = `Internal error: ${e.message}`;
+                        this.bot.errorCode = '-2';
+                        this.emitLastError();
                         reject(e);
                     }
                 });
             });
 
             req.on('error', (e) => {
-                tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
+                tools.envLog(`[EcovacsMQTT] Received error event: ${e.message}`);
+                if (e.toString().includes('ENOTFOUND') || e.toString().includes('EHOSTUNREACH')) {
+                    this.bot.errorDescription = `Network or Ecovacs API not reachable: ${e.message}`;
+                } else {
+                    this.bot.errorDescription = `Received error event: ${e.message}`;
+                }
+                this.bot.errorCode = '-1';
+                this.emitLastError();
                 reject(e);
             });
 
@@ -141,6 +144,20 @@ class EcovacsMQTT extends Ecovacs {
             req.write(JSON.stringify(params));
             req.end();
         });
+    }
+
+    emitLastError() {
+        this.emit("Error", this.bot.errorDescription);
+        this.emit('ErrorCode', this.bot.errorCode);
+        this.emit('LastError', {
+            'error': this.bot.errorDescription,
+            'code': this.bot.errorCode
+        });
+        // Error code 3 = request oauth error
+        if (this.bot.errorCode === '3') {
+            this.emit("disconnect", true);
+            this.disconnect();
+        }
     }
 
     //end session
