@@ -53,6 +53,20 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    emitLastError() {
+        this.emit("Error", this.bot.errorDescription);
+        this.emit('ErrorCode', this.bot.errorCode);
+        this.emit('LastError', {
+            'error': this.bot.errorDescription,
+            'code': this.bot.errorCode
+        });
+        // Error code 3 = request oauth error
+        if (this.bot.errorCode === '3') {
+            this.emit("disconnect", true);
+            this.disconnect();
+        }
+    }
+
     handleCommand(command, event) {
         switch (tools.getEventNameForCommandString(command)) {
             case 'CleanSt':
@@ -252,7 +266,7 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             default:
-                tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(event));
+                tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
                 break;
         }
     }

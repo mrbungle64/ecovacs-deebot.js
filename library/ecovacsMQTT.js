@@ -98,31 +98,24 @@ class EcovacsMQTT extends Ecovacs {
                     rawData += chunk;
                 });
                 res.on('end', () => {
-                    try {
-                        const json = JSON.parse(rawData);
-                        tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
-                        if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
-                            resolve(json);
+                    const json = JSON.parse(rawData);
+                    tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
+                    if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
+                        resolve(json);
+                    } else {
+                        tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                        const errorCode = json['errno'];
+                        const errorCodeObj = {code: errorCode};
+                        if (this.bot.is950type()) {
+                            this.bot.handle_error({resultData: errorCodeObj});
                         } else {
-                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
-                            const errorCode = json['errno'];
-                            const errorCodeObj = {code: errorCode};
-                            if (this.bot.is950type()) {
-                                this.bot.handle_error({resultData: errorCodeObj});
-                            } else {
-                                this.bot.handle_error(errorCodeObj);
-                            }
-                            // Error code 500 = wait for response timed out (see issue #19)
-                            if (this.bot.errorCode !== '500') {
-                                this.emitLastError();
-                                reject(errorCodeObj);
-                            }
+                            this.bot.handle_error(errorCodeObj);
                         }
-                    } catch (e) {
-                        this.bot.errorDescription = `Internal error: ${e.message}`;
-                        this.bot.errorCode = '-2';
-                        this.emitLastError();
-                        reject(e);
+                        // Error code 500 = wait for response timed out (see issue #19)
+                        if (this.bot.errorCode !== '500') {
+                            this.emitLastError();
+                        }
+                        reject(errorCodeObj);
                     }
                 });
             });
@@ -144,20 +137,6 @@ class EcovacsMQTT extends Ecovacs {
             req.write(JSON.stringify(params));
             req.end();
         });
-    }
-
-    emitLastError() {
-        this.emit("Error", this.bot.errorDescription);
-        this.emit('ErrorCode', this.bot.errorCode);
-        this.emit('LastError', {
-            'error': this.bot.errorDescription,
-            'code': this.bot.errorCode
-        });
-        // Error code 3 = request oauth error
-        if (this.bot.errorCode === '3') {
-            this.emit("disconnect", true);
-            this.disconnect();
-        }
     }
 
     //end session

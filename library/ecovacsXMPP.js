@@ -47,13 +47,15 @@ class EcovacsXMPP extends Ecovacs {
             } else if (stanza.name === 'iq' && stanza.attrs.type === 'error' && !!stanza.children[0] && stanza.children[0].name === 'error' && !!stanza.children[0].children[0]) {
                 tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
                 this.bot.handle_error(stanza.children[0].attrs);
-                this.emit('Error', this.bot.errorDescription);
-                this.emit('ErrorCode', this.bot.errorCode);
+                this.emitLastError();
             }
         });
 
-        this.simpleXmpp.on('error', (e) => {
-            tools.envLog('[EcovacsXMPP] Error:', e);
+        this.simpleXmpp.on('error', (error) => {
+            tools.envLog(`[EcovacsXMPP] Received error event: ${error}`);
+            this.bot.errorDescription = `Received error event: ${error}`;
+            this.bot.errorCode = '-1';
+            this.emitLastError();
         });
     }
 

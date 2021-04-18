@@ -1,6 +1,6 @@
 const CODES = {
     '-2': 'Internal error',
-    '-1': 'Network or Ecovacs API not reachable',
+    '-1': 'Host not reachable or communication malfunction',
     '0': 'NoError: Robot is operational',
     '3': 'RequestOAuthError: Authentication error',
     '7': 'log data is not found',

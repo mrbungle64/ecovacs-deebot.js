@@ -13,7 +13,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         this.callEcovacsDeviceAPI(c, action.api).then((json) => {
             this.handleCommandResponse(action, json);
         }).catch((e) => {
-            tools.envLog("[EcovacsMQTT_JSON] error sendCommand: %s", e.toString());
+            tools.envLog("[EcovacsMQTT_JSON] callEcovacsDeviceAPI failed for cmd %s: %s", action.name, e.toString());
         });
     }
 

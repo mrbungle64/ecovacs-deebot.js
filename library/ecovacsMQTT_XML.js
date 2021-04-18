@@ -20,7 +20,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         this.callEcovacsDeviceAPI(c, api).then((json) => {
             this.handleCommandResponse(action, json);
         }).catch((e) => {
-            tools.envLog("[EcovacsMQTT_XML] error sendCommand: %s", e.toString());
+            tools.envLog("[EcovacsMQTT_JSON] callEcovacsDeviceAPI failed for cmd %s: %s", action.name, e.toString());
         });
     }
 
