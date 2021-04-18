@@ -119,7 +119,7 @@ function getEventNameForCommandString(str) {
         case 'battery':
             return 'BatteryInfo';
         case 'waterpermeability':
-            return 'WaterInfo';
+            return 'WaterLevel';
         case 'chargerpos':
             return 'ChargePosition';
         case 'pos':
