@@ -69,6 +69,7 @@ There is of course no claim to full functionality.
 * Initial support for some more models (e.g. N3, N7, N8, T9 series)
 * Quite a lot refactoring and code consolidation
 * Improved example apps
+* Several improvements and fixes
 * (dbochicchio) Added some structured events
 
 ### 0.5.6
