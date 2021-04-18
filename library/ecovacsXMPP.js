@@ -2,6 +2,7 @@ const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const Element = require('ltx').Element;
 const dictionary = require('./ecovacsConstants_non950type.js');
+const errorCodes = require('./errorCodes');
 
 class EcovacsXMPP extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {
@@ -40,6 +41,11 @@ class EcovacsXMPP extends Ecovacs {
                     tools.envLog('[EcovacsXMPP] command: %s', command);
                     this.handleCommand(command, secondChild);
                     delete this.bot.commandsSent[secondChild.attrs.id];
+                    if (this.bot.errorCode === '-1') {
+                        this.bot.errorCode = '0';
+                        this.bot.errorDescription = errorCodes[this.bot.errorCode];
+                        this.emitLastError();
+                    }
                 }
                 else {
                     tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
