@@ -24,7 +24,7 @@
     "mqtt": "^4.2.6",
     "simple-xmpp": "^2.3.1",
     "xmldom": "^0.6.0",
-    "uniqid": "^5.2.0"
+    "uniqid": "^5.3.0"
   },
   "optionalDependencies": {
     "canvas": "^2.6.1"
