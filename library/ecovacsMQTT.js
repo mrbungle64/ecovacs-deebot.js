@@ -99,37 +99,48 @@ class EcovacsMQTT extends Ecovacs {
                     rawData += chunk;
                 });
                 res.on('end', () => {
-                    const json = JSON.parse(rawData);
-                    tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
-                    if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
-                        if (this.bot.errorCode === '-1') {
-                            this.bot.errorCode = '0';
-                            this.bot.errorDescription = errorCodes[this.bot.errorCode];
-                            this.emitLastError();
-                        }
-                        resolve(json);
-                    } else {
-                        tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
-                        const errorCode = json['errno'];
-                        const errorCodeObj = {code: errorCode};
-                        if (this.bot.is950type()) {
-                            this.bot.handle_error({resultData: errorCodeObj});
+                    try {
+                        const json = JSON.parse(rawData);
+                        tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
+                        if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
+                            if (this.bot.errorCode === '-1') {
+                                this.bot.errorCode = '0';
+                                this.bot.errorDescription = errorCodes[this.bot.errorCode];
+                                this.emitLastError();
+                            }
+                            resolve(json);
                         } else {
-                            this.bot.handle_error(errorCodeObj);
+                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            const errorCode = json['errno'];
+                            const errorCodeObj = {code: errorCode};
+                            if (this.bot.is950type()) {
+                                this.bot.handle_error({resultData: errorCodeObj});
+                            } else {
+                                this.bot.handle_error(errorCodeObj);
+                            }
+                            // Error code 500 = wait for response timed out (see issue #19)
+                            if (this.bot.errorCode !== '500') {
+                                this.emitLastError();
+                            }
+                            reject(errorCodeObj);
                         }
-                        // Error code 500 = wait for response timed out (see issue #19)
-                        if (this.bot.errorCode !== '500') {
-                            this.emitLastError();
-                        }
-                        reject(errorCodeObj);
+                    } catch (e) {
+                        tools.envLog("[EcovacsMQTT] Error parsing response data: " + e.toString());
+                        reject(e);
                     }
                 });
             });
 
             req.on('error', (e) => {
                 tools.envLog(`[EcovacsMQTT] Received error event: ${e.message}`);
-                if (e.toString().includes('ENOTFOUND') || e.toString().includes('EHOSTUNREACH')) {
-                    this.bot.errorDescription = `Network or Ecovacs API not reachable: ${e.message}`;
+                if (e.toString().includes('ENOTFOUND')) {
+                    this.bot.errorDescription = `DNS lookup failed: ${e.message}`;
+                }
+                if (e.toString().includes('EHOSTUNREACH')) {
+                    this.bot.errorDescription = `Host is unreachable: ${e.message}`;
+                }
+                else if (e.toString().includes('ETIMEDOUT') || e.toString().includes('EAI_AGAIN')) {
+                    this.bot.errorDescription = `Network connectivity error: ${e.message}`;
                 } else {
                     this.bot.errorDescription = `Received error event: ${e.message}`;
                 }
