@@ -347,7 +347,7 @@ exports.KnownDevices = {
         "name": "DEEBOT OZMO Slim10 Series",
         "950type": false,
         "main_brush": false,
-        "spot_area": true,
+        "spot_area": false,
         "custom_area": false,
         "mopping_system": true,
         "voice_report": false,
