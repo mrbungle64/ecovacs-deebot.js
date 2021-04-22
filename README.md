@@ -61,7 +61,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.6.0 (beta)
+### 0.6.0
 * Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
 * Support for Chinese server login
 * Implemented AutoEmpty commands for T8+/plus
