@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const tools = require('./tools');
+const errorCodes = require('./errorCodes');
 
 exports = String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -50,6 +51,14 @@ class Ecovacs extends EventEmitter {
             return require('./ecovacsConstants_950type.js');
         } else {
             return require('./ecovacsConstants_non950type.js');
+        }
+    }
+
+    emitLastErrorByErrorCode(errorCode) {
+        if (errorCode !== this.bot.errorCode) {
+            this.bot.errorCode = errorCode;
+            this.bot.errorDescription = errorCodes[this.bot.errorCode];
+            this.emitLastError();
         }
     }
 
