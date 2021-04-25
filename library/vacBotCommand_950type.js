@@ -255,6 +255,19 @@ class GetCleanSum extends VacBotCommand_950type {
         super('getTotalStats');
     }
 }
+class GetMajorMap extends VacBotCommand_950type {
+    constructor() {
+        super('getMajorMap');
+    }
+}
+class GetMapImage extends VacBotCommand_950type {
+    constructor(mapID, mapType='outline') {
+        if (constants.MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
+            mapType = constants.MAPINFOTYPE_TO_ECOVACS[mapType];
+        }
+        super('getMapInfo', {'mid': mapID, 'type': mapType});
+    }
+}
 
 class GetMaps extends VacBotCommand_950type {
     constructor() {
@@ -417,3 +430,4 @@ module.exports.GetVolume = GetVolume;
 module.exports.SetVolume = SetVolume;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.SetAutoEmpty = SetAutoEmpty;
+module.exports.GetMapImage = GetMapImage;

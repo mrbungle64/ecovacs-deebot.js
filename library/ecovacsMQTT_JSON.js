@@ -156,21 +156,26 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     handleCommand(command, event) {
         tools.envLog("[EcovacsMQTT_JSON] handleCommand() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
+        let commandPrefix = '';
         //incoming events (on)
         if (command.startsWith("on")) {
             command = command.substring(2);
+            commandPrefix = 'on';
         }
         //incoming events for (3rd) unknown/unsaved map
         if (command.startsWith("off")) {
             command = command.substring(3);
+            commandPrefix = 'off';
         }
         //incoming events (report)
         if (command.startsWith("report")) {
             command = command.substring(6);
+            commandPrefix = 'report';
         }
         //remove from "get" commands
         if (command.startsWith("get")) {
             command = command.substring(3);
+            commandPrefix = 'get';
         }
         // OZMO T8 series
         // Not sure if the lowercase variant is necessary
@@ -235,6 +240,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("CurrentMapMID", this.bot.currentMapMID);
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                 this.emit("Maps", this.bot.maps);
+                break;
+            case "mapinfo":
+                if(commandPrefix == 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
+                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(event, getCircularReplacer()));
+                } else {
+                    let base64PNG = this.bot.handle_mapInfo(event);
+                    if(base64PNG !== null) {
+                        this.emit("MapImage", base64PNG);
+                    }
+                }
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot.handle_mapSet(event);
@@ -382,6 +397,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'imageUrl': this.bot.cleanLog_lastImageUrl
                 });
                 break;
+            // case 'majormap':
+            //     //this.bot.handle_majormap(event);
+            //     break;
+            // case 'minormap':
+            //     //this.bot.handle_minormap(event);
+            //     break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
                 break;
