@@ -20,10 +20,13 @@ const SPOTAREA_SUBTYPES = {
     '14': {"en": "Gym", "de": "Fitnessstudio"}
 };
 
-class EcovacsMapImage {
+const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels, #TODO: make e.g. static to use in other map classes
+
+
+
+class EcovacsMapImageBase {
     mapCanvas;
     mapContext;
-    offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels, #TODO: make e.g. static to use in other map classes
     cropBoundaries = {
         minX: null,
         minY: null,
@@ -31,21 +34,15 @@ class EcovacsMapImage {
         maxY: null
     };
 
-    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount){
-        this.mapID = mapID;
+    constructor(mapType, mapTotalWidth, mapTotalHeight, mapPixel){
         this.mapType = constants.MAPINFOTYPE_FROM_ECOVACS[mapType];
         this.mapTotalWidth = mapTotalWidth;
         this.mapTotalHeight = mapTotalHeight;
         this.mapPixel = mapPixel;
-        this.mapTotalCount = mapTotalCount;
         
-        //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
-        this.mapPieces = new Array(mapTotalCount).fill(false);
-        //mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison 
-        this.mapPiecesCrc; 
         this.initCanvas();
     }
-
+    
     initCanvas() {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
@@ -57,40 +54,15 @@ class EcovacsMapImage {
         this.mapContext.beginPath();
     }
 
-    updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue) { 
-        //#TODO: currently only validated with one piece (StartX=0 and StartY=0)
-        if (!tools.isCanvasModuleAvailable()) {
-            return null;
-        }
+    drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
+        let mapPieceDecompressed = mapPieceToIntArray(mapPieceCompressed);
 
-        if(this.mapPiecesCrc != pieceCrc) { //CRC has changed, so invalidate all pieces and return
-            this.mapPiecesCrc = pieceCrc;
-            this.mapPieces.fill(false);
-            this.mapPieces[pieceIndex] = pieceValue;
-            return null; //nothing to process as not all pieces are received yet
-        } else {
-            if(!this.mapPieces.every(Boolean)) { //not all pieces have been received
-                this.mapPieces[pieceIndex] = pieceValue;
-                if(!this.mapPieces.every(Boolean)) { //if still not all pieces have been received return
-                    return null; //nothing to process as not all pieces are received yet
-                } else { //last piece received
-                    this.transferMapInfo = true;
-                }
-            } else { //all pieces have been received already, so only transfer once per new onMapInfo series
-                if(pieceIndex == 0) {
-                    this.transferMapInfo = true;
-                }
-            }
-        }
-        
-        let decompressedArray = mapPieceToIntArray(this.mapPieces.join(''));
-        //#TODO: extract to separate function for reuse with livemap
-        for (let row = 0; row < pieceWidth; row++) {
-            for (let column = 0; column < pieceHeight; column++) {
-                let bufferRow = row + pieceStartX * pieceWidth;
-                let bufferColumn = column + pieceStartY * pieceHeight;
-                let pieceDataPosition = pieceWidth * row + column;
-                let pixelValue = decompressedArray[pieceDataPosition];
+        for (let row = 0; row < mapPieceWidth; row++) {
+            for (let column = 0; column < mapPieceHeight; column++) {
+                let bufferRow = row + mapPieceStartX;
+                let bufferColumn = column + mapPieceStartY;
+                let pieceDataPosition = mapPieceWidth * row + column;
+                let pixelValue = mapPieceDecompressed[pieceDataPosition];
                 
                 if(pixelValue == 0) { //No data
                     this.mapContext.clearRect(bufferRow, bufferColumn, 1, 1);
@@ -133,7 +105,7 @@ class EcovacsMapImage {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
-        if(!this.mapPieces.every(Boolean) || !this.transferMapInfo) { //check if all pieces were retrieved yet or data should not be transferred
+        if(!this.transferMapInfo) { //check if data should not be transferred (mapinfo:not all datapieces retrieved or sub-datapiece with no changes retrieved)
             return null;
         };
         
@@ -189,6 +161,63 @@ class EcovacsMapImage {
             'mapBase64PNG': this.mapBase64PNG
         }
     }
+}
+
+class EcovacsMapImage extends EcovacsMapImageBase{
+    
+    mapCanvas;
+    mapContext;
+    cropBoundaries = {
+        minX: null,
+        minY: null,
+        maxX: null,
+        maxY: null
+    };
+
+    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount){
+        super(mapType, mapTotalWidth, mapTotalHeight, mapPixel);
+        
+        this.mapID = mapID,
+        this.mapTotalCount = mapTotalCount;
+        
+        //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
+        this.mapDataPieces = new Array(mapTotalCount).fill(false);
+        //mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison 
+        this.mapDataPiecesCrc; 
+        this.initCanvas();
+    }
+
+    updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue) { 
+        //#TODO: currently only validated with one piece (StartX=0 and StartY=0)
+        if (!tools.isCanvasModuleAvailable()) {
+            return null;
+        }
+
+        if(this.mapDataPiecesCrc != pieceCrc) { //CRC has changed, so invalidate all pieces and return
+            this.mapDataPiecesCrc = pieceCrc;
+            this.mapDataPieces.fill(false);
+            this.mapDataPieces[pieceIndex] = pieceValue;
+            return null; //nothing to process as not all pieces are received yet
+        } else {
+            if(!this.mapDataPieces.every(Boolean)) { //not all pieces have been received
+                this.mapDataPieces[pieceIndex] = pieceValue;
+                if(!this.mapDataPieces.every(Boolean)) { //if still not all pieces have been received return
+                    return null; //nothing to process as not all pieces are received yet
+                } else { //last piece received
+                    this.transferMapInfo = true;
+                }
+            } else { //all pieces have been received already, so only transfer once per new onMapInfo series
+                if(pieceIndex == 0) {
+                    this.transferMapInfo = true;
+                }
+            }
+        }
+        
+        this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX * pieceWidth, pieceStartY * pieceHeight, pieceWidth, pieceHeight);
+
+    }
+
+    
 }
 class EcovacsMap {
     constructor(mapID, mapIndex, mapName, mapStatus, mapIsCurrentMap = 1, mapIsBuilt = 1) {
