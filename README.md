@@ -39,9 +39,10 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot 710/711/711s
 * Deebot OZMO 610
 * Deebot OZMO 900/905
+* Deebot OZMO Slim 10
 * Deebot OZMO T5
 * Deebot OZMO T8 series
-* Deebot OZMO Slim 10
+* Deebot OZMO T9 series
 * Deebot N3 MAX
 * Deebot N7
 * Deebot N8 series
@@ -60,6 +61,9 @@ There is of course no claim to full functionality.
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
+
+### 0.6.1 (alpha)
+* Added full map data (maps, spot areas, virtual boundaries) as one structured event
 
 ### 0.6.0
 * Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
