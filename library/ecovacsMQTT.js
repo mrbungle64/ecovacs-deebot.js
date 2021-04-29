@@ -1,7 +1,6 @@
 const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
-const errorCodes = require('./errorCodes');
 const https = require('https');
 const URL = require('url').URL;
 
@@ -103,10 +102,8 @@ class EcovacsMQTT extends Ecovacs {
                         const json = JSON.parse(rawData);
                         tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
                         if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
-                            if (this.bot.errorCode === '-1') {
-                                this.bot.errorCode = '0';
-                                this.bot.errorDescription = errorCodes[this.bot.errorCode];
-                                this.emitLastError();
+                            if (this.bot.errorCode !== '0') {
+                                this.emitLastErrorByErrorCode('0');
                             }
                             resolve(json);
                         } else {
@@ -126,6 +123,7 @@ class EcovacsMQTT extends Ecovacs {
                         }
                     } catch (e) {
                         tools.envLog("[EcovacsMQTT] Error parsing response data: " + e.toString());
+                        this.emitLastErrorByErrorCode('-3');
                         reject(e);
                     }
                 });

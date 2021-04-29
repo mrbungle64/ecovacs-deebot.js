@@ -81,6 +81,9 @@ class VacBot {
 
         this.commandsSent = [];
 
+        this.mapDataObject = null;
+        this.mapDataObjectQueue = [];
+
         const LibraryForProtocol = this.getLibraryForProtocol();
         this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 
@@ -88,6 +91,158 @@ class VacBot {
             tools.envLog("[VacBot] Ready event!");
             this.is_ready = true;
         });
+
+        this.on('MapDataReady', () => {
+            if (this.mapDataObject) {
+                this.ecovacs.emit('MapDataObject', this.mapDataObject);
+                this.mapDataObject = null;
+            }
+        });
+        this.on('Maps', (mapData) => {
+            this.handleMapsEvent(mapData);
+        });
+        this.on('MapSpotAreas', (spotAreas) => {
+            this.handleMapSpotAreasEvent(spotAreas);
+        });
+        this.on('MapSpotAreaInfo', (spotAreaInfo) => {
+            this.handleMapSpotAreaInfo(spotAreaInfo);
+        });
+        this.on('MapVirtualBoundaries', (virtualBoundaries) => {
+            this.handleMapVirtualBoundaries(virtualBoundaries);
+        });
+        this.on('MapVirtualBoundaryInfo', (virtualBoundaryInfo) => {
+            this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
+        });
+    }
+
+    handleMapsEvent(mapData) {
+        if (!this.mapDataObject) {
+            this.mapDataObject = [];
+            for (const i in mapData['maps']) {
+                if (Object.prototype.hasOwnProperty.call(mapData['maps'], i)) {
+                    const mapID = mapData['maps'][i]['mapID'];
+                    this.mapDataObject.push(mapData['maps'][i].toJSON());
+                    this.run('GetSpotAreas', mapID);
+                    this.run('GetVirtualBoundaries', mapID);
+                }
+            }
+        }
+    }
+
+    handleMapSpotAreasEvent(spotAreas) {
+        const mapID = spotAreas['mapID'];
+        const mapObject = this.getMapObject(mapID);
+        if (mapObject) {
+            mapObject['mapSpotAreas'] = [];
+            for (const i in spotAreas['mapSpotAreas']) {
+                if (Object.prototype.hasOwnProperty.call(spotAreas['mapSpotAreas'], i)) {
+                    const mapSpotAreaID = spotAreas['mapSpotAreas'][i]['mapSpotAreaID'];
+                    mapObject['mapSpotAreas'].push(spotAreas['mapSpotAreas'][i].toJSON());
+                    this.run('GetSpotAreaInfo', spotAreas['mapID'], mapSpotAreaID);
+                    this.mapDataObjectQueue.push({
+                        'type': 'MapSpotArea',
+                        'mapID': spotAreas['mapID'],
+                        'mapSpotAreaID': mapSpotAreaID
+                    });
+                }
+            }
+        }
+    }
+
+    handleMapVirtualBoundaries(virtualBoundaries) {
+        const mapID = virtualBoundaries['mapID'];
+        const mapObject = this.getMapObject(mapID);
+        if (mapObject) {
+            mapObject['mapVirtualBoundaries'] = [];
+            const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
+            const virtualBoundaryArray = [];
+            for (const i in virtualBoundariesCombined) {
+                virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
+            }
+            for (const i in virtualBoundaryArray) {
+                const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
+                const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
+                mapObject['mapVirtualBoundaries'].push(virtualBoundaryArray[i].toJSON());
+                this.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
+                this.mapDataObjectQueue.push({
+                    'type': 'MapVirtualBoundary',
+                    'mapID': mapID,
+                    'mapVirtualBoundaryID': mapVirtualBoundaryID,
+                    'mapVirtualBoundaryType': mapVirtualBoundaryType
+                });
+            }
+        }
+    }
+
+    handleMapSpotAreaInfo(spotAreaInfo) {
+        const mapID = spotAreaInfo['mapID'];
+        const mapSpotAreaID = spotAreaInfo['mapSpotAreaID'];
+        const mapSpotAreasObject = this.getSpotAreaObject(mapID, mapSpotAreaID);
+        Object.assign(mapSpotAreasObject, spotAreaInfo.toJSON());
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            if ((item.mapID === mapID) && (item.type === 'MapSpotArea')) {
+                if (item.mapSpotAreaID === mapSpotAreaID) {
+                    return false;
+                }
+            }
+            return true;
+        })
+        if (this.mapDataObjectQueue.length === 0) {
+            this.ecovacs.emit('MapDataReady');
+        }
+    }
+
+    handleMapVirtualBoundaryInfo(virtualBoundaryInfo) {
+        const mapID = virtualBoundaryInfo['mapID'];
+        const virtualBoundaryID = virtualBoundaryInfo['mapVirtualBoundaryID'];
+        const mapVirtualBoundaryObject = this.getVirtualBoundaryObject(mapID, virtualBoundaryID);
+        Object.assign(mapVirtualBoundaryObject, virtualBoundaryInfo.toJSON());
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            if ((item.mapID === mapID) && (item.type === 'MapVirtualBoundary')) {
+                if (item.mapVirtualBoundaryType === virtualBoundaryInfo.mapVirtualBoundaryType) {
+                    if (item.mapVirtualBoundaryID === virtualBoundaryID) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        })
+        if (this.mapDataObjectQueue.length === 0) {
+            this.ecovacs.emit('MapDataReady');
+        }
+    }
+
+    getMapObject(mapID) {
+        return this.mapDataObject.find((map) => {
+            return map.mapID === mapID;
+        });
+    }
+
+    getSpotAreaObject(mapID, spotAreaID) {
+        const mapSpotAreasObject = this.mapDataObject.find((map) => {
+            return map.mapID === mapID;
+        }).mapSpotAreas;
+        if (mapSpotAreasObject) {
+            return mapSpotAreasObject.find((spotArea) => {
+                return spotArea.mapSpotAreaID === spotAreaID;
+            });
+        }
+        return null;
+    }
+
+    getVirtualBoundaryObject(mapID, virtualBoundaryID) {
+        const mapVirtualBoundariesObject = this.mapDataObject.find((map) => {
+            return map.mapID === mapID;
+        }).mapVirtualBoundaries;
+        if (mapVirtualBoundariesObject) {
+            return mapVirtualBoundariesObject.find((virtualBoundary) => {
+                return virtualBoundary.mapVirtualBoundaryID === virtualBoundaryID;
+            });
+        }
+        return null;
+    }
+
+    run(action) {
     }
 
     // Deprecated but keep this method for now
