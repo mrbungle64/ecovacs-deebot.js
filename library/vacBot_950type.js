@@ -198,16 +198,6 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
     }
 
-    handle_lastCleanLog(event) {
-        tools.envLog("[VacBot] handle_lastCleanLog");
-        if (event['resultData'].hasOwnProperty('log')) {
-            this.cleanLog_lastTimestamp = parseInt(event['resultData']['log']['ts']);
-            this.cleanLog_lastImageUrl = event['resultData']['log']['imageUrl'];
-            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-            tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
-        }
-    }
-
     handle_cleanSum(event) {
         this.cleanSum_totalSquareMeters = parseInt(event['resultData']['area']);
         this.cleanSum_totalSeconds = parseInt(event['resultData']['time']);
