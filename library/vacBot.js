@@ -123,7 +123,15 @@ class VacBot {
                     const mapID = mapData['maps'][i]['mapID'];
                     this.mapDataObject.push(mapData['maps'][i].toJSON());
                     this.run('GetSpotAreas', mapID);
+                    this.mapDataObjectQueue.push({
+                        'type': 'GetSpotAreas',
+                        'mapID': mapID
+                    });
                     this.run('GetVirtualBoundaries', mapID);
+                    this.mapDataObjectQueue.push({
+                        'type': 'GetVirtualBoundaries',
+                        'mapID': mapID
+                    });
                 }
             }
         }
@@ -140,13 +148,19 @@ class VacBot {
                     mapObject['mapSpotAreas'].push(spotAreas['mapSpotAreas'][i].toJSON());
                     this.run('GetSpotAreaInfo', spotAreas['mapID'], mapSpotAreaID);
                     this.mapDataObjectQueue.push({
-                        'type': 'MapSpotArea',
+                        'type': 'GetSpotAreaInfo',
                         'mapID': spotAreas['mapID'],
                         'mapSpotAreaID': mapSpotAreaID
                     });
                 }
             }
         }
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            if ((item.mapID === mapID) && (item.type === 'GetSpotAreas')) {
+                return false;
+            }
+            return true;
+        });
     }
 
     handleMapVirtualBoundaries(virtualBoundaries) {
@@ -165,13 +179,19 @@ class VacBot {
                 mapObject['mapVirtualBoundaries'].push(virtualBoundaryArray[i].toJSON());
                 this.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
                 this.mapDataObjectQueue.push({
-                    'type': 'MapVirtualBoundary',
+                    'type': 'GetVirtualBoundaryInfo',
                     'mapID': mapID,
                     'mapVirtualBoundaryID': mapVirtualBoundaryID,
                     'mapVirtualBoundaryType': mapVirtualBoundaryType
                 });
             }
         }
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            if ((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries')) {
+                return false;
+            }
+            return true;
+        });
     }
 
     handleMapSpotAreaInfo(spotAreaInfo) {
@@ -180,7 +200,7 @@ class VacBot {
         const mapSpotAreasObject = this.getSpotAreaObject(mapID, mapSpotAreaID);
         Object.assign(mapSpotAreasObject, spotAreaInfo.toJSON());
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'MapSpotArea')) {
+            if ((item.mapID === mapID) && (item.type === 'GetSpotAreaInfo')) {
                 if (item.mapSpotAreaID === mapSpotAreaID) {
                     return false;
                 }
@@ -198,7 +218,7 @@ class VacBot {
         const mapVirtualBoundaryObject = this.getVirtualBoundaryObject(mapID, virtualBoundaryID);
         Object.assign(mapVirtualBoundaryObject, virtualBoundaryInfo.toJSON());
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'MapVirtualBoundary')) {
+            if ((item.mapID === mapID) && (item.type === 'GetVirtualBoundaryInfo')) {
                 if (item.mapVirtualBoundaryType === virtualBoundaryInfo.mapVirtualBoundaryType) {
                     if (item.mapVirtualBoundaryID === virtualBoundaryID) {
                         return false;
