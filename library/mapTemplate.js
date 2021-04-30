@@ -20,9 +20,8 @@ const SPOTAREA_SUBTYPES = {
     '14': {"en": "Gym", "de": "Fitnessstudio"}
 };
 
-const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels, #TODO: make e.g. static to use in other map classes
-
-
+const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels
+let mapDataObject = null;
 
 class EcovacsMapImageBase {
     mapCanvas;
@@ -115,6 +114,8 @@ class EcovacsMapImageBase {
         //flip map horizontally before drawing everything else
         finalContext.translate(0, this.mapTotalHeight);
         finalContext.scale(1, -1);
+
+        //Draw base map
         finalContext.drawImage(this.mapCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
         
         if(this.mapID == currentMapMID) { //#TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
@@ -129,9 +130,9 @@ class EcovacsMapImageBase {
                 const robotImage = new Image(); // Create a new Image
                 robotImage.src = robotBase64;
                 //icon is facing upward, so add 90
-                let robotCanvas = getRotatedCanvasFromImage(robotImage, deebotPosition['a']+90); //0=facing right, 90 = facing upwards, 180/-180 = facing left, -90 = facing downwards
+                let robotCanvas = getRotatedCanvasFromImage(robotImage, deebotPosition['a']+90); //angle from ecovacs: 0=facing right, 90 = facing upwards, 180/-180 = facing left, -90 = facing downwards
                 // icon size is 16*16, so subtract 8 pixels to coordinates for center 
-                finalContext.drawImage(robotCanvas, (deebotPosition['x']/this.mapPixel)+this.offset-8, (deebotPosition['y']/this.mapPixel)+this.offset-8, 16, 16);
+                finalContext.drawImage(robotCanvas, (deebotPosition['x']/this.mapPixel)+offset-8, (deebotPosition['y']/this.mapPixel)+offset-8, 16, 16);
             }
             //Draw charger
             //////////////
@@ -141,7 +142,7 @@ class EcovacsMapImageBase {
             const chargerImage = new Image();
             chargerImage.src = charger;
             // icon size is 16*16, so subtract 8 pixels to coordinates for center
-            finalContext.drawImage(chargerImage, (chargerPosition['x']/this.mapPixel)+this.offset-8, (chargerPosition['y']/this.mapPixel)+this.offset-8, 16, 16);    
+            finalContext.drawImage(chargerImage, (chargerPosition['x']/this.mapPixel)+offset-8, (chargerPosition['y']/this.mapPixel)+offset-8, 16, 16);    
         }
         
         //crop image
@@ -425,6 +426,36 @@ function getRotatedCanvasFromImage (image, angle) {
     return rotatedCanvas;
 }
 
+function getMapObject(mapDataObject, mapID) {
+    return mapDataObject.find((map) => {
+        return map.mapID === mapID;
+    });
+}
+
+function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
+    const mapSpotAreasObject = mapDataObject.find((map) => {
+        return map.mapID === mapID;
+    }).mapSpotAreas;
+    if (mapSpotAreasObject) {
+        return mapSpotAreasObject.find((spotArea) => {
+            return spotArea.mapSpotAreaID === spotAreaID;
+        });
+    }
+    return null;
+}
+
+function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
+    const mapVirtualBoundariesObject = mapDataObject.find((map) => {
+        return map.mapID === mapID;
+    }).mapVirtualBoundaries;
+    if (mapVirtualBoundariesObject) {
+        return mapVirtualBoundariesObject.find((virtualBoundary) => {
+            return virtualBoundary.mapVirtualBoundaryID === virtualBoundaryID;
+        });
+    }
+    return null;
+}
+
 module.exports.EcovacsMap = EcovacsMap;
 module.exports.EcovacsMapImage = EcovacsMapImage;
 module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
@@ -434,3 +465,7 @@ module.exports.EcovacsMapVirtualBoundaries = EcovacsMapVirtualBoundaries;
 module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
 module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
+module.exports.getMapObject = getMapObject;
+module.exports.getSpotAreaObject = getSpotAreaObject;
+module.exports.getVirtualBoundaryObject = getVirtualBoundaryObject;
+module.exports.mapDataObject = mapDataObject;
