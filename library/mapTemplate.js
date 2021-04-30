@@ -1,6 +1,8 @@
 const tools = require('./tools.js');
 const lzma = require('lzma')
 const constants = require('./ecovacsConstants');
+const map = require('./mapTemplate');
+
 
 const SPOTAREA_SUBTYPES = {
     '0': {"en": "Default  (A, B, C...)", "de": "Standard (A, B, C...)"},
@@ -20,12 +22,42 @@ const SPOTAREA_SUBTYPES = {
     '14': {"en": "Gym", "de": "Fitnessstudio"}
 };
 
+const SPOTAREA_COLORS = [
+'#ffdcf6',
+'#fff8d2',
+'#e4fed9',
+'#dbf2fe',
+'#ffd7c9',
+'#fee3c4',
+'#f00431',
+'#ffa1a1',
+'#9fcfff'
+];
+
+const MAP_COLORS = {
+    'vw': '#e40046', //virtual wall
+    'mw': '#f7a501', //no mop zone
+    'floor': '#badbff',
+    'wall': '#5095e1',
+    'carpet': '#b0cceb',
+    'wifi_not_covered': '#d6d6d6',
+    'wifi_1': '#7fbafb', //strong
+    'wifi_2': '#a2cdfc',
+    'wifi_3': '#bbdafd',
+    'wifi_4': '#ddebfa',
+    'wifi_5': '"#f7fbff', //weak
+}
+
+
 const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels
-let mapDataObject = null;
+const mapDataObject = null;
 
 class EcovacsMapImageBase {
-    mapCanvas;
-    mapContext;
+    isLiveMap = null;
+    mapFloorCanvas;
+    mapFloorContext;
+    mapWallCanvas;
+    mapWallContext;
     cropBoundaries = {
         minX: null,
         minY: null,
@@ -47,10 +79,14 @@ class EcovacsMapImageBase {
             return null;
         }
         const {createCanvas} = require('canvas');
-        this.mapCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        this.mapContext = this.mapCanvas.getContext("2d");
-        this.mapContext.globalAlpha = 1;
-        this.mapContext.beginPath();
+        this.mapFloorCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
+        this.mapFloorContext = this.mapFloorCanvas.getContext("2d");
+        this.mapFloorContext.globalAlpha = 1;
+        this.mapFloorContext.beginPath();
+        this.mapWallCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
+        this.mapWallContext = this.mapWallCanvas.getContext("2d");
+        this.mapWallContext.globalAlpha = 1;
+        this.mapWallContext.beginPath();
     }
 
     drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
@@ -64,7 +100,8 @@ class EcovacsMapImageBase {
                 let pixelValue = mapPieceDecompressed[pieceDataPosition];
                 
                 if(pixelValue == 0) { //No data
-                    this.mapContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                    this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                    this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                 } else {
                     //checkCropBoundaries 
                     if (this.cropBoundaries.minY === null) {this.cropBoundaries.minY = bufferColumn;} else if (bufferColumn < this.cropBoundaries.minY) {this.cropBoundaries.minY = bufferColumn;}
@@ -74,27 +111,44 @@ class EcovacsMapImageBase {
                     
                     //#TODO: make colors customizable
                     if(pixelValue == 1) { //Floor
-                        this.mapContext.fillStyle = "#badbff";
+                        this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if(pixelValue == 2) { //Wall
-                        this.mapContext.fillStyle = "#5095e1";
+                        this.mapWallContext.fillStyle = MAP_COLORS['wall'];
+                        this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if(pixelValue == 3) { //Carpet
-                        this.mapContext.fillStyle = "#b0cceb";
+                        this.mapWallContext.fillStyle = MAP_COLORS['carpet'];
+                        this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                    //only for Wifi heatmap
                     } else if(pixelValue == 4) { //Wifi not covered
-                        this.mapContext.fillStyle = "#d6d6d6";
-                    
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_not_covered'];
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);  
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>10 && pixelValue <= 20) {  //Wifi coverage 1=strong
-                        this.mapContext.fillStyle = "#7fbafb";  
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];  
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>20 && pixelValue <= 30) { //Wifi coverage 2
-                        this.mapContext.fillStyle = "#a2cdfc";                
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];         
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);    
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);   
                     } else if (pixelValue>30 && pixelValue <= 40) { //Wifi coverage 3
-                        this.mapContext.fillStyle = "#bbdafd";                
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];        
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);   
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);     
                     } else if (pixelValue>40 && pixelValue <= 50) { //Wifi coverage 4
-                        this.mapContext.fillStyle = "#ddebfa";                
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];        
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);  
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);      
                     } else if (pixelValue>50) {        //Wifi coverage 5=weak
-                        this.mapContext.fillStyle = "#f7fbff";                      
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];      
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);    
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);            
                     }
 
-                    this.mapContext.fillRect(bufferRow, bufferColumn, 1, 1);
                 } 
             }
         }
@@ -115,9 +169,79 @@ class EcovacsMapImageBase {
         finalContext.translate(0, this.mapTotalHeight);
         finalContext.scale(1, -1);
 
-        //Draw base map
-        finalContext.drawImage(this.mapCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+        //Draw floor map
+        finalContext.drawImage(this.mapFloorCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
         
+        //get mapObject
+        let mapObject = null;
+        
+        if (map.mapDataObject !== null) {
+            if(typeof this.mapID === 'undefined' || this.isLiveMap == null || this.isLiveMap === true) {
+                mapObject = getCurrentMapObject(map.mapDataObject);
+            } else {
+                mapObject = getMapObject(map.mapDataObject, this.mapID);
+            }
+            //Draw spotAreas
+            let areaCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
+            const areaContext = areaCanvas.getContext('2d');
+            for(let areaIndex in mapObject['mapSpotAreas']) {
+                let areaCoordinateArray = mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaBoundaries'].split(';');
+                areaContext.beginPath();
+                for (let i = 0; i < areaCoordinateArray.length; i++) {
+                    let row = areaCoordinateArray[i].split(',')[0]/50+offset;
+                    let column = areaCoordinateArray[i].split(',')[1]/50+offset;
+                    if (i === 0) {
+                        areaContext.moveTo(row, column);
+                    } else {
+                        areaContext.lineTo(row, column);
+                    }
+                }
+                areaContext.closePath();
+                areaContext.fillStyle = SPOTAREA_COLORS[mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaID']%SPOTAREA_COLORS.length];
+                areaContext.fill();
+
+            }
+            finalContext.drawImage(areaCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+            
+            //Draw virtualBoundaries
+            let boundaryCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
+            const boundaryContext = boundaryCanvas.getContext('2d');
+            for(let boundaryIndex in mapObject['mapVirtualBoundaries']) {
+                let boundaryCoordinates = mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryCoordinates'];
+                let boundaryCoordinateArray = boundaryCoordinates.substring(1, boundaryCoordinates.length-1).split(',');
+                boundaryContext.beginPath();
+                for (let i = 0; i < boundaryCoordinateArray.length; i=i+2) {
+                    let row = boundaryCoordinateArray[i]/50+offset;
+                    let column = boundaryCoordinateArray[i+1]/50+offset;
+                    //checkCropBoundaries 
+                    if (this.cropBoundaries.minY === null) {this.cropBoundaries.minY = column;} else if (column < this.cropBoundaries.minY) {this.cropBoundaries.minY = column;}
+                    if (this.cropBoundaries.minX === null) {this.cropBoundaries.minX = row; } else if (row < this.cropBoundaries.minX) {this.cropBoundaries.minX = row;}
+                    if (this.cropBoundaries.maxX === null) {this.cropBoundaries.maxX = row; } else if (this.cropBoundaries.maxX < row) {this.cropBoundaries.maxX = row;}
+                    if (this.cropBoundaries.maxY === null) {this.cropBoundaries.maxY = column;} else if (this.cropBoundaries.maxY < column) {this.cropBoundaries.maxY = column;}
+                    
+                    if (i === 0) {
+                        boundaryContext.moveTo(row, column);
+                    } else {
+                        boundaryContext.lineTo(row, column);
+                    }
+                }
+                boundaryContext.closePath();
+                boundaryContext.lineWidth = 2;
+                boundaryContext.strokeStyle = MAP_COLORS[mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryType']];
+                boundaryContext.setLineDash([2, 2]);
+                boundaryContext.stroke();
+
+            }
+            finalContext.drawImage(boundaryCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+            
+            //Draw chargers
+            //TODO: add results from getPos_V2 to mapDataObject
+        }
+
+        //Draw walls & carpet
+        finalContext.drawImage(this.mapWallCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+
+        //Draw deebot
         if(this.mapID == currentMapMID) { //#TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
             const {Image} = require('canvas');
             if(typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //#TODO: draw other icon when position is invalid
@@ -165,9 +289,9 @@ class EcovacsMapImageBase {
 }
 
 class EcovacsMapImage extends EcovacsMapImageBase{
-    
-    mapCanvas;
-    mapContext;
+    isLiveMap = false;
+    mapFloorCanvas;
+    mapFloorContext;
     cropBoundaries = {
         minX: null,
         minY: null,
@@ -355,7 +479,7 @@ class EcovacsMapVirtualBoundaryInfo {
     }
 }
 
-function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
+function createCanvasFromCoordinates(coordinates, width = 100, height = 100, style = {}) {
     if (!tools.isCanvasModuleAvailable()) {
         return null;
     }
@@ -363,7 +487,6 @@ function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
     const {createCanvas} = require('canvas');
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
-    //ctx.translate(0, 2500);
     ctx.beginPath();
     for (let i = 0; i < coordinateArray.length; i++) {
         let xi = coordinateArray[i].split(',')[0];
@@ -432,6 +555,12 @@ function getMapObject(mapDataObject, mapID) {
     });
 }
 
+function getCurrentMapObject(mapDataObject) {
+    return mapDataObject.find((map) => {
+        return map.mapIsCurrentMap === mapID;
+    });
+}
+
 function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
     const mapSpotAreasObject = mapDataObject.find((map) => {
         return map.mapID === mapID;
@@ -466,6 +595,7 @@ module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
 module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
 module.exports.getMapObject = getMapObject;
+module.exports.getCurrentMapObject = getCurrentMapObject;
 module.exports.getSpotAreaObject = getSpotAreaObject;
 module.exports.getVirtualBoundaryObject = getVirtualBoundaryObject;
 module.exports.mapDataObject = mapDataObject;
