@@ -205,9 +205,7 @@ class Ecovacs extends EventEmitter {
                 this.emit('CleanSum', {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
-                    'totalNumber': this.bot.cleanSum_totalNumber,
-                    'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString
+                    'totalNumber': this.bot.cleanSum_totalNumber
                 });
                 break;
             case 'CleanLogs':
