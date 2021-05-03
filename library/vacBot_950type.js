@@ -493,6 +493,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new vacBotCommand.GetChargeState());
                 break;
             case "GetMaps".toLowerCase():
+                this.createMapDataObject = !!arguments[1] || false;
                 this.sendCommand(new vacBotCommand.GetMaps());
                 break;
             case "GetSpotAreas".toLowerCase():
