@@ -152,6 +152,9 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetLifeSpan', 'side_brush');
             vacbot.run('GetLifeSpan', 'filter');
             vacbot.run('GetCleanLogs');
+            if (vacbot.hasSpotAreas()) {
+                vacbot.run('GetMaps', true);
+            }
         }, 6000);
 
         setInterval(() => {
@@ -160,9 +163,6 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetBatteryState');
             if (vacbot.hasMoppingSystem()) {
                 vacbot.run('GetWaterLevel');
-            }
-            if (vacbot.hasSpotAreas()) {
-                vacbot.run('GetMaps', true);
             }
         }, 60000);
 
