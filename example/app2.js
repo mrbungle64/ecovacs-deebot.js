@@ -132,6 +132,7 @@ api.connect(account_id, password_hash).then(() => {
         vacbot.connect();
 
         console.log('[app2.js] name: ' + vacbot.getDeviceProperty('name'));
+        console.log('[app2.js] isCanvasModuleAvailable: ' + EcoVacsAPI.isCanvasModuleAvailable());
         console.log('[app2.js] isKnownDevice: ' + vacbot.isKnownDevice());
         console.log('[app2.js] isSupportedDevice: ' + vacbot.isSupportedDevice());
         console.log('[app2.js] is950type: ' + vacbot.is950type());
