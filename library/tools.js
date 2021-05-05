@@ -63,7 +63,7 @@ function isSupportedDevice(deviceClass) {
 
 function isKnownDevice(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getKnownDevices()));
-    return devices.hasOwnProperty(deviceClass) || isSupportedDevice();
+    return devices.hasOwnProperty(deviceClass) || isSupportedDevice(deviceClass);
 }
 
 function getDeviceProperty(deviceClass, property) {
