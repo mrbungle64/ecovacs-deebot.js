@@ -82,6 +82,7 @@ class VacBot {
 
         this.commandsSent = [];
 
+        this.createMapDataObject = false;
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
 
@@ -100,8 +101,11 @@ class VacBot {
                 this.mapDataObject = null;
             }
         });
+
         this.on('Maps', (mapData) => {
-            this.handleMapsEvent(mapData);
+            if (this.createMapDataObject) {
+                this.handleMapsEvent(mapData);
+            }
         });
         this.on('MapSpotAreas', (spotAreas) => {
             this.handleMapSpotAreasEvent(spotAreas);
