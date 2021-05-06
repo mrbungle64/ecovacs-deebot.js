@@ -245,10 +245,19 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if(commandPrefix == 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
                     tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(event, getCircularReplacer()));
                 } else {
-                    let base64PNG = this.bot.handle_mapInfo(event);
-                    if(base64PNG !== null) {
-                        this.emit("MapImage", base64PNG);
+                    let mapImage = this.bot.handle_mapInfo(event);
+                    if(mapImage !== null) {
+                        this.emit("MapImage", mapImage);
                     }
+                }
+                break;
+            case 'majormap':
+                this.bot.handle_majormap(event);
+                break;
+            case 'minormap':
+                let mapImage = this.bot.handle_minormap(event);
+                if(mapImage !== null) {
+                    this.emit("MapLiveImage", mapImage);
                 }
                 break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
@@ -397,12 +406,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'imageUrl': this.bot.cleanLog_lastImageUrl
                 });
                 break;
-            // case 'majormap':
-            //     //this.bot.handle_majormap(event);
-            //     break;
-            // case 'minormap':
-            //     //this.bot.handle_minormap(event);
-            //     break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
                 break;

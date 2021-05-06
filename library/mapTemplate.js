@@ -48,12 +48,10 @@ const MAP_COLORS = {
     'wifi_5': '"#f7fbff', //weak
 }
 
-
 const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels
 const mapDataObject = null;
 
 class EcovacsMapImageBase {
-    isLiveMap = null;
     mapFloorCanvas;
     mapFloorContext;
     mapWallCanvas;
@@ -65,7 +63,8 @@ class EcovacsMapImageBase {
         maxY: null
     };
 
-    constructor(mapType, mapTotalWidth, mapTotalHeight, mapPixel){
+    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel){
+        this.mapID = mapID,
         this.mapType = constants.MAPINFOTYPE_FROM_ECOVACS[mapType];
         this.mapTotalWidth = mapTotalWidth;
         this.mapTotalHeight = mapTotalHeight;
@@ -78,6 +77,7 @@ class EcovacsMapImageBase {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
+        
         const {createCanvas} = require('canvas');
         this.mapFloorCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
         this.mapFloorContext = this.mapFloorCanvas.getContext("2d");
@@ -87,6 +87,7 @@ class EcovacsMapImageBase {
         this.mapWallContext = this.mapWallCanvas.getContext("2d");
         this.mapWallContext.globalAlpha = 1;
         this.mapWallContext.beginPath();
+        
     }
 
     drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
@@ -109,7 +110,7 @@ class EcovacsMapImageBase {
                     if (this.cropBoundaries.maxX === null) {this.cropBoundaries.maxX = bufferRow; } else if (this.cropBoundaries.maxX < bufferRow) {this.cropBoundaries.maxX = bufferRow;}
                     if (this.cropBoundaries.maxY === null) {this.cropBoundaries.maxY = bufferColumn;} else if (this.cropBoundaries.maxY < bufferColumn) {this.cropBoundaries.maxY = bufferColumn;}
                     
-                    //#TODO: make colors customizable
+                    //TODO: make colors customizable
                     if(pixelValue == 1) { //Floor
                         this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
                         this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
@@ -176,7 +177,7 @@ class EcovacsMapImageBase {
         let mapObject = null;
         
         if (map.mapDataObject !== null) {
-            if(typeof this.mapID === 'undefined' || this.isLiveMap == null || this.isLiveMap === true) {
+            if(typeof this.mapID == null) {
                 mapObject = getCurrentMapObject(map.mapDataObject);
             } else {
                 mapObject = getMapObject(map.mapDataObject, this.mapID);
@@ -242,13 +243,13 @@ class EcovacsMapImageBase {
         finalContext.drawImage(this.mapWallCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
         //Draw deebot
-        if(this.mapID == currentMapMID) { //#TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
+        if(this.mapID == currentMapMID) { //TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
             const {Image} = require('canvas');
-            if(typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //#TODO: draw other icon when position is invalid
+            if(typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //TODO: draw other icon when position is invalid
                 //Draw robot
                 ////////////
-                //#TODO: later on the deebot position should only be drawn in the livemap so the mapinfo-maps dont have to be updated with new positions
-                //#TODO: replace with customizable icons
+                //TODO: later on the deebot position should only be drawn in the livemap so the mapinfo-maps dont have to be updated with new positions
+                //TODO: replace with customizable icons
                 //for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L27
                 const robotBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAMAAAHGjw8oAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADbUExURQAAAICAgICAgICAgICAgICAgHx8fH19fX19fYCAgIGBgX5+foCAgH5+foCAgH9/f39/f35+foCAgH9/f39/f4CAgH5+foGBgYCAgICAgIGBgX9/f39/f35+foCAgH9/f39/f4CAgIODg4eHh4mJiZCQkJycnJ2dnZ6enqCgoKSkpKenp62trbGxsbKysry8vL29vcLCwsXFxcbGxsvLy87OztPT09XV1d/f3+Tk5Ojo6Ozs7O3t7e7u7vHx8fLy8vPz8/X19fb29vf39/j4+Pn5+f39/f7+/v///9yECocAAAAgdFJOUwAGChgcKCkzOT5PVWZnlJmfsLq7wcrS1Nre4OXz+vr7ZhJmqwAAAAlwSFlzAAAXEQAAFxEByibzPwAAAcpJREFUKFNlkolaWkEMhYPggliBFiwWhGOx3AqCsggI4lZt8/5P5ElmuEX5P5hMMjeZJBMRafCvUKnbIqpcioci96owTQWqP0QKC54nImUAyr9k7VD1me4YvibHlJKpVUzQhR+dmdTRSDUvdHh8NK8nhqUVch7cITmXA3rtYDmH+3OL4XI1T+BhJUcXczQxOBXJuve0/daeUr5A6g9muJzo5NI2kPKtyRSGBStKQZ5RC1hENWn6NSRTrDUqLD/lsNKoFTNRETlGMn9dDoGdoDcT1fHPi7EuUDD9dMBw4+6vMQVyInnPXDsdW+8tjWfbYTbzg/OstcagzSlb0+wL/6k+1KPhCrj6YFhzS5eXuHcYNF4bsGtDYhFLTOSMqTsx9e3iyKfynb1SK+RqtEq70RzZPwEGKwv7G0OK1QA42Y+HIgct9P3WWG9ItI/mQTgvoeuWAMdlTRclO/+Km2jwlhDvinGNbyJH6EWV84AJ1wl8JowejqTqTmv+0GqDmVLlg/wLX5Mp2rO3WRs2Zs5fznAVd1EzRh10OONr7hhhM4ctevhiVVxHdYsbq+JzHzaIfdjs5CZ9tGInSfoWEXuL7//fwtn9+Jp7wSryDjBFqnOGeuUxAAAAAElFTkSuQmCC";
                 const robotImage = new Image(); // Create a new Image
@@ -260,7 +261,7 @@ class EcovacsMapImageBase {
             }
             //Draw charger
             //////////////
-            //#TODO: replace with customizable icons
+            //TODO: replace with customizable icons
             //for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L28
             const charger = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAdVBMVEUAAAA44Yo44Yo44Yo44Yo44Yo44Yo44Yo44Yp26q844Yr///9767Kv89DG9t2g8Md26q5C44/5/vvz/fjY+ei19NNV5ZtJ45T2/fmY78KP7r1v6atq6Kjs/PPi+u7e+uvM9+Gb8MSS7r+H7bhm6KVh56JZ5p3ZkKITAAAACnRSTlMABTr188xpJ4aepd0A4wAAANZJREFUKM9VklmCgzAMQwkQYCSmLKWl2+zL/Y9YcIUL7wvkJHIUJyKkVcyy+JIGCZILGF//QLEqlTmMdsBEXi56igfH/QVGqvXSu49+1KftCbn+dtxB5LOPfNGQNRaKaQNkTJ46OMGczZg8wJB/9TB+J3nFkyqJMp44vBrnWYhJJmOn/5uVzAotV/zACnbUtTbOpHcQzVx8kxw6mavdpYP90dsNcE5k6xd8RoIb2Xgk6xAbfm5C9NiHtxGiXD/U2P96UJunrS/LOeV2GG4wfBi241P5+NwBnAEUFx9FUdUAAAAASUVORK5CYII=";
             const chargerImage = new Image();
@@ -269,7 +270,7 @@ class EcovacsMapImageBase {
             finalContext.drawImage(chargerImage, (chargerPosition['x']/this.mapPixel)+offset-8, (chargerPosition['y']/this.mapPixel)+offset-8, 16, 16);    
         }
         
-        //crop image
+        //crop image 
         const croppedImage = finalContext.getImageData(this.cropBoundaries.minX
                 , this.mapTotalHeight - this.cropBoundaries.maxY // map was flipped horizontally before, so the boundaries have shifted
                 , this.cropBoundaries.maxX - this.cropBoundaries.minX
@@ -278,31 +279,47 @@ class EcovacsMapImageBase {
         finalContext.canvas.width = this.cropBoundaries.maxX - this.cropBoundaries.minX;
         finalContext.putImageData(croppedImage, 0, 0);
         this.mapBase64PNG = finalCanvas.toDataURL();
-        this.transferMapInfo = false ; //transfer only once per onMapInfo event series
+        this.transferMapInfo = false ;
         //console.log('<img src="' + finalCanvas.toDataURL() + '" />');
         return {
             'mapID': this.mapID,
-            'mapType': this.mapType,
+            'mapType': this.isLiveMap ? 'live' : this.mapType,
             'mapBase64PNG': this.mapBase64PNG
         }
     }
 }
 
-class EcovacsMapImage extends EcovacsMapImageBase{
+class EcovacsLiveMapImage extends EcovacsMapImageBase {
+
+    constructor(mapID, mapType, mapPieceWidth, mapPieceHeight, mapCellWidth, mapCellHeight, mapPixel, mapDataPiecesCrc){
+        super(mapID, mapType, mapPieceWidth * mapCellWidth, mapPieceHeight * mapCellHeight, mapPixel);
+        this.mapPieceWidth = mapPieceWidth;
+        this.mapPieceHeight = mapPieceHeight;
+        this.mapCellWidth = mapCellWidth;
+        this.mapCellHeight = mapCellHeight;
+        this.mapDataPiecesCrc = mapDataPiecesCrc;
+    }
+    updateMapDataPiecesCrc(mapDataPiecesCrc) {
+        this.mapDataPiecesCrc = mapDataPiecesCrc; //is only transfered in onMajorMap, TODO: comparison for change has to be done before onMinorMap-Events
+    }
+    updateMapPiece(mapDataPieceIndex, mapDataPiece) { 
+        if (!tools.isCanvasModuleAvailable()) {
+            return null;
+        }
+        this.transferMapInfo = true; //TODO: check for Crc change, interval and maybe only once per onMajorMap-Event or onMapTrace
+
+        this.drawMapPieceToCanvas(mapDataPiece
+            , Math.floor(mapDataPieceIndex / this.mapCellWidth) * this.mapPieceWidth, (mapDataPieceIndex % this.mapCellHeight) * this.mapPieceHeight
+            , this.mapPieceWidth, this.mapPieceHeight);
+    }
+}
+
+class EcovacsMapImage extends EcovacsMapImageBase {
     isLiveMap = false;
-    mapFloorCanvas;
-    mapFloorContext;
-    cropBoundaries = {
-        minX: null,
-        minY: null,
-        maxX: null,
-        maxY: null
-    };
 
     constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount){
-        super(mapType, mapTotalWidth, mapTotalHeight, mapPixel);
+        super(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel);
         
-        this.mapID = mapID,
         this.mapTotalCount = mapTotalCount;
         
         //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
@@ -313,7 +330,7 @@ class EcovacsMapImage extends EcovacsMapImageBase{
     }
 
     updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue) { 
-        //#TODO: currently only validated with one piece (StartX=0 and StartY=0)
+        //TODO: currently only validated with one piece (StartX=0 and StartY=0)
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
@@ -338,11 +355,9 @@ class EcovacsMapImage extends EcovacsMapImageBase{
             }
         }
         
-        this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX * pieceWidth, pieceStartY * pieceHeight, pieceWidth, pieceHeight);
+        this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX, pieceStartY, pieceWidth, pieceHeight);
 
     }
-
-    
 }
 class EcovacsMap {
     constructor(mapID, mapIndex, mapName, mapStatus, mapIsCurrentMap = 1, mapIsBuilt = 1) {
@@ -550,18 +565,27 @@ function getRotatedCanvasFromImage (image, angle) {
 }
 
 function getMapObject(mapDataObject, mapID) {
+    if(mapDataObject == null) {
+        return null;
+    }
     return mapDataObject.find((map) => {
         return map.mapID === mapID;
     });
 }
 
 function getCurrentMapObject(mapDataObject) {
+    if(mapDataObject == null) {
+        return null;
+    }
     return mapDataObject.find((map) => {
-        return map.mapIsCurrentMap === mapID;
+        return map.mapIsCurrentMap === true;
     });
 }
 
 function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
+    if(mapDataObject == null) {
+        return null;
+    }
     const mapSpotAreasObject = mapDataObject.find((map) => {
         return map.mapID === mapID;
     }).mapSpotAreas;
@@ -574,6 +598,9 @@ function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
 }
 
 function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
+    if(mapDataObject == null) {
+        return null;
+    }
     const mapVirtualBoundariesObject = mapDataObject.find((map) => {
         return map.mapID === mapID;
     }).mapVirtualBoundaries;
@@ -587,6 +614,7 @@ function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
 
 module.exports.EcovacsMap = EcovacsMap;
 module.exports.EcovacsMapImage = EcovacsMapImage;
+module.exports.EcovacsLiveMapImage = EcovacsLiveMapImage;
 module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
 module.exports.EcovacsMapSpotArea = EcovacsMapSpotArea;
 module.exports.EcovacsMapSpotAreaInfo = EcovacsMapSpotAreaInfo;

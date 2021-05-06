@@ -362,7 +362,39 @@ class VacBot_950type extends VacBot {
             this.mapImages[mapMID][event['resultData']['type']].updateMapPiece(event['resultData']['index'], event['resultData']['startX'], event['resultData']['startY'], event['resultData']['width'], event['resultData']['height'], event['resultData']['crc'], event['resultData']['value'])
         }
         let mapImage = this.mapImages[mapMID][event['resultData']['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
-        tools.envLog("[VacBot] *** mapImage mapID = " + mapMID + " PNG = " + JSON.stringify(mapImage));
+        //tools.envLog("[VacBot] *** mapImage mapID = " + mapMID + " PNG = " + JSON.stringify(mapImage));
+        return mapImage;
+    }
+
+    handle_majormap(event) {
+        let mapMID = event['resultData']['mid'];
+        if (isNaN(mapMID)) {
+            //error
+            return;
+        }
+        if(this.liveMapImage == null || this.liveMapImage.mapID != mapMID){
+            console.log('DEBUG reset livemap'); //TODO:
+            this.liveMapImage = new map.EcovacsLiveMapImage(mapMID, event['resultData']['type']
+                , event['resultData']['pieceWidth'], event['resultData']['pieceHeight']
+                , event['resultData']['cellWidth'], event['resultData']['cellHeight']
+                , event['resultData']['pixel'], event['resultData']['value'])
+        } else {
+            this.liveMapImage.updateMapDataPiecesCrc(event['resultData']['value']);
+        }
+        
+    }
+
+    handle_minormap(event) {
+        let mapMID = event['resultData']['mid'];
+        if (isNaN(mapMID) || this.liveMapImage == null || this.liveMapImage.mapID != mapMID) {
+            //error
+            return;
+        }
+        
+        this.liveMapImage.updateMapPiece(event['resultData']['pieceIndex'], event['resultData']['pieceValue']);
+        
+        let mapImage = this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+        //tools.envLog("[VacBot] *** mapImage mapID = " + mapMID + " PNG = " + JSON.stringify(mapImage));
         return mapImage;
     }
 

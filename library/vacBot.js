@@ -115,6 +115,10 @@ class VacBot {
         this.on('MapVirtualBoundaryInfo', (virtualBoundaryInfo) => {
             this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
         });
+        this.on('MapImage', (mapImageInfo) => {
+            this.handleMapImageInfo(mapImageInfo);
+        });
+        
     }
 
     handleMapsEvent(mapData) {
@@ -134,6 +138,11 @@ class VacBot {
                         'type': 'GetVirtualBoundaries',
                         'mapID': mapID
                     });
+                    // this.run('GetMapImage', mapID);
+                    // this.mapDataObjectQueue.push({
+                    //     'type': 'GetMapImage',
+                    //     'mapID': mapID
+                    // });
                 }
             }
         }
@@ -233,7 +242,23 @@ class VacBot {
             this.ecovacs.emit('MapDataReady');
         }
     }
-
+    // handleMapImageInfo(mapImageInfo) {
+    //     const mapID = mapImageInfo['mapID'];
+    //     const mapObject = map.getMapObject(this.mapDataObject, mapID);
+    //     if (mapObject) {
+    //         mapObject['mapImage']= mapImageInfo;
+    //     }
+    //     this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+    //         if ((item.mapID === mapID) && (item.type === 'GetMapImage')) {
+    //             return false;
+    //         }
+    //         return true;
+    //     })
+    //     if (this.mapDataObjectQueue.length === 0) {
+    //         this.ecovacs.emit('MapDataReady');
+    //     }
+    // }
+    
     run(action) {
     }
 
