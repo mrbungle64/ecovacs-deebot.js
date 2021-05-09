@@ -80,6 +80,16 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.lastUsedAreaValues) {
                     this.emit('LastUsedAreaValues', this.bot.lastUsedAreaValues);
                 }
+
+                // report+waterinfo
+                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
+                    this.emit("CleanReportDetails", {
+                        'status': this.bot.cleanReport,
+                        'waterInfo': {
+                            'enabled': this.bot.waterboxInfo,
+                            'level': this.bot.waterLevel
+                        }
+                    });
                 break;
             case 'CleanSpeed':
                 if (event.children && (event.children.length > 0)) {
@@ -136,6 +146,16 @@ class Ecovacs extends EventEmitter {
                     'enabled': this.bot.waterboxInfo,
                     'level': this.bot.waterLevel
                 });
+
+                // report+waterinfo
+                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
+                    this.emit("CleanReportDetails", {
+                        'status': this.bot.cleanReport,
+                        'waterInfo': {
+                            'enabled': this.bot.waterboxInfo,
+                            'level': this.bot.waterLevel
+                        }
+                    });
                 break;
             case 'WaterBoxInfo':
                 this.bot.handle_waterboxInfo(event);
@@ -144,6 +164,16 @@ class Ecovacs extends EventEmitter {
                     'enabled': this.bot.waterboxInfo,
                     'level': this.bot.waterLevel
                 });
+
+                // report+waterinfo
+                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
+                    this.emit("CleanReportDetails", {
+                        'status': this.bot.cleanReport,
+                        'waterInfo': {
+                            'enabled': this.bot.waterboxInfo,
+                            'level': this.bot.waterLevel
+                        }
+                    });
                 break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
