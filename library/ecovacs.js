@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const tools = require('./tools');
+const errorCodes = require('./errorCodes');
 
 exports = String.prototype.format = function () {
     if (arguments.length === 0) {
@@ -50,6 +51,28 @@ class Ecovacs extends EventEmitter {
             return require('./ecovacsConstants_950type.js');
         } else {
             return require('./ecovacsConstants_non950type.js');
+        }
+    }
+
+    emitLastErrorByErrorCode(errorCode) {
+        if (errorCode !== this.bot.errorCode) {
+            this.bot.errorCode = errorCode;
+            this.bot.errorDescription = errorCodes[this.bot.errorCode];
+            this.emitLastError();
+        }
+    }
+
+    emitLastError() {
+        this.emit("Error", this.bot.errorDescription);
+        this.emit('ErrorCode', this.bot.errorCode);
+        this.emit('LastError', {
+            'error': this.bot.errorDescription,
+            'code': this.bot.errorCode
+        });
+        // Error code 3 = request oauth error
+        if (this.bot.errorCode === '3') {
+            this.emit("disconnect", true);
+            this.disconnect();
         }
     }
 
@@ -111,8 +134,13 @@ class Ecovacs extends EventEmitter {
                         this.emit('LifeSpan_' + component, this.bot.components[component]);
                     }
                 }
-
-                // TODO: port global LifeSpan event from ecovacsMQTT_JSON.js
+                if (this.bot.components["filter"] && this.bot.components["side_brush"] && (this.bot.components["main_brush"] || !this.bot.hasMainBrush())) {
+                    this.emit("LifeSpan", {
+                        "filter": this.bot.components["filter"],
+                        "side_brush": this.bot.components["side_brush"],
+                        "main_brush": this.bot.components["main_brush"]
+                    });
+                }
                 break;
             case 'DeebotPosition':
                 this.bot.handle_deebotPosition(event);
@@ -177,8 +205,8 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
-                this.emit('NetInfoIP', this.bot.netInfoIP);
-                this.emit('NetInfoWifiSSID', this.bot.netInfoWifiSSID);
+                this.emit('NetInfoIP', this.bot.netInfoIP); // Deprecated
+                this.emit('NetInfoWifiSSID', this.bot.netInfoWifiSSID); // Deprecated
                 this.emit('NetworkInfo', {
                     'ip': this.bot.netInfoIP,
                     'mac': null,
@@ -201,15 +229,13 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'CleanSum':
                 this.bot.handle_cleanSum(event);
-                this.emit('CleanSum_totalSquareMeters', this.bot.cleanSum_totalSquareMeters);
-                this.emit('CleanSum_totalSeconds', this.bot.cleanSum_totalSeconds);
-                this.emit('CleanSum_totalNumber', this.bot.cleanSum_totalNumber);
+                this.emit('CleanSum_totalSquareMeters', this.bot.cleanSum_totalSquareMeters); // Deprecated
+                this.emit('CleanSum_totalSeconds', this.bot.cleanSum_totalSeconds); // Deprecated
+                this.emit('CleanSum_totalNumber', this.bot.cleanSum_totalNumber); // Deprecated
                 this.emit('CleanSum', {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
-                    'totalNumber': this.bot.cleanSum_totalNumber,
-                    'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
+                    'totalNumber': this.bot.cleanSum_totalNumber
                 });
                 break;
             case 'CleanLogs':
@@ -230,7 +256,7 @@ class Ecovacs extends EventEmitter {
                         'timestamp': this.bot.cleanLog_lastTimestamp,
                         'squareMeters': this.bot.cleanLog_lastSquareMeters,
                         'totalTime': this.bot.cleanLog_lastTotalTime,
-                        'totalTimeString': this.bot.cleanLog_lastTotalTimeString,
+                        'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
                         'imageUrl': this.bot.cleanLog_lastImageUrl
                     });
                 }
@@ -277,7 +303,7 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             default:
-                tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(event));
+                tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
                 break;
         }
     }

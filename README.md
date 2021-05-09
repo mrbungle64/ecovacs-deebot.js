@@ -39,9 +39,10 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot 710/711/711s
 * Deebot OZMO 610
 * Deebot OZMO 900/905
+* Deebot OZMO Slim 10
 * Deebot OZMO T5
 * Deebot OZMO T8 series
-* Deebot OZMO Slim 10
+* Deebot OZMO T9 series
 * Deebot N3 MAX
 * Deebot N7
 * Deebot N8 series
@@ -61,15 +62,20 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.6.0 (beta)
+### 0.6.1 (alpha)
+* Added full map data (maps, spot areas, virtual boundaries) as one structured event
+
+### 0.6.0
 * Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
 * Support for Chinese server login
 * Implemented AutoEmpty commands for T8+/plus
 * Added some cleaning log values and cleaning stats
 * Initial support for some more models (e.g. N3, N7, N8, T9 series)
-* Quite a lot refactoring and code consolidation
-* (dbochicchio) Added structured variant for some events
 * Improved example apps
+* (dbochicchio) Added some structured events
+* Quite a lot refactoring and code consolidation
+* Several improvements and fixes
+* Bump some dependencies
 
 ### 0.5.6
 * Some improvements for handling charge status

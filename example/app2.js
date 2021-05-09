@@ -76,7 +76,7 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('LastUsedAreaValues', (values) => {
                 console.log('[app2.js] LastUsedAreaValues: ' + values);
             });
-            vacbot.on('Maps', (maps) => {
+            /*vacbot.on('Maps', (maps) => {
                 console.log('[app2.js] Maps: ' + JSON.stringify(maps));
                 for (const i in maps['maps']) {
                     const mapID = maps['maps'][i]['mapID'];
@@ -110,6 +110,9 @@ api.connect(account_id, password_hash).then(() => {
             });
             vacbot.on('MapVirtualBoundaryInfo', (virtualBoundary) => {
                 console.log('[app2.js] MapVirtualBoundaryInfo: ' + JSON.stringify(virtualBoundary));
+            });*/
+            vacbot.on('MapDataObject', (mapDataObject) => {
+                console.log('[app2.js] MapDataObject:' + JSON.stringify(mapDataObject));
             });
             vacbot.on('CurrentMapName', (value) => {
                 console.log('[app2.js] CurrentMapName: ' + value);
@@ -121,11 +124,15 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('CurrentMapIndex', (value) => {
                 console.log('[app2.js] CurrentMapIndex: ' + value);
             });
+            vacbot.on('DeebotPositionCurrentSpotAreaID', (spotAreaID) => {
+                console.log('[app2.js] CurrentSpotAreaID: ' + spotAreaID);
+            });
         });
 
         vacbot.connect();
 
         console.log('[app2.js] name: ' + vacbot.getDeviceProperty('name'));
+        console.log('[app2.js] isCanvasModuleAvailable: ' + EcoVacsAPI.isCanvasModuleAvailable());
         console.log('[app2.js] isKnownDevice: ' + vacbot.isKnownDevice());
         console.log('[app2.js] isSupportedDevice: ' + vacbot.isSupportedDevice());
         console.log('[app2.js] is950type: ' + vacbot.is950type());
@@ -146,6 +153,9 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetLifeSpan', 'side_brush');
             vacbot.run('GetLifeSpan', 'filter');
             vacbot.run('GetCleanLogs');
+            if (vacbot.hasSpotAreas()) {
+                vacbot.run('GetMaps', true);
+            }
         }, 6000);
 
         setInterval(() => {
@@ -154,9 +164,6 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetBatteryState');
             if (vacbot.hasMoppingSystem()) {
                 vacbot.run('GetWaterLevel');
-            }
-            if (vacbot.hasSpotAreas()) {
-                vacbot.run('GetMaps');
             }
         }, 60000);
 

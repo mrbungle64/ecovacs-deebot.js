@@ -13,7 +13,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         this.callEcovacsDeviceAPI(c, action.api).then((json) => {
             this.handleCommandResponse(action, json);
         }).catch((e) => {
-            tools.envLog("[EcovacsMQTT_JSON] error sendCommand: %s", e.toString());
+            tools.envLog("[EcovacsMQTT_JSON] callEcovacsDeviceAPI failed for cmd %s: %s", action.name, e.toString());
         });
     }
 
@@ -261,7 +261,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "lifespan":
                 this.bot.handle_lifespan(event);
-                var r = {};
+                const r = {};
                 if (this.bot.components["filter"]) {
                     this.emit("LifeSpan_filter", this.bot.components["filter"]);
                     r["filter"] = this.bot.components["filter"];
@@ -275,6 +275,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     r["mainBrush"] = this.bot.components["main_brush"];
                 }
 
+                if (this.bot.components["filter"] && this.bot.components["side_brush"] && this.bot.components["main_brush"]) {
+                    this.emit("LifeSpan", r);
+                }
                 if (this.bot.components["filter"] || this.bot.components["side_brush"] || this.bot.components["main_brush"])
                     this.emit("LifeSpanStats", r);
                 break;
@@ -314,7 +317,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_waterInfo(event);
                 this.emit("WaterBoxInfo", this.bot.waterboxInfo);
                 this.emit("WaterLevel", this.bot.waterLevel);
-
                 this.emit("WaterInfo", {
                     'enabled': this.bot.waterboxInfo,
                     'level': this.bot.waterLevel
@@ -332,10 +334,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "netinfo":
                 this.bot.handle_netInfo(event);
-                this.emit("NetInfoIP", this.bot.netInfoIP);
-                this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID);
-                this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal);
-                this.emit("NetInfoMAC", this.bot.netInfoMAC);
+                this.emit("NetInfoIP", this.bot.netInfoIP); // Deprecated
+                this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID); // Deprecated
+                this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal); // Deprecated
+                this.emit("NetInfoMAC", this.bot.netInfoMAC); // Deprecated
                 this.emit("NetworkInfo", {
                     'ip': this.bot.netInfoIP,
                     'mac': this.bot.netInfoMAC,
@@ -366,15 +368,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'totalstats':
                 this.bot.handle_cleanSum(event);
-                this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters);
-                this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds);
-                this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber);
+                this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters); // Deprecated
+                this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds); // Deprecated
+                this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber); // Deprecated
                 this.emit('CleanSum', {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
-                    'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
-                    'totalNumber': this.bot.cleanSum_totalNumber,
+                    'totalNumber': this.bot.cleanSum_totalNumber
                 });
                 break;
             case 'cleanlogs':
