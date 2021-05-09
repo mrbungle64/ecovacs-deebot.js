@@ -212,6 +212,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "cleaninfo":
                 this.bot.handle_cleanReport(event);
                 this.emit("CleanReport", this.bot.cleanReport);
+
+                // report+waterinfo
+                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
+                    this.emit("CleanReportDetails", {
+                        'status': this.bot.cleanReport,
+                        'waterInfo': {
+                            'enabled': this.bot.waterboxInfo,
+                            'level': this.bot.waterLevel
+                        }
+                    });
+
                 if (this.bot.chargeStatus) {
                     this.emit("ChargeState", this.bot.chargeStatus);
                 }
@@ -310,6 +321,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'enabled': this.bot.waterboxInfo,
                     'level': this.bot.waterLevel
                 });
+
+                // report+waterinfo
+                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
+                    this.emit("CleanReportDetails", {
+                        'status': this.bot.cleanReport,
+                        'waterInfo': {
+                            'enabled': this.bot.waterboxInfo,
+                            'level': this.bot.waterLevel
+                        }
+                    });
                 break;
             case "netinfo":
                 this.bot.handle_netInfo(event);
