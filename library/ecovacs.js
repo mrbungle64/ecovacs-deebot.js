@@ -103,16 +103,7 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.lastUsedAreaValues) {
                     this.emit('LastUsedAreaValues', this.bot.lastUsedAreaValues);
                 }
-
-                // report+waterinfo
-                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
-                    this.emit("CleanReportDetails", {
-                        'status': this.bot.cleanReport,
-                        'waterInfo': {
-                            'enabled': this.bot.waterboxInfo,
-                            'level': this.bot.waterLevel
-                        }
-                    });
+                this.emitMoppingSystemReport();
                 break;
             case 'CleanSpeed':
                 if (event.children && (event.children.length > 0)) {
@@ -170,38 +161,12 @@ class Ecovacs extends EventEmitter {
             case 'WaterLevel':
                 this.bot.handle_waterLevel(event);
                 this.emit('WaterLevel', this.bot.waterLevel);
-                this.emit("WaterInfo", {
-                    'enabled': this.bot.waterboxInfo,
-                    'level': this.bot.waterLevel
-                });
-
-                // report+waterinfo
-                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
-                    this.emit("CleanReportDetails", {
-                        'status': this.bot.cleanReport,
-                        'waterInfo': {
-                            'enabled': this.bot.waterboxInfo,
-                            'level': this.bot.waterLevel
-                        }
-                    });
+                this.emitMoppingSystemReport();
                 break;
             case 'WaterBoxInfo':
                 this.bot.handle_waterboxInfo(event);
                 this.emit('WaterBoxInfo', this.bot.waterboxInfo);
-                this.emit("WaterInfo", {
-                    'enabled': this.bot.waterboxInfo,
-                    'level': this.bot.waterLevel
-                });
-
-                // report+waterinfo
-                if (this.bot.cleanReport != undefined && this.bot.waterboxInfo != undefined)
-                    this.emit("CleanReportDetails", {
-                        'status': this.bot.cleanReport,
-                        'waterInfo': {
-                            'enabled': this.bot.waterboxInfo,
-                            'level': this.bot.waterLevel
-                        }
-                    });
+                this.emitMoppingSystemReport();
                 break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
@@ -305,6 +270,18 @@ class Ecovacs extends EventEmitter {
             default:
                 tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
                 break;
+        }
+    }
+
+    emitMoppingSystemReport() {
+        if (this.bot.hasMoppingSystem() && this.bot.waterLevel && (this.bot.waterboxInfo !== null)) {
+            this.emit("MoppingSystemInfo", {
+                'cleanStatus': this.bot.cleanReport,
+                'waterInfo': {
+                    'enabled': Boolean(Number(this.bot.waterboxInfo)),
+                    'level': this.bot.waterLevel
+                }
+            });
         }
     }
 }
