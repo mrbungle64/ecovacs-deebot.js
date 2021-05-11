@@ -224,7 +224,7 @@ class VacBot_non950type extends VacBot {
       }
       if (mid && type) {
         if (type === 'sa') {
-          let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value, '0');
+          let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value);
           this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
           tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
           return {
