@@ -311,13 +311,17 @@ class VacBot_950type extends VacBot {
             mapMID = this.currentMapMID;
         }
         if (event['resultData']['type'] === 'ar') {
+            let mapSpotAreaBoundaries = event['resultData']['value'];
+            if (event['resultData']['compress']) {
+                mapSpotAreaBoundaries = map.mapPieceToIntArray(event['resultData']['value']);
+            }
             //TODO: filter out reportMapSubSet events (missing data)
             //reportMapSubSet event comes without map reference, replace
             let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
                 mapMID,
                 event['resultData']['mssid'],
                 event['resultData']['connections'], //reportMapSubSet event comes without connections
-                event['resultData']['value'],
+                mapSpotAreaBoundaries,
                 event['resultData']['subtype']
             );
             if (typeof this.mapSpotAreaInfos[mapMID] === 'undefined') {

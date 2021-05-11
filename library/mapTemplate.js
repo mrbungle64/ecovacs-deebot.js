@@ -1,4 +1,6 @@
 const tools = require('./tools.js');
+const lzma = require('lzma');
+
 const SPOTAREA_SUBTYPES = {
     '0': {"en": "Default  (A, B, C...)", "de": "Standard (A, B, C...)"},
     '1': {"en": "Living room", "de": "Wohnzimmer"},
@@ -193,6 +195,21 @@ function isPositionInSpotArea(position, spotAreaInfos) {
     return 'void';
 }
 
+//converts the compressed data retrieved from ecovacs API into int array containing the map pixels
+//thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
+function mapPieceToIntArray(pieceValue) {
+    const fixArray = new Int8Array([0,0,0,0]);
+    let buff = Buffer.from(pieceValue, 'base64');
+    let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
+    //fix 9 byte header to 13 bytes for lzma decompression
+    let correctedArray = [...int8Array.slice(0,9), ...fixArray, ...int8Array.slice(9)];
+    //console.log(correctedArray);
+    //decompress
+    let decompressedArray = lzma.decompress(correctedArray);
+    //console.log(decompressedArray);
+    return decompressedArray
+}
+
 module.exports.EcovacsMap = EcovacsMap;
 module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
 module.exports.EcovacsMapSpotArea = EcovacsMapSpotArea;
@@ -201,3 +218,4 @@ module.exports.EcovacsMapVirtualBoundaries = EcovacsMapVirtualBoundaries;
 module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
 module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
 module.exports.isPositionInSpotArea = isPositionInSpotArea;
+module.exports.mapPieceToIntArray = mapPieceToIntArray;
