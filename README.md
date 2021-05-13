@@ -64,6 +64,9 @@ There is of course no claim to full functionality.
 
 ### 0.6.1 (alpha)
 * Added full map data (maps, spot areas, virtual boundaries) as one structured event
+* Handle compressed spot area boundary data (e.g. T9 series)
+* Handle custom names for spot areas (e.g. T9 Series)
+* Some enhancements and fixes
 
 ### 0.6.0
 * Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
