@@ -18,6 +18,9 @@ class VacBot {
             this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
         }
         this.components = {};
+        this.lastComponentValues = {};
+        this.emitFullLifeSpanEvent = false;
+
         this.errorCode = '0';
         this.errorDescription = errorCodes[this.errorCode];
 

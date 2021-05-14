@@ -251,25 +251,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "lifespan":
                 this.bot.handle_lifespan(event);
-                const r = {};
-                if (this.bot.components["filter"]) {
-                    this.emit("LifeSpan_filter", this.bot.components["filter"]);
-                    r["filter"] = this.bot.components["filter"];
+                if (!this.bot.emitFullLifeSpanEvent) {
+                    for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+                        if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
+                            if (this.bot.components[component]) {
+                                if (this.bot.components[component] !== this.bot.lastComponentValues[component]) {
+                                    this.emit("LifeSpan_" + component, this.bot.components[component]);
+                                    this.bot.lastComponentValues[component] = this.bot.components[component];
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    this.handleLifeSpanCombined();
                 }
-                if (this.bot.components["side_brush"]) {
-                    this.emit("LifeSpan_side_brush", this.bot.components["side_brush"]);
-                    r["sideBrush"] = this.bot.components["side_brush"];
-                }
-                if (this.bot.components["main_brush"]) {
-                    this.emit("LifeSpan_main_brush", this.bot.components["main_brush"]);
-                    r["mainBrush"] = this.bot.components["main_brush"];
-                }
-
-                if (this.bot.components["filter"] && this.bot.components["side_brush"] && this.bot.components["main_brush"]) {
-                    this.emit("LifeSpan", r);
-                }
-                if (this.bot.components["filter"] || this.bot.components["side_brush"] || this.bot.components["main_brush"])
-                    this.emit("LifeSpanStats", r);
                 break;
             case "pos":
                 this.bot.handle_deebotPosition(event);

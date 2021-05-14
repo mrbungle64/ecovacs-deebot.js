@@ -28,7 +28,7 @@ class VacBot_950type extends VacBot {
                 }
                 tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
 
-                this.components[type] = lifespan;
+                this.components[type] = Number(lifespan.toFixed(2));
                 tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
             }
         }
@@ -555,7 +555,15 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new vacBotCommand.GetNetInfo());
                 break;
             case "GetLifeSpan".toLowerCase():
-                if (arguments.length >= 2) {
+                if (arguments.length < 2) {
+                    this.emitFullLifeSpanEvent = true;
+                    this.components = {};
+                    this.lastComponentValues = {};
+                    this.sendCommand(new vacBotCommand.GetLifeSpan('filter'));
+                    this.sendCommand(new vacBotCommand.GetLifeSpan('main_brush'));
+                    this.sendCommand(new vacBotCommand.GetLifeSpan('side_brush'));
+                } else {
+                    this.emitFullLifeSpanEvent = false;
                     this.sendCommand(new vacBotCommand.GetLifeSpan(arguments[1]));
                 }
                 break;

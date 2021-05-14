@@ -76,6 +76,24 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    handleLifeSpanCombined() {
+        const emitComponent = {};
+        for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+            if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
+                if (this.bot.components[component]) {
+                    emitComponent[component] = this.bot.components[component] && (this.bot.components[component] !== this.bot.lastComponentValues[component]);
+                }
+            }
+        }
+        if (emitComponent['filter'] && emitComponent['side_brush'] && (!this.bot.hasMainBrush() || emitComponent['main_brush'])) {
+            this.emit('LifeSpan', {
+                'filter': this.bot.components['filter'],
+                'side_brush': this.bot.components['side_brush'],
+                'main_brush': this.bot.components['main_brush']
+            });
+        }
+    }
+
     handleCommand(command, event) {
         switch (tools.getEventNameForCommandString(command)) {
             case 'CleanSt':
@@ -119,18 +137,16 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'LifeSpan':
                 this.bot.handle_lifespan(event.attrs);
-                const component = this.dictionary.COMPONENT_FROM_ECOVACS[event.attrs.type];
-                if (component) {
-                    if (this.bot.components[component]) {
-                        this.emit('LifeSpan_' + component, this.bot.components[component]);
+                if (!this.bot.emitFullLifeSpanEvent) {
+                    const component = this.dictionary.COMPONENT_FROM_ECOVACS[event.attrs.type];
+                    if (component) {
+                        if (this.bot.components[component]) {
+                            this.emit('LifeSpan_' + component, this.bot.components[component]);
+                            this.bot.lastComponentValues[component] = this.bot.components[component];
+                        }
                     }
-                }
-                if (this.bot.components["filter"] && this.bot.components["side_brush"] && (this.bot.components["main_brush"] || !this.bot.hasMainBrush())) {
-                    this.emit("LifeSpan", {
-                        "filter": this.bot.components["filter"],
-                        "side_brush": this.bot.components["side_brush"],
-                        "main_brush": this.bot.components["main_brush"]
-                    });
+                } else {
+                    this.handleLifeSpanCombined();
                 }
                 break;
             case 'DeebotPosition':
