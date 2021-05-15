@@ -245,22 +245,22 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "mapinfo":
                 if(commandPrefix == 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
                     tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(event, getCircularReplacer()));
-                } else {
+                } else if (tools.isCanvasModuleAvailable()) {
                     let mapImage = this.bot.handle_mapInfo(event);
                     if(mapImage !== null) {
                         this.emit("MapImage", mapImage);
                     }
                 }
                 break;
-            case 'majormap':
-                this.bot.handle_majormap(event);
-                break;
-            case 'minormap':
-                let mapImage = this.bot.handle_minormap(event);
-                if(mapImage !== null) {
-                    this.emit("MapLiveImage", mapImage);
-                }
-                break;
+            // case 'majormap':
+            //     this.bot.handle_majormap(event);
+            //     break;
+            // case 'minormap':
+            //     let mapImage = this.bot.handle_minormap(event);
+            //     if(mapImage !== null) {
+            //         this.emit("MapLiveImage", mapImage);
+            //     }
+            //     break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot.handle_mapSet(event);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed

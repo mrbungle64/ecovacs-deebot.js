@@ -30,7 +30,7 @@ const SPOTAREA_COLORS = [
 '#dbf2fe',
 '#ffd7c9',
 '#fee3c4',
-'#f00431',
+'#e98b9d',
 '#ffa1a1',
 '#9fcfff'
 ];
@@ -50,7 +50,7 @@ const MAP_COLORS = {
 }
 
 const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels
-const mapDataObject = null;
+let mapDataObject = null;
 
 class EcovacsMapImageBase {
     mapFloorCanvas;
