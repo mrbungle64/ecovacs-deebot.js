@@ -156,21 +156,26 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     handleCommand(command, event) {
         tools.envLog("[EcovacsMQTT_JSON] handleCommand() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
+        let commandPrefix = '';
         //incoming events (on)
         if (command.startsWith("on")) {
             command = command.substring(2);
+            commandPrefix = 'on';
         }
         //incoming events for (3rd) unknown/unsaved map
         if (command.startsWith("off")) {
             command = command.substring(3);
+            commandPrefix = 'off';
         }
         //incoming events (report)
         if (command.startsWith("report")) {
             command = command.substring(6);
+            commandPrefix = 'report';
         }
         //remove from "get" commands
         if (command.startsWith("get")) {
             command = command.substring(3);
+            commandPrefix = 'get';
         }
         // OZMO T8 series
         // Not sure if the lowercase variant is necessary
@@ -237,6 +242,25 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                 this.emit("Maps", this.bot.maps);
                 break;
+            case "mapinfo":
+                if(commandPrefix == 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
+                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(event, getCircularReplacer()));
+                } else if (tools.isCanvasModuleAvailable()) {
+                    let mapImage = this.bot.handle_mapInfo(event);
+                    if(mapImage !== null) {
+                        this.emit("MapImage", mapImage);
+                    }
+                }
+                break;
+            // case 'majormap':
+            //     this.bot.handle_majormap(event);
+            //     break;
+            // case 'minormap':
+            //     let mapImage = this.bot.handle_minormap(event);
+            //     if(mapImage !== null) {
+            //         this.emit("MapLiveImage", mapImage);
+            //     }
+            //     break;
             case "mapset": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot.handle_mapSet(event);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed

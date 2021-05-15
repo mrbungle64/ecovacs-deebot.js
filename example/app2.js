@@ -82,6 +82,9 @@ api.connect(account_id, password_hash).then(() => {
                     const mapID = maps['maps'][i]['mapID'];
                     vacbot.run('GetSpotAreas', mapID);
                     vacbot.run('GetVirtualBoundaries', mapID);
+                    
+                    vacbot.run('GetMapImage', mapID,'outline');
+                    vacbot.run('GetMapImage', mapID,'wifiHeatMap');
                 }
             });
             vacbot.on('MapSpotAreas', (spotAreas) => {
@@ -113,6 +116,10 @@ api.connect(account_id, password_hash).then(() => {
             });*/
             vacbot.on('MapDataObject', (mapDataObject) => {
                 console.log('[app2.js] MapDataObject:' + JSON.stringify(mapDataObject));
+            });
+            vacbot.on('MapImage', (value) => {
+                console.log('[app2.js] MapImage: ' + JSON.stringify(value));
+                console.log('<img src="' + value['mapBase64PNG'] + '" />');
             });
             vacbot.on('CurrentMapName', (value) => {
                 console.log('[app2.js] CurrentMapName: ' + value);
@@ -166,6 +173,14 @@ api.connect(account_id, password_hash).then(() => {
                 vacbot.run('GetWaterLevel');
             }
         }, 60000);
+
+        // setInterval(() => {
+        //     if (vacbot.hasSpotAreas()) {
+        //         //enable to also see deebotposition change more frequently in map image
+        //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','outline');
+        //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','wifiHeatMap'); 
+        //     }
+        // }, 5000);
 
             //
             // Catch ctrl-c to exit program

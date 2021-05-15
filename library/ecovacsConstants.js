@@ -18,6 +18,20 @@ exports.LGLOGAPI = 'lg/log.do';
 exports.PRODUCTAPI = 'pim/product';
 exports.REALM = 'ecouser.net';
 
+exports.MAPINFOTYPE_TO_ECOVACS = {
+    "outline": "ol",
+    "wifiHeatMap": "st",
+    "ai": "ai",
+    "workarea": "wa"
+};
+
+exports.MAPINFOTYPE_FROM_ECOVACS = {
+    "ol": "outline",
+    "st": "wifiHeatMap",
+    "ai": "ai",
+    "wa": "workarea"
+};
+
 exports.SupportedDevices = {
     "ls1ok3": {
         "name": "DEEBOT 900 Series",
