@@ -53,10 +53,10 @@ const offset = 400; //the positions of the chargers and the deebots need an offs
 let mapDataObject = null;
 
 class EcovacsMapImageBase {
-    mapFloorCanvas;
-    mapFloorContext;
-    mapWallCanvas;
-    mapWallContext;
+    mapFloorCanvas = null;
+    mapFloorContext = null;
+    mapWallCanvas = null;
+    mapWallContext = null;
     cropBoundaries = {
         minX: null,
         minY: null,
