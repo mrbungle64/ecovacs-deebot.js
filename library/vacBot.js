@@ -19,6 +19,9 @@ class VacBot {
             this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
         }
         this.components = {};
+        this.lastComponentValues = {};
+        this.emitFullLifeSpanEvent = false;
+
         this.errorCode = '0';
         this.errorDescription = errorCodes[this.errorCode];
 
@@ -108,16 +111,24 @@ class VacBot {
             }
         });
         this.on('MapSpotAreas', (spotAreas) => {
-            this.handleMapSpotAreasEvent(spotAreas);
+            if (this.createMapDataObject) {
+                this.handleMapSpotAreasEvent(spotAreas);
+            }
         });
         this.on('MapSpotAreaInfo', (spotAreaInfo) => {
-            this.handleMapSpotAreaInfo(spotAreaInfo);
+            if (this.createMapDataObject) {
+                this.handleMapSpotAreaInfo(spotAreaInfo);
+            }
         });
         this.on('MapVirtualBoundaries', (virtualBoundaries) => {
-            this.handleMapVirtualBoundaries(virtualBoundaries);
+            if (this.createMapDataObject) {
+                this.handleMapVirtualBoundaries(virtualBoundaries);
+            }
         });
         this.on('MapVirtualBoundaryInfo', (virtualBoundaryInfo) => {
-            this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
+            if (this.createMapDataObject) {
+                this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
+            }
         });
         this.on('MapImage', (mapImageInfo) => {
             this.handleMapImageInfo(mapImageInfo);

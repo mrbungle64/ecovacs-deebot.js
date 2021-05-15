@@ -414,10 +414,12 @@ class EcovacsMapSpotArea {
 }
 
 class EcovacsMapSpotAreaInfo {
-    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = "0") {
+    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = "0", customName = "") {
         this.mapID = mapID;
         this.mapSpotAreaID = mapSpotAreaID;
-        if (mapSubType == "0" || !SPOTAREA_SUBTYPES[mapSubType]["en"]) {
+        if (customName !== "") {
+            this.mapSpotAreaName = customName;
+        } else if ((mapSubType === "0") || !SPOTAREA_SUBTYPES[mapSubType]["en"]) {
             // if default naming or ID not found in list of names
             // return character representation (0=A, 1=B, etc.)
             this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
@@ -427,6 +429,7 @@ class EcovacsMapSpotAreaInfo {
         this.mapSpotAreaConnections = mapSpotAreaConnections;
         this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
         this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
+        this.mapSpotAreaSubType = mapSubType;
     }
 
     toJSON() {
@@ -435,7 +438,8 @@ class EcovacsMapSpotAreaInfo {
             mapSpotAreaID: this.mapSpotAreaID,
             mapSpotAreaName: this.mapSpotAreaName,
             mapSpotAreaConnections: this.mapSpotAreaConnections,
-            mapSpotAreaBoundaries: this.mapSpotAreaBoundaries
+            mapSpotAreaBoundaries: this.mapSpotAreaBoundaries,
+            mapSpotAreaSubType: this.mapSpotAreaSubType
         };
     }
 }
@@ -626,4 +630,5 @@ module.exports.getMapObject = getMapObject;
 module.exports.getCurrentMapObject = getCurrentMapObject;
 module.exports.getSpotAreaObject = getSpotAreaObject;
 module.exports.getVirtualBoundaryObject = getVirtualBoundaryObject;
+module.exports.mapPieceToIntArray = mapPieceToIntArray;
 module.exports.mapDataObject = mapDataObject;

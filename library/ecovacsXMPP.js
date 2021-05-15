@@ -1,7 +1,6 @@
 const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const Element = require('ltx').Element;
-const dictionary = require('./ecovacsConstants_non950type.js');
 const errorCodes = require('./errorCodes');
 
 class EcovacsXMPP extends Ecovacs {

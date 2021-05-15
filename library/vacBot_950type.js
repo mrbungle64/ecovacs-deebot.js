@@ -28,7 +28,7 @@ class VacBot_950type extends VacBot {
                 }
                 tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
 
-                this.components[type] = lifespan;
+                this.components[type] = Number(lifespan.toFixed(2));
                 tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
             }
         }
@@ -311,14 +311,23 @@ class VacBot_950type extends VacBot {
             mapMID = this.currentMapMID;
         }
         if (event['resultData']['type'] === 'ar') {
+            let mapSpotAreaBoundaries = event['resultData']['value'];
+            if (event['resultData']['compress']) {
+                mapSpotAreaBoundaries = map.mapPieceToIntArray(event['resultData']['value']);
+            }
+            let customName = '';
+            if (event['resultData']['name']) {
+                customName = event['resultData']['name'];
+            }
             //TODO: filter out reportMapSubSet events (missing data)
             //reportMapSubSet event comes without map reference, replace
             let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
                 mapMID,
                 event['resultData']['mssid'],
                 event['resultData']['connections'], //reportMapSubSet event comes without connections
-                event['resultData']['value'],
-                event['resultData']['subtype']
+                mapSpotAreaBoundaries,
+                event['resultData']['subtype'],
+                customName
             );
             if (typeof this.mapSpotAreaInfos[mapMID] === 'undefined') {
                 this.mapSpotAreaInfos[mapMID] = []; //initialize array for mapSpotAreaInfos if not existing
@@ -604,7 +613,15 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new vacBotCommand.GetNetInfo());
                 break;
             case "GetLifeSpan".toLowerCase():
-                if (arguments.length >= 2) {
+                if (arguments.length < 2) {
+                    this.emitFullLifeSpanEvent = true;
+                    this.components = {};
+                    this.lastComponentValues = {};
+                    this.sendCommand(new vacBotCommand.GetLifeSpan('filter'));
+                    this.sendCommand(new vacBotCommand.GetLifeSpan('main_brush'));
+                    this.sendCommand(new vacBotCommand.GetLifeSpan('side_brush'));
+                } else {
+                    this.emitFullLifeSpanEvent = false;
                     this.sendCommand(new vacBotCommand.GetLifeSpan(arguments[1]));
                 }
                 break;

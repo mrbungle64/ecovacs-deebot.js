@@ -76,6 +76,24 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    handleLifeSpanCombined() {
+        const emitComponent = {};
+        for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+            if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
+                if (this.bot.components[component]) {
+                    emitComponent[component] = this.bot.components[component] && (this.bot.components[component] !== this.bot.lastComponentValues[component]);
+                }
+            }
+        }
+        if (emitComponent['filter'] && emitComponent['side_brush'] && (!this.bot.hasMainBrush() || emitComponent['main_brush'])) {
+            this.emit('LifeSpan', {
+                'filter': this.bot.components['filter'],
+                'side_brush': this.bot.components['side_brush'],
+                'main_brush': this.bot.components['main_brush']
+            });
+        }
+    }
+
     handleCommand(command, event) {
         switch (tools.getEventNameForCommandString(command)) {
             case 'CleanSt':
@@ -103,6 +121,7 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.lastUsedAreaValues) {
                     this.emit('LastUsedAreaValues', this.bot.lastUsedAreaValues);
                 }
+                this.emitMoppingSystemReport();
                 break;
             case 'CleanSpeed':
                 if (event.children && (event.children.length > 0)) {
@@ -118,18 +137,16 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'LifeSpan':
                 this.bot.handle_lifespan(event.attrs);
-                const component = this.dictionary.COMPONENT_FROM_ECOVACS[event.attrs.type];
-                if (component) {
-                    if (this.bot.components[component]) {
-                        this.emit('LifeSpan_' + component, this.bot.components[component]);
+                if (!this.bot.emitFullLifeSpanEvent) {
+                    const component = this.dictionary.COMPONENT_FROM_ECOVACS[event.attrs.type];
+                    if (component) {
+                        if (this.bot.components[component]) {
+                            this.emit('LifeSpan_' + component, this.bot.components[component]);
+                            this.bot.lastComponentValues[component] = this.bot.components[component];
+                        }
                     }
-                }
-                if (this.bot.components["filter"] && this.bot.components["side_brush"] && (this.bot.components["main_brush"] || !this.bot.hasMainBrush())) {
-                    this.emit("LifeSpan", {
-                        "filter": this.bot.components["filter"],
-                        "side_brush": this.bot.components["side_brush"],
-                        "main_brush": this.bot.components["main_brush"]
-                    });
+                } else {
+                    this.handleLifeSpanCombined();
                 }
                 break;
             case 'DeebotPosition':
@@ -160,18 +177,12 @@ class Ecovacs extends EventEmitter {
             case 'WaterLevel':
                 this.bot.handle_waterLevel(event);
                 this.emit('WaterLevel', this.bot.waterLevel);
-                this.emit("WaterInfo", {
-                    'enabled': this.bot.waterboxInfo,
-                    'level': this.bot.waterLevel
-                });
+                this.emitMoppingSystemReport();
                 break;
             case 'WaterBoxInfo':
                 this.bot.handle_waterboxInfo(event);
                 this.emit('WaterBoxInfo', this.bot.waterboxInfo);
-                this.emit("WaterInfo", {
-                    'enabled': this.bot.waterboxInfo,
-                    'level': this.bot.waterLevel
-                });
+                this.emitMoppingSystemReport();
                 break;
             case 'NetInfo':
                 this.bot.handle_netInfo(event.attrs);
@@ -275,6 +286,18 @@ class Ecovacs extends EventEmitter {
             default:
                 tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
                 break;
+        }
+    }
+
+    emitMoppingSystemReport() {
+        if (this.bot.hasMoppingSystem() && this.bot.waterLevel && (this.bot.waterboxInfo !== null)) {
+            this.emit("MoppingSystemInfo", {
+                'cleanStatus': this.bot.cleanReport,
+                'waterInfo': {
+                    'enabled': Boolean(Number(this.bot.waterboxInfo)),
+                    'level': this.bot.waterLevel
+                }
+            });
         }
     }
 }
