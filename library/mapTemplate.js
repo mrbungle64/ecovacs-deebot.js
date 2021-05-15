@@ -53,19 +53,19 @@ const offset = 400; //the positions of the chargers and the deebots need an offs
 let mapDataObject = null;
 
 class EcovacsMapImageBase {
-    mapFloorCanvas = null;
-    mapFloorContext = null;
-    mapWallCanvas = null;
-    mapWallContext = null;
-    cropBoundaries = {
-        minX: null,
-        minY: null,
-        maxX: null,
-        maxY: null
-    };
 
-    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel){
-        this.mapID = mapID,
+    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel) {
+        this.mapFloorCanvas = null;
+        this.mapFloorContext = null;
+        this.mapWallCanvas = null;
+        this.mapWallContext = null;
+        this.cropBoundaries = {
+            minX: null,
+            minY: null,
+            maxX: null,
+            maxY: null
+        };
+        this.mapID = mapID;
         this.mapType = constants.MAPINFOTYPE_FROM_ECOVACS[mapType];
         this.mapTotalWidth = mapTotalWidth;
         this.mapTotalHeight = mapTotalHeight;
@@ -315,11 +315,11 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
 }
 
 class EcovacsMapImage extends EcovacsMapImageBase {
-    isLiveMap = false;
 
-    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount){
+    constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount) {
         super(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel);
-        
+
+        this.isLiveMap = false;
         this.mapTotalCount = mapTotalCount;
         
         //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
