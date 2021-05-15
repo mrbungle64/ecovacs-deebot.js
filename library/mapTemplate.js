@@ -22,6 +22,7 @@ const SPOTAREA_SUBTYPES = {
     '14': {"en": "Gym", "de": "Fitnessstudio"}
 };
 
+//TODO: make colors customizable by introducing SetMapStyle(json)
 const SPOTAREA_COLORS = [
 '#ffdcf6',
 '#fff8d2',
@@ -110,7 +111,6 @@ class EcovacsMapImageBase {
                     if (this.cropBoundaries.maxX === null) {this.cropBoundaries.maxX = bufferRow; } else if (this.cropBoundaries.maxX < bufferRow) {this.cropBoundaries.maxX = bufferRow;}
                     if (this.cropBoundaries.maxY === null) {this.cropBoundaries.maxY = bufferColumn;} else if (this.cropBoundaries.maxY < bufferColumn) {this.cropBoundaries.maxY = bufferColumn;}
                     
-                    //TODO: make colors customizable
                     if(pixelValue == 1) { //Floor
                         this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
                         this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
