@@ -169,9 +169,9 @@ class Ecovacs extends EventEmitter {
                 this.emit('ChargePosition', this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a']);
                 this.emit('ChargingPosition', {
                     'coords': this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a'],
-                    'x': this.bot.deebotPosition['x'],
-                    'y': this.bot.deebotPosition['y'],
-                    'a': this.bot.deebotPosition['a']
+                    'x': this.bot.chargePosition['x'],
+                    'y': this.bot.chargePosition['y'],
+                    'a': this.bot.chargePosition['a']
                 });
                 break;
             case 'WaterLevel':
