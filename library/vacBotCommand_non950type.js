@@ -115,12 +115,6 @@ class Charge extends VacBotCommand_non950type {
     }
 }
 
-class GetDeviceInfo extends VacBotCommand_non950type {
-    constructor() {
-        super('GetDeviceInfo');
-    }
-}
-
 class GetCleanState extends VacBotCommand_non950type {
     constructor() {
         super('GetCleanState');
@@ -193,14 +187,6 @@ class PlaySound extends VacBotCommand_non950type {
 class GetNetInfo extends VacBotCommand_non950type {
     constructor() {
         super('GetNetInfo');
-    }
-}
-
-class GetFirmwareVersion extends VacBotCommand_non950type {
-    constructor() {
-        super('GetVersion', {
-            'name': 'FW'
-        });
     }
 }
 
@@ -404,7 +390,6 @@ module.exports.Stop = Stop;
 module.exports.Pause = Pause;
 module.exports.Resume = Resume;
 module.exports.Charge = Charge;
-module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;
@@ -417,7 +402,6 @@ module.exports.GetWaterLevel = GetWaterLevel;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.PlaySound = PlaySound;
-module.exports.GetFirmwareVersion = GetFirmwareVersion;
 module.exports.GetPosition = GetPosition;
 module.exports.GetChargerPos = GetChargerPos;
 module.exports.GetNetInfo = GetNetInfo;

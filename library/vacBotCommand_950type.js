@@ -137,12 +137,6 @@ class MoveTurnAround extends Move {
     }
 }
 
-class GetDeviceInfo extends VacBotCommand_950type {
-    constructor() {
-        super('getDeviceInfo');
-    }
-}
-
 class Relocate extends VacBotCommand_950type {
     constructor() {
         super('setRelocationState', { "mode": "manu" });
@@ -398,7 +392,6 @@ module.exports.MoveForward = MoveForward;
 module.exports.MoveLeft = MoveLeft;
 module.exports.MoveRight = MoveRight;
 module.exports.MoveTurnAround = MoveTurnAround;
-module.exports.GetDeviceInfo = GetDeviceInfo;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetBatteryState = GetBatteryState;

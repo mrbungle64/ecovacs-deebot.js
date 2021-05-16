@@ -537,9 +537,6 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new vacBotCommand.PlaySound(arguments[1]));
                 }
                 break;
-            case "GetDeviceInfo".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetDeviceInfo());
-                break;
             case "GetCleanState".toLowerCase():
                 this.sendCommand(new vacBotCommand.GetCleanState());
                 break;
