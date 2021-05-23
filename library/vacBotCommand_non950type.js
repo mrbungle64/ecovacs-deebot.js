@@ -222,11 +222,9 @@ class GetMapM extends VacBotCommand_non950type {
 
 class PullMP extends VacBotCommand_non950type {
     constructor(pid) {
-        if (pid) {
-            super('PullMP', {
-                'pid': pid
-            });
-        }
+        super('PullMP', {
+            'pid': pid
+        });
     }
 }
 
