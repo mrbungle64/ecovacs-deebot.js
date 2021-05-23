@@ -290,14 +290,24 @@ class Ecovacs extends EventEmitter {
     }
 
     emitMoppingSystemReport() {
-        if (this.bot.hasMoppingSystem() && this.bot.waterLevel && (this.bot.waterboxInfo !== null)) {
-            this.emit("MoppingSystemInfo", {
-                'cleanStatus': this.bot.cleanReport,
-                'waterInfo': {
-                    'enabled': Boolean(Number(this.bot.waterboxInfo)),
+        const vacuumPowerAdjustmentOk = !this.bot.hasVacuumPowerAdjustment() || (this.bot.cleanSpeed !== null);
+        const moppingSystemOk = !this.bot.hasMoppingSystem() || (this.bot.waterLevel !== null);
+        if (vacuumPowerAdjustmentOk && moppingSystemOk) {
+            let r = {
+                'cleanStatus': this.bot.cleanReport
+            };
+            if (this.bot.hasVacuumPowerAdjustment() && (this.bot.cleanSpeed !== null)) {
+                r['cleanInfo'] = {
+                    'level': this.bot.cleanSpeed
+                }
+            }
+            if (this.bot.hasMoppingSystem() && (this.bot.waterLevel !== null)) {
+                r['waterInfo'] = {
+                    'enabled': Boolean(Number(this.bot.waterboxInfo || 0)),
                     'level': this.bot.waterLevel
                 }
-            });
+            }
+            this.emit("MoppingSystemInfo", r);
         }
     }
 }

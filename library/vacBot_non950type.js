@@ -132,7 +132,7 @@ class VacBot_non950type extends VacBot {
 
   handle_waterLevel(event) {
     if (event.attrs && event.attrs.hasOwnProperty('v')) {
-      this.waterLevel = event.attrs['v'];
+      this.waterLevel = Number(event.attrs['v']);
       tools.envLog("[VacBot] *** waterLevel = %s", this.waterLevel);
     }
   }

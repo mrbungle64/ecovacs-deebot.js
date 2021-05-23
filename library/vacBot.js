@@ -369,6 +369,10 @@ class VacBot {
         return this.getDeviceProperty('mopping_system');
     }
 
+    hasVacuumPowerAdjustment() {
+        return this.getDeviceProperty('clean_speed');
+    }
+
     hasVoiceReports() {
         return this.getDeviceProperty('voice_report');
     }
