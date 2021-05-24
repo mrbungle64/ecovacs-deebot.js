@@ -66,13 +66,14 @@ There is of course no claim to full functionality.
 * Added full map data (maps, spot areas, virtual boundaries) as one structured event
 * (boriswerner) Initial implementation of a static image of the map
 * Handle compressed spot area boundary data (e.g. T9 series)
-* Handle custom names for spot areas (e.g. T9 Series)
+* Handle custom names for spot areas (e.g. T9 series)
+* Implemented DoNotDisturb command (950 type models)
 * Some enhancements and fixes
 
 ### 0.6.0
 * Updated login process (credits to [@And3rsL](https://github.com/And3rsL))
 * Support for Chinese server login
-* Implemented AutoEmpty commands for T8+/plus
+* Implemented AutoEmpty commands for models with suction station (e.g. T8+/plus)
 * Added some cleaning log values and cleaning stats
 * Initial support for some more models (e.g. N3, N7, N8, T9 series)
 * Improved example apps
@@ -95,9 +96,9 @@ There is of course no claim to full functionality.
 * Some refactoring and code improvements
 
 ### 0.5.2
-* Implement ResetLifeSpan, SetVolume and GetVolume for 950 type models
-* Implement OnOff for non 950 type MQTT models
-* Implement method to get translated spot area names
+* Implemented ResetLifeSpan, SetVolume and GetVolume for 950 type models
+* Implemented OnOff for non 950 type MQTT models
+* Implemented method to get translated spot area names
 * Bump some dependencies
 * Several enhancements and fixes
 
