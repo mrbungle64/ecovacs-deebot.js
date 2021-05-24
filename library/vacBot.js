@@ -84,6 +84,8 @@ class VacBot {
         this.voiceReportDisabled = null;
 
         this.commandsSent = [];
+        this.mapPiecePacketsSent = [];
+        this.mapPiecePacketCurrentNumber = null;
 
         this.createMapDataObject = false;
         this.mapDataObject = null;
@@ -135,7 +137,7 @@ class VacBot {
                 this.handleMapImageInfo(mapImageInfo);
             }
         });
-        
+
     }
 
     handleMapsEvent(mapData) {
@@ -277,7 +279,7 @@ class VacBot {
             this.ecovacs.emit('MapDataReady');
         }
     }
-    
+
     run(action) {
     }
 
@@ -381,6 +383,10 @@ class VacBot {
         return this.getDeviceProperty('auto_empty_station');
     }
 
+    isMapImageSupported() {
+        return this.getDeviceProperty('map_image_supported');
+    }
+
     getVacBotDeviceId() {
         if (!this.useMqtt) {
             return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
@@ -392,6 +398,14 @@ class VacBot {
     sendCommand(action) {
         if (!this.is950type()) {
             this.commandsSent[action.getId()] = action;
+            if (action.name === 'PullMP') {
+                if (this.mapPiecePacketCurrentNumber === null) {
+                    this.mapPiecePacketCurrentNumber = 0;
+                } else {
+                    this.mapPiecePacketCurrentNumber++;
+                }
+                this.mapPiecePacketsSent[action.getId()] = this.mapPiecePacketCurrentNumber;
+            }
         }
         if (!this.useMqtt) {
             tools.envLog("[VacBot] Sending command `%s` with id %s", action.name, action.getId());

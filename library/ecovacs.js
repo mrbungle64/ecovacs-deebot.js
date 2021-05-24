@@ -267,6 +267,9 @@ class Ecovacs extends EventEmitter {
                     this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);
                 }
                 break;
+            case 'MapPiecePacket':
+                this.bot.handle_mapPiecePacket(event);
+                break;
             case 'DustCaseST':
                 this.bot.handle_dustcaseInfo(event);
                 this.emit('DustCaseInfo', this.bot.dustcaseInfo);

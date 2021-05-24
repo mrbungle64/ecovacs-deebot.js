@@ -43,7 +43,8 @@ exports.SupportedDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
@@ -55,7 +56,8 @@ exports.SupportedDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": false
+        "clean_speed": false,
+        "map_image_supported": false
     },
     "vi829v": {
         "name": "DEEBOT OZMO 920",
@@ -71,7 +73,8 @@ exports.SupportedDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "123": {
         "name": "DEEBOT Slim2 Series",
@@ -83,7 +86,8 @@ exports.SupportedDevices = {
         "voice_report": false,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": false
+        "clean_speed": false,
+        "map_image_supported": false
     }
 };
 
@@ -98,7 +102,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "159": {
         "name": "DEEBOT OZMO 601",
@@ -110,7 +115,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "130": {
         "name": "DEEBOT OZMO 610 Series",
@@ -122,7 +128,8 @@ exports.KnownDevices = {
         "voice_report": false,
         'single_room': true,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "uv242z": {
         "name": "DEEBOT 710",
@@ -134,7 +141,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
@@ -146,7 +154,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
@@ -158,7 +167,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
@@ -170,7 +180,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
@@ -182,7 +193,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
@@ -194,7 +206,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "9rft3c": {
         "name": "DEEBOT OZMO T5",
@@ -302,7 +315,8 @@ exports.KnownDevices = {
         "voice_report": false,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "165": {
         "name": "DEEBOT N79T/W",
@@ -318,7 +332,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     },
     "rvo6ev": {
         "name": "DEEBOT U2",
@@ -382,7 +397,8 @@ exports.KnownDevices = {
         "voice_report": false,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": true
+        "clean_speed": true,
+        "map_image_supported": false
     }
 };
 

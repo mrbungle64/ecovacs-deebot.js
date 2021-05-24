@@ -131,6 +131,8 @@ function getEventNameForCommandString(str) {
             return 'CachedMapInfo';
         case 'pullm':
             return 'MapSubSet';
+        case 'pullmp':
+            return 'MapPiecePacket';
         case 'logapicleanlogs':
             return 'CleanLogs';
         default:

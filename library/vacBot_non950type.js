@@ -10,6 +10,7 @@ class VacBot_non950type extends VacBot {
     super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
     this.dustcaseInfo = null;
+    this.mapPiecePacketsCrcArray = null;
   }
 
   handle_lifespan(event) {
@@ -150,6 +151,9 @@ class VacBot_non950type extends VacBot {
       this.mapSpotAreaInfos[this.currentMapMID] = [];
       this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
       this.handleMapExecuted = true;
+      if (this.isMapImageSupported() && tools.isCanvasModuleAvailable()) {
+        this.handle_mapInfo(event);
+      }
       return this.maps;
     }
     return null;
@@ -247,6 +251,54 @@ class VacBot_non950type extends VacBot {
     return {
       mapsubsetEvent: 'error'
     };
+  }
+
+  handle_mapInfo(event) {
+    if (event.attrs) {
+      const mapID = event.attrs.i;
+      const type = 'ol'; // Only outline is supported for non 950 type models
+      const columnGrid = event.attrs.w;
+      const columnPiece = event.attrs.c;
+      const rowGrid = event.attrs.h;
+      const rowPiece = event.attrs.r;
+      const pixelWidth = event.attrs.p;
+      const crc = event.attrs.m;
+      const totalWidth = columnGrid * columnPiece;
+      const totalHeight = rowGrid * rowPiece;
+      this.mapPiecePacketsCrcArray = crc.split(',');
+      if (typeof this.mapImages[mapID] === 'undefined') {
+        this.mapImages[mapID] = [];
+      }
+      if (typeof this.mapImages[mapID][type] === 'undefined') {
+        this.mapImages[mapID][type] = new map.EcovacsMapImage(mapID, type, totalWidth, totalHeight, pixelWidth, this.mapPiecePacketsCrcArray.length);
+      }
+      this.mapPiecePacketCurrentNumber = null;
+      this.mapPiecePacketsSent = [];
+      for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {
+        this.run('PullMP', c);
+      }
+    }
+  }
+
+  handle_mapPiecePacket(event) {
+    if (event.attrs) {
+      const mapID = event.attrs.i;
+      const type = 'ol'; // Only outline is supported for non 950 type models
+      if (this.mapImages[mapID][type]) {
+        tools.envLog('[Ecovacs] MapPiecePacket: %s', JSON.stringify(event));
+        let pid = this.mapPiecePacketsSent[event.attrs.id];
+        if (event.attrs.pid) {
+          pid = event.attrs.pid;
+        }
+        const crc = this.mapPiecePacketsCrcArray[pid];
+        const mapTotalWidth = this.mapImages[mapID][type].mapTotalWidth;
+        const mapTotalHeight = this.mapImages[mapID][type].mapTotalHeight;
+        const startX = (pid % 8) * mapTotalWidth;
+        const startY = Math.floor(pid / 8) * mapTotalHeight;
+        const pieceValue = event.attrs.c;
+        this.mapImages[this.currentMapMID][type].updateMapPiece(pid, startX, startY, mapTotalWidth, mapTotalHeight, crc, pieceValue);
+      }
+    }
   }
 
   handle_deebotPosition(event) {
@@ -588,14 +640,14 @@ class VacBot_non950type extends VacBot {
         this.handleMapExecuted = false;
         this.sendCommand(new vacBotCommand.GetMapM());
         break;
-      case "PullMP".toLowerCase():
-        if (arguments.length >= 2) {
-          this.sendCommand(new vacBotCommand.PullMP(arguments[1]));
-        }
-        break;
       case "PullM".toLowerCase():
         if (arguments.length >= 5) {
           this.sendCommand(new vacBotCommand.PullM(arguments[1], arguments[2], arguments[3], arguments[4]));
+        }
+        break;
+      case "PullMP".toLowerCase():
+        if (arguments.length >= 2) {
+          this.sendCommand(new vacBotCommand.PullMP(arguments[1]));
         }
         break;
       case "Move".toLowerCase():
