@@ -24,7 +24,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         payloadRequest['header'] = {};
         payloadRequest['header']['pri'] = '2';
         payloadRequest['header']['ts'] = Math.floor(Date.now());
-        payloadRequest['header']['tmz'] = 480;
+        payloadRequest['header']['tzm'] = 480;
         payloadRequest['header']['ver'] = '0.0.22';
         if (Object.keys(action.args).length > 0) {
             payloadRequest['body'] = {};

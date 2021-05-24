@@ -377,6 +377,16 @@ class SetAutoEmpty extends VacBotCommand_950type {
     }
 }
 
+class SetDoNotDisturb extends VacBotCommand_950type {
+    constructor(enable = 0, start = '22:00', end = '21:59') {
+        super('setBlock', {
+            'enable': enable,
+            'start': start,
+            'end': end
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -424,3 +434,4 @@ module.exports.SetVolume = SetVolume;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.GetMapImage = GetMapImage;
+module.exports.SetDoNotDisturb = SetDoNotDisturb;

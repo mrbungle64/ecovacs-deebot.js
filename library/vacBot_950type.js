@@ -390,7 +390,7 @@ class VacBot_950type extends VacBot {
         } else {
             this.liveMapImage.updateMapDataPiecesCrc(event['resultData']['value']);
         }
-        
+
     }
 
     handle_minormap(event) {
@@ -399,9 +399,9 @@ class VacBot_950type extends VacBot {
             //error
             return;
         }
-        
+
         this.liveMapImage.updateMapPiece(event['resultData']['pieceIndex'], event['resultData']['pieceValue']);
-        
+
         let mapImage = this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
         //tools.envLog("[VacBot] *** mapImage mapID = " + mapMID + " PNG = " + JSON.stringify(mapImage));
         return mapImage;
@@ -665,6 +665,14 @@ class VacBot_950type extends VacBot {
             case "SetAutoEmpty".toLowerCase():
                 if (arguments.length >= 2) {
                     this.sendCommand(new vacBotCommand.SetAutoEmpty(arguments[1]));
+                }
+                break;
+            case "SetDoNotDisturb".toLowerCase():
+                if (arguments.length >= 4) {
+                    this.sendCommand(new vacBotCommand.SetDoNotDisturb(arguments[1],arguments[2],arguments[3]));
+                }
+                else if (arguments.length >= 2) {
+                    this.sendCommand(new vacBotCommand.SetDoNotDisturb(arguments[1]));
                 }
                 break;
         }
