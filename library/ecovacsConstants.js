@@ -250,7 +250,7 @@ exports.KnownDevices = {
     },
     "lhbd50": {
         "name": "DEEBOT T9+",
-        "deviceClassLink": "h18jkh"
+        "deviceClassLink": "fqxoiu"
     },
     "jffnlf": {
         "name": "DEEBOT N3 MAX",
