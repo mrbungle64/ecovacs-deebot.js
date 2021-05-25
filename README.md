@@ -67,7 +67,7 @@ There is of course no claim to full functionality.
 * (boriswerner) Initial implementation of a static image of the map
 * Handle compressed spot area boundary data (e.g. T9 series)
 * Handle custom names for spot areas (e.g. T9 series)
-* Implemented DoNotDisturb command (950 type models)
+* Implemented DoNotDisturb commands (950 type models)
 * Some enhancements and fixes
 
 ### 0.6.0
