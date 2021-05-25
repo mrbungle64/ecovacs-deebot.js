@@ -387,6 +387,20 @@ class SetDoNotDisturb extends VacBotCommand_950type {
     }
 }
 
+class EnableDoNotDisturb extends SetDoNotDisturb {
+    constructor(start = '22:00', end = '21:59') {
+        super(1, start, end);
+    }
+}
+
+class DisableDoNotDisturb extends VacBotCommand_950type {
+    constructor() {
+        super('setBlock', {
+            'enable': 0
+        });
+    }
+}
+
 module.exports.Clean = Clean;
 module.exports.Edge = Edge;
 module.exports.Spot = Spot;
@@ -435,3 +449,5 @@ module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.GetMapImage = GetMapImage;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
+module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
+module.exports.DisableDoNotDisturb = DisableDoNotDisturb;

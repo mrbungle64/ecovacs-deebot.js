@@ -667,6 +667,17 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new vacBotCommand.SetAutoEmpty(arguments[1]));
                 }
                 break;
+            case "EnableDoNotDisturb".toLowerCase():
+                if (arguments.length >= 2) {
+                    this.sendCommand(new vacBotCommand.EnableDoNotDisturb(arguments[1],arguments[2]));
+                }
+                else if (arguments.length === 1) {
+                    this.sendCommand(new vacBotCommand.EnableDoNotDisturb());
+                }
+                break;
+            case "DisableDoNotDisturb".toLowerCase():
+                this.sendCommand(new vacBotCommand.DisableDoNotDisturb());
+                break;
             case "SetDoNotDisturb".toLowerCase():
                 if (arguments.length >= 4) {
                     this.sendCommand(new vacBotCommand.SetDoNotDisturb(arguments[1],arguments[2],arguments[3]));
