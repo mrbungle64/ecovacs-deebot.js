@@ -28,7 +28,7 @@
     "uniqid": "^5.3.0"
   },
   "optionalDependencies": {
-    "canvas": "^2.7.0"
+    "canvas": "^2.8.0"
   },
   "engines": {
     "node": ">=10"
