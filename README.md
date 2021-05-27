@@ -41,12 +41,12 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot OZMO 900/905
 * Deebot OZMO Slim 10
 * Deebot OZMO T5
-* Deebot OZMO T8 series
-* Deebot OZMO T9 series
+* Deebot U2 series
 * Deebot N3 MAX
 * Deebot N7
 * Deebot N8 series
-* Deebot U2 series
+* Deebot (OZMO) T8 series
+* Deebot T9 series
 
 The models listed are either already known to work or are technically similar to these models.
 Nevertheless, the functionality may be partially limited.
