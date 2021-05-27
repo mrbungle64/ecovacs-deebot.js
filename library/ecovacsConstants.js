@@ -297,6 +297,14 @@ exports.KnownDevices = {
         "name": "DEEBOT N8 PRO",
         "deviceClassLink": "h18jkh"
     },
+    "85as7h": {
+        "name": "DEEBOT N8 PRO+",
+        "deviceClassLink": "fqxoiu"
+    },
+    "ifbw08": {
+        "name": "DEEBOT N8 PRO+",
+        "deviceClassLink": "fqxoiu"
+    },
     "7bryc5": {
         "name": "DEEBOT N8+",
         "deviceClassLink": "fqxoiu"
@@ -865,6 +873,22 @@ exports.EcoVacsHomeProducts = {
             "name": "DEEBOT N8+",
             "icon": "5feaeb27d4cb3a0006679047",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb27d4cb3a0006679047"
+        }
+    },
+    "85as7h": {
+        "product": {
+            "_id": "5fbc7f5069320300086ffa5e",
+            "name": "DEEBOT N8 PRO+",
+            "icon": "5feaeb585f437d0008e0e00c",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb585f437d0008e0e00c"
+        }
+    },
+    "ifbw08": {
+        "product": {
+            "_id": "5fbc7e18c7260e0008585c8f",
+            "name": "DEEBOT N8 PRO+",
+            "icon": "5feaeb47d4cb3a0006679048",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb47d4cb3a0006679048"
         }
     },
     "p5nx9u": {
