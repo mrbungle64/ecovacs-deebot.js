@@ -50,7 +50,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 },
                 "cmdName": action.name,
                 "payload": this.wrapCommand_getPayload(action),
-
                 "payloadType": "j",
                 "td": "q",
                 "toId": recipient,
@@ -59,35 +58,18 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             }
         }
         if (action.api === constants.LGLOGAPI) {
-            if (action.name === 'Pull') { //temporary quickndirty to test new function
-                return {
-                    "did": recipient,
-                    "country": this.country,
-                    "td": action.name,
-                    "k": "db.CleanF", "asc": true, "limit": 20,
-                    "auth": {
-                        "token": this.secret,
-                        "resource": this.resource,
-                        "userid": this.user,
-                        "with": "users",
-                        "realm": constants.REALM
-                    },
-                    "resource": this.vacuum['resource']
-                }
-            } else {
-                return {
-                    "did": recipient,
-                    "country": this.country,
-                    "td": action.name,
-                    "auth": {
-                        "token": this.secret,
-                        "resource": this.resource,
-                        "userid": this.user,
-                        "with": "users",
-                        "realm": constants.REALM
-                    },
-                    "resource": this.vacuum['resource']
-                }
+            return {
+                "did": recipient,
+                "country": this.country,
+                "td": action.name,
+                "auth": {
+                    "token": this.secret,
+                    "resource": this.resource,
+                    "userid": this.user,
+                    "with": "users",
+                    "realm": constants.REALM
+                },
+                "resource": this.vacuum['resource']
             }
         }
     }
@@ -100,12 +82,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
         if (message) {
             tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() message: %s", JSON.stringify(message, getCircularReplacer()));
-
-            if ((action.api === constants.IOTDEVMANAGERAPI) && message.hasOwnProperty('resp')) {
-                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
+            if (message.hasOwnProperty('resp')) {
+                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() message['resp']: %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
                 this.handleMessage(command, message['resp'], "response");
             } else if (action.api === constants.LGLOGAPI) {
-                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() resp(0): %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
+                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() message: %s", command, JSON.stringify(message, getCircularReplacer()));
                 this.handleMessage(command, message, "logResponse");
             } else {
                 tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() invalid response");
