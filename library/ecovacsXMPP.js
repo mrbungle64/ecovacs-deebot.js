@@ -37,13 +37,15 @@ class EcovacsXMPP extends Ecovacs {
                     } else {
                         command = secondChild.attrs.td;
                     }
-                    tools.envLog('[EcovacsXMPP] command: %s', command);
-                    this.handleCommand(command, secondChild);
-                    delete this.bot.commandsSent[secondChild.attrs.id];
-                    if (this.bot.errorCode === '-1') {
-                        this.bot.errorCode = '0';
-                        this.bot.errorDescription = errorCodes[this.bot.errorCode];
-                        this.emitLastError();
+                    if (command !== '') {
+                        tools.envLog('[EcovacsXMPP] command: %s', command);
+                        this.handleCommand(command, secondChild);
+                        delete this.bot.commandsSent[secondChild.attrs.id];
+                        if (this.bot.errorCode === '-1') {
+                            this.bot.errorCode = '0';
+                            this.bot.errorDescription = errorCodes[this.bot.errorCode];
+                            this.emitLastError();
+                        }
                     }
                 }
                 else {
