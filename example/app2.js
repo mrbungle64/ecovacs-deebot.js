@@ -134,6 +134,9 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('DeebotPositionCurrentSpotAreaID', (spotAreaID) => {
                 console.log('[app2.js] CurrentSpotAreaID: ' + spotAreaID);
             });
+            vacbot.on('CleanLog', (object) => {
+                console.log('[app2.js] CleanLog: ' + JSON.stringify(object));
+            });
         });
 
         vacbot.connect();
