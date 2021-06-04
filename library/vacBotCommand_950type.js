@@ -160,8 +160,8 @@ class GetBatteryState extends VacBotCommand_950type {
 }
 
 class GetLifeSpan extends VacBotCommand_950type {
-    constructor(component) {
-        super('getLifeSpan', [constants_type.COMPONENT_TO_ECOVACS[component]]);
+    constructor(componentsArray) {
+        super('getLifeSpan', componentsArray);
     }
 }
 

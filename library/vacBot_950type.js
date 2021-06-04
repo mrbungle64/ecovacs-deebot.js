@@ -613,13 +613,19 @@ class VacBot_950type extends VacBot {
                 if (arguments.length < 2) {
                     this.emitFullLifeSpanEvent = true;
                     this.components = {};
-                    this.lastComponentValues = {};
-                    this.sendCommand(new vacBotCommand.GetLifeSpan('filter'));
-                    this.sendCommand(new vacBotCommand.GetLifeSpan('main_brush'));
-                    this.sendCommand(new vacBotCommand.GetLifeSpan('side_brush'));
+                    this.lastComponentValues = {}
+                    const componentsArray = [
+                        dictionary.COMPONENT_TO_ECOVACS['filter'],
+                        dictionary.COMPONENT_TO_ECOVACS['main_brush'],
+                        dictionary.COMPONENT_TO_ECOVACS['side_brush']
+                    ]
+                    this.sendCommand(new vacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;
-                    this.sendCommand(new vacBotCommand.GetLifeSpan(arguments[1]));
+                    const componentsArray = [
+                        dictionary.COMPONENT_TO_ECOVACS[arguments[1]]
+                    ]
+                    this.sendCommand(new vacBotCommand.GetLifeSpan(componentsArray));
                 }
                 break;
             case "ResetLifeSpan".toLowerCase():
