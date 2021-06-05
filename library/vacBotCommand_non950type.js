@@ -273,37 +273,37 @@ class Move extends VacBotCommand_non950type {
 
 class MoveBackward extends Move {
     constructor() {
-        super("backward");
+        super('backward');
     }
 }
 
 class MoveForward extends Move {
     constructor() {
-        super("forward");
+        super('forward');
     }
 }
 
 class MoveLeft extends Move {
     constructor() {
-        super("left");
+        super('left');
     }
 }
 
 class MoveRight extends Move {
     constructor() {
-        super("right");
+        super('right');
     }
 }
 
 class MoveTurnAround extends Move {
     constructor() {
-        super("turn_around");
+        super('turn_around');
     }
 }
 
 class GetLogs extends VacBotCommand_non950type {
     constructor(count = 20) {
-        super("GetLogs", {
+        super('GetLogs', {
             'count': count
         });
     }
@@ -311,7 +311,7 @@ class GetLogs extends VacBotCommand_non950type {
 
 class GetCleanLogs extends VacBotCommand_non950type {
     constructor(count = 20) {
-        super("GetCleanLogs", {
+        super('GetCleanLogs', {
             'count': count
         });
     }
@@ -319,7 +319,7 @@ class GetCleanLogs extends VacBotCommand_non950type {
 
 class GetLogApiCleanLogs extends VacBotCommand_non950type {
     constructor() {
-        super("GetLogApiCleanLogs");
+        super('GetLogApiCleanLogs');
     }
 }
 
@@ -340,6 +340,18 @@ class SetOnOff extends VacBotCommand_non950type {
             't': type,
             'on': on
         });
+    }
+}
+
+class EnableDoNotDisturb extends SetOnOff {
+    constructor() {
+        super('do_not_disturb', 1);
+    }
+}
+
+class DisableDoNotDisturb extends SetOnOff {
+    constructor() {
+        super('do_not_disturb', 0);
     }
 }
 
@@ -378,45 +390,47 @@ class RenameSpotArea extends VacBotCommand_non950type {
     }
 }
 
-module.exports.Clean = Clean;
-module.exports.Edge = Edge;
-module.exports.Spot = Spot;
-module.exports.SpotArea = SpotArea;
-module.exports.CustomArea = CustomArea;
-module.exports.Stop = Stop;
-module.exports.Pause = Pause;
-module.exports.Resume = Resume;
 module.exports.Charge = Charge;
-module.exports.GetCleanState = GetCleanState;
-module.exports.GetChargeState = GetChargeState;
+module.exports.Clean = Clean;
+module.exports.CustomArea = CustomArea;
+module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
+module.exports.Edge = Edge;
+module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetBatteryState = GetBatteryState;
-module.exports.GetLifeSpan = GetLifeSpan;
-module.exports.ResetLifeSpan = ResetLifeSpan;
-module.exports.SetLifeSpan = SetLifeSpan;
-module.exports.GetCleanSpeed = GetCleanSpeed;
-module.exports.GetWaterLevel = GetWaterLevel;
-module.exports.SetWaterLevel = SetWaterLevel;
-module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
-module.exports.PlaySound = PlaySound;
-module.exports.GetPosition = GetPosition;
+module.exports.GetChargeState = GetChargeState;
 module.exports.GetChargerPos = GetChargerPos;
-module.exports.GetNetInfo = GetNetInfo;
-module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetCleanLogs = GetCleanLogs;
+module.exports.GetCleanSpeed = GetCleanSpeed;
+module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.GetLogApiCleanLogs = GetLogApiCleanLogs;
+module.exports.GetLogs = GetLogs;
 module.exports.GetMapM = GetMapM;
-module.exports.PullMP = PullMP;
-module.exports.PullM = PullM;
 module.exports.GetMapSet = GetMapSet;
-module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.GetNetInfo = GetNetInfo;
+module.exports.GetOnOff = GetOnOff;
+module.exports.GetPosition = GetPosition;
+module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
+module.exports.GetWaterLevel = GetWaterLevel;
 module.exports.Move = Move;
 module.exports.MoveBackward = MoveBackward;
 module.exports.MoveForward = MoveForward;
 module.exports.MoveLeft = MoveLeft;
 module.exports.MoveRight = MoveRight;
 module.exports.MoveTurnAround = MoveTurnAround;
-module.exports.GetLogs = GetLogs;
-module.exports.GetCleanLogs = GetCleanLogs;
-module.exports.GetLogApiCleanLogs = GetLogApiCleanLogs;
-module.exports.GetOnOff = GetOnOff;
-module.exports.SetOnOff = SetOnOff;
+module.exports.Pause = Pause;
+module.exports.PlaySound = PlaySound;
+module.exports.PullM = PullM;
+module.exports.PullMP = PullMP;
 module.exports.RenameSpotArea = RenameSpotArea;
+module.exports.ResetLifeSpan = ResetLifeSpan;
+module.exports.Resume = Resume;
+module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.SetLifeSpan = SetLifeSpan;
+module.exports.SetOnOff = SetOnOff;
+module.exports.SetWaterLevel = SetWaterLevel;
+module.exports.Spot = Spot;
+module.exports.SpotArea = SpotArea;
+module.exports.Stop = Stop;

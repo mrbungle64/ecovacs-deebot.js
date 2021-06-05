@@ -57,6 +57,31 @@ class Spot extends Clean {
     }
 }
 
+class SpotArea extends Clean {
+    constructor(action = 'start', area = '', cleanings = 1) {
+        if (area !== '') {
+            let cleaningAsNumber = Number(cleanings);
+            super('spotArea',
+                action, {
+                    'content': area,
+                    'count': cleaningAsNumber
+                });
+        }
+    }
+}
+
+class CustomArea extends Clean {
+    constructor(action = 'start', map_position = '', cleanings = 1) {
+        if (map_position !== '') {
+            let cleaningAsNumber = Number(cleanings);
+            super('customArea', action, {
+                'content': map_position,
+                'count': cleaningAsNumber
+            });
+        }
+    }
+}
+
 class Pause extends VacBotCommand_950type {
     constructor() {
         super('clean', {
@@ -81,31 +106,6 @@ class Stop extends VacBotCommand_950type {
     }
 }
 
-class SpotArea extends Clean {
-    constructor(action = 'start', area = '', cleanings = 1) {
-        if (area !== '') {
-            let cleaningAsNumber = Number(cleanings);
-            super('spotArea',
-                action, {
-                'content': area,
-                'count': cleaningAsNumber
-            });
-        }
-    }
-}
-
-class CustomArea extends Clean {
-    constructor(action = 'start', map_position = '', cleanings = 1) {
-        if (map_position !== '') {
-            let cleaningAsNumber = Number(cleanings);
-            super('customArea', action, {
-                'content': map_position,
-                'count': cleaningAsNumber
-            });
-        }
-    }
-}
-
 class Charge extends VacBotCommand_950type {
     constructor() {
         super('charge', {
@@ -120,7 +120,7 @@ class Move extends VacBotCommand_950type {
         if (constants_type.MOVE_ACTION.hasOwnProperty(action)) {
             action = constants_type.MOVE_ACTION[action];
         }
-        super("move", {
+        super('move', {
             'act': action
         });
     }
@@ -128,38 +128,38 @@ class Move extends VacBotCommand_950type {
 
 class MoveBackward extends Move {
     constructor() {
-        super("backward");
+        super('backward');
     }
 }
 
 class MoveForward extends Move {
     constructor() {
-        super("forward");
+        super('forward');
     }
 }
 
 class MoveLeft extends Move {
     constructor() {
-        super("left");
+        super('left');
     }
 }
 
 class MoveRight extends Move {
     constructor() {
-        super("right");
+        super('right');
     }
 }
 
 class MoveTurnAround extends Move {
     constructor() {
-        super("turn_around");
+        super('turn_around');
     }
 }
 
 class Relocate extends VacBotCommand_950type {
     constructor() {
         super('setRelocationState', {
-            "mode": "manu"
+            'mode': 'manu'
         });
     }
 }
@@ -238,7 +238,7 @@ class GetWaterInfo extends VacBotCommand_950type {
 
 class GetPosition extends VacBotCommand_950type {
     constructor() {
-        super('getPos', ["chargePos", "deebotPos"]);
+        super('getPos', ['chargePos', 'deebotPos']);
     }
 }
 
@@ -396,14 +396,14 @@ class SetVolume extends VacBotCommand_950type {
     }
 }
 
-// T8 +/plus only
+// models with auto-empty station only
 class GetAutoEmpty extends VacBotCommand_950type {
     constructor() {
         super('getAutoEmpty');
     }
 }
 
-// T8 +/plus only
+// models with auto-empty station only
 class SetAutoEmpty extends VacBotCommand_950type {
     constructor(enable = 0) {
         super('setAutoEmpty', {
@@ -436,52 +436,52 @@ class DisableDoNotDisturb extends VacBotCommand_950type {
     }
 }
 
-module.exports.Clean = Clean;
-module.exports.Edge = Edge;
-module.exports.Spot = Spot;
-module.exports.SpotArea = SpotArea;
-module.exports.CustomArea = CustomArea;
-module.exports.Stop = Stop;
-module.exports.Pause = Pause;
-module.exports.Resume = Resume;
+module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
+module.exports.Clean = Clean;
+module.exports.CustomArea = CustomArea;
+module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
+module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
+module.exports.Edge = Edge;
+module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
+module.exports.GetAutoEmpty = GetAutoEmpty;
+module.exports.GetBatteryState = GetBatteryState;
+module.exports.GetChargeState = GetChargeState;
+module.exports.GetCleanLogs = GetCleanLogs;
+module.exports.GetCleanSpeed = GetCleanSpeed;
+module.exports.GetCleanState = GetCleanState;
+module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetError = GetError;
+module.exports.GetLastCleanLog = GetLastCleanLog;
+module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.GetMapImage = GetMapImage;
+module.exports.GetMapSet = GetMapSet;
+module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
+module.exports.GetMapSpotAreas = GetMapSpotAreas;
+module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
+module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
+module.exports.GetMaps = GetMaps;
+module.exports.GetNetInfo = GetNetInfo;
+module.exports.GetPosition = GetPosition;
+module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetVolume = GetVolume;
+module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.Move = Move;
 module.exports.MoveBackward = MoveBackward;
 module.exports.MoveForward = MoveForward;
 module.exports.MoveLeft = MoveLeft;
 module.exports.MoveRight = MoveRight;
 module.exports.MoveTurnAround = MoveTurnAround;
-module.exports.GetCleanState = GetCleanState;
-module.exports.GetChargeState = GetChargeState;
-module.exports.GetBatteryState = GetBatteryState;
-module.exports.GetLifeSpan = GetLifeSpan;
-module.exports.ResetLifeSpan = ResetLifeSpan;
-module.exports.GetPosition = GetPosition;
-module.exports.GetCleanSpeed = GetCleanSpeed;
-module.exports.SetCleanSpeed = SetCleanSpeed;
-module.exports.GetWaterInfo = GetWaterInfo;
-module.exports.SetWaterLevel = SetWaterLevel;
+module.exports.Pause = Pause;
 module.exports.PlaySound = PlaySound;
 module.exports.Relocate = Relocate;
-module.exports.GetMaps = GetMaps;
-module.exports.GetMapSet = GetMapSet;
-module.exports.GetError = GetError;
-module.exports.GetNetInfo = GetNetInfo;
-module.exports.GetSleepStatus = GetSleepStatus;
-module.exports.GetCleanSum = GetCleanSum;
-module.exports.GetMapSpotAreas = GetMapSpotAreas;
-module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
-module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
-module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
-module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
-module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
-module.exports.GetCleanLogs = GetCleanLogs;
-module.exports.GetLastCleanLog = GetLastCleanLog;
-module.exports.GetVolume = GetVolume;
-module.exports.SetVolume = SetVolume;
-module.exports.GetAutoEmpty = GetAutoEmpty;
+module.exports.ResetLifeSpan = ResetLifeSpan;
+module.exports.Resume = Resume;
 module.exports.SetAutoEmpty = SetAutoEmpty;
-module.exports.GetMapImage = GetMapImage;
+module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
-module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
-module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
+module.exports.SetVolume = SetVolume;
+module.exports.SetWaterLevel = SetWaterLevel;
+module.exports.Spot = Spot;
+module.exports.SpotArea = SpotArea;
+module.exports.Stop = Stop;
