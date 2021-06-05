@@ -22,10 +22,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         // All requests need to have this header -- not sure about timezone and ver
         let payloadRequest = {};
         payloadRequest['header'] = {};
-        payloadRequest['header']['pri'] = '2';
+        payloadRequest['header']['pri'] = '1';
         payloadRequest['header']['ts'] = Math.floor(Date.now());
         payloadRequest['header']['tzm'] = 480;
-        payloadRequest['header']['ver'] = '0.0.22';
+        payloadRequest['header']['ver'] = '0.0.50';
         if (Object.keys(action.args).length > 0) {
             payloadRequest['body'] = {};
             payloadRequest['body']['data'] = action.args;
