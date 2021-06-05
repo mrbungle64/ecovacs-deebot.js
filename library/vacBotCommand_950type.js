@@ -6,7 +6,9 @@ class VacBotCommand_950type {
     constructor(name, args = {}, api = constants.IOTDEVMANAGERAPI) {
         this.name = name;
         if (!args.hasOwnProperty('id')) {
-            args = Object.assign(args, { 'id': tools.getReqID() })
+            args = Object.assign(args, {
+                'id': tools.getReqID()
+            })
         }
         this.args = args;
         this.api = api;
@@ -49,25 +51,33 @@ class Edge extends Clean {
 
 class Spot extends Clean {
     constructor() {
-        super('spot', 'start', {'content':'0,0'});
+        super('spot', 'start', {
+            'content': '0,0'
+        });
     }
 }
 
 class Pause extends VacBotCommand_950type {
     constructor() {
-        super('clean', {'act': 'pause'});
+        super('clean', {
+            'act': 'pause'
+        });
     }
 }
 
 class Resume extends VacBotCommand_950type {
     constructor() {
-        super('clean', {'act': 'resume'});
+        super('clean', {
+            'act': 'resume'
+        });
     }
 }
 
 class Stop extends VacBotCommand_950type {
     constructor() {
-        super('clean',  {'act': 'stop'});
+        super('clean', {
+            'act': 'stop'
+        });
     }
 }
 
@@ -75,7 +85,11 @@ class SpotArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
         if (area !== '') {
             let cleaningAsNumber = Number(cleanings);
-            super('spotArea', action, {'content': area, 'count': cleaningAsNumber});
+            super('spotArea',
+                action, {
+                'content': area,
+                'count': cleaningAsNumber
+            });
         }
     }
 }
@@ -84,14 +98,19 @@ class CustomArea extends Clean {
     constructor(action = 'start', map_position = '', cleanings = 1) {
         if (map_position !== '') {
             let cleaningAsNumber = Number(cleanings);
-            super('customArea', action, {'content': map_position, 'count': cleaningAsNumber});
+            super('customArea', action, {
+                'content': map_position,
+                'count': cleaningAsNumber
+            });
         }
     }
 }
 
 class Charge extends VacBotCommand_950type {
     constructor() {
-        super('charge', {'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']}
+        super('charge', {
+                'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']
+            }
         );
     }
 }
@@ -101,7 +120,9 @@ class Move extends VacBotCommand_950type {
         if (constants_type.MOVE_ACTION.hasOwnProperty(action)) {
             action = constants_type.MOVE_ACTION[action];
         }
-        super("move", {'act': action});
+        super("move", {
+            'act': action
+        });
     }
 }
 
@@ -137,7 +158,9 @@ class MoveTurnAround extends Move {
 
 class Relocate extends VacBotCommand_950type {
     constructor() {
-        super('setRelocationState', { "mode": "manu" });
+        super('setRelocationState', {
+            "mode": "manu"
+        });
     }
 }
 
@@ -169,17 +192,6 @@ class ResetLifeSpan extends VacBotCommand_950type {
     constructor(component) {
         super('resetLifeSpan', {
             'type': constants_type.COMPONENT_TO_ECOVACS[component]
-        });
-    }
-}
-
-class SetTime extends VacBotCommand_950type {
-    constructor(timestamp, timezone) {
-        super('setTime', {
-            'time': {
-                't': timestamp,
-                'tz': timezone
-            }
         });
     }
 }
@@ -233,7 +245,9 @@ class GetPosition extends VacBotCommand_950type {
 class PlaySound extends VacBotCommand_950type {
     constructor(sid = 0) {
         let sidAsNumber = Number(sid);
-        super('playSound', {'sid': sidAsNumber});
+        super('playSound', {
+            'sid': sidAsNumber
+        });
     }
 }
 
@@ -242,22 +256,28 @@ class GetNetInfo extends VacBotCommand_950type {
         super('getNetInfo');
     }
 }
+
 class GetCleanSum extends VacBotCommand_950type {
     constructor() {
         super('getTotalStats');
     }
 }
+
 class GetMajorMap extends VacBotCommand_950type {
     constructor() {
         super('getMajorMap');
     }
 }
+
 class GetMapImage extends VacBotCommand_950type {
-    constructor(mapID, mapType='outline') {
+    constructor(mapID, mapType = 'outline') {
         if (constants.MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
             mapType = constants.MAPINFOTYPE_TO_ECOVACS[mapType];
         }
-        super('getMapInfo', {'mid': mapID, 'type': mapType});
+        super('getMapInfo', {
+            'mid': mapID,
+            'type': mapType
+        });
     }
 }
 
@@ -268,8 +288,11 @@ class GetMaps extends VacBotCommand_950type {
 }
 
 class GetMapSet extends VacBotCommand_950type {
-    constructor(mapID, type='ar') {
-        super('getMapSet', {'mid': mapID, 'type': type});
+    constructor(mapID, type = 'ar') {
+        super('getMapSet', {
+            'mid': mapID,
+            'type': type
+        });
     }
 }
 
@@ -286,20 +309,34 @@ class GetMapVirtualBoundaries extends GetMapSet {
 }
 
 class GetMapSubSet extends VacBotCommand_950type {
-    constructor(mapID, mapSubSetID, type='ar') { //default type is spotAreas
-        super('getMapSubSet', {'mid': mapID, 'mssid': mapSubSetID, 'type': type});
+    constructor(mapID, mapSubSetID, type = 'ar') { //default type is spotAreas
+        super('getMapSubSet', {
+            'mid': mapID,
+            'mssid': mapSubSetID,
+            'type': type
+        });
     }
 }
 
 class DeleteMapSubSet extends VacBotCommand_950type {
-    constructor(mapID, mapSubSetID, type='vw') { //default type is delete virtualWall
-        super('setMapSubSet', {'act': 'del', 'mid': mapID, 'mssid': mapSubSetID, 'type': type});
+    constructor(mapID, mapSubSetID, type = 'vw') { //default type is delete virtualWall
+        super('setMapSubSet', {
+            'act': 'del',
+            'mid': mapID,
+            'mssid': mapSubSetID,
+            'type': type
+        });
     }
 }
 
 class AddMapSubSet extends VacBotCommand_950type {
-    constructor(mapID, coordinates, mapSubSetType='vw') { //default type is virtualWall
-        super('setMapSubSet', {'act': 'add', 'mid': mapID, 'type': mapSubSetType, 'value': coordinates});
+    constructor(mapID, coordinates, mapSubSetType = 'vw') { //default type is virtualWall
+        super('setMapSubSet', {
+            'act': 'add',
+            'mid': mapID,
+            'type': mapSubSetType,
+            'value': coordinates
+        });
     }
 }
 
@@ -420,7 +457,6 @@ module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.GetPosition = GetPosition;
-module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.GetWaterInfo = GetWaterInfo;

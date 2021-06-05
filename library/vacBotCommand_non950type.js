@@ -6,7 +6,9 @@ class VacBotCommand_non950type {
     constructor(name, args = {}) {
         this.name = name;
         if (!args.hasOwnProperty('id')) {
-            args = Object.assign(args, { 'id': tools.getReqID() })
+            args = Object.assign(args, {
+                'id': tools.getReqID()
+            })
         }
         this.args = args;
     }
@@ -92,7 +94,9 @@ class Stop extends Clean {
 class SpotArea extends Clean {
     constructor(action = 'start', area = '') {
         if (area !== '') {
-            super('spot_area', action, {'mid': area});
+            super('spot_area', action, {
+                'mid': area
+            });
         }
     }
 }
@@ -100,7 +104,10 @@ class SpotArea extends Clean {
 class CustomArea extends Clean {
     constructor(action = 'start', map_position = '', cleanings = 1) {
         if (map_position !== '') {
-            super('spot_area', action, {'p': map_position, 'deep': cleanings});
+            super('spot_area', action, {
+                'p': map_position,
+                'deep': cleanings
+            });
         }
     }
 }
@@ -141,17 +148,6 @@ class GetLifeSpan extends VacBotCommand_non950type {
     }
 }
 
-class SetTime extends VacBotCommand_non950type {
-    constructor(timestamp, timezone) {
-        super('SetTime', {
-            'time': {
-                't': timestamp,
-                'tz': timezone
-            }
-        });
-    }
-}
-
 class GetCleanSpeed extends VacBotCommand_non950type {
     constructor() {
         super('GetCleanSpeed');
@@ -180,7 +176,10 @@ class GetWaterBoxInfo extends VacBotCommand_non950type {
 
 class PlaySound extends VacBotCommand_non950type {
     constructor(sid = '0') {
-        super('PlaySound', {'count': 1, 'sid': sid});
+        super('PlaySound', {
+            'count': 1,
+            'sid': sid
+        });
     }
 }
 
@@ -242,11 +241,9 @@ class GetMapSet extends VacBotCommand_non950type {
     // sa = spot areas
     // vw = virtual walls
     constructor(tp = 'sa') {
-        if (tp !== '') {
-            super('GetMapSet', {
-                'tp': tp
-            });
-        }
+        super('GetMapSet', {
+            'tp': tp
+        });
     }
 }
 
@@ -267,7 +264,9 @@ class Move extends VacBotCommand_non950type {
             action = constants_type.ACTION[action];
         }
         super("Move", {
-            'move': {'action': action}
+            'move': {
+                'action': action
+            }
         });
     }
 }
@@ -394,7 +393,6 @@ module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.SetLifeSpan = SetLifeSpan;
-module.exports.SetTime = SetTime;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetWaterLevel = GetWaterLevel;
 module.exports.SetWaterLevel = SetWaterLevel;
