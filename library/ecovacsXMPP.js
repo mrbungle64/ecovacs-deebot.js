@@ -24,37 +24,38 @@ class EcovacsXMPP extends Ecovacs {
 
         this.simpleXmpp.on('stanza', (stanza) => {
             tools.envLog('[EcovacsXMPP] stanza: %s', stanza.toString());
-            if (stanza.name === 'iq' && (stanza.attrs.type === 'set' || stanza.attrs.type === 'result') && !!stanza.children[0] && stanza.children[0].name === 'query' && !!stanza.children[0].children[0]) {
-                let firstChild = stanza.children[0];
-                tools.envLog('[EcovacsXMPP] firstChild: %s', firstChild.toString());
-                let secondChild = firstChild.children[0];
-                tools.envLog('[EcovacsXMPP] secondChild: %s', secondChild.toString());
-                let command = '';
-                if (secondChild.attrs) {
-                    if (secondChild.attrs.id && (this.bot.commandsSent[secondChild.attrs.id])) {
-                        const action = this.bot.commandsSent[secondChild.attrs.id];
-                        command = action.name;
-                    } else {
-                        command = secondChild.attrs.td;
-                    }
-                    if ((command !== undefined) && (command !== '')) {
-                        tools.envLog('[EcovacsXMPP] command: %s', command);
-                        this.handleCommand(command, secondChild);
-                        delete this.bot.commandsSent[secondChild.attrs.id];
-                        if (this.bot.errorCode === '-1') {
-                            this.bot.errorCode = '0';
-                            this.bot.errorDescription = errorCodes[this.bot.errorCode];
-                            this.emitLastError();
+            if ((stanza.name === 'iq') && !!stanza.children[0] && !!stanza.children[0].children[0]) {
+                if (((stanza.attrs.type === 'set') || (stanza.attrs.type === 'result')) && (stanza.children[0].name === 'query')) {
+                    let firstChild = stanza.children[0];
+                    tools.envLog('[EcovacsXMPP] firstChild: %s', firstChild.toString());
+                    let secondChild = firstChild.children[0];
+                    tools.envLog('[EcovacsXMPP] secondChild: %s', secondChild.toString());
+                    let command = '';
+                    if (secondChild.attrs) {
+                        if (secondChild.attrs.id && (this.bot.commandsSent[secondChild.attrs.id])) {
+                            const action = this.bot.commandsSent[secondChild.attrs.id];
+                            command = action.name;
+                        } else {
+                            command = secondChild.attrs.td;
                         }
+                        if ((command !== undefined) && (command !== '')) {
+                            tools.envLog('[EcovacsXMPP] command: %s', command);
+                            this.handleCommand(command, secondChild);
+                            delete this.bot.commandsSent[secondChild.attrs.id];
+                            if (this.bot.errorCode === '-1') {
+                                this.bot.errorCode = '0';
+                                this.bot.errorDescription = errorCodes[this.bot.errorCode];
+                                this.emitLastError();
+                            }
+                        }
+                    } else {
+                        tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
                     }
+                } else if ((stanza.attrs.type === 'error') && (stanza.children[0].name === 'error')) {
+                    tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
+                    this.bot.handle_error(stanza.children[0].attrs);
+                    this.emitLastError();
                 }
-                else {
-                    tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));
-                }
-            } else if (stanza.name === 'iq' && stanza.attrs.type === 'error' && !!stanza.children[0] && stanza.children[0].name === 'error' && !!stanza.children[0].children[0]) {
-                tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
-                this.bot.handle_error(stanza.children[0].attrs);
-                this.emitLastError();
             }
         });
 
