@@ -163,10 +163,7 @@ class VacBot_950type extends VacBot {
                         let date = new Date(timestamp * 1000);
                         tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, date.toString());
                         let len = parseInt(logs[logIndex]['last']);
-                        let hours = Math.floor(len / 3600);
-                        let minutes = Math.floor((len % 3600) / 60);
-                        let seconds = Math.floor(len % 60);
-                        let totalTimeString = hours.toString() + 'h ' + ((minutes < 10) ? '0' : '') + minutes.toString() + 'm ' + ((seconds < 10) ? '0' : '') + seconds.toString() + 's';
+                        let totalTimeString = tools.getTimeString(len);
                         tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
                         let imageUrl = logs[logIndex]['imageUrl'];
                         if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
@@ -184,6 +181,7 @@ class VacBot_950type extends VacBot {
                         this.cleanLog[logs[logIndex]['id']] = {
                             'squareMeters': squareMeters,
                             'timestamp': timestamp,
+                            'date': date,
                             'lastTime': len,
                             'totalTime': len,
                             'totalTimeFormatted': totalTimeString,
