@@ -157,7 +157,8 @@ class VacBot {
                         'type': 'GetVirtualBoundaries',
                         'mapID': mapID
                     });
-                    if (tools.isCanvasModuleAvailable()) {
+                    // This currently only works for non 950 type models
+                    if (tools.isCanvasModuleAvailable() && this.is950type()) {
                         this.run('GetMapImage', mapID);
                         this.mapDataObjectQueue.push({
                             'type': 'GetMapImage',
