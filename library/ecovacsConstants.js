@@ -317,6 +317,10 @@ exports.KnownDevices = {
         "name": "DEEBOT N8+",
         "deviceClassLink": "fqxoiu"
     },
+    "a7lhb1": {
+        "name": "DEEBOT N9+",
+        "deviceClassLink": "fqxoiu"
+    },
     "155": {
         "name": "DEEBOT N79S/SE",
         "950type": false,
@@ -883,6 +887,14 @@ exports.EcoVacsHomeProducts = {
         "product": {
             "_id": "5fbc7cc69601440008b24469",
             "name": "DEEBOT N8+",
+            "icon": "5feaeb27d4cb3a0006679047",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb27d4cb3a0006679047"
+        }
+    },
+    "a7lhb1": {
+        "product": {
+            "_id": "5fbc7cc69601440008b24469",
+            "name": "DEEBOT N9+",
             "icon": "5feaeb27d4cb3a0006679047",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb27d4cb3a0006679047"
         }
