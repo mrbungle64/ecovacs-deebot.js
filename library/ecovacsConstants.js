@@ -17,6 +17,7 @@ exports.LGLOGAPI = 'lg/log.do';
 // pim/product/getProductIotMap - This provides a list of "IOT" products.  Not sure what this provides the app.
 exports.PRODUCTAPI = 'pim/product';
 exports.REALM = 'ecouser.net';
+exports.APPAPI = 'appsvr/app.do';
 
 exports.MAPINFOTYPE_TO_ECOVACS = {
     "outline": "ol",

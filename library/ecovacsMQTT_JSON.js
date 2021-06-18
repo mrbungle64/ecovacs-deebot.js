@@ -110,14 +110,24 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (type === "incoming") {
             eventName = topic.split('/')[2]; //parse 3rd element from string iot/atr/onPos/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/
             message = JSON.parse(message);
-            resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
+            resultData = message['body']['data'];
             tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage incoming: %s", message);
         }
         if (type === "response") {
             tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage response: %s", JSON.stringify(message, getCircularReplacer()));
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
-            resultData = message['body']['data']; //nicht immer vorhanden "body":{"code":0,"msg":"ok"}}
+            resultData = message['body']['data'];
+            if (message['header']) {
+                const header = message['header'];
+                if (this.bot.firmwareVersion !== header['fwVer']) {
+                    this.bot.firmwareVersion = header['fwVer'];
+                    this.emit('HeaderInfo', {
+                        'fwVer': header['fwVer'],
+                        'hwVer': header['hwVer']
+                    });
+                }
+            }
         }
         if (type === "logResponse") {
             tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage logResponse: %s", JSON.stringify(message, getCircularReplacer()));
@@ -158,7 +168,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             command = command.substring(3);
             commandPrefix = 'get';
         }
-        // OZMO T8 series
+        // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
         if (command.endsWith("_V2") || command.endsWith("_v2")) {
             command = command.slice(0, -3);

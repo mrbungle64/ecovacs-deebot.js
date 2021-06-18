@@ -12,6 +12,7 @@ class VacBot_950type extends VacBot {
         this.autoEmpty = null;
         this.volume = 0;
         this.relocationState = null;
+        this.firmwareVersion = null;
     }
 
     handle_lifespan(event) {

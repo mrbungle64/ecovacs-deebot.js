@@ -70,7 +70,7 @@ There is of course no claim to full functionality.
 * Handle compressed spot area boundary data (e.g. T9 series)
 * Handle custom names for spot areas (e.g. T9 series)
 * Implemented DoNotDisturb commands (950 type models)
-* Added N8 PRO+, T9 AIVI Plus
+* Added N8 PRO+, N9+, T9 AIVI Plus
 * Some enhancements and fixes
 
 ### 0.6.0

@@ -231,7 +231,9 @@ class VacBot {
         const mapID = spotAreaInfo['mapID'];
         const mapSpotAreaID = spotAreaInfo['mapSpotAreaID'];
         const mapSpotAreasObject = map.getSpotAreaObject(this.mapDataObject, mapID, mapSpotAreaID);
-        Object.assign(mapSpotAreasObject, spotAreaInfo.toJSON());
+        if (mapSpotAreasObject) {
+            Object.assign(mapSpotAreasObject, spotAreaInfo.toJSON());
+        }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
             if ((item.mapID === mapID) && (item.type === 'GetSpotAreaInfo')) {
                 if (item.mapSpotAreaID === mapSpotAreaID) {
@@ -249,7 +251,9 @@ class VacBot {
         const mapID = virtualBoundaryInfo['mapID'];
         const virtualBoundaryID = virtualBoundaryInfo['mapVirtualBoundaryID'];
         const mapVirtualBoundaryObject = map.getVirtualBoundaryObject(this.mapDataObject, mapID, virtualBoundaryID);
-        Object.assign(mapVirtualBoundaryObject, virtualBoundaryInfo.toJSON());
+        if (mapVirtualBoundaryObject) {
+            Object.assign(mapVirtualBoundaryObject, virtualBoundaryInfo.toJSON());
+        }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
             if ((item.mapID === mapID) && (item.type === 'GetVirtualBoundaryInfo')) {
                 if (item.mapVirtualBoundaryType === virtualBoundaryInfo.mapVirtualBoundaryType) {
@@ -264,6 +268,7 @@ class VacBot {
             this.ecovacs.emit('MapDataReady');
         }
     }
+
     handleMapImageInfo(mapImageInfo) {
         const mapID = mapImageInfo['mapID'];
         const mapObject = map.getMapObject(this.mapDataObject, mapID);
