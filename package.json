@@ -1,6 +1,6 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.6.1-alpha.14",
+  "version": "0.6.1-alpha.15",
   "description": "Library for running Ecovacs Deebot vacuum cleaner robots",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,9 @@
   "keywords": [
     "ecovacs",
     "deebot",
-    "ozmo"
+    "ozmo",
+    "vacuum",
+    "robot"
   ],
   "author": "Sascha Hölzel",
   "license": "GPL-3.0",
