@@ -69,7 +69,8 @@ There is of course no claim to full functionality.
 * (boriswerner) Initial implementation of a static image of the map
 * Handle compressed spot area boundary data (e.g. T9 series)
 * Handle custom names for spot areas (e.g. T9 series)
-* Implemented DoNotDisturb commands (950 type models)
+* Implemented DoNotDisturb and AdvanceMode commands (950 type models)
+* Implemented TrueDetect commands (models with TrueDetect 3D)
 * Added N8 PRO+, N9+, T9 AIVI Plus
 * Some enhancements and fixes
 
