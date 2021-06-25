@@ -344,6 +344,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_volume(event);
                 this.emit("Volume", this.bot.volume);
                 break;
+            case 'advancedmode':
+                this.bot.handle_advancedMode(event);
+                this.emit("AdvancedMode", this.bot.advancedMode);
+                break;
+            case 'truedetect':
+                this.bot.handle_trueDetect(event);
+                this.emit("TrueDetect", this.bot.trueDetect);
+                break;
             case "error":
                 this.bot.handle_error(event);
                 this.emit("Error", this.bot.errorDescription);

@@ -436,6 +436,34 @@ class DisableDoNotDisturb extends VacBotCommand_950type {
     }
 }
 
+class SetAdvancedMode extends VacBotCommand_950type {
+    constructor(enable = 0) {
+        super('setAdvancedMode', {
+            'enable': enable
+        });
+    }
+}
+
+class GetAdvancedMode extends VacBotCommand_950type {
+    constructor() {
+        super('getAdvancedMode');
+    }
+}
+
+class SetTrueDetect extends VacBotCommand_950type {
+    constructor(enable = 0) {
+        super('setTrueDetect', {
+            'enable': enable
+        });
+    }
+}
+
+class GetTrueDetect extends VacBotCommand_950type {
+    constructor() {
+        super('getTrueDetect');
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -444,6 +472,7 @@ module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
 module.exports.Edge = Edge;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
+module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetChargeState = GetChargeState;
@@ -464,6 +493,7 @@ module.exports.GetMaps = GetMaps;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
 module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.Move = Move;
@@ -477,9 +507,11 @@ module.exports.PlaySound = PlaySound;
 module.exports.Relocate = Relocate;
 module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.Resume = Resume;
+module.exports.SetAdvancedMode = SetAdvancedMode;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
+module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVolume = SetVolume;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.Spot = Spot;

@@ -10,6 +10,8 @@ class VacBot_950type extends VacBot {
         super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
         this.autoEmpty = null;
+        this.advancedMode = null;
+        this.trueDetect = null;
         this.volume = 0;
         this.relocationState = null;
         this.firmwareVersion = null;
@@ -443,6 +445,16 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
     }
 
+    handle_advancedMode(event) {
+        this.advancedMode = event['resultData']['enable']
+        tools.envLog("[VacBot] *** advancedMode = " + this.advancedMode);
+    }
+
+    handle_trueDetect(event) {
+        this.trueDetect = event['resultData']['enable']
+        tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
+    }
+
     handle_stats(event) {
         this.currentStats = {
             'cleanedArea': event['resultData']['area'],
@@ -672,6 +684,12 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new vacBotCommand.SetAutoEmpty(arguments[1]));
                 }
                 break;
+            case "EnableAutoEmpty".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetAutoEmpty(1));
+                break;
+            case "DisableAutoEmpty".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetAutoEmpty(0));
+                break;
             case "EnableDoNotDisturb".toLowerCase():
                 if (arguments.length >= 2) {
                     this.sendCommand(new vacBotCommand.EnableDoNotDisturb(arguments[1],arguments[2]));
@@ -682,6 +700,24 @@ class VacBot_950type extends VacBot {
                 break;
             case "DisableDoNotDisturb".toLowerCase():
                 this.sendCommand(new vacBotCommand.DisableDoNotDisturb());
+                break;
+            case "EnableAdvancedMode".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetAdvancedMode(1));
+                break;
+            case "DisableAdvancedMode".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetAdvancedMode(0));
+                break;
+            case "GetAdvancedMode".toLowerCase():
+                this.sendCommand(new vacBotCommand.GetAdvancedMode());
+                break;
+            case "EnableTrueDetect".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetTrueDetect(1));
+                break;
+            case "DisableTrueDetect".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetTrueDetect(0));
+                break;
+            case "GetTrueDetect".toLowerCase():
+                this.sendCommand(new vacBotCommand.GetTrueDetect());
                 break;
             case "SetDoNotDisturb".toLowerCase():
                 if (arguments.length >= 4) {
