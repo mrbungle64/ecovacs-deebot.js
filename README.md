@@ -61,10 +61,11 @@ There is of course no claim to full functionality.
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 * The cleaning log has an empty result on T9 series
 * The combined map data object does not work with T9 series
+* TrueDetect commands not working yet (tested on T9)
 
 ## Changelog
 
-### 0.6.1 (alpha)
+### 0.6.1 (beta)
 * Added full map data (maps, spot areas, virtual boundaries) as one structured event
 * (boriswerner) Initial implementation of a static image of the map
 * Handle compressed spot area boundary data (e.g. T9 series)
