@@ -46,7 +46,7 @@ const MAP_COLORS = {
     'wifi_2': '#a2cdfc',
     'wifi_3': '#bbdafd',
     'wifi_4': '#ddebfa',
-    'wifi_5': '"#f7fbff', //weak
+    'wifi_5': '#f7fbff', //weak
 }
 
 const offset = 400; //the positions of the chargers and the deebots need an offset of 400 pixels
