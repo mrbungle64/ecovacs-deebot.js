@@ -690,6 +690,10 @@ class VacBot_950type extends VacBot {
             case "DisableAutoEmpty".toLowerCase():
                 this.sendCommand(new vacBotCommand.SetAutoEmpty(0));
                 break;
+            case "EmptyDustBin".toLowerCase():
+            case "EmptySuctionStation".toLowerCase():
+                this.sendCommand(new vacBotCommand.EmptyDustBin());
+                break;
             case "EnableDoNotDisturb".toLowerCase():
                 if (arguments.length >= 2) {
                     this.sendCommand(new vacBotCommand.EnableDoNotDisturb(arguments[1],arguments[2]));

@@ -396,18 +396,24 @@ class SetVolume extends VacBotCommand_950type {
     }
 }
 
-// models with auto-empty station only
 class GetAutoEmpty extends VacBotCommand_950type {
     constructor() {
         super('getAutoEmpty');
     }
 }
 
-// models with auto-empty station only
 class SetAutoEmpty extends VacBotCommand_950type {
     constructor(enable = 0) {
         super('setAutoEmpty', {
             'enable': enable
+        });
+    }
+}
+
+class EmptyDustBin extends VacBotCommand_950type {
+    constructor() {
+        super('setAutoEmpty', {
+            'act': 'start'
         });
     }
 }
@@ -471,6 +477,7 @@ module.exports.CustomArea = CustomArea;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
 module.exports.Edge = Edge;
+module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAutoEmpty = GetAutoEmpty;
