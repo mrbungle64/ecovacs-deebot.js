@@ -295,7 +295,7 @@ class VacBot_non950type extends VacBot {
         const mapTotalHeight = this.mapImages[mapID][type].mapTotalHeight;
         const startX = (pid % 8) * mapTotalWidth;
         const startY = Math.floor(pid / 8) * mapTotalHeight;
-        const pieceValue = event.attrs.c;
+        const pieceValue = event.attrs.p;
         this.mapImages[this.currentMapMID][type].updateMapPiece(pid, startX, startY, mapTotalWidth, mapTotalHeight, crc, pieceValue);
       }
     }
