@@ -14,9 +14,9 @@ class VacBot {
         this.deviceClass = vacuum['class'];
         this.deviceModel = this.deviceClass;
         this.deviceImageURL = '';
-        if (constants.EcoVacsHomeProducts[this.deviceClass]) {
-            this.deviceModel = constants.EcoVacsHomeProducts[this.deviceClass]['product']['name'];
-            this.deviceImageURL = constants.EcoVacsHomeProducts[this.deviceClass]['product']['iconUrl'];
+        if (tools.getProductIotMap()[this.deviceClass]) {
+            this.deviceModel = tools.getProductIotMap()[this.deviceClass].product.name;
+            this.deviceImageURL = tools.getProductIotMap()[this.deviceClass].product.iconUrl;
         }
         this.components = {};
         this.lastComponentValues = {};
