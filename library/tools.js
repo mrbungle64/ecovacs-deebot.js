@@ -1,4 +1,4 @@
-const constants = require('./ecovacsConstants');
+const deebotModels = require('./deebotModels');
 
 function isCanvasModuleAvailable() {
     try {
@@ -45,15 +45,15 @@ function getAllKnownDevices() {
 }
 
 function getSupportedDevices() {
-    return constants.SupportedDevices;
+    return deebotModels.SupportedDevices;
 }
 
 function getKnownDevices() {
-    return constants.KnownDevices;
+    return deebotModels.KnownDevices;
 }
 
 function getProductIotMap() {
-    return constants.EcoVacsHomeProducts;
+    return deebotModels.EcoVacsHomeProducts;
 }
 
 function isSupportedDevice(deviceClass) {
