@@ -72,6 +72,7 @@ There is of course no claim to full functionality.
 * Handle custom names for spot areas (e.g. T9 series)
 * Implemented DoNotDisturb and AdvanceMode commands (950 type models)
 * Implemented TrueDetect commands (models with TrueDetect 3D)
+* Implemented EmptyDustBin command for models with suction station (e.g. T8+/plus)
 * Added N8 PRO+, N9+, T9 AIVI Plus
 * Some enhancements and fixes
 
