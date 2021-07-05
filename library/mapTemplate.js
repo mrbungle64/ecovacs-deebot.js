@@ -74,12 +74,12 @@ class EcovacsMapImageBase {
 
         this.initCanvas();
     }
-    
+
     initCanvas() {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
-        
+
         const {createCanvas} = require('canvas');
         this.mapFloorCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
         this.mapFloorContext = this.mapFloorCanvas.getContext("2d");
@@ -89,7 +89,7 @@ class EcovacsMapImageBase {
         this.mapWallContext = this.mapWallCanvas.getContext("2d");
         this.mapWallContext.globalAlpha = 1;
         this.mapWallContext.beginPath();
-        
+
     }
 
     drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
@@ -101,17 +101,17 @@ class EcovacsMapImageBase {
                 let bufferColumn = column + mapPieceStartY;
                 let pieceDataPosition = mapPieceWidth * row + column;
                 let pixelValue = mapPieceDecompressed[pieceDataPosition];
-                
+
                 if(pixelValue == 0) { //No data
                     this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                 } else {
-                    //checkCropBoundaries 
+                    //checkCropBoundaries
                     if (this.cropBoundaries.minY === null) {this.cropBoundaries.minY = bufferColumn;} else if (bufferColumn < this.cropBoundaries.minY) {this.cropBoundaries.minY = bufferColumn;}
                     if (this.cropBoundaries.minX === null) {this.cropBoundaries.minX = bufferRow; } else if (bufferRow < this.cropBoundaries.minX) {this.cropBoundaries.minX = bufferRow;}
                     if (this.cropBoundaries.maxX === null) {this.cropBoundaries.maxX = bufferRow; } else if (this.cropBoundaries.maxX < bufferRow) {this.cropBoundaries.maxX = bufferRow;}
                     if (this.cropBoundaries.maxY === null) {this.cropBoundaries.maxY = bufferColumn;} else if (this.cropBoundaries.maxY < bufferColumn) {this.cropBoundaries.maxY = bufferColumn;}
-                    
+
                     if(pixelValue == 1) { //Floor
                         this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
                         this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
@@ -127,31 +127,31 @@ class EcovacsMapImageBase {
                     //only for Wifi heatmap
                     } else if(pixelValue == 4) { //Wifi not covered
                         this.mapFloorContext.fillStyle = MAP_COLORS['wifi_not_covered'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);  
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                         this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>10 && pixelValue <= 20) {  //Wifi coverage 1=strong
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];  
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];
                         this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                         this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>20 && pixelValue <= 30) { //Wifi coverage 2
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];         
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);    
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);   
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>30 && pixelValue <= 40) { //Wifi coverage 3
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];        
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);   
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);     
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>40 && pixelValue <= 50) { //Wifi coverage 4
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];        
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);  
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);      
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     } else if (pixelValue>50) {        //Wifi coverage 5=weak
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];      
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);    
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);            
+                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];
+                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     }
 
-                } 
+                }
             }
         }
     }
@@ -163,7 +163,7 @@ class EcovacsMapImageBase {
         if(!this.transferMapInfo) { //check if data should not be transferred (mapinfo:not all datapieces retrieved or sub-datapiece with no changes retrieved)
             return null;
         };
-        
+
         const {createCanvas} = require('canvas');
         let finalCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
         let finalContext = finalCanvas.getContext("2d");
@@ -173,10 +173,10 @@ class EcovacsMapImageBase {
 
         //Draw floor map
         finalContext.drawImage(this.mapFloorCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
-        
+
         //get mapObject
         let mapObject = null;
-        
+
         if (map.mapDataObject !== null) {
             if(typeof this.mapID == null) {
                 mapObject = getCurrentMapObject(map.mapDataObject);
@@ -204,7 +204,7 @@ class EcovacsMapImageBase {
 
             }
             finalContext.drawImage(areaCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
-            
+
             //Draw virtualBoundaries
             let boundaryCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
             const boundaryContext = boundaryCanvas.getContext('2d');
@@ -215,12 +215,12 @@ class EcovacsMapImageBase {
                 for (let i = 0; i < boundaryCoordinateArray.length; i=i+2) {
                     let row = boundaryCoordinateArray[i]/50+offset;
                     let column = boundaryCoordinateArray[i+1]/50+offset;
-                    //checkCropBoundaries 
+                    //checkCropBoundaries
                     if (this.cropBoundaries.minY === null) {this.cropBoundaries.minY = column;} else if (column < this.cropBoundaries.minY) {this.cropBoundaries.minY = column;}
                     if (this.cropBoundaries.minX === null) {this.cropBoundaries.minX = row; } else if (row < this.cropBoundaries.minX) {this.cropBoundaries.minX = row;}
                     if (this.cropBoundaries.maxX === null) {this.cropBoundaries.maxX = row; } else if (this.cropBoundaries.maxX < row) {this.cropBoundaries.maxX = row;}
                     if (this.cropBoundaries.maxY === null) {this.cropBoundaries.maxY = column;} else if (this.cropBoundaries.maxY < column) {this.cropBoundaries.maxY = column;}
-                    
+
                     if (i === 0) {
                         boundaryContext.moveTo(row, column);
                     } else {
@@ -235,7 +235,7 @@ class EcovacsMapImageBase {
 
             }
             finalContext.drawImage(boundaryCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
-            
+
             //Draw chargers
             //TODO: add results from getPos_V2 to mapDataObject
         }
@@ -257,7 +257,7 @@ class EcovacsMapImageBase {
                 robotImage.src = robotBase64;
                 //icon is facing upward, so add 90
                 let robotCanvas = getRotatedCanvasFromImage(robotImage, deebotPosition['a']+90); //angle from ecovacs: 0=facing right, 90 = facing upwards, 180/-180 = facing left, -90 = facing downwards
-                // icon size is 16*16, so subtract 8 pixels to coordinates for center 
+                // icon size is 16*16, so subtract 8 pixels to coordinates for center
                 finalContext.drawImage(robotCanvas, (deebotPosition['x']/this.mapPixel)+offset-8, (deebotPosition['y']/this.mapPixel)+offset-8, 16, 16);
             }
             //Draw charger
@@ -268,10 +268,10 @@ class EcovacsMapImageBase {
             const chargerImage = new Image();
             chargerImage.src = charger;
             // icon size is 16*16, so subtract 8 pixels to coordinates for center
-            finalContext.drawImage(chargerImage, (chargerPosition['x']/this.mapPixel)+offset-8, (chargerPosition['y']/this.mapPixel)+offset-8, 16, 16);    
+            finalContext.drawImage(chargerImage, (chargerPosition['x']/this.mapPixel)+offset-8, (chargerPosition['y']/this.mapPixel)+offset-8, 16, 16);
         }
-        
-        //crop image 
+
+        //crop image
         const croppedImage = finalContext.getImageData(this.cropBoundaries.minX
                 , this.mapTotalHeight - this.cropBoundaries.maxY // map was flipped horizontally before, so the boundaries have shifted
                 , this.cropBoundaries.maxX - this.cropBoundaries.minX
@@ -303,7 +303,7 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
     updateMapDataPiecesCrc(mapDataPiecesCrc) {
         this.mapDataPiecesCrc = mapDataPiecesCrc; //is only transfered in onMajorMap, TODO: comparison for change has to be done before onMinorMap-Events
     }
-    updateMapPiece(mapDataPieceIndex, mapDataPiece) { 
+    updateMapPiece(mapDataPieceIndex, mapDataPiece) {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
@@ -322,11 +322,11 @@ class EcovacsMapImage extends EcovacsMapImageBase {
 
         this.isLiveMap = false;
         this.mapTotalCount = mapTotalCount;
-        
+
         //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
         this.mapDataPieces = new Array(mapTotalCount).fill(false);
-        //mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison 
-        this.mapDataPiecesCrc; 
+        //mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison
+        this.mapDataPiecesCrc;
         this.initCanvas();
     }
 
@@ -355,7 +355,7 @@ class EcovacsMapImage extends EcovacsMapImageBase {
                 }
             }
         }
-        
+
         this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX, pieceStartY, pieceWidth, pieceHeight);
 
     }
@@ -563,7 +563,7 @@ function getRotatedCanvasFromImage (image, angle) {
     rotatedContext.rotate(angle * (Math.PI / 180));
     rotatedContext.translate( -image.width/2, -image.height/2 );
     rotatedContext.drawImage(image, 0, 0);
-    
+
     // console.log('<p>'+angle+"</p>")
     // console.log('<img src="' + rotatedCanvas.toDataURL() + '" />')
     return rotatedCanvas;
