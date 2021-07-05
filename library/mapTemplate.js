@@ -70,7 +70,8 @@ class EcovacsMapImageBase {
         this.mapTotalWidth = mapTotalWidth;
         this.mapTotalHeight = mapTotalHeight;
         this.mapPixel = mapPixel;
-        
+        this.transferMapInfo = null;
+
         this.initCanvas();
     }
     
@@ -329,13 +330,13 @@ class EcovacsMapImage extends EcovacsMapImageBase {
         this.initCanvas();
     }
 
-    updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue) { 
+    updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue, checkPieceCrc = true) {
         //TODO: currently only validated with one piece (StartX=0 and StartY=0)
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
 
-        if(this.mapDataPiecesCrc != pieceCrc) { //CRC has changed, so invalidate all pieces and return
+        if (checkPieceCrc && (this.mapDataPiecesCrc !== pieceCrc)) { //CRC has changed, so invalidate all pieces and return
             this.mapDataPiecesCrc = pieceCrc;
             this.mapDataPieces.fill(false);
             this.mapDataPieces[pieceIndex] = pieceValue;

@@ -296,7 +296,11 @@ class VacBot_non950type extends VacBot {
         const startX = (pid % 8) * mapTotalWidth;
         const startY = Math.floor(pid / 8) * mapTotalHeight;
         const pieceValue = event.attrs.p;
-        this.mapImages[this.currentMapMID][type].updateMapPiece(pid, startX, startY, mapTotalWidth, mapTotalHeight, crc, pieceValue);
+        this.mapImages[this.currentMapMID][type].updateMapPiece(pid, startX, startY, mapTotalWidth, mapTotalHeight, crc, pieceValue, false);
+        if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
+          let mapImage = this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+          tools.envLog('[Ecovacs] MapPiecePacket2: %s', JSON.stringify(mapImage));
+        }
       }
     }
   }
