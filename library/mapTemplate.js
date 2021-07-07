@@ -24,15 +24,15 @@ const SPOTAREA_SUBTYPES = {
 
 //TODO: make colors customizable by introducing SetMapStyle(json)
 const SPOTAREA_COLORS = [
-'#ffdcf6',
-'#fff8d2',
-'#e4fed9',
-'#dbf2fe',
-'#ffd7c9',
-'#fee3c4',
-'#e98b9d',
-'#ffa1a1',
-'#9fcfff'
+    '#ffdcf6',
+    '#fff8d2',
+    '#e4fed9',
+    '#dbf2fe',
+    '#ffd7c9',
+    '#fee3c4',
+    '#e98b9d',
+    '#ffa1a1',
+    '#9fcfff'
 ];
 
 const MAP_COLORS = {
@@ -53,7 +53,6 @@ const offset = 400; //the positions of the chargers and the deebots need an offs
 let mapDataObject = null;
 
 class EcovacsMapImageBase {
-
     constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel) {
         this.mapFloorCanvas = null;
         this.mapFloorContext = null;
@@ -160,9 +159,9 @@ class EcovacsMapImageBase {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
-        if(!this.transferMapInfo) { //check if data should not be transferred (mapinfo:not all datapieces retrieved or sub-datapiece with no changes retrieved)
+        if (!this.transferMapInfo) { //check if data should not be transferred (mapinfo:not all datapieces retrieved or sub-datapiece with no changes retrieved)
             return null;
-        };
+        }
 
         const {createCanvas} = require('canvas');
         let finalCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
@@ -291,7 +290,6 @@ class EcovacsMapImageBase {
 }
 
 class EcovacsLiveMapImage extends EcovacsMapImageBase {
-
     constructor(mapID, mapType, mapPieceWidth, mapPieceHeight, mapCellWidth, mapCellHeight, mapPixel, mapDataPiecesCrc){
         super(mapID, mapType, mapPieceWidth * mapCellWidth, mapPieceHeight * mapCellHeight, mapPixel);
         this.mapPieceWidth = mapPieceWidth;
@@ -300,9 +298,11 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
         this.mapCellHeight = mapCellHeight;
         this.mapDataPiecesCrc = mapDataPiecesCrc;
     }
+
     updateMapDataPiecesCrc(mapDataPiecesCrc) {
         this.mapDataPiecesCrc = mapDataPiecesCrc; //is only transfered in onMajorMap, TODO: comparison for change has to be done before onMinorMap-Events
     }
+
     updateMapPiece(mapDataPieceIndex, mapDataPiece) {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
@@ -316,7 +316,6 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
 }
 
 class EcovacsMapImage extends EcovacsMapImageBase {
-
     constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount) {
         super(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel);
 
@@ -326,7 +325,6 @@ class EcovacsMapImage extends EcovacsMapImageBase {
         //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
         this.mapDataPieces = new Array(mapTotalCount).fill(false);
         //mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison
-        this.mapDataPiecesCrc;
         this.initCanvas();
     }
 
@@ -355,11 +353,10 @@ class EcovacsMapImage extends EcovacsMapImageBase {
                 }
             }
         }
-
         this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX, pieceStartY, pieceWidth, pieceHeight);
-
     }
 }
+
 class EcovacsMap {
     constructor(mapID, mapIndex, mapName, mapStatus, mapIsCurrentMap = 1, mapIsBuilt = 1) {
         this.mapID = mapID;
@@ -459,6 +456,7 @@ class EcovacsMapVirtualBoundaries {
             this.mapNoMopZones.push(mapVirtualBoundary);
         }
     }
+
     toJSON() {
         return {
             mapID: this.mapID,
@@ -473,6 +471,7 @@ class EcovacsMapVirtualBoundary {
         this.mapVirtualBoundaryID = mapVirtualBoundaryID;
         this.mapVirtualBoundaryType = mapVirtualBoundaryType;
     }
+
     toJSON() {
         return {
             mapVirtualBoundaryID: this.mapVirtualBoundaryID,
