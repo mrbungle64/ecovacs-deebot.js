@@ -470,6 +470,12 @@ class GetTrueDetect extends VacBotCommand_950type {
     }
 }
 
+class GetSchedules extends VacBotCommand_950type {
+    constructor() {
+        super('getSched');
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -499,6 +505,7 @@ module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
 module.exports.GetMaps = GetMaps;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
+module.exports.GetSchedules = GetSchedules;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;

@@ -91,6 +91,8 @@ class VacBot {
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
 
+        this.schedules = [];
+
         const LibraryForProtocol = this.getLibraryForProtocol();
         this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 

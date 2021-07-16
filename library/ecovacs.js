@@ -286,6 +286,12 @@ class Ecovacs extends EventEmitter {
                     this.emit('VoiceReportDisabled', this.bot.voiceReportDisabled);
                 }
                 break;
+            case 'Sched':
+                this.bot.handle_getSched(event);
+                if (this.bot.schedules) {
+                    this.emit('Schedules', this.bot.schedules);
+                }
+                break;
             default:
                 tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
                 break;

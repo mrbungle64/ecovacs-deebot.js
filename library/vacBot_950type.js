@@ -475,6 +475,43 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
     }
 
+    handle_getSched(event) {
+        tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
+        this.schedules = [];
+        const count = event.resultData.length;
+        for (let c = 0; c < count; c++) {
+            const resultData = event.resultData[c];
+            let cleanCtl = {'type': 'auto'};
+            if (resultData.content && resultData.content.jsonStr) {
+                const json = JSON.parse(resultData.content.jsonStr);
+                Object.assign(cleanCtl, {'type': json.type});
+                if (cleanCtl.type === 'spotArea') {
+                    Object.assign(cleanCtl, {'spotAreas': json.content});
+                }
+            }
+            const weekdays = resultData.repeat;
+            const weekdaysObj = {
+                'monday': Boolean(Number(weekdays.substr(1, 1))),
+                'tuesday': Boolean(Number(weekdays.substr(2, 1))),
+                'wednesday': Boolean(Number(weekdays.substr(3, 1))),
+                'thursday': Boolean(Number(weekdays.substr(4, 1))),
+                'friday': Boolean(Number(weekdays.substr(5, 1))),
+                'saturday': Boolean(Number(weekdays.substr(6, 1))),
+                'sunday': Boolean(Number(weekdays.substr(0, 1))),
+            }
+            const object = {
+                'id': resultData.sid,
+                'cleanCmd': cleanCtl,
+                'enabled': Boolean(Number(resultData.enable)),
+                'weekdays': weekdaysObj,
+                'hour': resultData.hour,
+                'minute': resultData.minute,
+                'mapID': resultData.mid
+            }
+            this.schedules.push(object);
+        }
+    }
+
     run(action) {
         tools.envLog("[VacBot] action: %s", action);
         switch (action.toLowerCase()) {
@@ -730,6 +767,10 @@ class VacBot_950type extends VacBot {
                 else if (arguments.length >= 2) {
                     this.sendCommand(new vacBotCommand.SetDoNotDisturb(arguments[1]));
                 }
+                break;
+            case "GetSched".toLowerCase():
+            case "GetSchedules".toLowerCase():
+                this.sendCommand(new vacBotCommand.GetSchedules());
                 break;
         }
     }

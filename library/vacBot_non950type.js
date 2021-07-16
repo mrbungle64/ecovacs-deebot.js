@@ -505,6 +505,55 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  handle_getSched(event) {
+    tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
+    this.schedules = [];
+    const count = event.children.length;
+    for (let c = 0; c < count; c++) {
+      const resultData = event.children[c];
+      if ((resultData.name === 's') || (resultData.event === 's')) {
+        let cleanCtl = {'type': 'auto'};
+        if (resultData.children && resultData.children[0].children) {
+          if (resultData.children[0].children && resultData.children[0].children[0].attrs) {
+            Object.assign(cleanCtl, {'type': resultData.children[0].children[0].attrs.type});
+            if (cleanCtl.type === 'SpotArea') {
+              Object.assign(cleanCtl, {'spotAreas': resultData.children[0].children[0].attrs.mid});
+            }
+          }
+        }
+        let hour;
+        let minute;
+        if (resultData.attrs.t) {
+          // Deebot Slim 2
+          hour = resultData.attrs.t.split(':')[0];
+          minute = resultData.attrs.t.split(':')[1];
+        } else {
+          hour = resultData.attrs.h;
+          minute = resultData.attrs.m;
+        }
+        const weekdays = resultData.attrs.r;
+        const weekdaysObj = {
+          'monday': Boolean(Number(weekdays.substr(1, 1))),
+          'tuesday': Boolean(Number(weekdays.substr(2, 1))),
+          'wednesday': Boolean(Number(weekdays.substr(3, 1))),
+          'thursday': Boolean(Number(weekdays.substr(4, 1))),
+          'friday': Boolean(Number(weekdays.substr(5, 1))),
+          'saturday': Boolean(Number(weekdays.substr(6, 1))),
+          'sunday': Boolean(Number(weekdays.substr(0, 1))),
+        }
+        const object = {
+          'id': resultData.attrs.n,
+          'cleanCtl': cleanCtl,
+          'enabled': Boolean(Number(resultData.attrs.o)),
+          'weekdays': weekdaysObj,
+          'hour': hour,
+          'minute': minute
+        }
+        this.schedules.push(object);
+      }
+    }
+  }
+
   run(action) {
     tools.envLog("[VacBot] action: %s", action);
     switch (action.toLowerCase()) {
@@ -708,6 +757,10 @@ class VacBot_non950type extends VacBot {
         if (arguments.length >= 4) {
           this.sendCommand(new vacBotCommand.RenameSpotArea(arguments[1],arguments[2],arguments[3]));
         }
+        break;
+      case "GetSched".toLowerCase():
+      case "GetSchedules".toLowerCase():
+        this.sendCommand(new vacBotCommand.GetSchedules());
         break;
     }
   }

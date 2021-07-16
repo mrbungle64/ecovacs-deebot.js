@@ -390,6 +390,12 @@ class RenameSpotArea extends VacBotCommand_non950type {
     }
 }
 
+class GetSchedules extends VacBotCommand_non950type {
+    constructor() {
+        super('GetSched');
+    }
+}
+
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.CustomArea = CustomArea;
@@ -411,6 +417,7 @@ module.exports.GetMapSet = GetMapSet;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetOnOff = GetOnOff;
 module.exports.GetPosition = GetPosition;
+module.exports.GetSchedules = GetSchedules;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetWaterBoxInfo = GetWaterBoxInfo;
 module.exports.GetWaterLevel = GetWaterLevel;

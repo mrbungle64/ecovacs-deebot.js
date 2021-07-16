@@ -396,6 +396,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'imageUrl': this.bot.cleanLog_lastImageUrl
                 });
                 break;
+            case 'sched':
+                this.bot.handle_getSched(event);
+                if (this.bot.schedules) {
+                    this.emit('Schedules', this.bot.schedules);
+                }
+                break;
             default:
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
                 break;

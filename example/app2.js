@@ -82,7 +82,7 @@ api.connect(account_id, password_hash).then(() => {
                     const mapID = maps['maps'][i]['mapID'];
                     vacbot.run('GetSpotAreas', mapID);
                     vacbot.run('GetVirtualBoundaries', mapID);
-                    
+
                     vacbot.run('GetMapImage', mapID,'outline');
                     vacbot.run('GetMapImage', mapID,'wifiHeatMap');
                 }
@@ -137,6 +137,9 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('CleanLog', (object) => {
                 console.log('[app2.js] CleanLog: ' + JSON.stringify(object));
             });
+            vacbot.on('Schedules', (object) => {
+                console.log('[app2.js] Schedules: ' + JSON.stringify(object));
+            });
         });
 
         vacbot.connect();
@@ -181,7 +184,7 @@ api.connect(account_id, password_hash).then(() => {
         //     if (vacbot.hasSpotAreas()) {
         //         //enable to also see deebotposition change more frequently in map image
         //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','outline');
-        //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','wifiHeatMap'); 
+        //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','wifiHeatMap');
         //     }
         // }, 5000);
 
