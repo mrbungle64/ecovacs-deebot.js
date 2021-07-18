@@ -478,8 +478,7 @@ class VacBot_950type extends VacBot {
     handle_getSched(event) {
         tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
         this.schedules = [];
-        const count = event.resultData.length;
-        for (let c = 0; c < count; c++) {
+        for (let c = 0; c < event.resultData.length; c++) {
             const resultData = event.resultData[c];
             let cleanCtl = {'type': 'auto'};
             if (resultData.content && resultData.content.jsonStr) {
@@ -491,16 +490,16 @@ class VacBot_950type extends VacBot {
             }
             const weekdays = resultData.repeat;
             const weekdaysObj = {
-                'monday': Boolean(Number(weekdays.substr(1, 1))),
-                'tuesday': Boolean(Number(weekdays.substr(2, 1))),
-                'wednesday': Boolean(Number(weekdays.substr(3, 1))),
-                'thursday': Boolean(Number(weekdays.substr(4, 1))),
-                'friday': Boolean(Number(weekdays.substr(5, 1))),
-                'saturday': Boolean(Number(weekdays.substr(6, 1))),
-                'sunday': Boolean(Number(weekdays.substr(0, 1))),
+                'Mon': Boolean(Number(weekdays.substr(1, 1))),
+                'Tue': Boolean(Number(weekdays.substr(2, 1))),
+                'Wed': Boolean(Number(weekdays.substr(3, 1))),
+                'Thu': Boolean(Number(weekdays.substr(4, 1))),
+                'Fri': Boolean(Number(weekdays.substr(5, 1))),
+                'Sat': Boolean(Number(weekdays.substr(6, 1))),
+                'Sun': Boolean(Number(weekdays.substr(0, 1))),
             }
             const object = {
-                'id': resultData.sid,
+                'sid': resultData.sid,
                 'cleanCmd': cleanCtl,
                 'enabled': Boolean(Number(resultData.enable)),
                 'weekdays': weekdaysObj,
