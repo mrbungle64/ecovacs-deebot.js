@@ -489,8 +489,7 @@ class VacBot_950type extends VacBot {
                     'type': json.type
                 });
                 if (cleanCtl.type === 'spotArea') {
-                    Object.assign(cleanCtl,
-                        {
+                    Object.assign(cleanCtl, {
                             'spotAreas': json.content
                         });
                 }
