@@ -511,39 +511,51 @@ class VacBot_non950type extends VacBot {
     for (let c = 0; c < event.children.length; c++) {
       const resultData = event.children[c];
       if ((resultData.name === 's') || (resultData.event === 's')) {
-        let cleanCtl = {'type': 'auto'};
-        if (resultData.children && resultData.children[0].children) {
-          if (resultData.children[0].children && resultData.children[0].children[0].attrs) {
-            Object.assign(cleanCtl, {'type': resultData.children[0].children[0].attrs.type});
+        let cleanCtl = {
+          'type': 'auto'
+        };
+        if (resultData.hasOwnProperty('children') && resultData.children[0].hasOwnProperty('children')) {
+          if (resultData.children[0].children[0].hasOwnProperty('attrs')) {
+            const attrs = resultData.children[0].children[0].attrs;
+            Object.assign(cleanCtl, {
+              'type': attrs.type
+            });
             if (cleanCtl.type === 'SpotArea') {
-              Object.assign(cleanCtl, {'spotAreas': resultData.children[0].children[0].attrs.mid});
+              Object.assign(cleanCtl, {
+                'spotAreas': attrs.mid
+              });
             }
           }
         }
+        const attrs = resultData.attrs;
         let hour;
         let minute;
-        if (resultData.attrs.t) {
+        if (attrs.hasOwnProperty('t')) {
           // Deebot Slim 2
-          hour = resultData.attrs.t.split(':')[0];
-          minute = resultData.attrs.t.split(':')[1];
+          hour = attrs.t.split(':')[0];
+          minute = attrs.t.split(':')[1];
         } else {
-          hour = resultData.attrs.h;
-          minute = resultData.attrs.m;
+          hour = attrs.h;
+          minute = attrs.m;
         }
-        const weekdays = resultData.attrs.r;
+        const weekdays = attrs.r.split('');
         const weekdaysObj = {
-          'Mon': Boolean(Number(weekdays.substr(1, 1))),
-          'Tue': Boolean(Number(weekdays.substr(2, 1))),
-          'Wed': Boolean(Number(weekdays.substr(3, 1))),
-          'Thu': Boolean(Number(weekdays.substr(4, 1))),
-          'Fri': Boolean(Number(weekdays.substr(5, 1))),
-          'Sat': Boolean(Number(weekdays.substr(6, 1))),
-          'Sun': Boolean(Number(weekdays.substr(0, 1))),
+          'Mon': Boolean(Number(weekdays[1])),
+          'Tue': Boolean(Number(weekdays[2])),
+          'Wed': Boolean(Number(weekdays[3])),
+          'Thu': Boolean(Number(weekdays[4])),
+          'Fri': Boolean(Number(weekdays[5])),
+          'Sat': Boolean(Number(weekdays[6])),
+          'Sun': Boolean(Number(weekdays[0])),
+        }
+        let enabled = false;
+        if (attrs.hasOwnProperty('o')) {
+          enabled = Boolean(Number(attrs.o))
         }
         const object = {
-          'sid': resultData.attrs.n,
+          'sid': attrs.n,
           'cleanCtl': cleanCtl,
-          'enabled': Boolean(Number(resultData.attrs.o)),
+          'enabled': enabled,
           'weekdays': weekdaysObj,
           'hour': hour,
           'minute': minute

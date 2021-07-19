@@ -480,23 +480,30 @@ class VacBot_950type extends VacBot {
         this.schedules = [];
         for (let c = 0; c < event.resultData.length; c++) {
             const resultData = event.resultData[c];
-            let cleanCtl = {'type': 'auto'};
-            if (resultData.content && resultData.content.jsonStr) {
+            let cleanCtl = {
+                'type': 'auto'
+            };
+            if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
                 const json = JSON.parse(resultData.content.jsonStr);
-                Object.assign(cleanCtl, {'type': json.type});
+                Object.assign(cleanCtl, {
+                    'type': json.type
+                });
                 if (cleanCtl.type === 'spotArea') {
-                    Object.assign(cleanCtl, {'spotAreas': json.content});
+                    Object.assign(cleanCtl,
+                        {
+                            'spotAreas': json.content
+                        });
                 }
             }
-            const weekdays = resultData.repeat;
+            const weekdays = resultData.repeat.split('');
             const weekdaysObj = {
-                'Mon': Boolean(Number(weekdays.substr(1, 1))),
-                'Tue': Boolean(Number(weekdays.substr(2, 1))),
-                'Wed': Boolean(Number(weekdays.substr(3, 1))),
-                'Thu': Boolean(Number(weekdays.substr(4, 1))),
-                'Fri': Boolean(Number(weekdays.substr(5, 1))),
-                'Sat': Boolean(Number(weekdays.substr(6, 1))),
-                'Sun': Boolean(Number(weekdays.substr(0, 1))),
+                'Mon': Boolean(Number(weekdays[1])),
+                'Tue': Boolean(Number(weekdays[2])),
+                'Wed': Boolean(Number(weekdays[3])),
+                'Thu': Boolean(Number(weekdays[4])),
+                'Fri': Boolean(Number(weekdays[5])),
+                'Sat': Boolean(Number(weekdays[6])),
+                'Sun': Boolean(Number(weekdays[0])),
             }
             const object = {
                 'sid': resultData.sid,
