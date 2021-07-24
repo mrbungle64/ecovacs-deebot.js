@@ -145,6 +145,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     handleCommand(command, event) {
+        this.emit('messageReceived', new Date());
         tools.envLog("[EcovacsMQTT_JSON] handleCommand() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
         let commandPrefix = '';

@@ -95,6 +95,7 @@ class Ecovacs extends EventEmitter {
     }
 
     handleCommand(command, event) {
+        this.emit('messageReceived', new Date());
         switch (tools.getEventNameForCommandString(command)) {
             case 'CleanSt':
                 this.bot.handle_stats(event);
