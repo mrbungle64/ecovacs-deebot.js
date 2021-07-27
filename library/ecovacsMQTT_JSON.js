@@ -174,19 +174,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (command.endsWith("_V2") || command.endsWith("_v2")) {
             command = command.slice(0, -3);
         }
-        if (event.hasOwnProperty('resultCode')) {
-            const resultCode = event['resultCode'];
-            if (resultCode != 0) {
-                this.bot.handle_error(event);
-                this.emit("Error", command + ': ' + resultCode);
-                this.emit('ErrorCode', 'resultCode');
-                this.emit('LastError', {
-                    'error': this.bot.errorDescription,
-                    'code': this.bot.errorCode
-                });
-                return;
-            }
-        }
         switch (command) {
             case "stats":
                 this.bot.handle_stats(event);

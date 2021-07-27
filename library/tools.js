@@ -26,6 +26,10 @@ function getReqID() {
     return reqIdString.toString();
 }
 
+function is710series(deviceClass) {
+    return deviceClass === 'uv242z';
+}
+
 function isN79series(deviceClass) {
     switch (deviceClass) {
         case '126': // N79
@@ -170,5 +174,6 @@ module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getTimeString = getTimeString;
 module.exports.is950type = is950type;
 module.exports.isN79series = isN79series;
+module.exports.is710series = is710series;
 module.exports.getReqID = getReqID;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
