@@ -263,21 +263,19 @@ class VacBot_non950type extends VacBot {
       const rowPiece = event.attrs.r;
       const pixelWidth = event.attrs.p;
       const crc = event.attrs.m;
-      //const totalWidth = columnGrid * columnPiece;
-      //const totalHeight = rowGrid * rowPiece;
       this.mapPiecePacketsCrcArray = crc.split(',');
       if (typeof this.mapImages[mapID] === 'undefined') {
         this.mapImages[mapID] = [];
       }
       if (typeof this.mapImages[mapID][type] === 'undefined') {
-        this.mapImages[mapID][type] = new map.EcovacsLiveMapImage(mapID, mapType, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
+        this.mapImages[mapID][type] = new map.EcovacsLiveMapImage(mapID, type, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
       }
       this.mapPiecePacketCurrentNumber = null;
       this.mapPiecePacketsSent = [];
       for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {
         if(this.mapPiecePacketsCrcArray[c] != 1295764014) { //skip empty pieces
           this.run('PullMP', c);
-        }        
+        }
       }
     }
   }
@@ -292,16 +290,12 @@ class VacBot_non950type extends VacBot {
         if (event.attrs.pid) {
           pid = event.attrs.pid;
         }
-        //const crc = this.mapPiecePacketsCrcArray[pid];
-        //const mapTotalWidth = this.mapImages[mapID][type].mapTotalWidth;
-        //const mapTotalHeight = this.mapImages[mapID][type].mapTotalHeight;
-        //const startX = (pid % 8) * mapTotalWidth;
-        //const startY = Math.floor(pid / 8) * mapTotalHeight;
         const pieceValue = event.attrs.p;
         this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
         if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
           let mapImage = this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
           tools.envLog('[Ecovacs] MapPiecePacket2: %s', JSON.stringify(mapImage));
+          return mapImage;
         }
       }
     }
