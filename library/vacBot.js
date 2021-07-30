@@ -406,13 +406,8 @@ class VacBot {
     sendCommand(action) {
         if (!this.is950type()) {
             this.commandsSent[action.getId()] = action;
-            if (action.name === 'PullMP') {
-                if (this.mapPiecePacketCurrentNumber === null) {
-                    this.mapPiecePacketCurrentNumber = 0;
-                } else {
-                    this.mapPiecePacketCurrentNumber++;
-                }
-                this.mapPiecePacketsSent[action.getId()] = this.mapPiecePacketCurrentNumber;
+            if ((action.name === 'PullMP') && (action.args)) {
+                this.mapPiecePacketsSent[action.getId()] = action.args.pid;
             }
         }
         if (!this.useMqtt) {
