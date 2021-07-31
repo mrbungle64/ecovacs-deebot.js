@@ -227,6 +227,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 } else if (tools.isCanvasModuleAvailable()) {
                     let mapImage = this.bot.handle_mapInfo(event);
                     if(mapImage !== null) {
+                        this.emit("MapImageData", mapImage);
                         this.emit("MapImage", mapImage);
                     }
                 }

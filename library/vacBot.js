@@ -108,7 +108,7 @@ class VacBot {
                     // non 950 type models
                     this.createMapDataObject = false;
                     if (this.mapDataObject[0] && this.mapDataObject[0].mapImage) {
-                        this.ecovacs.emit('MapImage', this.mapDataObject[0].mapImage.mapBase64PNG);
+                        this.ecovacs.emit('MapImage', this.mapDataObject[0].mapImage);
                     }
                     this.createMapImageOnly = false;
                 } else {
@@ -144,7 +144,7 @@ class VacBot {
                 this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
             }
         });
-        this.on('MapImage', (mapImageInfo) => {
+        this.on('MapImageData', (mapImageInfo) => {
             if (this.createMapDataObject) {
                 this.handleMapImageInfo(mapImageInfo);
             }

@@ -271,7 +271,7 @@ class Ecovacs extends EventEmitter {
             case 'MapPiecePacket':
                 const mapImage = this.bot.handle_mapPiecePacket(event);
                 if (mapImage) {
-                    this.emit("MapImage", mapImage);
+                    this.emit("MapImageData", mapImage);
                 }
                 break;
             case 'DustCaseST':
