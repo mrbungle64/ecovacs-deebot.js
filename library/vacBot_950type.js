@@ -605,12 +605,16 @@ class VacBot_950type extends VacBot {
             case "GetMapImage".toLowerCase():
                 if (arguments.length === 2) {
                     this.sendCommand(new vacBotCommand.GetMapImage(arguments[1]));
-                }else if (arguments.length === 3) {
-                    this.sendCommand(new vacBotCommand.GetMapImage(arguments[1],arguments[2]));
+                } else if (arguments.length >= 3) {
+                    this.sendCommand(new vacBotCommand.GetMapImage(arguments[1], arguments[2]));
                 }
                 break;
             case "GetMaps".toLowerCase():
                 this.createMapDataObject = !!arguments[1] || false;
+                this.createMapImage = this.createMapDataObject && this.isMapImageSupported();
+                if (arguments.length >= 3) {
+                    this.createMapImage = !!arguments[2];
+                }
                 this.sendCommand(new vacBotCommand.GetMaps());
                 break;
             case "GetSpotAreas".toLowerCase():

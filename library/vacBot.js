@@ -85,9 +85,9 @@ class VacBot {
 
         this.commandsSent = [];
         this.mapPiecePacketsSent = [];
-        this.mapPiecePacketCurrentNumber = null;
 
         this.createMapDataObject = false;
+        this.createMapImage = false;
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
 
@@ -159,8 +159,8 @@ class VacBot {
                         'type': 'GetVirtualBoundaries',
                         'mapID': mapID
                     });
-                    // This currently only works for non 950 type models
-                    if (tools.isCanvasModuleAvailable() && this.is950type()) {
+                    // This currently only works for 950 type models
+                    if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
                         this.run('GetMapImage', mapID);
                         this.mapDataObjectQueue.push({
                             'type': 'GetMapImage',

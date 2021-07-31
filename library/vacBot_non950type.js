@@ -151,7 +151,7 @@ class VacBot_non950type extends VacBot {
       this.mapSpotAreaInfos[this.currentMapMID] = [];
       this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
       this.handleMapExecuted = true;
-      if (this.isMapImageSupported() && tools.isCanvasModuleAvailable()) {
+      if (this.createMapImage && tools.isCanvasModuleAvailable()) {
         this.handle_mapInfo(event);
       }
       return this.maps;
@@ -270,7 +270,6 @@ class VacBot_non950type extends VacBot {
       if (typeof this.mapImages[mapID][type] === 'undefined') {
         this.mapImages[mapID][type] = new map.EcovacsLiveMapImage(mapID, type, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
       }
-      this.mapPiecePacketCurrentNumber = null;
       this.mapPiecePacketsSent = [];
       for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {
         if(this.mapPiecePacketsCrcArray[c] != 1295764014) { //skip empty pieces
@@ -697,6 +696,10 @@ class VacBot_non950type extends VacBot {
         break;
       case "GetMaps".toLowerCase():
         this.createMapDataObject = !!arguments[1] || false;
+        this.createMapImage = this.createMapDataObject && this.isMapImageSupported();
+        if (arguments.length >= 3) {
+          this.createMapImage = !!arguments[2];
+        }
         this.handleMapExecuted = false;
         this.sendCommand(new vacBotCommand.GetMapM());
         break;
