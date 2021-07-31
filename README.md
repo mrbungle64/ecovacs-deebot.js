@@ -67,6 +67,7 @@ There is of course no claim to full functionality.
 ### 0.6.1 (beta)
 * Added full map data (maps, spot areas, virtual boundaries) as one structured event
 * (boriswerner) Implementation of a static map image (incl. bot and charging position)
+* Initial map image support for non 950 type models
 * Handle compressed spot area boundary data (e.g. T9 series)
 * Handle custom names for spot areas (e.g. T9 series)
 * Implemented DoNotDisturb and AdvanceMode commands (950 type models)
