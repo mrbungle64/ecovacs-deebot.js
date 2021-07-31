@@ -694,6 +694,13 @@ class VacBot_non950type extends VacBot {
         this.sendCommand(new vacBotCommand.GetMapSet('sa'));
         this.sendCommand(new vacBotCommand.GetMapSet('vw'));
         break;
+      case "GetMapImage".toLowerCase():
+        this.createMapDataObject = true;
+        this.createMapImage = true;
+        this.createMapImageOnly = true;
+        this.handleMapExecuted = false;
+        this.sendCommand(new vacBotCommand.GetMapM());
+        break;
       case "GetMaps".toLowerCase():
         this.createMapDataObject = !!arguments[1] || false;
         this.createMapImage = this.createMapDataObject && this.isMapImageSupported();

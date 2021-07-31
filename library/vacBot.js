@@ -88,6 +88,7 @@ class VacBot {
 
         this.createMapDataObject = false;
         this.createMapImage = false;
+        this.createMapImageOnly = false;
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
 
@@ -103,7 +104,16 @@ class VacBot {
 
         this.on('MapDataReady', () => {
             if (this.mapDataObject) {
-                this.ecovacs.emit('MapDataObject', this.mapDataObject);
+                if (this.createMapImageOnly) {
+                    // non 950 type models
+                    this.createMapDataObject = false;
+                    if (this.mapDataObject[0] && this.mapDataObject[0].mapImage) {
+                        this.ecovacs.emit('MapImage', this.mapDataObject[0].mapImage.mapBase64PNG);
+                    }
+                    this.createMapImageOnly = false;
+                } else {
+                    this.ecovacs.emit('MapDataObject', this.mapDataObject);
+                }
                 map.mapDataObject = JSON.parse(JSON.stringify(this.mapDataObject)); //clone to mapTemplate
                 this.mapDataObject = null;
             }
@@ -139,7 +149,6 @@ class VacBot {
                 this.handleMapImageInfo(mapImageInfo);
             }
         });
-
     }
 
     handleMapsEvent(mapData) {
@@ -159,7 +168,7 @@ class VacBot {
                         'type': 'GetVirtualBoundaries',
                         'mapID': mapID
                     });
-                    // This currently only works for 950 type models
+                    // 950 type models
                     if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
                         this.run('GetMapImage', mapID);
                         this.mapDataObjectQueue.push({
