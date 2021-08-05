@@ -74,8 +74,8 @@ class Spot extends Clean {
 }
 
 class Pause extends Clean {
-    constructor() {
-        super('pause', 'pause');
+    constructor(mode = 'auto') {
+        super(mode, 'pause');
     }
 }
 

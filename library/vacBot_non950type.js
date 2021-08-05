@@ -592,7 +592,11 @@ class VacBot_non950type extends VacBot {
         this.sendCommand(new vacBotCommand.Stop());
         break;
       case "Pause".toLowerCase():
-        this.sendCommand(new vacBotCommand.Pause());
+        if (arguments.length === 1) {
+          this.sendCommand(new vacBotCommand.Pause());
+        } else {
+          this.sendCommand(new vacBotCommand.Pause(arguments[1]));
+        }
         break;
       case "Resume".toLowerCase():
         this.sendCommand(new vacBotCommand.Resume());
