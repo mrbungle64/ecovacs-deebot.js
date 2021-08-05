@@ -509,8 +509,8 @@ class VacBot_non950type extends VacBot {
         let cleanCtl = {
           'type': 'auto'
         };
-        if (resultData.hasOwnProperty('children') && resultData.children[0].hasOwnProperty('children')) {
-          if (resultData.children[0].children[0].hasOwnProperty('attrs')) {
+        if (resultData.hasOwnProperty('children') && resultData.children[0] && resultData.children[0].hasOwnProperty('children')) {
+          if (resultData.children[0].children[0] && resultData.children[0].children[0].hasOwnProperty('attrs')) {
             const attrs = resultData.children[0].children[0].attrs;
             Object.assign(cleanCtl, {
               'type': attrs.type
