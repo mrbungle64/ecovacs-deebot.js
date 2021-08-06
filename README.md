@@ -13,7 +13,7 @@ Library for running Ecovacs Deebot vacuum cleaner robots
 
 Information on how to install this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Installation).
 
-It is recommended to use version 10.x, 12.x or 14.x of Node.js. The minimum required version is 10.x
+It is recommended to use version 12.x or 14.x of Node.js. The minimum required version is still 10.x, but that may change soon.
 
 ## Usage
 
@@ -64,7 +64,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.6.1 (beta)
+### 0.6.1
 * Added full map data (maps, spot areas, virtual boundaries) as one structured event
 * (boriswerner) Implementation of a static map image (incl. bot and charging position)
 * Initial map image support for non 950 type models
