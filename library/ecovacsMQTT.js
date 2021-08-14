@@ -77,7 +77,7 @@ class EcovacsMQTT extends Ecovacs {
                 'Content-Length': Buffer.byteLength(JSON.stringify(params))
             };
             if (this.bot.is950type()) {
-                headers = Object.assign(headers, {'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'});
+                Object.assign(headers, {'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'});
             }
 
             url = new URL(url);

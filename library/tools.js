@@ -43,8 +43,8 @@ function isN79series(deviceClass) {
 
 function getAllKnownDevices() {
     let devices = {};
-    devices = Object.assign(devices, getSupportedDevices());
-    devices = Object.assign(devices, getKnownDevices());
+    Object.assign(devices, getSupportedDevices());
+    Object.assign(devices, getKnownDevices());
     return devices;
 }
 

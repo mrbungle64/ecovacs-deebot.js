@@ -6,7 +6,7 @@ class VacBotCommand_non950type {
     constructor(name, args = {}) {
         this.name = name;
         if (!args.hasOwnProperty('id')) {
-            args = Object.assign(args, {
+            Object.assign(args, {
                 'id': tools.getReqID()
             })
         }
