@@ -36,7 +36,7 @@ class VacBot_950type extends VacBot {
         // as deebotPos and chargePos can also appear in other messages (CleanReport)
         // the handling should be extracted to a separate function
         const deebotPos = event['resultData']['deebotPos'];
-        if (deebotPos) {
+        if (typeof deebotPos === 'object') {
             // check if position changed or currentSpotAreaID unknown
             let changed = (deebotPos['x'] !== this.deebotPosition.x
                 || deebotPos['y'] !== this.deebotPosition.y
@@ -81,7 +81,8 @@ class VacBot_950type extends VacBot {
     }
 
     handle_cleanSpeed(event) {
-        this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[event['resultData']['speed']];
+        const speed = event['resultData']['speed'];
+        this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         tools.envLog("[VacBot] *** cleanSpeed = %s", this.cleanSpeed);
     }
 
@@ -98,10 +99,9 @@ class VacBot_950type extends VacBot {
     }
 
     handle_cleanReport(event) {
-        tools.envLog("[VacBot] handle_cleanReport");
         if (event['resultData']['state'] === 'clean') {
             let type = event['resultData']['cleanState']['type'];
-            if (typeof event['resultData']['cleanState']['content'] === "object") {
+            if (typeof event['resultData']['cleanState']['content'] === 'object') {
                 type = event['resultData']['cleanState']['content']['type'];
             }
             if (event['resultData']['cleanState']['motionState'] === 'working') {
@@ -141,7 +141,6 @@ class VacBot_950type extends VacBot {
     }
 
     handle_cleanLogs(event) {
-        tools.envLog("[VacBot] handle_cleanLogs");
         // Unlike the others, resultCode seems to be a string
         const resultCode = parseInt(event['resultCode']);
         if (resultCode === 0) {
@@ -156,13 +155,10 @@ class VacBot_950type extends VacBot {
                 if (logs.hasOwnProperty(logIndex)) {
                     if (!this.cleanLog[logs[logIndex]['id']]) { //log not yet existing
                         let squareMeters = parseInt(logs[logIndex]['area']);
-                        tools.envLog("[VacBot] cleanLogs %s: %s m2", logIndex, squareMeters);
                         let timestamp = parseInt(logs[logIndex]['ts']);
                         let date = new Date(timestamp * 1000);
-                        tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, date.toString());
                         let len = parseInt(logs[logIndex]['last']);
                         let totalTimeString = tools.getTimeString(len);
-                        tools.envLog("[VacBot] cleanLogs %s: %s", logIndex, totalTimeString);
                         let imageUrl = logs[logIndex]['imageUrl'];
                         if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
                             this.cleanLog_lastImageUrl = imageUrl;

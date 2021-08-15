@@ -31,7 +31,7 @@ class VacBotCommand_non950type {
     }
 
     getId() {
-        return this.args['id'];
+        return this.args.id;
     }
 
     toString() {

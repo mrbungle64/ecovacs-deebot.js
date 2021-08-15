@@ -1,6 +1,6 @@
-const tools = require('./tools.js'),
-    constants_type = require('./ecovacsConstants_950type.js'),
-    constants = require('./ecovacsConstants.js');
+const tools = require('./tools');
+const constants_type = require('./ecovacsConstants_950type');
+const constants = require('./ecovacsConstants');
 
 class VacBotCommand_950type {
     constructor(name, args = {}, api = constants.IOTDEVMANAGERAPI) {
@@ -15,7 +15,7 @@ class VacBotCommand_950type {
     }
 
     getId() {
-        return this.args['id'];
+        return this.args.id;
     }
 
     toString() {
