@@ -18,28 +18,23 @@ class VacBot_950type extends VacBot {
     }
 
     handle_lifespan(event) {
-        for (let component in event['resultData']) {
-            if (event['resultData'].hasOwnProperty(component)) {
-                let type = event['resultData'][component]["type"];
-                let left = event['resultData'][component]["left"];
-                let total = event['resultData'][component]["total"];
-                let lifespan = parseInt(left) / parseInt(total) * 100;
-                try {
-                    type = dictionary.COMPONENT_FROM_ECOVACS[type];
-                } catch (e) {
-                    tools.envLog("[VacBot] Unknown component type: ", event);
-                }
-                tools.envLog("[VacBot] lifespan %s: %s", type, lifespan);
-
-                this.components[type] = Number(lifespan.toFixed(2));
-                tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
+        for (let index in event['resultData']) {
+            if (event['resultData'][index]) {
+                const type = event['resultData'][index]["type"];
+                const component = dictionary.COMPONENT_FROM_ECOVACS[type];
+                const left = event['resultData'][index]["left"];
+                const total = event['resultData'][index]["total"];
+                const lifespan = parseInt(left) / parseInt(total) * 100;
+                this.components[component] = Number(lifespan.toFixed(2));
+                tools.envLog("[VacBot] lifespan %s: %s", component, this.components[component]);
             }
         }
+        tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
     }
 
     handle_deebotPosition(event) {
         // as deebotPos and chargePos can also appear in other messages (CleanReport)
-        // the handling should be extracted to a seperate function
+        // the handling should be extracted to a separate function
         const deebotPos = event['resultData']['deebotPos'];
         if (deebotPos) {
             // check if position changed or currentSpotAreaID unknown
@@ -502,7 +497,7 @@ class VacBot_950type extends VacBot {
                 'Thu': Boolean(Number(weekdays[4])),
                 'Fri': Boolean(Number(weekdays[5])),
                 'Sat': Boolean(Number(weekdays[6])),
-                'Sun': Boolean(Number(weekdays[0])),
+                'Sun': Boolean(Number(weekdays[0]))
             }
             const object = {
                 'sid': resultData.sid,
