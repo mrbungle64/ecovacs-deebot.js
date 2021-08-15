@@ -192,6 +192,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "batteryinfo":
                 this.bot.handle_batteryInfo(event);
                 this.emit("BatteryInfo", this.bot.batteryInfo);
+                this.emit("BatteryIsLow", this.bot.batteryIsLow);
                 break;
             case "cleaninfo":
                 this.bot.handle_cleanReport(event);

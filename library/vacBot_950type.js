@@ -199,7 +199,7 @@ class VacBot_950type extends VacBot {
     handle_batteryInfo(event) {
         this.batteryInfo = event['resultData']['value'];
         if (event['resultData'].hasOwnProperty('isLow')) {
-            this.batteryIsLow = (Number(event['resultData']['isLow']) === 1) ? true : false;
+            this.batteryIsLow = !!Number(event['resultData']['isLow']);
             tools.envLog("[VacBot] *** batteryIsLow = %s", this.batteryIsLow);
         }
         tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
