@@ -9,10 +9,6 @@ function isCanvasModuleAvailable() {
     }
 }
 
-function is950type(deviceClass) {
-    return getDeviceProperty(deviceClass, '950type');
-}
-
 // Generate a somewhat random string for request id with 8 chars.
 // Works similar to ecovacs app
 // This is required for e.g. the Ozmo 930
@@ -70,7 +66,7 @@ function isKnownDevice(deviceClass) {
     return devices.hasOwnProperty(deviceClass) || isSupportedDevice(deviceClass);
 }
 
-function getDeviceProperty(deviceClass, property) {
+function getDeviceProperty(deviceClass, property, defaultValue = false) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
         let device = devices[deviceClass];
@@ -81,7 +77,7 @@ function getDeviceProperty(deviceClass, property) {
             return device[property];
         }
     }
-    return false;
+    return defaultValue;
 }
 
 function getTimeString(time) {
@@ -172,7 +168,6 @@ module.exports.isSupportedDevice = isSupportedDevice;
 module.exports.isKnownDevice = isKnownDevice;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getTimeString = getTimeString;
-module.exports.is950type = is950type;
 module.exports.isN79series = isN79series;
 module.exports.is710series = is710series;
 module.exports.getReqID = getReqID;

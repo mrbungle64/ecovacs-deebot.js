@@ -331,7 +331,8 @@ class VacBot {
     }
 
     is950type() {
-        return this.getDeviceProperty('950type');
+        const defaultValue = this.useMqttProtocol();
+        return this.getDeviceProperty('950type', defaultValue);
     }
 
     isNot950type() {
@@ -350,8 +351,8 @@ class VacBot {
         return tools.isKnownDevice(this.deviceClass);
     }
 
-    getDeviceProperty(property) {
-        return tools.getDeviceProperty(this.deviceClass, property);
+    getDeviceProperty(property, defaultValue = false) {
+        return tools.getDeviceProperty(this.deviceClass, property, defaultValue);
     }
 
     hasMainBrush() {

@@ -359,7 +359,9 @@ class EcovacsAPI {
 
   getVacBot(user, hostname, resource, secret, vacuum, continent, server_address = null) {
     let vacbot;
-    if (tools.is950type(vacuum['class'])) {
+    const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
+    const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
+    if (is950Type) {
       tools.envLog('vacBot_950type identified');
       const VacBot_950type = require('./library/vacBot_950type');
       vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent, this.country);
@@ -383,12 +385,16 @@ class EcovacsAPI {
     return tools.isCanvasModuleAvailable();
   }
 
-  static isDeviceClass950type(deviceClass) {
-    return tools.is950type(deviceClass);
+  static isMQTTProtocolUsed(company) {
+    return (company === 'eco-ng') ? true : false;
+  }
+
+  static isDeviceClass950type(deviceClass, isMQTTProtocolUsed = true) {
+    return tools.getDeviceProperty(deviceClass, '950type', isMQTTProtocolUsed);
   }
 
   static isDeviceClassNot950type(deviceClass) {
-    return (!tools.is950type(deviceClass));
+    return (!EcovacsAPI.isDeviceClass950type(deviceClass));
   }
 
   static getDeviceId(machineId, deviceNumber = 0) {
