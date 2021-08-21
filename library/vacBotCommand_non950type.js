@@ -228,11 +228,11 @@ class PullMP extends VacBotCommand_non950type {
 }
 
 class PullM extends VacBotCommand_non950type {
-    constructor(pid, tp, msid, mid) {
+    constructor(mapSetType, mapSetId, mapDetailId) {
         super('PullM', {
-            'tp': tp,
-            'msid': msid,
-            'mid': mid
+            'tp': mapSetType,
+            'msid': mapSetId,
+            'mid': mapDetailId
         });
     }
 }
