@@ -64,6 +64,10 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.6.2 (alpha)
+* Some refactoring and code improvements
+* Switch to @xmldom/xmldom (bump xmldom from 0.6.0 to 0.7.2)
+
 ### 0.6.1
 * Added full map data (maps, spot areas, virtual boundaries) as one structured event
 * (boriswerner) Implementation of a static map image (incl. bot and charging position)
