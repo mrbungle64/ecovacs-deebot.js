@@ -234,9 +234,6 @@ class VacBot {
             case "Charge".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.Charge());
                 break;
-            case "Relocate".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.Relocate());
-                break;
             case "GetChargeState".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetChargeState());
                 break;

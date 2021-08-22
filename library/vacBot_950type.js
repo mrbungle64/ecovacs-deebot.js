@@ -560,7 +560,7 @@ class VacBot_950type extends VacBot {
             case "GetVirtualBoundaryInfo".toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
-                const type = args[2] || 'vw';
+                const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
                 if ((Number(mapID) > 0) && (Number(spotAreaID) > 0)) {
                     this.sendCommand(new vacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type));
                 }
@@ -569,7 +569,7 @@ class VacBot_950type extends VacBot {
             case "AddVirtualBoundary".toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const coordinates = args[1];
-                const type = args[2] || 'vw';
+                const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
                 if ((Number(mapID) > 0) && (coordinates !== '')) {
                     this.sendCommand(new vacBotCommand.AddMapVirtualBoundary(mapID, coordinates, type));
                 }
@@ -579,7 +579,7 @@ class VacBot_950type extends VacBot {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = args[2];
-                if ((Number(mapID) > 0) && (Number(spotAreaID) > 0) && (type !== '')) {
+                if ((Number(mapID) > 0) && (Number(spotAreaID) > 0) && (tools.isValidVirtualWallType(type))) {
                     this.sendCommand(new vacBotCommand.DeleteMapVirtualBoundary(mapID, spotAreaID, type));
                 }
                 break;
@@ -640,6 +640,9 @@ class VacBot_950type extends VacBot {
                 break;
             case "GetError".toLowerCase():
                 this.sendCommand(new vacBotCommand.GetError());
+                break;
+            case "Relocate".toLowerCase():
+                this.sendCommand(new vacBotCommand.Relocate());
                 break;
             case "GetVolume".toLowerCase():
                 this.sendCommand(new vacBotCommand.GetVolume());

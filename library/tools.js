@@ -107,6 +107,13 @@ function isValidJsonString(str) {
     return true;
 }
 
+function isValidVirtualWallType(type) {
+    if ((type === 'vw') || (type === 'mw')) {
+        return true;
+    }
+    return false;
+}
+
 function getEventNameForCommandString(str) {
     let command = str.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
     if (command.startsWith('On') && (command !== 'OnOff')) { //950 series incoming events
@@ -158,6 +165,7 @@ envLog = function () {
 
 module.exports.isObject = isObject;
 module.exports.isValidJsonString = isValidJsonString;
+module.exports.isValidVirtualWallType = isValidVirtualWallType;
 module.exports.getEventNameForCommandString = getEventNameForCommandString;
 module.exports.envLog = envLog;
 module.exports.getAllKnownDevices = getAllKnownDevices;
