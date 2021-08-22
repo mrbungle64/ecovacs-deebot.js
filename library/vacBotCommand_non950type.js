@@ -175,7 +175,7 @@ class GetWaterBoxInfo extends VacBotCommand_non950type {
 }
 
 class PlaySound extends VacBotCommand_non950type {
-    constructor(sid = '0') {
+    constructor(sid) {
         super('PlaySound', {
             'count': 1,
             'sid': sid

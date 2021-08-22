@@ -266,8 +266,8 @@ class VacBot {
                 this.sendCommand(new this.vacBotCommand.GetSchedules());
                 break;
             case "PlaySound".toLowerCase(): {
-                const sid = args[0] || 0;
-                this.sendCommand(new this.vacBotCommand.PlaySound(sid));
+                let sid = args[0] || 0;
+                this.sendCommand(new this.vacBotCommand.PlaySound(Number(sid)));
                 break;
             }
             case "GetCleanSum".toLowerCase(): {
