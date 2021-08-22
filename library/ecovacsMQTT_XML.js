@@ -1,7 +1,7 @@
 const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
-const DOMParser = require('xmldom').DOMParser;
+const { DOMParser } = require('@xmldom/xmldom');
 
 class EcovacsMQTT_XML extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
