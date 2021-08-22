@@ -199,20 +199,18 @@ class VacBot {
                 break;
             }
             case "SpotArea".toLowerCase(): {
-                const action = args[0];
                 const area = args[1];
                 const cleanings = args[2] || 1;
                 if (area !== '') {
-                    this.sendCommand(new this.vacBotCommand.SpotArea(action, area, cleanings));
+                    this.sendCommand(new this.vacBotCommand.SpotArea('start', area, cleanings));
                 }
                 break;
             }
             case "CustomArea".toLowerCase(): {
-                const action = args[0];
                 const area = args[1];
                 const cleanings = args[2] || 1;
                 if (area !== '') {
-                    this.sendCommand(new this.vacBotCommand.CustomArea(action, area, cleanings));
+                    this.sendCommand(new this.vacBotCommand.CustomArea('start', area, cleanings));
                 }
                 break;
             }
