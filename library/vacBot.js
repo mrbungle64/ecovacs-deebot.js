@@ -195,9 +195,7 @@ class VacBot {
     run(action, ...args) {
         switch (action.toLowerCase()) {
             case "Clean".toLowerCase(): {
-                const mode = args[0] || 'auto';
-                const action = args[1] || 'start';
-                this.sendCommand(new this.vacBotCommand.Clean(mode, action));
+                this.sendCommand(new this.vacBotCommand.Clean());
                 break;
             }
             case "SpotArea".toLowerCase(): {
