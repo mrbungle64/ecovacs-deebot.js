@@ -4,7 +4,6 @@ exports.AUTH_CLIENT_KEY = '1520391491841';
 exports.AUTH_CLIENT_SECRET = '77ef58ce3afbe337da74aa8c5ab963a9';
 
 exports.MAIN_URL_FORMAT = 'https://gl-{country}-api.ecovacs.com/v1/private/{country}/{lang}/{deviceId}/{appCode}/{appVersion}/{channel}/{deviceType}';
-exports.USER_URL_FORMAT = 'https://users-{continent}.ecouser.net:8000/user.do';
 exports.PORTAL_URL_FORMAT = 'https://portal-{continent}.ecouser.net/api';
 exports.PORTAL_URL_FORMAT_CN = 'https://portal.ecouser.net/api/';
 exports.PORTAL_GLOBAL_AUTHCODE = 'https://gl-{country}-openapi.ecovacs.com/v1/global/auth/getAuthCode';

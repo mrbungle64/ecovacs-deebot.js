@@ -98,16 +98,16 @@ class EcovacsAPI {
       }
     }
 
-    let sign_on_text = EcovacsAPI.CLIENT_KEY;
+    let sign_on_text = constants.CLIENT_KEY;
     let keys = Object.keys(sign_on);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
       sign_on_text += k + "=" + sign_on[k];
     }
-    sign_on_text += EcovacsAPI.SECRET;
+    sign_on_text += constants.SECRET;
 
-    result['authAppkey'] = EcovacsAPI.CLIENT_KEY;
+    result['authAppkey'] = constants.CLIENT_KEY;
     result['authSign'] = EcovacsAPI.md5(sign_on_text);
 
     return EcovacsAPI.paramsToQueryList(result);
@@ -120,16 +120,16 @@ class EcovacsAPI {
     let paramsSignIn = JSON.parse(JSON.stringify(result));
     paramsSignIn['openId'] = 'global';
 
-    let sign_on_text = EcovacsAPI.AUTH_CLIENT_KEY;
+    let sign_on_text = constants.AUTH_CLIENT_KEY;
     let keys = Object.keys(paramsSignIn);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
       sign_on_text += k + "=" + paramsSignIn[k];
     }
-    sign_on_text += EcovacsAPI.AUTH_CLIENT_SECRET;
+    sign_on_text += constants.AUTH_CLIENT_SECRET;
 
-    result['authAppkey'] = EcovacsAPI.AUTH_CLIENT_KEY;
+    result['authAppkey'] = constants.AUTH_CLIENT_KEY;
     result['authSign'] = EcovacsAPI.md5(sign_on_text);
 
     return EcovacsAPI.paramsToQueryList(result);
@@ -144,9 +144,9 @@ class EcovacsAPI {
           params[key] = args[key];
         }
       }
-      let mainUrlFormat = EcovacsAPI.MAIN_URL_FORMAT;
+      let mainUrlFormat = constants.MAIN_URL_FORMAT;
       if (loginPath === 'user/getAuthCode') {
-        mainUrlFormat = EcovacsAPI.PORTAL_GLOBAL_AUTHCODE;
+        mainUrlFormat = constants.PORTAL_GLOBAL_AUTHCODE;
         params['bizType'] = 'ECOVACS_IOT';
         params['deviceId'] = this.device_id;
       } else {
@@ -242,9 +242,9 @@ class EcovacsAPI {
         retryAttempts = arguments.retryAttempts + 1;
       }
 
-      let portalUrlFormat = EcovacsAPI.PORTAL_URL_FORMAT;
+      let portalUrlFormat = constants.PORTAL_URL_FORMAT;
       if (this.country.toLowerCase() === 'cn') {
-        portalUrlFormat = EcovacsAPI.PORTAL_URL_FORMAT_CN;
+        portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
       }
       let url = (portalUrlFormat + "/" + api).format({
         continent: continent
@@ -322,11 +322,11 @@ class EcovacsAPI {
       org = 'ECOCN';
       country = 'Chinese';
     }
-    return this.call_portal_api(EcovacsAPI.USERSAPI, 'loginByItToken', {
+    return this.call_portal_api(constants.USERSAPI, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
       'userId': this.uid,
       'token': this.auth_code,
-      'realm': EcovacsAPI.REALM,
+      'realm': constants.REALM,
       'resource': this.resource,
       'org': org,
       'last': '',
@@ -336,12 +336,12 @@ class EcovacsAPI {
 
   getDevices() {
     return new Promise((resolve, reject) => {
-      this.call_portal_api(EcovacsAPI.USERSAPI, 'GetDeviceList', {
+      this.call_portal_api(constants.USERSAPI, 'GetDeviceList', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
           'userid': this.uid,
-          'realm': EcovacsAPI.REALM,
+          'realm': constants.REALM,
           'token': this.user_access_token,
           'resource': this.resource
         }
@@ -423,25 +423,7 @@ class EcovacsAPI {
   }
 }
 
-EcovacsAPI.CLIENT_KEY = constants.CLIENT_KEY;
-EcovacsAPI.SECRET = constants.SECRET;
-EcovacsAPI.AUTH_CLIENT_KEY = constants.AUTH_CLIENT_KEY;
-EcovacsAPI.AUTH_CLIENT_SECRET = constants.AUTH_CLIENT_SECRET;
 EcovacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
-
-EcovacsAPI.MAIN_URL_FORMAT = constants.MAIN_URL_FORMAT;
-EcovacsAPI.USER_URL_FORMAT = constants.USER_URL_FORMAT;
-EcovacsAPI.PORTAL_URL_FORMAT = constants.PORTAL_URL_FORMAT;
-EcovacsAPI.PORTAL_URL_FORMAT_CN = constants.PORTAL_URL_FORMAT_CN;
-EcovacsAPI.PORTAL_GLOBAL_AUTHCODE = constants.PORTAL_GLOBAL_AUTHCODE;
-EcovacsAPI.USERSAPI = constants.USERSAPI;
-
-// IOT Device Manager - This provides control of "IOT" products via RestAPI, some bots use this instead of XMPP
-EcovacsAPI.IOTDEVMANAGERAPI = constants.IOTDEVMANAGERAPI;
-EcovacsAPI.LGLOGAPI = constants.LGLOGAPI;
-// Leaving this open, the only endpoint known currently is "Product IOT Map" -  pim/product/getProductIotMap - This provides a list of "IOT" products.  Not sure what this provides the app.
-EcovacsAPI.PRODUCTAPI = constants.PRODUCTAPI;
-
 EcovacsAPI.REALM = constants.REALM;
 
 module.exports.EcoVacsAPI = EcovacsAPI;
