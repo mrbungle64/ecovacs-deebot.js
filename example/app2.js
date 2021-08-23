@@ -166,7 +166,7 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetLifeSpan', 'side_brush');
             vacbot.run('GetLifeSpan', 'filter');
             vacbot.run('GetCleanLogs');
-            if (vacbot.hasSpotAreas()) {
+            if (vacbot.hasSpotAreaCleaningMode()) {
                 vacbot.run('GetMaps', true);
             }
         }, 6000);
@@ -181,7 +181,7 @@ api.connect(account_id, password_hash).then(() => {
         }, 60000);
 
         // setInterval(() => {
-        //     if (vacbot.hasSpotAreas()) {
+        //     if (vacbot.hasSpotAreaCleaningMode()) {
         //         //enable to also see deebotposition change more frequently in map image
         //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','outline');
         //         vacbot.run('GetMapImage', 'INSERT_MAP_ID_MANUALLY','wifiHeatMap');
