@@ -547,11 +547,6 @@ class VacBot {
         return this.getDeviceProperty('custom_area');
     }
 
-    // Deprecated
-    hasCustomAreas() {
-        return this.hasCustomAreaCleaningMode();
-    }
-
     hasMoppingSystem() {
         return this.getDeviceProperty('mopping_system');
     }

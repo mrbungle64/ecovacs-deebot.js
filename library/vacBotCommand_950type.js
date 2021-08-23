@@ -61,21 +61,20 @@ class SpotArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
         if (area !== '') {
             let cleaningAsNumber = Number(cleanings);
-            super('spotArea',
-                action, {
-                    'content': area,
-                    'count': cleaningAsNumber
-                });
+            super('spotArea', action, {
+                'content': area,
+                'count': cleaningAsNumber
+            });
         }
     }
 }
 
 class CustomArea extends Clean {
-    constructor(action = 'start', map_position = '', cleanings = 1) {
-        if (map_position !== '') {
+    constructor(action = 'start', area = '', cleanings = 1) {
+        if (area !== '') {
             let cleaningAsNumber = Number(cleanings);
             super('customArea', action, {
-                'content': map_position,
+                'content': area,
                 'count': cleaningAsNumber
             });
         }
@@ -109,7 +108,7 @@ class Stop extends VacBotCommand_950type {
 class Charge extends VacBotCommand_950type {
     constructor() {
         super('charge', {
-                'act': constants_type.CHARGE_MODE_TO_ECOVACS['return']
+                'act': 'go'
             }
         );
     }

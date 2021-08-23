@@ -102,11 +102,11 @@ class SpotArea extends Clean {
 }
 
 class CustomArea extends Clean {
-    constructor(action = 'start', map_position = '', cleanings = 1) {
-        if (map_position !== '') {
+    constructor(action = 'start', area = '', cleaningAsNumber = 1) {
+        if (area !== '') {
             super('spot_area', action, {
-                'p': map_position,
-                'deep': cleanings
+                'p': area,
+                'deep': cleaningAsNumber
             });
         }
     }
@@ -116,7 +116,7 @@ class Charge extends VacBotCommand_non950type {
     constructor() {
         super('Charge', {
             'charge': {
-                'type': constants_type.CHARGE_MODE_TO_ECOVACS['return']
+                'type': 'go'
             }
         });
     }

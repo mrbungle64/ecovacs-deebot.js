@@ -45,10 +45,6 @@ exports.CLEAN_SPEED_FROM_ECOVACS = {
     'strong': 3 // high
 };
 
-exports.CHARGE_MODE_TO_ECOVACS = {
-    'return': 'go'
-};
-
 exports.CHARGE_MODE_FROM_ECOVACS = {
     'Going': 'returning',
     'going': 'returning',
