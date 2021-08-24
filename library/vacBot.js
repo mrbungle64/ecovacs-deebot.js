@@ -11,12 +11,8 @@ class VacBot {
 
         this.useMqtt = this.useMqttProtocol();
         this.deviceClass = vacuum['class'];
-        this.deviceModel = this.deviceClass;
-        this.deviceImageURL = '';
-        if (tools.getProductIotMap()[this.deviceClass]) {
-            this.deviceModel = tools.getProductIotMap()[this.deviceClass].product.name;
-            this.deviceImageURL = tools.getProductIotMap()[this.deviceClass].product.iconUrl;
-        }
+        this.deviceModel = this.getProductName();
+        this.deviceImageURL = this.getProductImageURL();
         this.components = {};
         this.lastComponentValues = {};
         this.emitFullLifeSpanEvent = false;
@@ -497,6 +493,10 @@ class VacBot {
         return (this.vacuum['company'] === 'eco-ng') ? true : false;
     }
 
+    getProtocol() {
+        return this.useMqttProtocol() ? 'MQTT' : 'XMPP';
+    }
+
     is950type() {
         const defaultValue = this.useMqttProtocol();
         return this.getDeviceProperty('950type', defaultValue);
@@ -568,6 +568,20 @@ class VacBot {
         } else {
             return this.vacuum['did'];
         }
+    }
+
+    getProductName() {
+        if (tools.getProductIotMap()[this.deviceClass]) {
+            return tools.getProductIotMap()[this.deviceClass].product.name;
+        }
+        return this.deviceClass;
+    }
+
+    getProductImageURL() {
+        if (tools.getProductIotMap()[this.deviceClass]) {
+            this.deviceImageURL = tools.getProductIotMap()[this.deviceClass].product.iconUrl;
+        }
+        return '';
     }
 
     sendCommand(action) {
