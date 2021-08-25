@@ -1,19 +1,18 @@
 const ecovacsDeebot = require('./../index');
 const nodeMachineId = require('node-machine-id');
 const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
-const VacBot = ecovacsDeebot.VacBot;
 
 const account_id = "email@domain.com";
 const password = "a1b2c3d4";
-const countrycode = 'DE';
+const countryCode = 'DE';
 
 const password_hash = EcoVacsAPI.md5(password);
 const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync());
 const countries = ecovacsDeebot.countries;
-const continent = countries[countrycode].continent.toLowerCase();
+const continent = countries[countryCode].continent.toLowerCase();
 console.log(continent);
 
-const api = new EcoVacsAPI(device_id, countrycode, continent);
+const api = new EcoVacsAPI(device_id, countryCode, continent);
 api.connect(account_id, password_hash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[0];
@@ -145,38 +144,50 @@ api.connect(account_id, password_hash).then(() => {
         vacbot.connect();
 
         console.log('[app2.js] name: ' + vacbot.getDeviceProperty('name'));
-        console.log('[app2.js] isCanvasModuleAvailable: ' + EcoVacsAPI.isCanvasModuleAvailable());
         console.log('[app2.js] isKnownDevice: ' + vacbot.isKnownDevice());
         console.log('[app2.js] isSupportedDevice: ' + vacbot.isSupportedDevice());
         console.log('[app2.js] is950type: ' + vacbot.is950type());
         console.log('[app2.js] isNot950type: ' + vacbot.isNot950type());
+        console.log('[app2.js] protocol: ' + vacbot.getProtocol());
         console.log('[app2.js] hasMainBrush: ' + vacbot.hasMainBrush());
         console.log('[app2.js] hasEdgeCleaningMode: ' + vacbot.hasEdgeCleaningMode());
         console.log('[app2.js] hasSpotCleaningMode: ' + vacbot.hasSpotCleaningMode());
+        console.log('[app2.js] hasMappingCapabilities: ' + vacbot.hasMappingCapabilities());
         console.log('[app2.js] hasSpotAreaCleaningMode: ' + vacbot.hasSpotAreaCleaningMode());
         console.log('[app2.js] hasCustomAreaCleaningMode: ' + vacbot.hasCustomAreaCleaningMode());
         console.log('[app2.js] hasMoppingSystem: ' + vacbot.hasMoppingSystem());
         console.log('[app2.js] hasVoiceReports: ' + vacbot.hasVoiceReports());
         console.log('[app2.js] hasAutoEmptyStation: ' + vacbot.hasAutoEmptyStation());
+        console.log('[app2.js] isCanvasModuleAvailable: ' + EcoVacsAPI.isCanvasModuleAvailable());
 
         setTimeout(() => {
-            if (vacbot.hasMainBrush()) {
-                vacbot.run('GetLifeSpan', 'main_brush');
-            }
-            vacbot.run('GetLifeSpan', 'side_brush');
-            vacbot.run('GetLifeSpan', 'filter');
+            vacbot.run('GetCleanState');
+            vacbot.run('GetChargeState');
+            vacbot.run('GetBatteryState');
+
+            vacbot.run('GetLifeSpan');
             vacbot.run('GetCleanLogs');
-            if (vacbot.hasSpotAreaCleaningMode()) {
-                vacbot.run('GetMaps', true);
+
+            if (vacbot.hasMappingCapabilities()) {
+                vacbot.run('GetPosition');
+                vacbot.run('GetChargerPos');
+                const createMapDataObject = true; // default = false
+                const createMapImage = false; // default = createMapDataObject && vacbot.isMapImageSupported();
+                vacbot.run('GetMaps', createMapDataObject, createMapImage);
             }
         }, 6000);
 
         setInterval(() => {
-            vacbot.run('GetCleanState');
-            vacbot.run('GetChargeState');
-            vacbot.run('GetBatteryState');
+            vacbot.run('GetSleepStatus');
             if (vacbot.hasMoppingSystem()) {
                 vacbot.run('GetWaterLevel');
+            }
+            if (vacbot.hasVacuumPowerAdjustment()) {
+                vacbot.run('GetCleanSpeed');
+            }
+            if (vacbot.is950type()) {
+                vacbot.run('GetVolume');
+                vacbot.run('GetAdvancedMode');
             }
         }, 60000);
 

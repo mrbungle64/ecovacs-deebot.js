@@ -542,6 +542,10 @@ class VacBot {
         return this.getDeviceProperty('custom_area');
     }
 
+    hasMappingCapabilities() {
+        return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode()
+    }
+
     hasMoppingSystem() {
         return this.getDeviceProperty('mopping_system');
     }
