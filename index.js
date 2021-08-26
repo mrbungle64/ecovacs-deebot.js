@@ -199,12 +199,7 @@ class EcovacsAPI {
               throw new Error("Failure code 0002");
             } else {
               tools.envLog("[EcovacsAPI] call to %s failed with %s", loginPath, JSON.stringify(json));
-              throw new Error("Failure code {msg} ({code}) for call {func} and parameters {param}".format({
-                msg: json['msg'],
-                code: json['code'],
-                loginPath: loginPath,
-                param: JSON.stringify(args)
-              }));
+              throw new Error("Failure code: {msg} ({code})".format({msg: json['msg'], code: json['code']}));
             }
           } catch (e) {
             tools.envLog("[EcovacsAPI] " + e.message);

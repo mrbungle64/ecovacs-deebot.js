@@ -59,25 +59,21 @@ class Spot extends Clean {
 
 class SpotArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
-        if (area !== '') {
-            let cleaningAsNumber = Number(cleanings);
-            super('spotArea', action, {
-                'content': area,
-                'count': cleaningAsNumber
-            });
-        }
+        let cleaningAsNumber = Number(cleanings);
+        super('spotArea', action, {
+            'content': area,
+            'count': cleaningAsNumber
+        });
     }
 }
 
 class CustomArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
-        if (area !== '') {
-            let cleaningAsNumber = Number(cleanings);
-            super('customArea', action, {
-                'content': area,
-                'count': cleaningAsNumber
-            });
-        }
+        let cleaningAsNumber = Number(cleanings);
+        super('customArea', action, {
+            'content': area,
+            'count': cleaningAsNumber
+        });
     }
 }
 

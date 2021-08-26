@@ -93,22 +93,18 @@ class Stop extends Clean {
 
 class SpotArea extends Clean {
     constructor(action = 'start', area = '') {
-        if (area !== '') {
-            super('spot_area', action, {
-                'mid': area
-            });
-        }
+        super('spot_area', action, {
+            'mid': area
+        });
     }
 }
 
 class CustomArea extends Clean {
     constructor(action = 'start', area = '', cleaningAsNumber = 1) {
-        if (area !== '') {
-            super('spot_area', action, {
-                'p': area,
-                'deep': cleaningAsNumber
-            });
-        }
+        super('spot_area', action, {
+            'p': area,
+            'deep': cleaningAsNumber
+        });
     }
 }
 
