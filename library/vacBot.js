@@ -583,7 +583,7 @@ class VacBot {
 
     getProductImageURL() {
         if (tools.getProductIotMap()[this.deviceClass]) {
-            this.deviceImageURL = tools.getProductIotMap()[this.deviceClass].product.iconUrl;
+            return tools.getProductIotMap()[this.deviceClass].product.iconUrl;
         }
         return '';
     }
