@@ -538,7 +538,7 @@ class VacBot_950type extends VacBot {
             case "GetSpotAreaInfo".toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
-                if ((Number(mapID) > 0) && (Number(spotAreaID) > 0)) {
+                if ((Number(mapID) > 0) && (spotAreaID !== '')) {
                     this.sendCommand(new vacBotCommand.GetMapSpotAreaInfo(mapID, spotAreaID));
                 }
                 break;
@@ -561,7 +561,7 @@ class VacBot_950type extends VacBot {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
-                if ((Number(mapID) > 0) && (Number(spotAreaID) > 0)) {
+                if ((Number(mapID) > 0) && (spotAreaID !== '')) {
                     this.sendCommand(new vacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type));
                 }
                 break;
