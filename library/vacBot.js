@@ -195,16 +195,16 @@ class VacBot {
                 break;
             }
             case "SpotArea".toLowerCase(): {
-                const area = args[1];
-                const cleanings = args[2] || 1;
+                const area = args[0];
+                const cleanings = args[1] || 1;
                 if (area !== '') {
                     this.sendCommand(new this.vacBotCommand.SpotArea('start', area, cleanings));
                 }
                 break;
             }
             case "CustomArea".toLowerCase(): {
-                const area = args[1];
-                const cleanings = args[2] || 1;
+                const area = args[0];
+                const cleanings = args[1] || 1;
                 if (area !== '') {
                     this.sendCommand(new this.vacBotCommand.CustomArea('start', area, cleanings));
                 }
@@ -229,6 +229,7 @@ class VacBot {
                 break;
             case "Charge".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.Charge());
+                console.log("Charge");
                 break;
             case "GetChargeState".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetChargeState());
