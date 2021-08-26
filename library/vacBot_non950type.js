@@ -561,7 +561,7 @@ class VacBot_non950type extends VacBot {
   }
 
   run(action, ...args) {
-    super.run(action, args);
+    super.run(action, ...args);
     switch (action.toLowerCase()) {
       case "GetMaps".toLowerCase(): {
         this.createMapDataObject = !!args[0] || false;
