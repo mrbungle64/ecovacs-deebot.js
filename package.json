@@ -1,6 +1,6 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.6.2-alpha.4",
+  "version": "0.6.2-alpha.5",
   "description": "Library for running Ecovacs Deebot vacuum cleaner robots",
   "main": "index.js",
   "scripts": {
