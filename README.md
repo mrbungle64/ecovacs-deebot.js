@@ -66,7 +66,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.6.2 (alpha)
+### 0.6.2 (beta)
 * Lots of refactoring and code improvements
 * Added some wrapper [functions](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions) for controlling the bot
 * Switch to @xmldom/xmldom (bump xmldom from 0.6.0 to 0.7.2)
