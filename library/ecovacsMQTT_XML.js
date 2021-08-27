@@ -67,7 +67,9 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         let result = {};
         if (json.hasOwnProperty('resp')) {
             result = this.command_xml2dict(json['resp'], action);
-            this.handleCommand(action.name, result);
+            (async () => {
+                await this.handleMessagePayload(action.name, result);
+            })();
             delete this.bot.commandsSent[action.args.id];
         } else if (json.hasOwnProperty('logs')) {
             const children = [];
@@ -81,7 +83,9 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 },
                 'children': children
             };
-            this.handleCommand(action.name, result);
+            (async () => {
+                await this.handleMessagePayload(action.name, result);
+            })();
             delete this.bot.commandsSent[action.args.id];
         } else {
             tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json, getCircularReplacer()));
@@ -90,7 +94,9 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
 
     handleMessage(topic, payload, type = "incoming") {
         let result = this.command_xml2dict(payload);
-        this.handleCommand(result['event'], result);
+        (async () => {
+            await this.handleMessagePayload(result['event'], result);
+        })();
     }
 
     command_xml2dict(xmlString) {

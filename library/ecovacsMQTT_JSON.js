@@ -141,12 +141,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
         let result = {"resultCode": resultCode, "resultCodeMessage": resultCodeMessage, "resultData": resultData};
 
-        this.handleCommand(eventName, result);
+        (async () => {
+            await this.handleMessagePayload(eventName, result);
+        })();
     }
 
-    handleCommand(command, event) {
+    async handleMessagePayload(command, event) {
         this.emit('messageReceived', new Date());
-        tools.envLog("[EcovacsMQTT_JSON] handleCommand() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
+        tools.envLog("[EcovacsMQTT_JSON] handleMessagePayload() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         command = command.toLowerCase().replace(/^_+|_+$/g, '');
         let commandPrefix = '';
         //incoming events (on)

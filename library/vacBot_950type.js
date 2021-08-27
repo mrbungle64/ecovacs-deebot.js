@@ -347,6 +347,7 @@ class VacBot_950type extends VacBot {
             mapsubsetEvent: 'error'
         };
     }
+
     handle_mapInfo(event) {
         let mapMID = event['resultData']['mid'];
         if (isNaN(mapMID)) {
