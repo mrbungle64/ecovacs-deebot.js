@@ -10,7 +10,7 @@ exports.SupportedDevices = {
         "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
-        "map_image_supported": false
+        "map_image_supported": true
     },
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
@@ -23,7 +23,7 @@ exports.SupportedDevices = {
         "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
-        "map_image_supported": false
+        "map_image_supported": true
     },
     "vi829v": {
         "name": "DEEBOT OZMO 920",
