@@ -515,6 +515,9 @@ class VacBot_950type extends VacBot {
             case "GetMapImage".toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const mapType = args[1] || 'outline';
+                this.createMapDataObject = true;
+                this.createMapImage = true;
+                this.createMapImageOnly = args[2] !== undefined ? args[2] : true;
                 if (Number(mapID) > 0) {
                     this.sendCommand(new vacBotCommand.GetMapImage(mapID, mapType));
                 }
@@ -523,6 +526,7 @@ class VacBot_950type extends VacBot {
             case "GetMaps".toLowerCase(): {
                 this.createMapDataObject = !!args[0] || false;
                 this.createMapImage = this.createMapDataObject && this.isMapImageSupported();
+                this.createMapImageOnly = false;
                 if (args.length >= 2) {
                     this.createMapImage = !!args[1];
                 }

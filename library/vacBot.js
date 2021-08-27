@@ -102,12 +102,11 @@ class VacBot {
         this.on('MapDataReady', () => {
             if (this.mapDataObject) {
                 if (this.createMapImageOnly) {
-                    // non 950 type models
-                    this.createMapDataObject = false;
                     if (this.mapDataObject[0] && this.mapDataObject[0].mapImage) {
+                        this.createMapDataObject = false;
                         this.ecovacs.emit('MapImage', this.mapDataObject[0].mapImage);
+                        this.createMapImageOnly = false;
                     }
-                    this.createMapImageOnly = false;
                 } else {
                     this.ecovacs.emit('MapDataObject', this.mapDataObject);
                 }
@@ -143,7 +142,9 @@ class VacBot {
         });
         this.on('MapImageData', (mapImageInfo) => {
             if (this.createMapDataObject) {
-                this.handleMapImageInfo(mapImageInfo);
+                (async () => {
+                    await this.handleMapImageInfo(mapImageInfo);
+                })();
             }
         });
     }
@@ -331,7 +332,7 @@ class VacBot {
                     });
                     // 950 type models
                     if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
-                        this.run('GetMapImage', mapID);
+                        this.run('GetMapImage', mapID, 'outline', false);
                         this.mapDataObjectQueue.push({
                             'type': 'GetMapImage',
                             'mapID': mapID
@@ -441,7 +442,7 @@ class VacBot {
         }
     }
 
-    handleMapImageInfo(mapImageInfo) {
+    async handleMapImageInfo(mapImageInfo) {
         const mapID = mapImageInfo['mapID'];
         const mapObject = map.getMapObject(this.mapDataObject, mapID);
         if (mapObject) {
