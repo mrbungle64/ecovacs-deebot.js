@@ -41,7 +41,13 @@ class EcovacsXMPP extends Ecovacs {
                         if ((command !== undefined) && (command !== '')) {
                             tools.envLog('[EcovacsXMPP] command: %s', command);
                             (async () => {
-                                await this.handleMessagePayload(command, secondChild);
+                                try {
+                                    await this.handleMessagePayload(command, secondChild);
+                                } catch (e) {
+                                    this.bot.errorCode = '-2';
+                                    this.bot.errorDescription = e.toString();
+                                    this.emitLastError();
+                                }
                                 delete this.bot.commandsSent[secondChild.attrs.id];
                                 if (this.bot.errorCode === '-1') {
                                     this.bot.errorCode = '0';

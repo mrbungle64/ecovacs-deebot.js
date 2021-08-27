@@ -2,6 +2,7 @@ const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
 const { DOMParser } = require('@xmldom/xmldom');
+const errorCodes = require("./errorCodes");
 
 class EcovacsMQTT_XML extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
@@ -68,7 +69,13 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         if (json.hasOwnProperty('resp')) {
             result = this.command_xml2dict(json['resp'], action);
             (async () => {
-                await this.handleMessagePayload(action.name, result);
+                try {
+                    await this.handleMessagePayload(action.name, result);
+                } catch (e) {
+                    this.bot.errorCode = '-2';
+                    this.bot.errorDescription = e.toString();
+                    this.emitLastError();
+                }
                 delete this.bot.commandsSent[action.args.id];
             })();
         } else if (json.hasOwnProperty('logs')) {
@@ -84,7 +91,13 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 'children': children
             };
             (async () => {
-                await this.handleMessagePayload(action.name, result);
+                try {
+                    await this.handleMessagePayload(action.name, result);
+                } catch (e) {
+                    this.bot.errorCode = '-2';
+                    this.bot.errorDescription = e.toString();
+                    this.emitLastError();
+                }
                 delete this.bot.commandsSent[action.args.id];
             })();
         } else {
@@ -95,7 +108,13 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     handleMessage(topic, payload, type = "incoming") {
         let result = this.command_xml2dict(payload);
         (async () => {
-            await this.handleMessagePayload(result['event'], result);
+            try {
+                await this.handleMessagePayload(result['event'], result);
+            } catch (e) {
+                this.bot.errorCode = '-2';
+                this.bot.errorDescription = e.toString();
+                this.emitLastError();
+            }
         })();
     }
 

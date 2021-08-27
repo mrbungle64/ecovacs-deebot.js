@@ -1,6 +1,7 @@
 const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools.js');
 const constants = require('./ecovacsConstants');
+const errorCodes = require("./errorCodes");
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
@@ -134,7 +135,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         };
 
         (async () => {
-            await this.handleMessagePayload(eventName, result);
+            try {
+                await this.handleMessagePayload(eventName, result);
+            } catch (e) {
+                this.bot.errorCode = '-2';
+                this.bot.errorDescription = e.toString();
+                this.emitLastError();
+            }
         })();
     }
 
