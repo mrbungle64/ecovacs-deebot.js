@@ -42,13 +42,13 @@ class EcovacsXMPP extends Ecovacs {
                             tools.envLog('[EcovacsXMPP] command: %s', command);
                             (async () => {
                                 await this.handleMessagePayload(command, secondChild);
+                                delete this.bot.commandsSent[secondChild.attrs.id];
+                                if (this.bot.errorCode === '-1') {
+                                    this.bot.errorCode = '0';
+                                    this.bot.errorDescription = errorCodes[this.bot.errorCode];
+                                    this.emitLastError();
+                                }
                             })();
-                            delete this.bot.commandsSent[secondChild.attrs.id];
-                            if (this.bot.errorCode === '-1') {
-                                this.bot.errorCode = '0';
-                                this.bot.errorDescription = errorCodes[this.bot.errorCode];
-                                this.emitLastError();
-                            }
                         }
                     } else {
                         tools.envLog('[EcovacsXMPP] Unknown response type received: %s', JSON.stringify(stanza));

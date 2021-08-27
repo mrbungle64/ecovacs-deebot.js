@@ -99,22 +99,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             tools.envLog("[EcovacsMQTT_JSON] handleMessage message missing ... topic: %s", topic);
         }
 
-        tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage type: %s", type);
-        tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage topic: %s", topic);
-
         let eventName = topic;
         let resultCode = "0";
         let resultCodeMessage = "ok";
         let resultData = message;
 
         if (type === "incoming") {
-            eventName = topic.split('/')[2]; //parse 3rd element from string iot/atr/onPos/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/
+            //parse 3rd element from string iot/atr/onPos/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/
+            eventName = topic.split('/')[2];
             message = JSON.parse(message);
             resultData = message['body']['data'];
-            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage incoming: %s", message);
-        }
-        if (type === "response") {
-            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage response: %s", JSON.stringify(message, getCircularReplacer()));
+        } else if (type === "response") {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
             resultData = message['body']['data'];
@@ -128,18 +123,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     });
                 }
             }
-        }
-        if (type === "logResponse") {
-            tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage logResponse: %s", JSON.stringify(message, getCircularReplacer()));
+        } else if (type === "logResponse") {
             resultCodeMessage = message['ret'];
         }
 
-        tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage eventName: %s", eventName);
-        tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage resultCode: %s", resultCode);
-        tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage resultCodeMessage: %s", resultCodeMessage);
-        tools.envLog("[DEBUG_INCOMING]", "[EcovacsMQTT_JSON] handleMessage resultData: %s", JSON.stringify(resultData, getCircularReplacer()));
-
-        let result = {"resultCode": resultCode, "resultCodeMessage": resultCodeMessage, "resultData": resultData};
+        const result = {
+            "resultCode": resultCode,
+            "resultCodeMessage": resultCodeMessage,
+            "resultData": resultData
+        };
 
         (async () => {
             await this.handleMessagePayload(eventName, result);
