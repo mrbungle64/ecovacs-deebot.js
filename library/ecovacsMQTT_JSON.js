@@ -227,7 +227,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
                     tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(event, getCircularReplacer()));
                 } else if (tools.isCanvasModuleAvailable()) {
-                    let mapImage = this.bot.handle_mapInfo(event);
+                    let mapImage = await this.bot.handle_mapInfo(event);
                     if (mapImage !== null) {
                         this.emit("MapImageData", mapImage);
                         if (this.bot.createMapImageOnly) {

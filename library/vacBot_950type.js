@@ -351,7 +351,6 @@ class VacBot_950type extends VacBot {
     handle_mapInfo(event) {
         let mapMID = event['resultData']['mid'];
         if (isNaN(mapMID)) {
-            //error
             return;
         }
         if (typeof this.mapImages[mapMID] === 'undefined') {
@@ -360,12 +359,10 @@ class VacBot_950type extends VacBot {
         if (typeof this.mapImages[mapMID][event['resultData']['type']] === 'undefined') {
             this.mapImages[mapMID][event['resultData']['type']] = new map.EcovacsMapImage(mapMID, event['resultData']['type'], event['resultData']['totalWidth'], event['resultData']['totalHeight'], event['resultData']['pixel'], event['resultData']['totalCount']);
         }
-        if(event['resultData']['pieceValue']!='') {
+        if (event['resultData']['pieceValue'] !== '') {
             this.mapImages[mapMID][event['resultData']['type']].updateMapPiece(event['resultData']['index'], event['resultData']['startX'], event['resultData']['startY'], event['resultData']['width'], event['resultData']['height'], event['resultData']['crc'], event['resultData']['value'])
         }
-        let mapImage = this.mapImages[mapMID][event['resultData']['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
-        //tools.envLog("[VacBot] *** mapImage mapID = " + mapMID + " PNG = " + JSON.stringify(mapImage));
-        return mapImage;
+        return this.mapImages[mapMID][event['resultData']['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
     }
 
     handle_majormap(event) {
