@@ -95,12 +95,12 @@ class Ecovacs extends EventEmitter {
     }
 
     async handleMessagePayload(command, event) {
-        this.emit('messageReceived', new Date());
         let abbreviatedCmd = command.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
         // Incoming MQTT messages
         if (abbreviatedCmd.startsWith('On') && (abbreviatedCmd !== 'OnOff')) {
             abbreviatedCmd = abbreviatedCmd.substring(2);
         }
+        this.emit('messageReceived', command + ' => ' + abbreviatedCmd);
         switch (abbreviatedCmd) {
             case 'CleanSt':
                 this.bot.handle_stats(event);
@@ -307,10 +307,20 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             case 'Sched':
+                // Cleaning schedules
                 this.bot.handle_getSched(event);
                 if (this.bot.schedules) {
                     this.emit('Schedules', this.bot.schedules);
                 }
+                break;
+            case 'MapP':
+            case 'trace':
+            case 'CleanedPos':
+            case 'CleanedTrace':
+            case 'CleanedMapSet':
+            case 'CleanedMap':
+            case 'BigDataCleanInfoReport':
+                // TODO: implement these events
                 break;
             default:
                 tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
