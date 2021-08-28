@@ -234,15 +234,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     }
                 }
                 break;
-            // case 'MajorMap':
-            //     this.bot.handle_majormap(event);
-            //     break;
-            // case 'MinorMap':
-            //     let mapImage = this.bot.handle_minormap(event);
-            //     if(mapImage !== null) {
-            //         this.emit("MapLiveImage", mapImage);
-            //     }
-            //     break;
+            case 'MajorMap':
+                // TODO: finish implementing MajorMap
+                //this.bot.handle_majorMap(event);
+                break;
+            case 'MinorMap':
+                // TODO: finish implementing MinorMap
+                /*let mapImage = this.bot.handle_minorMap(event);
+                if (mapImage !== null) {
+                    this.emit("MapLiveImage", mapImage);
+                }*/
+                break;
+            case 'MapTrace':
+                // TODO: implement MapTrace
+                break;
             case "MapSet": //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot.handle_mapSet(event);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed

@@ -365,36 +365,34 @@ class VacBot_950type extends VacBot {
         return this.mapImages[mapMID][event['resultData']['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
     }
 
-    handle_majormap(event) {
+    handle_majorMap(event) {
         let mapMID = event['resultData']['mid'];
         if (isNaN(mapMID)) {
-            //error
             return;
         }
-        if(this.liveMapImage == null || this.liveMapImage.mapID != mapMID){
-            console.log('DEBUG reset livemap'); //TODO:
-            this.liveMapImage = new map.EcovacsLiveMapImage(mapMID, event['resultData']['type']
-                , event['resultData']['pieceWidth'], event['resultData']['pieceHeight']
-                , event['resultData']['cellWidth'], event['resultData']['cellHeight']
-                , event['resultData']['pixel'], event['resultData']['value'])
+        if (!this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
+            console.log('DEBUG reset livemap');
+            const type = event['resultData']['type'];
+            const pieceWidth = event['resultData']['pieceWidth'];
+            const pieceHeight = event['resultData']['pieceHeight'];
+            const cellWidth = event['resultData']['cellWidth'];
+            const cellHeight = event['resultData']['cellHeight'];
+            const pixel = event['resultData']['pixel'];
+            const value = event['resultData']['value'];
+            this.liveMapImage = new map.EcovacsLiveMapImage(
+                mapMID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, value)
         } else {
             this.liveMapImage.updateMapDataPiecesCrc(event['resultData']['value']);
         }
-
     }
 
-    handle_minormap(event) {
+    handle_minorMap(event) {
         let mapMID = event['resultData']['mid'];
-        if (isNaN(mapMID) || this.liveMapImage == null || this.liveMapImage.mapID != mapMID) {
-            //error
+        if (isNaN(mapMID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
             return;
         }
-
         this.liveMapImage.updateMapPiece(event['resultData']['pieceIndex'], event['resultData']['pieceValue']);
-
-        let mapImage = this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
-        //tools.envLog("[VacBot] *** mapImage mapID = " + mapMID + " PNG = " + JSON.stringify(mapImage));
-        return mapImage;
+        return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
     }
 
     handle_waterInfo(event) {
