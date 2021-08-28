@@ -307,10 +307,10 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             case 'Sched':
-                // Cleaning schedules
+                // Cleaning schedule
                 this.bot.handle_getSched(event);
-                if (this.bot.schedules) {
-                    this.emit('Schedules', this.bot.schedules);
+                if (this.bot.schedule) {
+                    this.emit('Schedule', this.bot.schedule);
                 }
                 break;
             case 'MapP':

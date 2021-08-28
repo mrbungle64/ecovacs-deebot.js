@@ -502,7 +502,7 @@ class VacBot_non950type extends VacBot {
 
   handle_getSched(event) {
     tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
-    this.schedules = [];
+    this.schedule = [];
     for (let c = 0; c < event.children.length; c++) {
       const resultData = event.children[c];
       if ((resultData.name === 's') || (resultData.event === 's')) {
@@ -555,7 +555,7 @@ class VacBot_non950type extends VacBot {
           'hour': hour,
           'minute': minute
         }
-        this.schedules.push(object);
+        this.schedule.push(object);
       }
     }
   }

@@ -395,8 +395,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'Sched':
                 this.bot.handle_Schedule(payload);
-                if (this.bot.schedules) {
-                    this.emit('Schedules', this.bot.schedules);
+                if (this.bot.schedule) {
+                    this.emit('Schedule', this.bot.schedule);
                 }
                 break;
             default:

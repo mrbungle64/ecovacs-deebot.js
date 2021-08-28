@@ -464,7 +464,7 @@ class VacBot_950type extends VacBot {
 
     handle_Schedule(payload) {
         tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
-        this.schedules = [];
+        this.schedule = [];
         for (let c = 0; c < payload.length; c++) {
             const resultData = payload[c];
             let cleanCtl = {
@@ -500,7 +500,7 @@ class VacBot_950type extends VacBot {
                 'minute': resultData.minute,
                 'mapID': resultData.mid
             }
-            this.schedules.push(object);
+            this.schedule.push(object);
         }
     }
 

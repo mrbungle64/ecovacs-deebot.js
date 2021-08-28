@@ -136,8 +136,8 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.on('CleanLog', (object) => {
                 console.log('[app2.js] CleanLog: ' + JSON.stringify(object));
             });
-            vacbot.on('Schedules', (object) => {
-                console.log('[app2.js] Schedules: ' + JSON.stringify(object));
+            vacbot.on('Schedule', (object) => {
+                console.log('[app2.js] Schedule: ' + JSON.stringify(object));
             });
         });
 

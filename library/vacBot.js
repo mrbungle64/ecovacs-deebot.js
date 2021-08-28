@@ -87,7 +87,7 @@ class VacBot {
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
 
-        this.schedules = [];
+        this.schedule = [];
 
         this.vacBotCommand = this.getLibraryForCommands();
 
@@ -252,8 +252,8 @@ class VacBot {
             case "GetPosition".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetPosition());
                 break;
-            case "GetSchedules".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.GetSchedules());
+            case "GetSchedule".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.GetSchedule());
                 break;
             case "PlaySound".toLowerCase(): {
                 let sid = args[0] || 0;
