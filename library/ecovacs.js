@@ -112,6 +112,7 @@ class Ecovacs extends EventEmitter {
                 this.bot.handle_batteryInfo(event.children[0]);
                 this.emit('BatteryInfo', this.bot.batteryInfo);
                 break;
+            case 'CleanState':
             case 'CleanReport':
                 if (event.children && (event.children.length > 0)) {
                     this.bot.handle_cleanReport(event.children[0]);
@@ -247,7 +248,10 @@ class Ecovacs extends EventEmitter {
                     this.emit('CleanLog_lastImageTimestamp', this.bot.cleanLog_lastTimestamp); // Deprecated
                 }
                 break;
-            case 'CachedMapInfo':
+            case 'MapM':
+                // Map Model
+                // - runs "GetMapSet" to request spot areas and virtual walls
+                // - and also runs indirectly "PullMP" to request map pieces of the map image
                 let mapinfo = this.bot.handle_cachedMapInfo(event);
                 if (mapinfo) {
                     this.emit('CurrentMapName', this.bot.currentMapName);
@@ -256,13 +260,23 @@ class Ecovacs extends EventEmitter {
                     this.emit('Maps', this.bot.maps);
                 }
                 break;
+            case 'PullMP':
+                // Map Pieces of the map image
+                const mapImage = this.bot.handle_mapPiecePacket(event);
+                if (mapImage) {
+                    this.emit("MapImageData", mapImage);
+                }
+                break;
             case 'MapSet':
+                // Spot Areas and virtual walls
+                // - runs "PullM" to request spot area and virtual wall data
                 let mapset = this.bot.handle_mapSet(event);
                 if (mapset['mapsetEvent'] !== 'error') {
                     this.emit(mapset['mapsetEvent'], mapset['mapsetData']);
                 }
                 break;
-            case 'MapSubSet':
+            case 'PullM':
+                // Spot area and virtual wall data
                 let mapsubset = this.bot.handle_mapSubset(event);
                 if (mapsubset && (mapsubset['mapsubsetEvent'] !== 'error')) {
                     this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);

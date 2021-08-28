@@ -120,11 +120,6 @@ function getEventNameForCommandString(str) {
         command = command.substring(2);
     }
     switch (command.toLowerCase()) {
-        case 'cleaninfo':
-        case 'cleanstate':
-            return 'CleanReport';
-        case 'battery':
-            return 'BatteryInfo';
         case 'waterpermeability':
             return 'WaterLevel';
         case 'chargerpos':
@@ -133,13 +128,6 @@ function getEventNameForCommandString(str) {
             return 'DeebotPosition';
         case 'errors':
             return 'Error';
-        case 'mapm':
-        case 'mapp':
-            return 'CachedMapInfo';
-        case 'pullm':
-            return 'MapSubSet';
-        case 'pullmp':
-            return 'MapPiecePacket';
         case 'logapicleanlogs':
             return 'CleanLogs';
         default:
