@@ -148,34 +148,34 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     async handleMessagePayload(command, event) {
         this.emit('messageReceived', new Date());
         tools.envLog("[EcovacsMQTT_JSON] handleMessagePayload() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
-        command = command.toLowerCase().replace(/^_+|_+$/g, '');
+        let abbreviatedCmd = command.toLowerCase().replace(/^_+|_+$/g, '');
         let commandPrefix = '';
-        //incoming events (on)
-        if (command.startsWith("on")) {
-            command = command.substring(2);
+        // Incoming events (on)
+        if (abbreviatedCmd.startsWith("on")) {
+            abbreviatedCmd = abbreviatedCmd.substring(2);
             commandPrefix = 'on';
         }
-        //incoming events for (3rd) unknown/unsaved map
-        if (command.startsWith("off")) {
-            command = command.substring(3);
+        // Incoming events for (3rd) unknown/unsaved map
+        if (abbreviatedCmd.startsWith("off")) {
+            abbreviatedCmd = abbreviatedCmd.substring(3);
             commandPrefix = 'off';
         }
-        //incoming events (report)
-        if (command.startsWith("report")) {
-            command = command.substring(6);
+        // Incoming events (report)
+        if (abbreviatedCmd.startsWith("report")) {
+            abbreviatedCmd = abbreviatedCmd.substring(6);
             commandPrefix = 'report';
         }
-        //remove from "get" commands
-        if (command.startsWith("get")) {
-            command = command.substring(3);
+        // Remove from "get" commands
+        if (abbreviatedCmd.startsWith("get")) {
+            abbreviatedCmd = abbreviatedCmd.substring(3);
             commandPrefix = 'get';
         }
         // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
-        if (command.endsWith("_V2") || command.endsWith("_v2")) {
-            command = command.slice(0, -3);
+        if (abbreviatedCmd.endsWith("_V2") || abbreviatedCmd.endsWith("_v2")) {
+            abbreviatedCmd = abbreviatedCmd.slice(0, -3);
         }
-        switch (command) {
+        switch (abbreviatedCmd) {
             case "stats":
                 this.bot.handle_stats(event);
                 if (this.bot.currentStats) {
@@ -396,7 +396,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             default:
-                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
+                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", abbreviatedCmd);
                 break;
         }
     }
