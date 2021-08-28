@@ -141,49 +141,45 @@ class VacBot_950type extends VacBot {
     }
 
     handle_cleanLogs(payload) {
-        // Unlike the others, resultCode seems to be a string
-        const resultCode = parseInt(event['resultCode']);
-        if (resultCode === 0) {
-            let logs = [];
-            if (payload.hasOwnProperty('logs')) {
-                logs = payload['logs'];
-            } else if (payload.hasOwnProperty('log')) {
-                logs = payload['log'];
-            }
+        let logs = [];
+        if (payload.hasOwnProperty('logs')) {
+            logs = payload['logs'];
+        } else if (payload.hasOwnProperty('log')) {
+            logs = payload['log'];
+        }
 
-            for (let logIndex in logs) {
-                if (logs.hasOwnProperty(logIndex)) {
-                    if (!this.cleanLog[logs[logIndex]['id']]) { //log not yet existing
-                        let squareMeters = parseInt(logs[logIndex]['area']);
-                        let timestamp = parseInt(logs[logIndex]['ts']);
-                        let date = new Date(timestamp * 1000);
-                        let len = parseInt(logs[logIndex]['last']);
-                        let totalTimeString = tools.getTimeString(len);
-                        let imageUrl = logs[logIndex]['imageUrl'];
-                        if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
-                            this.cleanLog_lastImageUrl = imageUrl;
-                            this.cleanLog_lastTimestamp = timestamp;
-                            this.cleanLog_lastSquareMeters = squareMeters;
-                            this.cleanLog_lastTotalTime = len;
-                            this.cleanLog_lastTotalTimeString = totalTimeString;
-                            tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-                            tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
-                            tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
-                            tools.envLog("[VacBot] *** cleanLog_lastTotalTime = " + this.cleanLog_lastTotalTime);
-                            tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
-                        }
-                        this.cleanLog[logs[logIndex]['id']] = {
-                            'squareMeters': squareMeters,
-                            'timestamp': timestamp,
-                            'date': date,
-                            'lastTime': len,
-                            'totalTime': len,
-                            'totalTimeFormatted': totalTimeString,
-                            'imageUrl': imageUrl,
-                            'type': logs[logIndex]['type'],
-                            'stopReason': logs[logIndex]['stopReason']
-                        };
+        for (let logIndex in logs) {
+            if (logs.hasOwnProperty(logIndex)) {
+                if (!this.cleanLog[logs[logIndex]['id']]) { //log not yet existing
+                    let squareMeters = parseInt(logs[logIndex]['area']);
+                    let timestamp = parseInt(logs[logIndex]['ts']);
+                    let date = new Date(timestamp * 1000);
+                    let len = parseInt(logs[logIndex]['last']);
+                    let totalTimeString = tools.getTimeString(len);
+                    let imageUrl = logs[logIndex]['imageUrl'];
+                    if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
+                        this.cleanLog_lastImageUrl = imageUrl;
+                        this.cleanLog_lastTimestamp = timestamp;
+                        this.cleanLog_lastSquareMeters = squareMeters;
+                        this.cleanLog_lastTotalTime = len;
+                        this.cleanLog_lastTotalTimeString = totalTimeString;
+                        tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
+                        tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
+                        tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
+                        tools.envLog("[VacBot] *** cleanLog_lastTotalTime = " + this.cleanLog_lastTotalTime);
+                        tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
                     }
+                    this.cleanLog[logs[logIndex]['id']] = {
+                        'squareMeters': squareMeters,
+                        'timestamp': timestamp,
+                        'date': date,
+                        'lastTime': len,
+                        'totalTime': len,
+                        'totalTimeFormatted': totalTimeString,
+                        'imageUrl': imageUrl,
+                        'type': logs[logIndex]['type'],
+                        'stopReason': logs[logIndex]['stopReason']
+                    };
                 }
             }
         }

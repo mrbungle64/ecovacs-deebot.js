@@ -165,7 +165,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             commandPrefix = 'report';
         }
         // Remove from "get" commands
-        if (abbreviatedCmd.startsWith("get")) {
+        if (abbreviatedCmd.startsWith("get") || abbreviatedCmd.startsWith("Get")) {
             abbreviatedCmd = abbreviatedCmd.substring(3);
             commandPrefix = 'get';
         }

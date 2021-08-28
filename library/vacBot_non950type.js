@@ -272,7 +272,7 @@ class VacBot_non950type extends VacBot {
       }
       this.mapPiecePacketsSent = [];
       for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {
-        if(this.mapPiecePacketsCrcArray[c] != 1295764014) { //skip empty pieces
+        if(this.mapPiecePacketsCrcArray[c] !== '1295764014') { //skip empty pieces
           this.run('PullMP', c);
         }
       }
