@@ -192,13 +192,13 @@ class ResetLifeSpan extends VacBotCommand_950type {
 }
 
 class GetCleanSpeed extends VacBotCommand_950type {
-    constructor(component) {
+    constructor() {
         super('getSpeed');
     }
 }
 
 class GetError extends VacBotCommand_950type {
-    constructor(component) {
+    constructor() {
         super('getError');
     }
 }
