@@ -114,27 +114,6 @@ function isValidVirtualWallType(type) {
     return false;
 }
 
-function getEventNameForCommandString(str) {
-    let command = str.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
-    if (command.startsWith('On') && (command !== 'OnOff')) { //950 series incoming events
-        command = command.substring(2);
-    }
-    switch (command.toLowerCase()) {
-        case 'waterpermeability':
-            return 'WaterLevel';
-        case 'chargerpos':
-            return 'ChargePosition';
-        case 'pos':
-            return 'DeebotPosition';
-        case 'errors':
-            return 'Error';
-        case 'logapicleanlogs':
-            return 'CleanLogs';
-        default:
-            return command;
-    }
-}
-
 envLog = function () {
     if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
         if ((arguments[0] === '[DEBUG_INCOMING_RAW]') || (arguments[0] === '[DEBUG_INCOMING]')) {
@@ -154,7 +133,6 @@ envLog = function () {
 module.exports.isObject = isObject;
 module.exports.isValidJsonString = isValidJsonString;
 module.exports.isValidVirtualWallType = isValidVirtualWallType;
-module.exports.getEventNameForCommandString = getEventNameForCommandString;
 module.exports.envLog = envLog;
 module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getSupportedDevices = getSupportedDevices;

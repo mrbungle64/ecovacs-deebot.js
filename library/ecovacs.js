@@ -96,7 +96,12 @@ class Ecovacs extends EventEmitter {
 
     async handleMessagePayload(command, event) {
         this.emit('messageReceived', new Date());
-        switch (tools.getEventNameForCommandString(command)) {
+        let abbreviatedCmd = command.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
+        // Incoming MQTT messages
+        if (abbreviatedCmd.startsWith('On') && (abbreviatedCmd !== 'OnOff')) {
+            abbreviatedCmd = abbreviatedCmd.substring(2);
+        }
+        switch (abbreviatedCmd) {
             case 'CleanSt':
                 this.bot.handle_stats(event);
                 if (this.bot.currentStats) {
@@ -151,7 +156,8 @@ class Ecovacs extends EventEmitter {
                     this.handleLifeSpanCombined();
                 }
                 break;
-            case 'DeebotPosition':
+            case 'Pos':
+                // DeebotPosition
                 this.bot.handle_deebotPosition(event);
                 if (this.bot.deebotPosition['x'] && this.bot.deebotPosition['y']) {
                     this.emit('DeebotPosition', this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a']);
@@ -166,7 +172,7 @@ class Ecovacs extends EventEmitter {
                     });
                 }
                 break;
-            case 'ChargePosition':
+            case 'ChargerPos':
                 this.bot.handle_chargePosition(event);
                 this.emit('ChargePosition', this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a']);
                 this.emit('ChargingPosition', {
@@ -176,7 +182,7 @@ class Ecovacs extends EventEmitter {
                     'a': this.bot.chargePosition['a']
                 });
                 break;
-            case 'WaterLevel':
+            case 'WaterPermeability':
                 this.bot.handle_waterLevel(event);
                 this.emit('WaterLevel', this.bot.waterLevel);
                 this.emitMoppingSystemReport();
@@ -221,7 +227,9 @@ class Ecovacs extends EventEmitter {
                     'totalNumber': this.bot.cleanSum_totalNumber
                 });
                 break;
+            case 'Logs':
             case 'CleanLogs':
+            case 'LogApiCleanLogs':
                 this.bot.handle_cleanLogs(event);
                 let cleanLog = [];
                 for (let i in this.bot.cleanLog) {
@@ -280,12 +288,6 @@ class Ecovacs extends EventEmitter {
                 let mapsubset = this.bot.handle_mapSubset(event);
                 if (mapsubset && (mapsubset['mapsubsetEvent'] !== 'error')) {
                     this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);
-                }
-                break;
-            case 'MapPiecePacket':
-                const mapImage = this.bot.handle_mapPiecePacket(event);
-                if (mapImage) {
-                    this.emit("MapImageData", mapImage);
                 }
                 break;
             case 'DustCaseST':
