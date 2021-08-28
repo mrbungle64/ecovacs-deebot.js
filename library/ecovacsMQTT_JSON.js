@@ -146,7 +146,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     async handleMessagePayload(command, event) {
-        this.emit('messageReceived', new Date());
         tools.envLog("[EcovacsMQTT_JSON] handleMessagePayload() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         let abbreviatedCmd = command.replace(/^_+|_+$/g, '');
         let commandPrefix = '';
@@ -175,27 +174,29 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (abbreviatedCmd.endsWith("_V2") || abbreviatedCmd.endsWith("_v2")) {
             abbreviatedCmd = abbreviatedCmd.slice(0, -3);
         }
+        this.emit('messageReceived', command  + ' => ' + abbreviatedCmd);
+        const payload = this.getPayload(event);
         switch (abbreviatedCmd) {
             case "Stats":
-                this.bot.handle_stats(event);
+                this.bot.handle_stats(payload);
                 if (this.bot.currentStats) {
                     this.emit("CurrentStats", this.bot.currentStats);
                     this.bot.currentStats = null;
                 }
                 break;
             case "ChargeState":
-                this.bot.handle_chargeState(event);
+                this.bot.handle_chargeState(payload);
                 if (this.bot.chargeStatus) {
                     this.emit("ChargeState", this.bot.chargeStatus);
                 }
                 break;
             case "Battery":
-                this.bot.handle_batteryInfo(event);
+                this.bot.handle_batteryInfo(payload);
                 this.emit("BatteryInfo", this.bot.batteryInfo);
                 this.emit("BatteryIsLow", this.bot.batteryIsLow);
                 break;
             case "CleanInfo":
-                this.bot.handle_cleanReport(event);
+                this.bot.handle_cleanReport(payload);
                 this.emit("CleanReport", this.bot.cleanReport);
                 this.emitMoppingSystemReport();
                 if (this.bot.chargeStatus) {
@@ -207,15 +208,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "Speed":
-                this.bot.handle_cleanSpeed(event);
+                this.bot.handle_cleanSpeed(payload);
                 this.emit("CleanSpeed", this.bot.cleanSpeed);
                 break;
             case "RelocationState":
-                this.bot.handle_relocationState(event);
+                this.bot.handle_relocationState(payload);
                 this.emit("RelocationState", this.bot.relocationState);
                 break;
             case "CachedMapInfo":
-                this.bot.handle_cachedMapInfo(event);
+                this.bot.handle_cachedMapInfo(payload);
                 this.emit("CurrentMapName", this.bot.currentMapName);
                 this.emit("CurrentMapMID", this.bot.currentMapMID);
                 this.emit("CurrentMapIndex", this.bot.currentMapIndex);
@@ -223,9 +224,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "MapInfo":
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
-                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(event, getCircularReplacer()));
+                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(payload, getCircularReplacer()));
                 } else if (tools.isCanvasModuleAvailable()) {
-                    let mapImage = await this.bot.handle_mapInfo(event);
+                    let mapImage = await this.bot.handle_mapInfo(payload);
                     if (mapImage !== null) {
                         this.emit("MapImageData", mapImage);
                         if (this.bot.createMapImageOnly) {
@@ -236,11 +237,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'MajorMap':
                 // TODO: finish implementing MajorMap
-                //this.bot.handle_majorMap(event);
+                //this.bot.handle_majorMap(payload);
                 break;
             case 'MinorMap':
                 // TODO: finish implementing MinorMap
-                /*let mapImage = this.bot.handle_minorMap(event);
+                /*let mapImage = this.bot.handle_minorMap(payload);
                 if (mapImage !== null) {
                     this.emit("MapLiveImage", mapImage);
                 }*/
@@ -249,19 +250,19 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // TODO: implement MapTrace
                 break;
             case "MapSet": //handle spotAreas, virtualWalls, noMopZones
-                let mapset = this.bot.handle_mapSet(event);
+                let mapset = this.bot.handle_mapSet(payload);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             case "MapSubSet": //handle spotAreas, virtualWalls, noMopZones
-                let mapsubset = this.bot.handle_mapSubset(event);
+                let mapsubset = this.bot.handle_mapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
             case "LifeSpan":
-                this.bot.handle_lifespan(event);
+                this.bot.handle_lifespan(payload);
                 if (!this.bot.emitFullLifeSpanEvent) {
                     for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
                         if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
@@ -278,7 +279,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "Pos":
-                this.bot.handle_deebotPosition(event);
+                this.bot.handle_deebotPosition(payload);
                 if (this.bot.deebotPosition["changeFlag"]) {
                     if ((this.bot.deebotPosition["isInvalid"] === true) && ((this.bot.relocationState === 'ok') || (this.bot.relocationState === null))) {
                         this.bot.relocationState = 'required';
@@ -310,13 +311,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "WaterInfo":
-                this.bot.handle_waterInfo(event);
+                this.bot.handle_waterInfo(payload);
                 this.emit("WaterBoxInfo", this.bot.waterboxInfo);
                 this.emit("WaterLevel", this.bot.waterLevel);
                 this.emitMoppingSystemReport();
                 break;
             case "NetInfo":
-                this.bot.handle_netInfo(event);
+                this.bot.handle_netInfo(payload);
                 this.emit("NetInfoIP", this.bot.netInfoIP); // Deprecated
                 this.emit("NetInfoWifiSSID", this.bot.netInfoWifiSSID); // Deprecated
                 this.emit("NetInfoWifiSignal", this.bot.netInfoWifiSignal); // Deprecated
@@ -329,27 +330,27 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 });
                 break;
             case 'Sleep':
-                this.bot.handle_sleepStatus(event);
+                this.bot.handle_sleepStatus(payload);
                 this.emit("SleepStatus", this.bot.sleepStatus);
                 break;
             case 'AutoEmpty':
-                this.bot.handle_autoEmpty(event);
+                this.bot.handle_autoEmpty(payload);
                 this.emit("AutoEmpty", this.bot.autoEmpty);
                 break;
             case 'Volume':
-                this.bot.handle_volume(event);
+                this.bot.handle_volume(payload);
                 this.emit("Volume", this.bot.volume);
                 break;
             case 'AdvancedMode':
-                this.bot.handle_advancedMode(event);
+                this.bot.handle_advancedMode(payload);
                 this.emit("AdvancedMode", this.bot.advancedMode);
                 break;
             case 'TrueDetect':
-                this.bot.handle_trueDetect(event);
+                this.bot.handle_trueDetect(payload);
                 this.emit("TrueDetect", this.bot.trueDetect);
                 break;
             case "Error":
-                this.bot.handle_error(event);
+                this.bot.handle_error(payload);
                 this.emit("Error", this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 this.emit('LastError', {
@@ -358,7 +359,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 });
                 break;
             case 'TotalStats':
-                this.bot.handle_cleanSum(event);
+                this.bot.handle_cleanSum(payload);
                 this.emit("CleanSum_totalSquareMeters", this.bot.cleanSum_totalSquareMeters); // Deprecated
                 this.emit("CleanSum_totalSeconds", this.bot.cleanSum_totalSeconds); // Deprecated
                 this.emit("CleanSum_totalNumber", this.bot.cleanSum_totalNumber); // Deprecated
@@ -369,8 +370,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 });
                 break;
             case 'CleanLogs':
-                tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(event, getCircularReplacer()));
-                this.bot.handle_cleanLogs(event);
+                tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(payload, getCircularReplacer()));
+                this.bot.handle_cleanLogs(payload);
                 let cleanLog = [];
                 for (let i in this.bot.cleanLog) {
                     if (this.bot.cleanLog.hasOwnProperty(i)) {
@@ -393,7 +394,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 });
                 break;
             case 'Sched':
-                this.bot.handle_getSched(event);
+                this.bot.handle_Schedule(payload);
                 if (this.bot.schedules) {
                     this.emit('Schedules', this.bot.schedules);
                 }
@@ -402,6 +403,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", abbreviatedCmd);
                 break;
         }
+    }
+
+    getPayload(event) {
+        if (event.hasOwnProperty('resultData')) {
+            return event['resultData'];
+        }
+        return event;
     }
 }
 
