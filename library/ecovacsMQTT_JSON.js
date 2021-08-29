@@ -7,30 +7,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
     }
 
-    sendCommand(action, recipient) {
-        let c = this.wrapCommand(action, recipient);
-        this.callEcovacsDeviceAPI(c, action.api).then((json) => {
-            this.handleCommandResponse(action, json);
-        }).catch((e) => {
-            tools.envLog("[EcovacsMQTT_JSON] callEcovacsDeviceAPI failed for cmd %s: %s", action.name, e.toString());
-        });
-    }
-
-    wrapCommand_getPayload(action) {
-        // All requests need to have this header -- not sure about timezone and ver
-        let payloadRequest = {};
-        payloadRequest['header'] = {};
-        payloadRequest['header']['pri'] = '1';
-        payloadRequest['header']['ts'] = Math.floor(Date.now());
-        payloadRequest['header']['tzm'] = 480;
-        payloadRequest['header']['ver'] = '0.0.50';
-        if (Object.keys(action.args).length > 0) {
-            payloadRequest['body'] = {};
-            payloadRequest['body']['data'] = action.args;
-        }
-        return payloadRequest;
-    }
-
     wrapCommand(action, recipient) {
         if (action.api === constants.IOTDEVMANAGERAPI) {
             return {
@@ -67,17 +43,27 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
     }
 
-    handleCommandResponse(action, message) {
-        let command = action.name;
-        //action.args: arguments of the initial command that was sent
-        tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() action: %s", action);
-        tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() command: %s", command);
+    wrapCommand_getPayload(action) {
+        // All requests need to have this header -- not sure about timezone
+        let payloadRequest = {};
+        payloadRequest['header'] = {};
+        payloadRequest['header']['pri'] = '1';
+        payloadRequest['header']['ts'] = Math.floor(Date.now());
+        payloadRequest['header']['tzm'] = 480;
+        payloadRequest['header']['ver'] = '0.0.50';
+        if (Object.keys(action.args).length > 0) {
+            payloadRequest['body'] = {};
+            payloadRequest['body']['data'] = action.args;
+        }
+        return payloadRequest;
+    }
 
+    handleCommandResponse(action, message) {
         if (message) {
             if (message.hasOwnProperty('resp')) {
-                this.handleMessage(command, message['resp'], "response");
+                this.handleMessage(action.name, message['resp'], "response");
             } else if (action.api === constants.LGLOGAPI) {
-                this.handleMessage(command, message, "logResponse");
+                this.handleMessage(action.name, message, "logResponse");
             } else {
                 tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() invalid response");
             }
@@ -91,7 +77,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let resultData = message;
 
         if (type === "incoming") {
-            //parse 3rd element from string iot/atr/onPos/e0bc19bb-8cb1-43e3-8503-e9f810e35d36/yna5xi/BTKk/
             eventName = topic.split('/')[2];
             message = JSON.parse(message);
             resultData = message['body']['data'];

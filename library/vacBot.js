@@ -597,13 +597,10 @@ class VacBot {
             }
         }
         tools.envLog("[VacBot] Sending command `%s` with id %s", action.name, action.getId());
-        if (!this.useMqtt) {
-            this.ecovacs.sendCommand(action.to_xml(), this.getVacBotDeviceId());
-        } else {
-            // IOTMQ issues commands via RestAPI, and listens on MQTT for status updates
-            // IOTMQ devices need the full action for additional parsing
-            this.ecovacs.sendCommand(action, this.getVacBotDeviceId());
-        }
+        let actionPayload = this.useMqtt ? action : action.to_xml();
+        (async () => {
+            await this.ecovacs.sendCommand(actionPayload, this.getVacBotDeviceId());
+        })();
     }
 
     // Deprecated

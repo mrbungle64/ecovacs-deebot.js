@@ -154,6 +154,22 @@ class EcovacsMQTT extends Ecovacs {
         });
     }
 
+    async sendCommand(action, recipient) {
+        let wrappedCommand = this.wrapCommand(action, recipient);
+        const json = await this.callEcovacsDeviceAPI(wrappedCommand, this.getAPI(action));
+        this.handleCommandResponse(action, json);
+    }
+
+    getAPI(action) {
+        let api = constants.IOTDEVMANAGERAPI; // non 950 type models
+        if (action.name === 'GetLogApiCleanLogs') {
+            api = constants.LGLOGAPI; // Cleaning log for non 950 type models (MQTT/XML)
+        } else if (action.api) {
+            api = action.api // 950 type models
+        }
+        return api;
+    }
+
     //end session
     disconnect() {
         tools.envLog("[EcovacsMQTT] Closing MQTT Client...");

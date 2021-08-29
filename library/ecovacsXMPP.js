@@ -23,32 +23,29 @@ class EcovacsXMPP extends Ecovacs {
         });
 
         this.simpleXmpp.on('stanza', (stanza) => {
-            tools.envLog('[EcovacsXMPP] stanza: %s', stanza.toString());
             if ((stanza.name === 'iq') && !!stanza.children[0] && !!stanza.children[0].children[0]) {
                 if (((stanza.attrs.type === 'set') || (stanza.attrs.type === 'result')) && (stanza.children[0].name === 'query')) {
-                    let firstChild = stanza.children[0];
-                    tools.envLog('[EcovacsXMPP] firstChild: %s', firstChild.toString());
-                    let secondChild = firstChild.children[0];
-                    tools.envLog('[EcovacsXMPP] secondChild: %s', secondChild.toString());
+                    let payload = stanza.children[0].children[0];
+                    tools.envLog('[EcovacsXMPP] payload: %s', payload.toString());
                     let command = '';
-                    if (secondChild.attrs) {
-                        if (secondChild.attrs.id && (this.bot.commandsSent[secondChild.attrs.id])) {
-                            const action = this.bot.commandsSent[secondChild.attrs.id];
+                    if (payload.attrs) {
+                        if (payload.attrs.id && (this.bot.commandsSent[payload.attrs.id])) {
+                            const action = this.bot.commandsSent[payload.attrs.id];
                             command = action.name;
                         } else {
-                            command = secondChild.attrs.td;
+                            command = payload.attrs.td;
                         }
                         if ((command !== undefined) && (command !== '')) {
                             tools.envLog('[EcovacsXMPP] command: %s', command);
                             (async () => {
                                 try {
-                                    await this.handleMessagePayload(command, secondChild);
+                                    await this.handleMessagePayload(command, payload);
                                 } catch (e) {
                                     this.bot.errorCode = '-2';
                                     this.bot.errorDescription = e.toString();
                                     this.emitLastError();
                                 }
-                                delete this.bot.commandsSent[secondChild.attrs.id];
+                                delete this.bot.commandsSent[payload.attrs.id];
                                 if (this.bot.errorCode === '-1') {
                                     this.bot.errorCode = '0';
                                     this.bot.errorDescription = errorCodes[this.bot.errorCode];
@@ -96,13 +93,12 @@ class EcovacsXMPP extends Ecovacs {
         });
     }
 
-    sendCommand(xml, recipient) {
-        let result = this.wrap_command(xml, recipient);
-        tools.envLog('[EcovacsXMPP] Sending xml:', result.toString());
-        this.simpleXmpp.conn.send(result);
+    async sendCommand(action, recipient) {
+        let wrappedCommand = this.wrap_command(action, recipient);
+        this.simpleXmpp.conn.send(wrappedCommand);
     }
 
-    wrap_command(xml, recipient) {
+    wrap_command(action, recipient) {
         let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
@@ -112,7 +108,7 @@ class EcovacsXMPP extends Ecovacs {
         });
         iqElement.c('query', {
             xmlns: 'com:ctl'
-        }).cnode(xml);
+        }).cnode(action);
         return iqElement;
     }
 

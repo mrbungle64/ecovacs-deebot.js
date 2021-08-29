@@ -8,19 +8,6 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
     }
 
-    sendCommand(action, recipient) {
-        let api = constants.IOTDEVMANAGERAPI;
-        if (action.name === 'GetLogApiCleanLogs') {
-            api = constants.LGLOGAPI;
-        }
-        let c = this.wrapCommand(action, recipient);
-        this.callEcovacsDeviceAPI(c, api).then((json) => {
-            this.handleCommandResponse(action, json);
-        }).catch((e) => {
-            tools.envLog("[EcovacsMQTT_XML] callEcovacsDeviceAPI failed for cmd %s: %s", action.name, e.toString());
-        });
-    }
-
     wrapCommand(action, recipient) {
         const auth = {
             'realm': constants.REALM,
