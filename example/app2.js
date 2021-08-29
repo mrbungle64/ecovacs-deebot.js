@@ -318,23 +318,23 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run("MoveForward");
         }
 
-            //
-            // Catch ctrl-c to exit program
-            //
-            process.on('SIGINT', function() {
-                console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
-                disconnect();
-            });
+        //
+        // Catch ctrl-c to exit program
+        //
+        process.on('SIGINT', function() {
+            console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
+            disconnect();
+        });
 
-            function disconnect() {
-                try {
-                    vacbot.disconnect();
-                } catch (e) {
-                    console.log('Failure in disconnecting: ', e.message);
-                }
-                console.log("Exiting...");
-                process.exit();
+        function disconnect() {
+            try {
+                vacbot.disconnect();
+            } catch (e) {
+                console.log('Failure in disconnecting: ', e.message);
             }
+            console.log("Exiting...");
+            process.exit();
+        }
     });
 }).catch((e) => {
     console.log('Failure in connecting: ', e.message);

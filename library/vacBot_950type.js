@@ -399,10 +399,8 @@ class VacBot_950type extends VacBot {
     }
 
     handle_volume(payload) {
-        if (event.hasOwnProperty('resultData')) {
-            this.volume = payload['volume'];
-            tools.envLog("[VacBot] *** volume = " + this.volume);
-        }
+        this.volume = payload['volume'];
+        tools.envLog("[VacBot] *** volume = " + this.volume);
     }
 
     handle_chargeState(payload) {
@@ -459,7 +457,6 @@ class VacBot_950type extends VacBot {
     }
 
     handle_Schedule(payload) {
-        tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
         this.schedule = [];
         for (let c = 0; c < payload.length; c++) {
             const resultData = payload[c];
@@ -515,9 +512,9 @@ class VacBot_950type extends VacBot {
                 break;
             }
             case "GetMaps".toLowerCase(): {
+                this.createMapImageOnly = false;
                 this.createMapDataObject = !!args[0] || false;
                 this.createMapImage = this.createMapDataObject && this.isMapImageSupported();
-                this.createMapImageOnly = false;
                 if (args.length >= 2) {
                     this.createMapImage = !!args[1];
                 }

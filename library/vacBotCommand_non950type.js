@@ -321,7 +321,9 @@ class GetLogApiCleanLogs extends VacBotCommand_non950type {
 
 class GetOnOff extends VacBotCommand_non950type {
     constructor(type) {
-        type = constants_type.ON_OFF_TO_ECOVACS[type];
+        if (constants_type.ON_OFF_TO_ECOVACS.hasOwnProperty(type)) {
+            type = constants_type.ON_OFF_TO_ECOVACS[type];
+        }
         super('GetOnOff', {
             't': type
         });
@@ -331,7 +333,9 @@ class GetOnOff extends VacBotCommand_non950type {
 class SetOnOff extends VacBotCommand_non950type {
     constructor(type, on) {
         // on = 1, off = 0
-        type = constants_type.ON_OFF_TO_ECOVACS[type];
+        if (constants_type.ON_OFF_TO_ECOVACS.hasOwnProperty(type)) {
+            type = constants_type.ON_OFF_TO_ECOVACS[type];
+        }
         super('SetOnOff', {
             't': type,
             'on': on
