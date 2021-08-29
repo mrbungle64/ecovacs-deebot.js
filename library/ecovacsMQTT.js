@@ -88,7 +88,7 @@ class EcovacsMQTT extends Ecovacs {
                 method: 'POST',
                 headers: headers
             };
-            tools.envLog("[EcovacsMQTT] Sending POST to ", JSON.stringify(reqOptions, getCircularReplacer()));
+            tools.envLog("[EcovacsMQTT] Sending POST to ", JSON.stringify(reqOptions));
 
             const req = https.request(reqOptions, (res) => {
                 res.setEncoding('utf8');
@@ -100,14 +100,14 @@ class EcovacsMQTT extends Ecovacs {
                 res.on('end', () => {
                     try {
                         const json = JSON.parse(rawData);
-                        tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json, getCircularReplacer()));
+                        tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json));
                         if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
                             if (this.bot.errorCode !== '0') {
                                 this.emitLastErrorByErrorCode('0');
                             }
                             resolve(json);
                         } else {
-                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json, getCircularReplacer()));
+                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json));
                             const errorCode = json['errno'];
                             const errorCodeObj = {code: errorCode};
                             if (this.bot.is950type()) {
@@ -148,7 +148,7 @@ class EcovacsMQTT extends Ecovacs {
             });
 
             // write data to request body
-            tools.envLog("[EcovacsMQTT] Sending", JSON.stringify(params, getCircularReplacer()));
+            tools.envLog("[EcovacsMQTT] Sending", JSON.stringify(params));
             req.write(JSON.stringify(params));
             req.end();
         });
@@ -164,19 +164,6 @@ class EcovacsMQTT extends Ecovacs {
             tools.envLog("[EcovacsMQTT] Error closing MQTT Client:  %s", e.toString());
         }
     }
-}
-
-function getCircularReplacer() {
-    const seen = new WeakSet();
-    return (key, value) => {
-        if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-                return;
-            }
-            seen.add(value);
-        }
-        return value;
-    };
 }
 
 module.exports = EcovacsMQTT;

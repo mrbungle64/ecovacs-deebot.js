@@ -2,7 +2,6 @@ const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
 const { DOMParser } = require('@xmldom/xmldom');
-const errorCodes = require("./errorCodes");
 
 class EcovacsMQTT_XML extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
@@ -23,10 +22,6 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     wrapCommand(action, recipient) {
-        if (!action) {
-            tools.envLog("[EcovacsMQTT_XML] wrapCommand action missing: %s", JSON.stringify(action, getCircularReplacer()));
-            return {};
-        }
         const auth = {
             'realm': constants.REALM,
             'resource': this.resource,
@@ -101,7 +96,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 delete this.bot.commandsSent[action.args.id];
             })();
         } else {
-            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json, getCircularReplacer()));
+            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json));
         }
     }
 
@@ -163,19 +158,6 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         }
         return result;
     }
-}
-
-function getCircularReplacer() {
-    const seen = new WeakSet();
-    return (key, value) => {
-        if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-                return;
-            }
-            seen.add(value);
-        }
-        return value;
-    };
 }
 
 module.exports = EcovacsMQTT_XML;

@@ -1,7 +1,6 @@
 const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools.js');
 const constants = require('./ecovacsConstants');
-const errorCodes = require("./errorCodes");
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
@@ -10,7 +9,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
     sendCommand(action, recipient) {
         let c = this.wrapCommand(action, recipient);
-        tools.envLog("[EcovacsMQTT_JSON] c: %s", JSON.stringify(c, getCircularReplacer()));
         this.callEcovacsDeviceAPI(c, action.api).then((json) => {
             this.handleCommandResponse(action, json);
         }).catch((e) => {
@@ -19,7 +17,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     wrapCommand_getPayload(action) {
-        tools.envLog("[EcovacsMQTT_JSON] wrapCommand() args: ", JSON.stringify(action.args, getCircularReplacer()));
         // All requests need to have this header -- not sure about timezone and ver
         let payloadRequest = {};
         payloadRequest['header'] = {};
@@ -31,15 +28,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             payloadRequest['body'] = {};
             payloadRequest['body']['data'] = action.args;
         }
-        tools.envLog("[EcovacsMQTT_JSON] wrapCommand() payload: %s", JSON.stringify(payloadRequest, getCircularReplacer()));
         return payloadRequest;
     }
 
     wrapCommand(action, recipient) {
-        if (!action) {
-            tools.envLog("[EcovacsMQTT_JSON] wrapCommand action missing: %s", JSON.stringify(action, getCircularReplacer()));
-            return {};
-        }
         if (action.api === constants.IOTDEVMANAGERAPI) {
             return {
                 'auth': {
@@ -82,12 +74,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() command: %s", command);
 
         if (message) {
-            tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() message: %s", JSON.stringify(message, getCircularReplacer()));
             if (message.hasOwnProperty('resp')) {
-                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() message['resp']: %s", command, JSON.stringify(message['resp'], getCircularReplacer()));
                 this.handleMessage(command, message['resp'], "response");
             } else if (action.api === constants.LGLOGAPI) {
-                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() message: %s", command, JSON.stringify(message, getCircularReplacer()));
                 this.handleMessage(command, message, "logResponse");
             } else {
                 tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() invalid response");
@@ -96,10 +85,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     handleMessage(topic, message, type = "incoming") {
-        if (!message) {
-            tools.envLog("[EcovacsMQTT_JSON] handleMessage message missing ... topic: %s", topic);
-        }
-
         let eventName = topic;
         let resultCode = "0";
         let resultCodeMessage = "ok";
@@ -146,7 +131,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     async handleMessagePayload(command, event) {
-        tools.envLog("[EcovacsMQTT_JSON] handleMessagePayload() command %s received event: %s", command, JSON.stringify(event, getCircularReplacer()));
         let abbreviatedCmd = command.replace(/^_+|_+$/g, '');
         let commandPrefix = '';
         // Incoming events (on)
@@ -224,7 +208,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "MapInfo":
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
-                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s",  JSON.stringify(payload, getCircularReplacer()));
+                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s", JSON.stringify(payload));
                 } else if (tools.isCanvasModuleAvailable()) {
                     let mapImage = await this.bot.handle_mapInfo(payload);
                     if (mapImage !== null) {
@@ -370,13 +354,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 });
                 break;
             case 'CleanLogs':
-                tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(payload, getCircularReplacer()));
                 this.bot.handle_cleanLogs(payload);
                 let cleanLog = [];
                 for (let i in this.bot.cleanLog) {
                     if (this.bot.cleanLog.hasOwnProperty(i)) {
                         cleanLog.push(this.bot.cleanLog[i]);
-                        tools.envLog("[EcovacsMQTT_JSON] Logs: %s", JSON.stringify(this.bot.cleanLog[i], getCircularReplacer()));
                     }
                 }
                 this.emit("CleanLog", cleanLog);
@@ -411,19 +393,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
         return event;
     }
-}
-
-function getCircularReplacer() {
-    const seen = new WeakSet();
-    return (key, value) => {
-        if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-                return;
-            }
-            seen.add(value);
-        }
-        return value;
-    };
 }
 
 module.exports = EcovacsMQTT_JSON;
