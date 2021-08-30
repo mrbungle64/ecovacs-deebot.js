@@ -63,10 +63,11 @@ There is of course no claim to full functionality.
 * The cleaning log has an empty result on T9 series
 * The combined map data object does not work with T9 series
 * TrueDetect commands not working yet (tested on T9)
+* Generating map images for 950 type models can still take some time
 
 ## Changelog
 
-### 0.6.2 (beta)
+### 0.6.2
 * Lots of refactoring, code improvements and some fixes
 * Added some wrapper [functions](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions) for controlling the bot
 * Switch to @xmldom/xmldom (bump xmldom from 0.6.0 to 0.7.2)
