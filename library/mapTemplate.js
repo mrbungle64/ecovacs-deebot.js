@@ -35,18 +35,18 @@ const SPOTAREA_COLORS = [
 ];
 
 const MAP_COLORS = {
-    'vw': '#e40046', //virtual wall
-    'mw': '#f7a501', //no mop zone
+    'vw': '#e40046', // virtual wall
+    'mw': '#f7a501', // no mop zone
     'floor': '#badbff',
     'wall': '#5095e1',
     'carpet': '#b0cceb',
     'wifi_not_covered': '#d6d6d6',
-    'wifi_1': '#7fbafb', //strong
+    'wifi_1': '#7fbafb', // strong
     'wifi_2': '#a2cdfc',
     'wifi_3': '#bbdafd',
     'wifi_4': '#ddebfa',
-    'wifi_5': '#f7fbff', //weak
-}
+    'wifi_5': '#f7fbff', // weak
+};
 
 const POSITION_OFFSET = 400; // the positions of the charger and the Deebot need an offset of 400 pixels
 
@@ -100,11 +100,11 @@ class EcovacsMapImageBase {
                 let pieceDataPosition = mapPieceWidth * row + column;
                 let pixelValue = mapPieceDecompressed[pieceDataPosition];
 
-                if (pixelValue === 0) { //No data
+                if (pixelValue === 0) { // No data
                     this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
                     this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                 } else {
-                    //checkCropBoundaries
+                    // Check cropBoundaries
                     if (this.cropBoundaries.minY === null) {
                         this.cropBoundaries.minY = bufferColumn;
                     } else if (bufferColumn < this.cropBoundaries.minY) {
@@ -126,43 +126,57 @@ class EcovacsMapImageBase {
                         this.cropBoundaries.maxY = bufferColumn;
                     }
 
-                    if (pixelValue === 1) { //Floor
-                        this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue === 2) { //Wall
-                        this.mapWallContext.fillStyle = MAP_COLORS['wall'];
-                        this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue === 3) { //Carpet
-                        this.mapWallContext.fillStyle = MAP_COLORS['carpet'];
-                        this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        //only for Wifi heatmap
-                    } else if (pixelValue === 4) { //Wifi not covered
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_not_covered'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue > 10 && pixelValue <= 20) {  //Wifi coverage 1=strong
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue > 20 && pixelValue <= 30) { //Wifi coverage 2
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue > 30 && pixelValue <= 40) { //Wifi coverage 3
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue > 40 && pixelValue <= 50) { //Wifi coverage 4
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    } else if (pixelValue > 50) {        //Wifi coverage 5=weak
-                        this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];
-                        this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                        this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                    if (pixelValue < 4) {
+                        // Floor, wall and carpet
+                        if (pixelValue === 1) {
+                            // Floor
+                            this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue === 2) {
+                            // Wall
+                            this.mapWallContext.fillStyle = MAP_COLORS['wall'];
+                            this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue === 3) {
+                            // Carpet
+                            this.mapWallContext.fillStyle = MAP_COLORS['carpet'];
+                            this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        }
+                    } else if (pixelValue >= 4) {
+                        // Wifi heatmap
+                        if (pixelValue === 4) {
+                            // Wifi not covered
+                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_not_covered'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue > 10 && pixelValue <= 20) {
+                            // Wifi coverage 1=strong
+                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue > 20 && pixelValue <= 30) {
+                            // Wifi coverage 2
+                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue > 30 && pixelValue <= 40) {
+                            // Wifi coverage 3
+                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue > 40 && pixelValue <= 50) {
+                            // Wifi coverage 4
+                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        } else if (pixelValue > 50) {
+                            // Wifi coverage 5=weak
+                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];
+                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
+                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
+                        }
                     }
                 }
             }
@@ -273,7 +287,7 @@ class EcovacsMapImageBase {
         finalContext.drawImage(this.mapWallCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
         //Draw deebot
-        if (this.mapID == currentMapMID) { //TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
+        if (this.mapID === currentMapMID) { //TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
             const {Image} = require('canvas');
             if (typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //TODO: draw other icon when position is invalid
                 //Draw robot
@@ -289,10 +303,10 @@ class EcovacsMapImageBase {
                 // icon size is 16*16, so subtract 8 pixels to coordinates for center
                 finalContext.drawImage(robotCanvas, (deebotPosition['x'] / this.mapPixel) + POSITION_OFFSET - 8, (deebotPosition['y'] / this.mapPixel) + POSITION_OFFSET - 8, 16, 16);
             }
-            //Draw charger
+            // Draw charger
             //////////////
-            //TODO: replace with customizable icons
-            //for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L28
+            // TODO: replace with customizable icons
+            // for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L28
             const charger = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAdVBMVEUAAAA44Yo44Yo44Yo44Yo44Yo44Yo44Yo44Yp26q844Yr///9767Kv89DG9t2g8Md26q5C44/5/vvz/fjY+ei19NNV5ZtJ45T2/fmY78KP7r1v6atq6Kjs/PPi+u7e+uvM9+Gb8MSS7r+H7bhm6KVh56JZ5p3ZkKITAAAACnRSTlMABTr188xpJ4aepd0A4wAAANZJREFUKM9VklmCgzAMQwkQYCSmLKWl2+zL/Y9YcIUL7wvkJHIUJyKkVcyy+JIGCZILGF//QLEqlTmMdsBEXi56igfH/QVGqvXSu49+1KftCbn+dtxB5LOPfNGQNRaKaQNkTJ46OMGczZg8wJB/9TB+J3nFkyqJMp44vBrnWYhJJmOn/5uVzAotV/zACnbUtTbOpHcQzVx8kxw6mavdpYP90dsNcE5k6xd8RoIb2Xgk6xAbfm5C9NiHtxGiXD/U2P96UJunrS/LOeV2GG4wfBi241P5+NwBnAEUFx9FUdUAAAAASUVORK5CYII=";
             const chargerImage = new Image();
             chargerImage.src = charger;
@@ -300,7 +314,7 @@ class EcovacsMapImageBase {
             finalContext.drawImage(chargerImage, (chargerPosition['x'] / this.mapPixel) + POSITION_OFFSET - 8, (chargerPosition['y'] / this.mapPixel) + POSITION_OFFSET - 8, 16, 16);
         }
 
-        //crop image
+        // Crop image
         const croppedImage = finalContext.getImageData(this.cropBoundaries.minX
             , this.mapTotalHeight - this.cropBoundaries.maxY // map was flipped horizontally before, so the boundaries have shifted
             , this.cropBoundaries.maxX - this.cropBoundaries.minX
@@ -330,7 +344,9 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
     }
 
     updateMapDataPiecesCrc(mapDataPiecesCrc) {
-        this.mapDataPiecesCrc = mapDataPiecesCrc; //is only transfered in onMajorMap, TODO: comparison for change has to be done before onMinorMap-Events
+        // Is only transferred in onMajorMap
+        // TODO: comparison for change has to be done before onMinorMap-Events
+        this.mapDataPiecesCrc = mapDataPiecesCrc;
     }
 
     updateMapPiece(mapDataPieceIndex, mapDataPiece) {
@@ -351,32 +367,32 @@ class EcovacsMapImage extends EcovacsMapImageBase {
 
         this.isLiveMap = false;
 
-        //mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
+        // mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
         this.mapDataPieces = new Array(mapTotalCount).fill(false);
-        //mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison
+        // mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison
         this.initCanvas();
     }
 
     updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue, checkPieceCrc = true) {
-        //TODO: currently only validated with one piece (StartX=0 and StartY=0)
+        // TODO: currently only validated with one piece (StartX=0 and StartY=0)
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
 
-        if (checkPieceCrc && (this.mapDataPiecesCrc !== pieceCrc)) { //CRC has changed, so invalidate all pieces and return
+        if (checkPieceCrc && (this.mapDataPiecesCrc !== pieceCrc)) { // CRC has changed, so invalidate all pieces and return
             this.mapDataPiecesCrc = pieceCrc;
             this.mapDataPieces.fill(false);
             this.mapDataPieces[pieceIndex] = pieceValue;
-            return null; //nothing to process as not all pieces are received yet
+            return null; // Nothing to process as not all pieces are received yet
         } else {
-            if (!this.mapDataPieces.every(Boolean)) { //not all pieces have been received
+            if (!this.mapDataPieces.every(Boolean)) { // Not all pieces have been received
                 this.mapDataPieces[pieceIndex] = pieceValue;
-                if (!this.mapDataPieces.every(Boolean)) { //if still not all pieces have been received return
-                    return null; //nothing to process as not all pieces are received yet
-                } else { //last piece received
+                if (!this.mapDataPieces.every(Boolean)) { // If still not all pieces have been received return
+                    return null; // Nothing to process as not all pieces are received yet
+                } else { // Last piece received
                     this.transferMapInfo = true;
                 }
-            } else { //all pieces have been received already, so only transfer once per new onMapInfo series
+            } else { // All pieces have been received already, so only transfer once per new onMapInfo series
                 if (pieceIndex === 0) {
                     this.transferMapInfo = true;
                 }
