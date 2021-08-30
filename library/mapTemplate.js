@@ -2,7 +2,6 @@ const tools = require('./tools.js');
 const lzma = require('lzma')
 const constants = require('./ecovacsConstants');
 const map = require('./mapTemplate');
-const {createCanvas, Image} = require('canvas');
 
 const SPOTAREA_SUBTYPES = {
     '0': {"en": "Default  (A, B, C...)", "de": "Standard (A, B, C...)"},
@@ -80,6 +79,7 @@ class EcovacsMapImageBase {
             return null;
         }
 
+        const {createCanvas} = require('canvas');
         this.mapFloorCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
         this.mapFloorContext = this.mapFloorCanvas.getContext("2d");
         this.mapFloorContext.globalAlpha = 1;
@@ -179,6 +179,7 @@ class EcovacsMapImageBase {
             return null;
         }
 
+        const {createCanvas} = require('canvas');
         let finalCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
         let finalContext = finalCanvas.getContext("2d");
         //flip map horizontally before drawing everything else
@@ -273,6 +274,7 @@ class EcovacsMapImageBase {
 
         //Draw deebot
         if (this.mapID == currentMapMID) { //TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
+            const {Image} = require('canvas');
             if (typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //TODO: draw other icon when position is invalid
                 //Draw robot
                 ////////////
@@ -531,6 +533,7 @@ function createCanvasFromCoordinates(coordinates, width = 100, height = 100, sty
     }
     let coordinateArray = coordinates.split(";");
 
+    const {createCanvas} = require('canvas');
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
     ctx.beginPath();
@@ -579,6 +582,7 @@ function mapPieceToIntArray(pieceValue) {
 
 
 function getRotatedCanvasFromImage(image, angle) {
+    const {createCanvas} = require('canvas');
     let rotatedCanvas = createCanvas(image.width, image.height);
     let rotatedContext = rotatedCanvas.getContext("2d");
     rotatedContext.translate(image.width / 2, image.height / 2);
