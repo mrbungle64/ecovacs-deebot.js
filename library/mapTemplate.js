@@ -66,6 +66,7 @@ class EcovacsMapImageBase {
         };
         this.mapID = mapID;
         this.mapType = constants.MAPINFOTYPE_FROM_ECOVACS[mapType];
+        this.isLiveMap = false;
         this.mapTotalWidth = mapTotalWidth;
         this.mapTotalHeight = mapTotalHeight;
         this.mapPixel = mapPixel;
@@ -196,14 +197,14 @@ class EcovacsMapImageBase {
         const {createCanvas} = require('canvas');
         let finalCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
         let finalContext = finalCanvas.getContext("2d");
-        //flip map horizontally before drawing everything else
+        // Flip map horizontally before drawing everything else
         finalContext.translate(0, this.mapTotalHeight);
         finalContext.scale(1, -1);
 
-        //Draw floor map
+        // Draw floor map
         finalContext.drawImage(this.mapFloorCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
-        //get mapObject
+        // Get mapObject
         let mapObject = null;
 
         if (map.mapDataObject !== null) {
@@ -212,7 +213,7 @@ class EcovacsMapImageBase {
             } else {
                 mapObject = getMapObject(map.mapDataObject, this.mapID);
             }
-            //Draw spotAreas
+            // Draw spotAreas
             let areaCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
             const areaContext = areaCanvas.getContext('2d');
             for (let areaIndex in mapObject['mapSpotAreas']) {
@@ -233,7 +234,7 @@ class EcovacsMapImageBase {
             }
             finalContext.drawImage(areaCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
-            //Draw virtualBoundaries
+            // Draw virtualBoundaries
             let boundaryCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
             const boundaryContext = boundaryCanvas.getContext('2d');
             for (let boundaryIndex in mapObject['mapVirtualBoundaries']) {
@@ -243,7 +244,7 @@ class EcovacsMapImageBase {
                 for (let i = 0; i < boundaryCoordinateArray.length; i = i + 2) {
                     let row = boundaryCoordinateArray[i] / 50 + POSITION_OFFSET;
                     let column = boundaryCoordinateArray[i + 1] / 50 + POSITION_OFFSET;
-                    //checkCropBoundaries
+                    // Check cropBoundaries
                     if (this.cropBoundaries.minY === null) {
                         this.cropBoundaries.minY = column;
                     } else if (column < this.cropBoundaries.minY) {
@@ -283,10 +284,10 @@ class EcovacsMapImageBase {
             //TODO: add results from getPos_V2 to mapDataObject
         }
 
-        //Draw walls & carpet
+        // Draw walls & carpet
         finalContext.drawImage(this.mapWallCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
-        //Draw deebot
+        // Draw deebot
         if (this.mapID === currentMapMID) { //TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
             const {Image} = require('canvas');
             if (typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //TODO: draw other icon when position is invalid
@@ -353,20 +354,17 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
-        this.transferMapInfo = true; //TODO: check for Crc change, interval and maybe only once per onMajorMap-Event or onMapTrace
-
-        this.drawMapPieceToCanvas(mapDataPiece
-            , Math.floor(mapDataPieceIndex / this.mapCellWidth) * this.mapPieceWidth, (mapDataPieceIndex % this.mapCellHeight) * this.mapPieceHeight
-            , this.mapPieceWidth, this.mapPieceHeight);
+        this.transferMapInfo = true; //TODO: check for CRC change, interval and maybe only once per onMajorMap-Event or onMapTrace
+        const mapPieceStartX = Math.floor(mapDataPieceIndex / this.mapCellWidth) * this.mapPieceWidth;
+        const mapPieceStartY = (mapDataPieceIndex % this.mapCellHeight) * this.mapPieceHeight;
+        this.drawMapPieceToCanvas(mapDataPiece, mapPieceStartX, mapPieceStartY, this.mapPieceWidth, this.mapPieceHeight);
     }
 }
 
 class EcovacsMapImage extends EcovacsMapImageBase {
     constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel, mapTotalCount) {
         super(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel);
-
         this.isLiveMap = false;
-
         // mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
         this.mapDataPieces = new Array(mapTotalCount).fill(false);
         // mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison
