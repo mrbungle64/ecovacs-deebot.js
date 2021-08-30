@@ -20,7 +20,7 @@ class EcovacsMQTT extends Ecovacs {
             rejectUnauthorized: false
         };
 
-        let url = 'mqtts://' + this.server_address + ':' + this.server_port;
+        let url = `mqtts://${this.server_address}:${this.server_port}`;
         this.client = this.mqtt.connect(url, options);
         tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
 

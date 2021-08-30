@@ -29,7 +29,7 @@ class EcovacsXMPP extends Ecovacs {
                     tools.envLog('[EcovacsXMPP] payload: %s', payload.toString());
                     let command = '';
                     if (payload.attrs) {
-                        if (payload.attrs.id && (this.bot.commandsSent[payload.attrs.id])) {
+                        if (payload.attrs.id && this.bot.commandsSent[payload.attrs.id]) {
                             const action = this.bot.commandsSent[payload.attrs.id];
                             command = action.name;
                         } else {

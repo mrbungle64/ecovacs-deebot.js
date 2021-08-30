@@ -135,15 +135,9 @@ class EcovacsAPI {
     return EcovacsAPI.paramsToQueryList(result);
   }
 
-  call_main_api(loginPath, args) {
+  call_main_api(loginPath, params) {
     return new Promise((resolve, reject) => {
-      tools.envLog("[EcovacsAPI] calling main api %s with %s", loginPath, JSON.stringify(args));
-      let params = {};
-      for (let key in args) {
-        if (args.hasOwnProperty(key)) {
-          params[key] = args[key];
-        }
-      }
+      tools.envLog("[EcovacsAPI] calling main api %s with %s", loginPath, JSON.stringify(params));
       let mainUrlFormat = constants.MAIN_URL_FORMAT;
       if (loginPath === 'user/getAuthCode') {
         mainUrlFormat = constants.PORTAL_GLOBAL_AUTHCODE;

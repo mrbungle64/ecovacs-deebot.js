@@ -1,16 +1,7 @@
 const EventEmitter = require('events');
 const tools = require('./tools');
+const constants = require('./ecovacsConstants');
 const errorCodes = require('./errorCodes');
-
-exports = String.prototype.format = function () {
-    if (arguments.length === 0) {
-        return this;
-    }
-    let args = arguments['0'];
-    return this.replace(/{(\w+)}/g, function (match, number) {
-        return typeof args[number] != 'undefined' ? args[number] : match;
-    });
-};
 
 class Ecovacs extends EventEmitter {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
@@ -27,15 +18,7 @@ class Ecovacs extends EventEmitter {
         this.vacuum = vacuum;
 
         if (!server_address) {
-            let prefix = this.bot.useMqtt ? 'mq' : 'msg';
-            let mainUrl = '{prefix}-{continent}.ecouser.net';
-            if (this.country.toLowerCase() === 'cn') {
-                mainUrl = '{prefix}.ecouser.net';
-            }
-            this.server_address = mainUrl.format({
-                prefix: prefix,
-                continent: continent
-            });
+            this.server_address = this.getServerAddress();
         } else {
             this.server_address = server_address;
         }
@@ -46,52 +29,13 @@ class Ecovacs extends EventEmitter {
         this.emit("ready", event);
     }
 
-    getDictionary() {
-        if (this.bot.is950type()) {
-            return require('./ecovacsConstants_950type.js');
-        } else {
-            return require('./ecovacsConstants_non950type.js');
+    getServerAddress() {
+        const urlPrefix = this.bot.useMqtt ? 'mq' : 'msg';
+        let serverAddress = `${urlPrefix}-${this.continent}.${constants.REALM}`;
+        if (this.country.toLowerCase() === 'cn') {
+            serverAddress = `${urlPrefix}.${constants.REALM}`;
         }
-    }
-
-    emitLastErrorByErrorCode(errorCode) {
-        if (errorCode !== this.bot.errorCode) {
-            this.bot.errorCode = errorCode;
-            this.bot.errorDescription = errorCodes[this.bot.errorCode];
-            this.emitLastError();
-        }
-    }
-
-    emitLastError() {
-        this.emit("Error", this.bot.errorDescription);
-        this.emit('ErrorCode', this.bot.errorCode);
-        this.emit('LastError', {
-            'error': this.bot.errorDescription,
-            'code': this.bot.errorCode
-        });
-        // Error code 3 = request oauth error
-        if (this.bot.errorCode === '3') {
-            this.emit("disconnect", true);
-            this.disconnect();
-        }
-    }
-
-    handleLifeSpanCombined() {
-        const emitComponent = {};
-        for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
-            if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
-                if (this.bot.components[component]) {
-                    emitComponent[component] = this.bot.components[component] && (this.bot.components[component] !== this.bot.lastComponentValues[component]);
-                }
-            }
-        }
-        if (emitComponent['filter'] && emitComponent['side_brush'] && (!this.bot.hasMainBrush() || emitComponent['main_brush'])) {
-            this.emit('LifeSpan', {
-                'filter': this.bot.components['filter'],
-                'side_brush': this.bot.components['side_brush'],
-                'main_brush': this.bot.components['main_brush']
-            });
-        }
+        return serverAddress;
     }
 
     async handleMessagePayload(command, event) {
@@ -325,6 +269,54 @@ class Ecovacs extends EventEmitter {
             default:
                 tools.envLog('[Ecovacs] Unknown response type received: %s', JSON.stringify(event));
                 break;
+        }
+    }
+
+    getDictionary() {
+        if (this.bot.is950type()) {
+            return require('./ecovacsConstants_950type.js');
+        } else {
+            return require('./ecovacsConstants_non950type.js');
+        }
+    }
+
+    handleLifeSpanCombined() {
+        const emitComponent = {};
+        for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+            if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
+                if (this.bot.components[component]) {
+                    emitComponent[component] = this.bot.components[component] && (this.bot.components[component] !== this.bot.lastComponentValues[component]);
+                }
+            }
+        }
+        if (emitComponent['filter'] && emitComponent['side_brush'] && (!this.bot.hasMainBrush() || emitComponent['main_brush'])) {
+            this.emit('LifeSpan', {
+                'filter': this.bot.components['filter'],
+                'side_brush': this.bot.components['side_brush'],
+                'main_brush': this.bot.components['main_brush']
+            });
+        }
+    }
+
+    emitLastErrorByErrorCode(errorCode) {
+        if (errorCode !== this.bot.errorCode) {
+            this.bot.errorCode = errorCode;
+            this.bot.errorDescription = errorCodes[this.bot.errorCode];
+            this.emitLastError();
+        }
+    }
+
+    emitLastError() {
+        this.emit("Error", this.bot.errorDescription);
+        this.emit('ErrorCode', this.bot.errorCode);
+        this.emit('LastError', {
+            'error': this.bot.errorDescription,
+            'code': this.bot.errorCode
+        });
+        // Error code 3 = request oauth error
+        if (this.bot.errorCode === '3') {
+            this.emit("disconnect", true);
+            this.disconnect();
         }
     }
 
