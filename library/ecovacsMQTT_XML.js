@@ -49,7 +49,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     handleCommandResponse(action, json) {
         let result = {};
         if (json.hasOwnProperty('resp')) {
-            result = this.command_xml2dict(json['resp'], action);
+            result = this.command_xml2json(json['resp'], action);
             (async () => {
                 try {
                     await this.handleMessagePayload(action.name, result);
@@ -88,7 +88,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     handleMessage(topic, payload, type = "incoming") {
-        let result = this.command_xml2dict(payload);
+        let result = this.command_xml2json(payload);
         (async () => {
             try {
                 await this.handleMessagePayload(result['event'], result);
@@ -100,7 +100,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         })();
     }
 
-    command_xml2dict(xmlString) {
+    command_xml2json(xmlString) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
         const firstChild = xml.childNodes[0];
@@ -132,12 +132,14 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             result.attrs[firstChild.attributes[i].name] = firstChild.attributes[i].value;
             if (firstChild.childNodes) {
                 for (let c = 0; c < firstChild.childNodes.length; c++) {
+                    const secondChild = firstChild.childNodes[c];
                     let childObject = {
-                        'event': firstChild.childNodes[c].tagName,
+                        'event': secondChild.tagName,
                         'attrs': {}
                     };
-                    for (let ca = 0; ca < firstChild.childNodes[c].attributes.length; ca++) {
-                        childObject['attrs'][firstChild.childNodes[c].attributes[ca].name] = firstChild.childNodes[c].attributes[ca].value;
+                    for (let ca = 0; ca < secondChild.attributes.length; ca++) {
+                        const thirdChild = secondChild.attributes[ca];
+                        childObject['attrs'][thirdChild.name] = thirdChild.value;
                     }
                     result.children.push(childObject);
                 }
