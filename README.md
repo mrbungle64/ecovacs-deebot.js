@@ -67,6 +67,9 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.6.3
+* Bugfix for systems that do not have canvas installed
+
 ### 0.6.2
 * Lots of refactoring, code improvements and some fixes
 * Added some wrapper [functions](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions) for controlling the bot
