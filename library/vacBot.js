@@ -535,8 +535,18 @@ class VacBot {
         return (!this.hasSpotAreaCleaningMode());
     }
 
+    // Deprecated
+    hasSpotAreas() {
+        return this.hasSpotAreaCleaningMode();
+    }
+
     hasSpotAreaCleaningMode() {
         return this.getDeviceProperty('spot_area');
+    }
+
+    // Deprecated
+    hasCustomAreas() {
+        return this.hasCustomAreaCleaningMode();
     }
 
     hasCustomAreaCleaningMode() {
