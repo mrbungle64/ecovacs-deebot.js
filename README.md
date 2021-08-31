@@ -67,6 +67,9 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.6.4
+* Fixed a backward compatibility issue
+
 ### 0.6.3
 * Bugfix for systems that do not have canvas installed
 
