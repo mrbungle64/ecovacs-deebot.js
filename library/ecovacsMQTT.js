@@ -108,13 +108,10 @@ class EcovacsMQTT extends Ecovacs {
                             resolve(json);
                         } else {
                             tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json));
-                            const errorCode = json['errno'];
-                            const errorCodeObj = {code: errorCode};
-                            if (this.bot.is950type()) {
-                                this.bot.handle_error({resultData: errorCodeObj});
-                            } else {
-                                this.bot.handle_error(errorCodeObj);
-                            }
+                            const errorCodeObj = {
+                                code: json['errno']
+                            };
+                            this.bot.handle_error(errorCodeObj);
                             // Error code 500 = wait for response timed out (see issue #19)
                             if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                                 this.emitLastError();
@@ -151,6 +148,8 @@ class EcovacsMQTT extends Ecovacs {
             tools.envLog("[EcovacsMQTT] Sending", JSON.stringify(params));
             req.write(JSON.stringify(params));
             req.end();
+        }).catch((e)=> {
+            tools.envLog("[EcovacsMQTT] Promise rejection: " + JSON.stringify(e));
         });
     }
 
