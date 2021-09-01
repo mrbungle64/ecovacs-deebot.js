@@ -67,6 +67,9 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.6.5
+* Bugfix and improved error handling when sending requests
+
 ### 0.6.4
 * Fixed a backward compatibility issue
 
