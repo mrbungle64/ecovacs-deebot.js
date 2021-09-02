@@ -155,8 +155,12 @@ class EcovacsMQTT extends Ecovacs {
 
     async sendCommand(action, recipient) {
         let wrappedCommand = this.wrapCommand(action, recipient);
-        const json = await this.callEcovacsDeviceAPI(wrappedCommand, this.getAPI(action));
-        this.handleCommandResponse(action, json);
+        try {
+            const json = await this.callEcovacsDeviceAPI(wrappedCommand, this.getAPI(action));
+            this.handleCommandResponse(action, json);
+        } catch (e) {
+            tools.envLog("[EcovacsMQTT] Error making call to Ecovacs API: " + e.toString());
+        }
     }
 
     getAPI(action) {
