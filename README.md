@@ -67,14 +67,8 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.6.5
-* Bugfix and improved error handling when sending requests
-
-### 0.6.4
-* Fixed a backward compatibility issue
-
-### 0.6.3
-* Bugfix for systems that do not have canvas installed
+### 0.6.3 - 0.6.6
+* Some Bugfixes and improved error handling when sending requests
 
 ### 0.6.2
 * Lots of refactoring, code improvements and some fixes
