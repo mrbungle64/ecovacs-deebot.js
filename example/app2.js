@@ -85,9 +85,6 @@ api.connect(account_id, password_hash).then(() => {
                     const mapID = maps['maps'][i]['mapID'];
                     vacbot.run('GetSpotAreas', mapID);
                     vacbot.run('GetVirtualBoundaries', mapID);
-
-                    vacbot.run('GetMapImage', mapID,'outline');
-                    vacbot.run('GetMapImage', mapID,'wifiHeatMap');
                 }
             });
             vacbot.on('MapSpotAreas', (spotAreas) => {
