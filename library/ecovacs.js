@@ -112,7 +112,8 @@ class Ecovacs extends EventEmitter {
                         'y': this.bot.deebotPosition['y'],
                         'a': this.bot.deebotPosition['a'],
                         'invalid': 0,
-                        'spotAreaID': this.bot.deebotPosition['currentSpotAreaID']
+                        'spotAreaID': this.bot.deebotPosition['currentSpotAreaID'],
+                        'distanceToChargingStation': this.bot.deebotPosition["distanceToChargingStation"]
                     });
                 }
                 break;

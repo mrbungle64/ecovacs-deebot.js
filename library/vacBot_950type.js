@@ -3,6 +3,7 @@ const vacBotCommand = require('./vacBotCommand_950type');
 const VacBot = require('./vacBot');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
+const mapTools = require('./mapTools');
 const map = require('./mapTemplate');
 
 class VacBot_950type extends VacBot {
@@ -33,32 +34,6 @@ class VacBot_950type extends VacBot {
     }
 
     handle_deebotPosition(payload) {
-        // as deebotPos and chargePos can also appear in other messages (CleanReport)
-        // the handling should be extracted to a separate function
-        const deebotPos = payload['deebotPos'];
-        if (typeof deebotPos === 'object') {
-            // check if position changed or currentSpotAreaID unknown
-            let changed = (deebotPos['x'] !== this.deebotPosition.x
-                || deebotPos['y'] !== this.deebotPosition.y
-                || deebotPos['a'] !== this.deebotPosition.a
-                || deebotPos['invalid'] !== this.deebotPosition.isInvalid
-                || this.deebotPosition.currentSpotAreaID === 'unknown'
-            );
-            if (changed) {
-                let currentSpotAreaID = map.isPositionInSpotArea([[deebotPos['x']], deebotPos['y']], this.mapSpotAreaInfos[this.currentMapMID]);
-                let isInvalid = Number(deebotPos['invalid']) === 1 ? true : false;
-                tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
-                this.deebotPosition = {
-                    x: deebotPos['x'],
-                    y: deebotPos['y'],
-                    a: deebotPos['a'],
-                    isInvalid: isInvalid,
-                    currentSpotAreaID: currentSpotAreaID,
-                    changeFlag: true
-                };
-                tools.envLog("[VacBot] *** deebotPosition = " + JSON.stringify(this.deebotPosition));
-            }
-        }
         // is only available in some DeebotPosition messages (e.g. on start cleaning)
         // there can be more than one charging station only handles first charging station
         const chargePos = payload['chargePos'];
@@ -76,6 +51,39 @@ class VacBot_950type extends VacBot {
                     changeFlag: true
                 };
                 tools.envLog("[VacBot] *** chargePosition = " + JSON.stringify(this.chargePosition));
+            }
+        }
+        // as deebotPos and chargePos can also appear in other messages (CleanReport)
+        // the handling should be extracted to a separate function
+        const deebotPos = payload['deebotPos'];
+        if (typeof deebotPos === 'object') {
+            // check if position changed or currentSpotAreaID unknown
+            let changed = (deebotPos['x'] !== this.deebotPosition.x
+                || deebotPos['y'] !== this.deebotPosition.y
+                || deebotPos['a'] !== this.deebotPosition.a
+                || deebotPos['invalid'] !== this.deebotPosition.isInvalid
+                || this.deebotPosition.currentSpotAreaID === 'unknown'
+            );
+            if (changed) {
+                let currentSpotAreaID = map.isPositionInSpotArea([[deebotPos['x']], deebotPos['y']], this.mapSpotAreaInfos[this.currentMapMID]);
+                let isInvalid = Number(deebotPos['invalid']) === 1 ? true : false;
+                let distanceToChargingStation = null;
+                if (this.chargePosition) {
+                    const pos = deebotPos['x'] + ',' + deebotPos['y'];
+                    const chargePos = this.chargePosition.x + ',' + this.chargePosition.y;
+                    distanceToChargingStation = mapTools.getDistanceToChargingStation(pos, chargePos);
+                }
+                tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
+                this.deebotPosition = {
+                    x: deebotPos['x'],
+                    y: deebotPos['y'],
+                    a: deebotPos['a'],
+                    isInvalid: isInvalid,
+                    currentSpotAreaID: currentSpotAreaID,
+                    changeFlag: true,
+                    distanceToChargingStation: distanceToChargingStation
+                };
+                tools.envLog("[VacBot] *** deebotPosition = " + JSON.stringify(this.deebotPosition));
             }
         }
     }

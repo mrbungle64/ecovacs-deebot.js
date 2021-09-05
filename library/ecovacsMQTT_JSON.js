@@ -263,7 +263,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                             'y': this.bot.deebotPosition['y'],
                             'a': this.bot.deebotPosition['a'],
                             'invalid': this.bot.deebotPosition["isInvalid"],
-                            'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"]
+                            'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"],
+                            'distanceToChargingStation': this.bot.deebotPosition["distanceToChargingStation"]
                         });
                     }
                     this.bot.deebotPosition["changeFlag"] = false;

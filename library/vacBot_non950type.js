@@ -3,6 +3,7 @@ const vacBotCommand = require('./vacBotCommand_non950type');
 const VacBot = require('./vacBot');
 const errorCodes = require('./errorCodes');
 const tools = require('./tools');
+const mapTools = require('./mapTools');
 const map = require('./mapTemplate');
 
 class VacBot_non950type extends VacBot {
@@ -307,13 +308,20 @@ class VacBot_non950type extends VacBot {
         const posY = event.attrs['p'].split(",")[1];
         const angle = event.attrs['a'];
         let currentSpotAreaID = map.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
+        let distanceToChargingStation = null;
+        if (this.chargePosition) {
+          const pos = posX + ',' + posY;
+          const chargePos = this.chargePosition.x + ',' + this.chargePosition.y;
+          distanceToChargingStation = mapTools.getDistanceToChargingStation(pos, chargePos);
+        }
         this.deebotPosition = {
           x: posX,
           y: posY,
           a: angle,
           isInvalid: false,
           currentSpotAreaID: currentSpotAreaID,
-          changeFlag: true
+          changeFlag: true,
+          distanceToChargingStation: distanceToChargingStation
         };
         tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
       }
