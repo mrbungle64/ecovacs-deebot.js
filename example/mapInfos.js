@@ -18,63 +18,65 @@ let mapSpotAreaName = [];
 
 api.connect(account_id, password_hash).then(() => {
     api.devices().then((devices) => {
-        // TODO: change device number
-        let vacuum = devices[1];
+        let vacuum = devices[0];
         console.log(vacuum);
         let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
         vacbot.on('ready', (event) => {
 
-            console.log('vacbot ready');
+            console.log('\nvacbot ready\n');
 
-            vacbot.on('ChargePosition', (chargePosition) => {
-                console.log('[mapInfos.js] ChargePosition: ' + chargePosition);
+            vacbot.on('Position', (object) => {
+                console.log(`Position (x,y): ${object.x},${object.y}`);
             });
-            vacbot.on('DeebotPosition', (deebotPosition) => {
-                console.log('[mapInfos.js] DeebotPosition: ' + deebotPosition);
+
+            vacbot.on('ChargingPosition', (object) => {
+                console.log(`Charging position (x,y): ${object.x},${object.y}`);
             });
+
             vacbot.on('LastUsedAreaValues', (values) => {
-                console.log('[mapInfos.js] LastUsedAreaValues: ' + values);
+                console.log(`Last used area values (x1,y1,x2,y2): ${values}`);
             });
 
             vacbot.on('MapDataObject', (mapDataObject) => {
-                mapData = Object.assign(mapDataObject)[0];
+                mapData = Object.assign(mapDataObject[0]);
                 for (let i = 0; i < mapData.mapSpotAreas.length; i++) {
                     const mapSpotArea = mapData.mapSpotAreas[i];
                     mapSpotAreaName[mapSpotArea.mapSpotAreaID] = mapSpotArea.mapSpotAreaName;
-                    console.log('[mapInfos.js] MapSpotArea ' + mapSpotArea.mapSpotAreaID + ' => ' + mapSpotArea.mapSpotAreaName);
+                    console.log(`- Spot area ${mapSpotArea.mapSpotAreaID} = ${mapSpotArea.mapSpotAreaName}`);
                 }
-                initInterval();
+                console.log('\nRequesting position data\n');
+                initGetPosition();
             });
 
             vacbot.on('CurrentMapName', (value) => {
-                console.log('[mapInfos.js] CurrentMapName: ' + value);
+                console.log(`Current map name: ${value}`);
             });
             vacbot.on('CurrentMapMID', (mapID) => {
-                console.log('[mapInfos.js] CurrentMapMID: ' + mapID);
+                console.log(`Current map ID: ${mapID}`);
                 vacbot.run('GetSpotAreas', mapID);
             });
 
             vacbot.on('DeebotPositionCurrentSpotAreaID', (spotAreaID) => {
                 if (mapSpotAreaName[mapData.mapSpotAreas[spotAreaID].mapSpotAreaID]) {
                     const mapSpotArea = mapData.mapSpotAreas[spotAreaID];
-                    console.log('[mapInfos.js] CurrentSpotArea: ' + spotAreaID + ' => ' + mapSpotAreaName[mapSpotArea.mapSpotAreaID]);
+                    console.log(`Current spot area ${spotAreaID} = ${mapSpotAreaName[mapSpotArea.mapSpotAreaID]}`);
                 } else {
-                    console.log('[mapInfos.js] CurrentSpotAreaID: ' + spotAreaID);
+                    console.log(`Current spot area ID ${spotAreaID}`);
                 }
             });
         });
 
         vacbot.connect();
 
-        console.log('[mapInfos.js] name: ' + vacbot.getDeviceProperty('name'));
-        console.log('[mapInfos.js] isKnownDevice: ' + vacbot.isKnownDevice());
-        console.log('[mapInfos.js] isSupportedDevice: ' + vacbot.isSupportedDevice());
-        console.log('[mapInfos.js] is950type: ' + vacbot.is950type());
-        console.log('[mapInfos.js] protocol: ' + vacbot.getProtocol());
-        console.log('[mapInfos.js] hasMappingCapabilities: ' + vacbot.hasMappingCapabilities());
-        console.log('[mapInfos.js] hasSpotAreaCleaningMode: ' + vacbot.hasSpotAreaCleaningMode());
-        console.log('[mapInfos.js] hasCustomAreaCleaningMode: ' + vacbot.hasCustomAreaCleaningMode());
-        console.log('[mapInfos.js] isCanvasModuleAvailable: ' + EcoVacsAPI.isCanvasModuleAvailable());
+        console.log(`- Name: ${vacbot.getDeviceProperty(`name`)}`);
+        console.log(`- Is known device: ${vacbot.isKnownDevice()}`);
+        console.log(`- Is supported device: ${vacbot.isSupportedDevice()}`);
+        console.log(`- Is 950 type model: ${vacbot.is950type()}`);
+        console.log(`- Communication protocol: ${vacbot.getProtocol()}`);
+        console.log(`- Mapping capabilities: ${vacbot.hasMappingCapabilities()}`);
+        console.log(`- Spot area cleaning mode: ${vacbot.hasSpotAreaCleaningMode()}`);
+        console.log(`- Custom area cleaning mode: ${vacbot.hasCustomAreaCleaningMode()}`);
+        console.log(`- Canvas module available: ${EcoVacsAPI.isCanvasModuleAvailable()}`);
 
         setTimeout(() => {
             vacbot.run('GetCleanState');
@@ -94,7 +96,7 @@ api.connect(account_id, password_hash).then(() => {
             disconnect();
         });
 
-        function initInterval() {
+        function initGetPosition() {
             if (vacbot.hasMappingCapabilities()) {
                 vacbot.run('GetPosition');
                 vacbot.run('GetChargerPos');
