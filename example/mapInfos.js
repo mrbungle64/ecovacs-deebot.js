@@ -1,32 +1,37 @@
 const ecovacsDeebot = require('./../index');
+const tools = require('./tools');
 const nodeMachineId = require('node-machine-id');
 const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
 
-const account_id = "email@domain.com";
-const password = "a1b2c3d4";
-const countryCode = 'DE';
+let settingsFile = tools.getSettingsFile();
+
+const account_id = settingsFile.ACCOUNT_ID;
+const password = settingsFile.PASSWORD;
+const countryCode = settingsFile.COUNTRY_CODE;
+const deviceNumber = settingsFile.DEVICE_NUMBER;
 
 const password_hash = EcoVacsAPI.md5(password);
-const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync());
-const countries = ecovacsDeebot.countries;
-const continent = countries[countryCode].continent.toLowerCase();
+const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
 
-const api = new EcoVacsAPI(device_id, countryCode, continent);
+const api = new EcoVacsAPI(device_id, countryCode);
 
-let mapData = {};
+let mapData = null;
 let mapSpotAreaName = [];
 
 api.connect(account_id, password_hash).then(() => {
     api.devices().then((devices) => {
-        let vacuum = devices[0];
+        let vacuum = devices[deviceNumber];
         console.log(vacuum);
-        let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
-        vacbot.on('ready', (event) => {
+        let vacbot = api.getVacBotObj(vacuum);
+        vacbot.on('ready', () => {
 
             console.log('\nvacbot ready\n');
 
             vacbot.on('Position', (object) => {
                 console.log(`Position (x,y): ${object.x},${object.y}`);
+                if (object.distanceToChargingStation) {
+                    console.log(`Distance to charger (m): ${object.distanceToChargingStation}`);
+                }
             });
 
             vacbot.on('ChargingPosition', (object) => {
@@ -57,26 +62,24 @@ api.connect(account_id, password_hash).then(() => {
             });
 
             vacbot.on('DeebotPositionCurrentSpotAreaID', (spotAreaID) => {
-                if (mapSpotAreaName[mapData.mapSpotAreas[spotAreaID].mapSpotAreaID]) {
-                    const mapSpotArea = mapData.mapSpotAreas[spotAreaID];
-                    console.log(`Current spot area ${spotAreaID} = ${mapSpotAreaName[mapSpotArea.mapSpotAreaID]}`);
-                } else {
-                    console.log(`Current spot area ID ${spotAreaID}`);
+                if (mapData && mapData.mapSpotAreas[spotAreaID]) {
+                    if (mapSpotAreaName[mapData.mapSpotAreas[spotAreaID].mapSpotAreaID]) {
+                        const mapSpotArea = mapData.mapSpotAreas[spotAreaID];
+                        console.log(`Current spot area ${spotAreaID} = ${mapSpotAreaName[mapSpotArea.mapSpotAreaID]}`);
+                    } else {
+                        console.log(`Current spot area ID ${spotAreaID}`);
+                    }
                 }
+            });
+
+            vacbot.on('Error', (value) => {
+                console.log('Error: ' + value);
             });
         });
 
         vacbot.connect();
 
-        console.log(`- Name: ${vacbot.getDeviceProperty(`name`)}`);
-        console.log(`- Is known device: ${vacbot.isKnownDevice()}`);
-        console.log(`- Is supported device: ${vacbot.isSupportedDevice()}`);
-        console.log(`- Is 950 type model: ${vacbot.is950type()}`);
-        console.log(`- Communication protocol: ${vacbot.getProtocol()}`);
-        console.log(`- Mapping capabilities: ${vacbot.hasMappingCapabilities()}`);
-        console.log(`- Spot area cleaning mode: ${vacbot.hasSpotAreaCleaningMode()}`);
-        console.log(`- Custom area cleaning mode: ${vacbot.hasCustomAreaCleaningMode()}`);
-        console.log(`- Canvas module available: ${EcoVacsAPI.isCanvasModuleAvailable()}`);
+        tools.dumpSomeVacbotData(vacbot, api);
 
         setTimeout(() => {
             vacbot.run('GetCleanState');
@@ -98,8 +101,8 @@ api.connect(account_id, password_hash).then(() => {
 
         function initGetPosition() {
             if (vacbot.hasMappingCapabilities()) {
-                vacbot.run('GetPosition');
                 vacbot.run('GetChargerPos');
+                vacbot.run('GetPosition');
             }
 
             setInterval(() => {
@@ -120,5 +123,5 @@ api.connect(account_id, password_hash).then(() => {
         }
     });
 }).catch((e) => {
-    console.log('Failure in connecting: ', e.message);
+    console.error(`Failure in connecting: ${e.message}`);
 });
