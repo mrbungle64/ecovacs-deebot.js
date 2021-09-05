@@ -599,6 +599,20 @@ class VacBot {
         return '';
     }
 
+    getName() {
+        if (this.getNickname()) {
+            return this.getNickname();
+        }
+        return '';
+    }
+
+    getNickname() {
+        if (this.vacuum.nick) {
+            return this.vacuum.nick;
+        }
+        return this.getProductName();
+    }
+
     sendCommand(action) {
         if (!this.is950type()) {
             this.commandsSent[action.getId()] = action;

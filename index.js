@@ -19,18 +19,8 @@ String.prototype.format = function () {
 };
 
 class EcovacsAPI {
-  constructor(device_id, country, continent) {
+  constructor(device_id, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI");
-
-    if (!device_id) {
-      throw "No Device ID provided";
-    }
-    if (!country) {
-      throw "No Country code provided";
-    }
-    if (!continent) {
-      throw "No Continent provided";
-    }
 
     this.meta = {
       'country': country,
@@ -42,16 +32,26 @@ class EcovacsAPI {
       'deviceType': '1'
     };
     this.resource = device_id.substr(0, 8);
-    this.country = country;
-    this.continent = continent;
+    this.country = country.toUpperCase();
+    this.continent = continent !== '' ? continent : this.getContinent();
     this.device_id = device_id;
   }
 
   connect(account_id, password_hash) {
     return new Promise((resolve, reject) => {
+      if (!account_id) {
+        throw new Error("No account ID provided");
+      }
+      if (!this.country) {
+        throw new Error("No country code provided");
+      }
+      if (!countries[this.country]) {
+        throw new Error("Wrong or unknown country code provided");
+      }
+
       let login_info = null;
       let login_path = 'user/login';
-      if (this.country.toLowerCase() === 'cn') {
+      if (this.country === 'CN') {
         login_path = 'user/loginCheckMobile';
       }
       this.call_main_api(login_path, {
@@ -146,7 +146,7 @@ class EcovacsAPI {
       } else {
         params['requestId'] = EcovacsAPI.md5(uniqid());
       }
-      if (this.country.toLowerCase() === 'cn') {
+      if (this.country === 'CN') {
         mainUrlFormat = mainUrlFormat.replace('.com','.cn');
       }
       let url;
@@ -232,7 +232,7 @@ class EcovacsAPI {
       }
 
       let portalUrlFormat = constants.PORTAL_URL_FORMAT;
-      if (this.country.toLowerCase() === 'cn') {
+      if (this.country === 'CN') {
         portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
       }
       let url = (portalUrlFormat + "/" + api).format({
@@ -306,8 +306,8 @@ class EcovacsAPI {
 
   call_login_by_it_token() {
     let org = 'ECOWW';
-    let country = this.country.toUpperCase();
-    if (this.country.toLowerCase() === 'cn') {
+    let country = this.country;
+    if (this.country === 'CN') {
       org = 'ECOCN';
       country = 'Chinese';
     }
@@ -346,7 +346,25 @@ class EcovacsAPI {
     return this.getDevices();
   }
 
-  getVacBot(user, hostname, resource, secret, vacuum, continent, server_address = null) {
+  getCountryName() {
+    if (countries[this.country]) {
+      return countries[this.country].name;
+    }
+    return 'unknown';
+  }
+
+  getContinent() {
+    if (countries[this.country]) {
+      return countries[this.country].continent.toLowerCase();
+    }
+    return 'ww';
+  }
+
+  getVacBotObj(vacuum) {
+    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, this.getContinent())
+  }
+
+  getVacBot(user, hostname, resource, secret, vacuum, continent) {
     let vacbot;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
@@ -368,6 +386,10 @@ class EcovacsAPI {
 
   static version() {
     return packageInfo.version;
+  }
+
+  getCanvasModuleIsAvailable() {
+    return EcovacsAPI.isCanvasModuleAvailable();
   }
 
   static isCanvasModuleAvailable() {

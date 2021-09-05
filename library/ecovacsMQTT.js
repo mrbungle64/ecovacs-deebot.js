@@ -59,7 +59,7 @@ class EcovacsMQTT extends Ecovacs {
     callEcovacsDeviceAPI(params, api) {
         return new Promise((resolve, reject) => {
             let portalUrlFormat = constants.PORTAL_URL_FORMAT;
-            if (this.country.toLowerCase() === 'cn') {
+            if (this.country === 'CN') {
                 portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
             }
             let url = (portalUrlFormat + '/' + api).format({

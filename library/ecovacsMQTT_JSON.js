@@ -1,5 +1,5 @@
 const EcovacsMQTT = require('./ecovacsMQTT');
-const tools = require('./tools.js');
+const tools = require('./tools');
 const constants = require('./ecovacsConstants');
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {

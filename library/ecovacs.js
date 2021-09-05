@@ -13,8 +13,8 @@ class Ecovacs extends EventEmitter {
         this.hostname = hostname;
         this.resource = resource;
         this.secret = secret;
+        this.country = country.toUpperCase();
         this.continent = continent;
-        this.country = country;
         this.vacuum = vacuum;
 
         if (!server_address) {
@@ -32,7 +32,7 @@ class Ecovacs extends EventEmitter {
     getServerAddress() {
         const urlPrefix = this.bot.useMqtt ? 'mq' : 'msg';
         let serverAddress = `${urlPrefix}-${this.continent}.${constants.REALM}`;
-        if (this.country.toLowerCase() === 'cn') {
+        if (this.country === 'CN') {
             serverAddress = `${urlPrefix}.${constants.REALM}`;
         }
         return serverAddress;
