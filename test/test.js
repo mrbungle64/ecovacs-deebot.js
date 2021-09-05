@@ -4,31 +4,6 @@ const ecovacsDeebot = require('../index.js');
 const tools = require('../library/tools.js');
 
 describe('API', function () {
-  describe('error checking', function () {
-    it('should throw an error when no arguments are provided', function () {
-      assert.throws(() => {
-        const api = new ecovacsDeebot.EcoVacsAPI();
-      });
-    });
-
-    it('should throw an error when no country or continent is provided', function () {
-      assert.throws(() => {
-        const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz");
-      });
-    });
-
-    it('should throw an error when no continent is provided', function () {
-      assert.throws(() => {
-        const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl");
-      });
-    });
-
-    it('should not throw an error when all arguments are provided to the constructor', function () {
-      assert.doesNotThrow(() => {
-        const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
-      });
-    });
-  });
 
   describe('storing variables', function () {
     it('should store the country and device id parameter in a meta variable', function () {
@@ -48,7 +23,7 @@ describe('API', function () {
       const country = "nl";
       const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", country, "eu");
       assert.ok(api.country);
-      assert.strictEqual(api.country, country);
+      assert.strictEqual(api.country, country.toUpperCase());
     });
 
     it('should store the continent provided', function () {
