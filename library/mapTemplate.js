@@ -564,26 +564,8 @@ function createCanvasFromCoordinates(coordinates, width = 100, height = 100, sty
     return canvas;
 }
 
-function isPositionInSpotArea(position, spotAreaInfos) {
-    // Source: https://github.com/substack/point-in-polygon/blob/master/index.js
-    // ray-casting algorithm based on
-    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-
-    if (tools.isCanvasModuleAvailable()) {
-        for (let infoID in spotAreaInfos) {
-            if (spotAreaInfos.hasOwnProperty(infoID)) {
-                if (spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(parseInt(position[0]), parseInt(position[1]))) {
-                    return spotAreaInfos[infoID]["mapSpotAreaID"];
-                }
-            }
-        }
-        return 'unknown';
-    }
-    return 'void';
-}
-
-//converts the compressed data retrieved from ecovacs API into int array containing the map pixels
-//thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
+// converts the compressed data retrieved from ecovacs API into int array containing the map pixels
+// thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
 function mapPieceToIntArray(pieceValue) {
     const fixArray = new Int8Array([0, 0, 0, 0]);
     let buff = Buffer.from(pieceValue, 'base64');
@@ -593,7 +575,6 @@ function mapPieceToIntArray(pieceValue) {
     //decompress
     return lzma.decompress(correctedArray)
 }
-
 
 function getRotatedCanvasFromImage(image, angle) {
     const {createCanvas} = require('canvas');
@@ -664,7 +645,6 @@ module.exports.EcovacsMapSpotAreaInfo = EcovacsMapSpotAreaInfo;
 module.exports.EcovacsMapVirtualBoundaries = EcovacsMapVirtualBoundaries;
 module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
 module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
-module.exports.isPositionInSpotArea = isPositionInSpotArea;
 module.exports.getMapObject = getMapObject;
 module.exports.getCurrentMapObject = getCurrentMapObject;
 module.exports.getSpotAreaObject = getSpotAreaObject;
