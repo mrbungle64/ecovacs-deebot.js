@@ -33,19 +33,19 @@ module.exports = {
   },
   "AO": {
     "name": "Angola",
-    "continent": "AF"
+    "continent": "WW"
   },
   "AQ": {
     "name": "Antarctica",
-    "continent": "AN"
+    "continent": "WW"
   },
   "AR": {
     "name": "Argentina",
-    "continent": "SA"
+    "continent": "WW"
   },
   "AS": {
     "name": "American Samoa",
-    "continent": "OC"
+    "continent": "WW"
   },
   "AT": {
     "name": "Austria",
@@ -53,7 +53,7 @@ module.exports = {
   },
   "AU": {
     "name": "Australia",
-    "continent": "OC"
+    "continent": "WW"
   },
   "AW": {
     "name": "Aruba",
@@ -85,7 +85,7 @@ module.exports = {
   },
   "BF": {
     "name": "Burkina Faso",
-    "continent": "AF"
+    "continent": "WW"
   },
   "BG": {
     "name": "Bulgaria",
@@ -97,11 +97,11 @@ module.exports = {
   },
   "BI": {
     "name": "Burundi",
-    "continent": "AF"
+    "continent": "WW"
   },
   "BJ": {
     "name": "Benin",
-    "continent": "AF"
+    "continent": "WW"
   },
   "BL": {
     "name": "Saint Barthélemy",
@@ -117,7 +117,7 @@ module.exports = {
   },
   "BO": {
     "name": "Bolivia",
-    "continent": "SA"
+    "continent": "WW"
   },
   "BQ": {
     "name": "Bonaire",
@@ -125,7 +125,7 @@ module.exports = {
   },
   "BR": {
     "name": "Brazil",
-    "continent": "SA"
+    "continent": "WW"
   },
   "BS": {
     "name": "Bahamas",
@@ -137,11 +137,11 @@ module.exports = {
   },
   "BV": {
     "name": "Bouvet Island",
-    "continent": "AN"
+    "continent": "WW"
   },
   "BW": {
     "name": "Botswana",
-    "continent": "AF"
+    "continent": "WW"
   },
   "BY": {
     "name": "Belarus",
@@ -161,15 +161,15 @@ module.exports = {
   },
   "CD": {
     "name": "Democratic Republic of the Congo",
-    "continent": "AF"
+    "continent": "WW"
   },
   "CF": {
     "name": "Central African Republic",
-    "continent": "AF"
+    "continent": "WW"
   },
   "CG": {
     "name": "Republic of the Congo",
-    "continent": "AF"
+    "continent": "WW"
   },
   "CH": {
     "name": "Switzerland",
@@ -177,19 +177,19 @@ module.exports = {
   },
   "CI": {
     "name": "Ivory Coast",
-    "continent": "AF"
+    "continent": "WW"
   },
   "CK": {
     "name": "Cook Islands",
-    "continent": "OC"
+    "continent": "WW"
   },
   "CL": {
     "name": "Chile",
-    "continent": "SA"
+    "continent": "WW"
   },
   "CM": {
     "name": "Cameroon",
-    "continent": "AF"
+    "continent": "WW"
   },
   "CN": {
     "name": "China",
@@ -197,7 +197,7 @@ module.exports = {
   },
   "CO": {
     "name": "Colombia",
-    "continent": "SA"
+    "continent": "WW"
   },
   "CR": {
     "name": "Costa Rica",
@@ -209,7 +209,7 @@ module.exports = {
   },
   "CV": {
     "name": "Cape Verde",
-    "continent": "AF"
+    "continent": "WW"
   },
   "CW": {
     "name": "Curacao",
@@ -233,7 +233,7 @@ module.exports = {
   },
   "DJ": {
     "name": "Djibouti",
-    "continent": "AF"
+    "continent": "WW"
   },
   "DK": {
     "name": "Denmark",
@@ -249,11 +249,11 @@ module.exports = {
   },
   "DZ": {
     "name": "Algeria",
-    "continent": "AF"
+    "continent": "WW"
   },
   "EC": {
     "name": "Ecuador",
-    "continent": "SA"
+    "continent": "WW"
   },
   "EE": {
     "name": "Estonia",
@@ -261,15 +261,15 @@ module.exports = {
   },
   "EG": {
     "name": "Egypt",
-    "continent": "AF"
+    "continent": "WW"
   },
   "EH": {
     "name": "Western Sahara",
-    "continent": "AF"
+    "continent": "WW"
   },
   "ER": {
     "name": "Eritrea",
-    "continent": "AF"
+    "continent": "WW"
   },
   "ES": {
     "name": "Spain",
@@ -277,7 +277,7 @@ module.exports = {
   },
   "ET": {
     "name": "Ethiopia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "FI": {
     "name": "Finland",
@@ -285,15 +285,15 @@ module.exports = {
   },
   "FJ": {
     "name": "Fiji",
-    "continent": "OC"
+    "continent": "WW"
   },
   "FK": {
     "name": "Falkland Islands",
-    "continent": "SA"
+    "continent": "WW"
   },
   "FM": {
     "name": "Micronesia",
-    "continent": "OC"
+    "continent": "WW"
   },
   "FO": {
     "name": "Faroe Islands",
@@ -305,7 +305,7 @@ module.exports = {
   },
   "GA": {
     "name": "Gabon",
-    "continent": "AF"
+    "continent": "WW"
   },
   "GB": {
     "name": "United Kingdom",
@@ -321,7 +321,7 @@ module.exports = {
   },
   "GF": {
     "name": "French Guiana",
-    "continent": "SA"
+    "continent": "WW"
   },
   "GG": {
     "name": "Guernsey",
@@ -329,7 +329,7 @@ module.exports = {
   },
   "GH": {
     "name": "Ghana",
-    "continent": "AF"
+    "continent": "WW"
   },
   "GI": {
     "name": "Gibraltar",
@@ -341,11 +341,11 @@ module.exports = {
   },
   "GM": {
     "name": "Gambia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "GN": {
     "name": "Guinea",
-    "continent": "AF"
+    "continent": "WW"
   },
   "GP": {
     "name": "Guadeloupe",
@@ -353,7 +353,7 @@ module.exports = {
   },
   "GQ": {
     "name": "Equatorial Guinea",
-    "continent": "AF"
+    "continent": "WW"
   },
   "GR": {
     "name": "Greece",
@@ -361,7 +361,7 @@ module.exports = {
   },
   "GS": {
     "name": "South Georgia and the South Sandwich Islands",
-    "continent": "AN"
+    "continent": "WW"
   },
   "GT": {
     "name": "Guatemala",
@@ -369,15 +369,15 @@ module.exports = {
   },
   "GU": {
     "name": "Guam",
-    "continent": "OC"
+    "continent": "WW"
   },
   "GW": {
     "name": "Guinea-Bissau",
-    "continent": "AF"
+    "continent": "WW"
   },
   "GY": {
     "name": "Guyana",
-    "continent": "SA"
+    "continent": "WW"
   },
   "HK": {
     "name": "Hong Kong",
@@ -385,7 +385,7 @@ module.exports = {
   },
   "HM": {
     "name": "Heard Island and McDonald Islands",
-    "continent": "AN"
+    "continent": "WW"
   },
   "HN": {
     "name": "Honduras",
@@ -461,7 +461,7 @@ module.exports = {
   },
   "KE": {
     "name": "Kenya",
-    "continent": "AF"
+    "continent": "WW"
   },
   "KG": {
     "name": "Kyrgyzstan",
@@ -473,11 +473,11 @@ module.exports = {
   },
   "KI": {
     "name": "Kiribati",
-    "continent": "OC"
+    "continent": "WW"
   },
   "KM": {
     "name": "Comoros",
-    "continent": "AF"
+    "continent": "WW"
   },
   "KN": {
     "name": "Saint Kitts and Nevis",
@@ -525,11 +525,11 @@ module.exports = {
   },
   "LR": {
     "name": "Liberia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "LS": {
     "name": "Lesotho",
-    "continent": "AF"
+    "continent": "WW"
   },
   "LT": {
     "name": "Lithuania",
@@ -545,11 +545,11 @@ module.exports = {
   },
   "LY": {
     "name": "Libya",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MA": {
     "name": "Morocco",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MC": {
     "name": "Monaco",
@@ -569,11 +569,11 @@ module.exports = {
   },
   "MG": {
     "name": "Madagascar",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MH": {
     "name": "Marshall Islands",
-    "continent": "OC"
+    "continent": "WW"
   },
   "MK": {
     "name": "Macedonia",
@@ -581,7 +581,7 @@ module.exports = {
   },
   "ML": {
     "name": "Mali",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MM": {
     "name": "Myanmar [Burma]",
@@ -597,7 +597,7 @@ module.exports = {
   },
   "MP": {
     "name": "Northern Mariana Islands",
-    "continent": "OC"
+    "continent": "WW"
   },
   "MQ": {
     "name": "Martinique",
@@ -605,7 +605,7 @@ module.exports = {
   },
   "MR": {
     "name": "Mauritania",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MS": {
     "name": "Montserrat",
@@ -617,7 +617,7 @@ module.exports = {
   },
   "MU": {
     "name": "Mauritius",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MV": {
     "name": "Maldives",
@@ -625,7 +625,7 @@ module.exports = {
   },
   "MW": {
     "name": "Malawi",
-    "continent": "AF"
+    "continent": "WW"
   },
   "MX": {
     "name": "Mexico",
@@ -637,27 +637,27 @@ module.exports = {
   },
   "MZ": {
     "name": "Mozambique",
-    "continent": "AF"
+    "continent": "WW"
   },
   "NA": {
     "name": "Namibia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "NC": {
     "name": "New Caledonia",
-    "continent": "OC"
+    "continent": "WW"
   },
   "NE": {
     "name": "Niger",
-    "continent": "AF"
+    "continent": "WW"
   },
   "NF": {
     "name": "Norfolk Island",
-    "continent": "OC"
+    "continent": "WW"
   },
   "NG": {
     "name": "Nigeria",
-    "continent": "AF"
+    "continent": "WW"
   },
   "NI": {
     "name": "Nicaragua",
@@ -677,15 +677,15 @@ module.exports = {
   },
   "NR": {
     "name": "Nauru",
-    "continent": "OC"
+    "continent": "WW"
   },
   "NU": {
     "name": "Niue",
-    "continent": "OC"
+    "continent": "WW"
   },
   "NZ": {
     "name": "New Zealand",
-    "continent": "OC"
+    "continent": "WW"
   },
   "OM": {
     "name": "Oman",
@@ -697,15 +697,15 @@ module.exports = {
   },
   "PE": {
     "name": "Peru",
-    "continent": "SA"
+    "continent": "WW"
   },
   "PF": {
     "name": "French Polynesia",
-    "continent": "OC"
+    "continent": "WW"
   },
   "PG": {
     "name": "Papua New Guinea",
-    "continent": "OC"
+    "continent": "WW"
   },
   "PH": {
     "name": "Philippines",
@@ -725,7 +725,7 @@ module.exports = {
   },
   "PN": {
     "name": "Pitcairn Islands",
-    "continent": "OC"
+    "continent": "WW"
   },
   "PR": {
     "name": "Puerto Rico",
@@ -741,11 +741,11 @@ module.exports = {
   },
   "PW": {
     "name": "Palau",
-    "continent": "OC"
+    "continent": "WW"
   },
   "PY": {
     "name": "Paraguay",
-    "continent": "SA"
+    "continent": "WW"
   },
   "QA": {
     "name": "Qatar",
@@ -753,7 +753,7 @@ module.exports = {
   },
   "RE": {
     "name": "Réunion",
-    "continent": "AF"
+    "continent": "WW"
   },
   "RO": {
     "name": "Romania",
@@ -769,7 +769,7 @@ module.exports = {
   },
   "RW": {
     "name": "Rwanda",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SA": {
     "name": "Saudi Arabia",
@@ -777,15 +777,15 @@ module.exports = {
   },
   "SB": {
     "name": "Solomon Islands",
-    "continent": "OC"
+    "continent": "WW"
   },
   "SC": {
     "name": "Seychelles",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SD": {
     "name": "Sudan",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SE": {
     "name": "Sweden",
@@ -797,7 +797,7 @@ module.exports = {
   },
   "SH": {
     "name": "Saint Helena",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SI": {
     "name": "Slovenia",
@@ -813,7 +813,7 @@ module.exports = {
   },
   "SL": {
     "name": "Sierra Leone",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SM": {
     "name": "San Marino",
@@ -821,23 +821,23 @@ module.exports = {
   },
   "SN": {
     "name": "Senegal",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SO": {
     "name": "Somalia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SR": {
     "name": "Suriname",
-    "continent": "SA"
+    "continent": "WW"
   },
   "SS": {
     "name": "South Sudan",
-    "continent": "AF"
+    "continent": "WW"
   },
   "ST": {
     "name": "São Tomé and Príncipe",
-    "continent": "AF"
+    "continent": "WW"
   },
   "SV": {
     "name": "El Salvador",
@@ -853,7 +853,7 @@ module.exports = {
   },
   "SZ": {
     "name": "Swaziland",
-    "continent": "AF"
+    "continent": "WW"
   },
   "TC": {
     "name": "Turks and Caicos Islands",
@@ -861,15 +861,15 @@ module.exports = {
   },
   "TD": {
     "name": "Chad",
-    "continent": "AF"
+    "continent": "WW"
   },
   "TF": {
     "name": "French Southern Territories",
-    "continent": "AN"
+    "continent": "WW"
   },
   "TG": {
     "name": "Togo",
-    "continent": "AF"
+    "continent": "WW"
   },
   "TH": {
     "name": "Thailand",
@@ -881,11 +881,11 @@ module.exports = {
   },
   "TK": {
     "name": "Tokelau",
-    "continent": "OC"
+    "continent": "WW"
   },
   "TL": {
     "name": "East Timor",
-    "continent": "OC"
+    "continent": "WW"
   },
   "TM": {
     "name": "Turkmenistan",
@@ -893,11 +893,11 @@ module.exports = {
   },
   "TN": {
     "name": "Tunisia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "TO": {
     "name": "Tonga",
-    "continent": "OC"
+    "continent": "WW"
   },
   "TR": {
     "name": "Turkey",
@@ -909,7 +909,7 @@ module.exports = {
   },
   "TV": {
     "name": "Tuvalu",
-    "continent": "OC"
+    "continent": "WW"
   },
   "TW": {
     "name": "Taiwan",
@@ -917,7 +917,7 @@ module.exports = {
   },
   "TZ": {
     "name": "Tanzania",
-    "continent": "AF"
+    "continent": "WW"
   },
   "UA": {
     "name": "Ukraine",
@@ -925,7 +925,7 @@ module.exports = {
   },
   "UG": {
     "name": "Uganda",
-    "continent": "AF"
+    "continent": "WW"
   },
   "UK": {
     "name": "United Kingdom",
@@ -933,7 +933,7 @@ module.exports = {
   },
   "UM": {
     "name": "U.S. Minor Outlying Islands",
-    "continent": "OC"
+    "continent": "WW"
   },
   "US": {
     "name": "United States",
@@ -941,7 +941,7 @@ module.exports = {
   },
   "UY": {
     "name": "Uruguay",
-    "continent": "SA"
+    "continent": "WW"
   },
   "UZ": {
     "name": "Uzbekistan",
@@ -957,7 +957,7 @@ module.exports = {
   },
   "VE": {
     "name": "Venezuela",
-    "continent": "SA"
+    "continent": "WW"
   },
   "VG": {
     "name": "British Virgin Islands",
@@ -973,15 +973,15 @@ module.exports = {
   },
   "VU": {
     "name": "Vanuatu",
-    "continent": "OC"
+    "continent": "WW"
   },
   "WF": {
     "name": "Wallis and Futuna",
-    "continent": "OC"
+    "continent": "WW"
   },
   "WS": {
     "name": "Samoa",
-    "continent": "OC"
+    "continent": "WW"
   },
   "XK": {
     "name": "Kosovo",
@@ -993,18 +993,18 @@ module.exports = {
   },
   "YT": {
     "name": "Mayotte",
-    "continent": "AF"
+    "continent": "WW"
   },
   "ZA": {
     "name": "South Africa",
-    "continent": "AF"
+    "continent": "WW"
   },
   "ZM": {
     "name": "Zambia",
-    "continent": "AF"
+    "continent": "WW"
   },
   "ZW": {
     "name": "Zimbabwe",
-    "continent": "AF"
+    "continent": "WW"
   }
 }

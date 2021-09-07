@@ -1,11 +1,34 @@
 const assert = require('assert');
+const axios = require('axios')
 
 const ecovacsDeebot = require('../index.js');
 const tools = require('../library/tools.js');
+const constants = require('../library/ecovacsConstants') 
 
 describe('API', function () {
 
   describe('storing variables', function () {
+    it('should connect to every continent API', async function () {
+      const continents = [];
+
+      await Promise.all(
+        Object.values(ecovacsDeebot.countries).map(async ({ continent }) => {
+          if (continents.includes(continent)) return;
+          continents.push(continent);
+
+          try {
+            await axios.get(constants.PORTAL_URL_FORMAT.format({ continent }));
+          } catch (err) {
+            if (err.code === 'ENOTFOUND') {
+              throw Error(err);
+            }
+
+            assert.strictEqual(err.response.status, 404);
+          }
+        })
+      );
+    });
+
     it('should store the country and device id parameter in a meta variable', function () {
       const device_id = "abcdefghijklmnopqrestuvwyz";
       const country = "nl";
