@@ -71,6 +71,10 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": false
     },
+    "16wdph": {
+        "name": "DEEBOT 661",
+        "deviceClassLink": "dl8fht"
+    },
     "159": {
         "name": "DEEBOT OZMO 601",
         "950type": false,
