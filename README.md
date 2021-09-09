@@ -71,7 +71,7 @@ There is of course no claim to full functionality.
 * (juliangsibecas) Added support for accounts from South America
 * (juliangsibecas) Updated the lookup table for countries of Africa, Antarctica, South America and Oceania
 * Many improvements to the example apps
-* Some improvements to map infos
+* Add new example app for map related infos
 * Implemented GetDistanceToChargingStation command
 * Some refactoring
 
