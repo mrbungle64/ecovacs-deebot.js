@@ -67,6 +67,13 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.6.7
+* Added support to Africa, Antarctica, South America and Oceania
+* Many improvements to the example apps
+* Some improvements to map infos
+* Implemented GetDistanceToChargingStation command
+* Some refactoring
+
 ### 0.6.3 - 0.6.6
 * Some Bugfixes and improved error handling when sending requests
 
