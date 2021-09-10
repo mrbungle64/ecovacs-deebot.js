@@ -14,35 +14,35 @@ class VacBot_non950type extends VacBot {
     this.mapPiecePacketsCrcArray = null;
   }
 
-  handle_lifespan(event) {
+  handle_lifespan(payload) {
     let type = null;
-    if (event.hasOwnProperty('type')) {
+    if (payload.hasOwnProperty('type')) {
       // type attribute must be trimmed because of Deebot M88
       // { td: 'LifeSpan', type: 'DustCaseHeap ', ... }
-      type = event['type'].trim();
+      type = payload['type'].trim();
       type = dictionary.COMPONENT_FROM_ECOVACS[type];
     }
 
     if (!type) {
-      tools.envLog("[VacBot] Unknown component type: ", event);
+      tools.envLog("[VacBot] Unknown component type: ", payload);
       return;
     }
 
     let lifespan = null;
-    if (event.hasOwnProperty('val') && event.hasOwnProperty('total')) {
+    if (payload.hasOwnProperty('val') && payload.hasOwnProperty('total')) {
       if (this.isN79series()) {
         // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
         // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
-        lifespan = parseInt(event['val']);
+        lifespan = parseInt(payload['val']);
       } else {
-        lifespan = parseInt(event['val']) / parseInt(event['total']) * 100;
+        lifespan = parseInt(payload['val']) / parseInt(payload['total']) * 100;
       }
-    } else if (event.hasOwnProperty('val')) {
-      lifespan = parseInt(event['val']) / 100;
-    } else if (event.hasOwnProperty('left') && (event.hasOwnProperty('total'))) {
-      lifespan = parseInt(event['left']) / parseInt(event['total']) * 100; // This works e.g. for a Ozmo 930
-    } else if (event.hasOwnProperty('left')) {
-      lifespan = parseInt(event['left']) / 60; // This works e.g. for a Deebot 900/901
+    } else if (payload.hasOwnProperty('val')) {
+      lifespan = parseInt(payload['val']) / 100;
+    } else if (payload.hasOwnProperty('left') && (payload.hasOwnProperty('total'))) {
+      lifespan = parseInt(payload['left']) / parseInt(payload['total']) * 100; // This works e.g. for a Ozmo 930
+    } else if (payload.hasOwnProperty('left')) {
+      lifespan = parseInt(payload['left']) / 60; // This works e.g. for a Deebot 900/901
     }
     if (lifespan) {
       tools.envLog("[VacBot] lifeSpan %s: %s", type, lifespan);
@@ -51,29 +51,29 @@ class VacBot_non950type extends VacBot {
     tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
   }
 
-  handle_netInfo(event) {
-    if (event.hasOwnProperty('wi')) {
-      this.netInfoIP = event['wi'];
+  handle_netInfo(payload) {
+    if (payload.hasOwnProperty('wi')) {
+      this.netInfoIP = payload['wi'];
       tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
     }
-    if (event.hasOwnProperty('s')) {
-      this.netInfoWifiSSID = event['s'];
+    if (payload.hasOwnProperty('s')) {
+      this.netInfoWifiSSID = payload['s'];
       tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
     }
   }
 
-  handle_cleanReport(event) {
-    if (event.attrs) {
-      let type = event.attrs['type'];
+  handle_cleanReport(payload) {
+    if (payload.attrs) {
+      let type = payload.attrs['type'];
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
         type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
       let action = '';
-      if (event.attrs.hasOwnProperty('st')) {
-        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['st']];
+      if (payload.attrs.hasOwnProperty('st')) {
+        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['st']];
       }
-      else if (event.attrs.hasOwnProperty('act')) {
-        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[event.attrs['act']];
+      else if (payload.attrs.hasOwnProperty('act')) {
+        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['act']];
       }
       if (action === 'stop' || action === 'pause') {
         type = action
@@ -81,12 +81,12 @@ class VacBot_non950type extends VacBot {
       this.cleanReport = type;
       tools.envLog("[VacBot] *** cleanReport = " + this.cleanReport);
 
-      if (event.attrs.hasOwnProperty('last')) {
-        tools.envLog("[VacBot] *** clean last = %s seconds" + event.attrs["last"]);
+      if (payload.attrs.hasOwnProperty('last')) {
+        tools.envLog("[VacBot] *** clean last = %s seconds" + payload.attrs["last"]);
       }
 
-      if (event.attrs.hasOwnProperty('p')) {
-        let pValues = event.attrs['p'];
+      if (payload.attrs.hasOwnProperty('p')) {
+        let pValues = payload.attrs['p'];
         const pattern = /^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/;
         if (pattern.test(pValues)) {
           const x1 = parseFloat(pValues.split(",")[0]).toFixed(1);
@@ -102,9 +102,9 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_cleanSpeed(event) {
-    if (event.attrs.hasOwnProperty('speed')) {
-      let speed = event.attrs['speed'];
+  handle_cleanSpeed(payload) {
+    if (payload.attrs.hasOwnProperty('speed')) {
+      let speed = payload.attrs['speed'];
       if (dictionary.CLEAN_SPEED_FROM_ECOVACS[speed]) {
         speed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         this.cleanSpeed = speed;
@@ -113,37 +113,37 @@ class VacBot_non950type extends VacBot {
         tools.envLog("[VacBot] Unknown clean speed: ", speed);
       }
     } else {
-      tools.envLog("[VacBot] couldn't parse clean speed ", event);
+      tools.envLog("[VacBot] couldn't parse clean speed ", payload);
     }
   }
 
-  handle_batteryInfo(event) {
+  handle_batteryInfo(payload) {
     let value;
-    if (event.hasOwnProperty('ctl')) {
-      value = event['ctl']['battery']['power'];
+    if (payload.hasOwnProperty('ctl')) {
+      value = payload['ctl']['battery']['power'];
     } else {
-      value = parseFloat(event.attrs['power']);
+      value = parseFloat(payload.attrs['power']);
     }
     try {
       this.batteryInfo = value;
       tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
     } catch (e) {
-      tools.envLog("[VacBot] couldn't parse battery info ", event);
+      tools.envLog("[VacBot] couldn't parse battery info ", payload);
     }
   }
 
-  handle_waterLevel(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('v')) {
-      this.waterLevel = Number(event.attrs['v']);
+  handle_waterLevel(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('v')) {
+      this.waterLevel = Number(payload.attrs['v']);
       tools.envLog("[VacBot] *** waterLevel = %s", this.waterLevel);
     }
   }
 
-  handle_cachedMapInfo(event) {
-    tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(event));
+  handle_cachedMapInfo(payload) {
+    tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(payload));
     // Execute only if the GetMaps cmd was received
-    if (!this.handleMapExecuted && event.attrs && event.attrs.hasOwnProperty('i')) {
-      this.currentMapMID = event.attrs['i'];
+    if (!this.handleMapExecuted && payload.attrs && payload.attrs.hasOwnProperty('i')) {
+      this.currentMapMID = payload.attrs['i'];
       const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, 1);
       this.maps = {
         "maps": [ecovacsMap]
@@ -153,23 +153,23 @@ class VacBot_non950type extends VacBot {
       this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
       this.handleMapExecuted = true;
       if (this.createMapImage && tools.isCanvasModuleAvailable()) {
-        this.handle_mapInfo(event);
+        this.handle_mapInfo(payload);
       }
       return this.maps;
     }
     return null;
   }
 
-  handle_mapSet(event) {
-    tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(event));
-    if (event.attrs && event.attrs.hasOwnProperty('tp')) {
-      if (event.attrs['tp'] === 'sa') {
-        const mapSetID = event.attrs['msid'];
+  handle_mapSet(payload) {
+    tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('tp')) {
+      if (payload.attrs['tp'] === 'sa') {
+        const mapSetID = payload.attrs['msid'];
         const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, mapSetID);
         let spotAreas = [];
-        for (let mapIndex in event.children) {
-          if (event.children.hasOwnProperty(mapIndex)) {
-            let mid = event.children[mapIndex].attrs['mid'];
+        for (let mapIndex in payload.children) {
+          if (payload.children.hasOwnProperty(mapIndex)) {
+            let mid = payload.children[mapIndex].attrs['mid'];
             if (!spotAreas[mid]) {
               mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
               this.run('PullM', 'sa', this.currentMapMID, mid);
@@ -182,12 +182,12 @@ class VacBot_non950type extends VacBot {
           mapsetEvent: 'MapSpotAreas',
           mapsetData: mapSpotAreas
         };
-      } else if (event.attrs['tp'] === 'vw') {
+      } else if (payload.attrs['tp'] === 'vw') {
         const mapVirtualBoundaries = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
         let virtualBoundaries = [];
-        for (let mapIndex in event.children) {
-          if (event.children.hasOwnProperty(mapIndex)) {
-            let mid = event.children[mapIndex].attrs['mid'];
+        for (let mapIndex in payload.children) {
+          if (payload.children.hasOwnProperty(mapIndex)) {
+            let mid = payload.children[mapIndex].attrs['mid'];
             if (!virtualBoundaries[mid]) {
               mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
               this.run('PullM', 'vw', this.currentMapMID, mid);
@@ -203,25 +203,25 @@ class VacBot_non950type extends VacBot {
       }
     }
 
-    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(event.attrs['tp']));
+    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(payload.attrs['tp']));
     return {
       mapsetEvent: 'error'
     };
   }
 
-  handle_mapSubset(event) {
-    tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(event));
-    if (event.attrs && event.attrs.hasOwnProperty('m')) {
-      const value = event.attrs['m'];
+  handle_mapSubset(payload) {
+    tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('m')) {
+      const value = payload.attrs['m'];
       let mid = '';
       let type = '';
-      if (event.attrs.hasOwnProperty('mid')) {
+      if (payload.attrs.hasOwnProperty('mid')) {
         // MQTT
-        mid = event.attrs['mid'];
-        type = event.attrs['tp'];
+        mid = payload.attrs['mid'];
+        type = payload.attrs['tp'];
       } else {
         // XMPP
-        const action = this.commandsSent[event.attrs.id];
+        const action = this.commandsSent[payload.attrs.id];
         if (action.args && action.args.mid && action.args.tp) {
           mid = action.args.mid;
           type = action.args.tp;
@@ -254,16 +254,16 @@ class VacBot_non950type extends VacBot {
     };
   }
 
-  handle_mapInfo(event) {
-    if (event.attrs) {
-      const mapID = event.attrs.i;
+  handle_mapInfo(payload) {
+    if (payload.attrs) {
+      const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
-      const columnGrid = event.attrs.w;
-      const columnPiece = event.attrs.c;
-      const rowGrid = event.attrs.h;
-      const rowPiece = event.attrs.r;
-      const pixelWidth = event.attrs.p;
-      const crc = event.attrs.m;
+      const columnGrid = payload.attrs.w;
+      const columnPiece = payload.attrs.c;
+      const rowGrid = payload.attrs.h;
+      const rowPiece = payload.attrs.r;
+      const pixelWidth = payload.attrs.p;
+      const crc = payload.attrs.m;
       this.mapPiecePacketsCrcArray = crc.split(',');
       if (typeof this.mapImages[mapID] === 'undefined') {
         this.mapImages[mapID] = [];
@@ -280,17 +280,17 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_mapPiecePacket(event) {
-    if (event.attrs) {
-      const mapID = event.attrs.i;
+  handle_mapPiecePacket(payload) {
+    if (payload.attrs) {
+      const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
       if (this.mapImages[mapID][type]) {
-        tools.envLog('[Ecovacs] MapPiecePacket: %s', JSON.stringify(event));
-        let pid = this.mapPiecePacketsSent[event.attrs.id];
-        if (event.attrs.pid) {
-          pid = event.attrs.pid;
+        tools.envLog('[Ecovacs] MapPiecePacket: %s', JSON.stringify(payload));
+        let pid = this.mapPiecePacketsSent[payload.attrs.id];
+        if (payload.attrs.pid) {
+          pid = payload.attrs.pid;
         }
-        const pieceValue = event.attrs.p;
+        const pieceValue = payload.attrs.p;
         this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
         if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
           let mapImage = this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
@@ -301,12 +301,12 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_deebotPosition(event) {
-    tools.envLog("[VacBot] *** deebotPosition event: %s", JSON.stringify(event));
-    if (event.attrs && event.attrs.hasOwnProperty('p')) {
-        const posX = event.attrs['p'].split(",")[0];
-        const posY = event.attrs['p'].split(",")[1];
-        const angle = event.attrs['a'];
+  handle_deebotPosition(payload) {
+    tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
+        const posX = payload.attrs['p'].split(",")[0];
+        const posY = payload.attrs['p'].split(",")[1];
+        const angle = payload.attrs['a'];
         let currentSpotAreaID = mapTools.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
         let distanceToChargingStation = null;
         if (this.chargePosition) {
@@ -327,41 +327,41 @@ class VacBot_non950type extends VacBot {
       }
   }
 
-  handle_chargePosition(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('p') && event.attrs.hasOwnProperty('a')) {
+  handle_chargePosition(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('p') && payload.attrs.hasOwnProperty('a')) {
       this.chargePosition = {
-        x: event.attrs['p'].split(",")[0],
-        y: event.attrs['p'].split(",")[1],
-        a: event.attrs['a']
+        x: payload.attrs['p'].split(",")[0],
+        y: payload.attrs['p'].split(",")[1],
+        a: payload.attrs['a']
       };
       tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.chargePosition));
     }
   }
 
-  handle_dustcaseInfo(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('st')) {
-      this.dustcaseInfo = event.attrs['st'];
+  handle_dustcaseInfo(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
+      this.dustcaseInfo = payload.attrs['st'];
       tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustcaseInfo);
     }
   }
 
-  handle_waterboxInfo(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('on')) {
-      this.waterboxInfo = event.attrs['on'];
+  handle_waterboxInfo(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('on')) {
+      this.waterboxInfo = payload.attrs['on'];
       tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
     }
   }
 
-  handle_sleepStatus(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('st')) {
-      this.sleepStatus = event.attrs['st'];
+  handle_sleepStatus(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
+      this.sleepStatus = payload.attrs['st'];
       tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
     }
   }
 
-  handle_chargeState(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('type')) {
-      const chargeStatus = event.attrs['type'];
+  handle_chargeState(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('type')) {
+      const chargeStatus = payload.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargeStatus]) {
         this.chargeStatus = dictionary.CHARGE_MODE_FROM_ECOVACS[chargeStatus];
         tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus);
@@ -369,23 +369,23 @@ class VacBot_non950type extends VacBot {
         tools.envLog("[VacBot] Unknown charging status '%s'", chargeStatus);
       }
     } else {
-      tools.envLog("[VacBot] couldn't parse charge status ", event);
+      tools.envLog("[VacBot] couldn't parse charge status ", payload);
     }
   }
 
-  handle_cleanSum(event) {
-    if (event.attrs && event.attrs.hasOwnProperty('a') && event.attrs.hasOwnProperty('l') && event.attrs.hasOwnProperty('c')) {
-      this.cleanSum_totalSquareMeters = parseInt(event.attrs['a']);
-      this.cleanSum_totalSeconds = parseInt(event.attrs['l']);
-      this.cleanSum_totalNumber = parseInt(event.attrs['c']);
+  handle_cleanSum(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('a') && payload.attrs.hasOwnProperty('l') && payload.attrs.hasOwnProperty('c')) {
+      this.cleanSum_totalSquareMeters = parseInt(payload.attrs['a']);
+      this.cleanSum_totalSeconds = parseInt(payload.attrs['l']);
+      this.cleanSum_totalNumber = parseInt(payload.attrs['c']);
     }
   }
 
-  handle_cleanLogs(event) {
-    if (event.attrs) {
-      const count = event.children.length;
+  handle_cleanLogs(payload) {
+    if (payload.attrs) {
+      const count = payload.children.length;
       for (let c = 0; c < count; c++) {
-        let childElement = event.children[c];
+        let childElement = payload.children[c];
         if (childElement) {
           let timestamp;
           let id;
@@ -451,16 +451,16 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_onOff(event) {
-    tools.envLog("[VacBot] *** handleOnOff = " + JSON.stringify(event));
-    if (event.attrs && event.attrs.hasOwnProperty('on')) {
+  handle_onOff(payload) {
+    tools.envLog("[VacBot] *** handleOnOff = " + JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('on')) {
       let type = null;
-      const action = this.commandsSent[event.attrs.id];
+      const action = this.commandsSent[payload.attrs.id];
       if (action.args && action.args.t) {
         type = dictionary.ON_OFF_FROM_ECOVACS[action.args.t];
       }
       if (type) {
-        const on = event.attrs.on;
+        const on = payload.attrs.on;
         tools.envLog("[VacBot] *** " + type + " = " + on);
         switch (type) {
           case 'do_not_disturb':
@@ -477,11 +477,11 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_stats(event) {
-    if (event.attrs) {
-      const area = parseInt(event.attrs.a);
-      const seconds = parseInt(event.attrs.l);
-      const type = event.attrs.type;
+  handle_stats(payload) {
+    if (payload.attrs) {
+      const area = parseInt(payload.attrs.a);
+      const seconds = parseInt(payload.attrs.l);
+      const type = payload.attrs.type;
       this.currentStats = {
         'cleanedArea': area,
         'cleanedSeconds': seconds,
@@ -490,14 +490,14 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_error(event) {
+  handle_error(payload) {
     this.errorCode = '0';
     this.errorDescription = '';
     let attrs = ['new', 'code', 'errno', 'error', 'errs'];
     for (const attr of attrs) {
-      if (event.hasOwnProperty(attr) && (event[attr] !== '')) {
+      if (payload.hasOwnProperty(attr) && (payload[attr] !== '')) {
         // 100 = "NoError: Robot is operational"
-        this.errorCode = (event[attr] === '100') ? '0' : event[attr];
+        this.errorCode = (payload[attr] === '100') ? '0' : payload[attr];
         if (errorCodes[this.errorCode]) {
           this.errorDescription = errorCodes[this.errorCode];
         } else {
@@ -508,12 +508,11 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_getSched(event) {
-    tools.envLog("[VacBot] getSched: %s", JSON.stringify(event));
+  handle_getSched(payload) {
     this.schedule = [];
-    for (let c = 0; c < event.children.length; c++) {
-      const resultData = event.children[c];
-      if ((resultData.name === 's') || (resultData.event === 's')) {
+    for (let c = 0; c < payload.children.length; c++) {
+      const resultData = payload.children[c];
+      if ((resultData.name === 's') || (resultData.payload === 's')) {
         let cleanCtl = {
           'type': 'auto'
         };
