@@ -482,6 +482,7 @@ class VacBot_950type extends VacBot {
                         });
                 }
             }
+            const onlyOnce = Number(resultData.repeat) === 0;
             const weekdays = resultData.repeat.split('');
             const weekdaysObj = {
                 'Mon': Boolean(Number(weekdays[1])),
@@ -495,7 +496,9 @@ class VacBot_950type extends VacBot {
             const object = {
                 'sid': resultData.sid,
                 'cleanCmd': cleanCtl,
+                'content': resultData.content,
                 'enabled': Boolean(Number(resultData.enable)),
+                'onlyOnce': onlyOnce,
                 'weekdays': weekdaysObj,
                 'hour': resultData.hour,
                 'minute': resultData.minute,

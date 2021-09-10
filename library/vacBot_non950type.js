@@ -540,6 +540,7 @@ class VacBot_non950type extends VacBot {
           hour = attrs.h;
           minute = attrs.m;
         }
+        const onlyOnce = Number(attrs.r) === 0;
         const weekdays = attrs.r.split('');
         const weekdaysObj = {
           'Mon': Boolean(Number(weekdays[1])),
@@ -558,6 +559,7 @@ class VacBot_non950type extends VacBot {
           'sid': attrs.n,
           'cleanCtl': cleanCtl,
           'enabled': enabled,
+          'onlyOnce': onlyOnce,
           'weekdays': weekdaysObj,
           'hour': hour,
           'minute': minute
