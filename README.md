@@ -67,6 +67,9 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.6.8
+* Some minor changes and improvements
+
 ### 0.6.7
 * (juliangsibecas) Added support for accounts from South America
 * (juliangsibecas) Updated the lookup table for countries of Africa, Antarctica, South America and Oceania
