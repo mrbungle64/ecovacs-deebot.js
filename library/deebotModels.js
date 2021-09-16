@@ -377,6 +377,19 @@ exports.KnownDevices = {
         "name": "DEEBOT U2 POWER",
         "deviceClassLink": "ipzjy0"
     },
+    "vsc5ia": {
+        "name": "DEEBOT 500",
+        "950type": false,
+        "main_brush": true,
+        "spot_area": false,
+        "custom_area": false,
+        "mopping_system": false,
+        "voice_report": false,
+        "single_room": false,
+        "auto_empty_station": false,
+        "clean_speed": true,
+        "map_image_supported": false
+    },
     "02uwxm": {
         "name": "DEEBOT OZMO Slim10 Series",
         "950type": false,
