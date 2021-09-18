@@ -36,6 +36,7 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot Slim 2
 * Deebot N79 series
 * Deebot M88
+* Deebot 500
 * Deebot 600/601/605
 * Deebot 710/711/711s
 * Deebot OZMO 610
@@ -69,6 +70,7 @@ There is of course no claim to full functionality.
 
 ### 0.6.8
 * Some minor changes and improvements
+* Added Deebot 500
 
 ### 0.6.7
 * (juliangsibecas) Added support for accounts from South America
@@ -77,6 +79,7 @@ There is of course no claim to full functionality.
 * Add new example app for map related infos
 * Implemented GetDistanceToChargingStation command
 * Some refactoring
+* Added Deebot 661
 
 ### 0.6.3 - 0.6.6
 * Some Bugfixes and improved error handling when sending requests
