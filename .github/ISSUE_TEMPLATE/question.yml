@@ -1,0 +1,56 @@
+name: Question
+description: Ask a question
+labels: [ Question ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for questions only!
+        If you have a problem or a feature request, please use one of the other templates.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The question
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: dropdown
+    id: device
+    validations:
+      required: false
+    attributes:
+      label: Which model do you own?
+      options:
+        - Deebot 500
+        - Deebot 600/601/605
+        - Deebot OZMO 610
+        - Deebot 710/711/711s
+        - Deebot 900/901
+        - Deebot OZMO 900/905
+        - Deebot OZMO 920
+        - Deebot OZMO 930
+        - Deebot OZMO 950
+        - Deebot OZMO Slim 10/11
+        - Deebot U2 series
+        - Deebot N3 MAX
+        - Deebot N7
+        - Deebot N8 series
+        - Deebot T8 series
+        - Deebot T9 series
+        - Deebot Slim 2
+        - Deebot N79 series
+        - Deebot M88
+        - Other model
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+        Please note, you can attach screenshots or screen recordings here, by
+        dragging and dropping files in the field below.

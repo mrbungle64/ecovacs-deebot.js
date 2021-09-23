@@ -1,0 +1,109 @@
+name: Problem or bug
+description: Create a report to help us improve
+labels: [ Potential bug, Verification ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for reporting bugs or problems only!
+        If you have a feature request or a question, please use one of the other templates.
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+        - label: I have searched the existing issues and no issue is describing my issue
+          required: true
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The problem
+      description: >-
+        Describe the issue you are experiencing. Tell us what you were trying to do and what happened.
+        Provide a clear and concise description of what the problem is.
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: dropdown
+    id: device
+    validations:
+      required: true
+    attributes:
+      label: With which model does the problem occur?
+      options:
+        - Deebot 500
+        - Deebot 600/601/605
+        - Deebot OZMO 610
+        - Deebot 710/711/711s
+        - Deebot 900/901
+        - Deebot OZMO 900/905
+        - Deebot OZMO 920
+        - Deebot OZMO 930
+        - Deebot OZMO 950
+        - Deebot OZMO Slim 10/11
+        - Deebot U2 series
+        - Deebot N3 MAX
+        - Deebot N7
+        - Deebot N8 series
+        - Deebot T8 series
+        - Deebot T9 series
+        - Deebot Slim 2
+        - Deebot N79 series
+        - Deebot M88
+        - Other model (Please fill out the fields at the bottom of the form)
+  - type: dropdown
+    id: installation_source
+    validations:
+      required: true
+    attributes:
+      label: From which source you have installed the adapter?
+      options:
+        - GitHub
+        - npm
+        - other
+  - type: input
+    id: version
+    validations:
+      required: true
+    attributes:
+      label: Version of the ecovacs-deebot.js library
+      placeholder: e.g. 0.6.0, 0.6.1-beta.0
+  - type: input
+    id: nodejs_version
+    validations:
+      required: true
+    attributes:
+      label: Version of Node.js
+      placeholder: e.g. v10.23.0, v14.17.2
+      description: >
+        See "Info" Tab or use `node -v` via terminal
+  - type: dropdown
+    id: os
+    validations:
+      required: true
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - Windows
+        - MacOS
+        - Other
+  - type: markdown
+    attributes:
+      value: |
+        # Details / additional information
+  - type: textarea
+    attributes:
+      label: Anything in the logs that might be useful?
+      description: >
+        For example, error message, or stack traces
+      render: txt
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+        Please note, you can attach screenshots or screen recordings here, by
+        dragging and dropping files in the field below.
