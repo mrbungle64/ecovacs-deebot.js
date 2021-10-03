@@ -491,7 +491,7 @@ class VacBot {
     }
 
     useMqttProtocol() {
-        return (this.vacuum['company'] === 'eco-ng') ? true : false;
+        return (this.vacuum['company'] === 'eco-ng');
     }
 
     getProtocol() {

@@ -74,16 +74,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let eventName = topic;
         let resultCode = "0";
         let resultCodeMessage = "ok";
-        let resultData = message;
+        let payload = message;
 
         if (type === "incoming") {
             eventName = topic.split('/')[2];
             message = JSON.parse(message);
-            resultData = message['body']['data'];
+            payload = message['body']['data'];
         } else if (type === "response") {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
-            resultData = message['body']['data'];
+            payload = message['body']['data'];
             if (message['header']) {
                 const header = message['header'];
                 if (this.bot.firmwareVersion !== header['fwVer']) {
@@ -101,7 +101,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         const result = {
             "resultCode": resultCode,
             "resultCodeMessage": resultCodeMessage,
-            "resultData": resultData
+            "payload": payload
         };
 
         (async () => {
@@ -374,8 +374,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     getPayload(event) {
-        if (event.hasOwnProperty('resultData')) {
-            return event['resultData'];
+        if (event.hasOwnProperty('payload')) {
+            return event['payload'];
         }
         return event;
     }
