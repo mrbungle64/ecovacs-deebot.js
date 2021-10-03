@@ -471,6 +471,42 @@ class GetSchedule extends VacBotCommand_950type {
     }
 }
 
+class GetDusterRemind extends VacBotCommand_950type {
+    constructor() {
+        super('getDusterRemind');
+    }
+}
+
+class SetDusterRemind extends VacBotCommand_950type {
+    constructor(enable = 0) {
+        super('setDusterRemind', {
+            'enable': enable
+        });
+    }
+}
+
+class SetDusterRemindPeriod extends VacBotCommand_950type {
+    constructor(period = 30) {
+        super('setDusterRemind', {
+            'period': period
+        });
+    }
+}
+
+class GetCarpetPressure extends VacBotCommand_950type {
+    constructor() {
+        super('getCarpertPressure');
+    }
+}
+
+class SetCarpetPressure extends VacBotCommand_950type {
+    constructor(enable = 0) {
+        super('setCarpertPressure', {
+            'enable': enable
+        });
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -483,11 +519,13 @@ module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
+module.exports.GetCarpetPressure = GetCarpetPressure;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
 module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetLifeSpan = GetLifeSpan;
@@ -518,8 +556,11 @@ module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.Resume = Resume;
 module.exports.SetAdvancedMode = SetAdvancedMode;
 module.exports.SetAutoEmpty = SetAutoEmpty;
+module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
+module.exports.SetDusterRemind = SetDusterRemind;
+module.exports.SetDusterRemindPeriod = SetDusterRemindPeriod;
 module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVolume = SetVolume;
 module.exports.SetWaterLevel = SetWaterLevel;

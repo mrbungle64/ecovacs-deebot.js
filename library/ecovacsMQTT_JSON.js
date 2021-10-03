@@ -319,6 +319,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_trueDetect(payload);
                 this.emit("TrueDetect", this.bot.trueDetect);
                 break;
+            case 'DusterRemind':
+                this.bot.handle_dusterRemind(payload);
+                this.emit("DusterRemind", this.bot.dusterRemind);
+                break;
+            case 'CarpertPressure':
+                this.bot.handle_carpetPressure(payload);
+                this.emit("CarpetPressure", this.bot.carpetPressure);
+                break;
             case "Error":
                 this.bot.handle_error(payload);
                 this.emit("Error", this.bot.errorDescription);

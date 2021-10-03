@@ -13,6 +13,11 @@ class VacBot_950type extends VacBot {
         this.autoEmpty = null;
         this.advancedMode = null;
         this.trueDetect = null;
+        this.dusterRemind = {
+            enabled: null,
+            period: null
+        };
+        this.carpetPressure = null;
         this.volume = 0;
         this.relocationState = null;
         this.firmwareVersion = null;
@@ -444,6 +449,19 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
     }
 
+    handle_dusterRemind(payload) {
+        this.dusterRemind = {
+            enabled: payload['enable'],
+            period: payload['period']
+        };
+        tools.envLog("[VacBot] *** dusterRemind = " + this.dusterRemind);
+    }
+
+    handle_carpetPressure(payload) {
+        this.carpetPressure = payload['enable']
+        tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
+    }
+
     handle_stats(payload) {
         this.currentStats = {
             'cleanedArea': payload['area'],
@@ -691,6 +709,29 @@ class VacBot_950type extends VacBot {
                 break;
             case "DisableAutoEmpty".toLowerCase():
                 this.sendCommand(new vacBotCommand.SetAutoEmpty(0));
+                break;
+            case "GetDusterRemind".toLowerCase():
+                this.sendCommand(new vacBotCommand.GetDusterRemind());
+                break;
+            case "EnableDusterRemind".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetDusterRemind(1));
+                break;
+            case "DisableDusterRemind".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetDusterRemind(0));
+                break;
+            case "SetDusterRemindPeriod".toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new vacBotCommand.SetDusterRemindPeriod(args[0]));
+                }
+                break;
+            case "GetCarpetPressure".toLowerCase():
+                this.sendCommand(new vacBotCommand.GetCarpetPressure());
+                break;
+            case "EnableCarpetPressure".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetCarpetPressure(1));
+                break;
+            case "DisableCarpetPressure".toLowerCase():
+                this.sendCommand(new vacBotCommand.SetCarpetPressure(0));
                 break;
         }
     }
