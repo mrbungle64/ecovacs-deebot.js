@@ -24,20 +24,11 @@ class EcovacsMQTT extends Ecovacs {
         this.client = this.mqtt.connect(url, options);
         tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
 
-        let vacuum_did = this.vacuum['did'];
-        let vacuum_class = this.vacuum['class'];
-        let vacuum_resource = this.vacuum['resource'];
         let ecovacsMQTT = this;
 
         this.client.on('connect', function () {
             tools.envLog('[EcovacsMQTT] client connected');
-            this.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (error, granted) => {
-                if (!error) {
-                    ecovacsMQTT.emit('ready', 'Client connected. Subscribe successful');
-                } else {
-                    tools.envLog('[EcovacsMQTT] subscribe err: %s', error.toString());
-                }
-            });
+            ecovacsMQTT.subscribe();
         });
 
         this.client.on('message', (topic, message) => {
@@ -47,6 +38,21 @@ class EcovacsMQTT extends Ecovacs {
 
         this.client.on('error', (error) => {
             ecovacsMQTT.emit('error', error);
+        });
+    }
+
+    subscribe() {
+        const vacuum_did = this.vacuum['did'];
+        const vacuum_class = this.vacuum['class'];
+        const vacuum_resource = this.vacuum['resource'];
+
+        this.client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (error, granted) => {
+            if (!error) {
+                tools.envLog('[EcovacsMQTT] subscribed to atr');
+                this.emit('ready', 'Client connected. Subscribe successful');
+            } else {
+                tools.envLog('[EcovacsMQTT] subscribe err: %s', error.toString());
+            }
         });
     }
 
