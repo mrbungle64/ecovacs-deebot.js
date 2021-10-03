@@ -454,7 +454,7 @@ class VacBot_950type extends VacBot {
             enabled: payload['enable'],
             period: payload['period']
         };
-        tools.envLog("[VacBot] *** dusterRemind = " + this.dusterRemind);
+        tools.envLog("[VacBot] *** dusterRemind = " + JSON.stringify(this.dusterRemind));
     }
 
     handle_carpetPressure(payload) {

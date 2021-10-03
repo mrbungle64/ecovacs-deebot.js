@@ -32,7 +32,6 @@ class EcovacsMQTT extends Ecovacs {
         });
 
         this.client.on('message', (topic, message) => {
-            tools.envLog('[EcovacsMQTT] message.toString(): ', message.toString());
             this.handleMessage(topic, message.toString(), "incoming");
         });
 
@@ -42,11 +41,7 @@ class EcovacsMQTT extends Ecovacs {
     }
 
     subscribe() {
-        const vacuum_did = this.vacuum['did'];
-        const vacuum_class = this.vacuum['class'];
-        const vacuum_resource = this.vacuum['resource'];
-
-        this.client.subscribe('iot/atr/+/' + vacuum_did + '/' + vacuum_class + '/' + vacuum_resource + '/+', (error, granted) => {
+        this.client.subscribe('iot/atr/+/' + this.vacuum['did'] + '/' + this.vacuum['class'] + '/' + this.vacuum['resource'] + '/+', (error, granted) => {
             if (!error) {
                 tools.envLog('[EcovacsMQTT] subscribed to atr');
                 this.emit('ready', 'Client connected. Subscribe successful');

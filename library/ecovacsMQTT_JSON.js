@@ -120,28 +120,26 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let commandPrefix = '';
         // Incoming events (on)
         if (abbreviatedCmd.startsWith("on")) {
-            abbreviatedCmd = abbreviatedCmd.substring(2);
             commandPrefix = 'on';
         }
         // Incoming events for (3rd) unknown/unsaved map
         if (abbreviatedCmd.startsWith("off")) {
-            abbreviatedCmd = abbreviatedCmd.substring(3);
             commandPrefix = 'off';
         }
         // Incoming events (report)
         if (abbreviatedCmd.startsWith("report")) {
-            abbreviatedCmd = abbreviatedCmd.substring(6);
             commandPrefix = 'report';
         }
         // Remove from "get" commands
         if (abbreviatedCmd.startsWith("get") || abbreviatedCmd.startsWith("Get")) {
-            abbreviatedCmd = abbreviatedCmd.substring(3);
             commandPrefix = 'get';
         }
         // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
         if (abbreviatedCmd.endsWith("_V2") || abbreviatedCmd.endsWith("_v2")) {
             abbreviatedCmd = abbreviatedCmd.slice(0, -3);
+        } else {
+            abbreviatedCmd = abbreviatedCmd.substring(commandPrefix.length);
         }
         this.emit('messageReceived', command  + ' => ' + abbreviatedCmd);
         const payload = this.getPayload(event);
