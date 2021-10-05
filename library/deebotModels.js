@@ -235,6 +235,10 @@ exports.KnownDevices = {
         "name": "DEEBOT T9+",
         "deviceClassLink": "fqxoiu"
     },
+    "um2ywg": {
+        "name": "DEEBOT T9+",
+        "deviceClassLink": "fqxoiu"
+    },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
         "deviceClassLink": "fqxoiu"
@@ -692,6 +696,12 @@ exports.EcoVacsHomeProducts = {
         "product": {
             "name": "DEEBOT T9+",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/603f51243b03f50007b6c2ca"
+        }
+    },
+    "um2ywg": {
+        "product": {
+            "name": "DEEBOT T9+",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/608b9981fc527c00087fddf1"
         }
     },
     "kw9ayx": {
