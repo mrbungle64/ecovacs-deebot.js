@@ -207,11 +207,19 @@ exports.KnownDevices = {
         "name": "DEEBOT OZMO T8 AIVI +",
         "deviceClassLink": "fqxoiu"
     },
+    "w16crm": {
+        "name": "DEEBOT OZMO T8 AIVI +",
+        "deviceClassLink": "fqxoiu"
+    },
     "wgxm70": {
         "name": "DEEBOT T8",
         "deviceClassLink": "h18jkh"
     },
     "bs40nz": {
+        "name": "DEEBOT T8 AIVI",
+        "deviceClassLink": "h18jkh"
+    },
+    "5089oy": {
         "name": "DEEBOT T8 AIVI",
         "deviceClassLink": "h18jkh"
     },
@@ -303,6 +311,10 @@ exports.KnownDevices = {
         "name": "DEEBOT N9+",
         "deviceClassLink": "fqxoiu"
     },
+    "c2of2s": {
+        "name": "DEEBOT N9+",
+        "deviceClassLink": "fqxoiu"
+    },
     "155": {
         "name": "DEEBOT N79S/SE",
         "950type": false,
@@ -383,6 +395,10 @@ exports.KnownDevices = {
     },
     "chmi0g": {
         "name": "DEEBOT U2 POWER",
+        "deviceClassLink": "ipzjy0"
+    },
+    "zjna8m": {
+        "name": "DEEBOT U2 SE",
         "deviceClassLink": "ipzjy0"
     },
     "vsc5ia": {
@@ -702,6 +718,12 @@ exports.EcoVacsHomeProducts = {
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5feaeb27d4cb3a0006679047"
         }
     },
+    "c2of2s": {
+        "product": {
+            "name": "DEEBOT N9+",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/61318dbc1d27796ece1d1baa"
+        }
+    },
     "9rft3c": {
         "product": {
             "name": "DEEBOT OZMO T5",
@@ -732,6 +754,12 @@ exports.EcoVacsHomeProducts = {
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5e8e93a7032edd3f5ec66d4a"
         }
     },
+    "5089oy": {
+        "product": {
+            "name": "DEEBOT T8 AIVI",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/60dd6db3038a38000888bd5b"
+        }
+    },
     "0bdtzz": {
         "product": {
             "name": "DEEBOT OZMO T8 PURE",
@@ -754,6 +782,12 @@ exports.EcoVacsHomeProducts = {
         "product": {
             "name": "DEEBOT OZMO T8 AIVI +",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5edd996bbd3b770008434636"
+        }
+    },
+    "w16crm": {
+        "product": {
+            "name": "DEEBOT OZMO T8 AIVI +",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/605053f7d18cbd0008e2f814"
         }
     },
     "wgxm70": {
@@ -790,6 +824,12 @@ exports.EcoVacsHomeProducts = {
         "product": {
             "name": "DEEBOT T9 AIVI",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/603f51243b03f50007b6c2ca"
+        }
+    },
+    "659yh8": {
+        "product": {
+            "name": "DEEBOT T9 AIVI",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/603f5147c8115100083364bc"
         }
     },
     "kw9ayx": {
@@ -880,6 +920,12 @@ exports.EcoVacsHomeProducts = {
         "product": {
             "name": "DEEBOT U2 POWER",
             "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/5ee85eb6bd3b770008435090"
+        }
+    },
+    "zjna8m": {
+        "product": {
+            "name": "DEEBOT U2 SE",
+            "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/6064256ed18cbd0008e2fcee"
         }
     },
     "xb83mv": {
