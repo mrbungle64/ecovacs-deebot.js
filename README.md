@@ -66,6 +66,11 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.7.0 (alpha)
+* Bumped required Node.js version to 12
+* Some minor changes and improvements
+* Added some new models
+
 ### 0.6.8
 * Some minor changes and improvements
 * Added Deebot 500

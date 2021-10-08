@@ -397,7 +397,7 @@ class EcovacsAPI {
   }
 
   static isMQTTProtocolUsed(company) {
-    return (company === 'eco-ng') ? true : false;
+    return (company === 'eco-ng');
   }
 
   static isDeviceClass950type(deviceClass, isMQTTProtocolUsed = true) {
