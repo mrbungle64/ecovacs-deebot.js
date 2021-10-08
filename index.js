@@ -262,9 +262,10 @@ class EcovacsAPI {
         res.on('end', () => {
           try {
             const json = JSON.parse(rawData);
+            const result = json['result'] || json['msg'];
             tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
-            tools.envLog("[EcovacsAPI] result: %s", json['result']);
-            if (json['result'] === 'ok') {
+            tools.envLog("[EcovacsAPI] result: %s", result);
+            if ((result === 'ok') || (result === 'success')) {
               resolve(json);
             } else if (json['result'] === 'fail') {
               // If it is a set token error try again
@@ -323,6 +324,29 @@ class EcovacsAPI {
     });
   }
 
+  getConfigProducts() {
+    return new Promise((resolve, reject) => {
+      this.call_portal_api(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
+        'userid': this.uid,
+        'auth': {
+          'with': 'users',
+          'userid': this.uid,
+          'realm': constants.REALM,
+          'token': this.user_access_token,
+          'resource': this.resource
+        }
+      }).then((data) => {
+        resolve(data['data']);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
+  configProducts() {
+    return this.getConfigProducts();
+  }
+
   getDevices() {
     return new Promise((resolve, reject) => {
       this.call_portal_api(constants.USERSAPI, 'GetDeviceList', {
@@ -344,6 +368,14 @@ class EcovacsAPI {
 
   devices() {
     return this.getDevices();
+  }
+
+  getProductIotMap() {
+    return tools.getProductIotMap();
+  }
+
+  getAllKnownDevices() {
+    return tools.getAllKnownDevices();
   }
 
   getCountryName() {
@@ -397,7 +429,7 @@ class EcovacsAPI {
   }
 
   static isMQTTProtocolUsed(company) {
-    return (company === 'eco-ng') ? true : false;
+    return (company === 'eco-ng');
   }
 
   static isDeviceClass950type(deviceClass, isMQTTProtocolUsed = true) {
