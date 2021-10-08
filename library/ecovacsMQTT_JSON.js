@@ -2,9 +2,40 @@ const EcovacsMQTT = require('./ecovacsMQTT');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
 
+// There's a typo in CarpertPressure ;)
+const HANDLED_OVER_P2P = [
+    'CarpertPressure',
+    'DusterRemind',
+    'Sleep',
+    'Speed',
+    'TotalStats',
+    'Volume',
+    'WaterInfo',
+];
+
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+    }
+
+    shouldBeHandledOverP2P(eventName) {
+        eventName = eventName.substring(3); // truncate get and set
+        return HANDLED_OVER_P2P.indexOf(eventName) >= 0;
+    }
+
+    subscribe() {
+        super.subscribe();
+
+        // iot/p2p/[command]/[did_sender]/[sender_class]/[sender_resource]/[receiver_did]/[receiver_class]/[receiver_resource]/[qp]/[request_id]/[payload_type]
+
+        this.client.subscribe('iot/p2p/+/+/+/+/' + this.vacuum['did'] + '/' + this.vacuum['class'] + '/' + this.vacuum['resource'] + '/q/+/j', (error, granted) => {
+            if (!error) {
+                tools.envLog('[EcovacsMQTT] subscribed to p2p');
+                this.emit('ready', 'Client connected to p2p. Subscribe successful');
+            } else {
+                tools.envLog('[EcovacsMQTT] subscribe err: %s', error.toString());
+            }
+        });
     }
 
     wrapCommand(action, recipient) {
@@ -72,50 +103,65 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
     handleMessage(topic, message, type = "incoming") {
         let eventName = topic;
-        let resultCode = "0";
-        let resultCodeMessage = "ok";
         let payload = message;
+        if (type === "incoming") {
+            message = JSON.parse(message);
+        }
+        if (message['body']) {
+            payload = message['body']['data'];
+        }
 
         if (type === "incoming") {
             eventName = topic.split('/')[2];
-            message = JSON.parse(message);
-            payload = message['body']['data'];
-        } else if (type === "response") {
-            resultCode = message['body']['code'];
-            resultCodeMessage = message['body']['msg'];
-            payload = message['body']['data'];
-            if (message['header']) {
-                const header = message['header'];
-                if (this.bot.firmwareVersion !== header['fwVer']) {
-                    this.bot.firmwareVersion = header['fwVer'];
-                    this.emit('HeaderInfo', {
-                        'fwVer': header['fwVer'],
-                        'hwVer': header['hwVer']
-                    });
-                }
+            if (!this.shouldIncomingMessageBeHandled(topic, message)) {
+                return;
             }
-        } else if (type === "logResponse") {
-            resultCodeMessage = message['ret'];
+        }
+        if ((type === 'logResponse') && message['header']) {
+            const header = message['header'];
+            if (this.bot.firmwareVersion !== header['fwVer']) {
+                this.bot.firmwareVersion = header['fwVer'];
+                this.emit('HeaderInfo', {
+                    'fwVer': header['fwVer'],
+                    'hwVer': header['hwVer']
+                });
+            }
         }
 
-        const result = {
-            "resultCode": resultCode,
-            "resultCodeMessage": resultCodeMessage,
-            "payload": payload
-        };
-
-        (async () => {
-            try {
-                await this.handleMessagePayload(eventName, result);
-            } catch (e) {
-                this.bot.errorCode = '-2';
-                this.bot.errorDescription = e.toString();
-                this.emitLastError();
-            }
-        })();
+        if (payload) {
+            (async () => {
+                try {
+                    await this.handleMessagePayload(eventName, payload);
+                } catch (e) {
+                    this.bot.errorCode = '-2';
+                    this.bot.errorDescription = eventName + ': ' + e.toString();
+                    this.emitLastError();
+                }
+            })();
+        }
     }
 
-    async handleMessagePayload(command, event) {
+    shouldIncomingMessageBeHandled(topic, message) {
+        const [_, channel, eventName] = topic.split('/');
+        const body = message['body'];
+        if (!body.hasOwnProperty('data')) {
+            return false;
+        }
+        const payload = body.data;
+        const numberOfProperties = Object.keys(payload).length;
+        // If we get only the id the payload is worthless
+        if (payload.hasOwnProperty('id') && (numberOfProperties === 1)) {
+            return false;
+        }
+        if (channel === 'p2p') {
+            if ((eventName.startsWith("get")) || !this.shouldBeHandledOverP2P(eventName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    async handleMessagePayload(command, payload) {
         let abbreviatedCmd = command.replace(/^_+|_+$/g, '');
         let commandPrefix = '';
         // Incoming events (on)
@@ -131,18 +177,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             commandPrefix = 'report';
         }
         // Remove from "get" commands
-        if (abbreviatedCmd.startsWith("get") || abbreviatedCmd.startsWith("Get")) {
+        if (abbreviatedCmd.startsWith("get")) {
             commandPrefix = 'get';
         }
+        // Remove from "set" commands
+        if (abbreviatedCmd.startsWith("set")) {
+            commandPrefix = 'set';
+        }
+        abbreviatedCmd = abbreviatedCmd.substring(commandPrefix.length);
         // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
         if (abbreviatedCmd.endsWith("_V2") || abbreviatedCmd.endsWith("_v2")) {
             abbreviatedCmd = abbreviatedCmd.slice(0, -3);
-        } else {
-            abbreviatedCmd = abbreviatedCmd.substring(commandPrefix.length);
         }
         this.emit('messageReceived', command  + ' => ' + abbreviatedCmd);
-        const payload = this.getPayload(event);
         switch (abbreviatedCmd) {
             case "Stats":
                 this.bot.handle_stats(payload);
@@ -377,13 +425,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", abbreviatedCmd);
                 break;
         }
-    }
-
-    getPayload(event) {
-        if (event.hasOwnProperty('payload')) {
-            return event['payload'];
-        }
-        return event;
     }
 }
 
