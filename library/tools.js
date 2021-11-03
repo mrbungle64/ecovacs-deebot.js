@@ -108,25 +108,12 @@ function isValidJsonString(str) {
 }
 
 function isValidVirtualWallType(type) {
-    if ((type === 'vw') || (type === 'mw')) {
-        return true;
-    }
-    return false;
+    return (type === 'vw') || (type === 'mw');
 }
 
 envLog = function () {
     if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
-        if ((arguments[0] === '[DEBUG_INCOMING_RAW]') || (arguments[0] === '[DEBUG_INCOMING]')) {
-            console.log.apply(this, [...arguments].slice(1)); //to keep things as is for dev
-        } else {
-            console.log.apply(this, arguments);
-        }
-    } else {
-        if ((process.env.NODE_ENV === 'DEBUG_INCOMING_RAW') && (arguments[0] === '[DEBUG_INCOMING_RAW]')) { // only process debug messages
-            console.log.apply(this, [...arguments].slice(1));
-        } else if ((process.env.NODE_ENV === 'DEBUG_INCOMING') && (arguments[0] === '[DEBUG_INCOMING]')) { // only process debug messages
-            console.log.apply(this, [...arguments].slice(1));
-        }
+        console.log.apply(this, arguments);
     }
 };
 
