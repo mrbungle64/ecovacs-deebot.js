@@ -219,24 +219,14 @@ class EcovacsAPI {
         }
       }
 
-      let continent = this.continent;
       tools.envLog(`[EcoVacsAPI] continent ${this.continent}`);
-      if (arguments.hasOwnProperty('continent')) {
-        continent = arguments.continent;
-      }
-      tools.envLog(`[EcoVacsAPI] continent ${continent}`);
-
-      let retryAttempts = 0;
-      if (arguments.hasOwnProperty('retryAttempts')) {
-        retryAttempts = arguments.retryAttempts + 1;
-      }
 
       let portalUrlFormat = constants.PORTAL_URL_FORMAT;
       if (this.country === 'CN') {
         portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
       }
       let url = (portalUrlFormat + "/" + api).format({
-        continent: continent
+        continent: this.continent
       });
       url = new URL(url);
       tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
@@ -269,12 +259,7 @@ class EcovacsAPI {
             } else if (json['result'] === 'fail') {
               // If it is a set token error try again
               if (json['error'] === 'set token error.') {
-                if (retryAttempts <= 3) {
-                  tools.envLog("[EcovacsAPI] loginByItToken set token error, trying again (%s/3)", retryAttempts);
-                  return this.call_portal_api(api, func, args, retryAttempts);
-                } else {
-                  tools.envLog("[EcovacsAPI] loginByItToken set token error, failed after %s attempts", retryAttempts);
-                }
+                  tools.envLog("[EcovacsAPI] loginByItToken set token error");
               } else {
                 tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
                 throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
