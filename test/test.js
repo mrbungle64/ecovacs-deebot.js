@@ -3,29 +3,27 @@ const axios = require('axios')
 
 const ecovacsDeebot = require('../index.js');
 const tools = require('../library/tools.js');
-const constants = require('../library/ecovacsConstants') 
+const constants = require('../library/ecovacsConstants');
 
 describe('API', function () {
-
   describe('storing variables', function () {
     it('should connect to every continent API', async function () {
       const continents = [];
 
       await Promise.all(
-        Object.values(ecovacsDeebot.countries).map(async ({ continent }) => {
-          if (continents.includes(continent)) return;
-          continents.push(continent);
+          Object.values(ecovacsDeebot.countries).map(async ({continent}) => {
+            if (continents.includes(continent)) return;
+            continents.push(continent);
 
-          try {
-            await axios.get(constants.PORTAL_URL_FORMAT.format({ continent }));
-          } catch (err) {
-            if (err.code === 'ENOTFOUND') {
-              throw Error(err);
+            try {
+              await axios.get(constants.PORTAL_URL_FORMAT.format({continent}));
+            } catch (err) {
+              if (err.code === 'ENOTFOUND') {
+                throw Error(err);
+              }
+              assert.strictEqual(err.response.status, 404);
             }
-
-            assert.strictEqual(err.response.status, 404);
-          }
-        })
+          })
       );
     });
 
@@ -54,6 +52,14 @@ describe('API', function () {
       const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
       assert.ok(api.continent);
       assert.strictEqual(api.continent, continent);
+    });
+
+    it('should provide a version number', function () {
+      const continent = "eu";
+      const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
+      assert.ok(api.getVersion());
+      assert.ok(ecovacsDeebot.EcoVacsAPI.version());
+      assert.strictEqual(api.getVersion(), ecovacsDeebot.EcoVacsAPI.version());
     });
   });
 
