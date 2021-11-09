@@ -599,6 +599,10 @@ class VacBot {
         return '';
     }
 
+    getModelName() {
+        return this.getDeviceProperty('name', '');
+    }
+
     getName() {
         if (this.getNickname()) {
             return this.getNickname();
