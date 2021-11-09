@@ -68,8 +68,8 @@ There is of course no claim to full functionality.
 
 ### 0.7.0 (alpha)
 * Bumped required Node.js version to 12
-* Some minor changes and improvements
 * Added some new models
+* Some minor changes and improvements
 
 ### 0.6.8
 * Some minor changes and improvements
