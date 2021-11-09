@@ -6,6 +6,8 @@ const { DOMParser } = require('@xmldom/xmldom');
 class EcovacsMQTT_XML extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+
+        this.datatype = 'x';
     }
 
     wrapCommand(action, recipient) {

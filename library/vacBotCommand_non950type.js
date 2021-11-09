@@ -33,14 +33,6 @@ class VacBotCommand_non950type {
     getId() {
         return this.args.id;
     }
-
-    toString() {
-        return this.command_name() + ' command';
-    }
-
-    command_name() {
-        return this.name.toLowerCase();
-    }
 }
 
 class Clean extends VacBotCommand_non950type {
@@ -173,7 +165,6 @@ class GetWaterBoxInfo extends VacBotCommand_non950type {
 class PlaySound extends VacBotCommand_non950type {
     constructor(sid) {
         super('PlaySound', {
-            'count': 1,
             'sid': sid
         });
     }

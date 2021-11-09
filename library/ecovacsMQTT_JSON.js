@@ -5,6 +5,8 @@ const constants = require('./ecovacsConstants');
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+
+        this.datatype = 'j';
     }
 
     wrapCommand(action, recipient) {
@@ -116,34 +118,18 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     async handleMessagePayload(command, event) {
-        let abbreviatedCmd = command.replace(/^_+|_+$/g, '');
-        let commandPrefix = '';
-        // Incoming events (on)
-        if (abbreviatedCmd.startsWith("on")) {
-            commandPrefix = 'on';
-        }
-        // Incoming events for (3rd) unknown/unsaved map
-        if (abbreviatedCmd.startsWith("off")) {
-            commandPrefix = 'off';
-        }
-        // Incoming events (report)
-        if (abbreviatedCmd.startsWith("report")) {
-            commandPrefix = 'report';
-        }
-        // Remove from "get" commands
-        if (abbreviatedCmd.startsWith("get") || abbreviatedCmd.startsWith("Get")) {
-            commandPrefix = 'get';
-        }
+        let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
-        if (abbreviatedCmd.endsWith("_V2") || abbreviatedCmd.endsWith("_v2")) {
-            abbreviatedCmd = abbreviatedCmd.slice(0, -3);
+        if (abbreviatedCommand.endsWith("_V2") || abbreviatedCommand.endsWith("_v2")) {
+            abbreviatedCommand = abbreviatedCommand.slice(0, -3);
         } else {
-            abbreviatedCmd = abbreviatedCmd.substring(commandPrefix.length);
+            const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
+            abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
         }
-        this.emit('messageReceived', command  + ' => ' + abbreviatedCmd);
+        this.emit('messageReceived', command  + ' => ' + abbreviatedCommand);
         const payload = this.getPayload(event);
-        switch (abbreviatedCmd) {
+        switch (abbreviatedCommand) {
             case "Stats":
                 this.bot.handle_stats(payload);
                 if (this.bot.currentStats) {
@@ -374,7 +360,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             default:
-                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", abbreviatedCmd);
+                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", abbreviatedCommand);
                 break;
         }
     }
@@ -384,6 +370,27 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             return event['payload'];
         }
         return event;
+    }
+
+    getCommandPrefix(command) {
+        let commandPrefix = '';
+        // Incoming events (on)
+        if (command.startsWith("on")) {
+            commandPrefix = 'on';
+        }
+        // Incoming events for (3rd) unknown/unsaved map
+        if (command.startsWith("off")) {
+            commandPrefix = 'off';
+        }
+        // Incoming events (report)
+        if (command.startsWith("report")) {
+            commandPrefix = 'report';
+        }
+        // Remove from "get" commands
+        if (command.startsWith("get") || command.startsWith("Get")) {
+            commandPrefix = 'get';
+        }
+        return commandPrefix;
     }
 }
 

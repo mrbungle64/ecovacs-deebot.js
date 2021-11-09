@@ -17,14 +17,6 @@ class VacBotCommand_950type {
     getId() {
         return this.args.id;
     }
-
-    toString() {
-        return this.command_name() + ' command';
-    }
-
-    command_name() {
-        return this.name.toLowerCase();
-    }
 }
 
 class Clean extends VacBotCommand_950type {

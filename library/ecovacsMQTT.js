@@ -12,6 +12,7 @@ class EcovacsMQTT extends Ecovacs {
 
         this.customdomain = hostname.split(".")[0]; // MQTT is using domain without tld extension
         this.username = user + '@' + this.customdomain;
+        this.datatype = '';
 
         let options = {
             clientId: this.username + '/' + resource,
@@ -41,7 +42,9 @@ class EcovacsMQTT extends Ecovacs {
     }
 
     subscribe() {
-        this.client.subscribe('iot/atr/+/' + this.vacuum['did'] + '/' + this.vacuum['class'] + '/' + this.vacuum['resource'] + '/+', (error, granted) => {
+        const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.datatype}`;
+        console.log(channel);
+        this.client.subscribe(channel, (error, granted) => {
             if (!error) {
                 tools.envLog('[EcovacsMQTT] subscribed to atr');
                 this.emit('ready', 'Client connected. Subscribe successful');
