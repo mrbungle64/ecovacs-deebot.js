@@ -52,10 +52,6 @@ function getKnownDevices() {
     return deebotModels.KnownDevices;
 }
 
-function getProductIotMap() {
-    return deebotModels.EcoVacsHomeProducts;
-}
-
 function isSupportedDevice(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getSupportedDevices()));
     return devices.hasOwnProperty(deviceClass);
@@ -124,7 +120,6 @@ module.exports.envLog = envLog;
 module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getKnownDevices = getKnownDevices;
-module.exports.getProductIotMap = getProductIotMap;
 module.exports.isSupportedDevice = isSupportedDevice;
 module.exports.isKnownDevice = isKnownDevice;
 module.exports.getDeviceProperty = getDeviceProperty;

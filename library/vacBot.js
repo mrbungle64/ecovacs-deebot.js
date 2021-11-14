@@ -586,17 +586,11 @@ class VacBot {
     }
 
     getProductName() {
-        if (tools.getProductIotMap()[this.deviceClass]) {
-            return tools.getProductIotMap()[this.deviceClass].product.name;
-        }
-        return this.deviceClass;
+        return this.vacuum['deviceName'];
     }
 
     getProductImageURL() {
-        if (tools.getProductIotMap()[this.deviceClass]) {
-            return tools.getProductIotMap()[this.deviceClass].product.iconUrl;
-        }
-        return '';
+        return this.vacuum['icon'];
     }
 
     getModelName() {
@@ -611,8 +605,8 @@ class VacBot {
     }
 
     getNickname() {
-        if (this.vacuum.nick) {
-            return this.vacuum.nick;
+        if (this.vacuum['nick']) {
+            return this.vacuum['nick'];
         }
         return this.getProductName();
     }
