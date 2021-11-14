@@ -336,11 +336,11 @@ class EcovacsAPI {
   mergeDeviceLists(deviceList, globalDeviceList) {
     // This is a workaround to keep compatibility
     // The device lists are not returned in the same order
-    for (let d=0; d<deviceList.length; d++) {
-      const did = deviceList[d].did;
-      for (let g=0; g<globalDeviceList.length; g++) {
-        if (globalDeviceList[g].did === did) {
-          deviceList[d] = Object.assign(globalDeviceList[g]);
+    for (let deviceNumber=0; deviceNumber<deviceList.length; deviceNumber++) {
+      for (let index=0; index<globalDeviceList.length; index++) {
+        if (globalDeviceList[index].did === deviceList[deviceNumber].did) {
+          deviceList[deviceNumber] = Object.assign(globalDeviceList[index]);
+          deviceList[deviceNumber].deviceNumber = deviceNumber;
         }
       }
     }
