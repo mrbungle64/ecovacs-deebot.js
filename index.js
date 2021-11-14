@@ -254,7 +254,7 @@ class EcovacsAPI {
             const json = JSON.parse(rawData);
             tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
             tools.envLog("[EcovacsAPI] result: %s", json['result']);
-            if (json['result'] === 'ok') {
+            if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
               resolve(json);
             } else if (json['result'] === 'fail') {
               // If it is a set token error try again
@@ -308,9 +308,9 @@ class EcovacsAPI {
     });
   }
 
-  getDevices() {
+  async getDevices(api = constants.USERSAPI, todo = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
-      this.call_portal_api(constants.USERSAPI, 'GetDeviceList', {
+      this.call_portal_api(api, todo, {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -327,8 +327,24 @@ class EcovacsAPI {
     });
   }
 
-  devices() {
-    return this.getDevices();
+  async devices() {
+    const deviceList = await this.getDevices(constants.USERSAPI, 'GetDeviceList');
+    const globalDeviceList = await this.getDevices(constants.APPAPI, 'GetGlobalDeviceList');
+    return this.mergeDeviceLists(deviceList, globalDeviceList);
+  }
+
+  mergeDeviceLists(deviceList, globalDeviceList) {
+    // This is a workaround to keep compatibility
+    // The device lists are not returned in the same order
+    for (let d=0; d<deviceList.length; d++) {
+      const did = deviceList[d].did;
+      for (let g=0; g<globalDeviceList.length; g++) {
+        if (globalDeviceList[g].did === did) {
+          deviceList[d] = Object.assign(globalDeviceList[g]);
+        }
+      }
+    }
+    return deviceList;
   }
 
   getCountryName() {
