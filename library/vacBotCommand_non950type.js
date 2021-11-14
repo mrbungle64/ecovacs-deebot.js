@@ -334,6 +334,18 @@ class SetOnOff extends VacBotCommand_non950type {
     }
 }
 
+class EnableContinuousCleaning extends SetOnOff {
+    constructor() {
+        super('continuous_cleaning', 1);
+    }
+}
+
+class DisableContinuousCleaning extends SetOnOff {
+    constructor() {
+        super('continuous_cleaning', 0);
+    }
+}
+
 class EnableDoNotDisturb extends SetOnOff {
     constructor() {
         super('do_not_disturb', 1);
@@ -390,8 +402,10 @@ class GetSchedule extends VacBotCommand_non950type {
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.CustomArea = CustomArea;
+module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
 module.exports.Edge = Edge;
+module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetChargeState = GetChargeState;

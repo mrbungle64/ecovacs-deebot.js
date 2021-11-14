@@ -652,6 +652,12 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
+            case "EnableContinuousCleaning".toLowerCase():
+                this.sendCommand(new vacBotCommand.EnableContinuousCleaning());
+                break;
+            case "DisableContinuousCleaning".toLowerCase():
+                this.sendCommand(new vacBotCommand.DisableContinuousCleaning());
+                break;
             case "GetWaterLevel".toLowerCase():
             case "GetWaterboxInfo".toLowerCase():
             case "GetWaterInfo".toLowerCase():

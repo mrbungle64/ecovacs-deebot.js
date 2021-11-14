@@ -405,6 +405,22 @@ class EmptyDustBin extends VacBotCommand_950type {
     }
 }
 
+class EnableContinuousCleaning extends VacBotCommand_950type {
+    constructor() {
+        super('setBreakPoint', {
+            'enable': 1
+        });
+    }
+}
+
+class DisableContinuousCleaning extends VacBotCommand_950type {
+    constructor() {
+        super('setBreakPoint', {
+            'enable': 0
+        });
+    }
+}
+
 class SetDoNotDisturb extends VacBotCommand_950type {
     constructor(enable = 0, start = '22:00', end = '21:59') {
         super('setBlock', {
@@ -504,9 +520,11 @@ module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.CustomArea = CustomArea;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
+module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
 module.exports.Edge = Edge;
 module.exports.EmptyDustBin = EmptyDustBin;
+module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAutoEmpty = GetAutoEmpty;
