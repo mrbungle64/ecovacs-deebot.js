@@ -10,6 +10,8 @@ class VacBot_950type extends VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
         super(user, hostname, resource, secret, vacuum, continent, country, server_address);
 
+        this.breakPoint = null;
+        this.block = null;
         this.autoEmpty = null;
         this.advancedMode = null;
         this.trueDetect = null;
@@ -434,6 +436,16 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
     }
 
+    handle_breakPoint(payload) {
+        this.breakPoint = payload['enable']
+        tools.envLog("[VacBot] *** breakPoint = " + this.breakPoint);
+    }
+
+    handle_block(payload) {
+        this.block = payload['enable']
+        tools.envLog("[VacBot] *** block = " + this.block);
+    }
+
     handle_autoEmpty(payload) {
         this.autoEmpty = payload['enable']
         tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
@@ -637,10 +649,6 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
-            case "DisableDoNotDisturb".toLowerCase(): {
-                this.sendCommand(new vacBotCommand.DisableDoNotDisturb());
-                break;
-            }
             case "SetDoNotDisturb".toLowerCase(): {
                 const enable = !!args[0];
                 const start = args[1];
@@ -652,12 +660,6 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
-            case "EnableContinuousCleaning".toLowerCase():
-                this.sendCommand(new vacBotCommand.EnableContinuousCleaning());
-                break;
-            case "DisableContinuousCleaning".toLowerCase():
-                this.sendCommand(new vacBotCommand.DisableContinuousCleaning());
-                break;
             case "GetWaterLevel".toLowerCase():
             case "GetWaterboxInfo".toLowerCase():
             case "GetWaterInfo".toLowerCase():

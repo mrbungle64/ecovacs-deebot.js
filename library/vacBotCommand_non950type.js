@@ -334,6 +334,12 @@ class SetOnOff extends VacBotCommand_non950type {
     }
 }
 
+class GetContinuousCleaning extends GetOnOff {
+    constructor() {
+        super('continuous_cleaning');
+    }
+}
+
 class EnableContinuousCleaning extends SetOnOff {
     constructor() {
         super('continuous_cleaning', 1);
@@ -343,6 +349,12 @@ class EnableContinuousCleaning extends SetOnOff {
 class DisableContinuousCleaning extends SetOnOff {
     constructor() {
         super('continuous_cleaning', 0);
+    }
+}
+
+class GetDoNotDisturb extends GetOnOff {
+    constructor() {
+        super('do_not_disturb');
     }
 }
 
@@ -414,6 +426,8 @@ module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetContinuousCleaning = GetContinuousCleaning;
+module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.GetLogApiCleanLogs = GetLogApiCleanLogs;
 module.exports.GetLogs = GetLogs;

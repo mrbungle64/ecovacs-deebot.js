@@ -655,15 +655,6 @@ class VacBot_non950type extends VacBot {
       case "EnableDoNotDisturb".toLowerCase():
         this.sendCommand(new vacBotCommand.EnableDoNotDisturb());
         break;
-      case "DisableDoNotDisturb".toLowerCase():
-        this.sendCommand(new vacBotCommand.DisableDoNotDisturb());
-        break;
-      case "EnableContinuousCleaning".toLowerCase():
-        this.sendCommand(new vacBotCommand.EnableContinuousCleaning());
-        break;
-      case "DisableContinuousCleaning".toLowerCase():
-        this.sendCommand(new vacBotCommand.DisableContinuousCleaning());
-        break;
       case "GetCleanLogs".toLowerCase(): {
         if (this.useMqtt) {
           this.sendCommand(new vacBotCommand.GetLogApiCleanLogs());

@@ -287,6 +287,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handle_sleepStatus(payload);
                 this.emit("SleepStatus", this.bot.sleepStatus);
                 break;
+            case 'BreakPoint':
+                this.bot.handle_breakPoint(payload);
+                this.emit("ContinuousCleaningEnabled", this.bot.breakPoint);
+                break;
+            case 'Block':
+                this.bot.handle_block(payload);
+                this.emit("DoNotDisturbEnabled", this.bot.block);
+                break;
             case 'AutoEmpty':
                 this.bot.handle_autoEmpty(payload);
                 this.emit("AutoEmpty", this.bot.autoEmpty);

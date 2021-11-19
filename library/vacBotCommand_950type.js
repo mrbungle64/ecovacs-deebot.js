@@ -405,6 +405,12 @@ class EmptyDustBin extends VacBotCommand_950type {
     }
 }
 
+class GetContinuousCleaning extends VacBotCommand_950type {
+    constructor() {
+        super('getBreakPoint');
+    }
+}
+
 class EnableContinuousCleaning extends VacBotCommand_950type {
     constructor() {
         super('setBreakPoint', {
@@ -428,6 +434,12 @@ class SetDoNotDisturb extends VacBotCommand_950type {
             'start': start,
             'end': end
         });
+    }
+}
+
+class GetDoNotDisturb extends VacBotCommand_950type {
+    constructor() {
+        super('getBlock');
     }
 }
 
@@ -535,6 +547,8 @@ module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetContinuousCleaning = GetContinuousCleaning;
+module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
 module.exports.GetLastCleanLog = GetLastCleanLog;

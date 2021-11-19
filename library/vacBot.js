@@ -288,6 +288,21 @@ class VacBot {
                 }
                 break;
             }
+            case "GetDoNotDisturb".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.GetDoNotDisturb());
+                break;
+            case "DisableDoNotDisturb".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.DisableDoNotDisturb());
+                break;
+            case "GetContinuousCleaning".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.GetContinuousCleaning());
+                break;
+            case "EnableContinuousCleaning".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.EnableContinuousCleaning());
+                break;
+            case "DisableContinuousCleaning".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.DisableContinuousCleaning());
+                break;
             case "Move".toLowerCase(): {
                 const action = args[0];
                 if (action !== '') {
