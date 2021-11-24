@@ -114,6 +114,7 @@ class VacBot_950type extends VacBot {
     }
 
     handle_cleanReport(payload) {
+        tools.envLog("[handle_cleanReport] payload: ", JSON.stringify(payload));
         if (payload['state'] === 'clean') {
             let type = payload['cleanState']['type'];
             if (typeof payload['cleanState']['content'] === 'object') {
@@ -156,6 +157,7 @@ class VacBot_950type extends VacBot {
     }
 
     handle_cleanLogs(payload) {
+        tools.envLog("[handle_cleanLogs] payload: ", this.removeFromLogs(JSON.stringify(payload)));
         let logs = [];
         if (payload.hasOwnProperty('logs')) {
             logs = payload['logs'];
@@ -419,6 +421,7 @@ class VacBot_950type extends VacBot {
     }
 
     handle_chargeState(payload) {
+        tools.envLog("[handle_chargeState] payload: ", JSON.stringify(payload));
         let status = null;
         const isCharging = parseInt(payload['isCharging']);
         if (isCharging === 1) {
@@ -475,6 +478,7 @@ class VacBot_950type extends VacBot {
     }
 
     handle_stats(payload) {
+        tools.envLog("[handle_stats] payload: " + JSON.stringify(payload));
         this.currentStats = {
             'cleanedArea': payload['area'],
             'cleanedSeconds': payload['time'],

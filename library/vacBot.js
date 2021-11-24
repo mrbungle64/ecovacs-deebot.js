@@ -653,6 +653,13 @@ class VacBot {
     getAreaName_i18n(name, languageCode = 'en') {
         return i18n.getSpotAreaName(name, languageCode);
     }
+
+    removeFromLogs(logData) {
+        let output = logData;
+        output = output.replace(new RegExp("(" + this.vacuum.did + ")", "g"), "[REMOVED]");
+        output = output.replace(new RegExp("(" + this.ecovacs.secret + ")", "g"), "[REMOVED]");
+        return output;
+    }
 }
 
 module.exports = VacBot;
