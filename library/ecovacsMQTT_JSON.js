@@ -120,12 +120,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     async handleMessagePayload(command, event) {
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
+        abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
         // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
         if (abbreviatedCommand.endsWith("_V2") || abbreviatedCommand.endsWith("_v2")) {
             abbreviatedCommand = abbreviatedCommand.slice(0, -3);
-        } else {
-            abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
         }
         this.emit('messageReceived', command  + ' => ' + abbreviatedCommand);
         const payload = this.getPayload(event);
@@ -368,7 +367,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             default:
-                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", abbreviatedCommand);
+                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
                 break;
         }
     }
