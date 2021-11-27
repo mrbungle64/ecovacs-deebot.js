@@ -70,6 +70,7 @@ There is of course no claim to full functionality.
 * Bumped required Node.js version to 12
 * Added some new models
 * Implement ContinuousCleaning and ContinuousCleaning commands (950 type models)
+* Start implementing V2 commands (e.g. T8 and T9 series)
 * Some minor changes and improvements
 
 ### 0.6.8
