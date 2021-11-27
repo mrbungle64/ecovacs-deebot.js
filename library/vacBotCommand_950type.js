@@ -35,6 +35,24 @@ class Clean extends VacBotCommand_950type {
     }
 }
 
+class CleanV2 extends VacBotCommand_950type {
+    constructor(mode = 'auto', action = 'start', kwargs = {}) {
+        let initCmd = {
+            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            'content': {
+                'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
+            }
+        };
+        for (let key in kwargs) {
+            if (kwargs.hasOwnProperty(key)) {
+                Object.assign(initCmd[key], kwargs[key])
+            }
+        }
+        tools.envLog('initCmd %s', initCmd);
+        super('clean_V2', initCmd);
+    }
+}
+
 class Edge extends Clean {
     constructor() {
         super('edge', 'start');
@@ -65,6 +83,20 @@ class CustomArea extends Clean {
         super('customArea', action, {
             'content': area,
             'count': cleaningAsNumber
+        });
+    }
+}
+
+class CustomAreaV2 extends CleanV2 {
+    constructor(area = '', cleanings = 1) {
+        let cleaningAsNumber = Number(cleanings);
+        super('customArea', 'start', {
+            'content': {
+                'total': 0,
+                'donotClean': 0,
+                'count': cleaningAsNumber,
+                'value': area
+            }
         });
     }
 }
@@ -531,6 +563,7 @@ module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.CustomArea = CustomArea;
+module.exports.CustomAreaV2 = CustomAreaV2;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
