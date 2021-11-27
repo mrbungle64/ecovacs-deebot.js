@@ -745,11 +745,23 @@ class VacBot_950type extends VacBot {
             case "DisableCarpetPressure".toLowerCase():
                 this.sendCommand(new vacBotCommand.SetCarpetPressure(0));
                 break;
-            case "CustomAreaV2".toLowerCase(): {
+            case "Clean_V2".toLowerCase(): {
+                this.sendCommand(new vacBotCommand.Clean_V2());
+                break;
+            }
+            case "SpotArea_V2".toLowerCase(): {
                 const area = args[0].toString();
                 const cleanings = args[1] || 0;
                 if (area !== '') {
-                    this.sendCommand(new vacBotCommand.CustomAreaV2(area, cleanings));
+                    this.sendCommand(new vacBotCommand.SpotArea_V2(area, cleanings));
+                }
+                break;
+            }
+            case "CustomArea_V2".toLowerCase(): {
+                const area = args[0].toString();
+                const cleanings = args[1] || 0;
+                if (area !== '') {
+                    this.sendCommand(new vacBotCommand.CustomArea_V2(area, cleanings));
                 }
                 break;
             }

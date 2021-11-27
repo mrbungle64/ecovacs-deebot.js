@@ -35,7 +35,7 @@ class Clean extends VacBotCommand_950type {
     }
 }
 
-class CleanV2 extends VacBotCommand_950type {
+class Clean_V2 extends VacBotCommand_950type {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let initCmd = {
             'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
@@ -77,6 +77,20 @@ class SpotArea extends Clean {
     }
 }
 
+class SpotArea_V2 extends Clean_V2 {
+    constructor(area = '', cleanings = 1) {
+        let cleaningAsNumber = Number(cleanings);
+        super('customArea', 'start', {
+            'content': {
+                'total': 0,
+                'donotClean': 0,
+                'count': cleaningAsNumber,
+                'value': area
+            }
+        });
+    }
+}
+
 class CustomArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
         let cleaningAsNumber = Number(cleanings);
@@ -87,7 +101,7 @@ class CustomArea extends Clean {
     }
 }
 
-class CustomAreaV2 extends CleanV2 {
+class CustomArea_V2 extends Clean_V2 {
     constructor(area = '', cleanings = 1) {
         let cleaningAsNumber = Number(cleanings);
         super('customArea', 'start', {
@@ -562,8 +576,9 @@ class SetCarpetPressure extends VacBotCommand_950type {
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
+module.exports.Clean_V2 = Clean_V2;
 module.exports.CustomArea = CustomArea;
-module.exports.CustomAreaV2 = CustomAreaV2;
+module.exports.CustomArea_V2 = CustomArea_V2;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
@@ -623,4 +638,5 @@ module.exports.SetVolume = SetVolume;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.Spot = Spot;
 module.exports.SpotArea = SpotArea;
+module.exports.SpotArea_V2 = SpotArea_V2;
 module.exports.Stop = Stop;
