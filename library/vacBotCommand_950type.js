@@ -80,7 +80,7 @@ class SpotArea extends Clean {
 class SpotArea_V2 extends Clean_V2 {
     constructor(area = '', cleanings = 1) {
         let cleaningAsNumber = Number(cleanings);
-        super('customArea', 'start', {
+        super('spotArea', 'start', {
             'content': {
                 'total': 0,
                 'donotClean': 0,
