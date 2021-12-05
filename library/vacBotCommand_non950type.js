@@ -39,6 +39,7 @@ class Clean extends VacBotCommand_non950type {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let initCmd = {
             'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
+            'speed': constants_type.CLEAN_SPEED_TO_ECOVACS[2],
             'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action]
         };
         for (let key in kwargs) {
