@@ -72,6 +72,7 @@ There is of course no claim to full functionality.
 * Implement ContinuousCleaning and ContinuousCleaning commands (950 type models)
 * Start implementing V2 commands (e.g. T8 and T9 series)
 * Some minor changes and improvements
+* Fix for Deebot 710 series
 
 ### 0.6.8
 * Some minor changes and improvements
