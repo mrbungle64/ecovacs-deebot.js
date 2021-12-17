@@ -65,7 +65,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.7.0 (beta)
+### 0.7.0
 * Bumped required Node.js version to 12
 * Added some new models
 * Implement ContinuousCleaning and ContinuousCleaning commands (950 type models)
