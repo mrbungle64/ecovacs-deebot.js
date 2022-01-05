@@ -36,7 +36,7 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot M88
 * Deebot 500
 * Deebot 600/601/605
-* Deebot 710/711/711s
+* Deebot 710/711
 * Deebot OZMO 610
 * Deebot OZMO 900/905
 * Deebot OZMO Slim 10/11
