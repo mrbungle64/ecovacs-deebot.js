@@ -65,6 +65,9 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.7.1 (alpha)
+* Bumped mqtt to 4.3.4 and xmldom to 0.8.0
+
 ### 0.7.0
 * Bumped required Node.js version to 12
 * Added some new models
