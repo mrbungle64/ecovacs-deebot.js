@@ -66,7 +66,8 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.7.1 (alpha)
-* Bumped mqtt to 4.3.4 and xmldom to 0.8.0
+* Bumped mqtt to 4.3.4
+* Bumped xmldom to 0.8.0
 
 ### 0.7.0
 * Bumped required Node.js version to 12
@@ -177,4 +178,4 @@ I am in no way affiliated with ECOVACS.
 
 GNU GENERAL PUBLIC LICENSE
 
-Copyright (c) 2021 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2022 Sascha Hölzel <mrb1232@posteo.de>
