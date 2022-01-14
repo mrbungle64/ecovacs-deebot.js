@@ -254,7 +254,7 @@ class EcovacsAPI {
             const json = JSON.parse(rawData);
             tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
             tools.envLog("[EcovacsAPI] result: %s", json['result']);
-            if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
+            if ((json['result'] === 'ok') || (json['ret'] === 'ok') || (json['msg'] === 'success')) {
               resolve(json);
             } else if (json['result'] === 'fail') {
               // If it is a set token error try again
@@ -308,6 +308,25 @@ class EcovacsAPI {
     });
   }
 
+  getConfigProducts() {
+    return new Promise((resolve, reject) => {
+      this.call_portal_api(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
+        'userid': this.uid,
+        'auth': {
+          'with': 'users',
+          'userid': this.uid,
+          'realm': constants.REALM,
+          'token': this.user_access_token,
+          'resource': this.resource
+        }
+      }).then((data) => {
+        resolve(data['data']);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
   async getDevices(api = constants.USERSAPI, todo = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
       this.call_portal_api(api, todo, {
@@ -345,6 +364,10 @@ class EcovacsAPI {
       }
     }
     return deviceList;
+  }
+
+  getAllKnownDevices() {
+    return tools.getAllKnownDevices();
   }
 
   getCountryName() {
