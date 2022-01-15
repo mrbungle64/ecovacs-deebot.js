@@ -65,9 +65,10 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.7.1 (alpha)
+### 0.7.1
 * Bumped mqtt to 4.3.4
 * Bumped xmldom to 0.8.0
+* Bumped follow-redirects to 1.14.7 (fix for CVE-2022-0155)
 
 ### 0.7.0
 * Bumped required Node.js version to 12
