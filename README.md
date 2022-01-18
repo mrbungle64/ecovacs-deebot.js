@@ -65,6 +65,10 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.7.2 (alpha)
+* Bumped axios to 0.2.5
+* Bumped canvas to 2.9.0
+
 ### 0.7.1
 * Bumped mqtt to 4.3.4
 * Bumped xmldom to 0.8.0
