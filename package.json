@@ -22,7 +22,7 @@
     "url": "https://github.com/mrbungle64/ecovacs-deebot.js"
   },
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^0.25.0",
     "ltx": "^3.0.0",
     "mqtt": "^4.3.4",
     "simple-xmpp": "^2.3.1",
