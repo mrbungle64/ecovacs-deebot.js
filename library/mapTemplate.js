@@ -72,12 +72,18 @@ class EcovacsMapImageBase {
         this.mapPixel = mapPixel;
         this.transferMapInfo = null;
 
-        this.initCanvas();
+        (async () => {
+            try {
+                await this.initCanvas();
+            } catch (e) {
+                console.log('initCanvas failed');
+            }
+        })();
     }
 
-    initCanvas() {
+    async initCanvas() {
         if (!tools.isCanvasModuleAvailable()) {
-            return null;
+            return;
         }
 
         const {createCanvas} = require('canvas');
@@ -91,7 +97,7 @@ class EcovacsMapImageBase {
         this.mapWallContext.beginPath();
     }
 
-    drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
+    async drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
         let mapPieceDecompressed = mapPieceToIntArray(mapPieceCompressed);
 
         for (let row = 0; row < mapPieceWidth; row++) {
@@ -184,14 +190,14 @@ class EcovacsMapImageBase {
         }
     }
 
-    getBase64PNG(deebotPosition, chargerPosition, currentMapMID) {
+    async getBase64PNG(deebotPosition, chargerPosition, currentMapMID) {
         if (!tools.isCanvasModuleAvailable()) {
-            return null;
+            return;
         }
         if (!this.transferMapInfo) {
             // check if data should not be transferred
             // mapinfo: not all data pieces retrieved or sub-data piece with no changes retrieved
-            return null;
+            return;
         }
 
         const {createCanvas} = require('canvas');
@@ -350,14 +356,14 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
         this.mapDataPiecesCrc = mapDataPiecesCrc;
     }
 
-    updateMapPiece(mapDataPieceIndex, mapDataPiece) {
+    async updateMapPiece(mapDataPieceIndex, mapDataPiece) {
         if (!tools.isCanvasModuleAvailable()) {
-            return null;
+            return;
         }
         this.transferMapInfo = true; //TODO: check for CRC change, interval and maybe only once per onMajorMap-Event or onMapTrace
         const mapPieceStartX = Math.floor(mapDataPieceIndex / this.mapCellWidth) * this.mapPieceWidth;
         const mapPieceStartY = (mapDataPieceIndex % this.mapCellHeight) * this.mapPieceHeight;
-        this.drawMapPieceToCanvas(mapDataPiece, mapPieceStartX, mapPieceStartY, this.mapPieceWidth, this.mapPieceHeight);
+        await this.drawMapPieceToCanvas(mapDataPiece, mapPieceStartX, mapPieceStartY, this.mapPieceWidth, this.mapPieceHeight);
     }
 }
 
@@ -368,10 +374,16 @@ class EcovacsMapImage extends EcovacsMapImageBase {
         // mapinfo returns the total compressed string in several pieces, stores the string pieces for concatenation
         this.mapDataPieces = new Array(mapTotalCount).fill(false);
         // mapinfo returns the total compressed string in several pieces, stores the CRC value of the concatenated string for comparison
-        this.initCanvas();
+        (async () => {
+            try {
+                await this.initCanvas();
+            } catch (e) {
+                console.log('initCanvas failed');
+            }
+        })();
     }
 
-    updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue, checkPieceCrc = true) {
+    async updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue, checkPieceCrc = true) {
         // TODO: currently only validated with one piece (StartX=0 and StartY=0)
         if (!tools.isCanvasModuleAvailable()) {
             return null;
@@ -396,7 +408,7 @@ class EcovacsMapImage extends EcovacsMapImageBase {
                 }
             }
         }
-        this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX, pieceStartY, pieceWidth, pieceHeight);
+        await this.drawMapPieceToCanvas(this.mapDataPieces.join(''), pieceStartX, pieceStartY, pieceWidth, pieceHeight);
     }
 }
 

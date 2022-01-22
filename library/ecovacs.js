@@ -219,7 +219,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'PullMP':
                 // Map Pieces of the map image
-                const mapImage = this.bot.handle_mapPiecePacket(payload);
+                const mapImage = await this.bot.handle_mapPiecePacket(payload);
                 if (mapImage) {
                     this.emit("MapImageData", mapImage);
                 }

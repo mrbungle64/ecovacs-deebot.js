@@ -139,7 +139,7 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_cachedMapInfo(payload) {
+  async handle_cachedMapInfo(payload) {
     tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(payload));
     // Execute only if the GetMaps cmd was received
     if (!this.handleMapExecuted && payload.attrs && payload.attrs.hasOwnProperty('i')) {
@@ -153,7 +153,7 @@ class VacBot_non950type extends VacBot {
       this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
       this.handleMapExecuted = true;
       if (this.createMapImage && tools.isCanvasModuleAvailable()) {
-        this.handle_mapInfo(payload);
+        await this.handle_mapInfo(payload);
       }
       return this.maps;
     }
@@ -254,7 +254,7 @@ class VacBot_non950type extends VacBot {
     };
   }
 
-  handle_mapInfo(payload) {
+  async handle_mapInfo(payload) {
     if (payload.attrs) {
       const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
@@ -280,7 +280,7 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_mapPiecePacket(payload) {
+  async handle_mapPiecePacket(payload) {
     if (payload.attrs) {
       const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
@@ -291,9 +291,9 @@ class VacBot_non950type extends VacBot {
           pid = payload.attrs.pid;
         }
         const pieceValue = payload.attrs.p;
-        this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
+        await this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
         if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
-          let mapImage = this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+          let mapImage = await this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
           tools.envLog('[Ecovacs] MapPiecePacket2: %s', JSON.stringify(mapImage));
           return mapImage;
         }

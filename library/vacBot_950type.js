@@ -361,7 +361,7 @@ class VacBot_950type extends VacBot {
         };
     }
 
-    handle_mapInfo(payload) {
+    async handle_mapInfo(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
             return;
@@ -373,9 +373,9 @@ class VacBot_950type extends VacBot {
             this.mapImages[mapMID][payload['type']] = new map.EcovacsMapImage(mapMID, payload['type'], payload['totalWidth'], payload['totalHeight'], payload['pixel'], payload['totalCount']);
         }
         if (payload['pieceValue'] !== '') {
-            this.mapImages[mapMID][payload['type']].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value'])
+            await this.mapImages[mapMID][payload['type']].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value'])
         }
-        return this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+        return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
     }
 
     handle_majorMap(payload) {
@@ -399,12 +399,12 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    handle_minorMap(payload) {
+    async handle_minorMap(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
             return;
         }
-        this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
+        await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
         return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
     }
 
