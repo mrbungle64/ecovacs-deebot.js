@@ -68,6 +68,7 @@ There is of course no claim to full functionality.
 ### 0.7.2 (alpha)
 * Bumped axios to 0.2.5
 * Bumped canvas to 2.9.0
+* Some refactoring and code improvements
 
 ### 0.7.1
 * Bumped mqtt to 4.3.4
