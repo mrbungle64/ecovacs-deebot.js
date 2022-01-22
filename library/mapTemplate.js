@@ -192,12 +192,12 @@ class EcovacsMapImageBase {
 
     async getBase64PNG(deebotPosition, chargerPosition, currentMapMID) {
         if (!tools.isCanvasModuleAvailable()) {
-            return;
+            return null;
         }
         if (!this.transferMapInfo) {
             // check if data should not be transferred
             // mapinfo: not all data pieces retrieved or sub-data piece with no changes retrieved
-            return;
+            return null;
         }
 
         const {createCanvas} = require('canvas');
