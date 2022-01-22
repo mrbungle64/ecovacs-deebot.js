@@ -377,10 +377,7 @@ class VacBot {
             }
         }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'GetSpotAreas')) {
-                return false;
-            }
-            return true;
+            return !((item.mapID === mapID) && (item.type === 'GetSpotAreas'));
         });
     }
 
@@ -408,10 +405,7 @@ class VacBot {
             }
         }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries')) {
-                return false;
-            }
-            return true;
+            return !((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries'));
         });
     }
 
@@ -464,10 +458,7 @@ class VacBot {
             mapObject['mapImage']= mapImageInfo;
         }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'GetMapImage')) {
-                return false;
-            }
-            return true;
+            return !((item.mapID === mapID) && (item.type === 'GetMapImage'));
         })
         if (this.mapDataObjectQueue.length === 0) {
             this.ecovacs.emit('MapDataReady');

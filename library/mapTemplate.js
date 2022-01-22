@@ -406,8 +406,8 @@ class EcovacsMap {
         this.mapIndex = mapIndex;
         this.mapName = mapName;
         this.mapStatus = mapStatus;
-        this.mapIsCurrentMap = Number(mapIsCurrentMap) === 1 ? true : false;
-        this.mapIsBuilt = Number(mapIsBuilt) === 1 ? true : false;
+        this.mapIsCurrentMap = Number(mapIsCurrentMap) === 1;
+        this.mapIsBuilt = Number(mapIsBuilt) === 1;
     }
 
     toJSON() {
@@ -541,7 +541,7 @@ class EcovacsMapVirtualBoundaryInfo {
     }
 }
 
-function createCanvasFromCoordinates(coordinates, width = 100, height = 100, style = {}) {
+function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
     if (!tools.isCanvasModuleAvailable()) {
         return null;
     }
