@@ -298,6 +298,7 @@ class VacBot_non950type extends VacBot {
           return mapImage;
         }
       }
+      return null;
     }
   }
 

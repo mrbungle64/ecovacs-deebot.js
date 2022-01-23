@@ -364,7 +364,7 @@ class VacBot_950type extends VacBot {
     async handle_mapInfo(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
-            return;
+            return null;
         }
         if (typeof this.mapImages[mapMID] === 'undefined') {
             this.mapImages[mapMID] = [];
@@ -402,7 +402,7 @@ class VacBot_950type extends VacBot {
     async handle_minorMap(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
-            return;
+            return null;
         }
         await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
         return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
