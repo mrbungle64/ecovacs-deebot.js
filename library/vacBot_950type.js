@@ -310,7 +310,7 @@ class VacBot_950type extends VacBot {
         return {mapsetEvent: 'error'};
     }
 
-    handle_mapSubset(payload) {
+    async handle_mapSubset(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
             mapMID = this.currentMapMID;
@@ -318,7 +318,7 @@ class VacBot_950type extends VacBot {
         if (payload['type'] === 'ar') {
             let mapSpotAreaBoundaries = payload['value'];
             if (payload['compress']) {
-                mapSpotAreaBoundaries = map.mapPieceToIntArray(payload['value']);
+                mapSpotAreaBoundaries = await map.mapPieceToIntArray(payload['value']);
             }
             let customName = '';
             if (payload['name']) {

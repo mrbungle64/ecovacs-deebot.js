@@ -98,7 +98,7 @@ class EcovacsMapImageBase {
     }
 
     async drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
-        let mapPieceDecompressed = mapPieceToIntArray(mapPieceCompressed);
+        let mapPieceDecompressed = await mapPieceToIntArray(mapPieceCompressed);
 
         for (let row = 0; row < mapPieceWidth; row++) {
             for (let column = 0; column < mapPieceHeight; column++) {
@@ -577,7 +577,7 @@ function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
 
 // converts the compressed data retrieved from ecovacs API into int array containing the map pixels
 // thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
-function mapPieceToIntArray(pieceValue) {
+async function mapPieceToIntArray(pieceValue) {
     const fixArray = new Int8Array([0, 0, 0, 0]);
     let buff = Buffer.from(pieceValue, 'base64');
     let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);

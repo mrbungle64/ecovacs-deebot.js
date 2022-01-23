@@ -208,7 +208,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "MapSubSet": //handle spotAreas, virtualWalls, noMopZones
-                let mapsubset = this.bot.handle_mapSubset(payload);
+                let mapsubset = await this.bot.handle_mapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
