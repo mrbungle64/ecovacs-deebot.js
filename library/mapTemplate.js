@@ -4,21 +4,21 @@ const constants = require('./ecovacsConstants');
 const map = require('./mapTemplate');
 
 const SPOTAREA_SUBTYPES = {
-    '0': {"en": "Default  (A, B, C...)", "de": "Standard (A, B, C...)"},
-    '1': {"en": "Living room", "de": "Wohnzimmer"},
-    '2': {"en": "Dining room", "de": "Esszimmer"},
-    '3': {"en": "Bedroom", "de": "Schlafzimmer"},
-    '4': {"en": "Study", "de": "Büro"},
-    '5': {"en": "Kitchen", "de": "Küche"},
-    '6': {"en": "Bathroom", "de": "Badezimmer"},
-    '7': {"en": "Laundry", "de": "Waschküche"},
-    '8': {"en": "Lounge", "de": "Lounge"},
-    '9': {"en": "Storeroom", "de": "Lagerraum"},
-    '10': {"en": "Kids room", "de": "Kinderzimmer"},
-    '11': {"en": "Sunroom", "de": "Wintergarten"},
-    '12': {"en": "Corridor", "de": "Flur"},
-    '13': {"en": "Balcony", "de": "Balkon"},
-    '14': {"en": "Gym", "de": "Fitnessstudio"}
+    '0': {'en': 'Default  (A, B, C...)', 'de': 'Standard (A, B, C...)'},
+    '1': {'en': 'Living room', 'de': 'Wohnzimmer'},
+    '2': {'en': 'Dining room', 'de': 'Esszimmer'},
+    '3': {'en': 'Bedroom', 'de': 'Schlafzimmer'},
+    '4': {'en': 'Study', 'de': 'Büro'},
+    '5': {'en': 'Kitchen', 'de': 'Küche'},
+    '6': {'en': 'Bathroom', 'de': 'Badezimmer'},
+    '7': {'en': 'Laundry', 'de': 'Waschküche'},
+    '8': {'en': 'Lounge', 'de': 'Lounge'},
+    '9': {'en': 'Storeroom', 'de': 'Lagerraum'},
+    '10': {'en': 'Kids room', 'de': 'Kinderzimmer'},
+    '11': {'en': 'Sunroom', 'de': 'Wintergarten'},
+    '12': {'en': 'Corridor', 'de': 'Flur'},
+    '13': {'en': 'Balcony', 'de': 'Balkon'},
+    '14': {'en': 'Gym', 'de': 'Fitnessstudio'}
 };
 
 //TODO: make colors customizable by introducing SetMapStyle(json)
@@ -76,7 +76,7 @@ class EcovacsMapImageBase {
             try {
                 await this.initCanvas();
             } catch (e) {
-                console.log('initCanvas failed');
+                tools.envLog(`[EcovacsMapImageBase] initCanvas failed: ${e.message}`);
             }
         })();
     }
@@ -88,11 +88,11 @@ class EcovacsMapImageBase {
 
         const {createCanvas} = require('canvas');
         this.mapFloorCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        this.mapFloorContext = this.mapFloorCanvas.getContext("2d");
+        this.mapFloorContext = this.mapFloorCanvas.getContext('2d');
         this.mapFloorContext.globalAlpha = 1;
         this.mapFloorContext.beginPath();
         this.mapWallCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        this.mapWallContext = this.mapWallCanvas.getContext("2d");
+        this.mapWallContext = this.mapWallCanvas.getContext('2d');
         this.mapWallContext.globalAlpha = 1;
         this.mapWallContext.beginPath();
     }
@@ -202,7 +202,7 @@ class EcovacsMapImageBase {
 
         const {createCanvas} = require('canvas');
         let finalCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        let finalContext = finalCanvas.getContext("2d");
+        let finalContext = finalCanvas.getContext('2d');
         // Flip map horizontally before drawing everything else
         finalContext.translate(0, this.mapTotalHeight);
         finalContext.scale(1, -1);
@@ -299,10 +299,10 @@ class EcovacsMapImageBase {
             if (typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //TODO: draw other icon when position is invalid
                 //Draw robot
                 ////////////
-                //TODO: later on the deebot position should only be drawn in the livemap so the mapinfo-maps dont have to be updated with new positions
+                //TODO: later on the deebot position should only be drawn in the live map so the mapinfo-maps dont have to be updated with new positions
                 //TODO: replace with customizable icons
                 //for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L27
-                const robotBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAMAAAHGjw8oAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADbUExURQAAAICAgICAgICAgICAgICAgHx8fH19fX19fYCAgIGBgX5+foCAgH5+foCAgH9/f39/f35+foCAgH9/f39/f4CAgH5+foGBgYCAgICAgIGBgX9/f39/f35+foCAgH9/f39/f4CAgIODg4eHh4mJiZCQkJycnJ2dnZ6enqCgoKSkpKenp62trbGxsbKysry8vL29vcLCwsXFxcbGxsvLy87OztPT09XV1d/f3+Tk5Ojo6Ozs7O3t7e7u7vHx8fLy8vPz8/X19fb29vf39/j4+Pn5+f39/f7+/v///9yECocAAAAgdFJOUwAGChgcKCkzOT5PVWZnlJmfsLq7wcrS1Nre4OXz+vr7ZhJmqwAAAAlwSFlzAAAXEQAAFxEByibzPwAAAcpJREFUKFNlkolaWkEMhYPggliBFiwWhGOx3AqCsggI4lZt8/5P5ElmuEX5P5hMMjeZJBMRafCvUKnbIqpcioci96owTQWqP0QKC54nImUAyr9k7VD1me4YvibHlJKpVUzQhR+dmdTRSDUvdHh8NK8nhqUVch7cITmXA3rtYDmH+3OL4XI1T+BhJUcXczQxOBXJuve0/daeUr5A6g9muJzo5NI2kPKtyRSGBStKQZ5RC1hENWn6NSRTrDUqLD/lsNKoFTNRETlGMn9dDoGdoDcT1fHPi7EuUDD9dMBw4+6vMQVyInnPXDsdW+8tjWfbYTbzg/OstcagzSlb0+wL/6k+1KPhCrj6YFhzS5eXuHcYNF4bsGtDYhFLTOSMqTsx9e3iyKfynb1SK+RqtEq70RzZPwEGKwv7G0OK1QA42Y+HIgct9P3WWG9ItI/mQTgvoeuWAMdlTRclO/+Km2jwlhDvinGNbyJH6EWV84AJ1wl8JowejqTqTmv+0GqDmVLlg/wLX5Mp2rO3WRs2Zs5fznAVd1EzRh10OONr7hhhM4ctevhiVVxHdYsbq+JzHzaIfdjs5CZ9tGInSfoWEXuL7//fwtn9+Jp7wSryDjBFqnOGeuUxAAAAAElFTkSuQmCC";
+                const robotBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAMAAAHGjw8oAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADbUExURQAAAICAgICAgICAgICAgICAgHx8fH19fX19fYCAgIGBgX5+foCAgH5+foCAgH9/f39/f35+foCAgH9/f39/f4CAgH5+foGBgYCAgICAgIGBgX9/f39/f35+foCAgH9/f39/f4CAgIODg4eHh4mJiZCQkJycnJ2dnZ6enqCgoKSkpKenp62trbGxsbKysry8vL29vcLCwsXFxcbGxsvLy87OztPT09XV1d/f3+Tk5Ojo6Ozs7O3t7e7u7vHx8fLy8vPz8/X19fb29vf39/j4+Pn5+f39/f7+/v///9yECocAAAAgdFJOUwAGChgcKCkzOT5PVWZnlJmfsLq7wcrS1Nre4OXz+vr7ZhJmqwAAAAlwSFlzAAAXEQAAFxEByibzPwAAAcpJREFUKFNlkolaWkEMhYPggliBFiwWhGOx3AqCsggI4lZt8/5P5ElmuEX5P5hMMjeZJBMRafCvUKnbIqpcioci96owTQWqP0QKC54nImUAyr9k7VD1me4YvibHlJKpVUzQhR+dmdTRSDUvdHh8NK8nhqUVch7cITmXA3rtYDmH+3OL4XI1T+BhJUcXczQxOBXJuve0/daeUr5A6g9muJzo5NI2kPKtyRSGBStKQZ5RC1hENWn6NSRTrDUqLD/lsNKoFTNRETlGMn9dDoGdoDcT1fHPi7EuUDD9dMBw4+6vMQVyInnPXDsdW+8tjWfbYTbzg/OstcagzSlb0+wL/6k+1KPhCrj6YFhzS5eXuHcYNF4bsGtDYhFLTOSMqTsx9e3iyKfynb1SK+RqtEq70RzZPwEGKwv7G0OK1QA42Y+HIgct9P3WWG9ItI/mQTgvoeuWAMdlTRclO/+Km2jwlhDvinGNbyJH6EWV84AJ1wl8JowejqTqTmv+0GqDmVLlg/wLX5Mp2rO3WRs2Zs5fznAVd1EzRh10OONr7hhhM4ctevhiVVxHdYsbq+JzHzaIfdjs5CZ9tGInSfoWEXuL7//fwtn9+Jp7wSryDjBFqnOGeuUxAAAAAElFTkSuQmCC';
                 const robotImage = new Image(); // Create a new Image
                 robotImage.src = robotBase64;
                 //icon is facing upward, so add 90
@@ -314,7 +314,7 @@ class EcovacsMapImageBase {
             //////////////
             // TODO: replace with customizable icons
             // for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L28
-            const charger = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAdVBMVEUAAAA44Yo44Yo44Yo44Yo44Yo44Yo44Yo44Yp26q844Yr///9767Kv89DG9t2g8Md26q5C44/5/vvz/fjY+ei19NNV5ZtJ45T2/fmY78KP7r1v6atq6Kjs/PPi+u7e+uvM9+Gb8MSS7r+H7bhm6KVh56JZ5p3ZkKITAAAACnRSTlMABTr188xpJ4aepd0A4wAAANZJREFUKM9VklmCgzAMQwkQYCSmLKWl2+zL/Y9YcIUL7wvkJHIUJyKkVcyy+JIGCZILGF//QLEqlTmMdsBEXi56igfH/QVGqvXSu49+1KftCbn+dtxB5LOPfNGQNRaKaQNkTJ46OMGczZg8wJB/9TB+J3nFkyqJMp44vBrnWYhJJmOn/5uVzAotV/zACnbUtTbOpHcQzVx8kxw6mavdpYP90dsNcE5k6xd8RoIb2Xgk6xAbfm5C9NiHtxGiXD/U2P96UJunrS/LOeV2GG4wfBi241P5+NwBnAEUFx9FUdUAAAAASUVORK5CYII=";
+            const charger = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAdVBMVEUAAAA44Yo44Yo44Yo44Yo44Yo44Yo44Yo44Yp26q844Yr///9767Kv89DG9t2g8Md26q5C44/5/vvz/fjY+ei19NNV5ZtJ45T2/fmY78KP7r1v6atq6Kjs/PPi+u7e+uvM9+Gb8MSS7r+H7bhm6KVh56JZ5p3ZkKITAAAACnRSTlMABTr188xpJ4aepd0A4wAAANZJREFUKM9VklmCgzAMQwkQYCSmLKWl2+zL/Y9YcIUL7wvkJHIUJyKkVcyy+JIGCZILGF//QLEqlTmMdsBEXi56igfH/QVGqvXSu49+1KftCbn+dtxB5LOPfNGQNRaKaQNkTJ46OMGczZg8wJB/9TB+J3nFkyqJMp44vBrnWYhJJmOn/5uVzAotV/zACnbUtTbOpHcQzVx8kxw6mavdpYP90dsNcE5k6xd8RoIb2Xgk6xAbfm5C9NiHtxGiXD/U2P96UJunrS/LOeV2GG4wfBi241P5+NwBnAEUFx9FUdUAAAAASUVORK5CYII=';
             const chargerImage = new Image();
             chargerImage.src = charger;
             // icon size is 16*16, so subtract 8 pixels to coordinates for center
@@ -331,7 +331,6 @@ class EcovacsMapImageBase {
         finalContext.putImageData(croppedImage, 0, 0);
         this.mapBase64PNG = finalCanvas.toDataURL();
         this.transferMapInfo = false;
-        //console.log('<img src="' + finalCanvas.toDataURL() + '" />');
         return {
             'mapID': this.mapID,
             'mapType': this.isLiveMap ? 'live' : this.mapType,
@@ -378,7 +377,7 @@ class EcovacsMapImage extends EcovacsMapImageBase {
             try {
                 await this.initCanvas();
             } catch (e) {
-                console.log('initCanvas failed');
+                tools.envLog(`[EcovacsMapImage] initCanvas failed: ${e.message}`);
             }
         })();
     }
@@ -386,19 +385,19 @@ class EcovacsMapImage extends EcovacsMapImageBase {
     async updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue, checkPieceCrc = true) {
         // TODO: currently only validated with one piece (StartX=0 and StartY=0)
         if (!tools.isCanvasModuleAvailable()) {
-            return null;
+            return;
         }
 
         if (checkPieceCrc && (this.mapDataPiecesCrc !== pieceCrc)) { // CRC has changed, so invalidate all pieces and return
             this.mapDataPiecesCrc = pieceCrc;
             this.mapDataPieces.fill(false);
             this.mapDataPieces[pieceIndex] = pieceValue;
-            return null; // Nothing to process as not all pieces are received yet
+            return; // Nothing to process as not all pieces are received yet
         } else {
             if (!this.mapDataPieces.every(Boolean)) { // Not all pieces have been received
                 this.mapDataPieces[pieceIndex] = pieceValue;
                 if (!this.mapDataPieces.every(Boolean)) { // If still not all pieces have been received return
-                    return null; // Nothing to process as not all pieces are received yet
+                    return; // Nothing to process as not all pieces are received yet
                 } else { // Last piece received
                     this.transferMapInfo = true;
                 }
@@ -467,17 +466,17 @@ class EcovacsMapSpotArea {
 }
 
 class EcovacsMapSpotAreaInfo {
-    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = "0", customName = "") {
+    constructor(mapID, mapSpotAreaID, mapSpotAreaConnections, mapSpotAreaBoundaries, mapSubType = '0', customName = '') {
         this.mapID = mapID;
         this.mapSpotAreaID = mapSpotAreaID;
-        if (customName !== "") {
+        if (customName !== '') {
             this.mapSpotAreaName = customName;
-        } else if ((mapSubType === "0") || !SPOTAREA_SUBTYPES[mapSubType]["en"]) {
+        } else if ((mapSubType === '0') || !SPOTAREA_SUBTYPES[mapSubType]['en']) {
             // if default naming or ID not found in list of names
             // return character representation (0=A, 1=B, etc.)
             this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
         } else {
-            this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]["en"]; //#LANG#
+            this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]['en']; //#LANG#
         }
         this.mapSpotAreaConnections = mapSpotAreaConnections;
         this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
@@ -557,7 +556,7 @@ function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
     if (!tools.isCanvasModuleAvailable()) {
         return null;
     }
-    let coordinateArray = coordinates.split(";");
+    let coordinateArray = coordinates.split(';');
 
     const {createCanvas} = require('canvas');
     const canvas = createCanvas(width, height);
@@ -591,7 +590,7 @@ function mapPieceToIntArray(pieceValue) {
 function getRotatedCanvasFromImage(image, angle) {
     const {createCanvas} = require('canvas');
     let rotatedCanvas = createCanvas(image.width, image.height);
-    let rotatedContext = rotatedCanvas.getContext("2d");
+    let rotatedContext = rotatedCanvas.getContext('2d');
     rotatedContext.translate(image.width / 2, image.height / 2);
     rotatedContext.rotate(angle * (Math.PI / 180));
     rotatedContext.translate(-image.width / 2, -image.height / 2);
