@@ -209,7 +209,7 @@ class VacBot_non950type extends VacBot {
     };
   }
 
-  handle_mapSubset(payload) {
+  async handle_mapSubset(payload) {
     tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('m')) {
       const value = payload.attrs['m'];

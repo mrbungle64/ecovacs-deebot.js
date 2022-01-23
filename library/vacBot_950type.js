@@ -546,7 +546,7 @@ class VacBot_950type extends VacBot {
         super.run(action, ...args);
         switch (action.toLowerCase()) {
             case "GetMapImage".toLowerCase(): {
-                const mapID = args[0]; // mapID is a string
+                const mapID = args[0].toString(); // mapID is a string
                 const mapType = args[1] || 'outline';
                 this.createMapDataObject = true;
                 this.createMapImage = true;
