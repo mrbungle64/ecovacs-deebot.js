@@ -50,7 +50,6 @@ class EcovacsAPI {
         error = new Error('Wrong or unknown country code provided');
       }
       if (!error) {
-        let login_info = null;
         let login_path = constants.LOGIN_PATH;
         if (this.country === 'CN') {
           login_path = `${login_path}CheckMobile`;
@@ -59,9 +58,8 @@ class EcovacsAPI {
           'account': account_id,
           'password': password_hash
         }).then((info) => {
-          login_info = info;
-          this.uid = login_info.uid;
-          this.login_access_token = login_info.accessToken;
+          this.uid = info.uid;
+          this.login_access_token = info.accessToken;
           this.call_main_api(constants.GETAUTHCODE_PATH, {
             'uid': this.uid,
             'accessToken': this.login_access_token
@@ -141,7 +139,7 @@ class EcovacsAPI {
 
   call_main_api(loginPath, params) {
     return new Promise((resolve, reject) => {
-      tools.envLog("[EcovacsAPI] calling main api %s with %s", loginPath, JSON.stringify(params));
+      tools.envLog(`[EcovacsAPI] Calling main api ${loginPath} with ${JSON.stringify(params)}`);
       let mainUrlFormat = constants.MAIN_URL_FORMAT;
       if (loginPath === constants.GETAUTHCODE_PATH) {
         mainUrlFormat = constants.PORTAL_GLOBAL_AUTHCODE;
@@ -164,46 +162,36 @@ class EcovacsAPI {
       tools.envLog(`[EcoVacsAPI] call_main_api calling ${url.href}`);
 
       https.get(url.href, (res) => {
-        const {
-          statusCode
-        } = res;
-
         let error;
-        if (statusCode !== 200) {
-          error = new Error('Request Failed.\n' +
-            `Status Code: ${statusCode}`);
-        }
-        if (error) {
-          tools.envLog("[EcovacsAPI] " + error.message);
-          res.resume();
-          return;
-        }
-
-        res.setEncoding('utf8');
-        let rawData = '';
-        res.on('data', (chunk) => {
-          rawData += chunk;
-        });
-        res.on('end', () => {
-          try {
-            const json = JSON.parse(rawData);
-            tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
-            if (json.code === '0000') {
-              resolve(json.data);
-            } else if (json.code === '1005') {
-              tools.envLog("[EcovacsAPI] incorrect account id or password");
-              throw new Error("incorrect account id or password");
-            } else if (json.code === '0002') {
-              throw new Error("Failure code 0002");
-            } else {
-              tools.envLog("[EcovacsAPI] call to %s failed with %s", loginPath, JSON.stringify(json));
-              throw new Error("Failure code: {msg} ({code})".format({msg: json['msg'], code: json['code']}));
+        if (res.statusCode === 200) {
+          res.setEncoding('utf8');
+          let rawData = '';
+          res.on('data', (chunk) => {
+            rawData += chunk;
+          });
+          res.on('end', () => {
+            try {
+              const json = JSON.parse(rawData);
+              tools.envLog(`[EcovacsAPI] got ${JSON.stringify(json)}`);
+              if (json.code === '0000') {
+                resolve(json.data);
+              } else {
+                if (json.code === '1005') {
+                  error = new Error('Incorrect account id or password');
+                } else {
+                  error = new Error(`Failure code ${json.code}: ${json.msg}`);
+                }
+                reject(error);
+              }
+            } catch (e) {
+              tools.envLog('[EcovacsAPI] ' + e.message);
+              reject(e);
             }
-          } catch (e) {
-            tools.envLog("[EcovacsAPI] " + e.message);
-            reject(e);
-          }
-        });
+          });
+        } else {
+          error = new Error(`Request failed with status code ${res.statusCode}`);
+          reject(error);
+        }
       }).on('error', (e) => {
         tools.envLog(`[EcoVacsAPI] Got error: ${e.message}`);
         reject(e);
