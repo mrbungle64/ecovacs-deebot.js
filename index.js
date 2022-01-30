@@ -39,50 +39,54 @@ class EcovacsAPI {
 
   connect(account_id, password_hash) {
     return new Promise((resolve, reject) => {
+      let error;
       if (!account_id) {
-        throw new Error("No account ID provided");
+        error = new Error('No account ID provided');
       }
       if (!this.country) {
-        throw new Error("No country code provided");
+        error = new Error('No country code provided');
       }
       if (!countries[this.country]) {
-        throw new Error("Wrong or unknown country code provided");
+        error = new Error('Wrong or unknown country code provided');
       }
-
-      let login_info = null;
-      let login_path = 'user/login';
-      if (this.country === 'CN') {
-        login_path = 'user/loginCheckMobile';
-      }
-      this.call_main_api(login_path, {
-        'account': account_id,
-        'password': password_hash
-      }).then((info) => {
-        login_info = info;
-        this.uid = login_info.uid;
-        this.login_access_token = login_info.accessToken;
-        this.call_main_api('user/getAuthCode', {
-          'uid': this.uid,
-          'accessToken': this.login_access_token
-        }).then((token) => {
-          this.auth_code = token['authCode'];
-          this.call_login_by_it_token().then((login) => {
-            this.user_access_token = login['token'];
-            this.uid = login['userId'];
-            tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
-            resolve("ready");
+      if (!error) {
+        let login_info = null;
+        let login_path = constants.LOGIN_PATH;
+        if (this.country === 'CN') {
+          login_path = `${login_path}CheckMobile`;
+        }
+        this.call_main_api(login_path, {
+          'account': account_id,
+          'password': password_hash
+        }).then((info) => {
+          login_info = info;
+          this.uid = login_info.uid;
+          this.login_access_token = login_info.accessToken;
+          this.call_main_api(constants.GETAUTHCODE_PATH, {
+            'uid': this.uid,
+            'accessToken': this.login_access_token
+          }).then((token) => {
+            this.auth_code = token['authCode'];
+            this.call_login_by_it_token().then((login) => {
+              this.user_access_token = login['token'];
+              this.uid = login['userId'];
+              tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
+              resolve("ready");
+            }).catch((e) => {
+              tools.envLog(`[EcovacsAPI] Error call_login_by_it_token(): ${e.message}`);
+              reject(e);
+            });
           }).catch((e) => {
-            tools.envLog("[EcovacsAPI] %s calling __call_login_by_it_token()", e.message);
+            tools.envLog(`[EcovacsAPI] Error call_main_api('${constants.GETAUTHCODE_PATH}'): ${e.message}`);
             reject(e);
           });
         }).catch((e) => {
-          tools.envLog("[EcovacsAPI] %s calling __call_main_api('user/getAuthCode', {...})", e.message);
+          tools.envLog(`[EcovacsAPI] Error call_main_api('${login_path}'): %s: ${e.message}`);
           reject(e);
         });
-      }).catch((e) => {
-        tools.envLog("[EcovacsAPI] %s calling __call_main_api('user/login', {...})", e.message);
-        reject(e);
-      });
+      } else {
+        reject(error);
+      }
     });
   }
 
@@ -139,7 +143,7 @@ class EcovacsAPI {
     return new Promise((resolve, reject) => {
       tools.envLog("[EcovacsAPI] calling main api %s with %s", loginPath, JSON.stringify(params));
       let mainUrlFormat = constants.MAIN_URL_FORMAT;
-      if (loginPath === 'user/getAuthCode') {
+      if (loginPath === constants.GETAUTHCODE_PATH) {
         mainUrlFormat = constants.PORTAL_GLOBAL_AUTHCODE;
         params['bizType'] = 'ECOVACS_IOT';
         params['deviceId'] = this.device_id;
@@ -150,7 +154,7 @@ class EcovacsAPI {
         mainUrlFormat = mainUrlFormat.replace('.com','.cn');
       }
       let url;
-      if (loginPath === 'user/getAuthCode') {
+      if (loginPath === constants.GETAUTHCODE_PATH) {
         url = new URL((mainUrlFormat).format(this.meta));
         url.search = this.signAuth(params).join('&');
       } else {

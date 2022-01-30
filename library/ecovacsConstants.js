@@ -9,6 +9,8 @@ exports.PORTAL_URL_FORMAT_CN = 'https://portal.ecouser.net/api/';
 exports.PORTAL_GLOBAL_AUTHCODE = 'https://gl-{country}-openapi.ecovacs.com/v1/global/auth/getAuthCode';
 
 exports.USERSAPI = 'users/user.do';
+exports.LOGIN_PATH = 'user/login';
+exports.GETAUTHCODE_PATH = 'user/getAuthCode';
 // IOT Device Manager - This provides control of "IOT" products via RestAPI
 exports.IOTDEVMANAGERAPI = 'iot/devmanager.do';
 exports.LGLOGAPI = 'lg/log.do';
