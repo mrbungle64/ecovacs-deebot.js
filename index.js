@@ -140,23 +140,16 @@ class EcovacsAPI {
   call_main_api(loginPath, params) {
     return new Promise((resolve, reject) => {
       tools.envLog(`[EcovacsAPI] Calling main api ${loginPath} with ${JSON.stringify(params)}`);
-      let mainUrlFormat = constants.MAIN_URL_FORMAT;
+      let url;
+      let mainUrl = this.getMainUrl(loginPath);
       if (loginPath === constants.GETAUTHCODE_PATH) {
-        mainUrlFormat = constants.PORTAL_GLOBAL_AUTHCODE;
         params['bizType'] = 'ECOVACS_IOT';
         params['deviceId'] = this.device_id;
-      } else {
-        params['requestId'] = EcovacsAPI.md5(uniqid());
-      }
-      if (this.country === 'CN') {
-        mainUrlFormat = mainUrlFormat.replace('.com','.cn');
-      }
-      let url;
-      if (loginPath === constants.GETAUTHCODE_PATH) {
-        url = new URL((mainUrlFormat).format(this.meta));
+        url = new URL((mainUrl).format(this.meta));
         url.search = this.signAuth(params).join('&');
       } else {
-        url = new URL((mainUrlFormat + "/" + loginPath).format(this.meta));
+        params['requestId'] = EcovacsAPI.md5(uniqid());
+        url = new URL((mainUrl + "/" + loginPath).format(this.meta));
         url.search = this.sign(params).join('&');
       }
       tools.envLog(`[EcoVacsAPI] call_main_api calling ${url.href}`);
@@ -197,6 +190,17 @@ class EcovacsAPI {
         reject(e);
       });
     });
+  }
+
+  getMainUrl(loginPath) {
+    let mainUrl = constants.MAIN_URL_FORMAT;
+    if (loginPath === constants.GETAUTHCODE_PATH) {
+      mainUrl = constants.PORTAL_GLOBAL_AUTHCODE;
+    }
+    if (this.country === 'CN') {
+      mainUrl = mainUrl.replace('.com','.cn');
+    }
+    return mainUrl;
   }
 
   call_portal_api(api, func, args) {
