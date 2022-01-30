@@ -71,7 +71,7 @@ class EcovacsAPI {
     });
     this.auth_code = result['authCode'];
 
-    result = await this.call_login_by_it_token();
+    result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
     this.uid = result['userId'];
     tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
@@ -142,7 +142,7 @@ class EcovacsAPI {
       portalUrl = new url.URL((portalPath + "/" + loginPath).format(this.meta));
       searchParams = new url.URLSearchParams(this.getUserLoginParams(params));
     }
-    tools.envLog(`[EcoVacsAPI] call_main_api calling ${portalUrl.href}`);
+    tools.envLog(`[EcoVacsAPI] callUserAuthApi calling ${portalUrl.href}`);
 
     const axiosConfig = {
       params: searchParams
@@ -181,96 +181,51 @@ class EcovacsAPI {
     return portalPath;
   }
 
-  call_portal_api(api, func, args) {
-    return new Promise((resolve, reject) => {
-      tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
-      let params = {
-        'todo': func
-      };
-      for (let key in args) {
-        if (args.hasOwnProperty(key)) {
-          params[key] = args[key];
-        }
+  async callPortalApi(api, func, args) {
+    tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
+    let params = {
+      'todo': func
+    };
+    for (let key in args) {
+      if (args.hasOwnProperty(key)) {
+        params[key] = args[key];
       }
+    }
 
-      tools.envLog(`[EcoVacsAPI] continent ${this.continent}`);
+    tools.envLog(`[EcoVacsAPI] continent ${this.continent}`);
 
-      let portalUrlFormat = constants.PORTAL_URL_FORMAT;
-      if (this.country === 'CN') {
-        portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
-      }
-      let portalUrl = (portalUrlFormat + "/" + api).format({
-        continent: this.continent
-      });
-      portalUrl = new url.URL(portalUrl);
-      tools.envLog(`[EcoVacsAPI] Calling ${portalUrl.href}`);
-
-      const reqOptions = {
-        hostname: portalUrl.hostname,
-        port: portalUrl.port,
-        path: portalUrl.pathname,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(JSON.stringify(params))
-        }
-      };
-      tools.envLog("[EcovacsAPI] Sending POST to", JSON.stringify(reqOptions));
-
-      const req = https.request(reqOptions, (res) => {
-        res.setEncoding('utf8');
-        let rawData = '';
-        res.on('data', (chunk) => {
-          rawData += chunk;
-        });
-        res.on('end', () => {
-          try {
-            const json = JSON.parse(rawData);
-            tools.envLog("[EcovacsAPI] got %s", JSON.stringify(json));
-            tools.envLog("[EcovacsAPI] result: %s", json['result']);
-            if ((json['result'] === 'ok') || (json['ret'] === 'ok') || (json['msg'] === 'success')) {
-              resolve(json);
-            } else if (json['result'] === 'fail') {
-              // If it is a set token error try again
-              if (json['error'] === 'set token error.') {
-                  tools.envLog("[EcovacsAPI] loginByItToken set token error");
-              } else {
-                tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(json));
-                throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
-                  errno: json['errno'],
-                  error: json['error'],
-                  func: func,
-                  params: JSON.stringify(args)
-                });
-              }
-            }
-          } catch (e) {
-            tools.envLog("[EcovacsAPI] " + e.message);
-            reject(e);
-          }
-        });
-      });
-
-      req.on('error', (e) => {
-        tools.envLog(`[EcoVacsAPI] problem with request: ${e.message}`);
-        reject(e);
-      });
-
-      // write data to request body
-      tools.envLog("[EcovacsAPI] Sending", JSON.stringify(params));
-      req.write(JSON.stringify(params));
-      req.end();
+    let portalUrlFormat = constants.PORTAL_URL_FORMAT;
+    if (this.country === 'CN') {
+      portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
+    }
+    let portalUrl = (portalUrlFormat + "/" + api).format({
+      continent: this.continent
     });
+    tools.envLog(`[EcoVacsAPI] Calling ${portalUrl}`);
+    const res = await axios.post(portalUrl, params);
+
+    const response = res.data;
+    tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
+    if ((response['result'] !== 'ok') && (response['ret'] !== 'ok') && (response['msg'] !== 'success')) {
+        tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(response));
+        throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
+          errno: response['errno'],
+          error: response['error'],
+          func: func,
+          params: JSON.stringify(args)
+        });
+    }
+    return response;
   }
 
-  call_login_by_it_token() {
+  callUserApiLoginByItToken() {
     let org = 'ECOWW';
     let country = this.country;
     if (this.country === 'CN') {
       org = 'ECOCN';
       country = 'Chinese';
     }
-    return this.call_portal_api(constants.USERSAPI, 'loginByItToken', {
+    return this.callPortalApi(constants.USERSAPI, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
       'userId': this.uid,
       'token': this.auth_code,
@@ -284,7 +239,7 @@ class EcovacsAPI {
 
   getConfigProducts() {
     return new Promise((resolve, reject) => {
-      this.call_portal_api(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
+      this.callPortalApi(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -303,7 +258,7 @@ class EcovacsAPI {
 
   async getDevices(api = constants.USERSAPI, todo = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
-      this.call_portal_api(api, todo, {
+      this.callPortalApi(api, todo, {
         'userid': this.uid,
         'auth': {
           'with': 'users',
