@@ -110,7 +110,7 @@ class VacBot {
                 } else {
                     this.ecovacs.emit('MapDataObject', this.mapDataObject);
                 }
-                map.mapDataObject = JSON.parse(JSON.stringify(this.mapDataObject)); // clone to mapTemplate
+                map.mapDataObject = this.mapDataObject; // clone to mapTemplate
                 this.mapDataObject = null;
             }
         });
@@ -118,42 +118,66 @@ class VacBot {
         this.on('Maps', (mapData) => {
             if (this.createMapDataObject) {
                 (async () => {
-                    await this.handleMapsEvent(mapData);
+                    try {
+                        await this.handleMapsEvent(mapData);
+                    } catch (e) {
+                        tools.envLog("[vacBot] Error handleMapsEvent: " + e.message);
+                    }
                 })();
             }
         });
         this.on('MapSpotAreas', (spotAreas) => {
             if (this.createMapDataObject) {
                 (async () => {
-                    await this.handleMapSpotAreasEvent(spotAreas);
+                    try {
+                        await this.handleMapSpotAreasEvent(spotAreas);
+                    } catch (e) {
+                        tools.envLog("[vacBot] Error handleMapSpotAreasEvent: " + e.message);
+                    }
                 })();
             }
         });
         this.on('MapSpotAreaInfo', (spotAreaInfo) => {
             if (this.createMapDataObject) {
                 (async () => {
-                    await this.handleMapSpotAreaInfo(spotAreaInfo);
+                    try {
+                        await this.handleMapSpotAreaInfo(spotAreaInfo);
+                    } catch (e) {
+                        tools.envLog("[vacBot] Error handleMapSpotAreaInfo: " + e.message);
+                    }
                 })();
             }
         });
         this.on('MapVirtualBoundaries', (virtualBoundaries) => {
             if (this.createMapDataObject) {
                 (async () => {
-                    await this.handleMapVirtualBoundaries(virtualBoundaries);
+                    try {
+                        await this.handleMapVirtualBoundaries(virtualBoundaries);
+                    } catch (e) {
+                        tools.envLog("[vacBot] Error handleMapVirtualBoundaries: " + e.message);
+                    }
                 })();
             }
         });
         this.on('MapVirtualBoundaryInfo', (virtualBoundaryInfo) => {
             if (this.createMapDataObject) {
                 (async () => {
-                    await this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
+                    try {
+                        await this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
+                    } catch (e) {
+                        tools.envLog("[vacBot] Error handleMapVirtualBoundaryInfo: " + e.message);
+                    }
                 })();
             }
         });
         this.on('MapImageData', (mapImageInfo) => {
             if (this.createMapDataObject) {
                 (async () => {
-                    await this.handleMapImageInfo(mapImageInfo);
+                    try {
+                        await this.handleMapImageInfo(mapImageInfo);
+                    } catch (e) {
+                        tools.envLog("[vacBot] Error handleMapImageInfo: " + e.message);
+                    }
                 })();
             }
         });
@@ -637,7 +661,11 @@ class VacBot {
         tools.envLog("[VacBot] Sending command `%s` with id %s", action.name, action.getId());
         let actionPayload = this.useMqtt ? action : action.to_xml();
         (async () => {
-            await this.ecovacs.sendCommand(actionPayload, this.getVacBotDeviceId());
+            try {
+                await this.ecovacs.sendCommand(actionPayload, this.getVacBotDeviceId());
+            } catch (e) {
+                tools.envLog("[vacBot] Error sendCommand: " + e.message);
+            }
         })();
     }
 
