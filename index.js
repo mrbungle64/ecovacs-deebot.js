@@ -1,5 +1,6 @@
 const https = require('https');
-const URL = require('url').URL;
+const url = require('url');
+const axios = require('axios').default;
 const crypto = require('crypto');
 const fs = require('fs');
 const constants = require('./library/ecovacsConstants.js');
@@ -140,21 +141,21 @@ class EcovacsAPI {
   call_main_api(loginPath, params) {
     return new Promise((resolve, reject) => {
       tools.envLog(`[EcovacsAPI] Calling main api ${loginPath} with ${JSON.stringify(params)}`);
-      let url;
-      let mainUrl = this.getMainUrl(loginPath);
+      let portalUrl;
+      let portalPath = this.getPortalPath(loginPath);
       if (loginPath === constants.GETAUTHCODE_PATH) {
         params['bizType'] = 'ECOVACS_IOT';
         params['deviceId'] = this.device_id;
-        url = new URL((mainUrl).format(this.meta));
-        url.search = this.signAuth(params).join('&');
+        portalUrl = new url.URL((portalPath).format(this.meta));
+        portalUrl.search = this.signAuth(params);
       } else {
         params['requestId'] = EcovacsAPI.md5(uniqid());
-        url = new URL((mainUrl + "/" + loginPath).format(this.meta));
-        url.search = this.sign(params).join('&');
+        portalUrl = new url.URL((portalPath + "/" + loginPath).format(this.meta));
+        portalUrl.search = this.sign(params);
       }
-      tools.envLog(`[EcoVacsAPI] call_main_api calling ${url.href}`);
+      tools.envLog(`[EcoVacsAPI] call_main_api calling ${portalUrl.href}`);
 
-      https.get(url.href, (res) => {
+      https.get(portalUrl.href, (res) => {
         let error;
         if (res.statusCode === 200) {
           res.setEncoding('utf8');
@@ -192,15 +193,15 @@ class EcovacsAPI {
     });
   }
 
-  getMainUrl(loginPath) {
-    let mainUrl = constants.MAIN_URL_FORMAT;
+  getPortalPath(loginPath) {
+    let portalPath = constants.MAIN_URL_FORMAT;
     if (loginPath === constants.GETAUTHCODE_PATH) {
-      mainUrl = constants.PORTAL_GLOBAL_AUTHCODE;
+      portalPath = constants.PORTAL_GLOBAL_AUTHCODE;
     }
     if (this.country === 'CN') {
-      mainUrl = mainUrl.replace('.com','.cn');
+      portalPath = portalPath.replace('.com','.cn');
     }
-    return mainUrl;
+    return portalPath;
   }
 
   call_portal_api(api, func, args) {
@@ -221,16 +222,16 @@ class EcovacsAPI {
       if (this.country === 'CN') {
         portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
       }
-      let url = (portalUrlFormat + "/" + api).format({
+      let portalUrl = (portalUrlFormat + "/" + api).format({
         continent: this.continent
       });
-      url = new URL(url);
-      tools.envLog(`[EcoVacsAPI] Calling ${url.href}`);
+      portalUrl = new url.URL(portalUrl);
+      tools.envLog(`[EcoVacsAPI] Calling ${portalUrl.href}`);
 
       const reqOptions = {
-        hostname: url.hostname,
-        port: url.port,
-        path: url.pathname,
+        hostname: portalUrl.hostname,
+        port: portalUrl.port,
+        path: portalUrl.pathname,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -450,7 +451,7 @@ class EcovacsAPI {
         query.push(key + "=" + encodeURIComponent(params[key]));
       }
     }
-    return query;
+    return query.join('&');
   }
 }
 
