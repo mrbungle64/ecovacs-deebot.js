@@ -201,19 +201,20 @@ class EcovacsAPI {
     let portalUrl = (portalUrlFormat + "/" + api).format({
       continent: this.continent
     });
+    let headers = {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(JSON.stringify(params))
+    };
     tools.envLog(`[EcoVacsAPI] Calling ${portalUrl}`);
-    const res = await axios.post(portalUrl, params);
+    const res = await axios.post(portalUrl, params, {
+      headers: headers
+    });
 
     const response = res.data;
     tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
     if ((response['result'] !== 'ok') && (response['ret'] !== 'ok') && (response['msg'] !== 'success')) {
-        tools.envLog("[EcovacsAPI] call to %s failed with %s", func, JSON.stringify(response));
-        throw "failure code {errno} ({error}) for call {func} and parameters {params}".format({
-          errno: response['errno'],
-          error: response['error'],
-          func: func,
-          params: JSON.stringify(args)
-        });
+        tools.envLog(`[EcovacsAPI] callPortalApi failure code ${response['errno']} (${response['error']}) for call ${func} and args ${JSON.stringify(args)}`);
+        throw `Failure code ${response['errno']} (${response['error']}) for call ${func}`;
     }
     return response;
   }

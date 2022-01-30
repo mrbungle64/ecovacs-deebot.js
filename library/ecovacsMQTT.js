@@ -118,10 +118,8 @@ class EcovacsMQTT extends Ecovacs {
             if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                 this.emitLastError();
             }
-            throw "failure code {errno} ({error})".format({
-                errno: response['errno'],
-                error: response['error']
-            });
+            tools.envLog(`[EcovacsAPI] callEcouserApi failure code ${response['errno']} (${response['error']})`);
+            throw `Failure code ${response['errno']} (${response['error']})`;
         }
         if (this.bot.errorCode !== '0') {
             this.emitLastErrorByErrorCode('0');
