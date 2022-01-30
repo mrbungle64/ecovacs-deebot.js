@@ -172,6 +172,7 @@ There is of course no claim to full functionality.
 * @bmartin5692 ([sucks](https://github.com/bmartin5692/sucks), [bumber](https://github.com/bmartin5692/bumper))
 * @Ligio ([ozmo](https://github.com/Ligio/ozmo))
 * @And3rsL ([Deebotozmo](https://github.com/And3rsL/Deebotozmo))
+* @edenhaus ([Client Library for Deebot Vacuums](https://github.com/DeebotUniverse/client.py), [Deebot-4-Home-Assistant](https://github.com/DeebotUniverse/Deebot-4-Home-Assistant))
 
 All credits for originally figuring out and documenting the protocol go to [@wpietri](https://github.com/wpietri).
 He documented his [findings on the protocol](http://github.com/wpietri/sucks/blob/master/protocol.md) in his repository.
