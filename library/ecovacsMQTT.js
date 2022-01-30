@@ -1,8 +1,7 @@
 const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
-const https = require('https');
-const URL = require('url').URL;
+const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
@@ -60,107 +59,80 @@ class EcovacsMQTT extends Ecovacs {
         });
     }
 
-    callEcovacsDeviceAPI(params, api) {
-        return new Promise((resolve, reject) => {
-            let portalUrlFormat = constants.PORTAL_URL_FORMAT;
-            if (this.country === 'CN') {
-                portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
-            }
-            let url = (portalUrlFormat + '/' + api).format({
-                continent: this.continent
-            });
-            if (this.bot.is950type()) {
-                url = url + "?cv=1.67.3&t=a&av=1.3.1";
-                if (api === constants.IOTDEVMANAGERAPI) {
-                    url = url + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
-                }
-            }
-
-            let headers = {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(JSON.stringify(params))
-            };
-            if (this.bot.is950type()) {
-                Object.assign(headers, {'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'});
-            }
-
-            url = new URL(url);
-            tools.envLog(`[EcovacsMQTT] Calling ${url.href}`);
-            const reqOptions = {
-                hostname: url.hostname,
-                path: url.pathname,
-                method: 'POST',
-                headers: headers
-            };
-            tools.envLog("[EcovacsMQTT] Sending POST to ", JSON.stringify(reqOptions));
-
-            const req = https.request(reqOptions, (res) => {
-                res.setEncoding('utf8');
-                res.setTimeout(6000);
-                let rawData = '';
-                res.on('data', (chunk) => {
-                    rawData += chunk;
-                });
-                res.on('end', () => {
-                    try {
-                        const json = JSON.parse(rawData);
-                        tools.envLog("[EcovacsMQTT] call response %s", JSON.stringify(json));
-                        if ((json['result'] === 'ok') || (json['ret'] === 'ok')) {
-                            if (this.bot.errorCode !== '0') {
-                                this.emitLastErrorByErrorCode('0');
-                            }
-                            resolve(json);
-                        } else {
-                            tools.envLog("[EcovacsMQTT] call failed with %s", JSON.stringify(json));
-                            const errorCodeObj = {
-                                code: json['errno']
-                            };
-                            this.bot.handle_error(errorCodeObj);
-                            // Error code 500 = wait for response timed out (see issue #19)
-                            if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
-                                this.emitLastError();
-                            }
-                            reject(errorCodeObj);
-                        }
-                    } catch (e) {
-                        tools.envLog("[EcovacsMQTT] Error parsing response data: " + e.toString());
-                        this.emitLastErrorByErrorCode('-3');
-                        reject(e);
-                    }
-                });
-            });
-
-            req.on('error', (e) => {
-                tools.envLog(`[EcovacsMQTT] Received error event: ${e.message}`);
-                if (e.toString().includes('ENOTFOUND')) {
-                    this.bot.errorDescription = `DNS lookup failed: ${e.message}`;
-                }
-                if (e.toString().includes('EHOSTUNREACH')) {
-                    this.bot.errorDescription = `Host is unreachable: ${e.message}`;
-                }
-                else if (e.toString().includes('ETIMEDOUT') || e.toString().includes('EAI_AGAIN')) {
-                    this.bot.errorDescription = `Network connectivity error: ${e.message}`;
-                } else {
-                    this.bot.errorDescription = `Received error event: ${e.message}`;
-                }
-                this.bot.errorCode = '-1';
-                this.emitLastError();
-                reject(e);
-            });
-
-            // write data to request body
-            tools.envLog("[EcovacsMQTT] Sending", JSON.stringify(params));
-            req.write(JSON.stringify(params));
-            req.end();
-        }).catch((e)=> {
-            tools.envLog("[EcovacsMQTT] Promise rejection: " + JSON.stringify(e));
+    async callEcouserApi(params, api) {
+        let portalUrlFormat = constants.PORTAL_URL_FORMAT;
+        if (this.country === 'CN') {
+            portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
+        }
+        let portalUrl = (portalUrlFormat + '/' + api).format({
+            continent: this.continent
         });
+        if (this.bot.is950type()) {
+            portalUrl = portalUrl + "?cv=1.67.3&t=a&av=1.3.1";
+            if (api === constants.IOTDEVMANAGERAPI) {
+                portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
+            }
+        }
+
+        let headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(JSON.stringify(params))
+        };
+        if (this.bot.is950type()) {
+            Object.assign(headers, {
+                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'
+            });
+        }
+
+        let response;
+        try {
+            const res = await axios.post(portalUrl, params, {
+                headers: headers
+            });
+            response = res.data;
+        } catch (e) {
+            tools.envLog(`[EcovacsMQTT] Received error event: ${e.message}`);
+            if (e.message.includes('ENOTFOUND')) {
+                this.bot.errorDescription = `DNS lookup failed: ${e.message}`;
+            }
+            if (e.message.includes('EHOSTUNREACH')) {
+                this.bot.errorDescription = `Host is unreachable: ${e.message}`;
+            }
+            else if (e.message.includes('ETIMEDOUT') || e.toString().includes('EAI_AGAIN')) {
+                this.bot.errorDescription = `Network connectivity error: ${e.message}`;
+            } else {
+                this.bot.errorDescription = `Received error event: ${e.message}`;
+            }
+            this.bot.errorCode = '-1';
+            this.emitLastError();
+            throw e.message;
+        }
+
+        tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
+        if ((response['result'] !== 'ok') && (response['ret'] !== 'ok')) {
+            const errorCodeObj = {
+                code: response['errno']
+            };
+            this.bot.handle_error(errorCodeObj);
+            // Error code 500 = wait for response timed out (see issue #19)
+            if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
+                this.emitLastError();
+            }
+            throw "failure code {errno} ({error})".format({
+                errno: response['errno'],
+                error: response['error']
+            });
+        }
+        if (this.bot.errorCode !== '0') {
+            this.emitLastErrorByErrorCode('0');
+        }
+        return response;
     }
 
     async sendCommand(action, recipient) {
         let wrappedCommand = this.wrapCommand(action, recipient);
         try {
-            const json = await this.callEcovacsDeviceAPI(wrappedCommand, this.getAPI(action));
+            const json = await this.callEcouserApi(wrappedCommand, this.getAPI(action));
             this.handleCommandResponse(action, json);
         } catch (e) {
             tools.envLog("[EcovacsMQTT] Error making call to Ecovacs API: " + e.toString());
