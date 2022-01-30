@@ -285,7 +285,6 @@ class VacBot_non950type extends VacBot {
       const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
       if (this.mapImages[mapID][type]) {
-        tools.envLog('[Ecovacs] MapPiecePacket: %s', JSON.stringify(payload));
         let pid = this.mapPiecePacketsSent[payload.attrs.id];
         if (payload.attrs.pid) {
           pid = payload.attrs.pid;
@@ -293,9 +292,11 @@ class VacBot_non950type extends VacBot {
         const pieceValue = payload.attrs.p;
         await this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
         if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
-          let mapImage = await this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
-          tools.envLog('[Ecovacs] MapPiecePacket2: %s', JSON.stringify(mapImage));
-          return mapImage;
+          try {
+            return await this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+          } catch (e) {
+            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+          }
         }
       }
       return null;
