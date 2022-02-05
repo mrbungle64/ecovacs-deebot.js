@@ -18,7 +18,7 @@ class EcovacsMQTT extends Ecovacs {
             username: this.username,
             password: this.secret,
             protocolVersion: 4,
-            keepalive: 60,
+            keepalive: 120,
             rejectUnauthorized: false
         };
 
