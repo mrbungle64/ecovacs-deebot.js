@@ -1,6 +1,6 @@
-const EcovacsMQTT = require('./ecovacsMQTT');
-const tools = require('./tools');
-const constants = require('./ecovacsConstants');
+const EcovacsMQTT = require('../ecovacsMQTT');
+const tools = require('../tools');
+const constants = require('../ecovacsConstants');
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {

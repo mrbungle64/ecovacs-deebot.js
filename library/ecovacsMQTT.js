@@ -17,6 +17,7 @@ class EcovacsMQTT extends Ecovacs {
             clientId: this.username + '/' + resource,
             username: this.username,
             password: this.secret,
+            protocolVersion: 4,
             rejectUnauthorized: false
         };
 
@@ -36,6 +37,7 @@ class EcovacsMQTT extends Ecovacs {
         });
 
         this.client.on('error', (error) => {
+            tools.envLog('[EcovacsMQTT] error: ' + error.message);
             ecovacsMQTT.emit('error', error);
         });
     }

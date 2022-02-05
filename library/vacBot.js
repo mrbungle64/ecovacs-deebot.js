@@ -514,19 +514,19 @@ class VacBot {
 
     getLibraryForCommands() {
         if (this.is950type()) {
-            return require('./vacBotCommand_950type');
+            return require('./950type/vacBotCommand');
         } else {
-            return require('./vacBotCommand_non950type');
+            return require('./non950type/vacBotCommand');
         }
     }
 
     getLibraryForProtocol() {
         if (this.is950type()) {
-            return require('./ecovacsMQTT_JSON.js');
+            return require('./950type/ecovacsMQTT_JSON.js');
         } else if (this.useMqtt) {
-            return require('./ecovacsMQTT_XML.js');
+            return require('./non950type/ecovacsMQTT_XML.js');
         } else {
-            return require('./ecovacsXMPP.js');
+            return require('./non950type/ecovacsXMPP.js');
         }
     }
 

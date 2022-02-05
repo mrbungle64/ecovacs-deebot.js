@@ -1,8 +1,8 @@
-const tools = require('./tools');
-const constants_type = require('./ecovacsConstants_non950type');
+const tools = require('../tools');
+const constants_type = require('./ecovacsConstants');
 const Element = require('ltx').Element;
 
-class VacBotCommand_non950type {
+class VacBotCommand {
     constructor(name, args = {}) {
         this.name = name;
         if (!args.hasOwnProperty('id')) {
@@ -35,7 +35,7 @@ class VacBotCommand_non950type {
     }
 }
 
-class Clean extends VacBotCommand_non950type {
+class Clean extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let initCmd = {
             'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
@@ -101,7 +101,7 @@ class CustomArea extends Clean {
     }
 }
 
-class Charge extends VacBotCommand_non950type {
+class Charge extends VacBotCommand {
     constructor() {
         super('Charge', {
             'charge': {
@@ -111,25 +111,25 @@ class Charge extends VacBotCommand_non950type {
     }
 }
 
-class GetCleanState extends VacBotCommand_non950type {
+class GetCleanState extends VacBotCommand {
     constructor() {
         super('GetCleanState');
     }
 }
 
-class GetChargeState extends VacBotCommand_non950type {
+class GetChargeState extends VacBotCommand {
     constructor() {
         super('GetChargeState');
     }
 }
 
-class GetBatteryState extends VacBotCommand_non950type {
+class GetBatteryState extends VacBotCommand {
     constructor() {
         super('GetBatteryInfo');
     }
 }
 
-class GetLifeSpan extends VacBotCommand_non950type {
+class GetLifeSpan extends VacBotCommand {
     constructor(component) {
         super('GetLifeSpan', {
             'type': constants_type.COMPONENT_TO_ECOVACS[component]
@@ -137,13 +137,13 @@ class GetLifeSpan extends VacBotCommand_non950type {
     }
 }
 
-class GetCleanSpeed extends VacBotCommand_non950type {
+class GetCleanSpeed extends VacBotCommand {
     constructor() {
         super('GetCleanSpeed');
     }
 }
 
-class SetWaterLevel extends VacBotCommand_non950type {
+class SetWaterLevel extends VacBotCommand {
     constructor(level) {
         super('SetWaterPermeability', {
             'v': level
@@ -151,19 +151,19 @@ class SetWaterLevel extends VacBotCommand_non950type {
     }
 }
 
-class GetWaterLevel extends VacBotCommand_non950type {
+class GetWaterLevel extends VacBotCommand {
     constructor() {
         super('GetWaterPermeability');
     }
 }
 
-class GetWaterBoxInfo extends VacBotCommand_non950type {
+class GetWaterBoxInfo extends VacBotCommand {
     constructor() {
         super('GetWaterBoxInfo');
     }
 }
 
-class PlaySound extends VacBotCommand_non950type {
+class PlaySound extends VacBotCommand {
     constructor(sid) {
         super('PlaySound', {
             'sid': sid
@@ -171,43 +171,43 @@ class PlaySound extends VacBotCommand_non950type {
     }
 }
 
-class GetNetInfo extends VacBotCommand_non950type {
+class GetNetInfo extends VacBotCommand {
     constructor() {
         super('GetNetInfo');
     }
 }
 
-class GetPosition extends VacBotCommand_non950type {
+class GetPosition extends VacBotCommand {
     constructor() {
         super('GetPos');
     }
 }
 
-class GetChargerPos extends VacBotCommand_non950type {
+class GetChargerPos extends VacBotCommand {
     constructor() {
         super('GetChargerPos');
     }
 }
 
-class GetSleepStatus extends VacBotCommand_non950type {
+class GetSleepStatus extends VacBotCommand {
     constructor() {
         super('GetSleepStatus');
     }
 }
 
-class GetCleanSum extends VacBotCommand_non950type {
+class GetCleanSum extends VacBotCommand {
     constructor() {
         super('GetCleanSum');
     }
 }
 
-class GetMapM extends VacBotCommand_non950type {
+class GetMapM extends VacBotCommand {
     constructor() {
         super('GetMapM');
     }
 }
 
-class PullMP extends VacBotCommand_non950type {
+class PullMP extends VacBotCommand {
     constructor(pid) {
         super('PullMP', {
             'pid': pid
@@ -215,7 +215,7 @@ class PullMP extends VacBotCommand_non950type {
     }
 }
 
-class PullM extends VacBotCommand_non950type {
+class PullM extends VacBotCommand {
     constructor(mapSetType, mapSetId, mapDetailId) {
         super('PullM', {
             'tp': mapSetType,
@@ -225,7 +225,7 @@ class PullM extends VacBotCommand_non950type {
     }
 }
 
-class GetMapSet extends VacBotCommand_non950type {
+class GetMapSet extends VacBotCommand {
     // sa = spot areas
     // vw = virtual walls
     constructor(tp = 'sa') {
@@ -235,7 +235,7 @@ class GetMapSet extends VacBotCommand_non950type {
     }
 }
 
-class SetCleanSpeed extends VacBotCommand_non950type {
+class SetCleanSpeed extends VacBotCommand {
     constructor(level) {
         if (constants_type.CLEAN_SPEED_TO_ECOVACS.hasOwnProperty(level)) {
             level = constants_type.CLEAN_SPEED_TO_ECOVACS[level];
@@ -246,7 +246,7 @@ class SetCleanSpeed extends VacBotCommand_non950type {
     }
 }
 
-class Move extends VacBotCommand_non950type {
+class Move extends VacBotCommand {
     constructor(action) {
         if (constants_type.ACTION.hasOwnProperty(action)) {
             action = constants_type.ACTION[action];
@@ -289,7 +289,7 @@ class MoveTurnAround extends Move {
     }
 }
 
-class GetLogs extends VacBotCommand_non950type {
+class GetLogs extends VacBotCommand {
     constructor(count = 20) {
         super('GetLogs', {
             'count': count
@@ -297,7 +297,7 @@ class GetLogs extends VacBotCommand_non950type {
     }
 }
 
-class GetCleanLogs extends VacBotCommand_non950type {
+class GetCleanLogs extends VacBotCommand {
     constructor(count = 20) {
         super('GetCleanLogs', {
             'count': count
@@ -305,13 +305,13 @@ class GetCleanLogs extends VacBotCommand_non950type {
     }
 }
 
-class GetLogApiCleanLogs extends VacBotCommand_non950type {
+class GetLogApiCleanLogs extends VacBotCommand {
     constructor() {
         super('GetLogApiCleanLogs');
     }
 }
 
-class GetOnOff extends VacBotCommand_non950type {
+class GetOnOff extends VacBotCommand {
     constructor(type) {
         if (constants_type.ON_OFF_TO_ECOVACS.hasOwnProperty(type)) {
             type = constants_type.ON_OFF_TO_ECOVACS[type];
@@ -322,7 +322,7 @@ class GetOnOff extends VacBotCommand_non950type {
     }
 }
 
-class SetOnOff extends VacBotCommand_non950type {
+class SetOnOff extends VacBotCommand {
     constructor(type, on) {
         // on = 1, off = 0
         if (constants_type.ON_OFF_TO_ECOVACS.hasOwnProperty(type)) {
@@ -373,7 +373,7 @@ class DisableDoNotDisturb extends SetOnOff {
 
 // Untested
 // Seems to be N79 Series only
-class SetLifeSpan extends VacBotCommand_non950type {
+class SetLifeSpan extends VacBotCommand {
     constructor(component, val = 100) {
         super('SetLifeSpan', {
             'type': constants_type.COMPONENT_TO_ECOVACS[component],
@@ -382,7 +382,7 @@ class SetLifeSpan extends VacBotCommand_non950type {
     }
 }
 
-class ResetLifeSpan extends VacBotCommand_non950type {
+class ResetLifeSpan extends VacBotCommand {
     constructor(component) {
         super('ResetLifeSpan', {
             'type': constants_type.COMPONENT_TO_ECOVACS[component]
@@ -393,7 +393,7 @@ class ResetLifeSpan extends VacBotCommand_non950type {
 // Tested with
 // - OZMO 930 (it works)
 // - Deebot 901 (does not work)
-class RenameSpotArea extends VacBotCommand_non950type {
+class RenameSpotArea extends VacBotCommand {
     constructor(msid, mid, name) {
         super('RenameM', {
             'tp': 'sa',
@@ -406,7 +406,7 @@ class RenameSpotArea extends VacBotCommand_non950type {
     }
 }
 
-class GetSchedule extends VacBotCommand_non950type {
+class GetSchedule extends VacBotCommand {
     constructor() {
         super('GetSched');
     }

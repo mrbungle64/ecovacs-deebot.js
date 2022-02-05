@@ -1,7 +1,7 @@
-const Ecovacs = require('./ecovacs');
-const tools = require('./tools');
+const Ecovacs = require('../ecovacs');
+const tools = require('../tools');
 const Element = require('ltx').Element;
-const errorCodes = require('./errorCodes');
+const errorCodes = require('../errorCodes');
 
 class EcovacsXMPP extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {

@@ -1,6 +1,6 @@
-const EcovacsMQTT = require('./ecovacsMQTT');
-const tools = require('./tools');
-const constants = require('./ecovacsConstants');
+const EcovacsMQTT = require('../ecovacsMQTT');
+const tools = require('../tools');
+const constants = require('../ecovacsConstants');
 const { DOMParser } = require('@xmldom/xmldom');
 
 class EcovacsMQTT_XML extends EcovacsMQTT {

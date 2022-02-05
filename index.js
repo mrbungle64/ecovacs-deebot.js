@@ -318,19 +318,17 @@ class EcovacsAPI {
   }
 
   getVacBot(user, hostname, resource, secret, vacuum, continent) {
-    let vacbot;
+    let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
     if (is950Type) {
       tools.envLog('vacBot_950type identified');
-      const VacBot_950type = require('./library/vacBot_950type');
-      vacbot = new VacBot_950type(user, hostname, resource, secret, vacuum, continent, this.country);
+      vacBotClass = require('./library/950type/vacBot');
     } else {
       tools.envLog('vacBot_non950type identified');
-      const VacBot_non950type = require('./library/vacBot_non950type');
-      vacbot = new VacBot_non950type(user, hostname, resource, secret, vacuum, continent, this.country);
+      vacBotClass = require('./library/non950type/vacBot');
     }
-    return vacbot;
+    return new vacBotClass(user, hostname, resource, secret, vacuum, continent, this.country);
   }
 
   getVersion() {
