@@ -319,7 +319,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("CarpetPressure", this.bot.carpetPressure);
                 break;
             case "Error":
-                this.bot.handle_error(payload);
+                this.bot.handleResponseError(payload);
                 this.emit("Error", this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 this.emit('LastError', {

@@ -157,7 +157,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Error':
                 payload = event.attrs;
-                this.bot.handle_error(payload);
+                this.bot.handleResponseError(payload);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 this.emit('LastError', {
@@ -301,6 +301,13 @@ class Ecovacs extends EventEmitter {
                 'main_brush': this.bot.components['main_brush']
             });
         }
+    }
+
+    emitNetworkError(error) {
+        tools.envLog(`[EcovacsMQTT] Received error event: ${error.message}`);
+        this.bot.errorDescription = tools.createErrorDescription(error.message);
+        this.bot.errorCode = '-1';
+        this.emitLastError();
     }
 
     emitLastErrorByErrorCode(errorCode) {

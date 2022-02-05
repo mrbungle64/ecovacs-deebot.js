@@ -90,30 +90,19 @@ class EcovacsMQTT extends Ecovacs {
                 headers: headers
             });
             response = res.data;
+            tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
         } catch (e) {
-            tools.envLog(`[EcovacsMQTT] Received error event: ${e.message}`);
-            if (e.message.includes('ENOTFOUND')) {
-                this.bot.errorDescription = `DNS lookup failed: ${e.message}`;
-            }
-            if (e.message.includes('EHOSTUNREACH')) {
-                this.bot.errorDescription = `Host is unreachable: ${e.message}`;
-            }
-            else if (e.message.includes('ETIMEDOUT') || e.toString().includes('EAI_AGAIN')) {
-                this.bot.errorDescription = `Network connectivity error: ${e.message}`;
-            } else {
-                this.bot.errorDescription = `Received error event: ${e.message}`;
-            }
-            this.bot.errorCode = '-1';
-            this.emitLastError();
+            this.emitNetworkError(e);
             throw e.message;
         }
 
-        tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
-        if ((response['result'] !== 'ok') && (response['ret'] !== 'ok')) {
+        if ((response['result'] === 'ok') || (response['ret'] === 'ok')) {
+            return response;
+        } else {
             const errorCodeObj = {
                 code: response['errno']
             };
-            this.bot.handle_error(errorCodeObj);
+            this.bot.handleResponseError(errorCodeObj);
             // Error code 500 = wait for response timed out (see issue #19)
             if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                 this.emitLastError();
@@ -124,7 +113,6 @@ class EcovacsMQTT extends Ecovacs {
         if (this.bot.errorCode !== '0') {
             this.emitLastErrorByErrorCode('0');
         }
-        return response;
     }
 
     async sendCommand(action, recipient) {

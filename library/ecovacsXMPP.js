@@ -58,7 +58,7 @@ class EcovacsXMPP extends Ecovacs {
                     }
                 } else if ((stanza.attrs.type === 'error') && (stanza.children[0].name === 'error')) {
                     tools.envLog('[EcovacsXMPP] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
-                    this.bot.handle_error(stanza.children[0].attrs);
+                    this.bot.handleResponseError(stanza.children[0].attrs);
                     this.emitLastError();
                 }
             }

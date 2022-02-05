@@ -9,6 +9,20 @@ function isCanvasModuleAvailable() {
     }
 }
 
+function createErrorDescription(message) {
+    if (message.includes('ENOTFOUND')) {
+        return `DNS lookup failed: ${message}`;
+    } else if (message.includes('EHOSTUNREACH')) {
+        return `Host is unreachable: ${message}`;
+    } else if (message.includes('ECONNRESET')) {
+        return `Connection is interrupted: ${message}`;
+    } else if (message.includes('ETIMEDOUT') || message.includes('EAI_AGAIN')) {
+        return `Network connectivity error: ${message}`;
+    } else {
+        return `Received error event: ${message}`;
+    }
+}
+
 // Generate a somewhat random string for request id with 8 chars.
 // Works similar to ecovacs app
 // This is required for e.g. the Ozmo 930
@@ -128,3 +142,4 @@ module.exports.isN79series = isN79series;
 module.exports.is710series = is710series;
 module.exports.getReqID = getReqID;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
+module.exports.createErrorDescription = createErrorDescription;

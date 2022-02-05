@@ -486,7 +486,7 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    handle_error(payload) {
+    handleResponseError(payload) {
         this.errorCode = payload['code'].toString();
         // known errorCode from library
         if (errorCodes[this.errorCode]) {

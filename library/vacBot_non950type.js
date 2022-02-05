@@ -492,7 +492,7 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_error(payload) {
+  handleResponseError(payload) {
     this.errorCode = '0';
     this.errorDescription = '';
     let attrs = ['new', 'code', 'errno', 'error', 'errs'];
