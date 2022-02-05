@@ -37,9 +37,21 @@ class EcovacsMQTT extends Ecovacs {
             this.handleMessage(topic, message.toString(), "incoming");
         });
 
+        this.client.on('offline', function () {
+            tools.envLog('[EcovacsMQTT] MQTT server is offline or not reachable');
+        });
+
+        this.client.on('disconnect', function (packet) {
+            tools.envLog('[EcovacsMQTT] MQTT connection disconnected: ' + packet);
+        })
+
         this.client.on('error', (error) => {
-            tools.envLog('[EcovacsMQTT] error: ' + error.message);
-            ecovacsMQTT.emit('error', error);
+            tools.envLog('[EcovacsMQTT] MQTT client error: ' + error.message);
+            try {
+                ecovacsMQTT.emit('error', error);
+            } catch (e) {
+                throw e.message;
+            }
         });
     }
 
@@ -48,17 +60,17 @@ class EcovacsMQTT extends Ecovacs {
         console.log(channel);
         this.client.subscribe(channel, (error, granted) => {
             if (!error) {
-                tools.envLog('[EcovacsMQTT] subscribed to atr');
+                tools.envLog('[EcovacsMQTT] Subscribed to atr channel');
                 this.emit('ready', 'Client connected. Subscribe successful');
             } else {
-                tools.envLog('[EcovacsMQTT] subscribe err: %s', error.toString());
+                tools.envLog('[EcovacsMQTT] Subscribe err: %s', error.toString());
             }
         });
     }
 
     connect() {
         this.on("ready", (event) => {
-            tools.envLog('[EcovacsMQTT] received ready event');
+            tools.envLog('[EcovacsMQTT] Received ready event');
         });
     }
 
@@ -100,6 +112,9 @@ class EcovacsMQTT extends Ecovacs {
         }
 
         if ((response['result'] === 'ok') || (response['ret'] === 'ok')) {
+            if (this.bot.errorCode !== '0') {
+                this.emitLastErrorByErrorCode('0');
+            }
             return response;
         } else {
             const errorCodeObj = {
@@ -112,9 +127,6 @@ class EcovacsMQTT extends Ecovacs {
             }
             tools.envLog(`[EcovacsAPI] callEcouserApi failure code ${response['errno']} (${response['error']})`);
             throw `Failure code ${response['errno']} (${response['error']})`;
-        }
-        if (this.bot.errorCode !== '0') {
-            this.emitLastErrorByErrorCode('0');
         }
     }
 
