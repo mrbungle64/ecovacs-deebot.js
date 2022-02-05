@@ -66,8 +66,8 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.7.2 (alpha)
+* A lot of code refactoring and also code improvements
 * Bumped several dependencies
-* Some refactoring and code improvements
 * Switched to axios
 
 ### 0.7.1
