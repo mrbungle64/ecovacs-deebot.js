@@ -38,17 +38,24 @@ class EcovacsMQTT extends Ecovacs {
         });
 
         this.client.on('offline', function () {
-            tools.envLog('[EcovacsMQTT] MQTT server is offline or not reachable');
+            try {
+                ecovacsMQTT.emitNetworkError('MQTT server is offline or not reachable');
+            } catch (e) {
+                throw e.message;
+            }
         });
 
         this.client.on('disconnect', function (packet) {
-            tools.envLog('[EcovacsMQTT] MQTT connection disconnected: ' + packet);
-        })
+            try {
+                ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
+            } catch (e) {
+                throw e.message;
+            }
+        });
 
         this.client.on('error', (error) => {
-            tools.envLog('[EcovacsMQTT] MQTT client error: ' + error.message);
             try {
-                ecovacsMQTT.emit('error', error);
+                ecovacsMQTT.emitNetworkError(`MQTT client error: ${error.message}`);
             } catch (e) {
                 throw e.message;
             }
@@ -107,7 +114,7 @@ class EcovacsMQTT extends Ecovacs {
             response = res.data;
             tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
         } catch (e) {
-            this.emitNetworkError(e);
+            this.emitNetworkError(e.message);
             throw e.message;
         }
 

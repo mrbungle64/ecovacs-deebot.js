@@ -303,10 +303,10 @@ class Ecovacs extends EventEmitter {
         }
     }
 
-    emitNetworkError(error) {
-        tools.envLog(`[EcovacsMQTT] Received error event: ${error.message}`);
-        this.bot.errorDescription = tools.createErrorDescription(error.message);
+    emitNetworkError(message) {
+        tools.envLog(`[EcovacsMQTT] Received error event: ${message}`);
         this.bot.errorCode = '-1';
+        this.bot.errorDescription = tools.createErrorDescription(message);
         this.emitLastError();
     }
 
