@@ -526,7 +526,7 @@ class VacBot {
         } else if (this.useMqtt) {
             return require('./non950type/ecovacsMQTT_XML.js');
         } else {
-            return require('./non950type/ecovacsXMPP.js');
+            return require('./non950type/ecovacsXMPP_XML.js');
         }
     }
 
