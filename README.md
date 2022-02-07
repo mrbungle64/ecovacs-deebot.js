@@ -66,6 +66,7 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.7.2 (alpha)
+* Bumped mqtt to 4.3.5
 * A lot of code refactoring and also code improvements
 * Bumped several dependencies
 * Switched to axios
