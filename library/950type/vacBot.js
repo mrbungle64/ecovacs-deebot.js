@@ -375,7 +375,12 @@ class VacBot_950type extends VacBot {
         if (payload['pieceValue'] !== '') {
             await this.mapImages[mapMID][payload['type']].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value'])
         }
-        return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+        try {
+            return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+        } catch (e) {
+            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+            return null;
+        }
     }
 
     handle_majorMap(payload) {
@@ -405,7 +410,12 @@ class VacBot_950type extends VacBot {
             return null;
         }
         await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
-        return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+        try {
+            return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+        } catch (e) {
+            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+            return null;
+        }
     }
 
     handle_waterInfo(payload) {
