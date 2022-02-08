@@ -296,6 +296,7 @@ class VacBot_non950type extends VacBot {
             return await this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
           } catch (e) {
             tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+            throw new Error(e);
           }
         }
       }
