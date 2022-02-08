@@ -56,18 +56,18 @@ There is of course no claim to full functionality.
 
 ## Known issues
 
-* There's a strange behavior of the battery value on Deebot 900/901. It's very likely that this is a firmware bug
-* "Edge" command does not work with Deebot U2 (starts auto clean instead)
+* Generating map images for 950 type models can still take some time
 * The cleaning log has an empty result on T9 series
 * The combined map data object does not work with T9 series
 * TrueDetect commands not working yet (tested on T9)
-* Generating map images for 950 type models can still take some time
+* "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
 
 ### 0.7.2 (alpha)
 * Bumped mqtt to 4.3.5
-* A lot of code refactoring and also code improvements
+* Stability improvements
+* A lot of code refactoring
 * Bumped several dependencies
 * Switched to axios
 
