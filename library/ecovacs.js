@@ -209,12 +209,16 @@ class Ecovacs extends EventEmitter {
                 // Map Model
                 // - runs "GetMapSet" to request spot areas and virtual walls
                 // - and also runs indirectly "PullMP" to request map pieces of the map image
-                let mapinfo = this.bot.handle_cachedMapInfo(payload);
-                if (mapinfo) {
-                    this.emit('CurrentMapName', this.bot.currentMapName);
-                    this.emit('CurrentMapMID', this.bot.currentMapMID);
-                    this.emit('CurrentMapIndex', this.bot.currentMapIndex);
-                    this.emit('Maps', this.bot.maps);
+                try {
+                    let mapinfo = this.bot.handle_cachedMapInfo(payload);
+                    if (mapinfo) {
+                        this.emit('CurrentMapName', this.bot.currentMapName);
+                        this.emit('CurrentMapMID', this.bot.currentMapMID);
+                        this.emit('CurrentMapIndex', this.bot.currentMapIndex);
+                        this.emit('Maps', this.bot.maps);
+                    }
+                } catch(e) {
+                    throw new Error(e);
                 }
                 break;
             case 'PullMP':

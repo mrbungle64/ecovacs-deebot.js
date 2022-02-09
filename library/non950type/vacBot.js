@@ -153,7 +153,11 @@ class VacBot_non950type extends VacBot {
       this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
       this.handleMapExecuted = true;
       if (this.createMapImage && tools.isCanvasModuleAvailable()) {
-        await this.handle_mapInfo(payload);
+        try {
+          await this.handle_mapInfo(payload);
+        } catch (e) {
+          throw new Error(e);
+        }
       }
       return this.maps;
     }

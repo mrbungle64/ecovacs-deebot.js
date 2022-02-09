@@ -168,11 +168,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("RelocationState", this.bot.relocationState);
                 break;
             case "CachedMapInfo":
-                this.bot.handle_cachedMapInfo(payload);
-                this.emit("CurrentMapName", this.bot.currentMapName);
-                this.emit("CurrentMapMID", this.bot.currentMapMID);
-                this.emit("CurrentMapIndex", this.bot.currentMapIndex);
-                this.emit("Maps", this.bot.maps);
+                try {
+                    this.bot.handle_cachedMapInfo(payload);
+                    this.emit("CurrentMapName", this.bot.currentMapName);
+                    this.emit("CurrentMapMID", this.bot.currentMapMID);
+                    this.emit("CurrentMapIndex", this.bot.currentMapIndex);
+                    this.emit("Maps", this.bot.maps);
+                } catch (e) {
+                    throw new Error(e);
+                }
                 break;
             case "MapInfo":
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status

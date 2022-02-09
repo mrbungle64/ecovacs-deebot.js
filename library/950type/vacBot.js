@@ -379,7 +379,7 @@ class VacBot_950type extends VacBot {
             return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
         } catch (e) {
             tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
-            return null;
+            throw new Error(e);
         }
     }
 
@@ -414,7 +414,7 @@ class VacBot_950type extends VacBot {
             return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
         } catch (e) {
             tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
-            return null;
+            throw new Error(e);
         }
     }
 

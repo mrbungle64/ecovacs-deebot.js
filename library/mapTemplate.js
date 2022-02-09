@@ -321,20 +321,24 @@ class EcovacsMapImageBase {
             finalContext.drawImage(chargerImage, (chargerPosition['x'] / this.mapPixel) + POSITION_OFFSET - 8, (chargerPosition['y'] / this.mapPixel) + POSITION_OFFSET - 8, 16, 16);
         }
 
-        // Crop image
-        const croppedImage = finalContext.getImageData(this.cropBoundaries.minX
-            , this.mapTotalHeight - this.cropBoundaries.maxY // map was flipped horizontally before, so the boundaries have shifted
-            , this.cropBoundaries.maxX - this.cropBoundaries.minX
-            , this.cropBoundaries.maxY - this.cropBoundaries.minY);
-        finalContext.canvas.height = this.cropBoundaries.maxY - this.cropBoundaries.minY;
-        finalContext.canvas.width = this.cropBoundaries.maxX - this.cropBoundaries.minX;
-        finalContext.putImageData(croppedImage, 0, 0);
-        this.mapBase64PNG = finalCanvas.toDataURL();
-        this.transferMapInfo = false;
-        return {
-            'mapID': this.mapID,
-            'mapType': this.isLiveMap ? 'live' : this.mapType,
-            'mapBase64PNG': this.mapBase64PNG
+        try {
+            // Crop image
+            const croppedImage = finalContext.getImageData(this.cropBoundaries.minX
+                , this.mapTotalHeight - this.cropBoundaries.maxY // map was flipped horizontally before, so the boundaries have shifted
+                , this.cropBoundaries.maxX - this.cropBoundaries.minX
+                , this.cropBoundaries.maxY - this.cropBoundaries.minY);
+            finalContext.canvas.height = this.cropBoundaries.maxY - this.cropBoundaries.minY;
+            finalContext.canvas.width = this.cropBoundaries.maxX - this.cropBoundaries.minX;
+            finalContext.putImageData(croppedImage, 0, 0);
+            this.mapBase64PNG = finalCanvas.toDataURL();
+            this.transferMapInfo = false;
+            return {
+                'mapID': this.mapID,
+                'mapType': this.isLiveMap ? 'live' : this.mapType,
+                'mapBase64PNG': this.mapBase64PNG
+            }
+        } catch (e) {
+            throw new Error(e);
         }
     }
 }
