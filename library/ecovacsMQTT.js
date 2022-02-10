@@ -41,7 +41,7 @@ class EcovacsMQTT extends Ecovacs {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT server is offline or not reachable');
             } catch (e) {
-                throw e.message;
+                tools.envLog('[EcovacsMQTT] MQTT server is offline or not reachable');
             }
         });
 
@@ -49,7 +49,7 @@ class EcovacsMQTT extends Ecovacs {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
             } catch (e) {
-                throw e.message;
+                tools.envLog('[EcovacsMQTT] MQTT client received disconnect event');
             }
         });
 
@@ -57,7 +57,7 @@ class EcovacsMQTT extends Ecovacs {
             try {
                 ecovacsMQTT.emitNetworkError(`MQTT client error: ${error.message}`);
             } catch (e) {
-                throw e.message;
+                tools.envLog(`MQTT client error: ${error.message}`);
             }
         });
     }

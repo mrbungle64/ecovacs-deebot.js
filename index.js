@@ -213,7 +213,7 @@ class EcovacsAPI {
     tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
     if ((response['result'] !== 'ok') && (response['ret'] !== 'ok') && (response['msg'] !== 'success')) {
         tools.envLog(`[EcovacsAPI] callPortalApi failure code ${response['errno']} (${response['error']}) for call ${func} and args ${JSON.stringify(args)}`);
-        throw `Failure code ${response['errno']} (${response['error']}) for call ${func}`;
+        throw new Error(`Failure code ${response['errno']} (${response['error']}) for call ${func}`);
     }
     return response;
   }

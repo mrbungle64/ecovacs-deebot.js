@@ -175,7 +175,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit("CurrentMapIndex", this.bot.currentMapIndex);
                     this.emit("Maps", this.bot.maps);
                 } catch (e) {
-                    throw new Error(e);
+                    tools.envLog("[EcovacsMQTT_JSON] Error on CachedMapInfo: %s", e.message);
                 }
                 break;
             case "MapInfo":

@@ -218,7 +218,7 @@ class Ecovacs extends EventEmitter {
                         this.emit('Maps', this.bot.maps);
                     }
                 } catch(e) {
-                    throw new Error(e);
+                    tools.envLog("[Ecovacs] Error on MapM: %s", e.message);
                 }
                 break;
             case 'PullMP':
@@ -232,7 +232,7 @@ class Ecovacs extends EventEmitter {
                     this.bot.errorCode = '-2';
                     this.bot.errorDescription = 'Error handling map image: %s' + e.message;
                     this.emitLastError();
-                    throw new Error(e);
+                    tools.envLog("[EcovacsMQTT] Error on PullMP: %s", e.message);
                 }
                 break;
             case 'MapSet':
