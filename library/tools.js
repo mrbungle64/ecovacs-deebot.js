@@ -21,7 +21,7 @@ function createErrorDescription(message) {
     } else if (message.includes('ETIMEDOUT') || message.includes('EAI_AGAIN')) {
         return `Network connectivity error: ${message}`;
     } else {
-        return `Received error event: ${message}`;
+        return `Received error message: ${message}`;
     }
 }
 

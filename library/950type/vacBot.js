@@ -677,7 +677,7 @@ class VacBot_950type extends VacBot {
                 break;
             }
             case "GetWaterLevel".toLowerCase():
-            case "GetWaterboxInfo".toLowerCase():
+            case "GetWaterBoxInfo".toLowerCase():
             case "GetWaterInfo".toLowerCase():
                 this.sendCommand(new vacBotCommand.GetWaterInfo());
                 break;
