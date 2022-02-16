@@ -56,7 +56,7 @@ There is of course no claim to full functionality.
 
 ## Known issues
 
-* Generating map images for 950 type models can still take some time
+* The generation of map images is currently not stable on 32-bit systems
 * The cleaning log has an empty result on T9 series
 * The combined map data object does not work with T9 series
 * TrueDetect commands not working yet (tested on T9)
