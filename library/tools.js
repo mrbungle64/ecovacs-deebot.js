@@ -123,7 +123,7 @@ function isValidVirtualWallType(type) {
     return (type === 'vw') || (type === 'mw');
 }
 
-envLog = function () {
+let envLog = function () {
     if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
         console.log.apply(this, arguments);
     }
