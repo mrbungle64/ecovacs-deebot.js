@@ -1,3 +1,5 @@
+'use strict';
+
 const tools = require("./tools.js");
 
 function getDistanceToChargingStation(deebotPosition, chargePosition) {

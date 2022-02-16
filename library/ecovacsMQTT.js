@@ -1,3 +1,5 @@
+'use strict';
+
 const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');

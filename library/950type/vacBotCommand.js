@@ -1,3 +1,5 @@
+'use strict';
+
 const tools = require('../tools');
 const constants_type = require('./ecovacsConstants');
 const constants = require('../ecovacsConstants');

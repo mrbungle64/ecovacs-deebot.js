@@ -1,3 +1,5 @@
+'use strict';
+
 const url = require('url');
 const axios = require('axios').default;
 const crypto = require('crypto');

@@ -1,3 +1,5 @@
+'use strict';
+
 const tools = require('./tools.js');
 const lzma = require('lzma')
 const constants = require('./ecovacsConstants');

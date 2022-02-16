@@ -1,3 +1,5 @@
+'use strict';
+
 const tools = require('./tools');
 const errorCodes = require('./errorCodes');
 const i18n = require('./i18n');

@@ -1,3 +1,5 @@
+'use strict';
+
 const deebotModels = require('./deebotModels');
 
 function isCanvasModuleAvailable() {

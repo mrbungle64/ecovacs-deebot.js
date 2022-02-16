@@ -1,3 +1,5 @@
+'use strict';
+
 const EventEmitter = require('events');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');

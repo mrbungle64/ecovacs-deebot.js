@@ -1,3 +1,5 @@
+'use strict';
+
 const dictionary = require('./ecovacsConstants');
 const vacBotCommand = require('./vacBotCommand');
 const VacBot = require('../vacBot');
