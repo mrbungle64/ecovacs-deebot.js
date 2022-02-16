@@ -58,9 +58,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 try {
                     await this.handleMessagePayload(action.name, result);
                 } catch (e) {
-                    this.bot.errorCode = '-2';
-                    this.bot.errorDescription = e.toString();
-                    this.emitLastError();
+                    this.emitError('-2', e.message);
                 }
                 delete this.bot.commandsSent[action.args.id];
             })();
@@ -80,9 +78,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 try {
                     await this.handleMessagePayload(action.name, result);
                 } catch (e) {
-                    this.bot.errorCode = '-2';
-                    this.bot.errorDescription = e.toString();
-                    this.emitLastError();
+                    this.emitError('-2', e.message);
                 }
                 delete this.bot.commandsSent[action.args.id];
             })();
@@ -97,9 +93,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             try {
                 await this.handleMessagePayload(result['event'], result);
             } catch (e) {
-                this.bot.errorCode = '-2';
-                this.bot.errorDescription = e.toString();
-                this.emitLastError();
+                this.emitError('-2', e.message);
             }
         })();
     }

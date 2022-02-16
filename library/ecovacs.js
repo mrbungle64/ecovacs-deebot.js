@@ -231,10 +231,7 @@ class Ecovacs extends EventEmitter {
                         this.emit("MapImageData", mapImage);
                     }
                 } catch (e) {
-                    this.bot.errorCode = '-2';
-                    this.bot.errorDescription = 'Error handling map image: %s' + e.message;
-                    this.emitLastError();
-                    tools.envLog("[EcovacsMQTT] Error on PullMP: %s", e.message);
+                    this.emitError('-2', 'Error handling map image: %s' + e.message);
                 }
                 break;
             case 'MapSet':
@@ -316,17 +313,25 @@ class Ecovacs extends EventEmitter {
         }
     }
 
-    emitNetworkError(message) {
-        tools.envLog(`[EcovacsMQTT] Received error event: ${message}`);
-        this.bot.errorCode = '-1';
-        this.bot.errorDescription = tools.createErrorDescription(message);
+    emitError(code, message) {
+        tools.envLog(`[EcovacsMQTT] Received error event with code '${code}' and message '${message}'`);
+        this.bot.errorCode = code;
+        this.bot.errorDescription = message;
         this.emitLastError();
+    }
+
+    emitNetworkError(message) {
+        this.emitError('-1', tools.createErrorDescription(message));
     }
 
     emitLastErrorByErrorCode(errorCode) {
         if (errorCode !== this.bot.errorCode) {
             this.bot.errorCode = errorCode;
-            this.bot.errorDescription = errorCodes[this.bot.errorCode];
+            if (errorCodes[errorCode]) {
+                this.bot.errorDescription = errorCodes[errorCode];
+            } else {
+                this.bot.errorDescription = 'Unknown error code';
+            }
             this.emitLastError();
         }
     }

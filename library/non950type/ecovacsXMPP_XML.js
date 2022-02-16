@@ -3,7 +3,6 @@
 const Ecovacs = require('../ecovacs');
 const tools = require('../tools');
 const Element = require('ltx').Element;
-const errorCodes = require('../errorCodes');
 
 class EcovacsXMPP_XML extends Ecovacs {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {
@@ -40,18 +39,12 @@ class EcovacsXMPP_XML extends Ecovacs {
                         if ((command !== undefined) && (command !== '')) {
                             tools.envLog('[EcovacsXMPP_XML] command: %s', command);
                             (async () => {
-                                try {
-                                    await this.handleMessagePayload(command, payload);
-                                } catch (e) {
-                                    this.bot.errorCode = '-2';
-                                    this.bot.errorDescription = e.toString();
-                                    this.emitLastError();
-                                }
+                                await this.handleMessagePayload(command, payload).catch(error => {
+                                    this.emitError('-2', error.message);
+                                });
                                 delete this.bot.commandsSent[payload.attrs.id];
                                 if (this.bot.errorCode === '-1') {
-                                    this.bot.errorCode = '0';
-                                    this.bot.errorDescription = errorCodes[this.bot.errorCode];
-                                    this.emitLastError();
+                                    this.emitLastErrorByErrorCode('0');
                                 }
                             })();
                         }
