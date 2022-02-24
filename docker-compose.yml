@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  ecovacs:
+    image: node:latest
+    volumes:
+      - ./:/opt/app
+    tty: true
+    stdin_open: true
+    environment:
+      - NODE_ENV=development
+    working_dir: /opt/app
+    command: bash -c 'npm install && node example/app2'
