@@ -65,7 +65,7 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.7.2 (beta)
-* Bumped mqtt to 4.3.5
+* Bumped mqtt to 4.3.6
 * Stability improvements
 * A lot of code refactoring
 * Bumped several dependencies
