@@ -31,7 +31,13 @@ class VacBot_950type extends VacBot {
         for (let index in payload) {
             if (payload[index]) {
                 const type = payload[index]["type"];
-                const component = dictionary.COMPONENT_FROM_ECOVACS[type];
+                let component = type;
+                if (dictionary.COMPONENT_FROM_ECOVACS[type]) {
+                    component = dictionary.COMPONENT_FROM_ECOVACS[type];
+                } else {
+                    tools.envLog('[VacBot] Unknown life span component type: %s', type);
+                    this.ecovacs.emit('Debug', `Unknown life span component type: ${type}`);
+                }
                 const left = payload[index]["left"];
                 const total = payload[index]["total"];
                 const lifespan = parseInt(left) / parseInt(total) * 100;
