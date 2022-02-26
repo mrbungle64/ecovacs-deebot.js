@@ -1,14 +1,10 @@
 {
-    "exclude": ["node_modules", "dist", "types", "example", "test"],
-    "compilerOptions": {
-      "allowJs": true,
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "declarationDir": "./types",
-      "declarationMap": true
-    }
+  "exclude": ["node_modules", "dist", "types", "example", "test"],
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "types",
+    "declarationMap": true
   }
-  
-  // run
-  // npx -p typescript tsc --declaration --allowJs --emitDeclarationOnly --outDir types
-  
+}
