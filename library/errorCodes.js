@@ -37,6 +37,7 @@ const CODES = {
     '500': 'Request Timeout',
     '601': 'ERROR_ClosedAIVISideAbnormal',
     '602': 'ClosedAIVIRollAbnormal',
+    '4200': 'Robot not reachable',
     'resultCode': 'resultCode'
 };
 
