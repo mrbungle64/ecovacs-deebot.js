@@ -7,7 +7,7 @@ const fs = require('fs');
 const constants = require('./library/ecovacsConstants.js');
 const uniqid = require('uniqid');
 const tools = require('./library/tools.js');
-const countries = require('./countries.js');
+const {countries} = require('./countries.json');
 const packageInfo = require('./package.json');
 
 String.prototype.format = function () {
