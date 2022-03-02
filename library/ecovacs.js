@@ -3,7 +3,7 @@
 const EventEmitter = require('events');
 const tools = require('./tools');
 const constants = require('./ecovacsConstants');
-const errorCodes = require('./errorCodes');
+const {errorCodes} = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {

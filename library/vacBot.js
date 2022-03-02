@@ -1,7 +1,7 @@
 'use strict';
 
 const tools = require('./tools');
-const errorCodes = require('./errorCodes');
+const {errorCodes} = require('./errorCodes.json');
 const i18n = require('./i18n');
 const map = require('./mapTemplate');
 
