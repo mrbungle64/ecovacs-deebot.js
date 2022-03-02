@@ -71,11 +71,40 @@ declare class VacBot {
     mapDataObjectQueue: any[];
     schedule: any[];
     vacBotCommand: typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
+    /**
+     * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
+     * The function then calls the `run` function with the value of `mode` as the first argument
+     * @since 0.6.2
+     * @param {string} [mode=Clean] - The mode to run the script in.
+     */
     clean(mode?: string): void;
-    spotArea(areas: any): void;
-    customArea(boundaryCoordinates: any, numberOfCleanings?: number): void;
+    /**
+     * This is a wrapper function for auto clean mode
+     * @since 0.6.2
+     * @param {string} areas - A string with a list of spot area IDs
+     */
+    spotArea(areas: string): void;
+    /**
+     * This is a wrapper function that will start cleaning the area specified by the boundary coordinates
+     * @since 0.6.2
+     * @param {string} boundaryCoordinates - A list of coordinates that form the polygon boundary of the area to be cleaned
+     * @param {number} [numberOfCleanings=1] - The number of times the robot will repeat the cleaning process
+     */
+    customArea(boundaryCoordinates: string, numberOfCleanings?: number): void;
+    /**
+     * This is a wrapper function for edge cleaning mode
+     * @since 0.6.2
+     */
     edge(): void;
+    /**
+     * This is a wrapper function for spot cleaning mode
+     * @since 0.6.2
+     */
     spot(): void;
+    /**
+     * This is a wrapper function to send the vacuum back to the charging station
+     * @since 0.6.2
+     */
     charge(): void;
     stop(): void;
     pause(mode?: string): void;

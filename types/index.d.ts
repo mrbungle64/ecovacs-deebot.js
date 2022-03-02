@@ -2,11 +2,43 @@ declare class EcovacsAPI {
     static version(): any;
     static isCanvasModuleAvailable(): boolean;
     static isMQTTProtocolUsed(company: any): boolean;
-    static isDeviceClass950type(deviceClass: any, isMQTTProtocolUsed?: boolean): any;
-    static isDeviceClassNot950type(deviceClass: any): boolean;
-    static getDeviceId(machineId: any, deviceNumber?: number): string;
-    static md5(text: any): string;
-    static encrypt(text: any): string;
+    /**
+     * Returns true if the device class is 950 type
+     * @param {String} deviceClass - The device class to check
+     * @param [isMQTTProtocolUsed=true] - This value is used as default value if the deviceClass is not registered
+     * @returns The value of the '950type' property
+     */
+    static isDeviceClass950type(deviceClass: string, isMQTTProtocolUsed?: boolean): any;
+    /**
+     * Returns true if the device class is not 950 type
+     * @param {String} deviceClass - The device class of the device.
+     * @returns A boolean value.
+     */
+    static isDeviceClassNot950type(deviceClass: string): boolean;
+    /**
+     * Given a machine id and a device number, return the device ID
+     * @param {String} machineId - The id of the device.
+     * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device.
+     * @returns {String} the device ID.
+     */
+    static getDeviceId(machineId: string, deviceNumber?: number): string;
+    /**
+     * Create a hash of the given text using the MD5 algorithm
+     * @param {String} text - The text to be hashed
+     * @returns {String} The MD5 hash of the text
+     */
+    static md5(text: string): string;
+    /**
+     * It takes a string and encrypts it using the public key
+     * @param {String} text - The text to encrypt
+     * @returns {String} The encrypted string
+     */
+    static encrypt(text: string): string;
+    /**
+     * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
+     * @param {Object} params - The parameters to be encoded.
+     * @returns {String} A string of the form "key1=value1&key2=value2&key3=value3"
+     */
     static paramsToQueryList(params: any): string;
     constructor(device_id: any, country: any, continent?: string);
     meta: {

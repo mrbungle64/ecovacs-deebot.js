@@ -185,26 +185,55 @@ class VacBot {
         });
     }
 
+    /**
+     * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
+     * The function then calls the `run` function with the value of `mode` as the first argument
+     * @since 0.6.2
+     * @param {string} [mode=Clean] - The mode to run the script in.
+     */
     clean(mode = "Clean") {
         this.run(mode);
     }
 
+    /**
+     * This is a wrapper function for auto clean mode
+     * @since 0.6.2
+     * @param {string} areas - A string with a list of spot area IDs
+     */
     spotArea(areas) {
         this.run("SpotArea", "start", areas);
     }
 
+    /**
+     * This is a wrapper function that will start cleaning the area specified by the boundary coordinates
+     * @since 0.6.2
+     * @param {string} boundaryCoordinates - A list of coordinates that form the polygon boundary of the area to be cleaned
+     * @param {number} [numberOfCleanings=1] - The number of times the robot will repeat the cleaning process
+     */
     customArea(boundaryCoordinates, numberOfCleanings = 1) {
         this.run("CustomArea", "start", boundaryCoordinates, numberOfCleanings);
     }
 
+    /**
+     * This is a wrapper function for edge cleaning mode
+     * @since 0.6.2
+     */
     edge() {
         this.clean('Edge');
     }
 
+    /**
+     * This is a wrapper function for spot cleaning mode
+     * @since 0.6.2
+     */
     spot() {
         this.clean('Spot');
     }
 
+    /**
+     * This is a wrapper function to send the vacuum back to the charging station
+     * @since 0.6.2
+     */
     charge() {
         this.run('Charge');
     }
