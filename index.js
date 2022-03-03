@@ -80,14 +80,12 @@ class EcovacsAPI {
   }
 
   getUserLoginParams(params) {
-    let result = JSON.parse(JSON.stringify(params));
-    result['authTimespan'] = Date.now();
-    result['authTimeZone'] = 'GMT-8';
+    params['authTimeZone'] = 'GMT-8';
 
     let sign_on = JSON.parse(JSON.stringify(this.meta));
-    for (let key in result) {
-      if (result.hasOwnProperty(key)) {
-        sign_on[key] = result[key];
+    for (let key in params) {
+      if (params.hasOwnProperty(key)) {
+        sign_on[key] = params[key];
       }
     }
 
@@ -100,17 +98,14 @@ class EcovacsAPI {
     }
     sign_on_text += constants.SECRET;
 
-    result['authAppkey'] = constants.CLIENT_KEY;
-    result['authSign'] = EcovacsAPI.md5(sign_on_text);
+    params['authAppkey'] = constants.CLIENT_KEY;
+    params['authSign'] = EcovacsAPI.md5(sign_on_text);
 
-    return EcovacsAPI.paramsToQueryList(result);
+    return EcovacsAPI.paramsToQueryList(params);
   }
 
   getAuthParams(params) {
-    let result = JSON.parse(JSON.stringify(params));
-    result['authTimespan'] = Date.now();
-
-    let paramsSignIn = JSON.parse(JSON.stringify(result));
+    let paramsSignIn = params;
     paramsSignIn['openId'] = 'global';
 
     let sign_on_text = constants.AUTH_CLIENT_KEY;
@@ -122,10 +117,10 @@ class EcovacsAPI {
     }
     sign_on_text += constants.AUTH_CLIENT_SECRET;
 
-    result['authAppkey'] = constants.AUTH_CLIENT_KEY;
-    result['authSign'] = EcovacsAPI.md5(sign_on_text);
+    params['authAppkey'] = constants.AUTH_CLIENT_KEY;
+    params['authSign'] = EcovacsAPI.md5(sign_on_text);
 
-    return EcovacsAPI.paramsToQueryList(result);
+    return EcovacsAPI.paramsToQueryList(params);
   }
 
   async callUserAuthApi(loginPath, params) {
@@ -133,6 +128,7 @@ class EcovacsAPI {
     let portalPath = this.getPortalPath(loginPath);
     let portalUrl;
     let searchParams;
+    params['authTimespan'] = Date.now();
     if (loginPath === constants.GETAUTHCODE_PATH) {
       params['bizType'] = 'ECOVACS_IOT';
       params['deviceId'] = this.device_id;
