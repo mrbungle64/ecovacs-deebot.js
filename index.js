@@ -78,18 +78,18 @@ class EcovacsAPI {
       'account': account_id,
       'password': password_hash
     });
-    this.userId = result.uid;
+    this.uid = result.uid;
     this.login_access_token = result.accessToken;
 
     result = await this.callUserAuthApi(constants.GETAUTHCODE_PATH, {
-      'uid': this.userId,
+      'uid': this.uid,
       'accessToken': this.login_access_token
     });
     this.auth_code = result['authCode'];
 
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
-    this.userId = result['userId'];
+    this.uid = result['userId'];
     tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
     return "ready";
   }
@@ -272,7 +272,7 @@ class EcovacsAPI {
     }
     return this.callPortalApi(constants.USERSAPI, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
-      'userId': this.userId,
+      'userId': this.uid,
       'token': this.auth_code,
       'realm': constants.REALM,
       'resource': this.resource,
@@ -289,10 +289,10 @@ class EcovacsAPI {
   getConfigProducts() {
     return new Promise((resolve, reject) => {
       this.callPortalApi(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
-        'userid': this.userId,
+        'userid': this.uid,
         'auth': {
           'with': 'users',
-          'userid': this.userId,
+          'userid': this.uid,
           'realm': constants.REALM,
           'token': this.user_access_token,
           'resource': this.resource
@@ -314,10 +314,10 @@ class EcovacsAPI {
   async getDevices(api = constants.USERSAPI, todo = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
       this.callPortalApi(api, todo, {
-        'userid': this.userId,
+        'userid': this.uid,
         'auth': {
           'with': 'users',
-          'userid': this.userId,
+          'userid': this.uid,
           'realm': constants.REALM,
           'token': this.user_access_token,
           'resource': this.resource
@@ -396,7 +396,7 @@ class EcovacsAPI {
    * @returns {*}
    */
   getVacBotObj(vacuum) {
-    return this.getVacBot(this.userId, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, this.getContinent())
+    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, this.getContinent())
   }
 
   /**
