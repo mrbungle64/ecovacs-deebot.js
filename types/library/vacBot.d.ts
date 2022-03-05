@@ -37,6 +37,7 @@ declare class VacBot {
         a: any;
         isInvalid: boolean;
         currentSpotAreaID: string;
+        currentSpotAreaName: string;
         changeFlag: boolean;
     };
     chargePosition: {
@@ -106,9 +107,26 @@ declare class VacBot {
      * @since 0.6.2
      */
     charge(): void;
+    /**
+     * This is a wrapper function to stop the vacuum
+     * @since 0.6.2
+     */
     stop(): void;
+    /**
+     * This is a wrapper function to pause the vacuum
+     * @since 0.6.2
+     */
     pause(mode?: string): void;
+    /**
+     * This is a wrapper function to resume the cleaning process
+     * @since 0.6.2
+     */
     resume(): void;
+    /**
+     * This is a wrapper function to play a sound
+     * @param {Number} soundID
+     * @since 0.6.2
+     */
     playSound(soundID?: number): void;
     run(action: any, ...args: any[]): void;
     handleMapsEvent(mapData: any): Promise<void>;
@@ -117,6 +135,12 @@ declare class VacBot {
     handleMapSpotAreaInfo(spotAreaInfo: any): Promise<void>;
     handleMapVirtualBoundaryInfo(virtualBoundaryInfo: any): Promise<void>;
     handleMapImageInfo(mapImageInfo: any): Promise<void>;
+    /**
+     * Get the name of the spot area that the bot is currently in
+     * @param {String} currentSpotAreaID - the ID of the spot area that the player is currently in
+     * @returns {String} the name of the current spot area
+     */
+    getSpotAreaName(currentSpotAreaID: string): string;
     /**
      * @deprecated
      */
@@ -132,29 +156,93 @@ declare class VacBot {
     getProtocol(): "MQTT" | "XMPP";
     is950type(): any;
     isNot950type(): boolean;
+    /**
+     * Returns true if the model is a N79 series model
+     * @returns {Boolean}
+     */
     isN79series(): boolean;
+    /**
+     * Returns true if the model is a supported model
+     * @returns {Boolean}
+     */
     isSupportedDevice(): boolean;
+    /**
+     * Returns true if the model is a known model
+     * @returns {Boolean}
+     */
     isKnownDevice(): boolean;
-    getDeviceProperty(property: any, defaultValue?: boolean): any;
-    hasMainBrush(): any;
+    /**
+     * Get the value of the given property for the device class
+     * @param {string} property - The property to get
+     * @param {any} [defaultValue=false] - The default value to return if the property is not found
+     * @returns {any} The value of the property
+     */
+    getDeviceProperty(property: string, defaultValue?: any): any;
+    /**
+     * Returns true if the model has a main brush
+     * @returns {Boolean}
+     */
+    hasMainBrush(): boolean;
+    /**
+     * Returns true if the model has Edge cleaning mode
+     * It is assumed that a model can have either an Edge or Spot Area mode
+     * @returns {Boolean}
+     */
     hasEdgeCleaningMode(): boolean;
+    /**
+     * Returns true if the model has Spot cleaning mode
+     * It is assumed that a model can have either a Spot or Spot Area mode
+     * @returns {Boolean}
+     */
     hasSpotCleaningMode(): boolean;
     /**
-     * @deprecated
+     * @deprecated - please use `hasSpotAreaCleaningMode()` instead
      */
-    hasSpotAreas(): any;
-    hasSpotAreaCleaningMode(): any;
+    hasSpotAreas(): boolean;
     /**
-     * @deprecated
+     * Returns true if the model has Spot Area cleaning mode
+     * @returns {Boolean}
      */
-    hasCustomAreas(): any;
-    hasCustomAreaCleaningMode(): any;
-    hasMappingCapabilities(): any;
-    hasMoppingSystem(): any;
-    hasVacuumPowerAdjustment(): any;
-    hasVoiceReports(): any;
-    hasAutoEmptyStation(): any;
-    isMapImageSupported(): any;
+    hasSpotAreaCleaningMode(): boolean;
+    /**
+     * @deprecated - please use `hasCustomAreaCleaningMode()` instead
+     */
+    hasCustomAreas(): boolean;
+    /**
+     * Returns true if the model has mapping capabilities
+     * @returns {Boolean}
+     */
+    hasCustomAreaCleaningMode(): boolean;
+    /**
+     * Returns true if the model has mapping capabilities
+     * @returns {Boolean}
+     */
+    hasMappingCapabilities(): boolean;
+    /**
+     * Returns true if the model has mopping functionality
+     * @returns {Boolean}
+     */
+    hasMoppingSystem(): boolean;
+    /**
+     * Returns true if the model has power adjustment functionality
+     * @returns {Boolean}
+     */
+    hasVacuumPowerAdjustment(): boolean;
+    /**
+     * Returns true if the model has voice report functionality
+     * @returns {Boolean}
+     */
+    hasVoiceReports(): boolean;
+    /**
+     * Returns true if the model has an auto empty station
+     * @returns {Boolean}
+     */
+    hasAutoEmptyStation(): boolean;
+    /**
+     * Returns true if the model supports map images
+     * @returns {Boolean}
+     */
+    isMapImageSupported(): boolean;
     /**
      * Get the device id for the vacuum
      * @returns {string} the device ID
@@ -177,21 +265,20 @@ declare class VacBot {
     getModelName(): string;
     /**
      * Get the nickname of the vacuum, if it exists, otherwise return an empty string
-     * @returns {string} the nickname if it exists, otherwise it returns an empty string
+     * @returns {string} the nickname
      */
     getName(): string;
     /**
      * Get the nickname of the vacuum, if it exists, otherwise get the product name
-     * @returns {string} the vacuum's nickname, if it has one, or the product name
+     * @returns {string} the nickname, if it has one, or the product name
      */
     getNickname(): string;
     /**
      * Send a command to the vacuum
-     * @param {Object} action - A VacBotCommand object
+     * @param {Object} action - a VacBotCommand object
      */
     sendCommand(action: any): void;
     /**
-     * Send a ping to the server
      * @deprecated
      */
     sendPing(): void;

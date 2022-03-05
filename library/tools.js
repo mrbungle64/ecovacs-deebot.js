@@ -50,7 +50,7 @@ function getReqID() {
 
 /**
  * @param {String} deviceClass - The device class of the device
- * @returns {Boolean} a Boolean value whether the device a 710 series modell
+ * @returns {Boolean} a Boolean value whether the device a 710 series model
  */
 function is710series(deviceClass) {
     return deviceClass === 'uv242z';
@@ -58,7 +58,7 @@ function is710series(deviceClass) {
 
 /**
  * @param {String} deviceClass - The device class of the device
- * @returns {Boolean} a Boolean value whether the device a N79 series modell
+ * @returns {Boolean} a Boolean value whether the device a N79 series model
  */
 function isN79series(deviceClass) {
     switch (deviceClass) {

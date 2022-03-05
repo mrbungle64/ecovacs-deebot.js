@@ -61,12 +61,12 @@ export function getDeviceProperty(deviceClass: string, property: string, default
 export function getTimeStringFormatted(totalSeconds: number): string;
 /**
  * @param {String} deviceClass - The device class of the device
- * @returns {Boolean} a Boolean value whether the device a N79 series modell
+ * @returns {Boolean} a Boolean value whether the device a N79 series model
  */
 export function isN79series(deviceClass: string): boolean;
 /**
  * @param {String} deviceClass - The device class of the device
- * @returns {Boolean} a Boolean value whether the device a 710 series modell
+ * @returns {Boolean} a Boolean value whether the device a 710 series model
  */
 export function is710series(deviceClass: string): boolean;
 /**

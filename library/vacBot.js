@@ -239,18 +239,35 @@ class VacBot {
         this.run('Charge');
     }
 
+    /**
+     * This is a wrapper function to stop the bot
+     * @since 0.6.2
+     */
     stop() {
         this.run('Stop');
     }
 
+    /**
+     * This is a wrapper function to pause the bot
+     * @since 0.6.2
+     */
     pause(mode = 'auto') {
         this.run('Pause', mode);
     }
 
+    /**
+     * This is a wrapper function to resume the cleaning process
+     * @since 0.6.2
+     */
     resume() {
         this.run('Resume');
     }
 
+    /**
+     * This is a wrapper function to play a sound
+     * @param {Number} soundID
+     * @since 0.6.2
+     */
     playSound(soundID = 0) {
         this.run("PlaySound", soundID);
     }
@@ -597,76 +614,140 @@ class VacBot {
         return (!this.is950type());
     }
 
+    /**
+     * Returns true if the model is a N79 series model
+     * @returns {Boolean}
+     */
     isN79series() {
         return tools.isN79series(this.deviceClass);
     }
 
+    /**
+     * Returns true if the model is a supported model
+     * @returns {Boolean}
+     */
     isSupportedDevice() {
         return tools.isSupportedDevice(this.deviceClass);
     }
 
+    /**
+     * Returns true if the model is a known model
+     * @returns {Boolean}
+     */
     isKnownDevice() {
         return tools.isKnownDevice(this.deviceClass);
     }
 
+    /**
+     * Get the value of the given property for the device class
+     * @param {string} property - The property to get
+     * @param {any} [defaultValue=false] - The default value to return if the property is not found
+     * @returns {any} The value of the property
+     */
     getDeviceProperty(property, defaultValue = false) {
         return tools.getDeviceProperty(this.deviceClass, property, defaultValue);
     }
 
+    /**
+     * Returns true if the model has a main brush
+     * @returns {Boolean}
+     */
     hasMainBrush() {
         return this.getDeviceProperty('main_brush');
     }
 
+    /**
+     * Returns true if the model has Edge cleaning mode
+     * It is assumed that a model can have either an Edge or Spot Area mode
+     * @returns {Boolean}
+     */
     hasEdgeCleaningMode() {
         return (!this.hasSpotAreaCleaningMode());
     }
 
+    /**
+     * Returns true if the model has Spot cleaning mode
+     * It is assumed that a model can have either a Spot or Spot Area mode
+     * @returns {Boolean}
+     */
     hasSpotCleaningMode() {
         return (!this.hasSpotAreaCleaningMode());
     }
 
     /**
-     * @deprecated
+     * @deprecated - please use `hasSpotAreaCleaningMode()` instead
      */
     hasSpotAreas() {
         return this.hasSpotAreaCleaningMode();
     }
 
+    /**
+     * Returns true if the model has Spot Area cleaning mode
+     * @returns {Boolean}
+     */
     hasSpotAreaCleaningMode() {
         return this.getDeviceProperty('spot_area');
     }
 
     /**
-     * @deprecated
+     * @deprecated - please use `hasCustomAreaCleaningMode()` instead
      */
     hasCustomAreas() {
         return this.hasCustomAreaCleaningMode();
     }
 
+    /**
+     * Returns true if the model has mapping capabilities
+     * @returns {Boolean}
+     */
     hasCustomAreaCleaningMode() {
         return this.getDeviceProperty('custom_area');
     }
 
+    /**
+     * Returns true if the model has mapping capabilities
+     * @returns {Boolean}
+     */
     hasMappingCapabilities() {
         return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode()
     }
 
+    /**
+     * Returns true if the model has mopping functionality
+     * @returns {Boolean}
+     */
     hasMoppingSystem() {
         return this.getDeviceProperty('mopping_system');
     }
 
+    /**
+     * Returns true if the model has power adjustment functionality
+     * @returns {Boolean}
+     */
     hasVacuumPowerAdjustment() {
         return this.getDeviceProperty('clean_speed');
     }
 
+    /**
+     * Returns true if the model has voice report functionality
+     * @returns {Boolean}
+     */
     hasVoiceReports() {
         return this.getDeviceProperty('voice_report');
     }
 
+    /**
+     * Returns true if the model has an auto empty station
+     * @returns {Boolean}
+     */
     hasAutoEmptyStation() {
         return this.getDeviceProperty('auto_empty_station');
     }
 
+    /**
+     * Returns true if the model supports map images
+     * @returns {Boolean}
+     */
     isMapImageSupported() {
         return this.getDeviceProperty('map_image_supported');
     }

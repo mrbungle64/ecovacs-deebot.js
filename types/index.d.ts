@@ -82,7 +82,7 @@ declare class EcovacsAPI {
      * @returns {string} The return value is a string that is either "ready" or "error"
      */
     connect(account_id: string, password_hash: string): string;
-    userId: any;
+    uid: any;
     login_access_token: any;
     auth_code: any;
     user_access_token: any;
