@@ -110,6 +110,7 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.deebotPosition['x'] && this.bot.deebotPosition['y']) {
                     this.emit('DeebotPosition', this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a']);
                     this.emit('DeebotPositionCurrentSpotAreaID', this.bot.deebotPosition['currentSpotAreaID']);
+                    this.emit("DeebotPositionCurrentSpotAreaName", this.bot.deebotPosition["currentSpotAreaName"]);
                     this.emit('Position', {
                         'coords': this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a'],
                         'x': this.bot.deebotPosition['x'],
@@ -117,6 +118,7 @@ class Ecovacs extends EventEmitter {
                         'a': this.bot.deebotPosition['a'],
                         'invalid': 0,
                         'spotAreaID': this.bot.deebotPosition['currentSpotAreaID'],
+                        'spotAreaName': this.bot.deebotPosition["currentSpotAreaName"],
                         'distanceToChargingStation': this.bot.deebotPosition["distanceToChargingStation"]
                     });
                 }

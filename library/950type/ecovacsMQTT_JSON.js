@@ -244,6 +244,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         this.emit("DeebotPosition", this.bot.deebotPosition["x"] + "," + this.bot.deebotPosition["y"] + "," + this.bot.deebotPosition["a"]);
                         this.emit("DeebotPositionIsInvalid", this.bot.deebotPosition["isInvalid"]);
                         this.emit("DeebotPositionCurrentSpotAreaID", this.bot.deebotPosition["currentSpotAreaID"]);
+                        this.emit("DeebotPositionCurrentSpotAreaName", this.bot.deebotPosition["currentSpotAreaName"]);
                         this.emit('Position', {
                             'coords': this.bot.deebotPosition['x'] + "," + this.bot.deebotPosition['y'] + "," + this.bot.deebotPosition['a'],
                             'x': this.bot.deebotPosition['x'],
@@ -251,6 +252,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                             'a': this.bot.deebotPosition['a'],
                             'invalid': this.bot.deebotPosition["isInvalid"],
                             'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"],
+                            'spotAreaName': this.bot.deebotPosition["currentSpotAreaName"],
                             'distanceToChargingStation': this.bot.deebotPosition["distanceToChargingStation"]
                         });
                     }

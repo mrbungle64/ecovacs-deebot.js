@@ -48,6 +48,7 @@ class VacBot {
             a: null,
             isInvalid: false,
             currentSpotAreaID: 'unknown',
+            currentSpotAreaName: 'unknown',
             changeFlag: false
         };
         this.chargePosition = {
@@ -528,6 +529,19 @@ class VacBot {
         if (this.mapDataObjectQueue.length === 0) {
             this.ecovacs.emit('MapDataReady');
         }
+    }
+
+    /**
+     * Get the name of the spot area that the bot is currently in
+     * @param {String} currentSpotAreaID - the ID of the spot area that the player is currently in
+     * @returns {String} the name of the current spot area
+     */
+    getSpotAreaName(currentSpotAreaID) {
+        let currentSpotAreaName = 'unknown';
+        if (this.mapSpotAreaInfos[this.currentMapMID] && this.mapSpotAreaInfos[this.currentMapMID][currentSpotAreaID]) {
+            currentSpotAreaName = this.mapSpotAreaInfos[this.currentMapMID][currentSpotAreaID].mapSpotAreaName;
+        }
+        return currentSpotAreaName;
     }
 
     /**

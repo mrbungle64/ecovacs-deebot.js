@@ -329,6 +329,7 @@ class VacBot_non950type extends VacBot {
           a: angle,
           isInvalid: false,
           currentSpotAreaID: currentSpotAreaID,
+          currentSpotAreaName: this.getSpotAreaName(currentSpotAreaID),
           changeFlag: true,
           distanceToChargingStation: distanceToChargingStation
         };

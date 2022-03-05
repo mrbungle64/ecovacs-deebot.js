@@ -95,6 +95,7 @@ class VacBot_950type extends VacBot {
                     a: deebotPos['a'],
                     isInvalid: isInvalid,
                     currentSpotAreaID: currentSpotAreaID,
+                    currentSpotAreaName: this.getSpotAreaName(currentSpotAreaID),
                     changeFlag: true,
                     distanceToChargingStation: distanceToChargingStation
                 };
