@@ -1,480 +1,88 @@
+/**
+ * Returns true if the value is an object, false if it is not
+ * @param {any} val - The value to check.
+ * @returns {Boolean} whether it is an object
+ */
 export function isObject(val: any): boolean;
-export function isValidJsonString(str: any): boolean;
-export function isValidVirtualWallType(type: any): boolean;
+/**
+ * Given a string, return true if it is a valid JSON string, false otherwise
+ * @param {String} jsonString - The string to be tested
+ * @returns {Boolean} whether it is a valid JSON string
+ */
+export function isValidJsonString(jsonString: string): boolean;
+/**
+ * Given a string, return true if it is either `vw` or `mw`
+ * @param {String} type - The type of the virtual boundary
+ * @returns {Boolean} whether it is a virtual wall type
+ */
+export function isValidVirtualWallType(type: string): boolean;
+/**
+ * Prints to `stdout` only in development mode (`dev` or `development`)
+ */
 export function envLog(...args: any[]): void;
-export function getAllKnownDevices(): {};
-export function getSupportedDevices(): {
-    ls1ok3: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "115": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    vi829v: {
-        name: string;
-        deviceClassLink: string;
-    };
-    yna5xi: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "123": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-};
-export function getKnownDevices(): {
-    dl8fht: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "16wdph": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "159": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "130": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    uv242z: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    jr3pqa: {
-        name: string;
-        deviceClassLink: string;
-    };
-    d0cnel: {
-        name: string;
-        deviceClassLink: string;
-    };
-    eyi9jv: {
-        name: string;
-        deviceClassLink: string;
-    };
-    y79a7u: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "2pv572": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    gd4uut: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    h18jkh: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    fqxoiu: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "9rft3c": {
-        name: string;
-        deviceClassLink: string;
-    };
-    b742vd: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "0bdtzz": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "55aiho": {
-        name: string;
-        deviceClassLink: string;
-    };
-    x5d34r: {
-        name: string;
-        deviceClassLink: string;
-    };
-    tpnwyu: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "34vhpm": {
-        name: string;
-        deviceClassLink: string;
-    };
-    w16crm: {
-        name: string;
-        deviceClassLink: string;
-    };
-    wgxm70: {
-        name: string;
-        deviceClassLink: string;
-    };
-    bs40nz: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "5089oy": {
-        name: string;
-        deviceClassLink: string;
-    };
-    a1nNMoAGAsH: {
-        name: string;
-        deviceClassLink: string;
-    };
-    vdehg6: {
-        name: string;
-        deviceClassLink: string;
-    };
-    no61kx: {
-        name: string;
-        deviceClassLink: string;
-    };
-    ucn2xe: {
-        name: string;
-        deviceClassLink: string;
-    };
-    ipohi5: {
-        name: string;
-        deviceClassLink: string;
-    };
-    lhbd50: {
-        name: string;
-        deviceClassLink: string;
-    };
-    um2ywg: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "8kwdb4": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "659yh8": {
-        name: string;
-        deviceClassLink: string;
-    };
-    kw9ayx: {
-        name: string;
-        deviceClassLink: string;
-    };
-    jffnlf: {
-        name: string;
-        deviceClassLink: string;
-    };
-    r5zxjr: {
-        name: string;
-        deviceClassLink: string;
-    };
-    n6cwdb: {
-        name: string;
-        deviceClassLink: string;
-    };
-    r5y7re: {
-        name: string;
-        deviceClassLink: string;
-    };
-    ty84oi: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "36xnxf": {
-        name: string;
-        deviceClassLink: string;
-    };
-    snxbvc: {
-        name: string;
-        deviceClassLink: string;
-    };
-    yu362x: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "85as7h": {
-        name: string;
-        deviceClassLink: string;
-    };
-    ifbw08: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "7bryc5": {
-        name: string;
-        deviceClassLink: string;
-    };
-    b2jqs4: {
-        name: string;
-        deviceClassLink: string;
-    };
-    a7lhb1: {
-        name: string;
-        deviceClassLink: string;
-    };
-    c2of2s: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "8bja83": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "126": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    "155": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "165": {
-        name: string;
-        deviceClassLink: string;
-    };
-    ipzjy0: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    rvo6ev: {
-        name: string;
-        deviceClassLink: string;
-    };
-    wlqdkp: {
-        name: string;
-        deviceClassLink: string;
-    };
-    nq9yhl: {
-        name: string;
-        deviceClassLink: string;
-    };
-    y2qy3m: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "7j1tu6": {
-        name: string;
-        deviceClassLink: string;
-    };
-    ts2ofl: {
-        name: string;
-        deviceClassLink: string;
-    };
-    c0lwyn: {
-        name: string;
-        deviceClassLink: string;
-    };
-    d4v1pm: {
-        name: string;
-        deviceClassLink: string;
-    };
-    u6eqoa: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "12baap": {
-        name: string;
-        deviceClassLink: string;
-    };
-    u4h1uk: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "1zqysa": {
-        name: string;
-        deviceClassLink: string;
-    };
-    chmi0g: {
-        name: string;
-        deviceClassLink: string;
-    };
-    zjna8m: {
-        name: string;
-        deviceClassLink: string;
-    };
-    vsc5ia: {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-    emzppx: {
-        name: string;
-        deviceClassLink: string;
-    };
-    r8ead0: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "9akc61": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "02uwxm": {
-        name: string;
-        "950type": boolean;
-        main_brush: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-    };
-};
-export function isSupportedDevice(deviceClass: any): any;
-export function isKnownDevice(deviceClass: any): any;
-export function getDeviceProperty(deviceClass: any, property: any, defaultValue?: boolean): any;
-export function getTimeString(time: any): string;
-export function isN79series(deviceClass: any): boolean;
-export function is710series(deviceClass: any): boolean;
+/**
+ * Get all known devices, including the supported devices and the known devices
+ * @returns {Object} a dictionary of all known devices
+ */
+export function getAllKnownDevices(): any;
+/**
+ * @returns {Object} a dictionary of supported devices
+ */
+export function getSupportedDevices(): any;
+/**
+ * @returns {Object} a dictionary of known devices
+ */
+export function getKnownDevices(): any;
+/**
+ * Check if the deviceClass belongs to a supported model
+ * @param {String} deviceClass - The device class to check for
+ * @returns {Boolean} whether the deviceClass belongs to a supported model
+ */
+export function isSupportedDevice(deviceClass: string): boolean;
+/**
+ * Check if the deviceClass belongs to a known model
+ * @param {String} deviceClass - The device class to check for
+ * @returns {Boolean} whether the deviceClass belongs to a known model
+ */
+export function isKnownDevice(deviceClass: string): boolean;
+/**
+ * Get the value of the given property for the device class
+ * @param {String} deviceClass - The device class to get the property for
+ * @param {String} property - The property to get
+ * @param {any} [defaultValue=false] - The default value to return if the property is not found
+ * @returns {any} The value of the property for the device class
+ */
+export function getDeviceProperty(deviceClass: string, property: string, defaultValue?: any): any;
+/**
+ * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
+ * @param {Number} totalSeconds - The total number of seconds to format
+ * @returns {String} a string that is formatted as hours, minutes, and seconds
+ */
+export function getTimeStringFormatted(totalSeconds: number): string;
+/**
+ * @param {String} deviceClass - The device class of the device
+ * @returns {Boolean} a Boolean value whether the device a N79 series modell
+ */
+export function isN79series(deviceClass: string): boolean;
+/**
+ * @param {String} deviceClass - The device class of the device
+ * @returns {Boolean} a Boolean value whether the device a 710 series modell
+ */
+export function is710series(deviceClass: string): boolean;
+/**
+ * Generate a somewhat random string for request id with 8 chars.
+ * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
+ * @returns {string} the generated ID
+ */
 export function getReqID(): string;
+/**
+ * @returns {Boolean} whether the canvas module is available
+ */
 export function isCanvasModuleAvailable(): boolean;
-export function createErrorDescription(message: any): string;
+/**
+ * Translates the Node.js error message for some network related error messages (e.g. `ENOTFOUND`)
+ * @param {string} message - The error message received from the server.
+ * @returns {string} the error description
+ */
+export function createErrorDescription(message: string): string;
 //# sourceMappingURL=tools.d.ts.map

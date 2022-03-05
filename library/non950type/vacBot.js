@@ -426,7 +426,7 @@ class VacBot_non950type extends VacBot {
             imageUrl = childElement['imageUrl'];
           }
           let date = new Date(timestamp * 1000);
-          let totalTimeString = tools.getTimeString(lastTime);
+          let totalTimeString = tools.getTimeStringFormatted(lastTime);
 
           if (c === 0) {
             if (imageUrl) {

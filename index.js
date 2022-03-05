@@ -21,6 +21,15 @@ String.prototype.format = function () {
 };
 
 class EcovacsAPI {
+  /**
+   * The constructor function takes in the device_id, country, and continent. It then sets up the meta object, which
+   * contains the country, language, device id, app code, app version, channel, device type, and sets the resource to the
+   * first 8 characters of the device id. It then sets the country to the uppercase version of the country, and sets the
+   * continent to the continent of the country if it's not set
+   * @param {string} device_id - The device ID of the vacuum
+   * @param {string} country - The country code
+   * @param {string} [continent] - The continent (optional)
+   */
   constructor(device_id, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI");
 
@@ -39,6 +48,12 @@ class EcovacsAPI {
     this.device_id = device_id;
   }
 
+  /**
+   * It connects to the Ecovacs API
+   * @param {string} account_id - The account ID of the user
+   * @param {string} password_hash - The password hash
+   * @returns {string} The return value is a string that is either "ready" or "error"
+   */
   async connect(account_id, password_hash) {
     let error;
     if (!account_id) {
@@ -63,22 +78,27 @@ class EcovacsAPI {
       'account': account_id,
       'password': password_hash
     });
-    this.uid = result.uid;
+    this.userId = result.uid;
     this.login_access_token = result.accessToken;
 
     result = await this.callUserAuthApi(constants.GETAUTHCODE_PATH, {
-      'uid': this.uid,
+      'uid': this.userId,
       'accessToken': this.login_access_token
     });
     this.auth_code = result['authCode'];
 
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
-    this.uid = result['userId'];
+    this.userId = result['userId'];
     tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
     return "ready";
   }
 
+  /**
+   *
+   * @param {Object} params
+   * @returns {String}
+   */
   getUserLoginParams(params) {
     params['authTimeZone'] = 'GMT-8';
 
@@ -104,6 +124,11 @@ class EcovacsAPI {
     return EcovacsAPI.paramsToQueryList(params);
   }
 
+  /**
+   *
+   * @param {Object} params
+   * @returns {String}
+   */
   getAuthParams(params) {
     let paramsSignIn = params;
     paramsSignIn['openId'] = 'global';
@@ -123,6 +148,12 @@ class EcovacsAPI {
     return EcovacsAPI.paramsToQueryList(params);
   }
 
+  /**
+   *
+   * @param {string} loginPath
+   * @param {Object} params
+   * @returns {Promise<*>}
+   */
   async callUserAuthApi(loginPath, params) {
     tools.envLog(`[EcovacsAPI] Calling main api ${loginPath} with ${JSON.stringify(params)}`);
     let portalPath = this.getPortalPath(loginPath);
@@ -167,6 +198,11 @@ class EcovacsAPI {
     }
   }
 
+  /**
+   *
+   * @param {string} loginPath
+   * @returns {string}
+   */
   getPortalPath(loginPath) {
     let portalPath = constants.MAIN_URL_FORMAT;
     if (loginPath === constants.GETAUTHCODE_PATH) {
@@ -178,6 +214,13 @@ class EcovacsAPI {
     return portalPath;
   }
 
+  /**
+   *
+   * @param {string} api
+   * @param {string} func
+   * @param {Object} args
+   * @returns {Promise<any>}
+   */
   async callPortalApi(api, func, args) {
     tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
     let params = {
@@ -216,6 +259,10 @@ class EcovacsAPI {
     return response;
   }
 
+  /**
+   *
+   * @returns {Promise<any>}
+   */
   callUserApiLoginByItToken() {
     let org = 'ECOWW';
     let country = this.country;
@@ -225,7 +272,7 @@ class EcovacsAPI {
     }
     return this.callPortalApi(constants.USERSAPI, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
-      'userId': this.uid,
+      'userId': this.userId,
       'token': this.auth_code,
       'realm': constants.REALM,
       'resource': this.resource,
@@ -235,13 +282,17 @@ class EcovacsAPI {
     });
   }
 
+  /**
+   *
+   * @returns {Promise<unknown>}
+   */
   getConfigProducts() {
     return new Promise((resolve, reject) => {
       this.callPortalApi(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
-        'userid': this.uid,
+        'userid': this.userId,
         'auth': {
           'with': 'users',
-          'userid': this.uid,
+          'userid': this.userId,
           'realm': constants.REALM,
           'token': this.user_access_token,
           'resource': this.resource
@@ -254,13 +305,19 @@ class EcovacsAPI {
     });
   }
 
+  /**
+   *
+   * @param api
+   * @param todo
+   * @returns {Promise<unknown>}
+   */
   async getDevices(api = constants.USERSAPI, todo = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
       this.callPortalApi(api, todo, {
-        'userid': this.uid,
+        'userid': this.userId,
         'auth': {
           'with': 'users',
-          'userid': this.uid,
+          'userid': this.userId,
           'realm': constants.REALM,
           'token': this.user_access_token,
           'resource': this.resource
@@ -273,12 +330,22 @@ class EcovacsAPI {
     });
   }
 
+  /**
+   *
+   * @returns {Promise<*>}
+   */
   async devices() {
     const deviceList = await this.getDevices(constants.USERSAPI, 'GetDeviceList');
     const globalDeviceList = await this.getDevices(constants.APPAPI, 'GetGlobalDeviceList');
     return this.mergeDeviceLists(deviceList, globalDeviceList);
   }
 
+  /**
+   *
+   * @param deviceList
+   * @param globalDeviceList
+   * @returns {*}
+   */
   mergeDeviceLists(deviceList, globalDeviceList) {
     // This is a workaround to keep compatibility
     // The device lists are not returned in the same order
@@ -293,10 +360,18 @@ class EcovacsAPI {
     return deviceList;
   }
 
+  /**
+   *
+   * @returns {{}}
+   */
   getAllKnownDevices() {
     return tools.getAllKnownDevices();
   }
 
+  /**
+   * Get the name of the country from the countries object
+   * @returns {string} the name of the country
+   */
   getCountryName() {
     if (countries[this.country]) {
       return countries[this.country].name;
@@ -304,6 +379,10 @@ class EcovacsAPI {
     return 'unknown';
   }
 
+  /**
+   * Get the continent code from the countries object
+   * @returns {string} the continent (lower case)
+   */
   getContinent() {
     if (countries[this.country]) {
       return countries[this.country].continent.toLowerCase();
@@ -311,10 +390,25 @@ class EcovacsAPI {
     return 'ww';
   }
 
+  /**
+   *
+   * @param {Object} vacuum
+   * @returns {*}
+   */
   getVacBotObj(vacuum) {
-    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, this.getContinent())
+    return this.getVacBot(this.userId, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, this.getContinent())
   }
 
+  /**
+   *
+   * @param {String} user
+   * @param {String} hostname
+   * @param {String} resource
+   * @param {String} secret
+   * @param {Object} vacuum
+   * @param {String} continent
+   * @returns {*}
+   */
   getVacBot(user, hostname, resource, secret, vacuum, continent) {
     let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
@@ -329,22 +423,42 @@ class EcovacsAPI {
     return new vacBotClass(user, hostname, resource, secret, vacuum, continent, this.country);
   }
 
+  /**
+   * Get the version of the package
+   * @returns {string} The version of the package
+   */
   getVersion() {
     return packageInfo.version;
   }
 
+  /**
+   * Get the version of the package
+   * @returns {string} The version of the package
+   */
   static version() {
     return packageInfo.version;
   }
 
+  /**
+   * Is the canvas module available?
+   * @returns {boolean} a boolean value
+   */
   getCanvasModuleIsAvailable() {
     return EcovacsAPI.isCanvasModuleAvailable();
   }
 
+  /**
+   * Is the canvas module available?
+   * @returns {boolean} a boolean value
+   */
   static isCanvasModuleAvailable() {
     return tools.isCanvasModuleAvailable();
   }
 
+  /**
+   * @param {String} company
+   * @returns {boolean}
+   */
   static isMQTTProtocolUsed(company) {
     return (company === 'eco-ng');
   }

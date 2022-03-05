@@ -6,8 +6,8 @@ declare class VacBot {
     is_ready: boolean;
     useMqtt: boolean;
     deviceClass: any;
-    deviceModel: any;
-    deviceImageURL: any;
+    deviceModel: string;
+    deviceImageURL: string;
     components: {};
     lastComponentValues: {};
     emitFullLifeSpanEvent: boolean;
@@ -117,7 +117,13 @@ declare class VacBot {
     handleMapSpotAreaInfo(spotAreaInfo: any): Promise<void>;
     handleMapVirtualBoundaryInfo(virtualBoundaryInfo: any): Promise<void>;
     handleMapImageInfo(mapImageInfo: any): Promise<void>;
+    /**
+     * @deprecated
+     */
     connect_and_wait_until_ready(): void;
+    /**
+     * Connect to the robot
+     */
     connect(): void;
     on(name: any, func: any): void;
     getLibraryForCommands(): typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
@@ -127,14 +133,20 @@ declare class VacBot {
     is950type(): any;
     isNot950type(): boolean;
     isN79series(): boolean;
-    isSupportedDevice(): any;
-    isKnownDevice(): any;
+    isSupportedDevice(): boolean;
+    isKnownDevice(): boolean;
     getDeviceProperty(property: any, defaultValue?: boolean): any;
     hasMainBrush(): any;
     hasEdgeCleaningMode(): boolean;
     hasSpotCleaningMode(): boolean;
+    /**
+     * @deprecated
+     */
     hasSpotAreas(): any;
     hasSpotAreaCleaningMode(): any;
+    /**
+     * @deprecated
+     */
     hasCustomAreas(): any;
     hasCustomAreaCleaningMode(): any;
     hasMappingCapabilities(): any;
@@ -143,16 +155,62 @@ declare class VacBot {
     hasVoiceReports(): any;
     hasAutoEmptyStation(): any;
     isMapImageSupported(): any;
-    getVacBotDeviceId(): any;
-    getProductName(): any;
-    getProductImageURL(): any;
-    getModelName(): any;
-    getName(): any;
-    getNickname(): any;
+    /**
+     * Get the device id for the vacuum
+     * @returns {string} the device ID
+     */
+    getVacBotDeviceId(): string;
+    /**
+     * Get the product name of the device
+     * @returns {string} the product name
+     */
+    getProductName(): string;
+    /**
+     * Get the product image URL of the image of the product
+     * @returns {string} the URL
+     */
+    getProductImageURL(): string;
+    /**
+     * Get the model name of the device
+     * @returns {string} the model name
+     */
+    getModelName(): string;
+    /**
+     * Get the nickname of the vacuum, if it exists, otherwise return an empty string
+     * @returns {string} the nickname if it exists, otherwise it returns an empty string
+     */
+    getName(): string;
+    /**
+     * Get the nickname of the vacuum, if it exists, otherwise get the product name
+     * @returns {string} the vacuum's nickname, if it has one, or the product name
+     */
+    getNickname(): string;
+    /**
+     * Send a command to the vacuum
+     * @param {Object} action - A VacBotCommand object
+     */
     sendCommand(action: any): void;
+    /**
+     * Send a ping to the server
+     * @deprecated
+     */
     sendPing(): void;
+    /**
+     * It disconnects the robot
+     */
     disconnect(): void;
-    getAreaName_i18n(name: any, languageCode?: string): any;
-    removeFromLogs(logData: any): any;
+    /**
+     * Get the translated name of a spot area
+     * @param {string} name - The name of the area
+     * @param {string} [languageCode=en] - The language code of the language you want the area name in
+     * @returns {string} The area name in the language specified
+     */
+    getAreaName_i18n(name: string, languageCode?: string): string;
+    /**
+     * Replace the `did` and `secret` with "[REMOVED]"
+     * @param {string} logData - The log data to be removed
+     * @returns {string} The log data with `did` and `secret` removed
+     */
+    removeFromLogs(logData: string): string;
 }
 //# sourceMappingURL=vacBot.d.ts.map

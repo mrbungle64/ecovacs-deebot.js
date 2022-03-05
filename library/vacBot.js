@@ -530,11 +530,16 @@ class VacBot {
         }
     }
 
-    // Deprecated but keep this method for now
+    /**
+     * @deprecated
+     */
     connect_and_wait_until_ready() {
         this.connect();
     }
 
+    /**
+     * Connect to the robot
+     */
     connect() {
         this.ecovacs.connect();
     }
@@ -606,7 +611,9 @@ class VacBot {
         return (!this.hasSpotAreaCleaningMode());
     }
 
-    // Deprecated
+    /**
+     * @deprecated
+     */
     hasSpotAreas() {
         return this.hasSpotAreaCleaningMode();
     }
@@ -615,7 +622,9 @@ class VacBot {
         return this.getDeviceProperty('spot_area');
     }
 
-    // Deprecated
+    /**
+     * @deprecated
+     */
     hasCustomAreas() {
         return this.hasCustomAreaCleaningMode();
     }
@@ -648,6 +657,10 @@ class VacBot {
         return this.getDeviceProperty('map_image_supported');
     }
 
+    /**
+     * Get the device id for the vacuum
+     * @returns {string} the device ID
+     */
     getVacBotDeviceId() {
         if (!this.useMqtt) {
             return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
@@ -656,18 +669,34 @@ class VacBot {
         }
     }
 
+    /**
+     * Get the product name of the device
+     * @returns {string} the product name
+     */
     getProductName() {
         return this.vacuum['deviceName'];
     }
 
+    /**
+     * Get the product image URL of the image of the product
+     * @returns {string} the URL
+     */
     getProductImageURL() {
         return this.vacuum['icon'];
     }
 
+    /**
+     * Get the model name of the device
+     * @returns {string} the model name
+     */
     getModelName() {
         return this.getDeviceProperty('name', '');
     }
 
+    /**
+     * Get the nickname of the vacuum, if it exists, otherwise return an empty string
+     * @returns {string} the nickname
+     */
     getName() {
         if (this.getNickname()) {
             return this.getNickname();
@@ -675,6 +704,10 @@ class VacBot {
         return '';
     }
 
+    /**
+     * Get the nickname of the vacuum, if it exists, otherwise get the product name
+     * @returns {string} the nickname, if it has one, or the product name
+     */
     getNickname() {
         if (this.vacuum['nick']) {
             return this.vacuum['nick'];
@@ -682,6 +715,10 @@ class VacBot {
         return this.getProductName();
     }
 
+    /**
+     * Send a command to the vacuum
+     * @param {Object} action - a VacBotCommand object
+     */
     sendCommand(action) {
         if (!this.is950type()) {
             this.commandsSent[action.getId()] = action;
@@ -700,20 +737,36 @@ class VacBot {
         })();
     }
 
-    // Deprecated
+    /**
+     * @deprecated
+     */
     sendPing() {
         this.ecovacs.sendPing();
     }
 
+    /**
+     * It disconnects the robot
+     */
     disconnect() {
         this.ecovacs.disconnect();
         this.is_ready = false;
     }
 
+    /**
+     * Get the translated name of a spot area
+     * @param {string} name - The name of the area
+     * @param {string} [languageCode=en] - The language code of the language you want the area name in
+     * @returns {string} The area name in the language specified
+     */
     getAreaName_i18n(name, languageCode = 'en') {
         return i18n.getSpotAreaName(name, languageCode);
     }
 
+    /**
+     * Replace the `did` and `secret` with "[REMOVED]"
+     * @param {string} logData - The log data to be removed
+     * @returns {string} The log data with `did` and `secret` removed
+     */
     removeFromLogs(logData) {
         let output = logData;
         output = output.replace(new RegExp("(" + this.vacuum.did + ")", "g"), "[REMOVED]");

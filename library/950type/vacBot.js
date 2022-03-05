@@ -180,7 +180,7 @@ class VacBot_950type extends VacBot {
                     let timestamp = parseInt(logs[logIndex]['ts']);
                     let date = new Date(timestamp * 1000);
                     let len = parseInt(logs[logIndex]['last']);
-                    let totalTimeString = tools.getTimeString(len);
+                    let totalTimeString = tools.getTimeStringFormatted(len);
                     let imageUrl = logs[logIndex]['imageUrl'];
                     if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
                         this.cleanLog_lastImageUrl = imageUrl;
