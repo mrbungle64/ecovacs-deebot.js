@@ -22,41 +22,36 @@ String.prototype.format = function () {
 
 class EcovacsAPI {
   /**
-   * The constructor function takes in the device_id, country, and continent. It then sets up the meta object, which
-   * contains the country, language, device id, app code, app version, channel, device type, and sets the resource to the
-   * first 8 characters of the device id. It then sets the country to the uppercase version of the country, and sets the
-   * continent to the continent of the country if it's not set
-   * @param {string} device_id - The device ID of the vacuum
+   * @param {string} deviceId - The device ID of the bot
    * @param {string} country - The country code
-   * @param {string} [continent] - The continent (optional)
+   * @param {string} [continent] - The continent (deprecated)
    */
-  constructor(device_id, country, continent = '') {
+  constructor(deviceId, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI");
 
     this.meta = {
       'country': country,
       'lang': 'EN',
-      'deviceId': device_id,
+      'deviceId': deviceId,
       'appCode': 'global_e',
       'appVersion': '1.6.3',
       'channel': 'google_play',
       'deviceType': '1'
     };
-    this.resource = device_id.substr(0, 8);
+    this.resource = deviceId.substr(0, 8);
     this.country = country.toUpperCase();
     this.continent = continent !== '' ? continent : this.getContinent();
-    this.device_id = device_id;
+    this.device_id = deviceId;
   }
 
   /**
-   * It connects to the Ecovacs API
-   * @param {string} account_id - The account ID of the user
+   * @param {string} accountId - The account ID of the user
    * @param {string} password_hash - The password hash
-   * @returns {string} The return value is a string that is either "ready" or "error"
+   * @returns {string}
    */
-  async connect(account_id, password_hash) {
+  async connect(accountId, password_hash) {
     let error;
-    if (!account_id) {
+    if (!accountId) {
       error = new Error('No account ID provided');
     }
     if (!this.country) {
@@ -75,7 +70,7 @@ class EcovacsAPI {
     }
 
     let result = await this.callUserAuthApi(login_path, {
-      'account': account_id,
+      'account': accountId,
       'password': password_hash
     });
     this.uid = result.uid;
@@ -95,9 +90,9 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param {Object} params
-   * @returns {String}
+   * Retrieve the parameters for the user login
+   * @param {Object} params - An object with the data to retrieve the parameters
+   * @returns {String} the parameters
    */
   getUserLoginParams(params) {
     params['authTimeZone'] = 'GMT-8';
@@ -125,9 +120,9 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param {Object} params
-   * @returns {String}
+   * Retrieve the parameters for authentication
+   * @param {Object} params - An object with the data to retrieve the parameters
+   * @returns {String} the parameters
    */
   getAuthParams(params) {
     let paramsSignIn = params;
@@ -149,10 +144,9 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param {string} loginPath
-   * @param {Object} params
-   * @returns {Promise<*>}
+   * @param {string} loginPath - The login path
+   * @param {Object} params - An object with the data to retrieve the parameters
+   * @returns {Promise<Object>} an object including access token and user ID
    */
   async callUserAuthApi(loginPath, params) {
     tools.envLog(`[EcovacsAPI] Calling main api ${loginPath} with ${JSON.stringify(params)}`);
@@ -199,9 +193,9 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param {string} loginPath
-   * @returns {string}
+   * Returns the portal path for the given login path
+   * @param {string} loginPath - The path to the login page
+   * @returns {string} the portal path
    */
   getPortalPath(loginPath) {
     let portalPath = constants.MAIN_URL_FORMAT;
@@ -215,11 +209,10 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param {string} api
-   * @param {string} func
-   * @param {Object} args
-   * @returns {Promise<any>}
+   * @param {string} api - the API path
+   * @param {string} func - the API function to be called
+   * @param {Object} args - An object with the params for the POST request
+   * @returns {Promise<Object>}
    */
   async callPortalApi(api, func, args) {
     tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
@@ -260,8 +253,8 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @returns {Promise<any>}
+   * It calls the API to login by access token
+   * @returns {Promise<Object>} a JSON object including user token and user ID
    */
   callUserApiLoginByItToken() {
     let org = 'ECOWW';
@@ -283,8 +276,7 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @returns {Promise<unknown>}
+   * @returns {Promise<Object>} a dictionary of Ecovacs products
    */
   getConfigProducts() {
     return new Promise((resolve, reject) => {
@@ -306,14 +298,13 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param api
-   * @param todo
-   * @returns {Promise<unknown>}
+   * @param {string} api - the API path
+   * @param {string} func - the API function to be called
+   * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
-  async getDevices(api = constants.USERSAPI, todo = 'GetDeviceList') {
+  async getDevices(api = constants.USERSAPI, func = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
-      this.callPortalApi(api, todo, {
+      this.callPortalApi(api, func, {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -331,8 +322,7 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @returns {Promise<*>}
+   * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
   async devices() {
     const deviceList = await this.getDevices(constants.USERSAPI, 'GetDeviceList');
@@ -341,10 +331,11 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param deviceList
-   * @param globalDeviceList
-   * @returns {*}
+   * Merge the data from the global device list (GetGlobalDeviceList)
+   * with the data from the device list (GetDeviceList) of the users Ecovacs account
+   * @param deviceList - The list of devices of the Ecovacs account
+   * @param globalDeviceList - The global device list returned by the API
+   * @returns {Object} a dictionary of all known devices
    */
   mergeDeviceLists(deviceList, globalDeviceList) {
     // This is a workaround to keep compatibility
@@ -361,8 +352,8 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @returns {{}}
+   * Get all known devices
+   * @returns {Object} a dictionary of all known devices
    */
   getAllKnownDevices() {
     return tools.getAllKnownDevices();
@@ -391,25 +382,24 @@ class EcovacsAPI {
   }
 
   /**
-   *
-   * @param {Object} vacuum
-   * @returns {*}
+   * Get the vacBot class object
+   * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
+   * @returns {Object}
    */
   getVacBotObj(vacuum) {
-    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, this.getContinent())
+    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum)
   }
 
   /**
-   *
-   * @param {String} user
-   * @param {String} hostname
-   * @param {String} resource
-   * @param {String} secret
-   * @param {Object} vacuum
-   * @param {String} continent
-   * @returns {*}
+   * Get the vacBot class object
+   * @param {String} user - The user ID
+   * @param {String} hostname - The host name for the Ecovacs API
+   * @param {String} resource - The 'resource'
+   * @param {String} secret - The 'secret' key
+   * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
+   * @returns {Object}
    */
-  getVacBot(user, hostname, resource, secret, vacuum, continent) {
+  getVacBot(user, hostname, resource, secret, vacuum) {
     let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
@@ -420,7 +410,7 @@ class EcovacsAPI {
       tools.envLog('vacBot_non950type identified');
       vacBotClass = require('./library/non950type/vacBot');
     }
-    return new vacBotClass(user, hostname, resource, secret, vacuum, continent, this.country);
+    return new vacBotClass(user, hostname, resource, secret, vacuum, this.getContinent(), this.country);
   }
 
   /**
@@ -475,7 +465,7 @@ class EcovacsAPI {
 
   /**
    * Returns true if the device class is not 950 type
-   * @param {String} deviceClass - The device class of the device.
+   * @param {String} deviceClass - The device class of the device
    * @returns A boolean value.
    */
   static isDeviceClassNot950type(deviceClass) {
@@ -486,7 +476,7 @@ class EcovacsAPI {
    * Given a machine id and a device number, return the device ID
    * @param {String} machineId - The id of the device.
    * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device.
-   * @returns {String} the device ID.
+   * @returns {String} the device ID
    */
   static getDeviceId(machineId, deviceNumber = 0) {
     return EcovacsAPI.md5(machineId + deviceNumber.toString());
@@ -515,7 +505,7 @@ class EcovacsAPI {
 
   /**
    * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-   * @param {Object} params - The parameters to be encoded.
+   * @param {Object} params - The parameters to be encoded
    * @returns {String} A string of the form "key1=value1&key2=value2&key3=value3"
    */
   static paramsToQueryList(params) {
