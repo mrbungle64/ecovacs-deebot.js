@@ -27,7 +27,7 @@ class EcovacsAPI {
    * @param {string} [continent] - The continent (deprecated)
    */
   constructor(deviceId, country, continent = '') {
-    tools.envLog("[EcovacsAPI] Setting up EcovacsAPI");
+    tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
 
     this.meta = {
       'country': country,
@@ -38,14 +38,14 @@ class EcovacsAPI {
       'channel': 'google_play',
       'deviceType': '1'
     };
-    this.resource = deviceId.substr(0, 8);
+    this.resource = deviceId.substring(0, 8);
     this.country = country.toUpperCase();
     this.continent = continent !== '' ? continent : this.getContinent();
     this.device_id = deviceId;
   }
 
   /**
-   * @param {string} accountId - The account ID of the user
+   * @param {string} accountId - The account ID (Email or Ecovacs ID)
    * @param {string} password_hash - The password hash
    * @returns {string}
    */
@@ -90,7 +90,7 @@ class EcovacsAPI {
   }
 
   /**
-   * Retrieve the parameters for the user login
+   * Get the parameters for the user login
    * @param {Object} params - An object with the data to retrieve the parameters
    * @returns {String} the parameters
    */
@@ -120,7 +120,7 @@ class EcovacsAPI {
   }
 
   /**
-   * Retrieve the parameters for authentication
+   * Get the parameters for authentication
    * @param {Object} params - An object with the data to retrieve the parameters
    * @returns {String} the parameters
    */
@@ -194,7 +194,7 @@ class EcovacsAPI {
 
   /**
    * Returns the portal path for the given login path
-   * @param {string} loginPath - The path to the login page
+   * @param {string} loginPath - The path for the login
    * @returns {string} the portal path
    */
   getPortalPath(loginPath) {
@@ -254,7 +254,7 @@ class EcovacsAPI {
 
   /**
    * It calls the API to login by access token
-   * @returns {Promise<Object>} a JSON object including user token and user ID
+   * @returns {Promise<Object>} an object including user token and user ID
    */
   callUserApiLoginByItToken() {
     let org = 'ECOWW';
@@ -382,24 +382,24 @@ class EcovacsAPI {
   }
 
   /**
-   * Get the vacBot class object
+   * Wrapper method for the `getVacBot` method (but with only 1 parameter)
    * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
-   * @returns {Object}
+   * @returns {Object} a corresponding instance of the 'vacBot' class
    */
   getVacBotObj(vacuum) {
     return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum)
   }
 
   /**
-   * Get the vacBot class object
-   * @param {String} user - The user ID
-   * @param {String} hostname - The host name for the Ecovacs API
-   * @param {String} resource - The 'resource'
-   * @param {String} secret - The 'secret' key
+   * Get a corresponding instance of the `vacBot` class
+   * @param {String} user - The user ID (retrieved from Ecovacs API)
+   * @param {String} hostname - The host name (for the Ecovacs API)
+   * @param {String} resource - the resource of the vacuum
+   * @param {String} userToken - The user token
    * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
-   * @returns {Object}
+   * @returns {Object} a corresponding instance of the `vacBot` class
    */
-  getVacBot(user, hostname, resource, secret, vacuum) {
+  getVacBot(user, hostname, resource, userToken, vacuum) {
     let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
@@ -410,7 +410,7 @@ class EcovacsAPI {
       tools.envLog('vacBot_non950type identified');
       vacBotClass = require('./library/non950type/vacBot');
     }
-    return new vacBotClass(user, hostname, resource, secret, vacuum, this.getContinent(), this.country);
+    return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country);
   }
 
   /**
@@ -474,8 +474,8 @@ class EcovacsAPI {
 
   /**
    * Given a machine id and a device number, return the device ID
-   * @param {String} machineId - The id of the device.
-   * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device.
+   * @param {String} machineId - The id of the device
+   * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device
    * @returns {String} the device ID
    */
   static getDeviceId(machineId, deviceNumber = 0) {
