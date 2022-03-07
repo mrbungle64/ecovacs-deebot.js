@@ -80,7 +80,9 @@ class VacBot_950type extends VacBot {
                 || this.deebotPosition.currentSpotAreaID === 'unknown'
             );
             if (changed) {
-                let currentSpotAreaID = mapTools.isPositionInSpotArea([[deebotPos['x']], deebotPos['y']], this.mapSpotAreaInfos[this.currentMapMID]);
+                const posX = Number(deebotPos['x']);
+                const posY = Number(deebotPos['y']);
+                let currentSpotAreaID = mapTools.isPositionInSpotArea(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
                 let isInvalid = Number(deebotPos['invalid']) === 1;
                 let distanceToChargingStation = null;
                 if (this.chargePosition) {

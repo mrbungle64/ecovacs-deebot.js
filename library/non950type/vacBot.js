@@ -313,10 +313,10 @@ class VacBot_non950type extends VacBot {
   handle_deebotPosition(payload) {
     tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
-        const posX = payload.attrs['p'].split(",")[0];
-        const posY = payload.attrs['p'].split(",")[1];
+        const posX = Number(payload.attrs['p'].split(",")[0]);
+        const posY = Number(payload.attrs['p'].split(",")[1]);
         const angle = payload.attrs['a'];
-        let currentSpotAreaID = mapTools.isPositionInSpotArea([posX, posY], this.mapSpotAreaInfos[this.currentMapMID]);
+        let currentSpotAreaID = mapTools.isPositionInSpotArea(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
         let distanceToChargingStation = null;
         if (this.chargePosition) {
           const pos = posX + ',' + posY;
