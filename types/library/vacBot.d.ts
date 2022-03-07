@@ -108,12 +108,12 @@ declare class VacBot {
      */
     charge(): void;
     /**
-     * This is a wrapper function to stop the vacuum
+     * This is a wrapper function to stop the bot
      * @since 0.6.2
      */
     stop(): void;
     /**
-     * This is a wrapper function to pause the vacuum
+     * This is a wrapper function to pause the bot
      * @since 0.6.2
      */
     pause(mode?: string): void;
@@ -128,7 +128,12 @@ declare class VacBot {
      * @since 0.6.2
      */
     playSound(soundID?: number): void;
-    run(action: any, ...args: any[]): void;
+    /**
+     * Run a specific command
+     * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
+     * @param args - zero or more arguments to perform the command
+     */
+    run(command: string, ...args: any[]): void;
     handleMapsEvent(mapData: any): Promise<void>;
     handleMapSpotAreasEvent(spotAreas: any): Promise<void>;
     handleMapVirtualBoundaries(virtualBoundaries: any): Promise<void>;
@@ -275,9 +280,9 @@ declare class VacBot {
     getNickname(): string;
     /**
      * Send a command to the vacuum
-     * @param {Object} action - a VacBotCommand object
+     * @param {Object} command - a VacBotCommand object
      */
-    sendCommand(action: any): void;
+    sendCommand(command: any): void;
     /**
      * @deprecated
      */

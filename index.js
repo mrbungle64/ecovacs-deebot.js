@@ -383,7 +383,7 @@ class EcovacsAPI {
 
   /**
    * Wrapper method for the `getVacBot` method (but with only 1 parameter)
-   * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
+   * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
    * @returns {Object} a corresponding instance of the 'vacBot' class
    */
   getVacBotObj(vacuum) {

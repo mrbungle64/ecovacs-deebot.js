@@ -70,15 +70,15 @@ class VacBot_non950type extends VacBot {
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
         type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
-      let action = '';
+      let command = '';
       if (payload.attrs.hasOwnProperty('st')) {
-        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['st']];
+        command = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['st']];
       }
       else if (payload.attrs.hasOwnProperty('act')) {
-        action = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['act']];
+        command = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['act']];
       }
-      if (action === 'stop' || action === 'pause') {
-        type = action
+      if (command === 'stop' || command === 'pause') {
+        type = command
       }
       this.cleanReport = type;
       tools.envLog("[VacBot] *** cleanReport = " + this.cleanReport);
@@ -227,10 +227,10 @@ class VacBot_non950type extends VacBot {
         type = payload.attrs['tp'];
       } else {
         // XMPP
-        const action = this.commandsSent[payload.attrs.id];
-        if (action.args && action.args.mid && action.args.tp) {
-          mid = action.args.mid;
-          type = action.args.tp;
+        const command = this.commandsSent[payload.attrs.id];
+        if (command.args && command.args.mid && command.args.tp) {
+          mid = command.args.mid;
+          type = command.args.tp;
         }
       }
       if (mid && type) {
@@ -465,9 +465,9 @@ class VacBot_non950type extends VacBot {
     tools.envLog("[VacBot] *** handleOnOff = " + JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('on')) {
       let type = null;
-      const action = this.commandsSent[payload.attrs.id];
-      if (action.args && action.args.t) {
-        type = dictionary.ON_OFF_FROM_ECOVACS[action.args.t];
+      const command = this.commandsSent[payload.attrs.id];
+      if (command.args && command.args.t) {
+        type = dictionary.ON_OFF_FROM_ECOVACS[command.args.t];
       }
       if (type) {
         const on = payload.attrs.on;
@@ -579,9 +579,14 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  run(action, ...args) {
-    super.run(action, ...args);
-    switch (action.toLowerCase()) {
+  /**
+   * Run a specific command
+   * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
+   * @param args - zero or more arguments to perform the command
+   */
+  run(command, ...args) {
+    super.run(command, ...args);
+    switch (command.toLowerCase()) {
       case "GetMaps".toLowerCase(): {
         this.createMapDataObject = !!args[0] || false;
         this.createMapImage = this.createMapDataObject && this.isMapImageSupported();

@@ -272,8 +272,13 @@ class VacBot {
         this.run("PlaySound", soundID);
     }
 
-    run(action, ...args) {
-        switch (action.toLowerCase()) {
+    /**
+     * Run a specific command
+     * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
+     * @param args - zero or more arguments to perform the command
+     */
+    run(command, ...args) {
+        switch (command.toLowerCase()) {
             case "Clean".toLowerCase(): {
                 this.sendCommand(new this.vacBotCommand.Clean());
                 break;
@@ -387,9 +392,9 @@ class VacBot {
                 this.sendCommand(new this.vacBotCommand.DisableContinuousCleaning());
                 break;
             case "Move".toLowerCase(): {
-                const action = args[0];
-                if (action !== '') {
-                    this.sendCommand(new this.vacBotCommand.Move(action));
+                const command = args[0];
+                if (command !== '') {
+                    this.sendCommand(new this.vacBotCommand.Move(command));
                 }
                 break;
             }
@@ -812,17 +817,17 @@ class VacBot {
 
     /**
      * Send a command to the vacuum
-     * @param {Object} action - a VacBotCommand object
+     * @param {Object} command - a VacBotCommand object
      */
-    sendCommand(action) {
+    sendCommand(command) {
         if (!this.is950type()) {
-            this.commandsSent[action.getId()] = action;
-            if ((action.name === 'PullMP') && (action.args)) {
-                this.mapPiecePacketsSent[action.getId()] = action.args.pid;
+            this.commandsSent[command.getId()] = command;
+            if ((command.name === 'PullMP') && (command.args)) {
+                this.mapPiecePacketsSent[command.getId()] = command.args.pid;
             }
         }
-        tools.envLog("[VacBot] Sending command `%s` with id %s", action.name, action.getId());
-        let actionPayload = this.useMqtt ? action : action.to_xml();
+        tools.envLog("[VacBot] Sending command `%s` with id %s", command.name, command.getId());
+        let actionPayload = this.useMqtt ? command : command.to_xml();
         (async () => {
             try {
                 await this.ecovacs.sendCommand(actionPayload, this.getVacBotDeviceId());

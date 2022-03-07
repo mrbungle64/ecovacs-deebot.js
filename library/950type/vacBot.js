@@ -561,9 +561,14 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    run(action, ...args) {
-        super.run(action, ...args);
-        switch (action.toLowerCase()) {
+    /**
+     * Run a specific command
+     * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
+     * @param args - zero or more arguments to perform the command
+     */
+    run(command, ...args) {
+        super.run(command, ...args);
+        switch (command.toLowerCase()) {
             case "GetMapImage".toLowerCase(): {
                 const mapID = args[0].toString(); // mapID is a string
                 const mapType = args[1] || 'outline';

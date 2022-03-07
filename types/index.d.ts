@@ -23,15 +23,15 @@ declare class EcovacsAPI {
     static isDeviceClass950type(deviceClass: string, isMQTTProtocolUsed?: boolean): any;
     /**
      * Returns true if the device class is not 950 type
-     * @param {String} deviceClass - The device class of the device.
+     * @param {String} deviceClass - The device class of the device
      * @returns A boolean value.
      */
     static isDeviceClassNot950type(deviceClass: string): boolean;
     /**
      * Given a machine id and a device number, return the device ID
-     * @param {String} machineId - The id of the device.
-     * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device.
-     * @returns {String} the device ID.
+     * @param {String} machineId - The id of the device
+     * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device
+     * @returns {String} the device ID
      */
     static getDeviceId(machineId: string, deviceNumber?: number): string;
     /**
@@ -48,20 +48,16 @@ declare class EcovacsAPI {
     static encrypt(text: string): string;
     /**
      * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-     * @param {Object} params - The parameters to be encoded.
+     * @param {Object} params - The parameters to be encoded
      * @returns {String} A string of the form "key1=value1&key2=value2&key3=value3"
      */
     static paramsToQueryList(params: any): string;
     /**
-     * The constructor function takes in the device_id, country, and continent. It then sets up the meta object, which
-     * contains the country, language, device id, app code, app version, channel, device type, and sets the resource to the
-     * first 8 characters of the device id. It then sets the country to the uppercase version of the country, and sets the
-     * continent to the continent of the country if it's not set
-     * @param {string} device_id - The device ID of the vacuum
+     * @param {string} deviceId - The device ID of the bot
      * @param {string} country - The country code
-     * @param {string} [continent] - The continent (optional)
+     * @param {string} [continent] - The continent (deprecated)
      */
-    constructor(device_id: string, country: string, continent?: string);
+    constructor(deviceId: string, country: string, continent?: string);
     meta: {
         country: string;
         lang: string;
@@ -76,83 +72,78 @@ declare class EcovacsAPI {
     continent: string;
     device_id: string;
     /**
-     * It connects to the Ecovacs API
-     * @param {string} account_id - The account ID of the user
+     * @param {string} accountId - The account ID (Email or Ecovacs ID)
      * @param {string} password_hash - The password hash
-     * @returns {string} The return value is a string that is either "ready" or "error"
+     * @returns {string}
      */
-    connect(account_id: string, password_hash: string): string;
+    connect(accountId: string, password_hash: string): string;
     uid: any;
     login_access_token: any;
     auth_code: any;
     user_access_token: any;
     /**
-     *
-     * @param {Object} params
-     * @returns {String}
+     * Get the parameters for the user login
+     * @param {Object} params - An object with the data to retrieve the parameters
+     * @returns {String} the parameters
      */
     getUserLoginParams(params: any): string;
     /**
-     *
-     * @param {Object} params
-     * @returns {String}
+     * Get the parameters for authentication
+     * @param {Object} params - An object with the data to retrieve the parameters
+     * @returns {String} the parameters
      */
     getAuthParams(params: any): string;
     /**
-     *
-     * @param {string} loginPath
-     * @param {Object} params
-     * @returns {Promise<*>}
+     * @param {string} loginPath - The login path
+     * @param {Object} params - An object with the data to retrieve the parameters
+     * @returns {Promise<Object>} an object including access token and user ID
      */
     callUserAuthApi(loginPath: string, params: any): Promise<any>;
     /**
-     *
-     * @param {string} loginPath
-     * @returns {string}
+     * Returns the portal path for the given login path
+     * @param {string} loginPath - The path for the login
+     * @returns {string} the portal path
      */
     getPortalPath(loginPath: string): string;
     /**
-     *
-     * @param {string} api
-     * @param {string} func
-     * @param {Object} args
-     * @returns {Promise<any>}
+     * @param {string} api - the API path
+     * @param {string} func - the API function to be called
+     * @param {Object} args - An object with the params for the POST request
+     * @returns {Promise<Object>}
      */
     callPortalApi(api: string, func: string, args: any): Promise<any>;
     /**
-     *
-     * @returns {Promise<any>}
+     * It calls the API to login by access token
+     * @returns {Promise<Object>} an object including user token and user ID
      */
     callUserApiLoginByItToken(): Promise<any>;
     /**
-     *
-     * @returns {Promise<unknown>}
+     * @returns {Promise<Object>} a dictionary of Ecovacs products
      */
-    getConfigProducts(): Promise<unknown>;
+    getConfigProducts(): Promise<any>;
     /**
-     *
-     * @param api
-     * @param todo
-     * @returns {Promise<unknown>}
+     * @param {string} api - the API path
+     * @param {string} func - the API function to be called
+     * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
      */
-    getDevices(api?: string, todo?: string): Promise<unknown>;
+    getDevices(api?: string, func?: string): Promise<any>;
     /**
-     *
-     * @returns {Promise<*>}
+     * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
      */
     devices(): Promise<any>;
     /**
-     *
-     * @param deviceList
-     * @param globalDeviceList
-     * @returns {*}
+     * Merge the data from the global device list (GetGlobalDeviceList)
+     * with the data from the device list (GetDeviceList) of the users Ecovacs account
+     * @param deviceList - The list of devices of the Ecovacs account
+     * @param globalDeviceList - The global device list returned by the API
+     * @returns {Object} a dictionary of all known devices
      */
     mergeDeviceLists(deviceList: any, globalDeviceList: any): any;
     /**
-     *
-     * @returns {{}}
+     * Get all known devices
+     * @returns {Object} a dictionary of all known devices
      */
-    getAllKnownDevices(): {};
+    getAllKnownDevices(): any;
     /**
      * Get the name of the country from the countries object
      * @returns {string} the name of the country
@@ -164,22 +155,21 @@ declare class EcovacsAPI {
      */
     getContinent(): string;
     /**
-     *
-     * @param {Object} vacuum
-     * @returns {*}
+     * Wrapper method for the `getVacBot` method (but with only 1 parameter)
+     * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
+     * @returns {Object} a corresponding instance of the 'vacBot' class
      */
     getVacBotObj(vacuum: any): any;
     /**
-     *
-     * @param {String} user
-     * @param {String} hostname
-     * @param {String} resource
-     * @param {String} secret
-     * @param {Object} vacuum
-     * @param {String} continent
-     * @returns {*}
+     * Get a corresponding instance of the `vacBot` class
+     * @param {String} user - The user ID (retrieved from Ecovacs API)
+     * @param {String} hostname - The host name (for the Ecovacs API)
+     * @param {String} resource - the resource of the vacuum
+     * @param {String} userToken - The user token
+     * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
+     * @returns {Object} a corresponding instance of the `vacBot` class
      */
-    getVacBot(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string): any;
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any): any;
     /**
      * Get the version of the package
      * @returns {string} The version of the package
