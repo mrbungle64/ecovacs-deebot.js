@@ -643,7 +643,7 @@ class VacBot_950type extends VacBot {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = args[2];
-                if ((Number(mapID) > 0) && (Number(spotAreaID) > 0) && (tools.isValidVirtualWallType(type))) {
+                if ((Number(mapID) > 0) && (Number(spotAreaID) >= 0) && (tools.isValidVirtualWallType(type))) {
                     this.sendCommand(new vacBotCommand.DeleteMapVirtualBoundary(mapID, spotAreaID, type));
                 }
                 break;
