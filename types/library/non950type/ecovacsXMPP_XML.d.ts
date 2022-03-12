@@ -6,7 +6,7 @@ declare class EcovacsXMPP_XML extends Ecovacs {
     simpleXmpp: any;
     connect(): void;
     sendCommand(action: any, recipient: any): Promise<void>;
-    wrap_command(action: any, recipient: any): any;
+    getCommandXml(command: any, recipient: any): any;
     getMyAddress(): string;
     sendPing(to: any): void;
     disconnect(): void;

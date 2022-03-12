@@ -8,46 +8,41 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
-        this.datatype = 'j';
+        this.payloadType = 'j'; // JSON
     }
 
-    wrapCommand(action, recipient) {
-        if (action.api === constants.IOTDEVMANAGERAPI) {
-            return {
-                'auth': {
-                    'realm': constants.REALM,
-                    'resource': this.resource,
-                    'token': this.secret,
-                    'userid': this.user,
-                    'with': 'users',
-                },
-                "cmdName": action.name,
-                "payload": this.wrapCommand_getPayload(action),
-                "payloadType": "j",
-                "td": "q",
-                "toId": recipient,
-                "toRes": this.vacuum['resource'],
-                "toType": this.vacuum['class']
-            }
+    /**
+     * The function takes in a command and a recipient and returns a JSON object
+     * @param {Object} command - the action to be performed
+     * @param {string} recipient - the id of the device to send the command to
+     * @returns {Object} the wrapped command to be sent to the vacuum
+     */
+    getCommandRequestObject(command, recipient) {
+        if (command.api === constants.IOTDEVMANAGERAPI) {
+            const payload = this.getCommandPayload(command);
+            return this.getCommandStandardRequestObject(command, recipient, payload);
         }
-        if (action.api === constants.LGLOGAPI) {
-            return {
-                "did": recipient,
-                "country": this.country,
-                "td": action.name,
-                "auth": {
-                    "token": this.secret,
-                    "resource": this.resource,
-                    "userid": this.user,
-                    "with": "users",
-                    "realm": constants.REALM
-                },
-                "resource": this.vacuum['resource']
-            }
+        if (command.api === constants.LGLOGAPI) {
+            return this.getCommandCleanLogsObject(command, recipient);
         }
     }
 
-    wrapCommand_getPayload(action) {
+    getCommandCleanLogsObject(command, recipient) {
+        return {
+            'did': recipient,
+            'country': this.country,
+            'td': command.name,
+            'auth': this.getAuthObject(),
+            'resource': this.vacuum['resource']
+        }
+    }
+
+    /**
+     * It creates a payload request header (and body)
+     * @param {Object} command - the action object that was passed to the getCommandRequestObject function
+     * @returns {Object} the payloadRequest object
+     */
+    getCommandPayload(command) {
         // All requests need to have this header -- not sure about timezone
         let payloadRequest = {};
         payloadRequest['header'] = {};
@@ -55,9 +50,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         payloadRequest['header']['ts'] = Math.floor(Date.now());
         payloadRequest['header']['tzm'] = 480;
         payloadRequest['header']['ver'] = '0.0.50';
-        if (Object.keys(action.args).length > 0) {
+        if (Object.keys(command.args).length > 0) {
             payloadRequest['body'] = {};
-            payloadRequest['body']['data'] = action.args;
+            payloadRequest['body']['data'] = command.args;
         }
         return payloadRequest;
     }
@@ -74,6 +69,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
     }
 
+    /**
+     * It handles incoming messages (MQTT message or response from API)
+     * @param {string} topic - the topic of the message
+     * @param {Object|string} message - the message
+     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     */
     handleMessage(topic, message, type = "incoming") {
         let eventName = topic;
         let resultCode = "0";
@@ -117,6 +118,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         })();
     }
 
+    /**
+     * This function handles the message payload
+     * and delegates the event object to the corresponding function
+     * @param {string} command - the command
+     * @param {Object} event - the event object received from the Ecovacs API
+     * @returns {Promise<void>}
+     */
     async handleMessagePayload(command, event) {
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
@@ -378,6 +386,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
     }
 
+    /**
+     * Given an event, return the payload
+     * @param {Object} event - The event object that was passed to the handler
+     * @returns The payload of the event
+     */
     getPayload(event) {
         if (event.hasOwnProperty('payload')) {
             return event['payload'];
@@ -385,6 +398,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         return event;
     }
 
+    /**
+     * Given a command, return the prefix of the command
+     * @param {string} command - the command that was sent
+     * @returns {string} the prefix of the command
+     */
     getCommandPrefix(command) {
         let commandPrefix = '';
         // Incoming events (on)

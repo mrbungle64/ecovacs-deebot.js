@@ -13,7 +13,7 @@ class EcovacsMQTT extends Ecovacs {
 
         this.customdomain = hostname.split(".")[0]; // MQTT is using domain without tld extension
         this.username = user + '@' + this.customdomain;
-        this.datatype = '';
+        this.payloadType = '';
 
         let options = {
             clientId: this.username + '/' + resource,
@@ -65,7 +65,7 @@ class EcovacsMQTT extends Ecovacs {
     }
 
     subscribe() {
-        const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.datatype}`;
+        const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
         console.log(channel);
         this.client.subscribe(channel, (error, granted) => {
             if (!error) {
@@ -145,9 +145,9 @@ class EcovacsMQTT extends Ecovacs {
      * @param {string} recipient - the recipient of the command. This is the device ID
      */
     async sendCommand(command, recipient) {
-        let wrappedCommand = this.wrapCommand(command, recipient);
+        let commandRequestObject = this.getCommandRequestObject(command, recipient);
         try {
-            const json = await this.callEcouserApi(wrappedCommand, this.getAPI(command));
+            const json = await this.callEcouserApi(commandRequestObject, this.getApiPath(command));
             this.handleCommandResponse(command, json);
         } catch (e) {
             tools.envLog("[EcovacsMQTT] Error making call to Ecovacs API: " + e.toString());
@@ -159,7 +159,7 @@ class EcovacsMQTT extends Ecovacs {
      * @param {Object} command - the command object
      * @returns {string} the API path that has to be called
      */
-    getAPI(command) {
+    getApiPath(command) {
         let api = constants.IOTDEVMANAGERAPI; // non 950 type models
         if (command.name === 'GetLogApiCleanLogs') {
             api = constants.LGLOGAPI; // Cleaning log for non 950 type models (MQTT/XML)
@@ -167,6 +167,39 @@ class EcovacsMQTT extends Ecovacs {
             api = command.api // 950 type models
         }
         return api;
+    }
+
+    getCommandStandardRequestObject(command, recipient, payload) {
+        return {
+            'cmdName': command.name,
+            'payload': payload,
+            'payloadType': this.payloadType,
+            'auth': this.getAuthObject(),
+            'td': 'q',
+            'toId': recipient,
+            'toRes': this.vacuum['resource'],
+            'toType': this.vacuum['class']
+        }
+    }
+
+    getCommandCleanLogsObject(command, recipient) {
+        return {
+            'auth': this.getAuthObject(),
+            'did': recipient,
+            'country': this.country,
+            'td': command,
+            'resource': this.vacuum['resource']
+        }
+    }
+
+    getAuthObject() {
+        return {
+            'realm': constants.REALM,
+            'resource': this.resource,
+            'token': this.secret,
+            'userid': this.user,
+            'with': 'users',
+        };
     }
 
     /**

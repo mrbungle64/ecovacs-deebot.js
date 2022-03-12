@@ -9,40 +9,19 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
-        this.datatype = 'x';
+        this.payloadType = 'x'; // XML
     }
 
-    wrapCommand(action, recipient) {
-        const auth = {
-            'realm': constants.REALM,
-            'resource': this.resource,
-            'token': this.secret,
-            'userid': this.user,
-            'with': 'users',
-        };
-        if (action.name === 'GetLogApiCleanLogs') {
-            return {
-                'auth': auth,
-                "did": recipient,
-                "country": this.country,
-                "td": "GetCleanLogs",
-                "resource": this.vacuum['resource']
-            }
+    getCommandRequestObject(command, recipient) {
+        if (command.name === 'GetLogApiCleanLogs') {
+            return this.getCommandCleanLogsObject('GetCleanLogs', recipient);
         } else {
-            return {
-                'auth': auth,
-                "cmdName": action.name,
-                "payload": this.wrapCommand_getPayload(action),
-                "payloadType": "x",
-                "td": "q",
-                "toId": recipient,
-                "toRes": this.vacuum['resource'],
-                "toType": this.vacuum['class']
-            }
+            const payload = this.getCommandPayload(command);
+            return this.getCommandStandardRequestObject(command, recipient, payload);
         }
     }
 
-    wrapCommand_getPayload(action) {
+    getCommandPayload(action) {
         let xml = action.to_xml();
         // Remove the td from ctl xml for RestAPI
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');

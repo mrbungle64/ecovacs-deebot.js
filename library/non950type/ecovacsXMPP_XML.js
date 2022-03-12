@@ -89,11 +89,11 @@ class EcovacsXMPP_XML extends Ecovacs {
     }
 
     async sendCommand(action, recipient) {
-        let wrappedCommand = this.wrap_command(action, recipient);
-        this.simpleXmpp.conn.send(wrappedCommand);
+        let commandXml = this.getCommandXml(action, recipient);
+        this.simpleXmpp.conn.send(commandXml);
     }
 
-    wrap_command(action, recipient) {
+    getCommandXml(command, recipient) {
         let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
@@ -103,7 +103,7 @@ class EcovacsXMPP_XML extends Ecovacs {
         });
         iqElement.c('query', {
             xmlns: 'com:ctl'
-        }).cnode(action);
+        }).cnode(command);
         return iqElement;
     }
 
