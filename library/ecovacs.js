@@ -322,6 +322,10 @@ class Ecovacs extends EventEmitter {
         this.emitLastError();
     }
 
+    /**
+     * Emit a network related error message
+     * @param {string} message - the error message
+     */
     emitNetworkError(message) {
         this.emitError('-1', tools.createErrorDescription(message));
     }
@@ -352,6 +356,10 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    /**
+     * If the vacuum has power adjustment and also has a mopping system
+     * then emit a `MoppingSystemInfo` event with the `cleanStatus` and `cleanInfo` properties
+     */
     emitMoppingSystemReport() {
         const vacuumPowerAdjustmentOk = !this.bot.hasVacuumPowerAdjustment() || (this.bot.cleanSpeed !== null);
         const moppingSystemOk = !this.bot.hasMoppingSystem() || (this.bot.waterLevel !== null);

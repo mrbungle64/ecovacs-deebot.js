@@ -139,27 +139,39 @@ class EcovacsMQTT extends Ecovacs {
         }
     }
 
-    async sendCommand(action, recipient) {
-        let wrappedCommand = this.wrapCommand(action, recipient);
+    /**
+     * It sends a command to the Ecovacs API
+     * @param {Object} command - the command to send to the Ecovacs API
+     * @param {string} recipient - the recipient of the command. This is the device ID
+     */
+    async sendCommand(command, recipient) {
+        let wrappedCommand = this.wrapCommand(command, recipient);
         try {
-            const json = await this.callEcouserApi(wrappedCommand, this.getAPI(action));
-            this.handleCommandResponse(action, json);
+            const json = await this.callEcouserApi(wrappedCommand, this.getAPI(command));
+            this.handleCommandResponse(command, json);
         } catch (e) {
             tools.envLog("[EcovacsMQTT] Error making call to Ecovacs API: " + e.toString());
         }
     }
 
-    getAPI(action) {
+    /**
+     * This function is used to determine the API to use for the action
+     * @param {Object} command - the command object
+     * @returns {string} the API path that has to be called
+     */
+    getAPI(command) {
         let api = constants.IOTDEVMANAGERAPI; // non 950 type models
-        if (action.name === 'GetLogApiCleanLogs') {
+        if (command.name === 'GetLogApiCleanLogs') {
             api = constants.LGLOGAPI; // Cleaning log for non 950 type models (MQTT/XML)
-        } else if (action.api) {
-            api = action.api // 950 type models
+        } else if (command.api) {
+            api = command.api // 950 type models
         }
         return api;
     }
 
-    //end session
+    /**
+     * Disconnect the MQTT client
+     */
     disconnect() {
         tools.envLog("[EcovacsMQTT] Closing MQTT Client...");
         try {

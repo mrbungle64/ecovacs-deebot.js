@@ -118,6 +118,11 @@ declare class EcovacsAPI {
      */
     callUserApiLoginByItToken(): Promise<any>;
     /**
+     * Get the login path for the current country
+     * @returns {string} The login path is being returned.
+     */
+    getLoginPath(): string;
+    /**
      * @returns {Promise<Object>} a dictionary of Ecovacs products
      */
     getConfigProducts(): Promise<any>;

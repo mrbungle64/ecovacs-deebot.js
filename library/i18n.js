@@ -15,6 +15,12 @@ const SPOTAREA_SUBTYPE_NAMES = {
     'gym': {'en': 'Gym', 'de': 'Fitnessstudio'}
 }
 
+/**
+ * Given a spot area name, return the localized name of the area
+ * @param {string} name - The name of the spot area
+ * @param {string} [languageCode=en] - The two-letter code (ISO 639-1) of the language you want the area name to be in
+ * @returns {string} the area name for the given area name
+ */
 function getSpotAreaName(name, languageCode = 'en') {
     const key = name.toLowerCase()
     if (SPOTAREA_SUBTYPE_NAMES.hasOwnProperty(key)) {
