@@ -4,6 +4,7 @@ const axios = require('axios')
 const ecovacsDeebot = require('../index.js');
 const tools = require('../library/tools.js');
 const constants = require('../library/ecovacsConstants');
+const i18n = require('../library/i18n');
 
 describe('API', function () {
   describe('storing variables', function () {
@@ -123,6 +124,17 @@ describe('API tools', function () {
   describe('countries', function () {
     it('should export a countries object', function () {
       assert.ok(ecovacsDeebot.countries);
+    });
+  });
+
+  describe('i18n', function () {
+    it('should translate a spot area name', function () {
+      assert.strictEqual(i18n.getSpotAreaName('random spot area name', 'en'), 'random spot area name');
+      assert.strictEqual(i18n.getSpotAreaName('living room'), 'Living room');
+      assert.strictEqual(i18n.getSpotAreaName('living room', 'en'), 'Living room');
+      assert.strictEqual(i18n.getSpotAreaName('living room', 'de'), 'Wohnzimmer');
+      assert.notStrictEqual(i18n.getSpotAreaName('living room', 'en'), 'Wohnzimmer');
+      assert.notStrictEqual(i18n.getSpotAreaName('living room'), 'Wohnzimmer');
     });
   });
 });
