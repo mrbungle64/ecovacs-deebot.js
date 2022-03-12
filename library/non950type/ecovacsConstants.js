@@ -1,5 +1,6 @@
-// These dictionaries convert to and from Ozmo's consts (which closely match what the UI and manuals use)
-// to and from what the Ecovacs API uses (which are sometimes very oddly named and have random capitalization.)
+// These dictionaries convert to and from this library's constants
+// to and from what the Ecovacs API uses (which are sometimes very oddly named and have random capitalization)
+
 exports.CLEAN_MODE_TO_ECOVACS = {
     'auto': 'auto',
     'edge': 'border',

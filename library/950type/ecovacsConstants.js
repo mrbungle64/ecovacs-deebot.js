@@ -1,5 +1,6 @@
-// These dictionaries convert to and from Ozmo's consts (which closely match what the UI and manuals use)
-// to and from what the Ecovacs API uses (which are sometimes very oddly named and have random capitalization.)
+// These dictionaries convert to and from this library's constants
+// to and from what the Ecovacs API uses (which are sometimes very oddly named and have random capitalization)
+
 exports.CLEAN_MODE_TO_ECOVACS = {
     'auto': 'auto',
     'edge': 'edge',
@@ -31,21 +32,21 @@ exports.WATER_LEVEL_TO_ECOVACS = {
     1: 1,     //low
     2: 2,     //middle
     3: 3,     //high
-    4: 4      //veryhigh
+    4: 4      //very high
 };
 
 exports.CLEAN_SPEED_TO_ECOVACS = {
     1: 1000,  //silent
     2: 0,     //normal
     3: 1,     //high
-    4: 2      //veryhigh
+    4: 2      //very high
 };
 
 exports.CLEAN_SPEED_FROM_ECOVACS = {
     1000: 1, //silent
     0: 2,    //normal
     1: 3,    //high
-    2: 4     //veryhigh
+    2: 4     //very high
 };
 
 exports.CHARGE_MODE_FROM_ECOVACS = {
