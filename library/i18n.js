@@ -16,12 +16,13 @@ const SPOTAREA_SUBTYPE_NAMES = {
 }
 
 function getSpotAreaName(name, languageCode = 'en') {
-    let areaName = name;
-    const spotAreaSubtypes = SPOTAREA_SUBTYPE_NAMES;
-    if (spotAreaSubtypes.hasOwnProperty(name.toLowerCase())) {
-        areaName = spotAreaSubtypes[name.toLowerCase()][languageCode];
+    const key = name.toLowerCase()
+    if (SPOTAREA_SUBTYPE_NAMES.hasOwnProperty(key)) {
+        if (SPOTAREA_SUBTYPE_NAMES[key].hasOwnProperty(languageCode)) {
+            name = SPOTAREA_SUBTYPE_NAMES[key][languageCode];
+        }
     }
-    return areaName;
+    return name;
 }
 
 module.exports.getSpotAreaName = getSpotAreaName;

@@ -64,12 +64,7 @@ class EcovacsAPI {
       throw error;
     }
 
-    let login_path = constants.LOGIN_PATH;
-    if (this.country === 'CN') {
-      login_path = `${login_path}CheckMobile`;
-    }
-
-    let result = await this.callUserAuthApi(login_path, {
+    let result = await this.callUserAuthApi(this.getLoginPath(), {
       'account': accountId,
       'password': password_hash
     });
@@ -273,6 +268,18 @@ class EcovacsAPI {
       'last': '',
       'country': country
     });
+  }
+
+  /**
+   * Get the login path for the current country
+   * @returns {string} The login path is being returned.
+   */
+  getLoginPath() {
+    let loginPath = constants.LOGIN_PATH;
+    if (this.country === 'CN') {
+      loginPath = `${loginPath}CheckMobile`;
+    }
+    return loginPath;
   }
 
   /**
