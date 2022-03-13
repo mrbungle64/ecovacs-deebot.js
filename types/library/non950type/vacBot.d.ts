@@ -7,22 +7,35 @@ declare class VacBot_non950type extends VacBot {
     dustcaseInfo: any;
     mapPiecePacketsCrcArray: any;
     /**
+     * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
+     * @param {Object} payload
+     */
+    handle_cleanReport(payload: any): void;
+    /**
+     * Handle the payload of the battery status
+     * @param {string} payload
+     */
+    handle_batteryInfo(payload: string): void;
+    /**
      * Handle the payload for the life span components
      * @param {Object} payload
      */
     handle_lifespan(payload: any): void;
     /**
-     * Handle the network related payload
+     * Handle the payload for the position data
      * @param {Object} payload
      */
-    handle_netInfo(payload: any): void;
-    handle_cleanReport(payload: any): void;
+    handle_deebotPosition(payload: any): void;
     /**
      * Handle the payload for vacuum power resp. suction power ("clean speed")
      * @param {Object} payload
      */
     handle_cleanSpeed(payload: any): void;
-    handle_batteryInfo(payload: any): void;
+    /**
+     * Handle the payload for network related data
+     * @param {Object} payload
+     */
+    handle_netInfo(payload: any): void;
     handle_waterLevel(payload: any): void;
     handle_cachedMapInfo(payload: any): Promise<any>;
     handleMapExecuted: boolean;
@@ -48,11 +61,6 @@ declare class VacBot_non950type extends VacBot {
     }>;
     handle_mapInfo(payload: any): Promise<void>;
     handle_mapPiecePacket(payload: any): Promise<any>;
-    /**
-     * Handle the payload for the position data
-     * @param {Object} payload
-     */
-    handle_deebotPosition(payload: any): void;
     handle_chargePosition(payload: any): void;
     handle_dustcaseInfo(payload: any): void;
     handle_waterboxInfo(payload: any): void;
@@ -62,8 +70,8 @@ declare class VacBot_non950type extends VacBot {
     handle_cleanLogs(payload: any): void;
     handle_onOff(payload: any): void;
     handle_stats(payload: any): void;
-    handleResponseError(payload: any): void;
     handle_getSched(payload: any): void;
+    handle_ResponseError(payload: any): void;
 }
 import VacBot = require("../vacBot");
 import map = require("../mapTemplate");

@@ -161,7 +161,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Error':
                 payload = event.attrs;
-                this.bot.handleResponseError(payload);
+                this.bot.handle_ResponseError(payload);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 this.emit('LastError', {

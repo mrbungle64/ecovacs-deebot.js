@@ -31,61 +31,9 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for the life span components
+   * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
    * @param {Object} payload
    */
-  handle_lifespan(payload) {
-    let type = null;
-    if (payload.hasOwnProperty('type')) {
-      // type attribute must be trimmed because of Deebot M88
-      // { td: 'LifeSpan', type: 'DustCaseHeap ', ... }
-      type = payload['type'].trim();
-      type = dictionary.COMPONENT_FROM_ECOVACS[type];
-    }
-
-    if (!type) {
-      tools.envLog("[VacBot] Unknown component type: ", payload);
-      return;
-    }
-
-    let lifespan = null;
-    if (payload.hasOwnProperty('val') && payload.hasOwnProperty('total')) {
-      if (this.isN79series()) {
-        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
-        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
-        lifespan = parseInt(payload['val']);
-      } else {
-        lifespan = parseInt(payload['val']) / parseInt(payload['total']) * 100;
-      }
-    } else if (payload.hasOwnProperty('val')) {
-      lifespan = parseInt(payload['val']) / 100;
-    } else if (payload.hasOwnProperty('left') && (payload.hasOwnProperty('total'))) {
-      lifespan = parseInt(payload['left']) / parseInt(payload['total']) * 100; // This works e.g. for a Ozmo 930
-    } else if (payload.hasOwnProperty('left')) {
-      lifespan = parseInt(payload['left']) / 60; // This works e.g. for a Deebot 900/901
-    }
-    if (lifespan) {
-      tools.envLog("[VacBot] lifeSpan %s: %s", type, lifespan);
-      this.components[type] = Number(lifespan.toFixed(2));
-    }
-    tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
-  }
-
-  /**
-   * Handle the payload for network related data
-   * @param {Object} payload
-   */
-  handle_netInfo(payload) {
-    if (payload.hasOwnProperty('wi')) {
-      this.netInfoIP = payload['wi'];
-      tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
-    }
-    if (payload.hasOwnProperty('s')) {
-      this.netInfoWifiSSID = payload['s'];
-      tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
-    }
-  }
-
   handle_cleanReport(payload) {
     if (payload.attrs) {
       let type = payload.attrs['type'];
@@ -127,6 +75,97 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
+   * Handle the payload of the battery status
+   * @param {string} payload
+   */
+  handle_batteryInfo(payload) {
+    let value;
+    if (payload.hasOwnProperty('ctl')) {
+      value = payload['ctl']['battery']['power'];
+    } else {
+      value = parseFloat(payload.attrs['power']);
+    }
+    try {
+      this.batteryInfo = value;
+      tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
+    } catch (e) {
+      tools.envLog("[VacBot] couldn't parse battery info ", payload);
+    }
+  }
+
+  /**
+   * Handle the payload for the life span components
+   * @param {Object} payload
+   */
+  handle_lifespan(payload) {
+    let type = null;
+    if (payload.hasOwnProperty('type')) {
+      // type attribute must be trimmed because of Deebot M88
+      // { td: 'LifeSpan', type: 'DustCaseHeap ', ... }
+      type = payload['type'].trim();
+      type = dictionary.COMPONENT_FROM_ECOVACS[type];
+    }
+
+    if (!type) {
+      tools.envLog("[VacBot] Unknown component type: ", payload);
+      return;
+    }
+
+    let lifespan = null;
+    if (payload.hasOwnProperty('val') && payload.hasOwnProperty('total')) {
+      if (this.isN79series()) {
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/80
+        // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/58
+        lifespan = parseInt(payload['val']);
+      } else {
+        lifespan = parseInt(payload['val']) / parseInt(payload['total']) * 100;
+      }
+    } else if (payload.hasOwnProperty('val')) {
+      lifespan = parseInt(payload['val']) / 100;
+    } else if (payload.hasOwnProperty('left') && (payload.hasOwnProperty('total'))) {
+      lifespan = parseInt(payload['left']) / parseInt(payload['total']) * 100; // This works e.g. for a Ozmo 930
+    } else if (payload.hasOwnProperty('left')) {
+      lifespan = parseInt(payload['left']) / 60; // This works e.g. for a Deebot 900/901
+    }
+    if (lifespan) {
+      tools.envLog("[VacBot] lifeSpan %s: %s", type, lifespan);
+      this.components[type] = Number(lifespan.toFixed(2));
+    }
+    tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
+  }
+
+  /**
+   * Handle the payload for the position data
+   * @param {Object} payload
+   */
+  handle_deebotPosition(payload) {
+    tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
+      const posX = Number(payload.attrs['p'].split(",")[0]);
+      const posY = Number(payload.attrs['p'].split(",")[1]);
+      const angle = payload.attrs['a'];
+      let currentSpotAreaID = mapTools.isPositionInSpotArea(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
+      let distanceToChargingStation = null;
+      if (this.chargePosition) {
+        const pos = posX + ',' + posY;
+        const chargePos = this.chargePosition.x + ',' + this.chargePosition.y;
+        distanceToChargingStation = mapTools.getDistanceToChargingStation(pos, chargePos);
+      }
+      this.deebotPosition = {
+        x: posX,
+        y: posY,
+        a: angle,
+        isInvalid: false,
+        currentSpotAreaID: currentSpotAreaID,
+        currentSpotAreaName: this.getSpotAreaName(currentSpotAreaID),
+        changeFlag: true,
+        distanceToChargingStation: distanceToChargingStation
+      };
+      tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
+    }
+  }
+
+  /**
    * Handle the payload for vacuum power resp. suction power ("clean speed")
    * @param {Object} payload
    */
@@ -145,18 +184,18 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_batteryInfo(payload) {
-    let value;
-    if (payload.hasOwnProperty('ctl')) {
-      value = payload['ctl']['battery']['power'];
-    } else {
-      value = parseFloat(payload.attrs['power']);
+  /**
+   * Handle the payload for network related data
+   * @param {Object} payload
+   */
+  handle_netInfo(payload) {
+    if (payload.hasOwnProperty('wi')) {
+      this.netInfoIP = payload['wi'];
+      tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
     }
-    try {
-      this.batteryInfo = value;
-      tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
-    } catch (e) {
-      tools.envLog("[VacBot] couldn't parse battery info ", payload);
+    if (payload.hasOwnProperty('s')) {
+      this.netInfoWifiSSID = payload['s'];
+      tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
     }
   }
 
@@ -336,37 +375,6 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  /**
-   * Handle the payload for the position data
-   * @param {Object} payload
-   */
-  handle_deebotPosition(payload) {
-    tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
-    if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
-        const posX = Number(payload.attrs['p'].split(",")[0]);
-        const posY = Number(payload.attrs['p'].split(",")[1]);
-        const angle = payload.attrs['a'];
-        let currentSpotAreaID = mapTools.isPositionInSpotArea(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
-        let distanceToChargingStation = null;
-        if (this.chargePosition) {
-          const pos = posX + ',' + posY;
-          const chargePos = this.chargePosition.x + ',' + this.chargePosition.y;
-          distanceToChargingStation = mapTools.getDistanceToChargingStation(pos, chargePos);
-        }
-        this.deebotPosition = {
-          x: posX,
-          y: posY,
-          a: angle,
-          isInvalid: false,
-          currentSpotAreaID: currentSpotAreaID,
-          currentSpotAreaName: this.getSpotAreaName(currentSpotAreaID),
-          changeFlag: true,
-          distanceToChargingStation: distanceToChargingStation
-        };
-        tools.envLog("[VacBot] *** deebotPosition = %s", JSON.stringify(this.deebotPosition));
-      }
-  }
-
   handle_chargePosition(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('p') && payload.attrs.hasOwnProperty('a')) {
       this.chargePosition = {
@@ -530,24 +538,6 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handleResponseError(payload) {
-    this.errorCode = '0';
-    this.errorDescription = '';
-    let attrs = ['new', 'code', 'errno', 'error', 'errs'];
-    for (const attr of attrs) {
-      if (payload.hasOwnProperty(attr) && (payload[attr] !== '')) {
-        // 100 = "NoError: Robot is operational"
-        this.errorCode = (payload[attr] === '100') ? '0' : payload[attr];
-        if (errorCodes[this.errorCode]) {
-          this.errorDescription = errorCodes[this.errorCode];
-        } else {
-          this.errorDescription = 'unknown errorCode: ' + this.errorCode;
-        }
-        return;
-      }
-    }
-  }
-
   handle_getSched(payload) {
     this.schedule = [];
     for (let c = 0; c < payload.children.length; c++) {
@@ -605,6 +595,24 @@ class VacBot_non950type extends VacBot {
           'minute': minute
         }
         this.schedule.push(object);
+      }
+    }
+  }
+
+  handle_ResponseError(payload) {
+    this.errorCode = '0';
+    this.errorDescription = '';
+    let attrs = ['new', 'code', 'errno', 'error', 'errs'];
+    for (const attr of attrs) {
+      if (payload.hasOwnProperty(attr) && (payload[attr] !== '')) {
+        // 100 = "NoError: Robot is operational"
+        this.errorCode = (payload[attr] === '100') ? '0' : payload[attr];
+        if (errorCodes[this.errorCode]) {
+          this.errorDescription = errorCodes[this.errorCode];
+        } else {
+          this.errorDescription = 'unknown errorCode: ' + this.errorCode;
+        }
+        return;
       }
     }
   }

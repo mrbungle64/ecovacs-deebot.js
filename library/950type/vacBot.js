@@ -42,6 +42,66 @@ class VacBot_950type extends VacBot {
     }
 
     /**
+     * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
+     * @param {Object} payload
+     */
+    handle_cleanReport(payload) {
+        tools.envLog("[handle_cleanReport] payload: ", JSON.stringify(payload));
+        if (payload['state'] === 'clean') {
+            let type = payload['cleanState']['type'];
+            if (typeof payload['cleanState']['content'] === 'object') {
+                type = payload['cleanState']['content']['type'];
+            }
+            if (payload['cleanState']['motionState'] === 'working') {
+                this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
+            } else {
+                this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['cleanState']['motionState']];
+            }
+            if (type === 'customArea') {
+                if (typeof payload['cleanState']['content'] === "object") {
+                    this.lastUsedAreaValues = payload['cleanState']['content']['value'];
+                } else {
+                    this.lastUsedAreaValues = payload['cleanState']['content'];
+                }
+            } else {
+                this.lastUsedAreaValues = null;
+            }
+        } else if (payload['trigger'] === 'alert') {
+            this.cleanReport = 'alert';
+            this.lastUsedAreaValues = null;
+        } else {
+            this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
+            if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'returning') {
+                // set charge state on returning to dock
+                const chargeStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
+                if (chargeStatus) {
+                    this.chargeStatus = chargeStatus;
+                    tools.envLog("[VacBot] *** chargeStatus = %s", this.chargeStatus);
+                }
+            } else if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'idle') {
+                // when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
+                // if this is not run, the status when canceling the return stays on 'returning'
+                this.run('GetChargeState');
+            }
+            this.lastUsedAreaValues = null;
+        }
+        tools.envLog("[VacBot] *** cleanReport = %s", this.cleanReport);
+    }
+
+    /**
+     * Handle the payload of the battery status
+     * @param {string} payload
+     */
+    handle_batteryInfo(payload) {
+        this.batteryInfo = payload['value'];
+        if (payload.hasOwnProperty('isLow')) {
+            this.batteryIsLow = !!Number(payload['isLow']);
+            tools.envLog("[VacBot] *** batteryIsLow = %s", this.batteryIsLow);
+        }
+        tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
+    }
+
+    /**
      * Handle the payload for the life span components
      * @param {Object} payload
      */
@@ -154,49 +214,6 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** netInfoMAC = %s", this.netInfoMAC);
     }
 
-    handle_cleanReport(payload) {
-        tools.envLog("[handle_cleanReport] payload: ", JSON.stringify(payload));
-        if (payload['state'] === 'clean') {
-            let type = payload['cleanState']['type'];
-            if (typeof payload['cleanState']['content'] === 'object') {
-                type = payload['cleanState']['content']['type'];
-            }
-            if (payload['cleanState']['motionState'] === 'working') {
-                this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
-            } else {
-                this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['cleanState']['motionState']];
-            }
-            if (type === 'customArea') {
-                if (typeof payload['cleanState']['content'] === "object") {
-                    this.lastUsedAreaValues = payload['cleanState']['content']['value'];
-                } else {
-                    this.lastUsedAreaValues = payload['cleanState']['content'];
-                }
-            } else {
-                this.lastUsedAreaValues = null;
-            }
-        } else if (payload['trigger'] === 'alert') {
-            this.cleanReport = 'alert';
-            this.lastUsedAreaValues = null;
-        } else {
-            this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
-            if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'returning') {
-                // set charge state on returning to dock
-                const chargeStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
-                if (chargeStatus) {
-                    this.chargeStatus = chargeStatus;
-                    tools.envLog("[VacBot] *** chargeStatus = %s", this.chargeStatus);
-                }
-            } else if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'idle') {
-                // when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
-                // if this is not run, the status when canceling the return stays on 'returning'
-                this.run('GetChargeState');
-            }
-            this.lastUsedAreaValues = null;
-        }
-        tools.envLog("[VacBot] *** cleanReport = %s", this.cleanReport);
-    }
-
     handle_cleanLogs(payload) {
         tools.envLog("[handle_cleanLogs] payload: ", this.removeFromLogs(JSON.stringify(payload)));
         let logs = [];
@@ -248,15 +265,6 @@ class VacBot_950type extends VacBot {
         this.cleanSum_totalSquareMeters = parseInt(payload['area']);
         this.cleanSum_totalSeconds = parseInt(payload['time']);
         this.cleanSum_totalNumber = parseInt(payload['count']);
-    }
-
-    handle_batteryInfo(payload) {
-        this.batteryInfo = payload['value'];
-        if (payload.hasOwnProperty('isLow')) {
-            this.batteryIsLow = !!Number(payload['isLow']);
-            tools.envLog("[VacBot] *** batteryIsLow = %s", this.batteryIsLow);
-        }
-        tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
     }
 
     handle_waterLevel(payload) {
@@ -537,18 +545,6 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    handleResponseError(payload) {
-        this.errorCode = payload['code'].toString();
-        // known errorCode from library
-        if (errorCodes[this.errorCode]) {
-            this.errorDescription = errorCodes[this.errorCode];
-        } else {
-            this.errorDescription = 'unknown errorCode: ' + this.errorCode;
-        }
-        tools.envLog("[VacBot] *** errorCode = " + this.errorCode);
-        tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
-    }
-
     handle_Schedule(payload) {
         this.schedule = [];
         for (let c = 0; c < payload.length; c++) {
@@ -591,6 +587,18 @@ class VacBot_950type extends VacBot {
             }
             this.schedule.push(object);
         }
+    }
+
+    handle_ResponseError(payload) {
+        this.errorCode = payload['code'].toString();
+        // known errorCode from library
+        if (errorCodes[this.errorCode]) {
+            this.errorDescription = errorCodes[this.errorCode];
+        } else {
+            this.errorDescription = 'unknown errorCode: ' + this.errorCode;
+        }
+        tools.envLog("[VacBot] *** errorCode = " + this.errorCode);
+        tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
     }
 
     /**
