@@ -97,8 +97,8 @@ class VacBot {
         const LibraryForProtocol = this.getLibraryForProtocol();
         this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
 
-        this.ecovacs.on("ready", () => {
-            tools.envLog("[VacBot] Ready event!");
+        this.ecovacs.on('ready', () => {
+            tools.envLog('[VacBot] Ready event!');
             this.is_ready = true;
         });
 
@@ -124,7 +124,7 @@ class VacBot {
                     try {
                         await this.handleMapsEvent(mapData);
                     } catch (e) {
-                        tools.envLog("[vacBot] Error handleMapsEvent: " + e.message);
+                        tools.envLog('[vacBot] Error handleMapsEvent: ' + e.message);
                     }
                 })();
             }
@@ -135,7 +135,7 @@ class VacBot {
                     try {
                         await this.handleMapSpotAreasEvent(spotAreas);
                     } catch (e) {
-                        tools.envLog("[vacBot] Error handleMapSpotAreasEvent: " + e.message);
+                        tools.envLog('[vacBot] Error handleMapSpotAreasEvent: ' + e.message);
                     }
                 })();
             }
@@ -146,7 +146,7 @@ class VacBot {
                     try {
                         await this.handleMapSpotAreaInfo(spotAreaInfo);
                     } catch (e) {
-                        tools.envLog("[vacBot] Error handleMapSpotAreaInfo: " + e.message);
+                        tools.envLog('[vacBot] Error handleMapSpotAreaInfo: ' + e.message);
                     }
                 })();
             }
@@ -157,7 +157,7 @@ class VacBot {
                     try {
                         await this.handleMapVirtualBoundaries(virtualBoundaries);
                     } catch (e) {
-                        tools.envLog("[vacBot] Error handleMapVirtualBoundaries: " + e.message);
+                        tools.envLog('[vacBot] Error handleMapVirtualBoundaries: ' + e.message);
                     }
                 })();
             }
@@ -168,7 +168,7 @@ class VacBot {
                     try {
                         await this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
                     } catch (e) {
-                        tools.envLog("[vacBot] Error handleMapVirtualBoundaryInfo: " + e.message);
+                        tools.envLog('[vacBot] Error handleMapVirtualBoundaryInfo: ' + e.message);
                     }
                 })();
             }
@@ -179,7 +179,7 @@ class VacBot {
                     try {
                         await this.handleMapImageInfo(mapImageInfo);
                     } catch (e) {
-                        tools.envLog("[vacBot] Error handleMapImageInfo: " + e.message);
+                        tools.envLog('[vacBot] Error handleMapImageInfo: ' + e.message);
                     }
                 })();
             }
@@ -192,7 +192,7 @@ class VacBot {
      * @since 0.6.2
      * @param {string} [mode=Clean] - The mode to run the script in.
      */
-    clean(mode = "Clean") {
+    clean(mode = 'Clean') {
         this.run(mode);
     }
 
@@ -202,7 +202,7 @@ class VacBot {
      * @param {string} areas - A string with a list of spot area IDs
      */
     spotArea(areas) {
-        this.run("SpotArea", "start", areas);
+        this.run('SpotArea', 'start', areas);
     }
 
     /**
@@ -212,7 +212,7 @@ class VacBot {
      * @param {number} [numberOfCleanings=1] - The number of times the robot will repeat the cleaning process
      */
     customArea(boundaryCoordinates, numberOfCleanings = 1) {
-        this.run("CustomArea", "start", boundaryCoordinates, numberOfCleanings);
+        this.run('CustomArea', 'start', boundaryCoordinates, numberOfCleanings);
     }
 
     /**

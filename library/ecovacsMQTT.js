@@ -10,9 +10,11 @@ class EcovacsMQTT extends Ecovacs {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
 
         this.mqtt = require('mqtt');
+        // MQTT is using domain without tld extension
+        const customDomain = hostname.split(".")[0];
+        this.username = user + '@' + customDomain;
 
-        this.customdomain = hostname.split(".")[0]; // MQTT is using domain without tld extension
-        this.username = user + '@' + this.customdomain;
+        // The payload type is either 'x' (XML) or 'j' (JSON)
         this.payloadType = '';
 
         let options = {

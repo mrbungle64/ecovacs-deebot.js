@@ -12,9 +12,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * The function takes in a command and returns a JSON object
+     * The function returns the request object
      * @param {Object} command - the action to be performed
-     * @returns {Object} the command object used to be sent to the vacuum
+     * @returns {Object} the command object used to be sent
      */
     getCommandRequestObject(command) {
         if (command.api === constants.IOTDEVMANAGERAPI) {
@@ -37,9 +37,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * It creates a payload request header (and body)
-     * @param {Object} command - the action object that was passed to the getCommandRequestObject function
-     * @returns {Object} the payloadRequest object
+     * It creates an object for the request payload with header and body
+     * @param {Object} command - the command object
+     * @returns {Object} the request payload object
      */
     getCommandPayload(command) {
         return {
@@ -68,7 +68,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * It handles incoming messages (MQTT message or response from API)
+     * It handles the messages from the API (incoming MQTT message or request response)
      * @param {string} topic - the topic of the message
      * @param {Object|string} message - the message
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
