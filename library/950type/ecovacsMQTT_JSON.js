@@ -14,8 +14,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     /**
      * The function takes in a command and a recipient and returns a JSON object
      * @param {Object} command - the action to be performed
-     * @param {string} recipient - the id of the device to send the command to
-     * @returns {Object} the wrapped command to be sent to the vacuum
+     * @param {string} recipient - the id of the device
+     * @returns {Object} the command object used to be sent to the vacuum
      */
     getCommandRequestObject(command, recipient) {
         if (command.api === constants.IOTDEVMANAGERAPI) {
@@ -43,18 +43,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @returns {Object} the payloadRequest object
      */
     getCommandPayload(command) {
-        // All requests need to have this header -- not sure about timezone
-        let payloadRequest = {};
-        payloadRequest['header'] = {};
-        payloadRequest['header']['pri'] = '1';
-        payloadRequest['header']['ts'] = Math.floor(Date.now());
-        payloadRequest['header']['tzm'] = 480;
-        payloadRequest['header']['ver'] = '0.0.50';
-        if (Object.keys(command.args).length > 0) {
-            payloadRequest['body'] = {};
-            payloadRequest['body']['data'] = command.args;
-        }
-        return payloadRequest;
+        return {
+            'header': {
+                'pri': '1',
+                'ts': Math.floor(Date.now()),
+                'tzm': 480,
+                'ver': '0.0.50'
+            },
+            'body': {
+                'data': command.args
+            }
+        };
     }
 
     handleCommandResponse(action, message) {
