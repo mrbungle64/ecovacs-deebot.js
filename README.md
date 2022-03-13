@@ -66,6 +66,7 @@ There is of course no claim to full functionality.
 
 ### 0.8.0 (alpha)
 * (m8schmit) Added types for typescript
+* Lots of documentation and refactoring
 
 ### 0.7.2
 * Bumped mqtt to 4.3.6
