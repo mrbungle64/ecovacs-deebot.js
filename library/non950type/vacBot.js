@@ -1,21 +1,39 @@
 'use strict';
 
-const dictionary = require('./ecovacsConstants');
-const vacBotCommand = require('./vacBotCommand');
+const VacBotCommand = require('./vacBotCommand');
 const VacBot = require('../vacBot');
-const {errorCodes} = require('../errorCodes.json');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapTemplate');
+const dictionary = require('./ecovacsConstants');
+const {errorCodes} = require('../errorCodes.json');
 
+/**
+ * This class is relevant for non 950 type models
+ * e.g. Deebot OZMO 930, (OZMO) 900 series (legacy models - some are MQTT based and the older ones are XMPP based)
+ */
 class VacBot_non950type extends VacBot {
-  constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
-    super(user, hostname, resource, secret, vacuum, continent, country, server_address);
+  /**
+   * @param {string} user - the userId retrieved by the Ecovacs API
+   * @param {string} hostname - the hostname of the API endpoint
+   * @param {string} resource - the resource of the vacuum
+   * @param {string} secret - the user access token
+   * @param {Object} vacuum - the device object for the vacuum
+   * @param {string} continent - the continent where the Ecovacs account is registered
+   * @param {string} country - the country where the Ecovacs account is registered
+   * @param {string} serverAddress - the server address of the MQTT and XMPP server
+   */
+  constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
+    super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);
 
     this.dustcaseInfo = null;
     this.mapPiecePacketsCrcArray = null;
   }
 
+  /**
+   * Handle the payload for the life span components
+   * @param {Object} payload
+   */
   handle_lifespan(payload) {
     let type = null;
     if (payload.hasOwnProperty('type')) {
@@ -53,6 +71,10 @@ class VacBot_non950type extends VacBot {
     tools.envLog("[VacBot] lifespan components: ", JSON.stringify(this.components));
   }
 
+  /**
+   * Handle the payload for network related data
+   * @param {Object} payload
+   */
   handle_netInfo(payload) {
     if (payload.hasOwnProperty('wi')) {
       this.netInfoIP = payload['wi'];
@@ -104,6 +126,10 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   * Handle the payload for vacuum power resp. suction power ("clean speed")
+   * @param {Object} payload
+   */
   handle_cleanSpeed(payload) {
     if (payload.attrs.hasOwnProperty('speed')) {
       let speed = payload.attrs['speed'];
@@ -310,6 +336,10 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   * Handle the payload for the position data
+   * @param {Object} payload
+   */
   handle_deebotPosition(payload) {
     tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
@@ -594,12 +624,12 @@ class VacBot_non950type extends VacBot {
           this.createMapImage = !!args[1];
         }
         this.handleMapExecuted = false;
-        this.sendCommand(new vacBotCommand.GetMapM());
+        this.sendCommand(new VacBotCommand.GetMapM());
         break;
       }
       case "GetMapSet".toLowerCase(): {
-        this.sendCommand(new vacBotCommand.GetMapSet('sa'));
-        this.sendCommand(new vacBotCommand.GetMapSet('vw'));
+        this.sendCommand(new VacBotCommand.GetMapSet('sa'));
+        this.sendCommand(new VacBotCommand.GetMapSet('vw'));
         break;
       }
       case "GetMapImage".toLowerCase(): {
@@ -607,7 +637,7 @@ class VacBot_non950type extends VacBot {
         this.createMapImage = true;
         this.createMapImageOnly = true;
         this.handleMapExecuted = false;
-        this.sendCommand(new vacBotCommand.GetMapM());
+        this.sendCommand(new VacBotCommand.GetMapM());
         break;
       }
       case "PullM".toLowerCase(): {
@@ -615,47 +645,47 @@ class VacBot_non950type extends VacBot {
         const mapSetId = args[1];
         const mapDetailId = args[2];
         if (args.length >= 3) {
-          this.sendCommand(new vacBotCommand.PullM(mapSetType, mapSetId, mapDetailId));
+          this.sendCommand(new VacBotCommand.PullM(mapSetType, mapSetId, mapDetailId));
         }
         break;
       }
       case "PullMP".toLowerCase(): {
         const pid = args[0];
         if (args.length >= 1) {
-          this.sendCommand(new vacBotCommand.PullMP(pid));
+          this.sendCommand(new VacBotCommand.PullMP(pid));
         }
         break;
       }
       case "GetLifeSpan".toLowerCase(): {
         if (args.length >= 1) {
           this.emitFullLifeSpanEvent = false;
-          this.sendCommand(new vacBotCommand.GetLifeSpan(args[0]));
+          this.sendCommand(new VacBotCommand.GetLifeSpan(args[0]));
         } else {
           this.emitFullLifeSpanEvent = true;
           this.components = {};
           this.lastComponentValues = {};
-          this.sendCommand(new vacBotCommand.GetLifeSpan('filter'));
+          this.sendCommand(new VacBotCommand.GetLifeSpan('filter'));
           if (this.hasMainBrush()) {
-            this.sendCommand(new vacBotCommand.GetLifeSpan('main_brush'));
+            this.sendCommand(new VacBotCommand.GetLifeSpan('main_brush'));
           }
-          this.sendCommand(new vacBotCommand.GetLifeSpan('side_brush'));
+          this.sendCommand(new VacBotCommand.GetLifeSpan('side_brush'));
         }
         break;
       }
       case "GetWaterLevel".toLowerCase():
-        this.sendCommand(new vacBotCommand.GetWaterLevel());
+        this.sendCommand(new VacBotCommand.GetWaterLevel());
         break;
       case "GetWaterBoxInfo".toLowerCase():
-        this.sendCommand(new vacBotCommand.GetWaterBoxInfo());
+        this.sendCommand(new VacBotCommand.GetWaterBoxInfo());
         break;
       case "GetChargerPos".toLowerCase():
       case "GetChargerPosition".toLowerCase():
-        this.sendCommand(new vacBotCommand.GetChargerPos());
+        this.sendCommand(new VacBotCommand.GetChargerPos());
         break;
       case "GetOnOff".toLowerCase(): {
         const type = args[0];
         if (type !== '') {
-          this.sendCommand(new vacBotCommand.GetOnOff(type));
+          this.sendCommand(new VacBotCommand.GetOnOff(type));
         }
         break;
       }
@@ -663,22 +693,22 @@ class VacBot_non950type extends VacBot {
         const type = args[0];
         const on = Number(args[1]) || 0;
         if ((type !== '') && (on >= 0) && (on <= 1)) {
-          this.sendCommand(new vacBotCommand.SetOnOff(type, on));
+          this.sendCommand(new VacBotCommand.SetOnOff(type, on));
         }
         break;
       }
       case "EnableDoNotDisturb".toLowerCase():
-        this.sendCommand(new vacBotCommand.EnableDoNotDisturb());
+        this.sendCommand(new VacBotCommand.EnableDoNotDisturb());
         break;
       case "GetCleanLogs".toLowerCase(): {
         if (this.useMqtt) {
-          this.sendCommand(new vacBotCommand.GetLogApiCleanLogs());
+          this.sendCommand(new VacBotCommand.GetLogApiCleanLogs());
         } else {
           if (this.isN79series()) {
             // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
-            this.sendCommand(new vacBotCommand.GetLogs());
+            this.sendCommand(new VacBotCommand.GetLogs());
           } else {
-            this.sendCommand(new vacBotCommand.GetCleanLogs());
+            this.sendCommand(new VacBotCommand.GetCleanLogs());
           }
         }
         break;
@@ -686,16 +716,16 @@ class VacBot_non950type extends VacBot {
       case "RenameSpotArea".toLowerCase(): {
         // Tested with OZMO 930 - maybe only working with OZMO 930
         if (args.length >= 3) {
-          this.sendCommand(new vacBotCommand.RenameSpotArea(args[0], args[1], args[2]));
+          this.sendCommand(new VacBotCommand.RenameSpotArea(args[0], args[1], args[2]));
         }
         break;
       }
       case "SetLifeSpan".toLowerCase(): {
         // Untested - maybe only working with N79 series
         if (args.length === 1) {
-          this.sendCommand(new vacBotCommand.SetLifeSpan(args[0]));
+          this.sendCommand(new VacBotCommand.SetLifeSpan(args[0]));
         } else if (args.length === 2) {
-          this.sendCommand(new vacBotCommand.SetLifeSpan(args[0], args[1]));
+          this.sendCommand(new VacBotCommand.SetLifeSpan(args[0], args[1]));
         }
         break;
       }

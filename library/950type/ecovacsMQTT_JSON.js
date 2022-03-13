@@ -5,8 +5,8 @@ const tools = require('../tools');
 const constants = require('../ecovacsConstants');
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
-        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 
         this.payloadType = 'j'; // JSON
     }
@@ -26,6 +26,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
     }
 
+    /**
+     * The function returns the request object for cleaning logs
+     * @param {Object} command - the action to be performed
+     * @returns {Object} the command object used to be sent
+     */
     getCommandCleanLogsObject(command) {
         return {
             'did': this.vacuum['did'],

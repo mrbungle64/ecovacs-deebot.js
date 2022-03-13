@@ -1,11 +1,26 @@
 export = VacBot_non950type;
+/**
+ * This class is relevant for non 950 type models
+ * e.g. Deebot OZMO 930, (OZMO) 900 series (legacy models - some are MQTT based and the older ones are XMPP based)
+ */
 declare class VacBot_non950type extends VacBot {
-    constructor(user: any, hostname: any, resource: any, secret: any, vacuum: any, continent: any, country?: string, server_address?: any);
     dustcaseInfo: any;
     mapPiecePacketsCrcArray: any;
+    /**
+     * Handle the payload for the life span components
+     * @param {Object} payload
+     */
     handle_lifespan(payload: any): void;
+    /**
+     * Handle the network related payload
+     * @param {Object} payload
+     */
     handle_netInfo(payload: any): void;
     handle_cleanReport(payload: any): void;
+    /**
+     * Handle the payload for vacuum power resp. suction power ("clean speed")
+     * @param {Object} payload
+     */
     handle_cleanSpeed(payload: any): void;
     handle_batteryInfo(payload: any): void;
     handle_waterLevel(payload: any): void;
@@ -33,6 +48,10 @@ declare class VacBot_non950type extends VacBot {
     }>;
     handle_mapInfo(payload: any): Promise<void>;
     handle_mapPiecePacket(payload: any): Promise<any>;
+    /**
+     * Handle the payload for the position data
+     * @param {Object} payload
+     */
     handle_deebotPosition(payload: any): void;
     handle_chargePosition(payload: any): void;
     handle_dustcaseInfo(payload: any): void;

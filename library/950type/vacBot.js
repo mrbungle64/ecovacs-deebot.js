@@ -1,16 +1,30 @@
 'use strict';
 
-const dictionary = require('./ecovacsConstants');
-const vacBotCommand = require('./vacBotCommand');
+const VacBotCommand = require('./vacBotCommand');
 const VacBot = require('../vacBot');
-const {errorCodes} = require('../errorCodes.json');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapTemplate');
+const dictionary = require('./ecovacsConstants');
+const {errorCodes} = require('../errorCodes.json');
 
+/**
+ * This class is relevant for 950 type models
+ * e.g. Deebot OZMO 920/950, (OZMO) T8 series, T9 series (which are all MQTT based models)
+ */
 class VacBot_950type extends VacBot {
-    constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', server_address = null) {
-        super(user, hostname, resource, secret, vacuum, continent, country, server_address);
+    /**
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {string} serverAddress - the server address of the MQTT server
+     */
+    constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', serverAddress) {
+        super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);
 
         this.breakPoint = null;
         this.block = null;
@@ -27,6 +41,10 @@ class VacBot_950type extends VacBot {
         this.firmwareVersion = null;
     }
 
+    /**
+     * Handle the payload for the life span components
+     * @param {Object} payload
+     */
     handle_lifespan(payload) {
         for (let index in payload) {
             if (payload[index]) {
@@ -48,6 +66,10 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
     }
 
+    /**
+     * Handle the payload for the position data
+     * @param {Object} payload
+     */
     handle_deebotPosition(payload) {
         // is only available in some DeebotPosition messages (e.g. on start cleaning)
         // there can be more than one charging station only handles first charging station
@@ -106,12 +128,20 @@ class VacBot_950type extends VacBot {
         }
     }
 
+    /**
+     * Handle the payload for vacuum power resp. suction power ("clean speed")
+     * @param {Object} payload
+     */
     handle_cleanSpeed(payload) {
         const speed = payload['speed'];
         this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         tools.envLog("[VacBot] *** cleanSpeed = %s", this.cleanSpeed);
     }
 
+    /**
+     * Handle the payload for network related data
+     * @param {Object} payload
+     */
     handle_netInfo(payload) {
         this.netInfoIP = payload['ip'];
         this.netInfoWifiSSID = payload['ssid'];
@@ -578,7 +608,7 @@ class VacBot_950type extends VacBot {
                 this.createMapImage = true;
                 this.createMapImageOnly = args[2] !== undefined ? args[2] : true;
                 if (Number(mapID) > 0) {
-                    this.sendCommand(new vacBotCommand.GetMapImage(mapID, mapType));
+                    this.sendCommand(new VacBotCommand.GetMapImage(mapID, mapType));
                 }
                 break;
             }
@@ -589,13 +619,13 @@ class VacBot_950type extends VacBot {
                 if (args.length >= 2) {
                     this.createMapImage = !!args[1];
                 }
-                this.sendCommand(new vacBotCommand.GetMaps());
+                this.sendCommand(new VacBotCommand.GetMaps());
                 break;
             }
             case "GetSpotAreas".toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
-                    this.sendCommand(new vacBotCommand.GetMapSpotAreas(mapID));
+                    this.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
                 }
                 break;
             }
@@ -603,7 +633,7 @@ class VacBot_950type extends VacBot {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 if ((Number(mapID) > 0) && (spotAreaID !== '')) {
-                    this.sendCommand(new vacBotCommand.GetMapSpotAreaInfo(mapID, spotAreaID));
+                    this.sendCommand(new VacBotCommand.GetMapSpotAreaInfo(mapID, spotAreaID));
                 }
                 break;
             }
@@ -616,8 +646,8 @@ class VacBot_950type extends VacBot {
                         this.mapVirtualBoundariesResponses[mapID][0] = false;
                         this.mapVirtualBoundariesResponses[mapID][1] = false;
                     }
-                    this.sendCommand(new vacBotCommand.GetMapVirtualBoundaries(mapID, 'vw'));
-                    this.sendCommand(new vacBotCommand.GetMapVirtualBoundaries(mapID, 'mw'));
+                    this.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'vw'));
+                    this.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'mw'));
                 }
                 break;
             }
@@ -626,7 +656,7 @@ class VacBot_950type extends VacBot {
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
                 if ((Number(mapID) > 0) && (spotAreaID !== '')) {
-                    this.sendCommand(new vacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type));
+                    this.sendCommand(new VacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type));
                 }
                 break;
             }
@@ -635,7 +665,7 @@ class VacBot_950type extends VacBot {
                 const coordinates = args[1];
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
                 if ((Number(mapID) > 0) && (coordinates !== '')) {
-                    this.sendCommand(new vacBotCommand.AddMapVirtualBoundary(mapID, coordinates, type));
+                    this.sendCommand(new VacBotCommand.AddMapVirtualBoundary(mapID, coordinates, type));
                 }
                 break;
             }
@@ -644,7 +674,7 @@ class VacBot_950type extends VacBot {
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = args[2];
                 if ((Number(mapID) > 0) && (Number(spotAreaID) >= 0) && (tools.isValidVirtualWallType(type))) {
-                    this.sendCommand(new vacBotCommand.DeleteMapVirtualBoundary(mapID, spotAreaID, type));
+                    this.sendCommand(new VacBotCommand.DeleteMapVirtualBoundary(mapID, spotAreaID, type));
                 }
                 break;
             }
@@ -658,14 +688,14 @@ class VacBot_950type extends VacBot {
                         dictionary.COMPONENT_TO_ECOVACS['main_brush'],
                         dictionary.COMPONENT_TO_ECOVACS['side_brush']
                     ]
-                    this.sendCommand(new vacBotCommand.GetLifeSpan(componentsArray));
+                    this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;
                     const component = args[0];
                     const componentsArray = [
                         dictionary.COMPONENT_TO_ECOVACS[component]
                     ]
-                    this.sendCommand(new vacBotCommand.GetLifeSpan(componentsArray));
+                    this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 }
                 break;
             }
@@ -673,9 +703,9 @@ class VacBot_950type extends VacBot {
                 const start = args[0];
                 const end = args[1];
                 if ((start !== '') && (end !== '')) {
-                    this.sendCommand(new vacBotCommand.EnableDoNotDisturb(start, end));
+                    this.sendCommand(new VacBotCommand.EnableDoNotDisturb(start, end));
                 } else {
-                    this.sendCommand(new vacBotCommand.EnableDoNotDisturb());
+                    this.sendCommand(new VacBotCommand.EnableDoNotDisturb());
                 }
                 break;
             }
@@ -684,102 +714,102 @@ class VacBot_950type extends VacBot {
                 const start = args[1];
                 const end = args[2];
                 if ((start !== '') && (end !== '')) {
-                    this.sendCommand(new vacBotCommand.SetDoNotDisturb(enable, start, end));
+                    this.sendCommand(new VacBotCommand.SetDoNotDisturb(enable, start, end));
                 } else if (args.length >= 1) {
-                    this.sendCommand(new vacBotCommand.SetDoNotDisturb(enable));
+                    this.sendCommand(new VacBotCommand.SetDoNotDisturb(enable));
                 }
                 break;
             }
             case "GetWaterLevel".toLowerCase():
             case "GetWaterBoxInfo".toLowerCase():
             case "GetWaterInfo".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetWaterInfo());
+                this.sendCommand(new VacBotCommand.GetWaterInfo());
                 break;
             case "GetCleanLogs".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetCleanLogs());
+                this.sendCommand(new VacBotCommand.GetCleanLogs());
                 break;
             case "GetError".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetError());
+                this.sendCommand(new VacBotCommand.GetError());
                 break;
             case "Relocate".toLowerCase():
-                this.sendCommand(new vacBotCommand.Relocate());
+                this.sendCommand(new VacBotCommand.Relocate());
                 break;
             case "GetVolume".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetVolume());
+                this.sendCommand(new VacBotCommand.GetVolume());
                 break;
             case "SetVolume".toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new vacBotCommand.SetVolume(args[0]));
+                    this.sendCommand(new VacBotCommand.SetVolume(args[0]));
                 }
                 break;
             case "EnableAdvancedMode".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetAdvancedMode(1));
+                this.sendCommand(new VacBotCommand.SetAdvancedMode(1));
                 break;
             case "DisableAdvancedMode".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetAdvancedMode(0));
+                this.sendCommand(new VacBotCommand.SetAdvancedMode(0));
                 break;
             case "GetAdvancedMode".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetAdvancedMode());
+                this.sendCommand(new VacBotCommand.GetAdvancedMode());
                 break;
             case "GetTrueDetect".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetTrueDetect());
+                this.sendCommand(new VacBotCommand.GetTrueDetect());
                 break;
             case "EnableTrueDetect".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetTrueDetect(1));
+                this.sendCommand(new VacBotCommand.SetTrueDetect(1));
                 break;
             case "DisableTrueDetect".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetTrueDetect(0));
+                this.sendCommand(new VacBotCommand.SetTrueDetect(0));
                 break;
             case "EmptyDustBin".toLowerCase():
             case "EmptySuctionStation".toLowerCase():
-                this.sendCommand(new vacBotCommand.EmptyDustBin());
+                this.sendCommand(new VacBotCommand.EmptyDustBin());
                 break;
             case "GetAutoEmpty".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetAutoEmpty());
+                this.sendCommand(new VacBotCommand.GetAutoEmpty());
                 break;
             case "SetAutoEmpty".toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new vacBotCommand.SetAutoEmpty(args[0]));
+                    this.sendCommand(new VacBotCommand.SetAutoEmpty(args[0]));
                 }
                 break;
             case "EnableAutoEmpty".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetAutoEmpty(1));
+                this.sendCommand(new VacBotCommand.SetAutoEmpty(1));
                 break;
             case "DisableAutoEmpty".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetAutoEmpty(0));
+                this.sendCommand(new VacBotCommand.SetAutoEmpty(0));
                 break;
             case "GetDusterRemind".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetDusterRemind());
+                this.sendCommand(new VacBotCommand.GetDusterRemind());
                 break;
             case "EnableDusterRemind".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetDusterRemind(1));
+                this.sendCommand(new VacBotCommand.SetDusterRemind(1));
                 break;
             case "DisableDusterRemind".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetDusterRemind(0));
+                this.sendCommand(new VacBotCommand.SetDusterRemind(0));
                 break;
             case "SetDusterRemindPeriod".toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new vacBotCommand.SetDusterRemindPeriod(args[0]));
+                    this.sendCommand(new VacBotCommand.SetDusterRemindPeriod(args[0]));
                 }
                 break;
             case "GetCarpetPressure".toLowerCase():
-                this.sendCommand(new vacBotCommand.GetCarpetPressure());
+                this.sendCommand(new VacBotCommand.GetCarpetPressure());
                 break;
             case "EnableCarpetPressure".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetCarpetPressure(1));
+                this.sendCommand(new VacBotCommand.SetCarpetPressure(1));
                 break;
             case "DisableCarpetPressure".toLowerCase():
-                this.sendCommand(new vacBotCommand.SetCarpetPressure(0));
+                this.sendCommand(new VacBotCommand.SetCarpetPressure(0));
                 break;
             case "Clean_V2".toLowerCase(): {
-                this.sendCommand(new vacBotCommand.Clean_V2());
+                this.sendCommand(new VacBotCommand.Clean_V2());
                 break;
             }
             case "SpotArea_V2".toLowerCase(): {
                 const area = args[0].toString();
                 const cleanings = args[1] || 0;
                 if (area !== '') {
-                    this.sendCommand(new vacBotCommand.SpotArea_V2(area, cleanings));
+                    this.sendCommand(new VacBotCommand.SpotArea_V2(area, cleanings));
                 }
                 break;
             }
@@ -787,7 +817,7 @@ class VacBot_950type extends VacBot {
                 const area = args[0].toString();
                 const cleanings = args[1] || 0;
                 if (area !== '') {
-                    this.sendCommand(new vacBotCommand.CustomArea_V2(area, cleanings));
+                    this.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings));
                 }
                 break;
             }

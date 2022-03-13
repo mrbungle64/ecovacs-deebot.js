@@ -6,8 +6,8 @@ const constants = require('./ecovacsConstants');
 const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 8883) {
-        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 
         this.mqtt = require('mqtt');
         // MQTT is using domain without tld extension
@@ -26,7 +26,7 @@ class EcovacsMQTT extends Ecovacs {
             rejectUnauthorized: false
         };
 
-        let url = `mqtts://${this.server_address}:${this.server_port}`;
+        let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
         this.client = this.mqtt.connect(url, options);
         tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
 

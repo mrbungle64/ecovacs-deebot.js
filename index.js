@@ -80,8 +80,8 @@ class EcovacsAPI {
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
     this.uid = result['userId'];
-    tools.envLog("[EcovacsAPI] EcovacsAPI connection complete");
-    return "ready";
+    tools.envLog('[EcovacsAPI] EcovacsAPI connection complete');
+    return 'ready';
   }
 
   /**

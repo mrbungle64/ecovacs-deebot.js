@@ -6,7 +6,7 @@ const constants = require('./ecovacsConstants');
 const {errorCodes} = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port) {
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort) {
         super();
 
         this.bot = bot;
@@ -19,12 +19,12 @@ class Ecovacs extends EventEmitter {
         this.continent = continent;
         this.vacuum = vacuum;
 
-        if (!server_address) {
-            this.server_address = this.getServerAddress();
+        if (!serverAddress) {
+            this.serverAddress = this.getServerAddress();
         } else {
-            this.server_address = server_address;
+            this.serverAddress = serverAddress;
         }
-        this.server_port = server_port;
+        this.serverPort = serverPort;
     }
 
     session_start(event) {

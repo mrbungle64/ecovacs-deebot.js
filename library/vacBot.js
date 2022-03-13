@@ -1,12 +1,26 @@
 'use strict';
 
 const tools = require('./tools');
-const {errorCodes} = require('./errorCodes.json');
 const i18n = require('./i18n');
 const map = require('./mapTemplate');
+const {errorCodes} = require('./errorCodes.json');
 
+/**
+ * This class represents the vacuum bot
+ * There are 2 classes which derive from this class (`VacBot_950type` and `VacBot_non950type`)
+ */
 class VacBot {
-    constructor(user, hostname, resource, secret, vacuum, continent, country, server_address = null) {
+    /**
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {string} serverAddress - the server address of the MQTT and XMPP server
+     */
+    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
         this.ecovacs = null;
         this.vacuum = vacuum;
         this.is_ready = false;
@@ -95,7 +109,7 @@ class VacBot {
         this.vacBotCommand = this.getLibraryForCommands();
 
         const LibraryForProtocol = this.getLibraryForProtocol();
-        this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, server_address);
+        this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
         this.ecovacs.on('ready', () => {
             tools.envLog('[VacBot] Ready event!');

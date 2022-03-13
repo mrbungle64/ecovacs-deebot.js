@@ -5,8 +5,8 @@ const tools = require('../tools');
 const Element = require('ltx').Element;
 
 class EcovacsXMPP_XML extends Ecovacs {
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port = 5223) {
-        super(bot, user, hostname, resource, secret, continent, country, vacuum, server_address, server_port);
+    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 5223) {
+        super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 
         this.iqElementId = 1;
         this.pingInterval = null;
@@ -68,12 +68,12 @@ class EcovacsXMPP_XML extends Ecovacs {
     }
 
     connect() {
-        tools.envLog('[EcovacsXMPP_XML] Connecting as %s to %s', this.user + '@' + this.hostname, this.server_address + ':' + this.server_port);
+        tools.envLog('[EcovacsXMPP_XML] Connecting as %s to %s', this.user + '@' + this.hostname, this.serverAddress + ':' + this.serverPort);
         this.simpleXmpp.connect({
             jid: this.user + '@' + this.hostname,
             password: '0/' + this.resource + '/' + this.secret,
-            host: this.server_address,
-            port: this.server_port
+            host: this.serverAddress,
+            port: this.serverPort
         });
 
         if (!this.pingInterval) {

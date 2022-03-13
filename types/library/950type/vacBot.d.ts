@@ -1,6 +1,9 @@
 export = VacBot_950type;
+/**
+ * This class is relevant for 950 type models
+ * e.g. Deebot OZMO 920/950, (OZMO) T8 series, T9 series (which are all MQTT based models)
+ */
 declare class VacBot_950type extends VacBot {
-    constructor(user: any, hostname: any, resource: any, secret: any, vacuum: any, continent: any, country?: string, server_address?: any);
     breakPoint: any;
     block: any;
     autoEmpty: any;
@@ -14,9 +17,25 @@ declare class VacBot_950type extends VacBot {
     volume: number;
     relocationState: any;
     firmwareVersion: any;
+    /**
+     * Handle the payload for the life span components
+     * @param {Object} payload
+     */
     handle_lifespan(payload: any): void;
+    /**
+     * Handle the payload for the position data
+     * @param {Object} payload
+     */
     handle_deebotPosition(payload: any): void;
+    /**
+     * Handle the payload for vacuum power resp. suction power ("clean speed")
+     * @param {Object} payload
+     */
     handle_cleanSpeed(payload: any): void;
+    /**
+     * Handle the network related payload
+     * @param {Object} payload
+     */
     handle_netInfo(payload: any): void;
     handle_cleanReport(payload: any): void;
     handle_cleanLogs(payload: any): void;

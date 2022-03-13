@@ -1,6 +1,6 @@
 export = Ecovacs;
 declare class Ecovacs extends EventEmitter {
-    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, server_address: any, server_port: any);
+    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, serverAddress: any, serverPort: any);
     bot: any;
     dictionary: typeof import("./950type/ecovacsConstants.js") | typeof import("./non950type/ecovacsConstants.js");
     user: any;
@@ -10,8 +10,8 @@ declare class Ecovacs extends EventEmitter {
     country: any;
     continent: any;
     vacuum: any;
-    server_address: any;
-    server_port: any;
+    serverAddress: any;
+    serverPort: any;
     session_start(event: any): void;
     getServerAddress(): string;
     handleMessagePayload(command: any, event: any): Promise<void>;

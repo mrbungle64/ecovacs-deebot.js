@@ -1,8 +1,7 @@
 export = EcovacsMQTT;
 declare class EcovacsMQTT extends Ecovacs {
-    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, server_address: any, server_port?: number);
+    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, serverAddress: any, serverPort?: number);
     mqtt: typeof import("mqtt");
-    customdomain: any;
     username: string;
     payloadType: string;
     client: import("mqtt").Client;

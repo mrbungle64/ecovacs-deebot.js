@@ -1,6 +1,20 @@
 export = VacBot;
+/**
+ * This class represents the vacuum bot
+ * There are 2 classes which derive from this class (`VacBot_950type` and `VacBot_non950type`)
+ */
 declare class VacBot {
-    constructor(user: any, hostname: any, resource: any, secret: any, vacuum: any, continent: any, country: any, server_address?: any);
+    /**
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {string} serverAddress - the server address of the MQTT and XMPP server
+     */
+    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country: string, serverAddress: string);
     ecovacs: import("./950type/ecovacsMQTT_JSON.js") | import("./non950type/ecovacsMQTT_XML.js") | import("./non950type/ecovacsXMPP_XML.js");
     vacuum: any;
     is_ready: boolean;
