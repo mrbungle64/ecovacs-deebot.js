@@ -12,16 +12,15 @@ declare class EcovacsMQTT extends Ecovacs {
     /**
      * It sends a command to the Ecovacs API
      * @param {Object} command - the command to send to the Ecovacs API
-     * @param {string} recipient - the recipient of the command. This is the device ID
      */
-    sendCommand(command: any, recipient: string): Promise<void>;
+    sendCommand(command: any): Promise<void>;
     /**
      * This function is used to determine the API to use for the action
      * @param {Object} command - the command object
      * @returns {string} the API path that has to be called
      */
     getApiPath(command: any): string;
-    getCommandStandardRequestObject(command: any, recipient: any, payload: any): {
+    getCommandStandardRequestObject(command: any, payload: any): {
         cmdName: any;
         payload: any;
         payloadType: string;
@@ -37,7 +36,7 @@ declare class EcovacsMQTT extends Ecovacs {
         toRes: any;
         toType: any;
     };
-    getCommandCleanLogsObject(command: any, recipient: any): {
+    getCommandCleanLogsObject(command: any): {
         auth: {
             realm: string;
             resource: any;

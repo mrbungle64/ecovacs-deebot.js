@@ -142,10 +142,9 @@ class EcovacsMQTT extends Ecovacs {
     /**
      * It sends a command to the Ecovacs API
      * @param {Object} command - the command to send to the Ecovacs API
-     * @param {string} recipient - the recipient of the command. This is the device ID
      */
-    async sendCommand(command, recipient) {
-        let commandRequestObject = this.getCommandRequestObject(command, recipient);
+    async sendCommand(command) {
+        let commandRequestObject = this.getCommandRequestObject(command);
         try {
             const json = await this.callEcouserApi(commandRequestObject, this.getApiPath(command));
             this.handleCommandResponse(command, json);
@@ -169,23 +168,23 @@ class EcovacsMQTT extends Ecovacs {
         return api;
     }
 
-    getCommandStandardRequestObject(command, recipient, payload) {
+    getCommandStandardRequestObject(command, payload) {
         return {
             'cmdName': command.name,
             'payload': payload,
             'payloadType': this.payloadType,
             'auth': this.getAuthObject(),
             'td': 'q',
-            'toId': recipient,
+            'toId': this.vacuum['did'],
             'toRes': this.vacuum['resource'],
             'toType': this.vacuum['class']
         }
     }
 
-    getCommandCleanLogsObject(command, recipient) {
+    getCommandCleanLogsObject(command) {
         return {
             'auth': this.getAuthObject(),
-            'did': recipient,
+            'did': this.vacuum['did'],
             'country': this.country,
             'td': command,
             'resource': this.vacuum['resource']

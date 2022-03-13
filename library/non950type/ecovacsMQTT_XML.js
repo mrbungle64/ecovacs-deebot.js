@@ -2,7 +2,6 @@
 
 const EcovacsMQTT = require('../ecovacsMQTT');
 const tools = require('../tools');
-const constants = require('../ecovacsConstants');
 const { DOMParser } = require('@xmldom/xmldom');
 
 class EcovacsMQTT_XML extends EcovacsMQTT {
@@ -12,12 +11,12 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         this.payloadType = 'x'; // XML
     }
 
-    getCommandRequestObject(command, recipient) {
+    getCommandRequestObject(command) {
         if (command.name === 'GetLogApiCleanLogs') {
-            return this.getCommandCleanLogsObject('GetCleanLogs', recipient);
+            return this.getCommandCleanLogsObject('GetCleanLogs');
         } else {
             const payload = this.getCommandPayload(command);
-            return this.getCommandStandardRequestObject(command, recipient, payload);
+            return this.getCommandStandardRequestObject(command, payload);
         }
     }
 

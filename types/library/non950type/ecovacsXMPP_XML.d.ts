@@ -5,8 +5,13 @@ declare class EcovacsXMPP_XML extends Ecovacs {
     pingInterval: NodeJS.Timer;
     simpleXmpp: any;
     connect(): void;
-    sendCommand(action: any, recipient: any): Promise<void>;
-    getCommandXml(command: any, recipient: any): any;
+    sendCommand(action: any): Promise<void>;
+    getCommandXml(command: any): any;
+    /**
+     * Get the device id for the vacuum
+     * @returns {string} the device ID
+     */
+    getDeviceId(): string;
     getMyAddress(): string;
     sendPing(to: any): void;
     disconnect(): void;

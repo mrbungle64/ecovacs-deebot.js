@@ -249,11 +249,6 @@ declare class VacBot {
      */
     isMapImageSupported(): boolean;
     /**
-     * Get the device id for the vacuum
-     * @returns {string} the device ID
-     */
-    getVacBotDeviceId(): string;
-    /**
      * Get the product name of the device
      * @returns {string} the product name
      */

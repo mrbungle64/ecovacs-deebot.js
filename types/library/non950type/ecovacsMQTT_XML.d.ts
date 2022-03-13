@@ -1,6 +1,6 @@
 export = EcovacsMQTT_XML;
 declare class EcovacsMQTT_XML extends EcovacsMQTT {
-    getCommandRequestObject(command: any, recipient: any): {
+    getCommandRequestObject(command: any): {
         cmdName: any;
         payload: any;
         payloadType: string;

@@ -78,33 +78,41 @@ class EcovacsXMPP_XML extends Ecovacs {
 
         if (!this.pingInterval) {
             this.pingInterval = setInterval(() => {
-                this.sendPing(this.bot.getVacBotDeviceId());
+                this.sendPing(this.getDeviceId());
             }, 30000);
         }
 
         this.on('ready', (event) => {
             tools.envLog('[EcovacsMQTT] received ready event');
-            this.sendPing(this.bot.getVacBotDeviceId());
+            this.sendPing(this.getDeviceId());
         });
     }
 
-    async sendCommand(action, recipient) {
-        let commandXml = this.getCommandXml(action, recipient);
+    async sendCommand(action) {
+        let commandXml = this.getCommandXml(action);
         this.simpleXmpp.conn.send(commandXml);
     }
 
-    getCommandXml(command, recipient) {
+    getCommandXml(command) {
         let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
-            to: recipient,
             from: this.getMyAddress(),
+            to: this.getDeviceId(),
             type: 'set'
         });
         iqElement.c('query', {
             xmlns: 'com:ctl'
         }).cnode(command);
         return iqElement;
+    }
+
+    /**
+     * Get the device id for the vacuum
+     * @returns {string} the device ID
+     */
+    getDeviceId() {
+        return this.bot.vacuum['did'] + '@' + this.bot.vacuum['class'] + '.ecorobot.net/atom';
     }
 
     getMyAddress() {

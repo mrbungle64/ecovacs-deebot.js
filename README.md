@@ -56,7 +56,7 @@ There is of course no claim to full functionality.
 
 ## Known issues
 
-* The generation of map images is currently not stable on 32-bit systems
+* The generation of map images is currently not stable on 32-bit systems (e.g. most Raspberry Pi systems)
 * The cleaning log has an empty result on T9 series
 * The combined map data object does not work with T9 series
 * TrueDetect commands not working yet (tested on T9)
@@ -65,7 +65,7 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.8.0 (alpha)
-* (m8schmit) Added types for typescript
+* (m8schmit) Added types for TypeScript
 * Lots of documentation and refactoring
 
 ### 0.7.2

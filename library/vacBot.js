@@ -758,18 +758,6 @@ class VacBot {
     }
 
     /**
-     * Get the device id for the vacuum
-     * @returns {string} the device ID
-     */
-    getVacBotDeviceId() {
-        if (!this.useMqtt) {
-            return this.vacuum['did'] + '@' + this.vacuum['class'] + '.ecorobot.net/atom';
-        } else {
-            return this.vacuum['did'];
-        }
-    }
-
-    /**
      * Get the product name of the device
      * @returns {string} the product name
      */
@@ -830,7 +818,7 @@ class VacBot {
         let actionPayload = this.useMqtt ? command : command.to_xml();
         (async () => {
             try {
-                await this.ecovacs.sendCommand(actionPayload, this.getVacBotDeviceId());
+                await this.ecovacs.sendCommand(actionPayload);
             } catch (e) {
                 tools.envLog("[vacBot] Error sendCommand: " + e.message);
             }

@@ -12,24 +12,23 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * The function takes in a command and a recipient and returns a JSON object
+     * The function takes in a command and returns a JSON object
      * @param {Object} command - the action to be performed
-     * @param {string} recipient - the id of the device
      * @returns {Object} the command object used to be sent to the vacuum
      */
-    getCommandRequestObject(command, recipient) {
+    getCommandRequestObject(command) {
         if (command.api === constants.IOTDEVMANAGERAPI) {
             const payload = this.getCommandPayload(command);
-            return this.getCommandStandardRequestObject(command, recipient, payload);
+            return this.getCommandStandardRequestObject(command, payload);
         }
         if (command.api === constants.LGLOGAPI) {
-            return this.getCommandCleanLogsObject(command, recipient);
+            return this.getCommandCleanLogsObject(command);
         }
     }
 
-    getCommandCleanLogsObject(command, recipient) {
+    getCommandCleanLogsObject(command) {
         return {
-            'did': recipient,
+            'did': this.vacuum['did'],
             'country': this.country,
             'td': command.name,
             'auth': this.getAuthObject(),

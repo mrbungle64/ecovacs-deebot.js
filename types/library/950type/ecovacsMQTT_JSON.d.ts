@@ -1,12 +1,11 @@
 export = EcovacsMQTT_JSON;
 declare class EcovacsMQTT_JSON extends EcovacsMQTT {
     /**
-     * The function takes in a command and a recipient and returns a JSON object
+     * The function takes in a command and returns a JSON object
      * @param {Object} command - the action to be performed
-     * @param {string} recipient - the id of the device to send the command to
-     * @returns {Object} the wrapped command to be sent to the vacuum
+     * @returns {Object} the command object used to be sent to the vacuum
      */
-    getCommandRequestObject(command: any, recipient: string): any;
+    getCommandRequestObject(command: any): any;
     /**
      * It creates a payload request header (and body)
      * @param {Object} command - the action object that was passed to the getCommandRequestObject function
