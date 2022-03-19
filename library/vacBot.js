@@ -624,19 +624,40 @@ class VacBot {
         }
     }
 
+    /**
+     * If the value of `company` is `eco-ng`
+     * the model uses MQTT as protocol
+     * @returns {Boolean}
+     */
     useMqttProtocol() {
         return (this.vacuum['company'] === 'eco-ng');
     }
 
+    /**
+     * Returns the protocol that is used
+     * @returns {String} `MQTT` or `XMPP`
+     */
     getProtocol() {
         return this.useMqttProtocol() ? 'MQTT' : 'XMPP';
     }
 
+    /**
+     * Returns true if the model is 950 type (MQTT/JSON)
+     * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
+     * If the model is not registered,
+     * it returns the default value (= is MQTT model)
+     * @returns {Boolean}
+     */
     is950type() {
         const defaultValue = this.useMqttProtocol();
         return this.getDeviceProperty('950type', defaultValue);
     }
 
+    /**
+     * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
+     * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
+     * @returns {Boolean}
+     */
     isNot950type() {
         return (!this.is950type());
     }
