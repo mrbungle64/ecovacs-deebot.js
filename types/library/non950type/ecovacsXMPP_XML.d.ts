@@ -1,6 +1,5 @@
 export = EcovacsXMPP_XML;
 declare class EcovacsXMPP_XML extends Ecovacs {
-    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, serverAddress: any, serverPort?: number);
     iqElementId: number;
     pingInterval: NodeJS.Timer;
     simpleXmpp: any;

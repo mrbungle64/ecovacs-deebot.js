@@ -7,7 +7,7 @@ const {errorCodes} = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {
     /**
-     * @param {VacBot} bot - the name of the vacuum
+     * @param {VacBot} bot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -22,7 +22,7 @@ class Ecovacs extends EventEmitter {
         super();
 
         this.bot = bot;
-        this.dictionary = this.getDictionary();
+        this.dictionary = this.getEcovacsDictionary();
         this.user = user;
         this.hostname = hostname;
         this.resource = resource;
@@ -32,18 +32,19 @@ class Ecovacs extends EventEmitter {
         this.vacuum = vacuum;
 
         if (!serverAddress) {
-            this.serverAddress = this.getServerAddress();
+            this.serverAddress = this.getEcovacsEndpoint();
         } else {
             this.serverAddress = serverAddress;
         }
         this.serverPort = serverPort;
     }
 
-    session_start(event) {
-        this.emit("ready", event);
-    }
-
-    getServerAddress() {
+    /**
+     * Get the server address of the Ecovacs endpoint.
+     * Different schema for accounts registered in China
+     * @returns {string} the endpoint
+     */
+    getEcovacsEndpoint() {
         const urlPrefix = this.bot.useMqtt ? 'mq' : 'msg';
         let serverAddress = `${urlPrefix}-${this.continent}.${constants.REALM}`;
         if (this.country === 'CN') {
@@ -52,6 +53,13 @@ class Ecovacs extends EventEmitter {
         return serverAddress;
     }
 
+    /**
+     * Handles the message command and the payload
+     * and delegates the event object to the corresponding method
+     * @param {string} command - the incoming message command
+     * @param {Object} event - the event object received from the Ecovacs API
+     * @returns {Promise<void>}
+     */
     async handleMessagePayload(command, event) {
         let abbreviatedCmd = command.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
         // Incoming MQTT messages
@@ -301,11 +309,14 @@ class Ecovacs extends EventEmitter {
         }
     }
 
-    getDictionary() {
+    /**
+     * @returns the dictionary of Ecovacs related constants
+     */
+    getEcovacsDictionary() {
         if (this.bot.is950type()) {
-            return require('./950type/ecovacsConstants.js');
+            return require('./950type/ecovacsConstants');
         } else {
-            return require('./non950type/ecovacsConstants.js');
+            return require('./non950type/ecovacsConstants');
         }
     }
 
@@ -354,6 +365,10 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    /**
+     * Emit the error.
+     * Disconnect if 'RequestOAuthError: Authentication error' error
+     */
     emitLastError() {
         this.emit("Error", this.bot.errorDescription);
         this.emit('ErrorCode', this.bot.errorCode);
@@ -361,7 +376,7 @@ class Ecovacs extends EventEmitter {
             'error': this.bot.errorDescription,
             'code': this.bot.errorCode
         });
-        // Error code 3 = request oauth error
+        // Error code 3 = 'RequestOAuthError: Authentication error'
         if (this.bot.errorCode === '3') {
             this.emit("disconnect", true);
             this.disconnect();

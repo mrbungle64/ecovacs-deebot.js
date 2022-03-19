@@ -6,7 +6,7 @@ const constants = require('../ecovacsConstants');
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     /**
-     * @param {VacBot} bot - the name of the vacuum
+     * @param {VacBot_950type} bot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -19,6 +19,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      */
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
+        this.bot = bot;
 
         this.payloadType = 'j'; // JSON
     }
@@ -139,9 +140,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * This function handles the message payload
-     * and delegates the event object to the corresponding function
-     * @param {string} command - the command
+     * Handles the message command and the payload
+     * and delegates the event object to the corresponding method
+     * @param {string} command - the incoming message command
      * @param {Object} event - the event object received from the Ecovacs API
      * @returns {Promise<void>}
      */

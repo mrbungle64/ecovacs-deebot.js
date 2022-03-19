@@ -4,7 +4,7 @@ const url = require('url');
 const axios = require('axios').default;
 const crypto = require('crypto');
 const fs = require('fs');
-const constants = require('./library/ecovacsConstants.js');
+const constants = require('./library/ecovacsConstants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
 const {countries} = require('./countries.json');
@@ -47,7 +47,7 @@ class EcovacsAPI {
   /**
    * @param {string} accountId - The account ID (Email or Ecovacs ID)
    * @param {string} password_hash - The password hash
-   * @returns {string}
+   * @returns {Promise<string>}
    */
   async connect(accountId, password_hash) {
     let error;
@@ -399,14 +399,15 @@ class EcovacsAPI {
 
   /**
    * Get a corresponding instance of the `vacBot` class
-   * @param {String} user - The user ID (retrieved from Ecovacs API)
-   * @param {String} hostname - The host name (for the Ecovacs API)
+   * @param {String} user - the user ID (retrieved from Ecovacs API)
+   * @param {String} hostname - the host name (for the Ecovacs API)
    * @param {String} resource - the resource of the vacuum
-   * @param {String} userToken - The user token
-   * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
-   * @returns {Object} a corresponding instance of the `vacBot` class
+   * @param {String} userToken - the user token
+   * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
+   * @param {String} continent - the continent
+   * @returns {VacBot} a corresponding instance of the `VacBot` class
    */
-  getVacBot(user, hostname, resource, userToken, vacuum) {
+  getVacBot(user, hostname, resource, userToken, vacuum, continent) {
     let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);

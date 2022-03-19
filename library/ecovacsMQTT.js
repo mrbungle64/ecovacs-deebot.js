@@ -7,7 +7,7 @@ const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {
     /**
-     * @param {VacBot} bot - the name of the vacuum
+     * @param {VacBot} bot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum

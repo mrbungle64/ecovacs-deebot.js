@@ -74,9 +74,9 @@ declare class EcovacsAPI {
     /**
      * @param {string} accountId - The account ID (Email or Ecovacs ID)
      * @param {string} password_hash - The password hash
-     * @returns {string}
+     * @returns {Promise<string>}
      */
-    connect(accountId: string, password_hash: string): string;
+    connect(accountId: string, password_hash: string): Promise<string>;
     uid: any;
     login_access_token: any;
     auth_code: any;
@@ -167,14 +167,15 @@ declare class EcovacsAPI {
     getVacBotObj(vacuum: any): any;
     /**
      * Get a corresponding instance of the `vacBot` class
-     * @param {String} user - The user ID (retrieved from Ecovacs API)
-     * @param {String} hostname - The host name (for the Ecovacs API)
+     * @param {String} user - the user ID (retrieved from Ecovacs API)
+     * @param {String} hostname - the host name (for the Ecovacs API)
      * @param {String} resource - the resource of the vacuum
-     * @param {String} userToken - The user token
-     * @param {Object} vacuum - The object for the specific device retrieved by the devices dictionary
-     * @returns {Object} a corresponding instance of the `vacBot` class
+     * @param {String} userToken - the user token
+     * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
+     * @param {String} continent - the continent
+     * @returns {VacBot} a corresponding instance of the `VacBot` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any): any;
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent: string): VacBot;
     /**
      * Get the version of the package
      * @returns {string} The version of the package

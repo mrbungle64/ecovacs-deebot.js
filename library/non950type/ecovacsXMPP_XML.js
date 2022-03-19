@@ -5,8 +5,21 @@ const tools = require('../tools');
 const Element = require('ltx').Element;
 
 class EcovacsXMPP_XML extends Ecovacs {
+    /**
+     * @param {VacBot_non950type} bot - the VacBot object
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} serverAddress - the address of the MQTT server
+     * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
+     */
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 5223) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
+        this.bot = bot;
 
         this.iqElementId = 1;
         this.pingInterval = null;
@@ -15,7 +28,7 @@ class EcovacsXMPP_XML extends Ecovacs {
 
         this.simpleXmpp.on('online', (event) => {
             tools.envLog('[EcovacsXMPP_XML] Session start');
-            this.session_start(event);
+            this.emit("ready", event);
         });
 
         this.simpleXmpp.on('close', () => {

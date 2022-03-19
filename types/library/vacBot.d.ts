@@ -176,9 +176,9 @@ declare class VacBot {
     getCommandsForModelType(): any;
     /**
      * Includes the specific module for the related model type
-     * @returns {Object}
+     * @returns {Ecovacs}
      */
-    getModuleForProtocol(): any;
+    getModuleForProtocol(): Ecovacs;
     /**
      * If the value of `company` is `eco-ng`
      * the model uses MQTT as protocol

@@ -27,7 +27,11 @@ const SPOTAREA_SUBTYPES = {
     '14': 'Gym'
 };
 
-//TODO: make colors customizable by introducing SetMapStyle(json)
+/**
+ * A set of colors for spot areas
+ * @type {string[]}
+ * @todo Make colors customizable by introducing setMapStyle (JSON)
+ */
 const SPOTAREA_COLORS = [
     '#ffdcf6',
     '#fff8d2',
@@ -40,6 +44,11 @@ const SPOTAREA_COLORS = [
     '#9fcfff'
 ];
 
+/**
+ * A set of colors for the element types
+ * @type {Object}
+ * @todo Make colors customizable
+ */
 const MAP_COLORS = {
     'vw': '#e40046', // virtual wall
     'mw': '#f7a501', // no mop zone

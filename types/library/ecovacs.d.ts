@@ -1,7 +1,7 @@
 export = Ecovacs;
 declare class Ecovacs extends EventEmitter {
     /**
-     * @param {VacBot} bot - the name of the vacuum
+     * @param {VacBot} bot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -14,7 +14,7 @@ declare class Ecovacs extends EventEmitter {
      */
     constructor(bot: VacBot, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: any, serverAddress: string, serverPort?: number);
     bot: VacBot;
-    dictionary: typeof import("./950type/ecovacsConstants.js") | typeof import("./non950type/ecovacsConstants.js");
+    dictionary: typeof import("./950type/ecovacsConstants") | typeof import("./non950type/ecovacsConstants");
     user: string;
     hostname: string;
     resource: string;
@@ -24,10 +24,24 @@ declare class Ecovacs extends EventEmitter {
     vacuum: any;
     serverAddress: string;
     serverPort: number;
-    session_start(event: any): void;
-    getServerAddress(): string;
-    handleMessagePayload(command: any, event: any): Promise<void>;
-    getDictionary(): typeof import("./950type/ecovacsConstants.js") | typeof import("./non950type/ecovacsConstants.js");
+    /**
+     * Get the server address of the Ecovacs endpoint.
+     * Different schema for accounts registered in China
+     * @returns {string} the endpoint
+     */
+    getEcovacsEndpoint(): string;
+    /**
+     * Handles the message command and the payload
+     * and delegates the event object to the corresponding method
+     * @param {string} command - the incoming message command
+     * @param {Object} event - the event object received from the Ecovacs API
+     * @returns {Promise<void>}
+     */
+    handleMessagePayload(command: string, event: any): Promise<void>;
+    /**
+     * @returns the dictionary of Ecovacs related constants
+     */
+    getEcovacsDictionary(): typeof import("./950type/ecovacsConstants") | typeof import("./non950type/ecovacsConstants");
     handleLifeSpanCombined(): void;
     emitError(code: any, message: any): void;
     /**
@@ -36,6 +50,10 @@ declare class Ecovacs extends EventEmitter {
      */
     emitNetworkError(message: string): void;
     emitLastErrorByErrorCode(errorCode: any): void;
+    /**
+     * Emit the error.
+     * Disconnect if 'RequestOAuthError: Authentication error' error
+     */
     emitLastError(): void;
     /**
      * If the vacuum has power adjustment and also has a mopping system

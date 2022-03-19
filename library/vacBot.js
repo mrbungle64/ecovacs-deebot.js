@@ -612,7 +612,7 @@ class VacBot {
 
     /**
      * Includes the specific module for the related model type
-     * @returns {Object}
+     * @returns {Ecovacs}
      */
     getModuleForProtocol() {
         if (this.is950type()) {
