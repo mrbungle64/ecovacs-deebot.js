@@ -11,6 +11,11 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         this.payloadType = 'x'; // XML
     }
 
+    /**
+     * The function returns the request object
+     * @param {Object} command - the action to be performed
+     * @returns {Object} the command object used to be sent
+     */
     getCommandRequestObject(command) {
         if (command.name === 'GetLogApiCleanLogs') {
             return this.getCommandCleanLogsObject('GetCleanLogs');
@@ -20,30 +25,42 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         }
     }
 
-    getCommandPayload(action) {
-        let xml = action.to_xml();
+    /**
+     * It creates a string with the payload in xml format
+     * and also removes the td element
+     * @param {Object} command - the command object
+     * @returns {string}
+     */
+    getCommandPayload(command) {
+        let xml = command.to_xml();
         // Remove the td from ctl xml for RestAPI
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
         return payloadXml.toString();
     }
 
-    handleCommandResponse(action, json) {
+    /**
+     * It handles the response from the Ecovacs API
+     * @todo Refactor this method
+     * @param {Object} command - the command that was sent to the Ecovacs API
+     * @param {Object} messagePayload - The message payload that was received
+     */
+    handleCommandResponse(command, messagePayload) {
         let result = {};
-        if (json.hasOwnProperty('resp')) {
-            result = this.command_xml2json(json['resp'], action);
+        if (messagePayload.hasOwnProperty('resp')) {
+            result = this.command_xml2json(messagePayload['resp'], command);
             (async () => {
                 try {
-                    await this.handleMessagePayload(action.name, result);
+                    await this.handleMessagePayload(command.name, result);
                 } catch (e) {
                     this.emitError('-2', e.message);
                 }
-                delete this.bot.commandsSent[action.args.id];
+                delete this.bot.commandsSent[command.args.id];
             })();
-        } else if (json.hasOwnProperty('logs')) {
+        } else if (messagePayload.hasOwnProperty('logs')) {
             const children = [];
             for (let i = 0; i < 20; i++) {
-                children.push(json.logs[i]);
+                children.push(messagePayload.logs[i]);
             }
             result = {
                 'event': 'CleanLogs',
@@ -54,17 +71,23 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
             };
             (async () => {
                 try {
-                    await this.handleMessagePayload(action.name, result);
+                    await this.handleMessagePayload(command.name, result);
                 } catch (e) {
                     this.emitError('-2', e.message);
                 }
-                delete this.bot.commandsSent[action.args.id];
+                delete this.bot.commandsSent[command.args.id];
             })();
         } else {
-            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(json));
+            tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(messagePayload));
         }
     }
 
+    /**
+     * It handles the messages from the API (incoming MQTT message or request response)
+     * @param {string} topic - the topic of the message
+     * @param {Object|string} payload - the payload
+     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     */
     handleMessage(topic, payload, type = "incoming") {
         let result = this.command_xml2json(payload);
         (async () => {
@@ -76,6 +99,11 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         })();
     }
 
+    /**
+     * It takes an XML string and converts it into JSON object
+     * @param {string} xmlString - the XML string
+     * @returns {Object} a JSON object
+     */
     command_xml2json(xmlString) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
