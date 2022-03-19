@@ -1,17 +1,29 @@
 export = Ecovacs;
 declare class Ecovacs extends EventEmitter {
-    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, serverAddress: any, serverPort: any);
-    bot: any;
+    /**
+     * @param {VacBot} bot - the name of the vacuum
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} serverAddress - the address of the MQTT server
+     * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
+     */
+    constructor(bot: VacBot, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: any, serverAddress: string, serverPort?: number);
+    bot: VacBot;
     dictionary: typeof import("./950type/ecovacsConstants.js") | typeof import("./non950type/ecovacsConstants.js");
-    user: any;
-    hostname: any;
-    resource: any;
-    secret: any;
-    country: any;
-    continent: any;
+    user: string;
+    hostname: string;
+    resource: string;
+    secret: string;
+    country: string;
+    continent: string;
     vacuum: any;
-    serverAddress: any;
-    serverPort: any;
+    serverAddress: string;
+    serverPort: number;
     session_start(event: any): void;
     getServerAddress(): string;
     handleMessagePayload(command: any, event: any): Promise<void>;

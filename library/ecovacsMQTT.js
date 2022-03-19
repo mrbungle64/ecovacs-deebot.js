@@ -6,6 +6,18 @@ const constants = require('./ecovacsConstants');
 const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {
+    /**
+     * @param {VacBot} bot - the name of the vacuum
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} serverAddress - the address of the MQTT server
+     * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
+     */
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 
@@ -16,19 +28,39 @@ class EcovacsMQTT extends Ecovacs {
 
         // The payload type is either 'x' (XML) or 'j' (JSON)
         this.payloadType = '';
+    }
 
-        let options = {
-            clientId: this.username + '/' + resource,
+    /**
+     * Subscribe for "broadcast" messages to the MQTT channel
+     * @see https://deebot.readthedocs.io/advanced/protocols/mqtt/#mqtt
+     */
+    subscribe() {
+        const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
+        console.log(channel);
+        this.client.subscribe(channel, (error, granted) => {
+            if (!error) {
+                tools.envLog('[EcovacsMQTT] Subscribed to atr channel');
+                this.emit('ready', 'Client connected. Subscribe successful');
+            } else {
+                tools.envLog('[EcovacsMQTT] Subscribe err: %s', error.toString());
+            }
+        });
+    }
+
+    /**
+     * Connect to the MQTT server and listen to broadcast messages
+     */
+    connect() {
+        let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
+        tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
+        this.client = this.mqtt.connect(url, {
+            clientId: this.username + '/' + this.resource,
             username: this.username,
             password: this.secret,
             protocolVersion: 4,
             keepalive: 120,
             rejectUnauthorized: false
-        };
-
-        let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
-        this.client = this.mqtt.connect(url, options);
-        tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
+        });
 
         let ecovacsMQTT = this;
 
@@ -64,38 +96,29 @@ class EcovacsMQTT extends Ecovacs {
                 tools.envLog(`MQTT client error: ${error.message}`);
             }
         });
-    }
 
-    subscribe() {
-        const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
-        console.log(channel);
-        this.client.subscribe(channel, (error, granted) => {
-            if (!error) {
-                tools.envLog('[EcovacsMQTT] Subscribed to atr channel');
-                this.emit('ready', 'Client connected. Subscribe successful');
-            } else {
-                tools.envLog('[EcovacsMQTT] Subscribe err: %s', error.toString());
-            }
-        });
-    }
-
-    connect() {
         this.on("ready", (event) => {
             tools.envLog('[EcovacsMQTT] Received ready event');
         });
     }
 
-    async callEcouserApi(params, api) {
+    /**
+     * Send post request to the Ecovacs API
+     * @param {Object} params - parameter object for building the URL
+     * @param {string} apiPath - the API path
+     * @returns {Promise<{Object}>}
+     */
+    async callEcouserApi(params, apiPath) {
         let portalUrlFormat = constants.PORTAL_URL_FORMAT;
         if (this.country === 'CN') {
             portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
         }
-        let portalUrl = (portalUrlFormat + '/' + api).format({
+        let portalUrl = (portalUrlFormat + '/' + apiPath).format({
             continent: this.continent
         });
         if (this.bot.is950type()) {
             portalUrl = portalUrl + "?cv=1.67.3&t=a&av=1.3.1";
-            if (api === constants.IOTDEVMANAGERAPI) {
+            if (apiPath === constants.IOTDEVMANAGERAPI) {
                 portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
             }
         }
@@ -170,6 +193,12 @@ class EcovacsMQTT extends Ecovacs {
         return api;
     }
 
+    /**
+     * This function returns a standard request object for sending commands
+     * @param {Object} command - the command object
+     * @param {Object} payload - the payload object
+     * @returns {Object} the JSON object
+     */
     getCommandStandardRequestObject(command, payload) {
         return {
             'cmdName': command.name,
@@ -183,6 +212,11 @@ class EcovacsMQTT extends Ecovacs {
         }
     }
 
+    /**
+     * Returns a request object for receiving clean logs
+     * @param {Object} command - the command object
+     * @returns {Object} the JSON object
+     */
     getCommandCleanLogsObject(command) {
         return {
             'auth': this.getAuthObject(),
@@ -193,6 +227,10 @@ class EcovacsMQTT extends Ecovacs {
         }
     }
 
+    /**
+     * Returns the `auth` object used for the command object
+     * @returns {Object} the JSON object
+     */
     getAuthObject() {
         return {
             'realm': constants.REALM,

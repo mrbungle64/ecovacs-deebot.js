@@ -5,6 +5,18 @@ const tools = require('../tools');
 const { DOMParser } = require('@xmldom/xmldom');
 
 class EcovacsMQTT_XML extends EcovacsMQTT {
+    /**
+     * @param {VacBot} bot - the name of the vacuum
+     * @param {string} user - the userId retrieved by the Ecovacs API
+     * @param {string} hostname - the hostname of the API endpoint
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} secret - the user access token
+     * @param {string} continent - the continent where the Ecovacs account is registered
+     * @param {string} country - the country where the Ecovacs account is registered
+     * @param {Object} vacuum - the device object for the vacuum
+     * @param {string} serverAddress - the address of the MQTT server
+     * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
+     */
     constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
         super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 

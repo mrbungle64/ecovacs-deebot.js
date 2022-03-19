@@ -1,13 +1,27 @@
 export = EcovacsMQTT;
 declare class EcovacsMQTT extends Ecovacs {
-    constructor(bot: any, user: any, hostname: any, resource: any, secret: any, continent: any, country: any, vacuum: any, serverAddress: any, serverPort?: number);
     mqtt: typeof import("mqtt");
     username: string;
     payloadType: string;
-    client: import("mqtt").Client;
+    /**
+     * Subscribe for "broadcast" messages to the MQTT channel
+     * @see https://deebot.readthedocs.io/advanced/protocols/mqtt/#mqtt
+     */
     subscribe(): void;
+    /**
+     * Connect to the MQTT server and listen to broadcast messages
+     */
     connect(): void;
-    callEcouserApi(params: any, api: any): Promise<any>;
+    client: import("mqtt").Client;
+    /**
+     * Send post request to the Ecovacs API
+     * @param {Object} params - parameter object for building the URL
+     * @param {string} apiPath - the API path
+     * @returns {Promise<{Object}>}
+     */
+    callEcouserApi(params: any, apiPath: string): Promise<{
+        Object;
+    }>;
     /**
      * It sends a command to the Ecovacs API
      * @param {Object} command - the command to send to the Ecovacs API
@@ -19,42 +33,24 @@ declare class EcovacsMQTT extends Ecovacs {
      * @returns {string} the API path that has to be called
      */
     getApiPath(command: any): string;
-    getCommandStandardRequestObject(command: any, payload: any): {
-        cmdName: any;
-        payload: any;
-        payloadType: string;
-        auth: {
-            realm: string;
-            resource: any;
-            token: any;
-            userid: any;
-            with: string;
-        };
-        td: string;
-        toId: any;
-        toRes: any;
-        toType: any;
-    };
-    getCommandCleanLogsObject(command: any): {
-        auth: {
-            realm: string;
-            resource: any;
-            token: any;
-            userid: any;
-            with: string;
-        };
-        did: any;
-        country: any;
-        td: any;
-        resource: any;
-    };
-    getAuthObject(): {
-        realm: string;
-        resource: any;
-        token: any;
-        userid: any;
-        with: string;
-    };
+    /**
+     * This function returns a standard request object for sending commands
+     * @param {Object} command - the command object
+     * @param {Object} payload - the payload object
+     * @returns {Object} the JSON object
+     */
+    getCommandStandardRequestObject(command: any, payload: any): any;
+    /**
+     * Returns a request object for receiving clean logs
+     * @param {Object} command - the command object
+     * @returns {Object} the JSON object
+     */
+    getCommandCleanLogsObject(command: any): any;
+    /**
+     * Returns the `auth` object used for the command object
+     * @returns {Object} the JSON object
+     */
+    getAuthObject(): any;
     /**
      * Disconnect the MQTT client
      */
