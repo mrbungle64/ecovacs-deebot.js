@@ -22,9 +22,9 @@ String.prototype.format = function () {
 
 class EcovacsAPI {
   /**
-   * @param {string} deviceId - The device ID of the bot
-   * @param {string} country - The country code
-   * @param {string} [continent] - The continent (deprecated)
+   * @param {string} deviceId - the device ID of the bot
+   * @param {string} country - the country code
+   * @param {string} [continent] - the continent (deprecated)
    */
   constructor(deviceId, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
@@ -86,7 +86,7 @@ class EcovacsAPI {
 
   /**
    * Get the parameters for the user login
-   * @param {Object} params - An object with the data to retrieve the parameters
+   * @param {Object} params - an object with the data to retrieve the parameters
    * @returns {String} the parameters
    */
   getUserLoginParams(params) {
@@ -116,7 +116,7 @@ class EcovacsAPI {
 
   /**
    * Get the parameters for authentication
-   * @param {Object} params - An object with the data to retrieve the parameters
+   * @param {Object} params - an object with the data to retrieve the parameters
    * @returns {String} the parameters
    */
   getAuthParams(params) {
@@ -139,8 +139,8 @@ class EcovacsAPI {
   }
 
   /**
-   * @param {string} loginPath - The login path
-   * @param {Object} params - An object with the data to retrieve the parameters
+   * @param {string} loginPath - the login path
+   * @param {Object} params - an object with the data to retrieve the parameters
    * @returns {Promise<Object>} an object including access token and user ID
    */
   async callUserAuthApi(loginPath, params) {
@@ -189,7 +189,7 @@ class EcovacsAPI {
 
   /**
    * Returns the portal path for the given login path
-   * @param {string} loginPath - The path for the login
+   * @param {string} loginPath - the path for the login
    * @returns {string} the portal path
    */
   getPortalPath(loginPath) {
@@ -206,7 +206,7 @@ class EcovacsAPI {
   /**
    * @param {string} api - the API path
    * @param {string} func - the API function to be called
-   * @param {Object} args - An object with the params for the POST request
+   * @param {Object} args - an object with the params for the POST request
    * @returns {Promise<Object>}
    */
   async callPortalApi(api, func, args) {
@@ -272,7 +272,7 @@ class EcovacsAPI {
 
   /**
    * Get the login path for the current country
-   * @returns {string} The login path is being returned.
+   * @returns {string} the login path is being returned.
    */
   getLoginPath() {
     let loginPath = constants.LOGIN_PATH;
@@ -340,8 +340,8 @@ class EcovacsAPI {
   /**
    * Merge the data from the global device list (GetGlobalDeviceList)
    * with the data from the device list (GetDeviceList) of the users Ecovacs account
-   * @param deviceList - The list of devices of the Ecovacs account
-   * @param globalDeviceList - The global device list returned by the API
+   * @param {Object} deviceList - the list of devices of the Ecovacs account
+   * @param {Object} globalDeviceList - the global device list returned by the API
    * @returns {Object} a dictionary of all known devices
    */
   mergeDeviceLists(deviceList, globalDeviceList) {
@@ -404,7 +404,7 @@ class EcovacsAPI {
    * @param {String} resource - the resource of the vacuum
    * @param {String} userToken - the user token
    * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
-   * @param {String} continent - the continent
+   * @param {String} [continent] - the continent
    * @returns {VacBot} a corresponding instance of the `VacBot` class
    */
   getVacBot(user, hostname, resource, userToken, vacuum, continent) {
@@ -423,7 +423,7 @@ class EcovacsAPI {
 
   /**
    * Get the version of the package
-   * @returns {string} The version of the package
+   * @returns {string} the version of the package
    */
   getVersion() {
     return packageInfo.version;
@@ -431,7 +431,7 @@ class EcovacsAPI {
 
   /**
    * Get the version of the package
-   * @returns {string} The version of the package
+   * @returns {string} the version of the package
    */
   static version() {
     return packageInfo.version;
@@ -465,7 +465,7 @@ class EcovacsAPI {
    * Returns true if the device class is 950 type
    * @param {String} deviceClass - The device class to check
    * @param [isMQTTProtocolUsed=true] - This value is used as default value if the deviceClass is not registered
-   * @returns The value of the '950type' property
+   * @returns {Boolean} the value of the '950type' property
    */
   static isDeviceClass950type(deviceClass, isMQTTProtocolUsed = true) {
     return tools.getDeviceProperty(deviceClass, '950type', isMQTTProtocolUsed);
@@ -474,7 +474,7 @@ class EcovacsAPI {
   /**
    * Returns true if the device class is not 950 type
    * @param {String} deviceClass - The device class of the device
-   * @returns A boolean value.
+   * @returns {Boolean} a boolean value.
    */
   static isDeviceClassNot950type(deviceClass) {
     return (!EcovacsAPI.isDeviceClass950type(deviceClass));
@@ -482,8 +482,8 @@ class EcovacsAPI {
 
   /**
    * Given a machine id and a device number, return the device ID
-   * @param {String} machineId - The id of the device
-   * @param {Number} [deviceNumber=0] - The device number is a number that is assigned to each device
+   * @param {String} machineId - the id of the device
+   * @param {Number} [deviceNumber=0] - the device number is a number that is assigned to each device
    * @returns {String} the device ID
    */
   static getDeviceId(machineId, deviceNumber = 0) {
@@ -492,8 +492,8 @@ class EcovacsAPI {
 
   /**
    * Create a hash of the given text using the MD5 algorithm
-   * @param {String} text - The text to be hashed
-   * @returns {String} The MD5 hash of the text
+   * @param {String} text - the text to be hashed
+   * @returns {String} the MD5 hash of the text
    */
   static md5(text) {
     return crypto.createHash('md5').update(text).digest("hex");
@@ -501,8 +501,8 @@ class EcovacsAPI {
 
   /**
    * It takes a string and encrypts it using the public key
-   * @param {String} text - The text to encrypt
-   * @returns {String} The encrypted string
+   * @param {String} text - the text to encrypt
+   * @returns {String} the encrypted string
    */
   static encrypt(text) {
     return crypto.publicEncrypt({
@@ -513,8 +513,8 @@ class EcovacsAPI {
 
   /**
    * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-   * @param {Object} params - The parameters to be encoded
-   * @returns {String} A string of the form "key1=value1&key2=value2&key3=value3"
+   * @param {Object} params - the parameters to be encoded
+   * @returns {String} a string of the form "key1=value1&key2=value2&key3=value3"
    */
   static paramsToQueryList(params) {
     let query = [];
