@@ -5,22 +5,26 @@ const lzma = require('lzma')
 const constants = require('./ecovacsConstants');
 const map = require('./mapTemplate');
 
+/**
+* Dictionary of the spot area types
+* @see i18n.js for translation dictionary
+**/
 const SPOTAREA_SUBTYPES = {
-    '0': {'en': 'Default  (A, B, C...)', 'de': 'Standard (A, B, C...)'},
-    '1': {'en': 'Living room', 'de': 'Wohnzimmer'},
-    '2': {'en': 'Dining room', 'de': 'Esszimmer'},
-    '3': {'en': 'Bedroom', 'de': 'Schlafzimmer'},
-    '4': {'en': 'Study', 'de': 'Büro'},
-    '5': {'en': 'Kitchen', 'de': 'Küche'},
-    '6': {'en': 'Bathroom', 'de': 'Badezimmer'},
-    '7': {'en': 'Laundry', 'de': 'Waschküche'},
-    '8': {'en': 'Lounge', 'de': 'Lounge'},
-    '9': {'en': 'Storeroom', 'de': 'Lagerraum'},
-    '10': {'en': 'Kids room', 'de': 'Kinderzimmer'},
-    '11': {'en': 'Sunroom', 'de': 'Wintergarten'},
-    '12': {'en': 'Corridor', 'de': 'Flur'},
-    '13': {'en': 'Balcony', 'de': 'Balkon'},
-    '14': {'en': 'Gym', 'de': 'Fitnessstudio'}
+    '0': 'Default  (A, B, C...)',
+    '1': 'Living room',
+    '2': 'Dining room',
+    '3': 'Bedroom',
+    '4': 'Study',
+    '5': 'Kitchen',
+    '6': 'Bathroom',
+    '7': 'Laundry',
+    '8': 'Lounge',
+    '9': 'Storeroom',
+    '10': 'Kids room',
+    '11': 'Sunroom',
+    '12': 'Corridor',
+    '13': 'Balcony',
+    '14': 'Gym'
 };
 
 //TODO: make colors customizable by introducing SetMapStyle(json)
@@ -477,12 +481,12 @@ class EcovacsMapSpotAreaInfo {
         this.mapSpotAreaID = mapSpotAreaID;
         if (customName !== '') {
             this.mapSpotAreaName = customName;
-        } else if ((mapSubType === '0') || !SPOTAREA_SUBTYPES[mapSubType]['en']) {
+        } else if ((mapSubType === '0') || !SPOTAREA_SUBTYPES[mapSubType]) {
             // if default naming or ID not found in list of names
             // return character representation (0=A, 1=B, etc.)
             this.mapSpotAreaName = String.fromCharCode(65 + parseInt(mapSpotAreaID));
         } else {
-            this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]['en']; //#LANG#
+            this.mapSpotAreaName = SPOTAREA_SUBTYPES[mapSubType]; //#LANG#
         }
         this.mapSpotAreaConnections = mapSpotAreaConnections;
         this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
