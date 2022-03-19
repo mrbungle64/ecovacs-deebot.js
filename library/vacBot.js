@@ -106,10 +106,10 @@ class VacBot {
 
         this.schedule = [];
 
-        this.vacBotCommand = this.getLibraryForCommands();
+        this.vacBotCommand = this.getCommandsForModelType();
 
-        const LibraryForProtocol = this.getLibraryForProtocol();
-        this.ecovacs = new LibraryForProtocol(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
+        const ProtocolModule = this.getModuleForProtocol();
+        this.ecovacs = new ProtocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
         this.ecovacs.on('ready', () => {
             tools.envLog('[VacBot] Ready event!');
@@ -606,13 +606,17 @@ class VacBot {
         }
     }
 
-    getLibraryForProtocol() {
+    /**
+     * Includes the specific module for the related model type
+     * @returns {Object}
+     */
+    getModuleForProtocol() {
         if (this.is950type()) {
-            return require('./950type/ecovacsMQTT_JSON.js');
-        } else if (this.useMqtt) {
-            return require('./non950type/ecovacsMQTT_XML.js');
+            return require('./950type/ecovacsMQTT_JSON');
+        } else if (this.useMqttProtocol()) {
+            return require('./non950type/ecovacsMQTT_XML');
         } else {
-            return require('./non950type/ecovacsXMPP_XML.js');
+            return require('./non950type/ecovacsXMPP_XML');
         }
     }
 
