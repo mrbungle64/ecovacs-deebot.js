@@ -598,7 +598,11 @@ class VacBot {
         this.ecovacs.on(name, func);
     }
 
-    getLibraryForCommands() {
+    /**
+     * Includes the specific commands for the related model type
+     * @returns {Object}
+     */
+    getCommandsForModelType() {
         if (this.is950type()) {
             return require('./950type/vacBotCommand');
         } else {
