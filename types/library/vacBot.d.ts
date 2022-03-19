@@ -15,7 +15,7 @@ declare class VacBot {
      * @param {string} serverAddress - the server address of the MQTT and XMPP server
      */
     constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country: string, serverAddress: string);
-    ecovacs: import("./950type/ecovacsMQTT_JSON.js") | import("./non950type/ecovacsMQTT_XML.js") | import("./non950type/ecovacsXMPP_XML.js");
+    ecovacs: any;
     vacuum: any;
     is_ready: boolean;
     useMqtt: boolean;
@@ -85,7 +85,7 @@ declare class VacBot {
     mapDataObject: any[];
     mapDataObjectQueue: any[];
     schedule: any[];
-    vacBotCommand: typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
+    vacBotCommand: any;
     /**
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
@@ -169,11 +169,40 @@ declare class VacBot {
      */
     connect(): void;
     on(name: any, func: any): void;
-    getLibraryForCommands(): typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
-    getLibraryForProtocol(): typeof import("./950type/ecovacsMQTT_JSON.js") | typeof import("./non950type/ecovacsMQTT_XML.js") | typeof import("./non950type/ecovacsXMPP_XML.js");
+    /**
+     * Includes the specific commands for the related model type
+     * @returns {Object}
+     */
+    getCommandsForModelType(): any;
+    /**
+     * Includes the specific module for the related model type
+     * @returns {Object}
+     */
+    getModuleForProtocol(): any;
+    /**
+     * If the value of `company` is `eco-ng`
+     * the model uses MQTT as protocol
+     * @returns {Boolean}
+     */
     useMqttProtocol(): boolean;
-    getProtocol(): "MQTT" | "XMPP";
-    is950type(): any;
+    /**
+     * Returns the protocol that is used
+     * @returns {String} `MQTT` or `XMPP`
+     */
+    getProtocol(): string;
+    /**
+     * Returns true if the model is 950 type (MQTT/JSON)
+     * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
+     * If the model is not registered,
+     * it returns the default value (= is MQTT model)
+     * @returns {Boolean}
+     */
+    is950type(): boolean;
+    /**
+     * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
+     * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
+     * @returns {Boolean}
+     */
     isNot950type(): boolean;
     /**
      * Returns true if the model is a N79 series model

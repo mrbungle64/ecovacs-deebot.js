@@ -4,16 +4,36 @@ declare class EcovacsXMPP_XML extends Ecovacs {
     iqElementId: number;
     pingInterval: NodeJS.Timer;
     simpleXmpp: any;
+    /**
+     * Connect to the Ecovacs server
+     */
     connect(): void;
-    sendCommand(action: any): Promise<void>;
+    /**
+     * Sends a command to the device
+     * @param {Object} command - the command object used to send
+     */
+    sendCommand(command: any): Promise<void>;
+    /**
+     * Create a specific XML element with the given command and return it
+     * @param {Object} command - the command as XML to send to the device
+     * @returns The specific XML for the command
+     */
     getCommandXml(command: any): any;
     /**
-     * Get the device id for the vacuum
-     * @returns {string} the device ID
+     * @returns {string} the Jabber Identifier of the device
      */
-    getDeviceId(): string;
-    getMyAddress(): string;
-    sendPing(to: any): void;
+    getDeviceJID(): string;
+    /**
+     * @returns {string} the Jabber Identifier of the server side
+     */
+    getServerJID(): string;
+    /**
+     * Sends a ping to the device
+     */
+    sendPing(): void;
+    /**
+     * Disconnects from the XMPP server
+     */
     disconnect(): void;
 }
 import Ecovacs = require("../ecovacs");

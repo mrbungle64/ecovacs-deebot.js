@@ -12,7 +12,12 @@ declare class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @returns {Object} the request payload object
      */
     getCommandPayload(command: any): any;
-    handleCommandResponse(action: any, message: any): void;
+    /**
+     * It handles the response from the Ecovacs API
+     * @param {Object} command - the command that was sent to the Ecovacs API
+     * @param {Object} messagePayload - The message payload that was received
+     */
+    handleCommandResponse(command: any, messagePayload: any): void;
     /**
      * It handles the messages from the API (incoming MQTT message or request response)
      * @param {string} topic - the topic of the message
