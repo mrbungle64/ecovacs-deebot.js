@@ -67,6 +67,9 @@ class EcovacsXMPP_XML extends Ecovacs {
         });
     }
 
+    /**
+     * Connect to the Ecovacs server
+     */
     connect() {
         tools.envLog('[EcovacsXMPP_XML] Connecting as %s to %s', this.user + '@' + this.hostname, this.serverAddress + ':' + this.serverPort);
         this.simpleXmpp.connect({
@@ -78,27 +81,36 @@ class EcovacsXMPP_XML extends Ecovacs {
 
         if (!this.pingInterval) {
             this.pingInterval = setInterval(() => {
-                this.sendPing(this.getDeviceId());
+                this.sendPing();
             }, 30000);
         }
 
-        this.on('ready', (event) => {
+        this.on('ready', () => {
             tools.envLog('[EcovacsMQTT] received ready event');
-            this.sendPing(this.getDeviceId());
+            this.sendPing();
         });
     }
 
-    async sendCommand(action) {
-        let commandXml = this.getCommandXml(action);
+    /**
+     * Sends a command to the device
+     * @param {Object} command - the command object used to send
+     */
+    async sendCommand(command) {
+        let commandXml = this.getCommandXml(command);
         this.simpleXmpp.conn.send(commandXml);
     }
 
+    /**
+     * Create a specific XML element with the given command and return it
+     * @param {Object} command - the command as XML to send to the device
+     * @returns The specific XML for the command
+     */
     getCommandXml(command) {
         let id = this.iqElementId++;
         let iqElement = new Element('iq', {
             id: id,
-            from: this.getMyAddress(),
-            to: this.getDeviceId(),
+            from: this.getServerJID(),
+            to: this.getDeviceJID(),
             type: 'set'
         });
         iqElement.c('query', {
@@ -108,23 +120,28 @@ class EcovacsXMPP_XML extends Ecovacs {
     }
 
     /**
-     * Get the device id for the vacuum
-     * @returns {string} the device ID
+     * @returns {string} the Jabber Identifier of the device
      */
-    getDeviceId() {
+    getDeviceJID() {
         return this.bot.vacuum['did'] + '@' + this.bot.vacuum['class'] + '.ecorobot.net/atom';
     }
 
-    getMyAddress() {
+    /**
+     * @returns {string} the Jabber Identifier of the server side
+     */
+    getServerJID() {
         return this.user + '@' + this.hostname + '/' + this.resource;
     }
 
-    sendPing(to) {
+    /**
+     * Sends a ping to the device
+     */
+    sendPing() {
         let id = this.iqElementId++;
         let e = new Element('iq', {
             id: id,
-            to: to,
-            from: this.getMyAddress(),
+            from: this.getServerJID(),
+            to: this.getDeviceJID(),
             type: 'get'
         });
         e.c('query', {
@@ -133,11 +150,14 @@ class EcovacsXMPP_XML extends Ecovacs {
         this.simpleXmpp.conn.send(e);
     }
 
+    /**
+     * Disconnects from the XMPP server
+     */
     disconnect() {
+        tools.envLog("[EcovacsXMPP_XML] Disconnect from the XMPP server");
         this.simpleXmpp.disconnect();
         clearInterval(this.pingInterval);
         this.pingInterval = null;
-        tools.envLog("[EcovacsXMPP_XML] Closed XMPP Client");
     }
 }
 
