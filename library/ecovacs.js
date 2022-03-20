@@ -7,7 +7,7 @@ const {errorCodes} = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {
     /**
-     * @param {VacBot} bot - the VacBot object
+     * @param {VacBot|VacBot_950type|VacBot_non950type} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -18,10 +18,10 @@ class Ecovacs extends EventEmitter {
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort) {
+    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort) {
         super();
 
-        this.bot = bot;
+        this.bot = vacBot;
         this.dictionary = this.getEcovacsDictionary();
         this.user = user;
         this.hostname = hostname;

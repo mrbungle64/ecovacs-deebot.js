@@ -6,7 +6,7 @@ const Element = require('ltx').Element;
 
 class EcovacsXMPP_XML extends Ecovacs {
     /**
-     * @param {VacBot_non950type} bot - the VacBot object
+     * @param {VacBot|VacBot_non950type} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -17,9 +17,9 @@ class EcovacsXMPP_XML extends Ecovacs {
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 5223) {
-        super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
-        this.bot = bot;
+    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 5223) {
+        super(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
+        this.vacBot = vacBot;
 
         this.iqElementId = 1;
         this.pingInterval = null;
@@ -43,8 +43,8 @@ class EcovacsXMPP_XML extends Ecovacs {
                     tools.envLog('[EcovacsXMPP_XML] payload: %s', payload.toString());
                     let command = '';
                     if (payload.attrs) {
-                        if (payload.attrs.id && this.bot.commandsSent[payload.attrs.id]) {
-                            const action = this.bot.commandsSent[payload.attrs.id];
+                        if (payload.attrs.id && this.vacBot.commandsSent[payload.attrs.id]) {
+                            const action = this.vacBot.commandsSent[payload.attrs.id];
                             command = action.name;
                         } else {
                             command = payload.attrs.td;
@@ -55,8 +55,8 @@ class EcovacsXMPP_XML extends Ecovacs {
                                 await this.handleMessagePayload(command, payload).catch(error => {
                                     this.emitError('-2', error.message);
                                 });
-                                delete this.bot.commandsSent[payload.attrs.id];
-                                if (this.bot.errorCode === '-1') {
+                                delete this.vacBot.commandsSent[payload.attrs.id];
+                                if (this.vacBot.errorCode === '-1') {
                                     this.emitLastErrorByErrorCode('0');
                                 }
                             })();
@@ -66,7 +66,7 @@ class EcovacsXMPP_XML extends Ecovacs {
                     }
                 } else if ((stanza.attrs.type === 'error') && (stanza.children[0].name === 'error')) {
                     tools.envLog('[EcovacsXMPP_XML] Response Error for request %s: %S', stanza.attrs.id, JSON.stringify(stanza.children[0]));
-                    this.bot.handle_ResponseError(stanza.children[0].attrs);
+                    this.vacBot.handle_ResponseError(stanza.children[0].attrs);
                     this.emitLastError();
                 }
             }
@@ -74,8 +74,8 @@ class EcovacsXMPP_XML extends Ecovacs {
 
         this.simpleXmpp.on('error', (error) => {
             tools.envLog(`[EcovacsXMPP] Received error event: ${error}`);
-            this.bot.errorDescription = `Received error event: ${error}`;
-            this.bot.errorCode = '-1';
+            this.vacBot.errorDescription = `Received error event: ${error}`;
+            this.vacBot.errorCode = '-1';
             this.emitLastError();
         });
     }
@@ -136,7 +136,7 @@ class EcovacsXMPP_XML extends Ecovacs {
      * @returns {string} the Jabber Identifier of the device
      */
     getDeviceJID() {
-        return this.bot.vacuum['did'] + '@' + this.bot.vacuum['class'] + '.ecorobot.net/atom';
+        return this.vacBot.vacuum['did'] + '@' + this.vacBot.vacuum['class'] + '.ecorobot.net/atom';
     }
 
     /**

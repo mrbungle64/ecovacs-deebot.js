@@ -7,7 +7,7 @@ const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {
     /**
-     * @param {VacBot} bot - the VacBot object
+     * @param {VacBot|VacBot_950type|VacBot_non950type} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -18,8 +18,8 @@ class EcovacsMQTT extends Ecovacs {
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
-        super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
+    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
+        super(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 
         this.mqtt = require('mqtt');
         // MQTT is using domain without tld extension

@@ -21,7 +21,8 @@ class VacBot {
      * @param {string} serverAddress - the server address of the MQTT and XMPP server
      */
     constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
-        this.ecovacs = null;
+
+        this.ecovacs = require('./ecovacsMQTT');
         this.vacuum = vacuum;
         this.is_ready = false;
 
@@ -106,10 +107,21 @@ class VacBot {
 
         this.schedule = [];
 
-        this.vacBotCommand = this.getCommandsForModelType();
+        if (this.is950type()) {
+            this.vacBotCommand = require('./950type/vacBotCommand');
+        } else {
+            this.vacBotCommand = require('./non950type/vacBotCommand');
+        }
 
-        const ProtocolModule = this.getModuleForProtocol();
-        this.ecovacs = new ProtocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
+        if (this.is950type()) {
+            this.protocolModule = require('./950type/ecovacsMQTT_JSON');
+        } else if (this.useMqttProtocol()) {
+            this.protocolModule = require('./non950type/ecovacsMQTT_XML');
+        } else {
+            this.protocolModule = require('./non950type/ecovacsXMPP_XML');
+        }
+
+        this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
         this.ecovacs.on('ready', () => {
             tools.envLog('[VacBot] Ready event!');
@@ -596,32 +608,6 @@ class VacBot {
 
     on(name, func) {
         this.ecovacs.on(name, func);
-    }
-
-    /**
-     * Includes the specific commands for the related model type
-     * @returns {Object}
-     */
-    getCommandsForModelType() {
-        if (this.is950type()) {
-            return require('./950type/vacBotCommand');
-        } else {
-            return require('./non950type/vacBotCommand');
-        }
-    }
-
-    /**
-     * Includes the specific module for the related model type
-     * @returns {Ecovacs}
-     */
-    getModuleForProtocol() {
-        if (this.is950type()) {
-            return require('./950type/ecovacsMQTT_JSON');
-        } else if (this.useMqttProtocol()) {
-            return require('./non950type/ecovacsMQTT_XML');
-        } else {
-            return require('./non950type/ecovacsXMPP_XML');
-        }
     }
 
     /**

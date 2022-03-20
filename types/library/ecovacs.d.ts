@@ -1,7 +1,7 @@
 export = Ecovacs;
 declare class Ecovacs extends EventEmitter {
     /**
-     * @param {VacBot} bot - the VacBot object
+     * @param {VacBot|VacBot_950type|VacBot_non950type} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -12,8 +12,8 @@ declare class Ecovacs extends EventEmitter {
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
-    constructor(bot: VacBot, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: any, serverAddress: string, serverPort?: number);
-    bot: VacBot;
+    constructor(vacBot: VacBot | VacBot_950type | VacBot_non950type, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: any, serverAddress: string, serverPort?: number);
+    bot: any;
     dictionary: typeof import("./950type/ecovacsConstants") | typeof import("./non950type/ecovacsConstants");
     user: string;
     hostname: string;

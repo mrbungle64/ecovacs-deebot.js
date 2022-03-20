@@ -15,7 +15,7 @@ declare class VacBot {
      * @param {string} serverAddress - the server address of the MQTT and XMPP server
      */
     constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country: string, serverAddress: string);
-    ecovacs: any;
+    ecovacs: import("./950type/ecovacsMQTT_JSON") | import("./non950type/ecovacsMQTT_XML") | import("./non950type/ecovacsXMPP_XML");
     vacuum: any;
     is_ready: boolean;
     useMqtt: boolean;
@@ -85,7 +85,8 @@ declare class VacBot {
     mapDataObject: any[];
     mapDataObjectQueue: any[];
     schedule: any[];
-    vacBotCommand: any;
+    vacBotCommand: typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
+    protocolModule: typeof import("./950type/ecovacsMQTT_JSON") | typeof import("./non950type/ecovacsMQTT_XML") | typeof import("./non950type/ecovacsXMPP_XML");
     /**
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
@@ -169,16 +170,6 @@ declare class VacBot {
      */
     connect(): void;
     on(name: any, func: any): void;
-    /**
-     * Includes the specific commands for the related model type
-     * @returns {Object}
-     */
-    getCommandsForModelType(): any;
-    /**
-     * Includes the specific module for the related model type
-     * @returns {Ecovacs}
-     */
-    getModuleForProtocol(): Ecovacs;
     /**
      * If the value of `company` is `eco-ng`
      * the model uses MQTT as protocol

@@ -6,7 +6,7 @@ const { DOMParser } = require('@xmldom/xmldom');
 
 class EcovacsMQTT_XML extends EcovacsMQTT {
     /**
-     * @param {VacBot_non950type} bot - the VacBot object
+     * @param {VacBot|VacBot_non950type} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -17,9 +17,9 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
-    constructor(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
-        super(bot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
-        this.bot = bot;
+    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
+        super(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
+        this.vacBot = vacBot;
 
         this.payloadType = 'x'; // XML
     }
@@ -68,7 +68,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 } catch (e) {
                     this.emitError('-2', e.message);
                 }
-                delete this.bot.commandsSent[command.args.id];
+                delete this.vacBot.commandsSent[command.args.id];
             })();
         } else if (messagePayload.hasOwnProperty('logs')) {
             const children = [];
@@ -88,7 +88,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
                 } catch (e) {
                     this.emitError('-2', e.message);
                 }
-                delete this.bot.commandsSent[command.args.id];
+                delete this.vacBot.commandsSent[command.args.id];
             })();
         } else {
             tools.envLog('[EcovacsMQTT] Unknown response type received: %s', JSON.stringify(messagePayload));

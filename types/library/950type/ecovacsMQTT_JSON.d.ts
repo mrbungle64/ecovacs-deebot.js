@@ -1,5 +1,6 @@
 export = EcovacsMQTT_JSON;
 declare class EcovacsMQTT_JSON extends EcovacsMQTT {
+    vacBot: any;
     /**
      * The function returns the request object
      * @param {Object} command - the action to be performed
