@@ -1,4 +1,7 @@
 export = EcovacsMQTT;
+/**
+ * @extends Ecovacs
+ */
 declare class EcovacsMQTT extends Ecovacs {
     mqtt: typeof import("mqtt");
     username: string;

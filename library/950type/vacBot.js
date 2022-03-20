@@ -11,6 +11,7 @@ const {errorCodes} = require('../errorCodes.json');
 /**
  * This class is relevant for 950 type models
  * e.g. Deebot OZMO 920/950, (OZMO) T8 series, T9 series (which are all MQTT based models)
+ * @extends VacBot
  */
 class VacBot_950type extends VacBot {
     /**
@@ -93,12 +94,12 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handle_batteryInfo(payload) {
-        this.batteryInfo = payload['value'];
+        this.batteryLevel = payload['value'];
         if (payload.hasOwnProperty('isLow')) {
             this.batteryIsLow = !!Number(payload['isLow']);
             tools.envLog("[VacBot] *** batteryIsLow = %s", this.batteryIsLow);
         }
-        tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
+        tools.envLog("[VacBot] *** batteryLevel = %d\%", this.batteryLevel);
     }
 
     /**

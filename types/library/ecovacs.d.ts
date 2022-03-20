@@ -1,4 +1,7 @@
 export = Ecovacs;
+/**
+ * @extends EventEmitter
+ */
 declare class Ecovacs extends EventEmitter {
     /**
      * @param {VacBot|VacBot_950type|VacBot_non950type} vacBot - the VacBot object

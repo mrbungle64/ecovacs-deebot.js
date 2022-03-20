@@ -2,6 +2,7 @@ export = VacBot_950type;
 /**
  * This class is relevant for 950 type models
  * e.g. Deebot OZMO 920/950, (OZMO) T8 series, T9 series (which are all MQTT based models)
+ * @extends VacBot
  */
 declare class VacBot_950type extends VacBot {
     breakPoint: any;
@@ -24,9 +25,9 @@ declare class VacBot_950type extends VacBot {
     handle_cleanReport(payload: any): void;
     /**
      * Handle the payload of the battery status
-     * @param {string} payload
+     * @param {Object} payload
      */
-    handle_batteryInfo(payload: string): void;
+    handle_batteryInfo(payload: any): void;
     /**
      * Handle the payload for the life span components
      * @param {Object} payload

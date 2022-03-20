@@ -162,9 +162,9 @@ declare class EcovacsAPI {
     /**
      * Wrapper method for the `getVacBot` method (but with only 1 parameter)
      * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
-     * @returns {Object} a corresponding instance of the 'vacBot' class
+     * @returns {VacBot_non950type|VacBot_950type} a corresponding instance of the 'vacBot' class
      */
-    getVacBotObj(vacuum: any): any;
+    getVacBotObj(vacuum: any): VacBot_non950type | VacBot_950type;
     /**
      * Get a corresponding instance of the `vacBot` class
      * @param {String} user - the user ID (retrieved from Ecovacs API)
@@ -173,9 +173,9 @@ declare class EcovacsAPI {
      * @param {String} userToken - the user token
      * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {String} [continent] - the continent
-     * @returns {VacBot} a corresponding instance of the `VacBot` class
+     * @returns {VacBot_non950type|VacBot_950type} a corresponding instance of the `VacBot` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent?: string): VacBot;
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent?: string): VacBot_non950type | VacBot_950type;
     /**
      * Get the version of the package
      * @returns {string} the version of the package
@@ -191,5 +191,7 @@ declare namespace EcovacsAPI {
     const PUBLIC_KEY: string;
     const REALM: string;
 }
-export { EcovacsAPI as EcoVacsAPI, countries };
+/** @type {Object} */
+export const countries: any;
+export { EcovacsAPI as EcoVacsAPI };
 //# sourceMappingURL=index.d.ts.map

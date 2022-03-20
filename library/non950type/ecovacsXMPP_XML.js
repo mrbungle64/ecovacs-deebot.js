@@ -4,6 +4,9 @@ const Ecovacs = require('../ecovacs');
 const tools = require('../tools');
 const Element = require('ltx').Element;
 
+/**
+ * @extends Ecovacs
+ */
 class EcovacsXMPP_XML extends Ecovacs {
     /**
      * @param {VacBot|VacBot_non950type} vacBot - the VacBot object

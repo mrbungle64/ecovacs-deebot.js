@@ -5,6 +5,9 @@ const tools = require('./tools');
 const constants = require('./ecovacsConstants');
 const {errorCodes} = require('./errorCodes.json');
 
+/**
+ * @extends EventEmitter
+ */
 class Ecovacs extends EventEmitter {
     /**
      * @param {VacBot|VacBot_950type|VacBot_non950type} vacBot - the VacBot object
@@ -84,7 +87,9 @@ class Ecovacs extends EventEmitter {
             case 'BatteryInfo':
                 payload = event.children[0];
                 this.bot.handle_batteryInfo(payload);
-                this.emit('BatteryInfo', this.bot.batteryInfo);
+                if (this.bot.batteryLevel !== undefined) {
+                    this.emit('BatteryInfo', this.bot.batteryLevel);
+                }
                 break;
             case 'CleanState':
             case 'CleanReport':

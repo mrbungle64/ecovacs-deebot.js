@@ -40,12 +40,12 @@ function createErrorDescription(message) {
  */
 function getReqID() {
     let reqIdString = '';
-    let rtnval = '';
+    let randomValue = '';
     for (let i = 0; i < 8; i++) {
-        rtnval = Math.floor(Math.random() * 10);
-        reqIdString = reqIdString + rtnval.toString();
+        randomValue = Math.floor(Math.random() * 10).toString();
+        reqIdString = reqIdString + randomValue;
     }
-    return reqIdString.toString();
+    return reqIdString;
 }
 
 /**

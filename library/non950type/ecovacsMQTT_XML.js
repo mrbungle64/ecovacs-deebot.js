@@ -4,6 +4,9 @@ const EcovacsMQTT = require('../ecovacsMQTT');
 const tools = require('../tools');
 const { DOMParser } = require('@xmldom/xmldom');
 
+/**
+ * @extends EcovacsMQTT
+ */
 class EcovacsMQTT_XML extends EcovacsMQTT {
     /**
      * @param {VacBot|VacBot_non950type} vacBot - the VacBot object

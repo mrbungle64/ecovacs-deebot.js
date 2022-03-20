@@ -11,6 +11,7 @@ const {errorCodes} = require('../errorCodes.json');
 /**
  * This class is relevant for non 950 type models
  * e.g. Deebot OZMO 930, (OZMO) 900 series (legacy models - some are MQTT based and the older ones are XMPP based)
+ * @extends VacBot
  */
 class VacBot_non950type extends VacBot {
   /**
@@ -76,20 +77,18 @@ class VacBot_non950type extends VacBot {
 
   /**
    * Handle the payload of the battery status
-   * @param {string} payload
+   * @param {Object} payload
    */
   handle_batteryInfo(payload) {
-    let value;
+    let batteryLevel;
     if (payload.hasOwnProperty('ctl')) {
-      value = payload['ctl']['battery']['power'];
-    } else {
-      value = parseFloat(payload.attrs['power']);
+      batteryLevel = payload['ctl']['battery']['power'];
+    } else if (payload.attrs) {
+      batteryLevel = parseFloat(payload.attrs['power']);
     }
-    try {
-      this.batteryInfo = value;
-      tools.envLog("[VacBot] *** batteryInfo = %d\%", this.batteryInfo);
-    } catch (e) {
-      tools.envLog("[VacBot] couldn't parse battery info ", payload);
+    if (batteryLevel !== undefined) {
+      this.batteryLevel = batteryLevel;
+      tools.envLog("[VacBot] *** batteryLevel = %d\%", this.batteryLevel);
     }
   }
 
@@ -380,7 +379,8 @@ class VacBot_non950type extends VacBot {
       this.chargePosition = {
         x: payload.attrs['p'].split(",")[0],
         y: payload.attrs['p'].split(",")[1],
-        a: payload.attrs['a']
+        a: payload.attrs['a'],
+        changeFlag: true
       };
       tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.chargePosition));
     }
@@ -709,7 +709,7 @@ class VacBot_non950type extends VacBot {
         this.sendCommand(new VacBotCommand.EnableDoNotDisturb());
         break;
       case "GetCleanLogs".toLowerCase(): {
-        if (this.useMqtt) {
+        if (this.useMqttProtocol()) {
           this.sendCommand(new VacBotCommand.GetLogApiCleanLogs());
         } else {
           if (this.isN79series()) {

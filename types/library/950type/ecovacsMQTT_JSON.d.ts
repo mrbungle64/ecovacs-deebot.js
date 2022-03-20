@@ -1,4 +1,7 @@
 export = EcovacsMQTT_JSON;
+/**
+ * @extends EcovacsMQTT
+ */
 declare class EcovacsMQTT_JSON extends EcovacsMQTT {
     vacBot: any;
     /**

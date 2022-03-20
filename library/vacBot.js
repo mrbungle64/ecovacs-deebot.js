@@ -25,7 +25,6 @@ class VacBot {
         this.vacuum = vacuum;
         this.is_ready = false;
 
-        this.useMqtt = this.useMqttProtocol();
         this.deviceClass = vacuum['class'];
         this.deviceModel = this.getProductName();
         this.deviceImageURL = this.getProductImageURL();
@@ -47,7 +46,7 @@ class VacBot {
         this.currentMapIndex = 0;
         this.lastUsedAreaValues = '';
 
-        this.batteryInfo = null;
+        this.batteryLevel = null;
         this.batteryIsLow = false;
         this.cleanReport = null;
         this.chargeStatus = null;
@@ -843,7 +842,7 @@ class VacBot {
             }
         }
         tools.envLog("[VacBot] Sending command `%s` with id %s", command.name, command.getId());
-        let actionPayload = this.useMqtt ? command : command.to_xml();
+        let actionPayload = this.useMqttProtocol() ? command : command.to_xml();
         (async () => {
             try {
                 await this.ecovacs.sendCommand(actionPayload);

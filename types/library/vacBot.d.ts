@@ -11,14 +11,12 @@ declare class VacBot {
      * @param {string} secret - the user access token
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} continent - the continent where the Ecovacs account is registered
-     * @param {string} country - the country where the Ecovacs account is registered
-     * @param {string} serverAddress - the server address of the MQTT and XMPP server
+     * @param {string} [country='DE'] - the country where the Ecovacs account is registered
+     * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
      */
-    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country: string, serverAddress: string);
-    ecovacs: import("./950type/ecovacsMQTT_JSON") | import("./non950type/ecovacsMQTT_XML") | import("./non950type/ecovacsXMPP_XML");
+    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country?: string, serverAddress?: string);
     vacuum: any;
     is_ready: boolean;
-    useMqtt: boolean;
     deviceClass: any;
     deviceModel: string;
     deviceImageURL: string;
@@ -27,17 +25,17 @@ declare class VacBot {
     emitFullLifeSpanEvent: boolean;
     errorCode: string;
     errorDescription: any;
-    maps: any;
+    maps: {};
     mapImages: any[];
     mapVirtualBoundaries: any[];
     mapVirtualBoundariesResponses: any[];
     mapSpotAreaInfos: any[];
     mapVirtualBoundaryInfos: any[];
     currentMapName: string;
-    currentMapMID: any;
+    currentMapMID: string;
     currentMapIndex: number;
-    lastUsedAreaValues: any;
-    batteryInfo: any;
+    lastUsedAreaValues: string;
+    batteryLevel: any;
     batteryIsLow: boolean;
     cleanReport: any;
     chargeStatus: any;
@@ -87,6 +85,7 @@ declare class VacBot {
     schedule: any[];
     vacBotCommand: typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
     protocolModule: typeof import("./950type/ecovacsMQTT_JSON") | typeof import("./non950type/ecovacsMQTT_XML") | typeof import("./non950type/ecovacsXMPP_XML");
+    ecovacs: import("./950type/ecovacsMQTT_JSON") | import("./non950type/ecovacsMQTT_XML") | import("./non950type/ecovacsXMPP_XML");
     /**
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
@@ -312,10 +311,6 @@ declare class VacBot {
      * @param {Object} command - a VacBotCommand object
      */
     sendCommand(command: any): void;
-    /**
-     * @deprecated
-     */
-    sendPing(): void;
     /**
      * It disconnects the robot
      */

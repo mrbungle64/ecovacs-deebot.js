@@ -5,6 +5,9 @@ const tools = require('./tools');
 const constants = require('./ecovacsConstants');
 const axios = require("axios").default;
 
+/**
+ * @extends Ecovacs
+ */
 class EcovacsMQTT extends Ecovacs {
     /**
      * @param {VacBot|VacBot_950type|VacBot_non950type} vacBot - the VacBot object

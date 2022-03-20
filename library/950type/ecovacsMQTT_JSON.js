@@ -4,6 +4,9 @@ const EcovacsMQTT = require('../ecovacsMQTT');
 const tools = require('../tools');
 const constants = require('../ecovacsConstants');
 
+/**
+ * @extends EcovacsMQTT
+ */
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     /**
      * @param {VacBot|VacBot_950type} vacBot - the VacBot object
@@ -173,7 +176,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "Battery":
                 this.vacBot.handle_batteryInfo(payload);
-                this.emit("BatteryInfo", this.vacBot.batteryInfo);
+                this.emit("BatteryInfo", this.vacBot.batteryLevel);
                 this.emit("BatteryIsLow", this.vacBot.batteryIsLow);
                 break;
             case "CleanInfo":
