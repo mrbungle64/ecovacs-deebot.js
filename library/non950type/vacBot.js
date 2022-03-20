@@ -20,8 +20,8 @@ class VacBot_non950type extends VacBot {
    * @param {string} secret - the user access token
    * @param {Object} vacuum - the device object for the vacuum
    * @param {string} continent - the continent where the Ecovacs account is registered
-   * @param {string} country - the country where the Ecovacs account is registered
-   * @param {string} serverAddress - the server address of the MQTT and XMPP server
+   * @param {string} [country='DE'] - the country where the Ecovacs account is registered
+   * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
    */
   constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
     super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);

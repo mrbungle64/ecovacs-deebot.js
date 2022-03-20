@@ -20,8 +20,8 @@ class VacBot_950type extends VacBot {
      * @param {string} secret - the user access token
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} continent - the continent where the Ecovacs account is registered
-     * @param {string} country - the country where the Ecovacs account is registered
-     * @param {string} serverAddress - the server address of the MQTT server
+     * @param {string} [country='DE'] - the country where the Ecovacs account is registered
+     * @param {string} [serverAddress] - the server address of the MQTT server
      */
     constructor(user, hostname, resource, secret, vacuum, continent, country = 'DE', serverAddress) {
         super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);
@@ -64,11 +64,11 @@ class VacBot_950type extends VacBot {
                     this.lastUsedAreaValues = payload['cleanState']['content'];
                 }
             } else {
-                this.lastUsedAreaValues = null;
+                this.lastUsedAreaValues = '';
             }
         } else if (payload['trigger'] === 'alert') {
             this.cleanReport = 'alert';
-            this.lastUsedAreaValues = null;
+            this.lastUsedAreaValues = '';
         } else {
             this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
             if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'returning') {
@@ -83,14 +83,14 @@ class VacBot_950type extends VacBot {
                 // if this is not run, the status when canceling the return stays on 'returning'
                 this.run('GetChargeState');
             }
-            this.lastUsedAreaValues = null;
+            this.lastUsedAreaValues = '';
         }
         tools.envLog("[VacBot] *** cleanReport = %s", this.cleanReport);
     }
 
     /**
      * Handle the payload of the battery status
-     * @param {string} payload
+     * @param {Object} payload
      */
     handle_batteryInfo(payload) {
         this.batteryInfo = payload['value'];
@@ -718,7 +718,7 @@ class VacBot_950type extends VacBot {
                 break;
             }
             case "SetDoNotDisturb".toLowerCase(): {
-                const enable = !!args[0];
+                const enable = Number(!!args[0]);
                 const start = args[1];
                 const end = args[2];
                 if ((start !== '') && (end !== '')) {

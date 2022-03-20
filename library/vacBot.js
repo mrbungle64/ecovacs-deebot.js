@@ -17,12 +17,11 @@ class VacBot {
      * @param {string} secret - the user access token
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} continent - the continent where the Ecovacs account is registered
-     * @param {string} country - the country where the Ecovacs account is registered
-     * @param {string} serverAddress - the server address of the MQTT and XMPP server
+     * @param {string} [country='DE'] - the country where the Ecovacs account is registered
+     * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
      */
     constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
 
-        this.ecovacs = require('./ecovacsMQTT');
         this.vacuum = vacuum;
         this.is_ready = false;
 
@@ -37,16 +36,16 @@ class VacBot {
         this.errorCode = '0';
         this.errorDescription = errorCodes[this.errorCode];
 
-        this.maps = null;
+        this.maps = {};
         this.mapImages = [];
         this.mapVirtualBoundaries = [];
         this.mapVirtualBoundariesResponses = []; // response from vw, mw per mapID
         this.mapSpotAreaInfos = [];
         this.mapVirtualBoundaryInfos = [];
         this.currentMapName = 'unknown';
-        this.currentMapMID = null;
+        this.currentMapMID = '';
         this.currentMapIndex = 0;
-        this.lastUsedAreaValues = null;
+        this.lastUsedAreaValues = '';
 
         this.batteryInfo = null;
         this.batteryIsLow = false;
