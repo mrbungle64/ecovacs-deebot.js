@@ -8,7 +8,7 @@
     "test": "NODE_ENV=test mocha",
     "test_windows": "SET NODE_ENV=test && mocha",
     "appTest": "NODE_ENV=dev node example/app2.js",
-    "exportTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "exportTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir types",
     "exportAndCheckTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --checkJs --outDir types"
   },
   "keywords": [
