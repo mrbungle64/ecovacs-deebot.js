@@ -853,13 +853,6 @@ class VacBot {
     }
 
     /**
-     * @deprecated
-     */
-    sendPing() {
-        this.ecovacs.sendPing();
-    }
-
-    /**
      * It disconnects the robot
      */
     disconnect() {
