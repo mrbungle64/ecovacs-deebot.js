@@ -1,7 +1,4 @@
 export = EcovacsXMPP_XML;
-/**
- * @extends Ecovacs
- */
 declare class EcovacsXMPP_XML extends Ecovacs {
     vacBot: any;
     iqElementId: number;

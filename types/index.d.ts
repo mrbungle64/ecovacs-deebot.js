@@ -162,9 +162,9 @@ declare class EcovacsAPI {
     /**
      * Wrapper method for the `getVacBot` method (but with only 1 parameter)
      * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
-     * @returns {VacBot_non950type|VacBot_950type} a corresponding instance of the 'vacBot' class
+     * @returns {Object} a corresponding instance of the 'vacBot' class
      */
-    getVacBotObj(vacuum: any): VacBot_non950type | VacBot_950type;
+    getVacBotObj(vacuum: any): any;
     /**
      * Get a corresponding instance of the `vacBot` class
      * @param {String} user - the user ID (retrieved from Ecovacs API)
@@ -173,9 +173,9 @@ declare class EcovacsAPI {
      * @param {String} userToken - the user token
      * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {String} [continent] - the continent
-     * @returns {VacBot_non950type|VacBot_950type} a corresponding instance of the `VacBot` class
+     * @returns {Object} a corresponding instance of the `VacBot` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent?: string): VacBot_non950type | VacBot_950type;
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent?: string): any;
     /**
      * Get the version of the package
      * @returns {string} the version of the package

@@ -1,7 +1,4 @@
 export = EcovacsMQTT_XML;
-/**
- * @extends EcovacsMQTT
- */
 declare class EcovacsMQTT_XML extends EcovacsMQTT {
     vacBot: any;
     /**

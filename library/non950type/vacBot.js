@@ -11,7 +11,6 @@ const {errorCodes} = require('../errorCodes.json');
 /**
  * This class is relevant for non 950 type models
  * e.g. Deebot OZMO 930, (OZMO) 900 series (legacy models - some are MQTT based and the older ones are XMPP based)
- * @extends VacBot
  */
 class VacBot_non950type extends VacBot {
   /**

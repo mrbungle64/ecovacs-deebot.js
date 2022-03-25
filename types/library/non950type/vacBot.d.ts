@@ -2,7 +2,6 @@ export = VacBot_non950type;
 /**
  * This class is relevant for non 950 type models
  * e.g. Deebot OZMO 930, (OZMO) 900 series (legacy models - some are MQTT based and the older ones are XMPP based)
- * @extends VacBot
  */
 declare class VacBot_non950type extends VacBot {
     dustcaseInfo: any;

@@ -4,12 +4,9 @@ const EcovacsMQTT = require('../ecovacsMQTT');
 const tools = require('../tools');
 const constants = require('../ecovacsConstants');
 
-/**
- * @extends EcovacsMQTT
- */
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     /**
-     * @param {VacBot|VacBot_950type} vacBot - the VacBot object
+     * @param {Object} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum

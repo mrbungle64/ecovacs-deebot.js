@@ -4,12 +4,9 @@ const EcovacsMQTT = require('../ecovacsMQTT');
 const tools = require('../tools');
 const { DOMParser } = require('@xmldom/xmldom');
 
-/**
- * @extends EcovacsMQTT
- */
 class EcovacsMQTT_XML extends EcovacsMQTT {
     /**
-     * @param {VacBot|VacBot_non950type} vacBot - the VacBot object
+     * @param {Object} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
      * @param {string} resource - the resource of the vacuum
@@ -123,6 +120,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     command_xml2json(xmlString) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
+        /** @type {Object} */
         const firstChild = xml.childNodes[0];
         let attrs = {};
         let event = null;

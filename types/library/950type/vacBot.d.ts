@@ -2,7 +2,6 @@ export = VacBot_950type;
 /**
  * This class is relevant for 950 type models
  * e.g. Deebot OZMO 920/950, (OZMO) T8 series, T9 series (which are all MQTT based models)
- * @extends VacBot
  */
 declare class VacBot_950type extends VacBot {
     breakPoint: any;
