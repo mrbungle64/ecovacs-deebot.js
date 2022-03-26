@@ -83,6 +83,9 @@ export class GetLifeSpan extends VacBotCommand {
 export class GetMapImage extends VacBotCommand {
     constructor(mapID: any, mapType?: string);
 }
+export class GetMapImage_V2 extends VacBotCommand {
+    constructor(mapID: any, mapType?: string);
+}
 export class GetMapSet extends VacBotCommand {
     constructor(mapID: any, type?: string);
 }
