@@ -650,6 +650,7 @@ module.exports.SetAdvancedMode = SetAdvancedMode;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.SetCleanCount = SetCleanCount;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetDusterRemindPeriod = SetDusterRemindPeriod;

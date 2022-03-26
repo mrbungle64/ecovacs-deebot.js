@@ -841,7 +841,7 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
-            case "SetCleanCount":
+            case "SetCleanCount".toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetCleanCount(args[0]));
                 }
