@@ -168,6 +168,9 @@ export class SetCarpetPressure extends VacBotCommand {
 export class SetCleanSpeed extends VacBotCommand {
     constructor(level: any);
 }
+export class SetCleanCount extends VacBotCommand {
+    constructor(count?: number);
+}
 export class SetDoNotDisturb extends VacBotCommand {
     constructor(enable?: number, start?: string, end?: string);
 }

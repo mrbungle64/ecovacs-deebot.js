@@ -584,6 +584,14 @@ class SetCarpetPressure extends VacBotCommand {
     }
 }
 
+class SetCleanCount extends VacBotCommand {
+    constructor(count = 1) {
+        super('setCleanCount', {
+            'count': count
+        });
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
