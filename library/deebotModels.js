@@ -335,6 +335,26 @@ exports.KnownDevices = {
         "name": "DEEBOT X1 Omni",
         "deviceClassLink": "fqxoiu"
     },
+    "1b23du": {
+        "name": "DEEBOT X1 OMNI",
+        "deviceClassLink": "fqxoiu"
+    },
+    "1vxt52": {
+        "name": "DEEBOT X1 OMNI",
+        "deviceClassLink": "fqxoiu"
+    },
+    "2o4lnm": {
+        "name": "DEEBOT X1 TURBO",
+        "deviceClassLink": "fqxoiu"
+    },
+    "n4gstt": {
+        "name": "DEEBOT X1 PLUS",
+        "deviceClassLink": "fqxoiu"
+    },
+    "rss8xk": {
+        "name": "DEEBOT T10 PLUS",
+        "deviceClassLink": "fqxoiu"
+    },
     "126": {
         "name": "DEEBOT N79",
         "950type": false,
