@@ -45,7 +45,7 @@ class Ecovacs extends EventEmitter {
      * @returns {string} the endpoint
      */
     getEcovacsEndpoint() {
-        const urlPrefix = this.bot.useMqtt ? 'mq' : 'msg';
+        const urlPrefix = this.bot.useMqttProtocol() ? 'mq' : 'msg';
         let serverAddress = `${urlPrefix}-${this.continent}.${constants.REALM}`;
         if (this.country === 'CN') {
             serverAddress = `${urlPrefix}.${constants.REALM}`;
