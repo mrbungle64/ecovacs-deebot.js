@@ -432,6 +432,10 @@ class VacBot_950type extends VacBot {
         }
     }
 
+    /**
+     * @todo: finish the implementation
+     * @param payload
+     */
     handle_majorMap(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
@@ -453,6 +457,11 @@ class VacBot_950type extends VacBot {
         }
     }
 
+    /**
+     * @todo: finish the implementation
+     * @param payload
+     * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
+     */
     async handle_minorMap(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {

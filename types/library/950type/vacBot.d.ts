@@ -70,9 +70,18 @@ declare class VacBot_950type extends VacBot {
         mapsubsetData?: undefined;
     }>;
     handle_mapInfo(payload: any): Promise<any>;
+    /**
+     * @todo: finish the implementation
+     * @param payload
+     */
     handle_majorMap(payload: any): void;
     liveMapImage: map.EcovacsLiveMapImage;
-    handle_minorMap(payload: any): Promise<{
+    /**
+     * @todo: finish the implementation
+     * @param payload
+     * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
+     */
+    handle_minorMap(payload: any): Promise<null | {
         mapID: any;
         mapType: any;
         mapBase64PNG: string;

@@ -14,14 +14,39 @@ declare class EcovacsMQTT extends Ecovacs {
     connect(): void;
     client: import("mqtt").Client;
     /**
-     * Send post request to the Ecovacs API
-     * @param {Object} params - parameter object for building the URL
-     * @param {string} apiPath - the API path
-     * @returns {Promise<{Object}>}
+     * @param {Object} command - the command object
+     * @param {Object} params
      */
-    callEcouserApi(params: any, apiPath: string): Promise<{
-        Object;
-    }>;
+    getRequestUrl(command: any, params: any): any;
+    getRequestHeaders(params: any): {
+        'Content-Type': string;
+        'Content-Length': number;
+    };
+    /**
+     * The function returns the request object
+     * @param {Object} command - the action to be performed
+     * @returns {Object} the command object used to be sent
+     */
+    getRequestObject(command: any): any;
+    /**
+     * @param {Object} command - the command object
+     * @returns {string}
+     * @abstract
+     */
+    getCommandPayload(command: any): string;
+    /**
+     * @param {Object} command - the command that was sent to the Ecovacs API
+     * @param {Object} messagePayload - The message payload that was received
+     * @abstract
+     */
+    handleCommandResponse(command: any, messagePayload: any): void;
+    /**
+     * @param {string} topic - the topic of the message
+     * @param {Object|string} message - the message
+     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     * @abstract
+     */
+    handleMessage(topic: string, message: any | string, type?: string): void;
     /**
      * It sends a command to the Ecovacs API
      * @param {Object} command - the command to send to the Ecovacs API
@@ -39,22 +64,18 @@ declare class EcovacsMQTT extends Ecovacs {
      * @param {Object} payload - the payload object
      * @returns {Object} the JSON object
      */
-    getCommandStandardRequestObject(command: any, payload: any): any;
+    getCommandRequestObject(command: any, payload: any): any;
     /**
      * Returns a request object for receiving clean logs
      * @param {Object} command - the command object
      * @returns {Object} the JSON object
      */
-    getCommandCleanLogsObject(command: any): any;
+    getCleanLogsCommandObject(command: any): any;
     /**
      * Returns the `auth` object used for the command object
      * @returns {Object} the JSON object
      */
     getAuthObject(): any;
-    /**
-     * Disconnect the MQTT client
-     */
-    disconnect(): void;
 }
 import Ecovacs = require("./ecovacs");
 //# sourceMappingURL=ecovacsMQTT.d.ts.map

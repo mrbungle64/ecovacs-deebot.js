@@ -25,20 +25,6 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     }
 
     /**
-     * The function returns the request object
-     * @param {Object} command - the action to be performed
-     * @returns {Object} the command object used to be sent
-     */
-    getCommandRequestObject(command) {
-        if (command.name === 'GetLogApiCleanLogs') {
-            return this.getCommandCleanLogsObject('GetCleanLogs');
-        } else {
-            const payload = this.getCommandPayload(command);
-            return this.getCommandStandardRequestObject(command, payload);
-        }
-    }
-
-    /**
      * It creates a string with the payload in xml format
      * and also removes the td element
      * @param {Object} command - the command object

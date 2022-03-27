@@ -13,16 +13,6 @@ const countries = require('./countries.json').countries;
 /** @type {Object} */
 const packageInfo = require('./package.json');
 
-String.prototype.format = function () {
-  if (arguments.length === 0) {
-    return this;
-  }
-  let args = arguments['0'];
-  return this.replace(/{(\w+)}/g, function (match, number) {
-    return typeof args[number] != 'undefined' ? args[number] : match;
-  });
-};
-
 class EcovacsAPI {
   /**
    * @param {string} deviceId - the device ID of the bot
@@ -155,11 +145,11 @@ class EcovacsAPI {
     if (loginPath === constants.GETAUTHCODE_PATH) {
       params['bizType'] = 'ECOVACS_IOT';
       params['deviceId'] = this.device_id;
-      portalUrl = new url.URL((portalPath).format(this.meta));
+      portalUrl = new url.URL(tools.formatString(portalPath, this.meta));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));
     } else {
       params['requestId'] = EcovacsAPI.md5(uniqid());
-      portalUrl = new url.URL((portalPath + "/" + loginPath).format(this.meta));
+      portalUrl = new url.URL(tools.formatString(portalPath + "/" + loginPath, this.meta));
       searchParams = new url.URLSearchParams(this.getUserLoginParams(params));
     }
     tools.envLog(`[EcoVacsAPI] callUserAuthApi calling ${portalUrl.href}`);
@@ -229,9 +219,7 @@ class EcovacsAPI {
     if (this.country === 'CN') {
       portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
     }
-    let portalUrl = (portalUrlFormat + "/" + api).format({
-      continent: this.continent
-    });
+    let portalUrl = tools.formatString(portalUrlFormat + "/" + api, {continent: this.continent});
     let headers = {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(JSON.stringify(params))

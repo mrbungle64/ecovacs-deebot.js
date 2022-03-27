@@ -2,6 +2,16 @@
 
 const deebotModels = require('./deebotModels');
 
+function formatString(string) {
+    if (arguments.length === 0) {
+        return string;
+    }
+    const args = arguments[1];
+    return string.replace(/{(\w+)}/g, function (match, key) {
+        return typeof args[key] !== 'undefined' ? args[key] : match;
+    });
+}
+
 /**
  * @returns {Boolean} whether the canvas module is available
  */
@@ -212,3 +222,4 @@ module.exports.is710series = is710series;
 module.exports.getReqID = getReqID;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
 module.exports.createErrorDescription = createErrorDescription;
+module.exports.formatString = formatString;

@@ -410,6 +410,11 @@ class Ecovacs extends EventEmitter {
             this.emit("MoppingSystemInfo", r);
         }
     }
+
+    /**
+     * @abstract
+     */
+    disconnect() {}
 }
 
 module.exports = Ecovacs;

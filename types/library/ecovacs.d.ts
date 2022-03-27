@@ -60,6 +60,10 @@ declare class Ecovacs extends EventEmitter {
      * then emit a `MoppingSystemInfo` event with the `cleanStatus` and `cleanInfo` properties
      */
     emitMoppingSystemReport(): void;
+    /**
+     * @abstract
+     */
+    disconnect(): void;
 }
 import EventEmitter = require("events");
 //# sourceMappingURL=ecovacs.d.ts.map

@@ -17,7 +17,8 @@ describe('API', function () {
             continents.push(continent);
 
             try {
-              await axios.get(constants.PORTAL_URL_FORMAT.format({continent}));
+              const url = tools.formatString(constants.PORTAL_URL_FORMAT, {"continent": continent});
+              await axios.get(url);
             } catch (err) {
               if (err.code === 'ENOTFOUND') {
                 throw Error(err);
@@ -106,18 +107,18 @@ describe('API tools', function () {
 
   describe('#string.format', function () {
     it('should add a format method to the prototype of String', function () {
-      assert.ok("abcdefghijklmnopqrestuvwyz".format);
+      assert.ok(tools.formatString("abcdefghijklmnopqrestuvwyz"));
     });
 
     it('should replace key identifiers with provided values', function () {
-      assert.strictEqual("{first} {second}".format({first: "Hello", second: "world"}), "Hello world");
-      assert.strictEqual("{first} world".format({first: "Hello"}), "Hello world");
+      assert.strictEqual(tools.formatString("{first} {second}", {first: "Hello", second: "world"}), "Hello world");
+      assert.strictEqual(tools.formatString("{first} world", {first: "Hello"}), "Hello world");
     });
 
     it('should not replace key identifiers when not provided as values', function () {
-      assert.strictEqual("{first} {second}".format({foo: "Hello", bar: "world"}), "{first} {second}");
-      assert.strictEqual("{first} world".format({foo: "Hello", bar: "world"}), "{first} world");
-      assert.strictEqual("{first} {second}".format({}), "{first} {second}");
+      assert.strictEqual(tools.formatString("{first} {second}", {foo: "Hello", bar: "world"}), "{first} {second}");
+      assert.strictEqual(tools.formatString("{first} world", {foo: "Hello", bar: "world"}), "{first} world");
+      assert.strictEqual(tools.formatString("{first} {second}", {}), "{first} {second}");
     });
   });
 

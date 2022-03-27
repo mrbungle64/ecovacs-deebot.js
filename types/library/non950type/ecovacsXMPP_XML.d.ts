@@ -31,10 +31,6 @@ declare class EcovacsXMPP_XML extends Ecovacs {
      * Sends a ping to the device
      */
     sendPing(): void;
-    /**
-     * Disconnects from the XMPP server
-     */
-    disconnect(): void;
 }
 import Ecovacs = require("../ecovacs");
 //# sourceMappingURL=ecovacsXMPP_XML.d.ts.map

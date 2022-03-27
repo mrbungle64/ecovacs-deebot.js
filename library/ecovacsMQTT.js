@@ -103,26 +103,26 @@ class EcovacsMQTT extends Ecovacs {
     }
 
     /**
-     * Send post request to the Ecovacs API
-     * @param {Object} params - parameter object for building the URL
-     * @param {string} apiPath - the API path
-     * @returns {Promise<{Object}>}
+     * @param {Object} command - the command object
+     * @param {Object} params
      */
-    async callEcouserApi(params, apiPath) {
+    getRequestUrl(command,params) {
+        const apiPath = this.getApiPath(command);
         let portalUrlFormat = constants.PORTAL_URL_FORMAT;
         if (this.country === 'CN') {
             portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
         }
-        let portalUrl = (portalUrlFormat + '/' + apiPath).format({
-            continent: this.continent
-        });
+        let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, {continent: this.continent});
         if (this.bot.is950type()) {
             portalUrl = portalUrl + "?cv=1.67.3&t=a&av=1.3.1";
             if (apiPath === constants.IOTDEVMANAGERAPI) {
                 portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
             }
         }
+        return portalUrl;
+    }
 
+    getRequestHeaders(params) {
         let headers = {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(JSON.stringify(params))
@@ -132,47 +132,84 @@ class EcovacsMQTT extends Ecovacs {
                 'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'
             });
         }
+        return headers;
+    }
 
-        let response;
-        try {
-            const res = await axios.post(portalUrl, params, {
-                headers: headers
-            });
-            response = res.data;
-            tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
-        } catch (e) {
-            this.emitNetworkError(e.message);
-            throw e.message;
+    /**
+     * The function returns the request object
+     * @param {Object} command - the action to be performed
+     * @returns {Object} the command object used to be sent
+     */
+    getRequestObject(command) {
+        if ((command.api === constants.LGLOGAPI) || (command.name === 'GetLogApiCleanLogs')) {
+            return this.getCleanLogsCommandObject(command.name);
         }
-
-        if ((response['result'] === 'ok') || (response['ret'] === 'ok')) {
-            if (this.bot.errorCode !== '0') {
-                this.emitLastErrorByErrorCode('0');
-            }
-            return response;
-        } else {
-            const errorCodeObj = {
-                code: response['errno']
-            };
-            this.bot.handle_ResponseError(errorCodeObj);
-            // Error code 500 = wait for response timed out (see issue #19)
-            if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
-                this.emitLastError();
-            }
-            tools.envLog(`[EcovacsAPI] callEcouserApi failure code ${response['errno']} (${response['error']})`);
-            throw `Failure code ${response['errno']} (${response['error']})`;
+        else {
+            const payload = this.getCommandPayload(command);
+            return this.getCommandRequestObject(command, payload);
         }
     }
+
+    /**
+     * @param {Object} command - the command object
+     * @returns {string}
+     * @abstract
+     */
+    getCommandPayload(command) { return ''; }
+
+    /**
+     * @param {Object} command - the command that was sent to the Ecovacs API
+     * @param {Object} messagePayload - The message payload that was received
+     * @abstract
+     */
+    handleCommandResponse(command, messagePayload) {}
+
+    /**
+     * @param {string} topic - the topic of the message
+     * @param {Object|string} message - the message
+     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     * @abstract
+     */
+    handleMessage(topic, message, type = "incoming") {}
 
     /**
      * It sends a command to the Ecovacs API
      * @param {Object} command - the command to send to the Ecovacs API
      */
     async sendCommand(command) {
-        let commandRequestObject = this.getCommandRequestObject(command);
         try {
-            const json = await this.callEcouserApi(commandRequestObject, this.getApiPath(command));
-            this.handleCommandResponse(command, json);
+            const params = this.getRequestObject(command);
+            const portalUrl = this.getRequestUrl(command, params);
+            const headers = this.getRequestHeaders(params);
+            let response;
+            try {
+                const res = await axios.post(portalUrl, params, {
+                    headers: headers
+                });
+                response = res.data;
+                tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
+            } catch (e) {
+                this.emitNetworkError(e.message);
+                throw e.message;
+            }
+
+            if ((response['result'] === 'ok') || (response['ret'] === 'ok')) {
+                if (this.bot.errorCode !== '0') {
+                    this.emitLastErrorByErrorCode('0');
+                }
+                this.handleCommandResponse(command, response);
+            } else {
+                const errorCodeObj = {
+                    code: response['errno']
+                };
+                this.bot.handle_ResponseError(errorCodeObj);
+                // Error code 500 = wait for response timed out (see issue #19)
+                if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
+                    this.emitLastError();
+                }
+                tools.envLog(`[EcovacsAPI] callEcouserApi failure code ${response['errno']} (${response['error']})`);
+                throw `Failure code ${response['errno']} (${response['error']})`;
+            }
         } catch (e) {
             tools.envLog("[EcovacsMQTT] Error making call to Ecovacs API: " + e.toString());
         }
@@ -199,7 +236,7 @@ class EcovacsMQTT extends Ecovacs {
      * @param {Object} payload - the payload object
      * @returns {Object} the JSON object
      */
-    getCommandStandardRequestObject(command, payload) {
+    getCommandRequestObject(command, payload) {
         return {
             'cmdName': command.name,
             'payload': payload,
@@ -217,7 +254,7 @@ class EcovacsMQTT extends Ecovacs {
      * @param {Object} command - the command object
      * @returns {Object} the JSON object
      */
-    getCommandCleanLogsObject(command) {
+    getCleanLogsCommandObject(command) {
         return {
             'auth': this.getAuthObject(),
             'did': this.vacuum['did'],

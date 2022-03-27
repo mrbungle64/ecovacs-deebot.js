@@ -334,6 +334,26 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    "1b23du": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "1vxt52": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "2o4lnm": {
+        name: string;
+        deviceClassLink: string;
+    };
+    n4gstt: {
+        name: string;
+        deviceClassLink: string;
+    };
+    rss8xk: {
+        name: string;
+        deviceClassLink: string;
+    };
     "126": {
         name: string;
         "950type": boolean;

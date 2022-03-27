@@ -85,4 +85,5 @@ export function isCanvasModuleAvailable(): boolean;
  * @returns {string} the error description
  */
 export function createErrorDescription(message: string): string;
+export function formatString(string: any, ...args: any[]): any;
 //# sourceMappingURL=tools.d.ts.map

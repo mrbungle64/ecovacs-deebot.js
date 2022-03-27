@@ -25,26 +25,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * The function returns the request object
-     * @param {Object} command - the action to be performed
-     * @returns {Object} the command object used to be sent
-     */
-    getCommandRequestObject(command) {
-        if (command.api === constants.IOTDEVMANAGERAPI) {
-            const payload = this.getCommandPayload(command);
-            return this.getCommandStandardRequestObject(command, payload);
-        }
-        if (command.api === constants.LGLOGAPI) {
-            return this.getCommandCleanLogsObject(command);
-        }
-    }
-
-    /**
      * The function returns the request object for cleaning logs
      * @param {Object} command - the action to be performed
      * @returns {Object} the command object used to be sent
      */
-    getCommandCleanLogsObject(command) {
+    getCleanLogsCommandObject(command) {
         return {
             'did': this.vacuum['did'],
             'country': this.country,
@@ -222,11 +207,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'MajorMap':
                 // TODO: finish implementing MajorMap
-                //this.bot.handle_majorMap(payload);
+                //this.vacBot.handle_majorMap(payload);
                 break;
             case 'MinorMap':
                 // TODO: finish implementing MinorMap
-                /*let mapImage = this.bot.handle_minorMap(payload);
+                /*let mapImage = this.vacBot.handle_minorMap(payload);
                 if (mapImage !== null) {
                     this.emit("MapLiveImage", mapImage);
                 }*/
