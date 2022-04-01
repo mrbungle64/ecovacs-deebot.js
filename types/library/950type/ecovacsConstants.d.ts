@@ -57,11 +57,17 @@ export namespace COMPONENT_TO_ECOVACS {
     const main_brush: string;
     const side_brush: string;
     const filter: string;
+    const unitCare: string;
+    const dModule: string;
 }
 export namespace COMPONENT_FROM_ECOVACS {
-    const brush: string;
-    const sideBrush: string;
-    const heap: string;
+    export const brush: string;
+    export const sideBrush: string;
+    export const heap: string;
+    const unitCare_1: string;
+    export { unitCare_1 as unitCare };
+    const dModule_1: string;
+    export { dModule_1 as dModule };
 }
 export namespace MOVE_ACTION {
     export const backward: string;

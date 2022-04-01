@@ -58,13 +58,17 @@ exports.CHARGE_MODE_FROM_ECOVACS = {
 exports.COMPONENT_TO_ECOVACS = {
     'main_brush': 'brush',
     'side_brush': 'sideBrush',
-    'filter': 'heap'
+    'filter': 'heap',
+    'unitCare': 'unitCare',
+    'dModule': 'dModule'
 };
 
 exports.COMPONENT_FROM_ECOVACS = {
     'brush': 'main_brush',
     'sideBrush': 'side_brush',
-    'heap': 'filter'
+    'heap': 'filter',
+    'unitCare': 'unitCare',
+    'dModule': 'dModule'
 };
 
 exports.MOVE_ACTION = {
