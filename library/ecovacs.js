@@ -78,12 +78,12 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'ChargeState':
                 payload = event.children[0];
-                this.bot.handle_chargeState(payload);
+                this.bot.handleChargeState(payload);
                 this.emit('ChargeState', this.bot.chargeStatus);
                 break;
             case 'BatteryInfo':
                 payload = event.children[0];
-                this.bot.handle_batteryInfo(payload);
+                this.bot.handleBatteryInfo(payload);
                 if (this.bot.batteryLevel !== undefined) {
                     this.emit('BatteryInfo', this.bot.batteryLevel);
                 }
@@ -93,7 +93,7 @@ class Ecovacs extends EventEmitter {
                 if (event.children && (event.children.length > 0)) {
                     payload = event.children[0];
                 }
-                this.bot.handle_cleanReport(payload);
+                this.bot.handleCleanReport(payload);
                 this.emit('CleanReport', this.bot.cleanReport);
                 if (this.bot.lastUsedAreaValues) {
                     this.emit('LastUsedAreaValues', this.bot.lastUsedAreaValues);
@@ -104,7 +104,7 @@ class Ecovacs extends EventEmitter {
                 if (event.children && (event.children.length > 0)) {
                     payload = event.children[0];
                 }
-                this.bot.handle_cleanSpeed(payload);
+                this.bot.handleCleanSpeed(payload);
                 this.emit('CleanSpeed', this.bot.cleanSpeed);
                 break;
             case 'RelocationState':
@@ -113,7 +113,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'LifeSpan':
                 payload = event.attrs;
-                this.bot.handle_lifespan(payload);
+                this.bot.handleLifespan(payload);
                 if (!this.bot.emitFullLifeSpanEvent) {
                     const component = this.dictionary.COMPONENT_FROM_ECOVACS[payload.type];
                     if (component) {
@@ -128,7 +128,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Pos':
                 // DeebotPosition
-                this.bot.handle_deebotPosition(payload);
+                this.bot.handleDeebotPosition(payload);
                 if (this.bot.deebotPosition['x'] && this.bot.deebotPosition['y']) {
                     this.emit('DeebotPosition', this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a']);
                     this.emit('DeebotPositionCurrentSpotAreaID', this.bot.deebotPosition['currentSpotAreaID']);
@@ -146,7 +146,7 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             case 'ChargerPos':
-                this.bot.handle_chargePosition(payload);
+                this.bot.handleChargePosition(payload);
                 this.emit('ChargePosition', this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a']);
                 this.emit('ChargingPosition', {
                     'coords': this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a'],
@@ -156,18 +156,18 @@ class Ecovacs extends EventEmitter {
                 });
                 break;
             case 'WaterPermeability':
-                this.bot.handle_waterLevel(payload);
+                this.bot.handleWaterPermeability(payload);
                 this.emit('WaterLevel', this.bot.waterLevel);
                 this.emitMoppingSystemReport();
                 break;
             case 'WaterBoxInfo':
-                this.bot.handle_waterboxInfo(payload);
+                this.bot.handleWaterboxInfo(payload);
                 this.emit('WaterBoxInfo', this.bot.waterboxInfo);
                 this.emitMoppingSystemReport();
                 break;
             case 'NetInfo':
                 payload = event.attrs;
-                this.bot.handle_netInfo(payload);
+                this.bot.handleNetInfo(payload);
                 this.emit('NetInfoIP', this.bot.netInfoIP); // Deprecated
                 this.emit('NetInfoWifiSSID', this.bot.netInfoWifiSSID); // Deprecated
                 this.emit('NetworkInfo', {
@@ -178,7 +178,7 @@ class Ecovacs extends EventEmitter {
                 });
                 break;
             case 'SleepStatus':
-                this.bot.handle_sleepStatus(payload);
+                this.bot.handleSleepStatus(payload);
                 this.emit('SleepStatus', this.bot.sleepStatus);
                 break;
             case 'Error':
@@ -274,7 +274,7 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             case 'DustCaseST':
-                this.bot.handle_dustcaseInfo(payload);
+                this.bot.handleDustcaseInfo(payload);
                 this.emit('DustCaseInfo', this.bot.dustcaseInfo);
                 break;
             case 'OnOff':
@@ -322,6 +322,9 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    /**
+     * Handle life span components to emit combined object
+     */
     handleLifeSpanCombined() {
         const emitComponent = {};
         for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
@@ -340,6 +343,11 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    /**
+     * Set values for emitting an error
+     * @param {string} code - the error code
+     * @param {string} message - the error message
+     */
     emitError(code, message) {
         tools.envLog(`[EcovacsMQTT] Received error event with code '${code}' and message '${message}'`);
         this.bot.errorCode = code;
@@ -355,6 +363,10 @@ class Ecovacs extends EventEmitter {
         this.emitError('-1', tools.createErrorDescription(message));
     }
 
+    /**
+     * Emit an error by a given error code
+     * @param {string} errorCode
+     */
     emitLastErrorByErrorCode(errorCode) {
         if (errorCode !== this.bot.errorCode) {
             this.bot.errorCode = errorCode;

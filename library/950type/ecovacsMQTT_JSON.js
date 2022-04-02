@@ -151,18 +151,18 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "ChargeState":
-                this.vacBot.handle_chargeState(payload);
+                this.vacBot.handleChargeState(payload);
                 if (this.vacBot.chargeStatus) {
                     this.emit("ChargeState", this.vacBot.chargeStatus);
                 }
                 break;
             case "Battery":
-                this.vacBot.handle_batteryInfo(payload);
+                this.vacBot.handleBatteryInfo(payload);
                 this.emit("BatteryInfo", this.vacBot.batteryLevel);
                 this.emit("BatteryIsLow", this.vacBot.batteryIsLow);
                 break;
             case "CleanInfo":
-                this.vacBot.handle_cleanReport(payload);
+                this.vacBot.handleCleanReport(payload);
                 this.emit("CleanReport", this.vacBot.cleanReport);
                 this.emitMoppingSystemReport();
                 if (this.vacBot.chargeStatus) {
@@ -174,7 +174,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "Speed":
-                this.vacBot.handle_cleanSpeed(payload);
+                this.vacBot.handleCleanSpeed(payload);
                 this.emit("CleanSpeed", this.vacBot.cleanSpeed);
                 break;
             case "RelocationState":
@@ -232,7 +232,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "LifeSpan":
-                this.vacBot.handle_lifespan(payload);
+                this.vacBot.handleLifespan(payload);
                 if (!this.vacBot.emitFullLifeSpanEvent) {
                     for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
                         if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
@@ -249,7 +249,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "Pos":
-                this.vacBot.handle_deebotPosition(payload);
+                this.vacBot.handleDeebotPosition(payload);
                 if (this.vacBot.deebotPosition["changeFlag"]) {
                     if ((this.vacBot.deebotPosition["isInvalid"] === true) && ((this.vacBot.relocationState === 'ok') || (this.vacBot.relocationState === null))) {
                         this.vacBot.relocationState = 'required';
@@ -284,13 +284,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "WaterInfo":
-                this.vacBot.handle_waterInfo(payload);
+                this.vacBot.handleWaterInfo(payload);
                 this.emit("WaterBoxInfo", this.vacBot.waterboxInfo);
                 this.emit("WaterLevel", this.vacBot.waterLevel);
                 this.emitMoppingSystemReport();
                 break;
             case "NetInfo":
-                this.vacBot.handle_netInfo(payload);
+                this.vacBot.handleNetInfo(payload);
                 this.emit("NetInfoIP", this.vacBot.netInfoIP); // Deprecated
                 this.emit("NetInfoWifiSSID", this.vacBot.netInfoWifiSSID); // Deprecated
                 this.emit("NetInfoWifiSignal", this.vacBot.netInfoWifiSignal); // Deprecated
@@ -303,7 +303,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 });
                 break;
             case 'Sleep':
-                this.vacBot.handle_sleepStatus(payload);
+                this.vacBot.handleSleepStatus(payload);
                 this.emit("SleepStatus", this.vacBot.sleepStatus);
                 break;
             case 'BreakPoint':

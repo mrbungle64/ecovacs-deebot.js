@@ -31,10 +31,11 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
+   * Handle the payload of the `CleanReport` response/message
+   * e.g. charge status, clean status and the last area values
    * @param {Object} payload
    */
-  handle_cleanReport(payload) {
+  handleCleanReport(payload) {
     if (payload.attrs) {
       let type = payload.attrs['type'];
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
@@ -75,10 +76,10 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload of the battery status
+   * Handle the payload of the `BatteryInfo` response/message (battery level)
    * @param {Object} payload
    */
-  handle_batteryInfo(payload) {
+  handleBatteryInfo(payload) {
     let batteryLevel;
     if (payload.hasOwnProperty('ctl')) {
       batteryLevel = payload['ctl']['battery']['power'];
@@ -92,10 +93,11 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for the life span components
+   * Handle the payload of the `LifeSpan` response/message
+   * (information about accessories components)
    * @param {Object} payload
    */
-  handle_lifespan(payload) {
+  handleLifespan(payload) {
     let type = null;
     if (payload.hasOwnProperty('type')) {
       // type attribute must be trimmed because of Deebot M88
@@ -133,10 +135,11 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for the position data
+   * Handle the payload of the `Pos` response/message
+   * (position of the vacuum and the charging station)
    * @param {Object} payload
    */
-  handle_deebotPosition(payload) {
+  handleDeebotPosition(payload) {
     tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
       const posX = Number(payload.attrs['p'].split(",")[0]);
@@ -164,10 +167,11 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for vacuum power resp. suction power ("clean speed")
+   * Handle the payload of the `CleanSpeed` response/message
+   * (vacuum power resp. suction power)
    * @param {Object} payload
    */
-  handle_cleanSpeed(payload) {
+  handleCleanSpeed(payload) {
     if (payload.attrs.hasOwnProperty('speed')) {
       let speed = payload.attrs['speed'];
       if (dictionary.CLEAN_SPEED_FROM_ECOVACS[speed]) {
@@ -183,10 +187,11 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for network related data
+   * Handle the payload of the `NetInfo` response/message
+   * (ip address and Wi-Fi ssid)
    * @param {Object} payload
    */
-  handle_netInfo(payload) {
+  handleNetInfo(payload) {
     if (payload.hasOwnProperty('wi')) {
       this.netInfoIP = payload['wi'];
       tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
@@ -197,216 +202,33 @@ class VacBot_non950type extends VacBot {
     }
   }
 
-  handle_waterLevel(payload) {
+  /**
+   * Handle the payload of the `WaterPermeability` response/message (water level)
+   * @param {Object} payload
+   */
+  handleWaterPermeability(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('v')) {
       this.waterLevel = Number(payload.attrs['v']);
       tools.envLog("[VacBot] *** waterLevel = %s", this.waterLevel);
     }
   }
 
-  async handle_cachedMapInfo(payload) {
-    tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(payload));
-    // Execute only if the GetMaps cmd was received
-    if (!this.handleMapExecuted && payload.attrs && payload.attrs.hasOwnProperty('i')) {
-      this.currentMapMID = payload.attrs['i'];
-      const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, 1);
-      this.maps = {
-        "maps": [ecovacsMap]
-      };
-      this.run('GetMapSet');
-      this.mapSpotAreaInfos[this.currentMapMID] = [];
-      this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
-      this.handleMapExecuted = true;
-      if (this.createMapImage && tools.isCanvasModuleAvailable()) {
-        try {
-          await this.handle_mapInfo(payload);
-        } catch (e) {
-          throw new Error(e);
-        }
-      }
-      return this.maps;
-    }
-    return null;
-  }
-
-  handle_mapSet(payload) {
-    tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(payload));
-    if (payload.attrs && payload.attrs.hasOwnProperty('tp')) {
-      if (payload.attrs['tp'] === 'sa') {
-        const mapSetID = payload.attrs['msid'];
-        const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, mapSetID);
-        let spotAreas = [];
-        for (let mapIndex in payload.children) {
-          if (payload.children.hasOwnProperty(mapIndex)) {
-            let mid = payload.children[mapIndex].attrs['mid'];
-            if (!spotAreas[mid]) {
-              mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
-              this.run('PullM', 'sa', this.currentMapMID, mid);
-              spotAreas[mid] = true;
-            }
-          }
-        }
-        tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
-        return {
-          mapsetEvent: 'MapSpotAreas',
-          mapsetData: mapSpotAreas
-        };
-      } else if (payload.attrs['tp'] === 'vw') {
-        const mapVirtualBoundaries = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
-        let virtualBoundaries = [];
-        for (let mapIndex in payload.children) {
-          if (payload.children.hasOwnProperty(mapIndex)) {
-            let mid = payload.children[mapIndex].attrs['mid'];
-            if (!virtualBoundaries[mid]) {
-              mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
-              this.run('PullM', 'vw', this.currentMapMID, mid);
-              virtualBoundaries[mid] = true;
-            }
-          }
-        }
-        tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(mapVirtualBoundaries));
-        return {
-          mapsetEvent: 'MapVirtualBoundaries',
-          mapsetData: mapVirtualBoundaries
-        };
-      }
-    }
-
-    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(payload.attrs['tp']));
-    return {
-      mapsetEvent: 'error'
-    };
-  }
-
-  async handle_mapSubset(payload) {
-    tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(payload));
-    if (payload.attrs && payload.attrs.hasOwnProperty('m')) {
-      const value = payload.attrs['m'];
-      let mid = '';
-      let type = '';
-      if (payload.attrs.hasOwnProperty('mid')) {
-        // MQTT
-        mid = payload.attrs['mid'];
-        type = payload.attrs['tp'];
-      } else {
-        // XMPP
-        const command = this.commandsSent[payload.attrs.id];
-        if (command.args && command.args.mid && command.args.tp) {
-          mid = command.args.mid;
-          type = command.args.tp;
-        }
-      }
-      if (mid && type) {
-        if (type === 'sa') {
-          let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value);
-          this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
-          tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
-          return {
-            mapsubsetEvent: 'MapSpotAreaInfo',
-            mapsubsetData: mapSpotAreaInfo
-          };
-        } else if (type === 'vw') {
-          let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mid, 'vw', value);
-          this.mapVirtualBoundaryInfos[this.currentMapMID][mid] = mapVirtualBoundaryInfo;
-          tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
-          return {
-            mapsubsetEvent: 'MapVirtualBoundaryInfo',
-            mapsubsetData: mapVirtualBoundaryInfo
-          };
-        }
-      } else {
-        tools.envLog("[VacBot] *** handle_mapSubset Missing mid or type");
-      }
-    }
-    return {
-      mapsubsetEvent: 'error'
-    };
-  }
-
-  async handle_mapInfo(payload) {
-    if (payload.attrs) {
-      const mapID = payload.attrs.i;
-      const type = 'ol'; // Only outline is supported for non 950 type models
-      const columnGrid = payload.attrs.w;
-      const columnPiece = payload.attrs.c;
-      const rowGrid = payload.attrs.h;
-      const rowPiece = payload.attrs.r;
-      const pixelWidth = payload.attrs.p;
-      const crc = payload.attrs.m;
-      this.mapPiecePacketsCrcArray = crc.split(',');
-      if (typeof this.mapImages[mapID] === 'undefined') {
-        this.mapImages[mapID] = [];
-      }
-      if (typeof this.mapImages[mapID][type] === 'undefined') {
-        this.mapImages[mapID][type] = new map.EcovacsLiveMapImage(mapID, type, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
-      }
-      this.mapPiecePacketsSent = [];
-      for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {
-        if(this.mapPiecePacketsCrcArray[c] !== '1295764014') { //skip empty pieces
-          this.run('PullMP', c);
-        }
-      }
-    }
-  }
-
-  async handle_mapPiecePacket(payload) {
-    if (payload.attrs) {
-      const mapID = payload.attrs.i;
-      const type = 'ol'; // Only outline is supported for non 950 type models
-      if (this.mapImages[mapID][type]) {
-        let pid = this.mapPiecePacketsSent[payload.attrs.id];
-        if (payload.attrs.pid) {
-          pid = payload.attrs.pid;
-        }
-        const pieceValue = payload.attrs.p;
-        await this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
-        if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
-          try {
-            return await this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
-          } catch (e) {
-            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
-            throw new Error(e);
-          }
-        }
-      }
-      return null;
-    }
-  }
-
-  handle_chargePosition(payload) {
-    if (payload.attrs && payload.attrs.hasOwnProperty('p') && payload.attrs.hasOwnProperty('a')) {
-      this.chargePosition = {
-        x: payload.attrs['p'].split(",")[0],
-        y: payload.attrs['p'].split(",")[1],
-        a: payload.attrs['a'],
-        changeFlag: true
-      };
-      tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.chargePosition));
-    }
-  }
-
-  handle_dustcaseInfo(payload) {
-    if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
-      this.dustcaseInfo = payload.attrs['st'];
-      tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustcaseInfo);
-    }
-  }
-
-  handle_waterboxInfo(payload) {
+  /**
+   * Handle the payload of the `WaterBoxInfo` response/message (water tank status)
+   * @param {Object} payload
+   */
+  handleWaterboxInfo(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('on')) {
       this.waterboxInfo = payload.attrs['on'];
       tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
     }
   }
 
-  handle_sleepStatus(payload) {
-    if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
-      this.sleepStatus = payload.attrs['st'];
-      tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
-    }
-  }
-
-  handle_chargeState(payload) {
+  /**
+   * Handle the payload of the `ChargeState` response/message (charge status)
+   * @param {Object} payload
+   */
+  handleChargeState(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('type')) {
       const chargeStatus = payload.attrs['type'];
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargeStatus]) {
@@ -420,6 +242,49 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   * Handle the payload of the `ChargerPos` response/message
+   * (charger resp. charge position)
+   * @param {Object} payload
+   */
+  handleChargePosition(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('p') && payload.attrs.hasOwnProperty('a')) {
+      this.chargePosition = {
+        x: payload.attrs['p'].split(",")[0],
+        y: payload.attrs['p'].split(",")[1],
+        a: payload.attrs['a'],
+        changeFlag: true
+      };
+      tools.envLog("[VacBot] *** chargePosition = %s", JSON.stringify(this.chargePosition));
+    }
+  }
+
+  /**
+   * Handle the payload of the `DustCaseST` response/message (dust case status)
+   * @param {Object} payload
+   */
+  handleDustcaseInfo(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
+      this.dustcaseInfo = payload.attrs['st'];
+      tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustcaseInfo);
+    }
+  }
+
+  /**
+   * Handle the payload of the `SleepStatus` response/message (sleep status)
+   * @param {Object} payload
+   */
+  handleSleepStatus(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
+      this.sleepStatus = payload.attrs['st'];
+      tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
+    }
+  }
+
+  /**
+   *
+   * @param {Object} payload
+   */
   handle_cleanSum(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('a') && payload.attrs.hasOwnProperty('l') && payload.attrs.hasOwnProperty('c')) {
       this.cleanSum_totalSquareMeters = parseInt(payload.attrs['a']);
@@ -428,6 +293,10 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   *
+   * @param {Object} payload
+   */
   handle_cleanLogs(payload) {
     if (payload.attrs) {
       const count = payload.children.length;
@@ -498,6 +367,10 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   *
+   * @param {Object} payload
+   */
   handle_onOff(payload) {
     tools.envLog("[VacBot] *** handleOnOff = " + JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('on')) {
@@ -524,6 +397,10 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   *
+   * @param {Object} payload
+   */
   handle_stats(payload) {
     if (payload.attrs) {
       const area = parseInt(payload.attrs.a);
@@ -537,6 +414,10 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   *
+   * @param {Object} payload
+   */
   handle_getSched(payload) {
     this.schedule = [];
     for (let c = 0; c < payload.children.length; c++) {
@@ -598,6 +479,199 @@ class VacBot_non950type extends VacBot {
     }
   }
 
+  /**
+   * Handle the payload for the map info data (CachedMapInfo)
+   * @param {Object} payload
+   */
+  async handle_cachedMapInfo(payload) {
+    tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(payload));
+    // Execute only if the GetMaps cmd was received
+    if (!this.handleMapExecuted && payload.attrs && payload.attrs.hasOwnProperty('i')) {
+      this.currentMapMID = payload.attrs['i'];
+      const ecovacsMap = new map.EcovacsMap(this.currentMapMID, 0, this.currentMapName, 1);
+      this.maps = {
+        "maps": [ecovacsMap]
+      };
+      this.run('GetMapSet');
+      this.mapSpotAreaInfos[this.currentMapMID] = [];
+      this.mapVirtualBoundaryInfos[this.currentMapMID] = [];
+      this.handleMapExecuted = true;
+      if (this.createMapImage && tools.isCanvasModuleAvailable()) {
+        try {
+          await this.handle_mapInfo(payload);
+        } catch (e) {
+          throw new Error(e);
+        }
+      }
+      return this.maps;
+    }
+    return null;
+  }
+
+  /**
+   *
+   * @param {Object} payload
+   */
+  handle_mapSet(payload) {
+    tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('tp')) {
+      if (payload.attrs['tp'] === 'sa') {
+        const mapSetID = payload.attrs['msid'];
+        const mapSpotAreas = new map.EcovacsMapSpotAreas(this.currentMapMID, mapSetID);
+        let spotAreas = [];
+        for (let mapIndex in payload.children) {
+          if (payload.children.hasOwnProperty(mapIndex)) {
+            let mid = payload.children[mapIndex].attrs['mid'];
+            if (!spotAreas[mid]) {
+              mapSpotAreas.push(new map.EcovacsMapSpotArea(mid));
+              this.run('PullM', 'sa', this.currentMapMID, mid);
+              spotAreas[mid] = true;
+            }
+          }
+        }
+        tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
+        return {
+          mapsetEvent: 'MapSpotAreas',
+          mapsetData: mapSpotAreas
+        };
+      } else if (payload.attrs['tp'] === 'vw') {
+        const mapVirtualBoundaries = new map.EcovacsMapVirtualBoundaries(this.currentMapMID);
+        let virtualBoundaries = [];
+        for (let mapIndex in payload.children) {
+          if (payload.children.hasOwnProperty(mapIndex)) {
+            let mid = payload.children[mapIndex].attrs['mid'];
+            if (!virtualBoundaries[mid]) {
+              mapVirtualBoundaries.push(new map.EcovacsMapVirtualBoundary(mid, 'vw'));
+              this.run('PullM', 'vw', this.currentMapMID, mid);
+              virtualBoundaries[mid] = true;
+            }
+          }
+        }
+        tools.envLog("[VacBot] *** MapVirtualBoundaries = " + JSON.stringify(mapVirtualBoundaries));
+        return {
+          mapsetEvent: 'MapVirtualBoundaries',
+          mapsetData: mapVirtualBoundaries
+        };
+      }
+    }
+
+    tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(payload.attrs['tp']));
+    return {
+      mapsetEvent: 'error'
+    };
+  }
+
+  /**
+   *
+   * @param {Object} payload
+   */
+  async handle_mapSubset(payload) {
+    tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(payload));
+    if (payload.attrs && payload.attrs.hasOwnProperty('m')) {
+      const value = payload.attrs['m'];
+      let mid = '';
+      let type = '';
+      if (payload.attrs.hasOwnProperty('mid')) {
+        // MQTT
+        mid = payload.attrs['mid'];
+        type = payload.attrs['tp'];
+      } else {
+        // XMPP
+        const command = this.commandsSent[payload.attrs.id];
+        if (command.args && command.args.mid && command.args.tp) {
+          mid = command.args.mid;
+          type = command.args.tp;
+        }
+      }
+      if (mid && type) {
+        if (type === 'sa') {
+          let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(this.currentMapMID, mid, '', value);
+          this.mapSpotAreaInfos[this.currentMapMID][mid] = mapSpotAreaInfo;
+          tools.envLog("[VacBot] *** MapSpotAreaInfo = " + JSON.stringify(mapSpotAreaInfo));
+          return {
+            mapsubsetEvent: 'MapSpotAreaInfo',
+            mapsubsetData: mapSpotAreaInfo
+          };
+        } else if (type === 'vw') {
+          let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(this.currentMapMID, mid, 'vw', value);
+          this.mapVirtualBoundaryInfos[this.currentMapMID][mid] = mapVirtualBoundaryInfo;
+          tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
+          return {
+            mapsubsetEvent: 'MapVirtualBoundaryInfo',
+            mapsubsetData: mapVirtualBoundaryInfo
+          };
+        }
+      } else {
+        tools.envLog("[VacBot] *** handle_mapSubset Missing mid or type");
+      }
+    }
+    return {
+      mapsubsetEvent: 'error'
+    };
+  }
+
+  /**
+   *
+   * @param {Object} payload
+   */
+  async handle_mapInfo(payload) {
+    if (payload.attrs) {
+      const mapID = payload.attrs.i;
+      const type = 'ol'; // Only outline is supported for non 950 type models
+      const columnGrid = payload.attrs.w;
+      const columnPiece = payload.attrs.c;
+      const rowGrid = payload.attrs.h;
+      const rowPiece = payload.attrs.r;
+      const pixelWidth = payload.attrs.p;
+      const crc = payload.attrs.m;
+      this.mapPiecePacketsCrcArray = crc.split(',');
+      if (typeof this.mapImages[mapID] === 'undefined') {
+        this.mapImages[mapID] = [];
+      }
+      if (typeof this.mapImages[mapID][type] === 'undefined') {
+        this.mapImages[mapID][type] = new map.EcovacsLiveMapImage(mapID, type, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
+      }
+      this.mapPiecePacketsSent = [];
+      for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {
+        if(this.mapPiecePacketsCrcArray[c] !== '1295764014') { //skip empty pieces
+          this.run('PullMP', c);
+        }
+      }
+    }
+  }
+
+  /**
+   *
+   * @param {Object} payload
+   */
+  async handle_mapPiecePacket(payload) {
+    if (payload.attrs) {
+      const mapID = payload.attrs.i;
+      const type = 'ol'; // Only outline is supported for non 950 type models
+      if (this.mapImages[mapID][type]) {
+        let pid = this.mapPiecePacketsSent[payload.attrs.id];
+        if (payload.attrs.pid) {
+          pid = payload.attrs.pid;
+        }
+        const pieceValue = payload.attrs.p;
+        await this.mapImages[this.currentMapMID][type].updateMapPiece(pid, pieceValue);
+        if (this.mapImages[this.currentMapMID][type].transferMapInfo) {
+          try {
+            return await this.mapImages[this.currentMapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+          } catch (e) {
+            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+            throw new Error(e);
+          }
+        }
+      }
+      return null;
+    }
+  }
+
+  /**
+   *
+   * @param {Object} payload
+   */
   handle_ResponseError(payload) {
     this.errorCode = '0';
     this.errorDescription = '';

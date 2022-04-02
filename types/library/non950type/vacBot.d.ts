@@ -7,38 +7,106 @@ declare class VacBot_non950type extends VacBot {
     dustcaseInfo: any;
     mapPiecePacketsCrcArray: any;
     /**
-     * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
+     * Handle the payload of the `CleanReport` response/message
+     * e.g. charge status, clean status and the last area values
      * @param {Object} payload
      */
-    handle_cleanReport(payload: any): void;
+    handleCleanReport(payload: any): void;
     /**
-     * Handle the payload of the battery status
+     * Handle the payload of the `BatteryInfo` response/message (battery level)
      * @param {Object} payload
      */
-    handle_batteryInfo(payload: any): void;
+    handleBatteryInfo(payload: any): void;
     /**
-     * Handle the payload for the life span components
+     * Handle the payload of the `LifeSpan` response/message
+     * (information about accessories components)
      * @param {Object} payload
      */
-    handle_lifespan(payload: any): void;
+    handleLifespan(payload: any): void;
     /**
-     * Handle the payload for the position data
+     * Handle the payload of the `Pos` response/message
+     * (position of the vacuum and the charging station)
      * @param {Object} payload
      */
-    handle_deebotPosition(payload: any): void;
+    handleDeebotPosition(payload: any): void;
     /**
-     * Handle the payload for vacuum power resp. suction power ("clean speed")
+     * Handle the payload of the `CleanSpeed` response/message
+     * (vacuum power resp. suction power)
      * @param {Object} payload
      */
-    handle_cleanSpeed(payload: any): void;
+    handleCleanSpeed(payload: any): void;
     /**
-     * Handle the payload for network related data
+     * Handle the payload of the `NetInfo` response/message
+     * (ip address and Wi-Fi ssid)
      * @param {Object} payload
      */
-    handle_netInfo(payload: any): void;
-    handle_waterLevel(payload: any): void;
+    handleNetInfo(payload: any): void;
+    /**
+     * Handle the payload of the `WaterPermeability` response/message (water level)
+     * @param {Object} payload
+     */
+    handleWaterPermeability(payload: any): void;
+    /**
+     * Handle the payload of the `WaterBoxInfo` response/message (water tank status)
+     * @param {Object} payload
+     */
+    handleWaterboxInfo(payload: any): void;
+    /**
+     * Handle the payload of the `ChargeState` response/message (charge status)
+     * @param {Object} payload
+     */
+    handleChargeState(payload: any): void;
+    /**
+     * Handle the payload of the `ChargerPos` response/message
+     * (charger resp. charge position)
+     * @param {Object} payload
+     */
+    handleChargePosition(payload: any): void;
+    /**
+     * Handle the payload of the `DustCaseST` response/message (dust case status)
+     * @param {Object} payload
+     */
+    handleDustcaseInfo(payload: any): void;
+    /**
+     * Handle the payload of the `SleepStatus` response/message (sleep status)
+     * @param {Object} payload
+     */
+    handleSleepStatus(payload: any): void;
+    /**
+     *
+     * @param {Object} payload
+     */
+    handle_cleanSum(payload: any): void;
+    /**
+     *
+     * @param {Object} payload
+     */
+    handle_cleanLogs(payload: any): void;
+    /**
+     *
+     * @param {Object} payload
+     */
+    handle_onOff(payload: any): void;
+    /**
+     *
+     * @param {Object} payload
+     */
+    handle_stats(payload: any): void;
+    /**
+     *
+     * @param {Object} payload
+     */
+    handle_getSched(payload: any): void;
+    /**
+     * Handle the payload for the map info data (CachedMapInfo)
+     * @param {Object} payload
+     */
     handle_cachedMapInfo(payload: any): Promise<{}>;
     handleMapExecuted: boolean;
+    /**
+     *
+     * @param {Object} payload
+     */
     handle_mapSet(payload: any): {
         mapsetEvent: string;
         mapsetData: map.EcovacsMapSpotAreas;
@@ -49,6 +117,10 @@ declare class VacBot_non950type extends VacBot {
         mapsetEvent: string;
         mapsetData?: undefined;
     };
+    /**
+     *
+     * @param {Object} payload
+     */
     handle_mapSubset(payload: any): Promise<{
         mapsubsetEvent: string;
         mapsubsetData: map.EcovacsMapSpotAreaInfo;
@@ -59,18 +131,20 @@ declare class VacBot_non950type extends VacBot {
         mapsubsetEvent: string;
         mapsubsetData?: undefined;
     }>;
+    /**
+     *
+     * @param {Object} payload
+     */
     handle_mapInfo(payload: any): Promise<void>;
+    /**
+     *
+     * @param {Object} payload
+     */
     handle_mapPiecePacket(payload: any): Promise<any>;
-    handle_chargePosition(payload: any): void;
-    handle_dustcaseInfo(payload: any): void;
-    handle_waterboxInfo(payload: any): void;
-    handle_sleepStatus(payload: any): void;
-    handle_chargeState(payload: any): void;
-    handle_cleanSum(payload: any): void;
-    handle_cleanLogs(payload: any): void;
-    handle_onOff(payload: any): void;
-    handle_stats(payload: any): void;
-    handle_getSched(payload: any): void;
+    /**
+     *
+     * @param {Object} payload
+     */
     handle_ResponseError(payload: any): void;
 }
 import VacBot = require("../vacBot");

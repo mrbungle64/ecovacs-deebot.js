@@ -12,7 +12,7 @@ declare class VacBot {
      * @param {string} secret - the user access token
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} continent - the continent where the Ecovacs account is registered
-     * @param {string} [country='DE'] - the country where the Ecovacs account is registered
+     * @param {string} [country] - the country where the Ecovacs account is registered
      * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
      */
     constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country?: string, serverAddress?: string);

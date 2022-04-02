@@ -42,14 +42,26 @@ declare class Ecovacs extends EventEmitter {
      * @returns the dictionary of Ecovacs related constants
      */
     getEcovacsDictionary(): typeof import("./950type/ecovacsConstants") | typeof import("./non950type/ecovacsConstants");
+    /**
+     * Handle life span components to emit combined object
+     */
     handleLifeSpanCombined(): void;
-    emitError(code: any, message: any): void;
+    /**
+     * Set values for emitting an error
+     * @param {string} code - the error code
+     * @param {string} message - the error message
+     */
+    emitError(code: string, message: string): void;
     /**
      * Emit a network related error message
      * @param {string} message - the error message
      */
     emitNetworkError(message: string): void;
-    emitLastErrorByErrorCode(errorCode: any): void;
+    /**
+     * Emit an error by a given error code
+     * @param {string} errorCode
+     */
+    emitLastErrorByErrorCode(errorCode: string): void;
     /**
      * Emit the error.
      * Disconnect if 'RequestOAuthError: Authentication error' error

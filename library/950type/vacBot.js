@@ -42,11 +42,12 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
+     * Handle the payload of the `CleanInfo` response/message
+     * e.g. charge status, clean status and the last area values
      * @param {Object} payload
      */
-    handle_cleanReport(payload) {
-        tools.envLog("[handle_cleanReport] payload: ", JSON.stringify(payload));
+    handleCleanReport(payload) {
+        tools.envLog("[handleCleanReport] payload: ", JSON.stringify(payload));
         if (payload['state'] === 'clean') {
             let type = payload['cleanState']['type'];
             if (typeof payload['cleanState']['content'] === 'object') {
@@ -89,10 +90,10 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the battery status
+     * Handle the payload of the `Battery` response/message (battery level)
      * @param {Object} payload
      */
-    handle_batteryInfo(payload) {
+    handleBatteryInfo(payload) {
         this.batteryLevel = payload['value'];
         if (payload.hasOwnProperty('isLow')) {
             this.batteryIsLow = !!Number(payload['isLow']);
@@ -102,10 +103,11 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload for the life span components
+     * Handle the payload of the `LifeSpan` response/message
+     * (information about accessories components)
      * @param {Object} payload
      */
-    handle_lifespan(payload) {
+    handleLifespan(payload) {
         for (let index in payload) {
             if (payload[index]) {
                 const type = payload[index]["type"];
@@ -127,10 +129,11 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload for the position data
+     * Handle the payload of the `Pos` response/message
+     * (vacuum position and charger resp. charge position)
      * @param {Object} payload
      */
-    handle_deebotPosition(payload) {
+    handleDeebotPosition(payload) {
         // is only available in some DeebotPosition messages (e.g. on start cleaning)
         // there can be more than one charging station only handles first charging station
         const chargePos = payload['chargePos'];
@@ -191,20 +194,21 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload for vacuum power resp. suction power ("clean speed")
+     * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
      * @param {Object} payload
      */
-    handle_cleanSpeed(payload) {
+    handleCleanSpeed(payload) {
         const speed = payload['speed'];
         this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         tools.envLog("[VacBot] *** cleanSpeed = %s", this.cleanSpeed);
     }
 
     /**
-     * Handle the payload for network related data
+     * Handle the payload of the `NetInfo` response/message
+     * (network addresses and Wi-Fi status)
      * @param {Object} payload
      */
-    handle_netInfo(payload) {
+    handleNetInfo(payload) {
         this.netInfoIP = payload['ip'];
         this.netInfoWifiSSID = payload['ssid'];
         this.netInfoWifiSignal = payload['rssi'];
@@ -214,6 +218,45 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
         tools.envLog("[VacBot] *** netInfoWifiSignal = %s", this.netInfoWifiSignal);
         tools.envLog("[VacBot] *** netInfoMAC = %s", this.netInfoMAC);
+    }
+
+    /**
+     * Handle the payload of the `WaterInfo` response/message
+     * (water level and water box status)
+     * @param {Object} payload
+     */
+    handleWaterInfo(payload) {
+        this.waterLevel = payload['amount'];
+        this.waterboxInfo = payload['enable'];
+        tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
+        tools.envLog("[VacBot] *** waterLevel = " + this.waterLevel);
+    }
+
+    /**
+     * Handle the payload of the `ChargeState` response/message (charge status)
+     * @param {Object} payload
+     */
+    handleChargeState(payload) {
+        tools.envLog("[handleChargeState] payload: ", JSON.stringify(payload));
+        let status = null;
+        const isCharging = parseInt(payload['isCharging']);
+        if (isCharging === 1) {
+            status = 'charging';
+        } else if (isCharging === 0) {
+            status = 'idle';
+        }
+        if (status) {
+            this.chargeStatus = status;
+        }
+    }
+
+    /**
+     * Handle the payload of the `Sleep` response/message (sleep status)
+     * @param {Object} payload
+     */
+    handleSleepStatus(payload) {
+        this.sleepStatus = payload['enable'];
+        tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
     }
 
     handle_cleanLogs(payload) {
@@ -269,14 +312,105 @@ class VacBot_950type extends VacBot {
         this.cleanSum_totalNumber = parseInt(payload['count']);
     }
 
-    handle_waterLevel(payload) {
-        this.waterLevel = payload['amount'];
-        tools.envLog("[VacBot] *** waterLevel = %s", this.waterLevel);
-    }
-
     handle_relocationState(payload) {
         this.relocationState = payload['state'];
         tools.envLog("[VacBot] *** relocationState = " + this.relocationState);
+    }
+
+    handle_volume(payload) {
+        this.volume = payload['volume'];
+        tools.envLog("[VacBot] *** volume = " + this.volume);
+    }
+
+    handle_breakPoint(payload) {
+        this.breakPoint = payload['enable'];
+        tools.envLog("[VacBot] *** breakPoint = " + this.breakPoint);
+    }
+
+    handle_block(payload) {
+        this.block = payload['enable'];
+        tools.envLog("[VacBot] *** block = " + this.block);
+    }
+
+    handle_autoEmpty(payload) {
+        this.autoEmpty = payload['enable'];
+        tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
+    }
+
+    handle_advancedMode(payload) {
+        this.advancedMode = payload['enable'];
+        tools.envLog("[VacBot] *** advancedMode = " + this.advancedMode);
+    }
+
+    handle_trueDetect(payload) {
+        this.trueDetect = payload['enable'];
+        tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
+    }
+
+    handle_dusterRemind(payload) {
+        this.dusterRemind = {
+            enabled: payload['enable'],
+            period: payload['period']
+        };
+        tools.envLog("[VacBot] *** dusterRemind = " + JSON.stringify(this.dusterRemind));
+    }
+
+    handle_carpetPressure(payload) {
+        this.carpetPressure = payload['enable'];
+        tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
+    }
+
+    handle_stats(payload) {
+        tools.envLog("[handle_stats] payload: " + JSON.stringify(payload));
+        this.currentStats = {
+            'cleanedArea': payload['area'],
+            'cleanedSeconds': payload['time'],
+            'cleanType': payload['type']
+        };
+    }
+
+    handle_Schedule(payload) {
+        this.schedule = [];
+        for (let c = 0; c < payload.length; c++) {
+            const resultData = payload[c];
+            let cleanCtl = {
+                'type': 'auto'
+            };
+            if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
+                const json = JSON.parse(resultData.content.jsonStr);
+                Object.assign(cleanCtl, {
+                    'type': json.type
+                });
+                if (cleanCtl.type === 'spotArea') {
+                    Object.assign(cleanCtl, {
+                            'spotAreas': json.content
+                        });
+                }
+            }
+            const onlyOnce = Number(resultData.repeat) === 0;
+            const weekdays = resultData.repeat.split('');
+            const weekdaysObj = {
+                'Mon': Boolean(Number(weekdays[1])),
+                'Tue': Boolean(Number(weekdays[2])),
+                'Wed': Boolean(Number(weekdays[3])),
+                'Thu': Boolean(Number(weekdays[4])),
+                'Fri': Boolean(Number(weekdays[5])),
+                'Sat': Boolean(Number(weekdays[6])),
+                'Sun': Boolean(Number(weekdays[0]))
+            };
+            const object = {
+                'sid': resultData.sid,
+                'cleanCmd': cleanCtl,
+                'content': resultData.content,
+                'enabled': Boolean(Number(resultData.enable)),
+                'onlyOnce': onlyOnce,
+                'weekdays': weekdaysObj,
+                'hour': resultData.hour,
+                'minute': resultData.minute,
+                'mapID': resultData.mid
+            };
+            this.schedule.push(object);
+        }
     }
 
     handle_cachedMapInfo(payload) {
@@ -479,128 +613,6 @@ class VacBot_950type extends VacBot {
         } catch (e) {
             tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
             throw new Error(e);
-        }
-    }
-
-    handle_waterInfo(payload) {
-        this.waterLevel = payload['amount'];
-        this.waterboxInfo = payload['enable'];
-        tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
-        tools.envLog("[VacBot] *** waterLevel = " + this.waterLevel);
-    }
-
-    handle_volume(payload) {
-        this.volume = payload['volume'];
-        tools.envLog("[VacBot] *** volume = " + this.volume);
-    }
-
-    handle_chargeState(payload) {
-        tools.envLog("[handle_chargeState] payload: ", JSON.stringify(payload));
-        let status = null;
-        const isCharging = parseInt(payload['isCharging']);
-        if (isCharging === 1) {
-            status = 'charging';
-        } else if (isCharging === 0) {
-            status = 'idle';
-        }
-        if (status) {
-            this.chargeStatus = status;
-        }
-    }
-
-    handle_sleepStatus(payload) {
-        this.sleepStatus = payload['enable'];
-        tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
-    }
-
-    handle_breakPoint(payload) {
-        this.breakPoint = payload['enable'];
-        tools.envLog("[VacBot] *** breakPoint = " + this.breakPoint);
-    }
-
-    handle_block(payload) {
-        this.block = payload['enable'];
-        tools.envLog("[VacBot] *** block = " + this.block);
-    }
-
-    handle_autoEmpty(payload) {
-        this.autoEmpty = payload['enable'];
-        tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
-    }
-
-    handle_advancedMode(payload) {
-        this.advancedMode = payload['enable'];
-        tools.envLog("[VacBot] *** advancedMode = " + this.advancedMode);
-    }
-
-    handle_trueDetect(payload) {
-        this.trueDetect = payload['enable'];
-        tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
-    }
-
-    handle_dusterRemind(payload) {
-        this.dusterRemind = {
-            enabled: payload['enable'],
-            period: payload['period']
-        };
-        tools.envLog("[VacBot] *** dusterRemind = " + JSON.stringify(this.dusterRemind));
-    }
-
-    handle_carpetPressure(payload) {
-        this.carpetPressure = payload['enable'];
-        tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
-    }
-
-    handle_stats(payload) {
-        tools.envLog("[handle_stats] payload: " + JSON.stringify(payload));
-        this.currentStats = {
-            'cleanedArea': payload['area'],
-            'cleanedSeconds': payload['time'],
-            'cleanType': payload['type']
-        };
-    }
-
-    handle_Schedule(payload) {
-        this.schedule = [];
-        for (let c = 0; c < payload.length; c++) {
-            const resultData = payload[c];
-            let cleanCtl = {
-                'type': 'auto'
-            };
-            if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
-                const json = JSON.parse(resultData.content.jsonStr);
-                Object.assign(cleanCtl, {
-                    'type': json.type
-                });
-                if (cleanCtl.type === 'spotArea') {
-                    Object.assign(cleanCtl, {
-                            'spotAreas': json.content
-                        });
-                }
-            }
-            const onlyOnce = Number(resultData.repeat) === 0;
-            const weekdays = resultData.repeat.split('');
-            const weekdaysObj = {
-                'Mon': Boolean(Number(weekdays[1])),
-                'Tue': Boolean(Number(weekdays[2])),
-                'Wed': Boolean(Number(weekdays[3])),
-                'Thu': Boolean(Number(weekdays[4])),
-                'Fri': Boolean(Number(weekdays[5])),
-                'Sat': Boolean(Number(weekdays[6])),
-                'Sun': Boolean(Number(weekdays[0]))
-            };
-            const object = {
-                'sid': resultData.sid,
-                'cleanCmd': cleanCtl,
-                'content': resultData.content,
-                'enabled': Boolean(Number(resultData.enable)),
-                'onlyOnce': onlyOnce,
-                'weekdays': weekdaysObj,
-                'hour': resultData.hour,
-                'minute': resultData.minute,
-                'mapID': resultData.mid
-            };
-            this.schedule.push(object);
         }
     }
 

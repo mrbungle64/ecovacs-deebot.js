@@ -18,39 +18,68 @@ declare class VacBot_950type extends VacBot {
     relocationState: any;
     firmwareVersion: any;
     /**
-     * Handle the payload of the clean report (e.g. charge status, clean status and the last area values)
+     * Handle the payload of the `CleanInfo` response/message
+     * e.g. charge status, clean status and the last area values
      * @param {Object} payload
      */
-    handle_cleanReport(payload: any): void;
+    handleCleanReport(payload: any): void;
     /**
-     * Handle the payload of the battery status
+     * Handle the payload of the `Battery` response/message (battery level)
      * @param {Object} payload
      */
-    handle_batteryInfo(payload: any): void;
+    handleBatteryInfo(payload: any): void;
     /**
-     * Handle the payload for the life span components
+     * Handle the payload of the `LifeSpan` response/message
+     * (information about accessories components)
      * @param {Object} payload
      */
-    handle_lifespan(payload: any): void;
+    handleLifespan(payload: any): void;
     /**
-     * Handle the payload for the position data
+     * Handle the payload of the `Pos` response/message
+     * (vacuum position and charger resp. charge position)
      * @param {Object} payload
      */
-    handle_deebotPosition(payload: any): void;
+    handleDeebotPosition(payload: any): void;
     /**
-     * Handle the payload for vacuum power resp. suction power ("clean speed")
+     * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
      * @param {Object} payload
      */
-    handle_cleanSpeed(payload: any): void;
+    handleCleanSpeed(payload: any): void;
     /**
-     * Handle the payload for network related data
+     * Handle the payload of the `NetInfo` response/message
+     * (network addresses and Wi-Fi status)
      * @param {Object} payload
      */
-    handle_netInfo(payload: any): void;
+    handleNetInfo(payload: any): void;
+    /**
+     * Handle the payload of the `WaterInfo` response/message
+     * (water level and water box status)
+     * @param {Object} payload
+     */
+    handleWaterInfo(payload: any): void;
+    /**
+     * Handle the payload of the `ChargeState` response/message (charge status)
+     * @param {Object} payload
+     */
+    handleChargeState(payload: any): void;
+    /**
+     * Handle the payload of the `Sleep` response/message (sleep status)
+     * @param {Object} payload
+     */
+    handleSleepStatus(payload: any): void;
     handle_cleanLogs(payload: any): void;
     handle_cleanSum(payload: any): void;
-    handle_waterLevel(payload: any): void;
     handle_relocationState(payload: any): void;
+    handle_volume(payload: any): void;
+    handle_breakPoint(payload: any): void;
+    handle_block(payload: any): void;
+    handle_autoEmpty(payload: any): void;
+    handle_advancedMode(payload: any): void;
+    handle_trueDetect(payload: any): void;
+    handle_dusterRemind(payload: any): void;
+    handle_carpetPressure(payload: any): void;
+    handle_stats(payload: any): void;
+    handle_Schedule(payload: any): void;
     handle_cachedMapInfo(payload: any): void;
     handle_mapSet(payload: any): {
         mapsetEvent: string;
@@ -86,19 +115,6 @@ declare class VacBot_950type extends VacBot {
         mapType: any;
         mapBase64PNG: string;
     }>;
-    handle_waterInfo(payload: any): void;
-    handle_volume(payload: any): void;
-    handle_chargeState(payload: any): void;
-    handle_sleepStatus(payload: any): void;
-    handle_breakPoint(payload: any): void;
-    handle_block(payload: any): void;
-    handle_autoEmpty(payload: any): void;
-    handle_advancedMode(payload: any): void;
-    handle_trueDetect(payload: any): void;
-    handle_dusterRemind(payload: any): void;
-    handle_carpetPressure(payload: any): void;
-    handle_stats(payload: any): void;
-    handle_Schedule(payload: any): void;
     handle_ResponseError(payload: any): void;
 }
 import VacBot = require("../vacBot");
