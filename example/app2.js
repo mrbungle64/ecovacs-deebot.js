@@ -33,7 +33,7 @@ api.connect(account_id, password_hash).then(() => {
 
         // Once the session has started the bot will fire a 'ready' event.
         // At this point you can request information from your vacuum or send actions to it.
-        vacbot.on('ready', (event) => {
+        vacbot.on('ready', () => {
 
             console.log('\nvacbot ready\n');
 
@@ -139,7 +139,7 @@ api.connect(account_id, password_hash).then(() => {
             });
             vacbot.on('MapImage', (value) => {
                 console.log('MapImage: ' + JSON.stringify(value));
-                console.log('<img src="' + value['mapBase64PNG'] + '" />');
+                console.log('<img src="' + value.mapBase64PNG + '" />');
             });
 
             vacbot.on('CurrentMapName', (value) => {
@@ -263,7 +263,7 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('GetSpotAreas', mapID); // retrieve spot areas
             vacbot.run('GetVirtualBoundaries', mapID); // retrieve virtual boundaries
             vacbot.run('GetSpotAreaInfo', mapID, '0'); // retrieve various data for a spot area
-            vacbot.run('RenameSpotArea', '2', '0', 'Dressing room') // works only with a few models (e.g. OZMO 930)
+            vacbot.run('RenameSpotArea', '2', '0', 'Dressing room'); // works only with a few models (e.g. OZMO 930)
             const boundaryType = 'vw'; // vw = virtual wall, mw = no-mop-zone
             vacbot.run('GetVirtualBoundaryInfo', mapID, '0', boundaryType); // retrieve various data for a virtual boundary
             vacbot.run('DeleteVirtualBoundary', mapID, '0', boundaryType); // delete a virtual boundary
