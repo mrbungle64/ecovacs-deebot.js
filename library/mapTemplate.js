@@ -167,34 +167,34 @@ class EcovacsMapImageBase {
                             this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
                         }
                     } else if (pixelValue >= 4) {
-                        // Wifi heatmap
+                        // Wi-Fi heatmap
                         if (pixelValue === 4) {
-                            // Wifi not covered
+                            // Wi-Fi not covered
                             this.mapFloorContext.fillStyle = MAP_COLORS['wifi_not_covered'];
                             this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                             this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                         } else if (pixelValue > 10 && pixelValue <= 20) {
-                            // Wifi coverage 1=strong
+                            // Wi-Fi coverage 1=strong
                             this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];
                             this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                             this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                         } else if (pixelValue > 20 && pixelValue <= 30) {
-                            // Wifi coverage 2
+                            // Wi-Fi coverage 2
                             this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];
                             this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                             this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                         } else if (pixelValue > 30 && pixelValue <= 40) {
-                            // Wifi coverage 3
+                            // Wi-Fi coverage 3
                             this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];
                             this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                             this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                         } else if (pixelValue > 40 && pixelValue <= 50) {
-                            // Wifi coverage 4
+                            // Wi-Fi coverage 4
                             this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];
                             this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                             this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
                         } else if (pixelValue > 50) {
-                            // Wifi coverage 5=weak
+                            // Wi-Fi coverage 5=weak
                             this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];
                             this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
                             this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);

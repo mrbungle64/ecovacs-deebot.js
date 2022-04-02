@@ -200,7 +200,7 @@ api.connect(account_id, password_hash).then(() => {
 
         function variousShortcutFunctions() {
             // Please do not execute this function
-            // To try some of the commands, please copy and paste them
+            // To try some commands, please copy and paste them
 
             // Cleaning
             vacbot.run('Clean'); // auto clean
@@ -255,7 +255,7 @@ api.connect(account_id, password_hash).then(() => {
             vacbot.run('Relocate'); // send command to relocate position
 
             // Map data, spot areas and virtual boundaries
-            // Some of the commands are classified as experimental for now (e.g. DeleteVirtualBoundary, GetMapImage)
+            // Some commands are classified as experimental for now (e.g. DeleteVirtualBoundary, GetMapImage)
 
             const mapID = '1298761989'; // Example value
             // See "Please uncomment this code block if you want to use GetMaps cmd" (currently line 76)

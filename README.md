@@ -143,7 +143,7 @@ There is of course no claim to full functionality.
 * Several enhancements and fixes
 
 ### 0.5.4
-* Some fixes for cleaning logs (non 950 type)
+* Some fixes for cleaning log (non 950 type)
 
 ### 0.5.3
 * Some refactoring and code improvements

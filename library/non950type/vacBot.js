@@ -121,7 +121,7 @@ class VacBot_non950type extends VacBot {
     } else if (payload.hasOwnProperty('val')) {
       lifespan = parseInt(payload['val']) / 100;
     } else if (payload.hasOwnProperty('left') && (payload.hasOwnProperty('total'))) {
-      lifespan = parseInt(payload['left']) / parseInt(payload['total']) * 100; // This works e.g. for a Ozmo 930
+      lifespan = parseInt(payload['left']) / parseInt(payload['total']) * 100; // This works e.g. for OZMO 930
     } else if (payload.hasOwnProperty('left')) {
       lifespan = parseInt(payload['left']) / 60; // This works e.g. for a Deebot 900/901
     }
