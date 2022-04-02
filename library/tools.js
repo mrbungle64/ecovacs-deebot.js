@@ -138,7 +138,7 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
     if (devices.hasOwnProperty(deviceClass)) {
         let device = devices[deviceClass];
         if ((!device.hasOwnProperty(property)) && (device.hasOwnProperty('deviceClassLink'))) {
-            device = devices[device['deviceClassLink']];
+            device = devices[device.deviceClassLink];
         }
         if (device.hasOwnProperty(property)) {
             return device[property];

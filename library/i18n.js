@@ -1,3 +1,5 @@
+'use strict';
+
 const SPOTAREA_SUBTYPE_NAMES = {
     'living room': {'en': 'Living room', 'de': 'Wohnzimmer'},
     'dining room': {'en': 'Dining room', 'de': 'Esszimmer'},
