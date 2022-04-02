@@ -6,6 +6,7 @@ const map = require('./mapTemplate');
 const {errorCodes} = require('./errorCodes.json');
 
 /**
+ * @class VacBot
  * This class represents the vacuum bot
  * There are 2 classes which derive from this class (`VacBot_950type` and `VacBot_non950type`)
  */
@@ -440,6 +441,11 @@ class VacBot {
         }
     }
 
+    /**
+     * Handle object with map info data to provide a full map data object
+     * @param {Object} mapData
+     * @returns {Promise<void>}
+     */
     async handleMapsEvent(mapData) {
         if (!this.mapDataObject) {
             this.mapDataObject = [];
@@ -470,6 +476,11 @@ class VacBot {
         }
     }
 
+    /**
+     * Handle object with spot area data to provide a full map data object
+     * @param {Object} spotAreas
+     * @returns {Promise<void>}
+     */
     async handleMapSpotAreasEvent(spotAreas) {
         const mapID = spotAreas['mapID'];
         const mapObject = map.getMapObject(this.mapDataObject, mapID);
@@ -493,6 +504,11 @@ class VacBot {
         });
     }
 
+    /**
+     * Handle object with virtual boundary data to provide a full map data object
+     * @param {Object} virtualBoundaries
+     * @returns {Promise<void>}
+     */
     async handleMapVirtualBoundaries(virtualBoundaries) {
         const mapID = virtualBoundaries['mapID'];
         const mapObject = map.getMapObject(this.mapDataObject, mapID);
@@ -521,6 +537,11 @@ class VacBot {
         });
     }
 
+    /**
+     * Handle object with spot area info data to provide a full map data object
+     * @param {Object} spotAreaInfo
+     * @returns {Promise<void>}
+     */
     async handleMapSpotAreaInfo(spotAreaInfo) {
         const mapID = spotAreaInfo['mapID'];
         const mapSpotAreaID = spotAreaInfo['mapSpotAreaID'];
@@ -541,6 +562,11 @@ class VacBot {
         }
     }
 
+    /**
+     * Handle object with virtual boundary info data to provide a full map data object
+     * @param {Object} virtualBoundaryInfo
+     * @returns {Promise<void>}
+     */
     async handleMapVirtualBoundaryInfo(virtualBoundaryInfo) {
         const mapID = virtualBoundaryInfo['mapID'];
         const virtualBoundaryID = virtualBoundaryInfo['mapVirtualBoundaryID'];
@@ -563,6 +589,12 @@ class VacBot {
         }
     }
 
+
+    /**
+     * Handle object with map image data to provide a full map data object
+     * @param {Object} mapImageInfo
+     * @returns {Promise<void>}
+     */
     async handleMapImageInfo(mapImageInfo) {
         const mapID = mapImageInfo['mapID'];
         const mapObject = map.getMapObject(this.mapDataObject, mapID);

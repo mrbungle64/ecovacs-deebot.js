@@ -30,10 +30,10 @@ declare class EcovacsMQTT extends Ecovacs {
     getRequestObject(command: any): any;
     /**
      * @param {Object} command - the command object
-     * @returns {string}
+     * @returns {string|object} the specific payload for the request object
      * @abstract
      */
-    getCommandPayload(command: any): string;
+    getCommandPayload(command: any): string | object;
     /**
      * @param {Object} command - the command that was sent to the Ecovacs API
      * @param {Object} messagePayload - The message payload that was received

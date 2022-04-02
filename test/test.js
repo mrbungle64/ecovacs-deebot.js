@@ -29,14 +29,6 @@ describe('API', function () {
       );
     });
 
-    it('should store the country and device id parameter in a meta variable', function () {
-      const device_id = "abcdefghijklmnopqrestuvwyz";
-      const country = "nl";
-      const api = new ecovacsDeebot.EcoVacsAPI(device_id, country, "eu");
-      assert.strictEqual(api.meta.deviceId, device_id);
-      assert.strictEqual(api.meta.country, country);
-    });
-
     it('should store the first 8 characters of the device id as the resource id', function () {
       const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
       assert.strictEqual(api.resource, "abcdefgh");
@@ -100,7 +92,7 @@ describe('API tools', function () {
       assert.strictEqual(tools.isObject(JSON.parse('{"key": "value"}')), true);
       assert.strictEqual(tools.isObject(() => {
       }), true);
-      assert.strictEqual(tools.isObject(new Object()), true);
+      assert.strictEqual(tools.isObject({}), true);
       assert.strictEqual(tools.isObject(new Date()), true);
     });
   });

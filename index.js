@@ -13,6 +13,14 @@ const countries = require('./countries.json').countries;
 /** @type {Object} */
 const packageInfo = require('./package.json');
 
+/**
+ * @class EcovacsAPI
+ * An instance of this class provides access to the Ecovacs account and to the API
+ * @property @private resource - the resource of the device
+ * @property @private country - the country where the Ecovacs account is registered
+ * @property @private continent - the continent where the Ecovacs account is registered
+ * @property @private deviceId - the device ID of the bot
+ */
 class EcovacsAPI {
   /**
    * @param {string} deviceId - the device ID of the bot
@@ -22,19 +30,10 @@ class EcovacsAPI {
   constructor(deviceId, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
 
-    this.meta = {
-      'country': country,
-      'lang': 'EN',
-      'deviceId': deviceId,
-      'appCode': 'global_e',
-      'appVersion': '1.6.3',
-      'channel': 'google_play',
-      'deviceType': '1'
-    };
     this.resource = deviceId.substring(0, 8);
     this.country = country.toUpperCase();
     this.continent = continent !== '' ? continent : this.getContinent();
-    this.device_id = deviceId;
+    this.deviceId = deviceId;
   }
 
   /**
@@ -85,7 +84,7 @@ class EcovacsAPI {
   getUserLoginParams(params) {
     params['authTimeZone'] = 'GMT-8';
 
-    let sign_on = JSON.parse(JSON.stringify(this.meta));
+    let sign_on = JSON.parse(JSON.stringify(this.getMetaObject()));
     for (let key in params) {
       if (params.hasOwnProperty(key)) {
         sign_on[key] = params[key];
@@ -132,6 +131,22 @@ class EcovacsAPI {
   }
 
   /**
+   * Get the meta object that will be used to make a request to the server
+   * @returns {Object}
+   */
+  getMetaObject() {
+    return {
+      'country': this.country,
+      'lang': 'EN',
+      'deviceId': this.deviceId,
+      'appCode': 'global_e',
+      'appVersion': '1.6.3',
+      'channel': 'google_play',
+      'deviceType': '1'
+    };
+  }
+
+  /**
    * @param {string} loginPath - the login path
    * @param {Object} params - an object with the data to retrieve the parameters
    * @returns {Promise<Object>} an object including access token and user ID
@@ -144,12 +159,12 @@ class EcovacsAPI {
     params['authTimespan'] = Date.now();
     if (loginPath === constants.GETAUTHCODE_PATH) {
       params['bizType'] = 'ECOVACS_IOT';
-      params['deviceId'] = this.device_id;
-      portalUrl = new url.URL(tools.formatString(portalPath, this.meta));
+      params['deviceId'] = this.deviceId;
+      portalUrl = new url.URL(tools.formatString(portalPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));
     } else {
       params['requestId'] = EcovacsAPI.md5(uniqid());
-      portalUrl = new url.URL(tools.formatString(portalPath + "/" + loginPath, this.meta));
+      portalUrl = new url.URL(tools.formatString(portalPath + "/" + loginPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getUserLoginParams(params));
     }
     tools.envLog(`[EcoVacsAPI] callUserAuthApi calling ${portalUrl.href}`);

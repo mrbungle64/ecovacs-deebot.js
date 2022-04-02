@@ -152,7 +152,7 @@ class EcovacsMQTT extends Ecovacs {
 
     /**
      * @param {Object} command - the command object
-     * @returns {string}
+     * @returns {string|object} the specific payload for the request object
      * @abstract
      */
     getCommandPayload(command) { return ''; }

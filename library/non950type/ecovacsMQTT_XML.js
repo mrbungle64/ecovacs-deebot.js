@@ -101,9 +101,10 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     /**
      * It takes an XML string and converts it into JSON object
      * @param {string} xmlString - the XML string
+     * @param {Object} [command] - the command object
      * @returns {Object} a JSON object
      */
-    command_xml2json(xmlString) {
+    command_xml2json(xmlString, command) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
         /** @type {Object} */
@@ -111,10 +112,9 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
         let attrs = {};
         let event = null;
         tools.envLog('[EcovacsMQTT] xml received: %s', xml);
-        if (arguments.length > 1) {
+        if (command) {
             event = firstChild.tagName;
-            const action = arguments[1];
-            attrs = action.args
+            attrs = command.args;
         } else {
             if (!firstChild || !firstChild.attributes) {
                 return {

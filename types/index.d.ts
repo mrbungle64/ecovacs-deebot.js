@@ -1,3 +1,11 @@
+/**
+ * @class EcovacsAPI
+ * An instance of this class provides access to the Ecovacs account and to the API
+ * @property @private resource - the resource of the device
+ * @property @private country - the country where the Ecovacs account is registered
+ * @property @private continent - the continent where the Ecovacs account is registered
+ * @property @private deviceId - the device ID of the bot
+ */
 declare class EcovacsAPI {
     /**
      * Get the version of the package
@@ -58,19 +66,10 @@ declare class EcovacsAPI {
      * @param {string} [continent] - the continent (deprecated)
      */
     constructor(deviceId: string, country: string, continent?: string);
-    meta: {
-        country: string;
-        lang: string;
-        deviceId: string;
-        appCode: string;
-        appVersion: string;
-        channel: string;
-        deviceType: string;
-    };
     resource: string;
     country: string;
     continent: string;
-    device_id: string;
+    deviceId: string;
     /**
      * @param {string} accountId - The account ID (Email or Ecovacs ID)
      * @param {string} password_hash - The password hash
@@ -93,6 +92,11 @@ declare class EcovacsAPI {
      * @returns {String} the parameters
      */
     getAuthParams(params: any): string;
+    /**
+     * Get the meta object that will be used to make a request to the server
+     * @returns {Object}
+     */
+    getMetaObject(): any;
     /**
      * @param {string} loginPath - the login path
      * @param {Object} params - an object with the data to retrieve the parameters
