@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 exports.SupportedDevices = {
     "ls1ok3": {
         "name": "DEEBOT 900 Series",

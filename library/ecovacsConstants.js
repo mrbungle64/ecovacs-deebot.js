@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 exports.CLIENT_KEY = "1520391301804";
 exports.SECRET = "6c319b2a5cd3e66e39159c2e28f2fce9";
 exports.AUTH_CLIENT_KEY = '1520391491841';

@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 // These dictionaries convert to and from this library's constants
 // to and from what the Ecovacs API uses (which are sometimes very oddly named and have random capitalization)
 
