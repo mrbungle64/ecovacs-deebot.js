@@ -1,3 +1,5 @@
+'use strict';
+
 const ecovacsDeebot = require('./../index');
 const tools = require('./tools');
 const nodeMachineId = require('node-machine-id');
