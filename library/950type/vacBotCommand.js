@@ -10,7 +10,7 @@ class VacBotCommand {
         if (!args.hasOwnProperty('id')) {
             Object.assign(args, {
                 'id': tools.getReqID()
-            })
+            });
         }
         this.args = args;
         this.api = api;
@@ -47,7 +47,7 @@ class Clean_V2 extends VacBotCommand {
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
-                Object.assign(initCmd[key], kwargs[key])
+                Object.assign(initCmd[key], kwargs[key]);
             }
         }
         tools.envLog('initCmd %s', initCmd);

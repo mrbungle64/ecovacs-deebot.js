@@ -556,7 +556,7 @@ class VacBot {
                 }
             }
             return true;
-        })
+        });
         if (this.mapDataObjectQueue.length === 0) {
             this.ecovacs.emit('MapDataReady');
         }
@@ -583,7 +583,7 @@ class VacBot {
                 }
             }
             return true;
-        })
+        });
         if (this.mapDataObjectQueue.length === 0) {
             this.ecovacs.emit('MapDataReady');
         }
@@ -603,7 +603,7 @@ class VacBot {
         }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
             return !((item.mapID === mapID) && (item.type === 'GetMapImage'));
-        })
+        });
         if (this.mapDataObjectQueue.length === 0) {
             this.ecovacs.emit('MapDataReady');
         }
@@ -773,7 +773,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasMappingCapabilities() {
-        return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode()
+        return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode();
     }
 
     /**

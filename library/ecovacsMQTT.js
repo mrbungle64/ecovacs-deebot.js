@@ -225,7 +225,7 @@ class EcovacsMQTT extends Ecovacs {
         if (command.name === 'GetLogApiCleanLogs') {
             api = constants.LGLOGAPI; // Cleaning log for non 950 type models (MQTT/XML)
         } else if (command.api) {
-            api = command.api // 950 type models
+            api = command.api; // 950 type models
         }
         return api;
     }
@@ -246,7 +246,7 @@ class EcovacsMQTT extends Ecovacs {
             'toId': this.vacuum['did'],
             'toRes': this.vacuum['resource'],
             'toType': this.vacuum['class']
-        }
+        };
     }
 
     /**
@@ -261,7 +261,7 @@ class EcovacsMQTT extends Ecovacs {
             'country': this.country,
             'td': command,
             'resource': this.vacuum['resource']
-        }
+        };
     }
 
     /**

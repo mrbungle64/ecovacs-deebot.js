@@ -1,7 +1,7 @@
 'use strict';
 
 const tools = require('./tools.js');
-const lzma = require('lzma')
+const lzma = require('lzma');
 const constants = require('./ecovacsConstants');
 const map = require('./mapTemplate');
 
@@ -351,7 +351,7 @@ class EcovacsMapImageBase {
                 'mapID': this.mapID,
                 'mapType': this.isLiveMap ? 'live' : this.mapType,
                 'mapBase64PNG': this.mapBase64PNG
-            }
+            };
         } catch (e) {
             throw new Error(e);
         }
@@ -603,7 +603,7 @@ async function mapPieceToIntArray(pieceValue) {
     //fix 9 byte header to 13 bytes for lzma decompression
     let correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];
     //decompress
-    return lzma.decompress(correctedArray)
+    return lzma.decompress(correctedArray);
 }
 
 function getRotatedCanvasFromImage(image, angle) {

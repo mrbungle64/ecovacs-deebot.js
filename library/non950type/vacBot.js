@@ -48,7 +48,7 @@ class VacBot_non950type extends VacBot {
         command = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['act']];
       }
       if (command === 'stop' || command === 'pause') {
-        type = command
+        type = command;
       }
       this.cleanReport = type;
       tools.envLog("[VacBot] *** cleanReport = " + this.cleanReport);

@@ -36,7 +36,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             'td': command.name,
             'auth': this.getAuthObject(),
             'resource': this.vacuum['resource']
-        }
+        };
     }
 
     /**

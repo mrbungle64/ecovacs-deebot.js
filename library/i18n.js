@@ -13,7 +13,7 @@ const SPOTAREA_SUBTYPE_NAMES = {
     'corridor': {'en': 'Corridor', 'de': 'Flur'},
     'balcony': {'en': 'Balcony', 'de': 'Balkon'},
     'gym': {'en': 'Gym', 'de': 'Fitnessstudio'}
-}
+};
 
 /**
  * Given a spot area name, return the localized name of the area
@@ -22,7 +22,7 @@ const SPOTAREA_SUBTYPE_NAMES = {
  * @returns {string} the area name for the given area name
  */
 function getSpotAreaName(name, languageCode = 'en') {
-    const key = name.toLowerCase()
+    const key = name.toLowerCase();
     if (SPOTAREA_SUBTYPE_NAMES.hasOwnProperty(key)) {
         if (SPOTAREA_SUBTYPE_NAMES[key].hasOwnProperty(languageCode)) {
             name = SPOTAREA_SUBTYPE_NAMES[key][languageCode];

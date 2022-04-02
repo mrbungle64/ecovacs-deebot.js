@@ -1,5 +1,5 @@
 const assert = require('assert');
-const axios = require('axios')
+const axios = require('axios');
 
 const ecovacsDeebot = require('../index.js');
 const tools = require('../library/tools.js');

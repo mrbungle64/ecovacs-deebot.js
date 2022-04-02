@@ -171,7 +171,7 @@ class EcovacsAPI {
 
     const axiosConfig = {
       params: searchParams
-    }
+    };
     tools.envLog(`[EcoVacsAPI] callUserAuthApi config ${searchParams.toString()}`);
 
     try {
@@ -400,7 +400,7 @@ class EcovacsAPI {
    * @returns {Object} a corresponding instance of the 'vacBot' class
    */
   getVacBotObj(vacuum) {
-    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum)
+    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum);
   }
 
   /**
