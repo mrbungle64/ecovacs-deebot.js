@@ -422,7 +422,7 @@ class VacBot_950type extends VacBot {
             this.mapImages[mapMID][payload['type']] = new map.EcovacsMapImage(mapMID, payload['type'], payload['totalWidth'], payload['totalHeight'], payload['pixel'], payload['totalCount']);
         }
         if (payload['pieceValue'] !== '') {
-            await this.mapImages[mapMID][payload['type']].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value'])
+            await this.mapImages[mapMID][payload['type']].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value']);
         }
         try {
             return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
@@ -451,7 +451,7 @@ class VacBot_950type extends VacBot {
             const pixel = payload['pixel'];
             const value = payload['value'];
             this.liveMapImage = new map.EcovacsLiveMapImage(
-                mapMID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, value)
+                mapMID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, value);
         } else {
             this.liveMapImage.updateMapDataPiecesCrc(payload['value']);
         }
@@ -503,32 +503,32 @@ class VacBot_950type extends VacBot {
     }
 
     handle_sleepStatus(payload) {
-        this.sleepStatus = payload['enable']
+        this.sleepStatus = payload['enable'];
         tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
     }
 
     handle_breakPoint(payload) {
-        this.breakPoint = payload['enable']
+        this.breakPoint = payload['enable'];
         tools.envLog("[VacBot] *** breakPoint = " + this.breakPoint);
     }
 
     handle_block(payload) {
-        this.block = payload['enable']
+        this.block = payload['enable'];
         tools.envLog("[VacBot] *** block = " + this.block);
     }
 
     handle_autoEmpty(payload) {
-        this.autoEmpty = payload['enable']
+        this.autoEmpty = payload['enable'];
         tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
     }
 
     handle_advancedMode(payload) {
-        this.advancedMode = payload['enable']
+        this.advancedMode = payload['enable'];
         tools.envLog("[VacBot] *** advancedMode = " + this.advancedMode);
     }
 
     handle_trueDetect(payload) {
-        this.trueDetect = payload['enable']
+        this.trueDetect = payload['enable'];
         tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
     }
 
@@ -541,7 +541,7 @@ class VacBot_950type extends VacBot {
     }
 
     handle_carpetPressure(payload) {
-        this.carpetPressure = payload['enable']
+        this.carpetPressure = payload['enable'];
         tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
     }
 
@@ -551,7 +551,7 @@ class VacBot_950type extends VacBot {
             'cleanedArea': payload['area'],
             'cleanedSeconds': payload['time'],
             'cleanType': payload['type']
-        }
+        };
     }
 
     handle_Schedule(payload) {
@@ -582,7 +582,7 @@ class VacBot_950type extends VacBot {
                 'Fri': Boolean(Number(weekdays[5])),
                 'Sat': Boolean(Number(weekdays[6])),
                 'Sun': Boolean(Number(weekdays[0]))
-            }
+            };
             const object = {
                 'sid': resultData.sid,
                 'cleanCmd': cleanCtl,
@@ -593,7 +593,7 @@ class VacBot_950type extends VacBot {
                 'hour': resultData.hour,
                 'minute': resultData.minute,
                 'mapID': resultData.mid
-            }
+            };
             this.schedule.push(object);
         }
     }
@@ -699,19 +699,19 @@ class VacBot_950type extends VacBot {
                 if (!args.length) {
                     this.emitFullLifeSpanEvent = true;
                     this.components = {};
-                    this.lastComponentValues = {}
+                    this.lastComponentValues = {};
                     const componentsArray = [
                         dictionary.COMPONENT_TO_ECOVACS['filter'],
                         dictionary.COMPONENT_TO_ECOVACS['main_brush'],
                         dictionary.COMPONENT_TO_ECOVACS['side_brush']
-                    ]
+                    ];
                     this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;
                     const component = args[0];
                     const componentsArray = [
                         dictionary.COMPONENT_TO_ECOVACS[component]
-                    ]
+                    ];
                     this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 }
                 break;

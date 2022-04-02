@@ -533,7 +533,7 @@ class VacBot_non950type extends VacBot {
         'cleanedArea': area,
         'cleanedSeconds': seconds,
         'cleanType': type
-      }
+      };
     }
   }
 
@@ -579,10 +579,10 @@ class VacBot_non950type extends VacBot {
           'Fri': Boolean(Number(weekdays[5])),
           'Sat': Boolean(Number(weekdays[6])),
           'Sun': Boolean(Number(weekdays[0])),
-        }
+        };
         let enabled = false;
         if (attrs.hasOwnProperty('o')) {
-          enabled = Boolean(Number(attrs.o))
+          enabled = Boolean(Number(attrs.o));
         }
         const object = {
           'sid': attrs.n,
@@ -592,7 +592,7 @@ class VacBot_non950type extends VacBot {
           'weekdays': weekdaysObj,
           'hour': hour,
           'minute': minute
-        }
+        };
         this.schedule.push(object);
       }
     }
