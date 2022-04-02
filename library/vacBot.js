@@ -517,19 +517,23 @@ class VacBot {
             const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
             const virtualBoundaryArray = [];
             for (const i in virtualBoundariesCombined) {
-                virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
+                if (virtualBoundariesCombined.hasOwnProperty(i)) {
+                    virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
+                }
             }
             for (const i in virtualBoundaryArray) {
-                const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
-                const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
-                mapObject['mapVirtualBoundaries'].push(virtualBoundaryArray[i].toJSON());
-                this.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
-                this.mapDataObjectQueue.push({
-                    'type': 'GetVirtualBoundaryInfo',
-                    'mapID': mapID,
-                    'mapVirtualBoundaryID': mapVirtualBoundaryID,
-                    'mapVirtualBoundaryType': mapVirtualBoundaryType
-                });
+                if (virtualBoundaryArray.hasOwnProperty(i)) {
+                    const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
+                    const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
+                    mapObject['mapVirtualBoundaries'].push(virtualBoundaryArray[i].toJSON());
+                    this.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
+                    this.mapDataObjectQueue.push({
+                        'type': 'GetVirtualBoundaryInfo',
+                        'mapID': mapID,
+                        'mapVirtualBoundaryID': mapVirtualBoundaryID,
+                        'mapVirtualBoundaryType': mapVirtualBoundaryType
+                    });
+                }
             }
         }
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {

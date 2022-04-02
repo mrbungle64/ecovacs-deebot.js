@@ -229,7 +229,7 @@ class EcovacsMapImageBase {
         let mapObject = null;
 
         if (map.mapDataObject !== null) {
-            if (typeof this.mapID == null) {
+            if (this.mapID === undefined) {
                 mapObject = getCurrentMapObject(map.mapDataObject);
             } else {
                 mapObject = getMapObject(map.mapDataObject, this.mapID);
@@ -238,20 +238,22 @@ class EcovacsMapImageBase {
             let areaCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
             const areaContext = areaCanvas.getContext('2d');
             for (let areaIndex in mapObject['mapSpotAreas']) {
-                let areaCoordinateArray = mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaBoundaries'].split(';');
-                areaContext.beginPath();
-                for (let i = 0; i < areaCoordinateArray.length; i++) {
-                    let row = areaCoordinateArray[i].split(',')[0] / 50 + POSITION_OFFSET;
-                    let column = areaCoordinateArray[i].split(',')[1] / 50 + POSITION_OFFSET;
-                    if (i === 0) {
-                        areaContext.moveTo(row, column);
-                    } else {
-                        areaContext.lineTo(row, column);
+                if (mapObject['mapSpotAreas'].hasOwnProperty(areaIndex)) {
+                    let areaCoordinateArray = mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaBoundaries'].split(';');
+                    areaContext.beginPath();
+                    for (let i = 0; i < areaCoordinateArray.length; i++) {
+                        let row = areaCoordinateArray[i].split(',')[0] / 50 + POSITION_OFFSET;
+                        let column = areaCoordinateArray[i].split(',')[1] / 50 + POSITION_OFFSET;
+                        if (i === 0) {
+                            areaContext.moveTo(row, column);
+                        } else {
+                            areaContext.lineTo(row, column);
+                        }
                     }
+                    areaContext.closePath();
+                    areaContext.fillStyle = SPOTAREA_COLORS[mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaID'] % SPOTAREA_COLORS.length];
+                    areaContext.fill();
                 }
-                areaContext.closePath();
-                areaContext.fillStyle = SPOTAREA_COLORS[mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaID'] % SPOTAREA_COLORS.length];
-                areaContext.fill();
             }
             finalContext.drawImage(areaCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
@@ -259,45 +261,47 @@ class EcovacsMapImageBase {
             let boundaryCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
             const boundaryContext = boundaryCanvas.getContext('2d');
             for (let boundaryIndex in mapObject['mapVirtualBoundaries']) {
-                let boundaryCoordinates = mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryCoordinates'];
-                let boundaryCoordinateArray = boundaryCoordinates.substring(1, boundaryCoordinates.length - 1).split(',');
-                boundaryContext.beginPath();
-                for (let i = 0; i < boundaryCoordinateArray.length; i = i + 2) {
-                    let row = boundaryCoordinateArray[i] / 50 + POSITION_OFFSET;
-                    let column = boundaryCoordinateArray[i + 1] / 50 + POSITION_OFFSET;
-                    // Check cropBoundaries
-                    if (this.cropBoundaries.minY === null) {
-                        this.cropBoundaries.minY = column;
-                    } else if (column < this.cropBoundaries.minY) {
-                        this.cropBoundaries.minY = column;
-                    }
-                    if (this.cropBoundaries.minX === null) {
-                        this.cropBoundaries.minX = row;
-                    } else if (row < this.cropBoundaries.minX) {
-                        this.cropBoundaries.minX = row;
-                    }
-                    if (this.cropBoundaries.maxX === null) {
-                        this.cropBoundaries.maxX = row;
-                    } else if (this.cropBoundaries.maxX < row) {
-                        this.cropBoundaries.maxX = row;
-                    }
-                    if (this.cropBoundaries.maxY === null) {
-                        this.cropBoundaries.maxY = column;
-                    } else if (this.cropBoundaries.maxY < column) {
-                        this.cropBoundaries.maxY = column;
-                    }
+                if (mapObject['mapVirtualBoundaries'].hasOwnProperty(boundaryIndex)) {
+                    let boundaryCoordinates = mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryCoordinates'];
+                    let boundaryCoordinateArray = boundaryCoordinates.substring(1, boundaryCoordinates.length - 1).split(',');
+                    boundaryContext.beginPath();
+                    for (let i = 0; i < boundaryCoordinateArray.length; i = i + 2) {
+                        let row = boundaryCoordinateArray[i] / 50 + POSITION_OFFSET;
+                        let column = boundaryCoordinateArray[i + 1] / 50 + POSITION_OFFSET;
+                        // Check cropBoundaries
+                        if (this.cropBoundaries.minY === null) {
+                            this.cropBoundaries.minY = column;
+                        } else if (column < this.cropBoundaries.minY) {
+                            this.cropBoundaries.minY = column;
+                        }
+                        if (this.cropBoundaries.minX === null) {
+                            this.cropBoundaries.minX = row;
+                        } else if (row < this.cropBoundaries.minX) {
+                            this.cropBoundaries.minX = row;
+                        }
+                        if (this.cropBoundaries.maxX === null) {
+                            this.cropBoundaries.maxX = row;
+                        } else if (this.cropBoundaries.maxX < row) {
+                            this.cropBoundaries.maxX = row;
+                        }
+                        if (this.cropBoundaries.maxY === null) {
+                            this.cropBoundaries.maxY = column;
+                        } else if (this.cropBoundaries.maxY < column) {
+                            this.cropBoundaries.maxY = column;
+                        }
 
-                    if (i === 0) {
-                        boundaryContext.moveTo(row, column);
-                    } else {
-                        boundaryContext.lineTo(row, column);
+                        if (i === 0) {
+                            boundaryContext.moveTo(row, column);
+                        } else {
+                            boundaryContext.lineTo(row, column);
+                        }
                     }
+                    boundaryContext.closePath();
+                    boundaryContext.lineWidth = 2;
+                    boundaryContext.strokeStyle = MAP_COLORS[mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryType']];
+                    boundaryContext.setLineDash([2, 2]);
+                    boundaryContext.stroke();
                 }
-                boundaryContext.closePath();
-                boundaryContext.lineWidth = 2;
-                boundaryContext.strokeStyle = MAP_COLORS[mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryType']];
-                boundaryContext.setLineDash([2, 2]);
-                boundaryContext.stroke();
             }
             finalContext.drawImage(boundaryCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
@@ -338,10 +342,11 @@ class EcovacsMapImageBase {
 
         try {
             // Crop image
-            const croppedImage = finalContext.getImageData(this.cropBoundaries.minX
-                , this.mapTotalHeight - this.cropBoundaries.maxY // map was flipped horizontally before, so the boundaries have shifted
-                , this.cropBoundaries.maxX - this.cropBoundaries.minX
-                , this.cropBoundaries.maxY - this.cropBoundaries.minY);
+            const sx = this.cropBoundaries.minX;
+            const sy = this.mapTotalHeight - this.cropBoundaries.maxY; // map was flipped horizontally before, so the boundaries have shifted
+            const sw = this.cropBoundaries.maxX - this.cropBoundaries.minX;
+            const sh = this.cropBoundaries.maxY - this.cropBoundaries.minY;
+            const croppedImage = finalContext.getImageData(sx, sy, sw, sh);
             finalContext.canvas.height = this.cropBoundaries.maxY - this.cropBoundaries.minY;
             finalContext.canvas.width = this.cropBoundaries.maxX - this.cropBoundaries.minX;
             finalContext.putImageData(croppedImage, 0, 0);
@@ -619,49 +624,47 @@ function getRotatedCanvasFromImage(image, angle) {
 }
 
 function getMapObject(mapDataObject, mapID) {
-    if (mapDataObject == null) {
-        return null;
-    }
-    return mapDataObject.find((map) => {
-        return map.mapID === mapID;
-    });
-}
-
-function getCurrentMapObject(mapDataObject) {
-    if (mapDataObject == null) {
-        return null;
-    }
-    return mapDataObject.find((map) => {
-        return map.mapIsCurrentMap === true;
-    });
-}
-
-function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
-    if (mapDataObject == null) {
-        return null;
-    }
-    const mapSpotAreasObject = mapDataObject.find((map) => {
-        return map.mapID === mapID;
-    }).mapSpotAreas;
-    if (mapSpotAreasObject) {
-        return mapSpotAreasObject.find((spotArea) => {
-            return spotArea.mapSpotAreaID === spotAreaID;
+    if (mapDataObject) {
+        return mapDataObject.find((map) => {
+            return map.mapID === mapID;
         });
     }
     return null;
 }
 
-function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
-    if (mapDataObject == null) {
-        return null;
-    }
-    const mapVirtualBoundariesObject = mapDataObject.find((map) => {
-        return map.mapID === mapID;
-    }).mapVirtualBoundaries;
-    if (mapVirtualBoundariesObject) {
-        return mapVirtualBoundariesObject.find((virtualBoundary) => {
-            return virtualBoundary.mapVirtualBoundaryID === virtualBoundaryID;
+function getCurrentMapObject(mapDataObject) {
+    if (mapDataObject) {
+        return mapDataObject.find((map) => {
+            return map.mapIsCurrentMap === true;
         });
+    }
+    return null;
+}
+
+function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
+    if (mapDataObject) {
+        const mapSpotAreasObject = mapDataObject.find((map) => {
+            return map.mapID === mapID;
+        }).mapSpotAreas;
+        if (mapSpotAreasObject) {
+            return mapSpotAreasObject.find((spotArea) => {
+                return spotArea.mapSpotAreaID === spotAreaID;
+            });
+        }
+    }
+    return null;
+}
+
+function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
+    if (mapDataObject) {
+        const mapVirtualBoundariesObject = mapDataObject.find((map) => {
+            return map.mapID === mapID;
+        }).mapVirtualBoundaries;
+        if (mapVirtualBoundariesObject) {
+            return mapVirtualBoundariesObject.find((virtualBoundary) => {
+                return virtualBoundary.mapVirtualBoundaryID === virtualBoundaryID;
+            });
+        }
     }
     return null;
 }

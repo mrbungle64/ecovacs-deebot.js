@@ -72,10 +72,10 @@ declare class EcovacsAPI {
     deviceId: string;
     /**
      * @param {string} accountId - The account ID (Email or Ecovacs ID)
-     * @param {string} password_hash - The password hash
+     * @param {string} passwordHash - The password hash
      * @returns {Promise<string>}
      */
-    connect(accountId: string, password_hash: string): Promise<string>;
+    connect(accountId: string, passwordHash: string): Promise<string>;
     uid: any;
     login_access_token: any;
     auth_code: any;
@@ -93,7 +93,7 @@ declare class EcovacsAPI {
      */
     getAuthParams(params: any): string;
     /**
-     * Get the meta object that will be used to make a request to the server
+     * Get the meta-object that will be used to make a request to the server
      * @returns {Object}
      */
     getMetaObject(): any;

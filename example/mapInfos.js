@@ -12,7 +12,7 @@ const password = settingsFile.PASSWORD;
 const countryCode = settingsFile.COUNTRY_CODE;
 const deviceNumber = settingsFile.DEVICE_NUMBER;
 
-const password_hash = EcoVacsAPI.md5(password);
+const passwordHash = EcoVacsAPI.md5(password);
 const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
 
 const api = new EcoVacsAPI(device_id, countryCode);
@@ -20,7 +20,7 @@ const api = new EcoVacsAPI(device_id, countryCode);
 let mapData = null;
 let mapSpotAreaName = [];
 
-api.connect(account_id, password_hash).then(() => {
+api.connect(account_id, passwordHash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[deviceNumber];
         console.log(vacuum);

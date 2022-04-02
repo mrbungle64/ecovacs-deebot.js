@@ -136,9 +136,10 @@ class VacBot_950type extends VacBot {
         const chargePos = payload['chargePos'];
         if (chargePos) {
             // check if position changed
-            let changed = (chargePos[0]['x'] !== this.chargePosition.x
-                || chargePos[0]['y'] !== this.chargePosition.y
-                || chargePos[0]['a'] !== this.chargePosition.a
+            let changed = (
+                chargePos[0]['x'] !== this.chargePosition.x ||
+                chargePos[0]['y'] !== this.chargePosition.y ||
+                chargePos[0]['a'] !== this.chargePosition.a
             );
             if (changed) {
                 this.chargePosition = {
@@ -155,11 +156,12 @@ class VacBot_950type extends VacBot {
         const deebotPos = payload['deebotPos'];
         if (typeof deebotPos === 'object') {
             // check if position changed or currentSpotAreaID unknown
-            let changed = (deebotPos['x'] !== this.deebotPosition.x
-                || deebotPos['y'] !== this.deebotPosition.y
-                || deebotPos['a'] !== this.deebotPosition.a
-                || deebotPos['invalid'] !== this.deebotPosition.isInvalid
-                || this.deebotPosition.currentSpotAreaID === 'unknown'
+            let changed = (
+                deebotPos['x'] !== this.deebotPosition.x ||
+                deebotPos['y'] !== this.deebotPosition.y ||
+                deebotPos['a'] !== this.deebotPosition.a ||
+                deebotPos['invalid'] !== this.deebotPosition.isInvalid ||
+                this.deebotPosition.currentSpotAreaID === 'unknown'
             );
             if (changed) {
                 const posX = Number(deebotPos['x']);
@@ -319,7 +321,9 @@ class VacBot_950type extends VacBot {
         if (payload['type'] === 'ar') {
             let mapSpotAreas = new map.EcovacsMapSpotAreas(mapMID, payload['msid']);
             for (let mapIndex in payload['subsets']) {
-                mapSpotAreas.push(new map.EcovacsMapSpotArea(payload['subsets'][mapIndex]['mssid']));
+                if (payload['subsets'].hasOwnProperty(mapIndex)) {
+                    mapSpotAreas.push(new map.EcovacsMapSpotArea(payload['subsets'][mapIndex]['mssid']));
+                }
             }
             tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
             return {
@@ -333,8 +337,10 @@ class VacBot_950type extends VacBot {
                 this.mapVirtualBoundariesResponses[mapMID] = [false, false];
             }
             for (let mapIndex in payload['subsets']) {
-                tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + payload['subsets'][mapIndex]['mssid']);
-                this.mapVirtualBoundaries[mapMID].push(new map.EcovacsMapVirtualBoundary(payload['subsets'][mapIndex]['mssid'], payload['type']));
+                if (payload['subsets'].hasOwnProperty(mapIndex)) {
+                    tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + payload['subsets'][mapIndex]['mssid']);
+                    this.mapVirtualBoundaries[mapMID].push(new map.EcovacsMapVirtualBoundary(payload['subsets'][mapIndex]['mssid'], payload['type']));
+                }
             }
             if (payload['type'] === 'vw') {
                 this.mapVirtualBoundariesResponses[mapMID][0] = true;

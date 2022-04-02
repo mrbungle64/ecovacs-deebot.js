@@ -38,10 +38,10 @@ class EcovacsAPI {
 
   /**
    * @param {string} accountId - The account ID (Email or Ecovacs ID)
-   * @param {string} password_hash - The password hash
+   * @param {string} passwordHash - The password hash
    * @returns {Promise<string>}
    */
-  async connect(accountId, password_hash) {
+  async connect(accountId, passwordHash) {
     let error;
     if (!accountId) {
       error = new Error('No account ID provided');
@@ -58,7 +58,7 @@ class EcovacsAPI {
 
     let result = await this.callUserAuthApi(this.getLoginPath(), {
       'account': accountId,
-      'password': password_hash
+      'password': passwordHash
     });
     this.uid = result.uid;
     this.login_access_token = result.accessToken;
@@ -131,7 +131,7 @@ class EcovacsAPI {
   }
 
   /**
-   * Get the meta object that will be used to make a request to the server
+   * Get the meta-object that will be used to make a request to the server
    * @returns {Object}
    */
   getMetaObject() {
