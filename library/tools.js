@@ -13,7 +13,7 @@ function formatString(string) {
 }
 
 /**
- * @returns {Boolean} whether the canvas module is available
+ * @returns {boolean} whether the canvas module is available
  */
 function isCanvasModuleAvailable() {
     try {
@@ -59,16 +59,16 @@ function getReqID() {
 }
 
 /**
- * @param {String} deviceClass - The device class of the device
- * @returns {Boolean} a Boolean value whether the device a 710 series model
+ * @param {string} deviceClass - The device class of the device
+ * @returns {boolean} a Boolean value whether the device a 710 series model
  */
 function is710series(deviceClass) {
     return deviceClass === 'uv242z';
 }
 
 /**
- * @param {String} deviceClass - The device class of the device
- * @returns {Boolean} a Boolean value whether the device a N79 series model
+ * @param {string} deviceClass - The device class of the device
+ * @returns {boolean} a Boolean value whether the device a N79 series model
  */
 function isN79series(deviceClass) {
     switch (deviceClass) {
@@ -108,8 +108,8 @@ function getKnownDevices() {
 
 /**
  * Check if the deviceClass belongs to a supported model
- * @param {String} deviceClass - The device class to check for
- * @returns {Boolean} whether the deviceClass belongs to a supported model
+ * @param {string} deviceClass - The device class to check for
+ * @returns {boolean} whether the deviceClass belongs to a supported model
  */
 function isSupportedDevice(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getSupportedDevices()));
@@ -118,8 +118,8 @@ function isSupportedDevice(deviceClass) {
 
 /**
  * Check if the deviceClass belongs to a known model
- * @param {String} deviceClass - The device class to check for
- * @returns {Boolean} whether the deviceClass belongs to a known model
+ * @param {string} deviceClass - The device class to check for
+ * @returns {boolean} whether the deviceClass belongs to a known model
  */
 function isKnownDevice(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getKnownDevices()));
@@ -128,8 +128,8 @@ function isKnownDevice(deviceClass) {
 
 /**
  * Get the value of the given property for the device class
- * @param {String} deviceClass - The device class to get the property for
- * @param {String} property - The property to get
+ * @param {string} deviceClass - The device class to get the property for
+ * @param {string} property - The property to get
  * @param {any} [defaultValue=false] - The default value to return if the property is not found
  * @returns {any} The value of the property for the device class
  */
@@ -149,8 +149,8 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
 
 /**
  * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
- * @param {Number} totalSeconds - The total number of seconds to format
- * @returns {String} a string that is formatted as hours, minutes, and seconds
+ * @param {number} totalSeconds - The total number of seconds to format
+ * @returns {string} a string that is formatted as hours, minutes, and seconds
  */
 function getTimeStringFormatted(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
@@ -162,7 +162,7 @@ function getTimeStringFormatted(totalSeconds) {
 /**
  * Returns true if the value is an object, false if it is not
  * @param {any} val - The value to check.
- * @returns {Boolean} whether it is an object
+ * @returns {boolean} whether it is an object
  */
 function isObject(val) {
     if (val === null) {
@@ -173,8 +173,8 @@ function isObject(val) {
 
 /**
  * Given a string, return true if it is a valid JSON string, false otherwise
- * @param {String} jsonString - The string to be tested
- * @returns {Boolean} whether it is a valid JSON string
+ * @param {string} jsonString - The string to be tested
+ * @returns {boolean} whether it is a valid JSON string
  */
 function isValidJsonString(jsonString) {
     try {
@@ -190,8 +190,8 @@ function isValidJsonString(jsonString) {
 
 /**
  * Given a string, return true if it is either `vw` or `mw`
- * @param {String} type - The type of the virtual boundary
- * @returns {Boolean} whether it is a virtual wall type
+ * @param {string} type - The type of the virtual boundary
+ * @returns {boolean} whether it is a virtual wall type
  */
 function isValidVirtualWallType(type) {
     return (type === 'vw') || (type === 'mw');

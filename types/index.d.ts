@@ -1,10 +1,10 @@
 /**
  * @class EcovacsAPI
  * An instance of this class provides access to the Ecovacs account and to the API
- * @property @private resource - the resource of the device
- * @property @private country - the country where the Ecovacs account is registered
- * @property @private continent - the continent where the Ecovacs account is registered
- * @property @private deviceId - the device ID of the bot
+ * @property {string} @private resource - the resource of the device
+ * @property {string} @private country - the country where the Ecovacs account is registered
+ * @property {string} @private continent - the continent where the Ecovacs account is registered
+ * @property {string} @private deviceId - the device ID of the bot
  */
 declare class EcovacsAPI {
     /**
@@ -18,46 +18,46 @@ declare class EcovacsAPI {
      */
     static isCanvasModuleAvailable(): boolean;
     /**
-     * @param {String} company
+     * @param {string} company
      * @returns {boolean}
      */
     static isMQTTProtocolUsed(company: string): boolean;
     /**
      * Returns true if the device class is 950 type
-     * @param {String} deviceClass - The device class to check
+     * @param {string} deviceClass - The device class to check
      * @param [isMQTTProtocolUsed=true] - This value is used as default value if the deviceClass is not registered
-     * @returns {Boolean} the value of the '950type' property
+     * @returns {boolean} the value of the '950type' property
      */
     static isDeviceClass950type(deviceClass: string, isMQTTProtocolUsed?: boolean): boolean;
     /**
      * Returns true if the device class is not 950 type
-     * @param {String} deviceClass - The device class of the device
-     * @returns {Boolean} a boolean value.
+     * @param {string} deviceClass - The device class of the device
+     * @returns {boolean} a boolean value.
      */
     static isDeviceClassNot950type(deviceClass: string): boolean;
     /**
      * Given a machine id and a device number, return the device ID
-     * @param {String} machineId - the id of the device
-     * @param {Number} [deviceNumber=0] - the device number is a number that is assigned to each device
-     * @returns {String} the device ID
+     * @param {string} machineId - the id of the device
+     * @param {number} [deviceNumber=0] - the device number is a number that is assigned to each device
+     * @returns {string} the device ID
      */
     static getDeviceId(machineId: string, deviceNumber?: number): string;
     /**
      * Create a hash of the given text using the MD5 algorithm
-     * @param {String} text - the text to be hashed
-     * @returns {String} the MD5 hash of the text
+     * @param {string} text - the text to be hashed
+     * @returns {string} the MD5 hash of the text
      */
     static md5(text: string): string;
     /**
      * It takes a string and encrypts it using the public key
-     * @param {String} text - the text to encrypt
-     * @returns {String} the encrypted string
+     * @param {string} text - the text to encrypt
+     * @returns {string} the encrypted string
      */
     static encrypt(text: string): string;
     /**
      * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
      * @param {Object} params - the parameters to be encoded
-     * @returns {String} a string of the form "key1=value1&key2=value2&key3=value3"
+     * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
      */
     static paramsToQueryList(params: any): string;
     /**
@@ -83,13 +83,13 @@ declare class EcovacsAPI {
     /**
      * Get the parameters for the user login
      * @param {Object} params - an object with the data to retrieve the parameters
-     * @returns {String} the parameters
+     * @returns {string} the parameters
      */
     getUserLoginParams(params: any): string;
     /**
      * Get the parameters for authentication
      * @param {Object} params - an object with the data to retrieve the parameters
-     * @returns {String} the parameters
+     * @returns {string} the parameters
      */
     getAuthParams(params: any): string;
     /**
@@ -171,12 +171,12 @@ declare class EcovacsAPI {
     getVacBotObj(vacuum: any): any;
     /**
      * Get a corresponding instance of the `vacBot` class
-     * @param {String} user - the user ID (retrieved from Ecovacs API)
-     * @param {String} hostname - the host name (for the Ecovacs API)
-     * @param {String} resource - the resource of the vacuum
-     * @param {String} userToken - the user token
+     * @param {string} user - the user ID (retrieved from Ecovacs API)
+     * @param {string} hostname - the host name (for the Ecovacs API)
+     * @param {string} resource - the resource of the vacuum
+     * @param {string} userToken - the user token
      * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
-     * @param {String} [continent] - the continent
+     * @param {string} [continent] - the continent
      * @returns {Object} a corresponding instance of the `VacBot` class
      */
     getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent?: string): any;

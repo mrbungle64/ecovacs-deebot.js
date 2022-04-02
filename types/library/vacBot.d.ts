@@ -139,7 +139,7 @@ declare class VacBot {
     resume(): void;
     /**
      * This is a wrapper function to play a sound
-     * @param {Number} soundID
+     * @param {number} soundID
      * @since 0.6.2
      */
     playSound(soundID?: number): void;
@@ -187,8 +187,8 @@ declare class VacBot {
     handleMapImageInfo(mapImageInfo: any): Promise<void>;
     /**
      * Get the name of the spot area that the bot is currently in
-     * @param {String} currentSpotAreaID - the ID of the spot area that the player is currently in
-     * @returns {String} the name of the current spot area
+     * @param {string} currentSpotAreaID - the ID of the spot area that the player is currently in
+     * @returns {string} the name of the current spot area
      */
     getSpotAreaName(currentSpotAreaID: string): string;
     /**
@@ -203,12 +203,12 @@ declare class VacBot {
     /**
      * If the value of `company` is `eco-ng`
      * the model uses MQTT as protocol
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     useMqttProtocol(): boolean;
     /**
      * Returns the protocol that is used
-     * @returns {String} `MQTT` or `XMPP`
+     * @returns {string} `MQTT` or `XMPP`
      */
     getProtocol(): string;
     /**
@@ -216,28 +216,28 @@ declare class VacBot {
      * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
      * If the model is not registered,
      * it returns the default value (= is MQTT model)
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     is950type(): boolean;
     /**
      * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
      * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     isNot950type(): boolean;
     /**
      * Returns true if the model is a N79 series model
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     isN79series(): boolean;
     /**
      * Returns true if the model is a supported model
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     isSupportedDevice(): boolean;
     /**
      * Returns true if the model is a known model
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     isKnownDevice(): boolean;
     /**
@@ -249,19 +249,19 @@ declare class VacBot {
     getDeviceProperty(property: string, defaultValue?: any): any;
     /**
      * Returns true if the model has a main brush
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasMainBrush(): boolean;
     /**
      * Returns true if the model has Edge cleaning mode
      * It is assumed that a model can have either an Edge or Spot Area mode
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasEdgeCleaningMode(): boolean;
     /**
      * Returns true if the model has Spot cleaning mode
      * It is assumed that a model can have either a Spot or Spot Area mode
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasSpotCleaningMode(): boolean;
     /**
@@ -270,7 +270,7 @@ declare class VacBot {
     hasSpotAreas(): boolean;
     /**
      * Returns true if the model has Spot Area cleaning mode
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasSpotAreaCleaningMode(): boolean;
     /**
@@ -279,37 +279,37 @@ declare class VacBot {
     hasCustomAreas(): boolean;
     /**
      * Returns true if the model has mapping capabilities
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasCustomAreaCleaningMode(): boolean;
     /**
      * Returns true if the model has mapping capabilities
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasMappingCapabilities(): boolean;
     /**
      * Returns true if the model has mopping functionality
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasMoppingSystem(): boolean;
     /**
      * Returns true if the model has power adjustment functionality
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasVacuumPowerAdjustment(): boolean;
     /**
      * Returns true if the model has voice report functionality
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasVoiceReports(): boolean;
     /**
      * Returns true if the model has an auto empty station
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     hasAutoEmptyStation(): boolean;
     /**
      * Returns true if the model supports map images
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     isMapImageSupported(): boolean;
     /**
