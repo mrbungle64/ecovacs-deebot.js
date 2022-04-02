@@ -17,15 +17,15 @@ const packageInfo = require('./package.json');
  * @class EcovacsAPI
  * An instance of this class provides access to the Ecovacs account and to the API
  * @property {string} @private resource - the resource of the device
- * @property {string} @private country - the country where the Ecovacs account is registered
+ * @property {string} @private country - the country code of the country where the Ecovacs account is registered
  * @property {string} @private continent - the continent where the Ecovacs account is registered
  * @property {string} @private deviceId - the device ID of the bot
  */
 class EcovacsAPI {
   /**
    * @param {string} deviceId - the device ID of the bot
-   * @param {string} country - the country code
-   * @param {string} [continent] - the continent (deprecated)
+   * @param {string} country - the country code of the country where the Ecovacs account is registered
+   * @param {string} [continent] - the continent code (deprecated)
    */
   constructor(deviceId, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");

@@ -1,3 +1,5 @@
+'use strict';
+
 const assert = require('assert');
 const axios = require('axios');
 
@@ -13,7 +15,9 @@ describe('API', function () {
 
       await Promise.all(
           Object.values(ecovacsDeebot.countries).map(async ({continent}) => {
-            if (continents.includes(continent)) return;
+            if (continents.includes(continent)) {
+              return;
+            }
             continents.push(continent);
 
             try {
@@ -58,8 +62,8 @@ describe('API', function () {
   });
 
   describe('rsa key file', function () {
-    const fs = require('fs')
-      , crypto = require('crypto');
+    const fs = require('fs');
+    const crypto = require('crypto');
 
     it('should exist as a file', function (done) {
       fs.stat("key.pem", done);
