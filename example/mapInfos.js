@@ -7,20 +7,20 @@ const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
 
 let settingsFile = tools.getSettingsFile();
 
-const account_id = settingsFile.ACCOUNT_ID;
+const accountId = settingsFile.ACCOUNT_ID;
 const password = settingsFile.PASSWORD;
 const countryCode = settingsFile.COUNTRY_CODE;
 const deviceNumber = settingsFile.DEVICE_NUMBER;
 
 const passwordHash = EcoVacsAPI.md5(password);
-const device_id = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
+const deviceId = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
 
-const api = new EcoVacsAPI(device_id, countryCode);
+const api = new EcoVacsAPI(deviceId, countryCode);
 
 let mapData = null;
 let mapSpotAreaName = [];
 
-api.connect(account_id, passwordHash).then(() => {
+api.connect(accountId, passwordHash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[deviceNumber];
         console.log(vacuum);
