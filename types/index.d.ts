@@ -1,10 +1,10 @@
 /**
  * @class EcovacsAPI
  * An instance of this class provides access to the Ecovacs account and to the API
- * @property {string} @private resource - the resource of the device
- * @property {string} @private country - the country code of the country where the Ecovacs account is registered
- * @property {string} @private continent - the continent where the Ecovacs account is registered
- * @property {string} @private deviceId - the device ID of the bot
+ * @property @private {string} resource - the resource of the device
+ * @property @private {string} country - the country code of the country where the Ecovacs account is registered
+ * @property @private {string} continent - the continent where the Ecovacs account is registered
+ * @property @private {string} deviceId - the device ID of the bot
  */
 declare class EcovacsAPI {
     /**

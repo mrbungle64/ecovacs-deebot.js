@@ -107,6 +107,7 @@ class EcovacsXMPP_XML extends Ecovacs {
     /**
      * Sends a command to the device
      * @param {Object} command - the command object used to send
+     * @returns {Promise<void>}
      */
     async sendCommand(command) {
         let commandXml = this.getCommandXml(command);

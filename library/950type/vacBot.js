@@ -562,6 +562,7 @@ class VacBot_950type extends VacBot {
     /**
      * Handle the payload of the `MapSubSet` response/message
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
     async handleMapSubset(payload) {
         let mapMID = payload['mid'];
@@ -617,6 +618,7 @@ class VacBot_950type extends VacBot {
     /**
      * Handle the payload of the `MapInfo` response/message
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
     async handleMapInfo(payload) {
         let mapMID = payload['mid'];

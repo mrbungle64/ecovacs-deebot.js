@@ -484,6 +484,7 @@ class VacBot_non950type extends VacBot {
    * Handle the payload for the map info data
    * (see also `CachedMapInfo` for non 950 type)
    * @param {Object} payload
+   * @returns {Promise<Object>}
    */
   async handleMapM(payload) {
     tools.envLog("[VacBot] *** handleMapM " + JSON.stringify(payload));
@@ -567,6 +568,7 @@ class VacBot_non950type extends VacBot {
    * Handle the payload of the `PullM` response/message
    * (see also `MapSubset` for non 950 type)
    * @param {Object} payload
+   * @returns {Promise<Object>}
    */
   async handlePullM(payload) {
     tools.envLog("[VacBot] *** handlePullM " + JSON.stringify(payload));
@@ -618,6 +620,7 @@ class VacBot_non950type extends VacBot {
    * triggered by the `handleMapM` response/message
    * (see also `MapInfo` for non 950 type)
    * @param {Object} payload
+   * @returns {Promise<void>}
    */
   async handleMapInfo(payload) {
     if (payload.attrs) {
@@ -648,6 +651,7 @@ class VacBot_non950type extends VacBot {
   /**
    * Handle the payload of the `PullMP` response/message (map piece packet)
    * @param {Object} payload
+   * @returns {Promise<Object>}
    */
   async handlePullMP(payload) {
     if (payload.attrs) {

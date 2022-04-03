@@ -102,8 +102,9 @@ declare class VacBot_non950type extends VacBot {
      * Handle the payload for the map info data
      * (see also `CachedMapInfo` for non 950 type)
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
-    handleMapM(payload: any): Promise<{}>;
+    handleMapM(payload: any): Promise<any>;
     handleMapExecuted: boolean;
     /**
      * Handle the payload of the `MapSet` response/message
@@ -123,27 +124,21 @@ declare class VacBot_non950type extends VacBot {
      * Handle the payload of the `PullM` response/message
      * (see also `MapSubset` for non 950 type)
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
-    handlePullM(payload: any): Promise<{
-        mapsubsetEvent: string;
-        mapsubsetData: map.EcovacsMapSpotAreaInfo;
-    } | {
-        mapsubsetEvent: string;
-        mapsubsetData: map.EcovacsMapVirtualBoundaryInfo;
-    } | {
-        mapsubsetEvent: string;
-        mapsubsetData?: undefined;
-    }>;
+    handlePullM(payload: any): Promise<any>;
     /**
      * Handle the payload for the map image
      * triggered by the `handleMapM` response/message
      * (see also `MapInfo` for non 950 type)
      * @param {Object} payload
+     * @returns {Promise<void>}
      */
     handleMapInfo(payload: any): Promise<void>;
     /**
      * Handle the payload of the `PullMP` response/message (map piece packet)
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
     handlePullMP(payload: any): Promise<any>;
     /**

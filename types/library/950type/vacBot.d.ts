@@ -151,20 +151,13 @@ declare class VacBot_950type extends VacBot {
     /**
      * Handle the payload of the `MapSubSet` response/message
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
-    handleMapSubset(payload: any): Promise<{
-        mapsubsetEvent: string;
-        mapsubsetData: map.EcovacsMapSpotAreaInfo;
-    } | {
-        mapsubsetEvent: string;
-        mapsubsetData: map.EcovacsMapVirtualBoundaryInfo;
-    } | {
-        mapsubsetEvent: string;
-        mapsubsetData?: undefined;
-    }>;
+    handleMapSubset(payload: any): Promise<any>;
     /**
      * Handle the payload of the `MapInfo` response/message
      * @param {Object} payload
+     * @returns {Promise<Object>}
      */
     handleMapInfo(payload: any): Promise<any>;
     /**

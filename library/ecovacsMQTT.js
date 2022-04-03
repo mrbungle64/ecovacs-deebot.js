@@ -175,6 +175,7 @@ class EcovacsMQTT extends Ecovacs {
     /**
      * It sends a command to the Ecovacs API
      * @param {Object} command - the command to send to the Ecovacs API
+     * @returns {Promise<void>}
      */
     async sendCommand(command) {
         try {
