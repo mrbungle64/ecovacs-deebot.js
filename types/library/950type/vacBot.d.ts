@@ -22,12 +22,12 @@ declare class VacBot_950type extends VacBot {
      * e.g. charge status, clean status and the last area values
      * @param {Object} payload
      */
-    handleCleanReport(payload: any): void;
+    handleCleanInfo(payload: any): void;
     /**
      * Handle the payload of the `Battery` response/message (battery level)
      * @param {Object} payload
      */
-    handleBatteryInfo(payload: any): void;
+    handleBattery(payload: any): void;
     /**
      * Handle the payload of the `LifeSpan` response/message
      * (information about accessories components)
@@ -39,12 +39,12 @@ declare class VacBot_950type extends VacBot {
      * (vacuum position and charger resp. charge position)
      * @param {Object} payload
      */
-    handleDeebotPosition(payload: any): void;
+    handlePos(payload: any): void;
     /**
      * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
      * @param {Object} payload
      */
-    handleCleanSpeed(payload: any): void;
+    handleSpeed(payload: any): void;
     /**
      * Handle the payload of the `NetInfo` response/message
      * (network addresses and Wi-Fi status)
@@ -67,28 +67,92 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleSleepStatus(payload: any): void;
-    handle_cleanLogs(payload: any): void;
-    handle_cleanSum(payload: any): void;
-    handle_relocationState(payload: any): void;
-    handle_volume(payload: any): void;
-    handle_breakPoint(payload: any): void;
-    handle_block(payload: any): void;
-    handle_autoEmpty(payload: any): void;
-    handle_advancedMode(payload: any): void;
-    handle_trueDetect(payload: any): void;
-    handle_dusterRemind(payload: any): void;
-    handle_carpetPressure(payload: any): void;
-    handle_stats(payload: any): void;
-    handle_Schedule(payload: any): void;
-    handle_cachedMapInfo(payload: any): void;
-    handle_mapSet(payload: any): {
+    /**
+     * Handle the payload of the `CleanLogs` response/message
+     * @param {Object} payload
+     */
+    handleCleanLogs(payload: any): void;
+    /**
+     * Handle the payload of the `TotalStats` response/message
+     * @param {Object} payload
+     */
+    handleTotalStats(payload: any): void;
+    /**
+     * Handle the payload of the `RelocationState` response/message
+     * @param {Object} payload
+     */
+    handleRelocationState(payload: any): void;
+    /**
+     * Handle the payload of the `Volume` response/message
+     * @param {Object} payload
+     */
+    handleVolume(payload: any): void;
+    /**
+     * Handle the payload of the `BreakPoint` response/message
+     * @param {Object} payload
+     */
+    handleBreakPoint(payload: any): void;
+    /**
+     * Handle the payload of the `Block` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleBlock(payload: any): void;
+    /**
+     * Handle the payload of the `AutoEmpty` response/message
+     * @param {Object} payload
+     */
+    handleAutoEmpty(payload: any): void;
+    /**
+     * Handle the payload of the `AdvancedMode` response/message
+     * @param {Object} payload
+     */
+    handleAdvancedMode(payload: any): void;
+    /**
+     * Handle the payload of the `TrueDetect` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleTrueDetect(payload: any): void;
+    /**
+     * Handle the payload of the `DusterRemind` response/message
+     * @param {Object} payload
+     */
+    handleDusterRemind(payload: any): void;
+    /**
+     * Handle the payload of the `xxx` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleCarpetPressure(payload: any): void;
+    /**
+     * Handle the payload of the `CarpertPressure` (sic) response/message
+     * @param {Object} payload
+     */
+    handleStats(payload: any): void;
+    /**
+     * Handle the payload of the `Sched` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleSched(payload: any): void;
+    /**
+     * Handle the payload of the `CachedMapInfo` response/message
+     * @param {Object} payload
+     */
+    handleCachedMapInfo(payload: any): void;
+    /**
+     * Handle the payload of the `MapSet` response/message
+     * @param {Object} payload
+     */
+    handleMapSet(payload: any): {
         mapsetEvent: string;
         mapsetData?: undefined;
     } | {
         mapsetEvent: string;
         mapsetData: any;
     };
-    handle_mapSubset(payload: any): Promise<{
+    /**
+     * Handle the payload of the `MapSubSet` response/message
+     * @param {Object} payload
+     */
+    handleMapSubset(payload: any): Promise<{
         mapsubsetEvent: string;
         mapsubsetData: map.EcovacsMapSpotAreaInfo;
     } | {
@@ -98,24 +162,32 @@ declare class VacBot_950type extends VacBot {
         mapsubsetEvent: string;
         mapsubsetData?: undefined;
     }>;
-    handle_mapInfo(payload: any): Promise<any>;
+    /**
+     * Handle the payload of the `MapInfo` response/message
+     * @param {Object} payload
+     */
+    handleMapInfo(payload: any): Promise<any>;
     /**
      * @todo: finish the implementation
      * @param payload
      */
-    handle_majorMap(payload: any): void;
+    handleMajorMap(payload: any): void;
     liveMapImage: map.EcovacsLiveMapImage;
     /**
      * @todo: finish the implementation
      * @param payload
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
-    handle_minorMap(payload: any): Promise<null | {
+    handleMinorMap(payload: any): Promise<null | {
         mapID: any;
         mapType: any;
         mapBase64PNG: string;
     }>;
-    handle_ResponseError(payload: any): void;
+    /**
+     * Handle the payload of the `Error` response/message
+     * @param {Object} payload
+     */
+    handleResponseError(payload: any): void;
 }
 import VacBot = require("../vacBot");
 import map = require("../mapTemplate");

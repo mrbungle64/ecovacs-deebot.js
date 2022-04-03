@@ -139,7 +139,7 @@ class VacBot_non950type extends VacBot {
    * (position of the vacuum and the charging station)
    * @param {Object} payload
    */
-  handleDeebotPosition(payload) {
+  handlePos(payload) {
     tools.envLog("[VacBot] *** deebotPosition payload: %s", JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('p')) {
       const posX = Number(payload.attrs['p'].split(",")[0]);
@@ -247,7 +247,7 @@ class VacBot_non950type extends VacBot {
    * (charger resp. charge position)
    * @param {Object} payload
    */
-  handleChargePosition(payload) {
+  handleChargePos(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('p') && payload.attrs.hasOwnProperty('a')) {
       this.chargePosition = {
         x: payload.attrs['p'].split(",")[0],
@@ -263,7 +263,7 @@ class VacBot_non950type extends VacBot {
    * Handle the payload of the `DustCaseST` response/message (dust case status)
    * @param {Object} payload
    */
-  handleDustcaseInfo(payload) {
+  handleDustCaseST(payload) {
     if (payload.attrs && payload.attrs.hasOwnProperty('st')) {
       this.dustcaseInfo = payload.attrs['st'];
       tools.envLog("[VacBot] *** dustcaseInfo = " + this.dustcaseInfo);
@@ -282,22 +282,10 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `CleanLogs` response/message
    * @param {Object} payload
    */
-  handle_cleanSum(payload) {
-    if (payload.attrs && payload.attrs.hasOwnProperty('a') && payload.attrs.hasOwnProperty('l') && payload.attrs.hasOwnProperty('c')) {
-      this.cleanSum_totalSquareMeters = parseInt(payload.attrs['a']);
-      this.cleanSum_totalSeconds = parseInt(payload.attrs['l']);
-      this.cleanSum_totalNumber = parseInt(payload.attrs['c']);
-    }
-  }
-
-  /**
-   *
-   * @param {Object} payload
-   */
-  handle_cleanLogs(payload) {
+  handleCleanLogs(payload) {
     if (payload.attrs) {
       const count = payload.children.length;
       for (let c = 0; c < count; c++) {
@@ -368,10 +356,23 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `CleanSum` response/message
    * @param {Object} payload
    */
-  handle_onOff(payload) {
+  handleCleanSum(payload) {
+    if (payload.attrs && payload.attrs.hasOwnProperty('a') && payload.attrs.hasOwnProperty('l') && payload.attrs.hasOwnProperty('c')) {
+      this.cleanSum_totalSquareMeters = parseInt(payload.attrs['a']);
+      this.cleanSum_totalSeconds = parseInt(payload.attrs['l']);
+      this.cleanSum_totalNumber = parseInt(payload.attrs['c']);
+    }
+  }
+
+  /**
+   * Handle the payload of the `OnOff` response/message
+   * (do_not_disturb, continuous_cleaning, silence_voice_report)
+   * @param {Object} payload
+   */
+  handleOnOff(payload) {
     tools.envLog("[VacBot] *** handleOnOff = " + JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('on')) {
       let type = null;
@@ -398,10 +399,10 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `CleanSt` response/message (Stats)
    * @param {Object} payload
    */
-  handle_stats(payload) {
+  handleCleanSt(payload) {
     if (payload.attrs) {
       const area = parseInt(payload.attrs.a);
       const seconds = parseInt(payload.attrs.l);
@@ -415,10 +416,10 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `Sched` response/message
    * @param {Object} payload
    */
-  handle_getSched(payload) {
+  handleSched(payload) {
     this.schedule = [];
     for (let c = 0; c < payload.children.length; c++) {
       const resultData = payload.children[c];
@@ -480,11 +481,12 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for the map info data (CachedMapInfo)
+   * Handle the payload for the map info data
+   * (see also `CachedMapInfo` for non 950 type)
    * @param {Object} payload
    */
-  async handle_cachedMapInfo(payload) {
-    tools.envLog("[VacBot] *** handle_cachedMapInfo " + JSON.stringify(payload));
+  async handleMapM(payload) {
+    tools.envLog("[VacBot] *** handleMapM " + JSON.stringify(payload));
     // Execute only if the GetMaps cmd was received
     if (!this.handleMapExecuted && payload.attrs && payload.attrs.hasOwnProperty('i')) {
       this.currentMapMID = payload.attrs['i'];
@@ -498,7 +500,7 @@ class VacBot_non950type extends VacBot {
       this.handleMapExecuted = true;
       if (this.createMapImage && tools.isCanvasModuleAvailable()) {
         try {
-          await this.handle_mapInfo(payload);
+          await this.handleMapInfo(payload);
         } catch (e) {
           throw new Error(e);
         }
@@ -509,11 +511,11 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `MapSet` response/message
    * @param {Object} payload
    */
-  handle_mapSet(payload) {
-    tools.envLog("[VacBot] *** handle_mapSet " + JSON.stringify(payload));
+  handleMapSet(payload) {
+    tools.envLog("[VacBot] *** handleMapSet " + JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('tp')) {
       if (payload.attrs['tp'] === 'sa') {
         const mapSetID = payload.attrs['msid'];
@@ -562,11 +564,12 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `PullM` response/message
+   * (see also `MapSubset` for non 950 type)
    * @param {Object} payload
    */
-  async handle_mapSubset(payload) {
-    tools.envLog("[VacBot] *** handle_mapSubset " + JSON.stringify(payload));
+  async handlePullM(payload) {
+    tools.envLog("[VacBot] *** handlePullM " + JSON.stringify(payload));
     if (payload.attrs && payload.attrs.hasOwnProperty('m')) {
       const value = payload.attrs['m'];
       let mid = '';
@@ -602,7 +605,7 @@ class VacBot_non950type extends VacBot {
           };
         }
       } else {
-        tools.envLog("[VacBot] *** handle_mapSubset Missing mid or type");
+        tools.envLog("[VacBot] *** handlePullM Missing mid or type");
       }
     }
     return {
@@ -611,10 +614,12 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload for the map image
+   * triggered by the `handleMapM` response/message
+   * (see also `MapInfo` for non 950 type)
    * @param {Object} payload
    */
-  async handle_mapInfo(payload) {
+  async handleMapInfo(payload) {
     if (payload.attrs) {
       const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
@@ -641,10 +646,10 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `PullMP` response/message (map piece packet)
    * @param {Object} payload
    */
-  async handle_mapPiecePacket(payload) {
+  async handlePullMP(payload) {
     if (payload.attrs) {
       const mapID = payload.attrs.i;
       const type = 'ol'; // Only outline is supported for non 950 type models
@@ -669,10 +674,10 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   *
+   * Handle the payload of the `Error` response/message
    * @param {Object} payload
    */
-  handle_ResponseError(payload) {
+  handleResponseError(payload) {
     this.errorCode = '0';
     this.errorDescription = '';
     let attrs = ['new', 'code', 'errno', 'error', 'errs'];

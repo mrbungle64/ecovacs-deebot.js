@@ -28,7 +28,7 @@ declare class VacBot_non950type extends VacBot {
      * (position of the vacuum and the charging station)
      * @param {Object} payload
      */
-    handleDeebotPosition(payload: any): void;
+    handlePos(payload: any): void;
     /**
      * Handle the payload of the `CleanSpeed` response/message
      * (vacuum power resp. suction power)
@@ -61,53 +61,55 @@ declare class VacBot_non950type extends VacBot {
      * (charger resp. charge position)
      * @param {Object} payload
      */
-    handleChargePosition(payload: any): void;
+    handleChargePos(payload: any): void;
     /**
      * Handle the payload of the `DustCaseST` response/message (dust case status)
      * @param {Object} payload
      */
-    handleDustcaseInfo(payload: any): void;
+    handleDustCaseST(payload: any): void;
     /**
      * Handle the payload of the `SleepStatus` response/message (sleep status)
      * @param {Object} payload
      */
     handleSleepStatus(payload: any): void;
     /**
-     *
+     * Handle the payload of the `CleanLogs` response/message
      * @param {Object} payload
      */
-    handle_cleanSum(payload: any): void;
+    handleCleanLogs(payload: any): void;
     /**
-     *
+     * Handle the payload of the `CleanSum` response/message
      * @param {Object} payload
      */
-    handle_cleanLogs(payload: any): void;
+    handleCleanSum(payload: any): void;
     /**
-     *
+     * Handle the payload of the `OnOff` response/message
+     * (do_not_disturb, continuous_cleaning, silence_voice_report)
      * @param {Object} payload
      */
-    handle_onOff(payload: any): void;
+    handleOnOff(payload: any): void;
     /**
-     *
+     * Handle the payload of the `CleanSt` response/message (Stats)
      * @param {Object} payload
      */
-    handle_stats(payload: any): void;
+    handleCleanSt(payload: any): void;
     /**
-     *
+     * Handle the payload of the `Sched` response/message
      * @param {Object} payload
      */
-    handle_getSched(payload: any): void;
+    handleSched(payload: any): void;
     /**
-     * Handle the payload for the map info data (CachedMapInfo)
+     * Handle the payload for the map info data
+     * (see also `CachedMapInfo` for non 950 type)
      * @param {Object} payload
      */
-    handle_cachedMapInfo(payload: any): Promise<{}>;
+    handleMapM(payload: any): Promise<{}>;
     handleMapExecuted: boolean;
     /**
-     *
+     * Handle the payload of the `MapSet` response/message
      * @param {Object} payload
      */
-    handle_mapSet(payload: any): {
+    handleMapSet(payload: any): {
         mapsetEvent: string;
         mapsetData: map.EcovacsMapSpotAreas;
     } | {
@@ -118,10 +120,11 @@ declare class VacBot_non950type extends VacBot {
         mapsetData?: undefined;
     };
     /**
-     *
+     * Handle the payload of the `PullM` response/message
+     * (see also `MapSubset` for non 950 type)
      * @param {Object} payload
      */
-    handle_mapSubset(payload: any): Promise<{
+    handlePullM(payload: any): Promise<{
         mapsubsetEvent: string;
         mapsubsetData: map.EcovacsMapSpotAreaInfo;
     } | {
@@ -132,20 +135,22 @@ declare class VacBot_non950type extends VacBot {
         mapsubsetData?: undefined;
     }>;
     /**
-     *
+     * Handle the payload for the map image
+     * triggered by the `handleMapM` response/message
+     * (see also `MapInfo` for non 950 type)
      * @param {Object} payload
      */
-    handle_mapInfo(payload: any): Promise<void>;
+    handleMapInfo(payload: any): Promise<void>;
     /**
-     *
+     * Handle the payload of the `PullMP` response/message (map piece packet)
      * @param {Object} payload
      */
-    handle_mapPiecePacket(payload: any): Promise<any>;
+    handlePullMP(payload: any): Promise<any>;
     /**
-     *
+     * Handle the payload of the `Error` response/message
      * @param {Object} payload
      */
-    handle_ResponseError(payload: any): void;
+    handleResponseError(payload: any): void;
 }
 import VacBot = require("../vacBot");
 import map = require("../mapTemplate");

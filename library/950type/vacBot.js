@@ -46,8 +46,8 @@ class VacBot_950type extends VacBot {
      * e.g. charge status, clean status and the last area values
      * @param {Object} payload
      */
-    handleCleanReport(payload) {
-        tools.envLog("[handleCleanReport] payload: ", JSON.stringify(payload));
+    handleCleanInfo(payload) {
+        tools.envLog("[handleCleanInfo] payload: ", JSON.stringify(payload));
         if (payload['state'] === 'clean') {
             let type = payload['cleanState']['type'];
             if (typeof payload['cleanState']['content'] === 'object') {
@@ -93,7 +93,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the `Battery` response/message (battery level)
      * @param {Object} payload
      */
-    handleBatteryInfo(payload) {
+    handleBattery(payload) {
         this.batteryLevel = payload['value'];
         if (payload.hasOwnProperty('isLow')) {
             this.batteryIsLow = !!Number(payload['isLow']);
@@ -133,7 +133,7 @@ class VacBot_950type extends VacBot {
      * (vacuum position and charger resp. charge position)
      * @param {Object} payload
      */
-    handleDeebotPosition(payload) {
+    handlePos(payload) {
         // is only available in some DeebotPosition messages (e.g. on start cleaning)
         // there can be more than one charging station only handles first charging station
         const chargePos = payload['chargePos'];
@@ -197,7 +197,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
      * @param {Object} payload
      */
-    handleCleanSpeed(payload) {
+    handleSpeed(payload) {
         const speed = payload['speed'];
         this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         tools.envLog("[VacBot] *** cleanSpeed = %s", this.cleanSpeed);
@@ -259,8 +259,12 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
     }
 
-    handle_cleanLogs(payload) {
-        tools.envLog("[handle_cleanLogs] payload: ", this.removeFromLogs(JSON.stringify(payload)));
+    /**
+     * Handle the payload of the `CleanLogs` response/message
+     * @param {Object} payload
+     */
+    handleCleanLogs(payload) {
+        tools.envLog("[handleCleanLogs] payload: ", this.removeFromLogs(JSON.stringify(payload)));
         let logs = [];
         if (payload.hasOwnProperty('logs')) {
             logs = payload['logs'];
@@ -306,48 +310,84 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
     }
 
-    handle_cleanSum(payload) {
+    /**
+     * Handle the payload of the `TotalStats` response/message
+     * @param {Object} payload
+     */
+    handleTotalStats(payload) {
         this.cleanSum_totalSquareMeters = parseInt(payload['area']);
         this.cleanSum_totalSeconds = parseInt(payload['time']);
         this.cleanSum_totalNumber = parseInt(payload['count']);
     }
 
-    handle_relocationState(payload) {
+    /**
+     * Handle the payload of the `RelocationState` response/message
+     * @param {Object} payload
+     */
+    handleRelocationState(payload) {
         this.relocationState = payload['state'];
         tools.envLog("[VacBot] *** relocationState = " + this.relocationState);
     }
 
-    handle_volume(payload) {
+    /**
+     * Handle the payload of the `Volume` response/message
+     * @param {Object} payload
+     */
+    handleVolume(payload) {
         this.volume = payload['volume'];
         tools.envLog("[VacBot] *** volume = " + this.volume);
     }
 
-    handle_breakPoint(payload) {
+    /**
+     * Handle the payload of the `BreakPoint` response/message
+     * @param {Object} payload
+     */
+    handleBreakPoint(payload) {
         this.breakPoint = payload['enable'];
         tools.envLog("[VacBot] *** breakPoint = " + this.breakPoint);
     }
 
-    handle_block(payload) {
+    /**
+     * Handle the payload of the `Block` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleBlock(payload) {
         this.block = payload['enable'];
         tools.envLog("[VacBot] *** block = " + this.block);
     }
 
-    handle_autoEmpty(payload) {
+    /**
+     * Handle the payload of the `AutoEmpty` response/message
+     * @param {Object} payload
+     */
+    handleAutoEmpty(payload) {
         this.autoEmpty = payload['enable'];
         tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
     }
 
-    handle_advancedMode(payload) {
+    /**
+     * Handle the payload of the `AdvancedMode` response/message
+     * @param {Object} payload
+     */
+    handleAdvancedMode(payload) {
         this.advancedMode = payload['enable'];
         tools.envLog("[VacBot] *** advancedMode = " + this.advancedMode);
     }
 
-    handle_trueDetect(payload) {
+    /**
+     * Handle the payload of the `TrueDetect` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleTrueDetect(payload) {
         this.trueDetect = payload['enable'];
         tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
     }
 
-    handle_dusterRemind(payload) {
+    /**
+     * Handle the payload of the `DusterRemind` response/message
+     * @param {Object} payload
+     */
+    handleDusterRemind(payload) {
         this.dusterRemind = {
             enabled: payload['enable'],
             period: payload['period']
@@ -355,13 +395,21 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** dusterRemind = " + JSON.stringify(this.dusterRemind));
     }
 
-    handle_carpetPressure(payload) {
+    /**
+     * Handle the payload of the `xxx` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleCarpetPressure(payload) {
         this.carpetPressure = payload['enable'];
         tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
     }
 
-    handle_stats(payload) {
-        tools.envLog("[handle_stats] payload: " + JSON.stringify(payload));
+    /**
+     * Handle the payload of the `CarpertPressure` (sic) response/message
+     * @param {Object} payload
+     */
+    handleStats(payload) {
+        tools.envLog("[handleStats] payload: " + JSON.stringify(payload));
         this.currentStats = {
             'cleanedArea': payload['area'],
             'cleanedSeconds': payload['time'],
@@ -369,7 +417,11 @@ class VacBot_950type extends VacBot {
         };
     }
 
-    handle_Schedule(payload) {
+    /**
+     * Handle the payload of the `Sched` response/message (xxx)
+     * @param {Object} payload
+     */
+    handleSched(payload) {
         this.schedule = [];
         for (let c = 0; c < payload.length; c++) {
             const resultData = payload[c];
@@ -413,7 +465,11 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    handle_cachedMapInfo(payload) {
+    /**
+     * Handle the payload of the `CachedMapInfo` response/message
+     * @param {Object} payload
+     */
+    handleCachedMapInfo(payload) {
         this.currentMapName = 'unknown';
         this.maps = {"maps": []};
         const infoEvent = payload['info'];
@@ -442,7 +498,11 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
     }
 
-    handle_mapSet(payload) {
+    /**
+     * Handle the payload of the `MapSet` response/message
+     * @param {Object} payload
+     */
+    handleMapSet(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
             if (this.currentMapMID) {
@@ -499,7 +559,11 @@ class VacBot_950type extends VacBot {
         return {mapsetEvent: 'error'};
     }
 
-    async handle_mapSubset(payload) {
+    /**
+     * Handle the payload of the `MapSubSet` response/message
+     * @param {Object} payload
+     */
+    async handleMapSubset(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
             mapMID = this.currentMapMID;
@@ -550,7 +614,11 @@ class VacBot_950type extends VacBot {
         };
     }
 
-    async handle_mapInfo(payload) {
+    /**
+     * Handle the payload of the `MapInfo` response/message
+     * @param {Object} payload
+     */
+    async handleMapInfo(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
             return null;
@@ -576,7 +644,7 @@ class VacBot_950type extends VacBot {
      * @todo: finish the implementation
      * @param payload
      */
-    handle_majorMap(payload) {
+    handleMajorMap(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID)) {
             return;
@@ -602,7 +670,7 @@ class VacBot_950type extends VacBot {
      * @param payload
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
-    async handle_minorMap(payload) {
+    async handleMinorMap(payload) {
         let mapMID = payload['mid'];
         if (isNaN(mapMID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
             return null;
@@ -616,7 +684,11 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    handle_ResponseError(payload) {
+    /**
+     * Handle the payload of the `Error` response/message
+     * @param {Object} payload
+     */
+    handleResponseError(payload) {
         this.errorCode = payload['code'].toString();
         // known errorCode from library
         if (errorCodes[this.errorCode]) {

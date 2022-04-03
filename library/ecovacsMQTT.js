@@ -202,7 +202,7 @@ class EcovacsMQTT extends Ecovacs {
                 const errorCodeObj = {
                     code: response['errno']
                 };
-                this.bot.handle_ResponseError(errorCodeObj);
+                this.bot.handleResponseError(errorCodeObj);
                 // Error code 500 = wait for response timed out (see issue #19)
                 if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                     this.emitLastError();

@@ -64,9 +64,13 @@ There is of course no claim to full functionality.
 
 ### 0.8.0 (alpha)
 * (m8schmit) Added types for TypeScript
-* Some fixes and improvements
-* Lots of documentation and refactoring
-* Bump some dependencies
+* Lots of code documentation
+* Lots of code improvements
+* Added some new models to config
+* Added unit care to LifeSpan components
+* Added current spot area name to the events
+* Some fixes
+* Updated dependencies
 
 ### 0.7.2
 * Bumped mqtt to 4.3.6

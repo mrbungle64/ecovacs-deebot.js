@@ -70,7 +70,7 @@ class Ecovacs extends EventEmitter {
         let payload = event;
         switch (abbreviatedCmd) {
             case 'CleanSt':
-                this.bot.handle_stats(payload);
+                this.bot.handleCleanSt(payload);
                 if (this.bot.currentStats) {
                     this.emit('CurrentStats', this.bot.currentStats);
                     this.bot.currentStats = null;
@@ -108,7 +108,7 @@ class Ecovacs extends EventEmitter {
                 this.emit('CleanSpeed', this.bot.cleanSpeed);
                 break;
             case 'RelocationState':
-                this.bot.handle_relocationState(payload);
+                this.bot.handleRelocationState(payload);
                 this.emit('RelocationState', this.bot.relocationState);
                 break;
             case 'LifeSpan':
@@ -128,7 +128,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Pos':
                 // DeebotPosition
-                this.bot.handleDeebotPosition(payload);
+                this.bot.handlePos(payload);
                 if (this.bot.deebotPosition['x'] && this.bot.deebotPosition['y']) {
                     this.emit('DeebotPosition', this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a']);
                     this.emit('DeebotPositionCurrentSpotAreaID', this.bot.deebotPosition['currentSpotAreaID']);
@@ -146,7 +146,7 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             case 'ChargerPos':
-                this.bot.handleChargePosition(payload);
+                this.bot.handleChargePos(payload);
                 this.emit('ChargePosition', this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a']);
                 this.emit('ChargingPosition', {
                     'coords': this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a'],
@@ -183,7 +183,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Error':
                 payload = event.attrs;
-                this.bot.handle_ResponseError(payload);
+                this.bot.handleResponseError(payload);
                 this.emit('Error', this.bot.errorDescription);
                 this.emit('ErrorCode', this.bot.errorCode);
                 this.emit('LastError', {
@@ -192,7 +192,7 @@ class Ecovacs extends EventEmitter {
                 });
                 break;
             case 'CleanSum':
-                this.bot.handle_cleanSum(payload);
+                this.bot.handleCleanSum(payload);
                 this.emit('CleanSum_totalSquareMeters', this.bot.cleanSum_totalSquareMeters); // Deprecated
                 this.emit('CleanSum_totalSeconds', this.bot.cleanSum_totalSeconds); // Deprecated
                 this.emit('CleanSum_totalNumber', this.bot.cleanSum_totalNumber); // Deprecated
@@ -205,7 +205,7 @@ class Ecovacs extends EventEmitter {
             case 'Logs':
             case 'CleanLogs':
             case 'LogApiCleanLogs':
-                this.bot.handle_cleanLogs(payload);
+                this.bot.handleCleanLogs(payload);
                 let cleanLog = [];
                 for (let i in this.bot.cleanLog) {
                     if (this.bot.cleanLog.hasOwnProperty(i)) {
@@ -236,7 +236,7 @@ class Ecovacs extends EventEmitter {
                 // - runs "GetMapSet" to request spot areas and virtual walls
                 // - and also runs indirectly "PullMP" to request map pieces of the map image
                 try {
-                    let mapinfo = this.bot.handle_cachedMapInfo(payload);
+                    let mapinfo = this.bot.handleMapM(payload);
                     if (mapinfo) {
                         this.emit('CurrentMapName', this.bot.currentMapName);
                         this.emit('CurrentMapMID', this.bot.currentMapMID);
@@ -250,7 +250,7 @@ class Ecovacs extends EventEmitter {
             case 'PullMP':
                 // Map Pieces of the map image
                 try {
-                    const mapImage = await this.bot.handle_mapPiecePacket(payload);
+                    const mapImage = await this.bot.handlePullMP(payload);
                     if (mapImage) {
                         this.emit("MapImageData", mapImage);
                     }
@@ -261,24 +261,24 @@ class Ecovacs extends EventEmitter {
             case 'MapSet':
                 // Spot Areas and virtual walls
                 // - runs "PullM" to request spot area and virtual wall data
-                let mapset = this.bot.handle_mapSet(payload);
+                let mapset = this.bot.handleMapSet(payload);
                 if (mapset['mapsetEvent'] !== 'error') {
                     this.emit(mapset['mapsetEvent'], mapset['mapsetData']);
                 }
                 break;
             case 'PullM':
                 // Spot area and virtual wall data
-                let mapsubset = await this.bot.handle_mapSubset(payload);
+                let mapsubset = await this.bot.handlePullM(payload);
                 if (mapsubset && (mapsubset['mapsubsetEvent'] !== 'error')) {
                     this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);
                 }
                 break;
             case 'DustCaseST':
-                this.bot.handleDustcaseInfo(payload);
+                this.bot.handleDustCaseST(payload);
                 this.emit('DustCaseInfo', this.bot.dustcaseInfo);
                 break;
             case 'OnOff':
-                this.bot.handle_onOff(payload);
+                this.bot.handleOnOff(payload);
                 if (this.bot.doNotDisturbEnabled) {
                     this.emit('DoNotDisturbEnabled', this.bot.doNotDisturbEnabled);
                 }
@@ -291,7 +291,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Sched':
                 // Cleaning schedule
-                this.bot.handle_getSched(payload);
+                this.bot.handleSched(payload);
                 if (this.bot.schedule) {
                     this.emit('Schedule', this.bot.schedule);
                 }
