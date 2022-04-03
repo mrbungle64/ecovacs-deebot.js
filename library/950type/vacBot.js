@@ -642,7 +642,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * @todo: finish the implementation
-     * @param payload
+     * @param {Object} payload
      */
     handleMajorMap(payload) {
         let mapMID = payload['mid'];
@@ -667,7 +667,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * @todo: finish the implementation
-     * @param payload
+     * @param {Object} payload
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
     async handleMinorMap(payload) {

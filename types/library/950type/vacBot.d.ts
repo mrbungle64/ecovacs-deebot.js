@@ -169,13 +169,13 @@ declare class VacBot_950type extends VacBot {
     handleMapInfo(payload: any): Promise<any>;
     /**
      * @todo: finish the implementation
-     * @param payload
+     * @param {Object} payload
      */
     handleMajorMap(payload: any): void;
     liveMapImage: map.EcovacsLiveMapImage;
     /**
      * @todo: finish the implementation
-     * @param payload
+     * @param {Object} payload
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
     handleMinorMap(payload: any): Promise<null | {
