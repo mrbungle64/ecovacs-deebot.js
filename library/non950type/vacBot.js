@@ -369,7 +369,7 @@ class VacBot_non950type extends VacBot {
 
   /**
    * Handle the payload of the `OnOff` response/message
-   * (do_not_disturb, continuous_cleaning, silence_voice_report)
+   * (do not disturb, continuous cleaning, voice report)
    * @param {Object} payload
    */
   handleOnOff(payload) {
@@ -481,7 +481,7 @@ class VacBot_non950type extends VacBot {
   }
 
   /**
-   * Handle the payload for the map info data
+   * Handle the payload for `MapM` response/message
    * (see also `CachedMapInfo` for non 950 type)
    * @param {Object} payload
    * @returns {Promise<Object>}

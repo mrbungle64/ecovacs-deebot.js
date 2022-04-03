@@ -1,7 +1,7 @@
 export = VacBot_950type;
 /**
  * This class is relevant for 950 type models
- * e.g. Deebot OZMO 920/950, (OZMO) T8 series, T9 series (which are all MQTT based models)
+ * e.g. Deebot OZMO 920/950, T8 series, T9 series (which are all MQTT based models)
  */
 declare class VacBot_950type extends VacBot {
     breakPoint: any;
@@ -19,7 +19,7 @@ declare class VacBot_950type extends VacBot {
     firmwareVersion: any;
     /**
      * Handle the payload of the `CleanInfo` response/message
-     * e.g. charge status, clean status and the last area values
+     * (e.g. charge status, clean status and the last area values)
      * @param {Object} payload
      */
     handleCleanInfo(payload: any): void;
@@ -93,7 +93,7 @@ declare class VacBot_950type extends VacBot {
      */
     handleBreakPoint(payload: any): void;
     /**
-     * Handle the payload of the `Block` response/message (xxx)
+     * Handle the payload of the `Block` response/message
      * @param {Object} payload
      */
     handleBlock(payload: any): void;
@@ -108,7 +108,7 @@ declare class VacBot_950type extends VacBot {
      */
     handleAdvancedMode(payload: any): void;
     /**
-     * Handle the payload of the `TrueDetect` response/message (xxx)
+     * Handle the payload of the `TrueDetect` response/message
      * @param {Object} payload
      */
     handleTrueDetect(payload: any): void;
@@ -118,17 +118,17 @@ declare class VacBot_950type extends VacBot {
      */
     handleDusterRemind(payload: any): void;
     /**
-     * Handle the payload of the `xxx` response/message (xxx)
+     * Handle the payload of the `CarpertPressure` (sic) response/message
      * @param {Object} payload
      */
     handleCarpetPressure(payload: any): void;
     /**
-     * Handle the payload of the `CarpertPressure` (sic) response/message
+     * Handle the payload of the `Stats` response/message
      * @param {Object} payload
      */
     handleStats(payload: any): void;
     /**
-     * Handle the payload of the `Sched` response/message (xxx)
+     * Handle the payload of the `Sched` response/message (Schedule)
      * @param {Object} payload
      */
     handleSched(payload: any): void;

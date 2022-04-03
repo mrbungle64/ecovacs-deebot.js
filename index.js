@@ -25,7 +25,7 @@ class EcovacsAPI {
   /**
    * @param {string} deviceId - the device ID of the bot
    * @param {string} country - the country code of the country where the Ecovacs account is registered
-   * @param {string} [continent] - the continent code (deprecated)
+   * @param {string} [continent=''] - the continent code (deprecated)
    */
   constructor(deviceId, country, continent = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
