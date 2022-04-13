@@ -36,7 +36,7 @@ api.connect(accountId, passwordHash).then(() => {
 
       console.log('\nvacbot ready\n');
 
-      vacbot.run('BatteryState');
+      vacbot.run('GetBatteryState');
       vacbot.run('GetCleanState');
       vacbot.run('GetChargeState');
 
