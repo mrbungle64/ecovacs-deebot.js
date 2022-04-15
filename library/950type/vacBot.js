@@ -695,6 +695,10 @@ class VacBot_950type extends VacBot {
         // known errorCode from library
         if (errorCodes[this.errorCode]) {
             this.errorDescription = errorCodes[this.errorCode];
+            // Request error
+            if (this.errorCode === '1') {
+                this.errorDescription = this.errorDescription + ': ' + payload.error;
+            }
         } else {
             this.errorDescription = 'unknown errorCode: ' + this.errorCode;
         }

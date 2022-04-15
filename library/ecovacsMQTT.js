@@ -188,7 +188,7 @@ class EcovacsMQTT extends Ecovacs {
                     headers: headers
                 });
                 response = res.data;
-                tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
+                tools.envLog("[EcovacsMQTT] got %s", JSON.stringify(response));
             } catch (e) {
                 this.emitNetworkError(e.message);
                 throw e.message;
@@ -201,14 +201,15 @@ class EcovacsMQTT extends Ecovacs {
                 this.handleCommandResponse(command, response);
             } else {
                 const errorCodeObj = {
-                    code: response['errno']
+                    code: response['errno'],
+                    error: response['error']
                 };
                 this.bot.handleResponseError(errorCodeObj);
                 // Error code 500 = wait for response timed out (see issue #19)
                 if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                     this.emitLastError();
                 }
-                tools.envLog(`[EcovacsAPI] callEcouserApi failure code ${response['errno']} (${response['error']})`);
+                tools.envLog(`[EcovacsMQTT] callEcouserApi failure code ${response['errno']} (${response['error']})`);
                 throw `Failure code ${response['errno']} (${response['error']})`;
             }
         } catch (e) {
