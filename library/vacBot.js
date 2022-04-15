@@ -620,10 +620,21 @@ class VacBot {
      */
     getSpotAreaName(currentSpotAreaID) {
         let currentSpotAreaName = 'unknown';
-        if (this.mapSpotAreaInfos[this.currentMapMID] && this.mapSpotAreaInfos[this.currentMapMID][currentSpotAreaID]) {
-            currentSpotAreaName = this.mapSpotAreaInfos[this.currentMapMID][currentSpotAreaID].mapSpotAreaName;
+        const mapInfo = this.mapSpotAreaInfos[this.currentMapMID];
+        if (mapInfo && map[currentSpotAreaID]) {
+            currentSpotAreaName = mapInfo[currentSpotAreaID].mapSpotAreaName;
         }
         return currentSpotAreaName;
+    }
+
+    /**
+     * Get the translated name of a spot area
+     * @param {string} name - The name of the area
+     * @param {string} [languageCode=en] - The language code of the language you want the area name in
+     * @returns {string} The area name in the language specified
+     */
+    getAreaName_i18n(name, languageCode = 'en') {
+        return i18n.getSpotAreaName(name, languageCode);
     }
 
     /**
@@ -878,7 +889,7 @@ class VacBot {
             }
         }
         tools.envLog("[VacBot] Sending command `%s` with id %s", command.name, command.getId());
-        let actionPayload = this.useMqttProtocol() ? command : command.to_xml();
+        let actionPayload = this.useMqttProtocol() ? command : command.toXml();
         (async () => {
             try {
                 await this.ecovacs.sendCommand(actionPayload);
@@ -894,16 +905,6 @@ class VacBot {
     disconnect() {
         this.ecovacs.disconnect();
         this.is_ready = false;
-    }
-
-    /**
-     * Get the translated name of a spot area
-     * @param {string} name - The name of the area
-     * @param {string} [languageCode=en] - The language code of the language you want the area name in
-     * @returns {string} The area name in the language specified
-     */
-    getAreaName_i18n(name, languageCode = 'en') {
-        return i18n.getSpotAreaName(name, languageCode);
     }
 
     /**

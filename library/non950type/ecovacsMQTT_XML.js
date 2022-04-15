@@ -31,7 +31,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
      * @returns {string}
      */
     getCommandPayload(command) {
-        let xml = command.to_xml();
+        let xml = command.toXml();
         // Remove the td from ctl xml for RestAPI
         let payloadXml = new DOMParser().parseFromString(xml.toString(), 'text/xml');
         payloadXml.documentElement.removeAttribute('td');
@@ -47,7 +47,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
     handleCommandResponse(command, messagePayload) {
         let result = {};
         if (messagePayload.hasOwnProperty('resp')) {
-            result = this.command_xml2json(messagePayload['resp'], command);
+            result = this.commandXml2Json(messagePayload['resp'], command);
             (async () => {
                 try {
                     await this.handleMessagePayload(command.name, result);
@@ -88,7 +88,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      */
     handleMessage(topic, payload, type = "incoming") {
-        let result = this.command_xml2json(payload);
+        let result = this.commandXml2Json(payload);
         (async () => {
             try {
                 await this.handleMessagePayload(result['event'], result);
@@ -104,7 +104,7 @@ class EcovacsMQTT_XML extends EcovacsMQTT {
      * @param {Object} [command] - the command object
      * @returns {Object} a JSON object
      */
-    command_xml2json(xmlString, command) {
+    commandXml2Json(xmlString, command) {
         const domParser = new DOMParser();
         const xml = domParser.parseFromString(xmlString, "text/xml");
         /** @type {Object} */

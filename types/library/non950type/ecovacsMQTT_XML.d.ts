@@ -14,7 +14,7 @@ declare class EcovacsMQTT_XML extends EcovacsMQTT {
      * @param {Object} [command] - the command object
      * @returns {Object} a JSON object
      */
-    command_xml2json(xmlString: string, command?: any): any;
+    commandXml2Json(xmlString: string, command?: any): any;
 }
 import EcovacsMQTT = require("../ecovacsMQTT");
 //# sourceMappingURL=ecovacsMQTT_XML.d.ts.map

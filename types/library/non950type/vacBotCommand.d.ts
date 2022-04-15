@@ -149,7 +149,7 @@ declare class VacBotCommand {
     constructor(name: any, args?: {});
     name: any;
     args: {};
-    to_xml(): any;
+    toXml(): any;
     getId(): any;
 }
 export {};

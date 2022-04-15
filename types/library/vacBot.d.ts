@@ -192,6 +192,13 @@ declare class VacBot {
      */
     getSpotAreaName(currentSpotAreaID: string): string;
     /**
+     * Get the translated name of a spot area
+     * @param {string} name - The name of the area
+     * @param {string} [languageCode=en] - The language code of the language you want the area name in
+     * @returns {string} The area name in the language specified
+     */
+    getAreaName_i18n(name: string, languageCode?: string): string;
+    /**
      * @deprecated
      */
     connect_and_wait_until_ready(): void;
@@ -346,13 +353,6 @@ declare class VacBot {
      * It disconnects the robot
      */
     disconnect(): void;
-    /**
-     * Get the translated name of a spot area
-     * @param {string} name - The name of the area
-     * @param {string} [languageCode=en] - The language code of the language you want the area name in
-     * @returns {string} The area name in the language specified
-     */
-    getAreaName_i18n(name: string, languageCode?: string): string;
     /**
      * Replace the `did` and `secret` with "[REMOVED]"
      * @param {string} logData - The log data to be removed

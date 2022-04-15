@@ -15,7 +15,7 @@ class VacBotCommand {
         this.args = args;
     }
 
-    to_xml() {
+    toXml() {
         let ctl = new Element('ctl', {
             td: this.name
         });
