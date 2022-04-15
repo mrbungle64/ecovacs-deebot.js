@@ -9,6 +9,7 @@ declare class VacBot_950type extends VacBot {
     autoEmpty: any;
     advancedMode: any;
     trueDetect: any;
+    cleanCount: number;
     dusterRemind: {
         enabled: any;
         period: any;
@@ -112,6 +113,11 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleTrueDetect(payload: any): void;
+    /**
+     * Handle the payload of the `CleanCount` response/message
+     * @param {Object} payload
+     */
+    handleCleanCount(payload: any): void;
     /**
      * Handle the payload of the `DusterRemind` response/message
      * @param {Object} payload

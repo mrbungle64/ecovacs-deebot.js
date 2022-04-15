@@ -31,6 +31,7 @@ class VacBot_950type extends VacBot {
         this.autoEmpty = null;
         this.advancedMode = null;
         this.trueDetect = null;
+        this.cleanCount = 1;
         this.dusterRemind = {
             enabled: null,
             period: null
@@ -381,6 +382,15 @@ class VacBot_950type extends VacBot {
     handleTrueDetect(payload) {
         this.trueDetect = payload['enable'];
         tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
+    }
+
+    /**
+     * Handle the payload of the `CleanCount` response/message
+     * @param {Object} payload
+     */
+    handleCleanCount(payload) {
+        this.cleanCount = payload['value'];
+        tools.envLog("[VacBot] *** cleanCount = " + this.cleanCount);
     }
 
     /**
@@ -946,6 +956,9 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
+            case "GetCleanCount".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetCleanCount());
+                break;
             case "SetCleanCount".toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetCleanCount(args[0]));

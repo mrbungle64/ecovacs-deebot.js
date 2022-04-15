@@ -592,6 +592,12 @@ class SetCleanCount extends VacBotCommand {
     }
 }
 
+class GetCleanCount extends VacBotCommand {
+    constructor() {
+        super('getCleanCount');
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -610,6 +616,7 @@ module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetCarpetPressure = GetCarpetPressure;
 module.exports.GetChargeState = GetChargeState;
+module.exports.GetCleanCount = GetCleanCount;
 module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
