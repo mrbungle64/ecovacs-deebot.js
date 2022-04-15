@@ -688,9 +688,13 @@ class VacBot_non950type extends VacBot {
     for (const attr of attrs) {
       if (payload.hasOwnProperty(attr) && (payload[attr] !== '')) {
         // 100 = "NoError: Robot is operational"
-        this.errorCode = (payload[attr] === '100') ? '0' : payload[attr];
+        this.errorCode = (payload[attr] === '100') ? '0' : payload[attr].toString();
         if (errorCodes[this.errorCode]) {
           this.errorDescription = errorCodes[this.errorCode];
+          // Request error
+          if (this.errorCode === '1') {
+            this.errorDescription = this.errorDescription + ': ' + payload.error;
+          }
         } else {
           this.errorDescription = 'unknown errorCode: ' + this.errorCode;
         }
