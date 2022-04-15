@@ -389,7 +389,7 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleCleanCount(payload) {
-        this.cleanCount = payload['value'];
+        this.cleanCount = payload['count'];
         tools.envLog("[VacBot] *** cleanCount = " + this.cleanCount);
     }
 
