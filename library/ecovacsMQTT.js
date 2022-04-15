@@ -141,7 +141,7 @@ class EcovacsMQTT extends Ecovacs {
      * @returns {Object} the command object used to be sent
      */
     getRequestObject(command) {
-        if ((command.api === constants.LGLOGAPI) || (command.name === 'GetLogApiCleanLogs')) {
+        if (command.name === 'GetCleanLogs') {
             return this.getCleanLogsCommandObject(command);
         }
         else {
@@ -224,7 +224,7 @@ class EcovacsMQTT extends Ecovacs {
      */
     getApiPath(command) {
         let api = constants.IOTDEVMANAGERAPI; // non 950 type models
-        if (command.name === 'GetLogApiCleanLogs') {
+        if (command.name === 'GetCleanLogs') {
             api = constants.LGLOGAPI; // Cleaning log for non 950 type models (MQTT/XML)
         } else if (command.api) {
             api = command.api; // 950 type models

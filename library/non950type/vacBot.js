@@ -795,15 +795,11 @@ class VacBot_non950type extends VacBot {
         this.sendCommand(new VacBotCommand.EnableDoNotDisturb());
         break;
       case "GetCleanLogs".toLowerCase(): {
-        if (this.useMqttProtocol()) {
-          this.sendCommand(new VacBotCommand.GetLogApiCleanLogs());
+        if (this.isN79series()) {
+          // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
+          this.sendCommand(new VacBotCommand.GetLogs());
         } else {
-          if (this.isN79series()) {
-            // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
-            this.sendCommand(new VacBotCommand.GetLogs());
-          } else {
-            this.sendCommand(new VacBotCommand.GetCleanLogs());
-          }
+          this.sendCommand(new VacBotCommand.GetCleanLogs());
         }
         break;
       }

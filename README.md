@@ -69,7 +69,7 @@ There is of course no claim to full functionality.
 * Added some new models to config
 * Added unit care to LifeSpan components
 * Added current spot area name to the events
-* Implemented setCleanCount command
+* Implemented getCleanCount/setCleanCount command
 * Some fixes
 * Updated dependencies
 

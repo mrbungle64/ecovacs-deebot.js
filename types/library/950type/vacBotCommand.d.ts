@@ -51,7 +51,7 @@ export class GetChargeState extends VacBotCommand {
     constructor();
 }
 export class GetCleanCount extends VacBotCommand {
-    constructor(count?: number);
+    constructor();
 }
 export class GetCleanLogs extends VacBotCommand {
     constructor(count?: number);
