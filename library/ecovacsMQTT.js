@@ -142,7 +142,7 @@ class EcovacsMQTT extends Ecovacs {
      */
     getRequestObject(command) {
         if ((command.api === constants.LGLOGAPI) || (command.name === 'GetLogApiCleanLogs')) {
-            return this.getCleanLogsCommandObject(command.name);
+            return this.getCleanLogsCommandObject(command);
         }
         else {
             const payload = this.getCommandPayload(command);
@@ -261,7 +261,7 @@ class EcovacsMQTT extends Ecovacs {
             'auth': this.getAuthObject(),
             'did': this.vacuum['did'],
             'country': this.country,
-            'td': command,
+            'td': command.name,
             'resource': this.vacuum['resource']
         };
     }
