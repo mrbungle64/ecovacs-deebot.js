@@ -1,6 +1,6 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.8.0-alpha.2",
+  "version": "0.8.0-alpha.3",
   "description": "Library for running Ecovacs Deebot vacuum cleaner robots",
   "main": "index.js",
   "types": "./types/index.d.ts",
@@ -29,7 +29,7 @@
     "ltx": "~3.0.0",
     "mqtt": "~4.3.7",
     "simple-xmpp": "~2.3.1",
-    "@xmldom/xmldom": "~0.8.1",
+    "@xmldom/xmldom": "~0.8.2",
     "lzma": "~2.3.2",
     "uniqid": "~5.4.0"
   },
