@@ -221,4 +221,4 @@ declare class GetMapSubSet extends VacBotCommand {
     constructor(mapID: any, mapSubSetID: any, type?: string);
 }
 export {};
-//# sourceMappingURL=vacBotCommand.d.ts.map
+//# sourceMappingURL=command.d.ts.map

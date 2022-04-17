@@ -1,6 +1,6 @@
 'use strict';
 
-const VacBotCommand = require('./vacBotCommand');
+const VacBotCommand = require('./command');
 const VacBot = require('../vacBot');
 const tools = require('../tools');
 const mapTools = require('../mapTools');

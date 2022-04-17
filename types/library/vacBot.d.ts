@@ -84,7 +84,7 @@ declare class VacBot {
     mapDataObject: any[];
     mapDataObjectQueue: any[];
     schedule: any[];
-    vacBotCommand: typeof import("./950type/vacBotCommand") | typeof import("./non950type/vacBotCommand");
+    vacBotCommand: typeof import("./950type/command") | typeof import("./non950type/command");
     protocolModule: typeof import("./950type/ecovacsMQTT_JSON") | typeof import("./non950type/ecovacsMQTT_XML") | typeof import("./non950type/ecovacsXMPP_XML");
     ecovacs: import("./950type/ecovacsMQTT_JSON") | import("./non950type/ecovacsMQTT_XML") | import("./non950type/ecovacsXMPP_XML");
     /**

@@ -153,4 +153,4 @@ declare class VacBotCommand {
     getId(): any;
 }
 export {};
-//# sourceMappingURL=vacBotCommand.d.ts.map
+//# sourceMappingURL=command.d.ts.map

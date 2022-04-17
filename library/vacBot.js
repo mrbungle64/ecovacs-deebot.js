@@ -107,9 +107,9 @@ class VacBot {
         this.schedule = [];
 
         if (this.is950type()) {
-            this.vacBotCommand = require('./950type/vacBotCommand');
+            this.vacBotCommand = require('./950type/command');
         } else {
-            this.vacBotCommand = require('./non950type/vacBotCommand');
+            this.vacBotCommand = require('./non950type/command');
         }
 
         if (this.is950type()) {
