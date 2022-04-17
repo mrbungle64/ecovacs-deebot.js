@@ -275,13 +275,14 @@ class VacBot_950type extends VacBot {
 
         for (let logIndex in logs) {
             if (logs.hasOwnProperty(logIndex)) {
-                if (!this.cleanLog[logs[logIndex]['id']]) { //log not yet existing
-                    let squareMeters = parseInt(logs[logIndex]['area']);
-                    let timestamp = parseInt(logs[logIndex]['ts']);
+                const logEntry = logs[logIndex];
+                if (!this.cleanLog[logEntry['id']]) { //log not yet existing
+                    let squareMeters = parseInt(logEntry['area']);
+                    let timestamp = Number(logEntry['ts']);
                     let date = new Date(timestamp * 1000);
-                    let len = parseInt(logs[logIndex]['last']);
+                    let len = parseInt(logEntry['last']);
                     let totalTimeString = tools.getTimeStringFormatted(len);
-                    let imageUrl = logs[logIndex]['imageUrl'];
+                    let imageUrl = logEntry['imageUrl'];
                     if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
                         this.cleanLog_lastImageUrl = imageUrl;
                         this.cleanLog_lastTimestamp = timestamp;
@@ -294,7 +295,7 @@ class VacBot_950type extends VacBot {
                         tools.envLog("[VacBot] *** cleanLog_lastTotalTime = " + this.cleanLog_lastTotalTime);
                         tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
                     }
-                    this.cleanLog[logs[logIndex]['id']] = {
+                    this.cleanLog[logEntry['id']] = {
                         'squareMeters': squareMeters,
                         'timestamp': timestamp,
                         'date': date,
@@ -302,8 +303,8 @@ class VacBot_950type extends VacBot {
                         'totalTime': len,
                         'totalTimeFormatted': totalTimeString,
                         'imageUrl': imageUrl,
-                        'type': logs[logIndex]['type'],
-                        'stopReason': logs[logIndex]['stopReason']
+                        'type': logEntry['type'],
+                        'stopReason': logEntry['stopReason']
                     };
                 }
             }
