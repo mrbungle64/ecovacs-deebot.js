@@ -14,7 +14,7 @@ declare class Ecovacs extends EventEmitter {
      */
     constructor(vacBot: any, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: any, serverAddress: string, serverPort?: number);
     bot: any;
-    dictionary: typeof import("./950type/ecovacsConstants") | typeof import("./non950type/ecovacsConstants");
+    dictionary: typeof import("./950type/ecovacsDictionary") | typeof import("./non950type/ecovacsDictionary");
     user: string;
     hostname: string;
     resource: string;
@@ -41,7 +41,7 @@ declare class Ecovacs extends EventEmitter {
     /**
      * @returns the dictionary of Ecovacs related constants
      */
-    getEcovacsDictionary(): typeof import("./950type/ecovacsConstants") | typeof import("./non950type/ecovacsConstants");
+    getEcovacsDictionary(): typeof import("./950type/ecovacsDictionary") | typeof import("./non950type/ecovacsDictionary");
     /**
      * Handle life span components to emit combined object
      */

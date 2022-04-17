@@ -14,17 +14,4 @@ export var LGLOGAPI: string;
 export var PRODUCTAPI: string;
 export var REALM: string;
 export var APPAPI: string;
-export namespace MAPINFOTYPE_TO_ECOVACS {
-    const outline: string;
-    const wifiHeatMap: string;
-    const ai: string;
-    const workarea: string;
-}
-export namespace MAPINFOTYPE_FROM_ECOVACS {
-    export const ol: string;
-    export const st: string;
-    const ai_1: string;
-    export { ai_1 as ai };
-    export const wa: string;
-}
 //# sourceMappingURL=ecovacsConstants.d.ts.map

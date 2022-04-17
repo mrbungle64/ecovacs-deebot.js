@@ -316,9 +316,9 @@ class Ecovacs extends EventEmitter {
      */
     getEcovacsDictionary() {
         if (this.bot.is950type()) {
-            return require('./950type/ecovacsConstants');
+            return require('./950type/ecovacsDictionary');
         } else {
-            return require('./non950type/ecovacsConstants');
+            return require('./non950type/ecovacsDictionary');
         }
     }
 

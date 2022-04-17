@@ -119,4 +119,4 @@ export namespace TRIGGER {
     export const dnd: string;
     export const e: string;
 }
-//# sourceMappingURL=ecovacsConstants.d.ts.map
+//# sourceMappingURL=ecovacsDictionary.d.ts.map

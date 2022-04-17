@@ -2,7 +2,6 @@
 
 const tools = require('./tools.js');
 const lzma = require('lzma');
-const constants = require('./ecovacsConstants');
 const map = require('./mapTemplate');
 
 /**
@@ -44,6 +43,13 @@ const SPOTAREA_COLORS = [
     '#9fcfff'
 ];
 
+const MAPINFOTYPE_FROM_ECOVACS = {
+    "ol": "outline",
+    "st": "wifiHeatMap",
+    "ai": "ai",
+    "wa": "workarea"
+};
+
 /**
  * A set of colors for the element types
  * @type {Object}
@@ -80,7 +86,7 @@ class EcovacsMapImageBase {
             maxY: null
         };
         this.mapID = mapID;
-        this.mapType = constants.MAPINFOTYPE_FROM_ECOVACS[mapType];
+        this.mapType = MAPINFOTYPE_FROM_ECOVACS[mapType];
         this.isLiveMap = false;
         this.mapTotalWidth = mapTotalWidth;
         this.mapTotalHeight = mapTotalHeight;

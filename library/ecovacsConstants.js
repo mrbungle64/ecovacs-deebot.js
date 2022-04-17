@@ -21,17 +21,3 @@ exports.LGLOGAPI = 'lg/log.do';
 exports.PRODUCTAPI = 'pim/product';
 exports.REALM = 'ecouser.net';
 exports.APPAPI = 'appsvr/app.do';
-
-exports.MAPINFOTYPE_TO_ECOVACS = {
-    "outline": "ol",
-    "wifiHeatMap": "st",
-    "ai": "ai",
-    "workarea": "wa"
-};
-
-exports.MAPINFOTYPE_FROM_ECOVACS = {
-    "ol": "outline",
-    "st": "wifiHeatMap",
-    "ai": "ai",
-    "wa": "workarea"
-};

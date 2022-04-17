@@ -1,8 +1,15 @@
 'use strict';
 
 const tools = require('../tools');
-const constants_type = require('./ecovacsConstants');
+const constants_type = require('./ecovacsDictionary');
 const constants = require('../ecovacsConstants');
+
+const MAPINFOTYPE_TO_ECOVACS = {
+    "outline": "ol",
+    "wifiHeatMap": "st",
+    "ai": "ai",
+    "workarea": "wa"
+};
 
 class VacBotCommand {
     constructor(name, args = {}, api = constants.IOTDEVMANAGERAPI) {
@@ -306,8 +313,8 @@ class GetMajorMap extends VacBotCommand {
 
 class GetMapImage extends VacBotCommand {
     constructor(mapID, mapType = 'outline') {
-        if (constants.MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
-            mapType = constants.MAPINFOTYPE_TO_ECOVACS[mapType];
+        if (MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
+            mapType = MAPINFOTYPE_TO_ECOVACS[mapType];
         }
         super('getMapInfo', {
             'mid': mapID,
