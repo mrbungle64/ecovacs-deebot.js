@@ -1,5 +1,5 @@
 # Number of days of inactivity before an issue becomes stale
-daysUntilStale: 7
+daysUntilStale: 5
 # Number of days of inactivity before a stale issue is closed
 daysUntilClose: 3
 # Only issues or pull requests with all of these labels are check if stale
