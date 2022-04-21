@@ -62,7 +62,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.8.0 (alpha)
+### 0.8.0 (beta)
 * (m8schmit) Added types for TypeScript
 * Lots of code documentation
 * Lots of code improvements
