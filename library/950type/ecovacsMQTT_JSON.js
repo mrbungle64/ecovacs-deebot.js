@@ -219,18 +219,22 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'MapTrace':
                 // TODO: implement MapTrace
                 break;
-            case "MapSet": //handle spotAreas, virtualWalls, noMopZones
+            case "MapSet": {
+                //handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.vacBot.handleMapSet(payload);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
-            case "MapSubSet": //handle spotAreas, virtualWalls, noMopZones
+            }
+            case "MapSubSet": {
+                //handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = await this.vacBot.handleMapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
+            }
             case "LifeSpan":
                 this.vacBot.handleLifespan(payload);
                 if (!this.vacBot.emitFullLifeSpanEvent) {
@@ -362,7 +366,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'totalNumber': this.vacBot.cleanSum_totalNumber
                 });
                 break;
-            case 'CleanLogs':
+            case 'CleanLogs': {
                 this.vacBot.handleCleanLogs(payload);
                 let cleanLog = [];
                 for (let i in this.vacBot.cleanLog) {
@@ -384,6 +388,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'imageUrl': this.vacBot.cleanLog_lastImageUrl
                 });
                 break;
+            }
             case 'Sched':
                 this.vacBot.handleSched(payload);
                 if (this.vacBot.schedule) {

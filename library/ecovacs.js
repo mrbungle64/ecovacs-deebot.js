@@ -204,7 +204,7 @@ class Ecovacs extends EventEmitter {
                 break;
             case 'Logs':
             case 'CleanLogs':
-            case 'LogApiCleanLogs':
+            case 'LogApiCleanLogs': {
                 this.bot.handleCleanLogs(payload);
                 let cleanLog = [];
                 for (let i in this.bot.cleanLog) {
@@ -231,6 +231,7 @@ class Ecovacs extends EventEmitter {
                     this.emit('CleanLog_lastImageTimestamp', this.bot.cleanLog_lastTimestamp); // Deprecated
                 }
                 break;
+            }
             case 'MapM':
                 // Map Model
                 // - runs "GetMapSet" to request spot areas and virtual walls
@@ -258,7 +259,7 @@ class Ecovacs extends EventEmitter {
                     this.emitError('-2', 'Error handling map image: %s' + e.message);
                 }
                 break;
-            case 'MapSet':
+            case 'MapSet': {
                 // Spot Areas and virtual walls
                 // - runs "PullM" to request spot area and virtual wall data
                 let mapset = this.bot.handleMapSet(payload);
@@ -266,13 +267,15 @@ class Ecovacs extends EventEmitter {
                     this.emit(mapset['mapsetEvent'], mapset['mapsetData']);
                 }
                 break;
-            case 'PullM':
+            }
+            case 'PullM': {
                 // Spot area and virtual wall data
                 let mapsubset = await this.bot.handlePullM(payload);
                 if (mapsubset && (mapsubset['mapsubsetEvent'] !== 'error')) {
                     this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);
                 }
                 break;
+            }
             case 'DustCaseST':
                 this.bot.handleDustCaseST(payload);
                 this.emit('DustCaseInfo', this.bot.dustcaseInfo);

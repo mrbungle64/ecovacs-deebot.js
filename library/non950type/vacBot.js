@@ -88,7 +88,7 @@ class VacBot_non950type extends VacBot {
     }
     if (batteryLevel !== undefined) {
       this.batteryLevel = batteryLevel;
-      tools.envLog("[VacBot] *** batteryLevel = %d\%", this.batteryLevel);
+      tools.envLog(`[VacBot] *** batteryLevel = ${this.batteryLevel}%`, );
     }
   }
 

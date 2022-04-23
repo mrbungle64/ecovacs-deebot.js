@@ -15,7 +15,7 @@
         ],
         "no-console": "off",
         "no-var": "error",
-        "prefer-const": "error",
+        "prefer-const": "off",
         "quotes": [
             "off",
             "single",
@@ -27,7 +27,8 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-prototype-builtins": "off"
     },
     "parserOptions": {
         "ecmaVersion": 2018
