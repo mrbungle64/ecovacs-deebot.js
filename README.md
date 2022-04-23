@@ -45,6 +45,7 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot OZMO T5
 * Deebot (OZMO) T8 series
 * Deebot T9 series
+* Deebot X1 series
 
 The models listed are either already known to work or are technically similar to these models.
 Nevertheless, the functionality may be partially limited.
