@@ -621,7 +621,7 @@ class VacBot {
     getSpotAreaName(currentSpotAreaID) {
         let currentSpotAreaName = 'unknown';
         const mapInfo = this.mapSpotAreaInfos[this.currentMapMID];
-        if (mapInfo && map[currentSpotAreaID]) {
+        if (mapInfo && mapInfo[currentSpotAreaID]) {
             currentSpotAreaName = mapInfo[currentSpotAreaID].mapSpotAreaName;
         }
         return currentSpotAreaName;
