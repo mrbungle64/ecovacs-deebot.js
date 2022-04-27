@@ -27,13 +27,13 @@ class EcovacsXMPP_XML extends Ecovacs {
         this.simpleXmpp = require('simple-xmpp');
 
         this.simpleXmpp.on('online', (event) => {
-            tools.envLog('[EcovacsXMPP_XML] Session start');
-            this.emit("ready", event);
+            tools.envLog(`[EcovacsXMPP_XML] Session start: ${JSON.stringify(event)}`);
+            this.emit("ready", 'XMPP client connected');
         });
 
         this.simpleXmpp.on('close', () => {
             tools.envLog('[EcovacsXMPP_XML] Session disconnected');
-            this.emit('closed');
+            this.emit('closed', 'XMPP client disconnected');
         });
 
         this.simpleXmpp.on('stanza', (stanza) => {
