@@ -98,7 +98,7 @@ class VacBot_950type extends VacBot {
         this.batteryLevel = payload['value'];
         if (payload.hasOwnProperty('isLow')) {
             this.batteryIsLow = !!Number(payload['isLow']);
-            tools.envLog(`[VacBot] *** batteryIsLow = ${this.batteryLevel}`);
+            tools.envLog(`[VacBot] *** batteryIsLow = ${this.batteryIsLow}`);
         }
         tools.envLog(`[VacBot] *** batteryLevel = ${this.batteryLevel}%`, );
     }

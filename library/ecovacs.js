@@ -132,7 +132,7 @@ class Ecovacs extends EventEmitter {
                 if (this.bot.deebotPosition['x'] && this.bot.deebotPosition['y']) {
                     this.emit('DeebotPosition', this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a']);
                     this.emit('DeebotPositionCurrentSpotAreaID', this.bot.deebotPosition['currentSpotAreaID']);
-                    this.emit("DeebotPositionCurrentSpotAreaName", this.bot.deebotPosition["currentSpotAreaName"]);
+                    this.emit('DeebotPositionCurrentSpotAreaName', this.bot.deebotPosition['currentSpotAreaName']);
                     this.emit('Position', {
                         'coords': this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a'],
                         'x': this.bot.deebotPosition['x'],
@@ -140,8 +140,8 @@ class Ecovacs extends EventEmitter {
                         'a': this.bot.deebotPosition['a'],
                         'invalid': 0,
                         'spotAreaID': this.bot.deebotPosition['currentSpotAreaID'],
-                        'spotAreaName': this.bot.deebotPosition["currentSpotAreaName"],
-                        'distanceToChargingStation': this.bot.deebotPosition["distanceToChargingStation"]
+                        'spotAreaName': this.bot.deebotPosition['currentSpotAreaName'],
+                        'distanceToChargingStation': this.bot.deebotPosition['distanceToChargingStation']
                     });
                 }
                 break;
@@ -245,7 +245,7 @@ class Ecovacs extends EventEmitter {
                         this.emit('Maps', this.bot.maps);
                     }
                 } catch(e) {
-                    tools.envLog("[Ecovacs] Error on MapM: %s", e.message);
+                    tools.envLog('[Ecovacs] Error on MapM: %s', e.message);
                 }
                 break;
             case 'PullMP':
@@ -253,7 +253,7 @@ class Ecovacs extends EventEmitter {
                 try {
                     const mapImage = await this.bot.handlePullMP(payload);
                     if (mapImage) {
-                        this.emit("MapImageData", mapImage);
+                        this.emit('MapImageData', mapImage);
                     }
                 } catch (e) {
                     this.emitError('-2', 'Error handling map image: %s' + e.message);
@@ -387,7 +387,7 @@ class Ecovacs extends EventEmitter {
      * Disconnect if 'RequestOAuthError: Authentication error' error
      */
     emitLastError() {
-        this.emit("Error", this.bot.errorDescription);
+        this.emit('Error', this.bot.errorDescription);
         this.emit('ErrorCode', this.bot.errorCode);
         this.emit('LastError', {
             'error': this.bot.errorDescription,
@@ -395,7 +395,7 @@ class Ecovacs extends EventEmitter {
         });
         // Error code 3 = 'RequestOAuthError: Authentication error'
         if (this.bot.errorCode === '3') {
-            this.emit("disconnect", true);
+            this.emit('disconnect', true);
             this.disconnect();
         }
     }
@@ -422,7 +422,7 @@ class Ecovacs extends EventEmitter {
                     'level': this.bot.waterLevel
                 };
             }
-            this.emit("MoppingSystemInfo", r);
+            this.emit('MoppingSystemInfo', r);
         }
     }
 
