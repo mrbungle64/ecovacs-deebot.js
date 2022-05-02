@@ -71,6 +71,7 @@ There is of course no claim to full functionality.
 * Added unit care to LifeSpan components
 * Added current spot area name to the events
 * Implemented getCleanCount/setCleanCount command
+* Add CurrentSpotAreas and CurrentCustomAreaValues events
 * Some fixes
 * Updated dependencies
 
