@@ -49,6 +49,8 @@ class VacBot_950type extends VacBot {
      */
     handleCleanInfo(payload) {
         tools.envLog("[handleCleanInfo] payload: ", JSON.stringify(payload));
+        this.currentSpotAreas = '';
+        this.currentCustomAreaValues = '';
         if (payload['state'] === 'clean') {
             let type = payload['cleanState']['type'];
             if (typeof payload['cleanState']['content'] === 'object') {
@@ -59,18 +61,22 @@ class VacBot_950type extends VacBot {
             } else {
                 this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['cleanState']['motionState']];
             }
-            if (type === 'customArea') {
+            if ((type === 'spotArea') || (type === 'customArea')) {
+                let areaValues;
                 if (typeof payload['cleanState']['content'] === "object") {
-                    this.lastUsedAreaValues = payload['cleanState']['content']['value'];
+                    areaValues = payload['cleanState']['content']['value'];
                 } else {
-                    this.lastUsedAreaValues = payload['cleanState']['content'];
+                    areaValues = payload['cleanState']['content'];
                 }
-            } else {
-                this.lastUsedAreaValues = '';
+                if (type === 'customArea') {
+                    this.currentCustomAreaValues = areaValues;
+                }
+                else if (type === 'spotArea') {
+                    this.currentSpotAreas = areaValues;
+                }
             }
         } else if (payload['trigger'] === 'alert') {
             this.cleanReport = 'alert';
-            this.lastUsedAreaValues = '';
         } else {
             this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
             if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'returning') {
@@ -85,7 +91,6 @@ class VacBot_950type extends VacBot {
                 // if this is not run, the status when canceling the return stays on 'returning'
                 this.run('GetChargeState');
             }
-            this.lastUsedAreaValues = '';
         }
         tools.envLog("[VacBot] *** cleanReport = %s", this.cleanReport);
     }

@@ -45,7 +45,8 @@ class VacBot {
         this.currentMapName = 'unknown';
         this.currentMapMID = '';
         this.currentMapIndex = 0;
-        this.lastUsedAreaValues = '';
+        this.currentCustomAreaValues = '';
+        this.currentSpotAreas = '';
 
         this.batteryLevel = null;
         this.batteryIsLow = false;

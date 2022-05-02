@@ -58,7 +58,13 @@ class VacBot_non950type extends VacBot {
         tools.envLog("[VacBot] *** clean last = %s seconds" + payload.attrs["last"]);
       }
 
-      if (payload.attrs.hasOwnProperty('p')) {
+      this.currentSpotAreas = '';
+      if (this.cleanReport === 'spot_area') {
+        if (payload.attrs.hasOwnProperty('mid')) {
+          this.currentSpotAreas = payload.attrs.mid;
+        }
+      }
+      else if (payload.attrs.hasOwnProperty('p')) {
         let pValues = payload.attrs['p'];
         const pattern = /^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/;
         if (pattern.test(pValues)) {
@@ -66,10 +72,10 @@ class VacBot_non950type extends VacBot {
           const y1 = parseFloat(pValues.split(",")[1]).toFixed(1);
           const x2 = parseFloat(pValues.split(",")[2]).toFixed(1);
           const y2 = parseFloat(pValues.split(",")[3]).toFixed(1);
-          this.lastUsedAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
-          tools.envLog("[VacBot] *** lastAreaValues = " + pValues);
+          this.currentCustomAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
+          tools.envLog("[VacBot] *** lastUsedAreaValues = " + pValues);
         } else {
-          tools.envLog("[VacBot] *** lastAreaValues invalid pValues = " + pValues);
+          tools.envLog("[VacBot] *** lastUsedAreaValues invalid pValues = " + pValues);
         }
       }
     }

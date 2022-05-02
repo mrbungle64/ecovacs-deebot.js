@@ -35,7 +35,8 @@ declare class VacBot {
     currentMapName: string;
     currentMapMID: string;
     currentMapIndex: number;
-    lastUsedAreaValues: string;
+    currentCustomAreaValues: string;
+    currentSpotAreas: string;
     batteryLevel: any;
     batteryIsLow: boolean;
     cleanReport: any;

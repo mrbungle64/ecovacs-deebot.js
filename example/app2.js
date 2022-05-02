@@ -88,8 +88,15 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.on('DeebotPosition', (deebotPosition) => {
                 console.log('DeebotPosition: ' + deebotPosition);
             });
+
             vacbot.on('LastUsedAreaValues', (values) => {
                 console.log('LastUsedAreaValues: ' + values);
+            });
+            vacbot.on('CurrentSpotAreas', (values) => {
+                console.log('CurrentSpotAreas: ' + values);
+            });
+            vacbot.on('CurrentCustomAreaValues', (values) => {
+                console.log('CurrentCustomAreaValues: ' + values);
             });
 
             // Please uncomment this code block if you want to use GetMaps cmd

@@ -95,8 +95,10 @@ class Ecovacs extends EventEmitter {
                 }
                 this.bot.handleCleanReport(payload);
                 this.emit('CleanReport', this.bot.cleanReport);
-                if (this.bot.lastUsedAreaValues) {
-                    this.emit('LastUsedAreaValues', this.bot.lastUsedAreaValues);
+                this.emit('CurrentSpotAreas', this.bot.currentSpotAreas);
+                this.emit('CurrentCustomAreaValues', this.bot.currentCustomAreaValues);
+                if (this.bot.currentCustomAreaValues) {
+                    this.emit('LastUsedAreaValues', this.bot.currentCustomAreaValues);
                 }
                 this.emitMoppingSystemReport();
                 break;

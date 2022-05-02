@@ -40,8 +40,14 @@ api.connect(accountId, passwordHash).then(() => {
                 console.log(`Charging position (x,y): ${object.x},${object.y}`);
             });
 
+            vacbot.on('CurrentSpotAreas', (values) => {
+                console.log(`Current spot areas: ${values}`);
+            });
+            vacbot.on('CurrentCustomAreaValues', (values) => {
+                console.log(`Current custom area values (x1,y1,x2,y2): ${values}`);
+            });
             vacbot.on('LastUsedAreaValues', (values) => {
-                console.log(`Last used area values (x1,y1,x2,y2): ${values}`);
+                console.log(`Last used custom area values (x1,y1,x2,y2): ${values}`);
             });
 
             vacbot.on('MapDataObject', (mapDataObject) => {

@@ -168,9 +168,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (this.vacBot.chargeStatus) {
                     this.emit("ChargeState", this.vacBot.chargeStatus);
                 }
-                if (this.vacBot.lastUsedAreaValues) {
-                    tools.envLog('[EcovacsMQTT_JSON] LastUsedAreaValues: %s', this.vacBot.lastUsedAreaValues);
-                    this.emit("LastUsedAreaValues", this.vacBot.lastUsedAreaValues);
+                this.emit("CurrentCustomAreaValues", this.vacBot.currentCustomAreaValues);
+                this.emit("CurrentSpotAreas", this.vacBot.currentSpotAreas);
+                if (this.vacBot.currentCustomAreaValues) {
+                    this.emit("LastUsedAreaValues", this.vacBot.currentCustomAreaValues);
                 }
                 break;
             case "Speed":
