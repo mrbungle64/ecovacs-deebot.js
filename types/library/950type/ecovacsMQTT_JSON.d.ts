@@ -13,6 +13,11 @@ declare class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @returns {string} the prefix of the command
      */
     getCommandPrefix(command: string): string;
+    /**
+     * Handle onFwBuryPoint message (e.g. T8/T9 series)
+     * @param {Object} payload
+     */
+    handleFwBuryPoint(payload: any): void;
 }
 import EcovacsMQTT = require("../ecovacsMQTT");
 //# sourceMappingURL=ecovacsMQTT_JSON.d.ts.map

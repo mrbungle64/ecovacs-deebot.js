@@ -69,7 +69,11 @@ declare class VacBot {
     cleanLog_lastTotalTime: any;
     cleanLog_lastTotalTimeString: any;
     cleanLog_lastSquareMeters: any;
-    currentStats: any;
+    currentStats: {
+        cleanedArea: any;
+        cleanedSeconds: any;
+        cleanType: any;
+    };
     netInfoIP: any;
     netInfoWifiSSID: any;
     netInfoWifiSignal: any;

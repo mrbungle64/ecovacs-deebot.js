@@ -33,10 +33,15 @@ class VacBot_950type extends VacBot {
         this.trueDetect = null;
         this.cleanCount = 1;
         this.dusterRemind = {
-            enabled: null,
-            period: null
+            'enabled': null,
+            'period': null
         };
         this.carpetPressure = null;
+        this.cleanPreference = null;
+        this.liveLaunchPwdState = {
+            'state': null,
+            'hasPwd': null
+        };
         this.volume = 0;
         this.relocationState = null;
         this.firmwareVersion = null;
@@ -418,6 +423,19 @@ class VacBot_950type extends VacBot {
     handleCarpetPressure(payload) {
         this.carpetPressure = payload['enable'];
         tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
+    }
+
+    handleCleanPreference(payload) {
+        this.cleanPreference = payload['enable'];
+        tools.envLog("[VacBot] *** cleanPreference = " + this.cleanPreference);
+    }
+
+    handleLiveLaunchPwdState(payload) {
+        this.liveLaunchPwdState = {
+            state: payload.state,
+            hasPwd: payload.hasPwd
+        };
+        tools.envLog("[VacBot] *** cleanPreference = " + JSON.stringify(this.cleanPreference));
     }
 
     /**

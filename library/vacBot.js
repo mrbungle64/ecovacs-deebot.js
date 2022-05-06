@@ -84,7 +84,11 @@ class VacBot {
         this.cleanLog_lastTotalTimeString = null;
         this.cleanLog_lastSquareMeters = null;
 
-        this.currentStats = null;
+        this.currentStats = {
+            'cleanedArea': null,
+            'cleanedSeconds': null,
+            'cleanType': null
+        };
 
         this.netInfoIP = null;
         this.netInfoWifiSSID = null;

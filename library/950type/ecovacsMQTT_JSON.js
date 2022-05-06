@@ -143,6 +143,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         this.emit('messageReceived', command  + ' => ' + abbreviatedCommand);
         const payload = this.getPayload(event);
         switch (abbreviatedCommand) {
+            case 'FwBuryPoint': {
+                this.handleFwBuryPoint(payload);
+                break;
+            }
             case "Stats":
                 this.vacBot.handleStats(payload);
                 if (this.vacBot.currentStats) {
@@ -347,6 +351,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleCarpetPressure(payload);
                 this.emit("CarpetPressure", this.vacBot.carpetPressure);
                 break;
+            case 'CleanPreference':
+                this.vacBot.handleCleanPreference(payload);
+                this.emit("CleanPreference", this.vacBot.cleanPreference);
+                break;
+            case 'LiveLaunchPwdState':
+                this.vacBot.handleLiveLaunchPwdState(payload);
+                this.emit("LiveLaunchPwdState", this.vacBot.liveLaunchPwdState);
+                break;
             case "Error":
                 this.vacBot.handleResponseError(payload);
                 this.emit("Error", this.vacBot.errorDescription);
@@ -397,7 +409,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             default:
-                tools.envLog("[EcovacsMQTT_JSON] Unknown command received: %s", command);
+                tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
                 break;
         }
     }
@@ -438,6 +450,72 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             commandPrefix = 'get';
         }
         return commandPrefix;
+    }
+
+    /**
+     * Handle onFwBuryPoint message (e.g. T8/T9 series)
+     * @param {Object} payload
+     */
+    handleFwBuryPoint(payload) {
+        try {
+            const fwBuryPoint = JSON.parse(JSON.parse(payload['content'])['d']['body']['data']['d_val']);
+            tools.envLog(fwBuryPoint);
+            let val;
+            if (fwBuryPoint.hasOwnProperty('code')) {
+                if (fwBuryPoint.code === 110) {
+                    // code 110 = NoDustBox: Dust Bin Not installed
+                    val = Number(!fwBuryPoint.state);
+                    this.emit('DustCaseInfo', val);
+                }
+            }
+            if (fwBuryPoint.hasOwnProperty('mopremind')) {
+                // Info whether 'Cleaning Cloth Reminder' is enabled
+                val = fwBuryPoint.mopremind;
+                this.emit('SettingInfoMopReminder', val);
+            }
+            if (fwBuryPoint.hasOwnProperty('AI')) {
+                // Info whether AIVI is enabled
+                val = fwBuryPoint.AI;
+                this.emit('SettingInfoAIVI', val);
+            }
+            if (fwBuryPoint.hasOwnProperty('isPressurized')) {
+                // Info whether 'Auto-Boost Suction' is enabled
+                val = fwBuryPoint.isPressurized;
+                this.emit('SettingInfoAutoBoostSuction', val);
+            }
+            if (fwBuryPoint.hasOwnProperty('DND')) {
+                // Info whether 'Auto-Boost Suction' is enabled
+                val = fwBuryPoint.DND;
+                this.emit('DoNotDisturbEnabled', val);
+            }
+            if (fwBuryPoint.hasOwnProperty('continue')) {
+                // Info whether 'Continuous Cleaning' is enabled
+                val = fwBuryPoint.continue;
+                this.emit('ContinuousCleaningEnabled', val);
+            }
+
+            if (Array.isArray(fwBuryPoint)) {
+                const key = fwBuryPoint.length - 1;
+                const data = fwBuryPoint[key];
+                if (data.hasOwnProperty('uptime')) {
+                    // Uptime
+                    val = data.uptime.trim();
+                    this.emit('SystemUptime', val);
+                }
+                if (data.hasOwnProperty('meminfo')) {
+                    // MemInfo
+                    val = data.meminfo;
+                    this.emit('SystemMemInfo', val);
+                }
+                if (data.hasOwnProperty('signal')) {
+                    // Signal strength
+                    val = data.signal;
+                    this.emit('SystemSignal', val);
+                }
+            }        }
+        catch (e) {
+            tools.envLog(`Error handling onFwBuryPoint payload: ${payload}`);
+        }
     }
 }
 
