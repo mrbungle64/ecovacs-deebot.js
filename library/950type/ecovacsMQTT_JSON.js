@@ -144,7 +144,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         const payload = this.getPayload(event);
         switch (abbreviatedCommand) {
             case 'FwBuryPoint': {
-                this.handleFwBuryPoint(payload);
+                await this.handleFwBuryPoint(payload);
                 break;
             }
             case "Stats":
@@ -462,13 +462,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
     /**
      * Handle onFwBuryPoint message (e.g. T8/T9 series)
+     * This is presumably some kind of debug or internal message
+     * The main advantage of this message is that it's fired immediately
      * @param {Object} payload
      */
-    handleFwBuryPoint(payload) {
+    async handleFwBuryPoint(payload) {
         try {
             const fwBuryPoint = JSON.parse(JSON.parse(payload['content'])['d']['body']['data']['d_val']);
             tools.envLog(fwBuryPoint);
             let val;
+
             if (fwBuryPoint.hasOwnProperty('code')) {
                 if (fwBuryPoint.code === 110) {
                     // code 110 = NoDustBox: Dust Bin Not installed
@@ -476,30 +479,96 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('DustCaseInfo', val);
                 }
             }
-            if (fwBuryPoint.hasOwnProperty('mopremind')) {
-                // Info whether 'Cleaning Cloth Reminder' is enabled
-                val = fwBuryPoint.mopremind;
-                this.emit('SettingInfoMopReminder', val);
+
+            const handleFwBuryPointWaterInfo = false;
+            if (handleFwBuryPointWaterInfo) {
+                if (fwBuryPoint.hasOwnProperty('waterAmount')) {
+                    // Info about the water amount
+                    this.vacBot.waterLevel = fwBuryPoint.waterAmount + 1; // Adapt for regular value
+                }
+                if (this.vacBot.sleepStatus === 0) {
+                    if (fwBuryPoint.hasOwnProperty('waterbox')) {
+                        // Info whether a waterbox is installed
+                        // and also which type:
+                        // 0 = No waterbox installed
+                        // 1 = Regular waterbox installed
+                        // 2 = OZMO Pro installed
+                        this.vacBot.waterboxInfo = Number(fwBuryPoint.waterbox >= 1);
+                        this.vacBot.moppingType = fwBuryPoint.waterbox;
+                    }
+                    if (this.vacBot.waterboxInfo >= 1) {
+                        if (fwBuryPoint.hasOwnProperty('mopmode')) {
+                            // Info about the waterbox and the scrubbing pattern type
+                            // 0 = No waterbox is installed
+                            // 1 = Waterbox is installed
+                            // 2 = Quick scrubbing (this doesn't work directly after installing ozmo pro waterbox)
+                            // 3 = Deep scrubbing (this doesn't work directly after installing ozmo pro waterbox)
+
+                            // Check if it's valid, because `mopmode` doesn't have the correct value
+                            // directly after installing ozmo pro waterbox
+                            if ((this.vacBot.moppingType === 2) && (fwBuryPoint.mopmode >= 2)) {
+                                this.vacBot.scrubbingType = fwBuryPoint.mopmode - 1; // Adapt for regular value
+                            }
+                        }
+                    } else {
+                        this.vacBot.moppingType = 0;
+                    }
+                }
+                if ((this.vacBot.waterboxInfo !== null) && (this.vacBot.waterLevel !== null)) {
+                    const payload = {
+                        'enable': this.vacBot.waterboxInfo,
+                        'amount': this.vacBot.waterLevel,
+                        'sweepType': this.vacBot.scrubbingType,
+                        'type': this.vacBot.moppingType
+                    };
+                    if (this.bot.sleepStatus === 0) {
+                        Object.assign(payload, {
+                            'sweepType': this.vacBot.scrubbingType,
+                            'type': this.vacBot.moppingType
+                        });
+                    }
+                    console.log('WaterInfo');
+                    console.log(payload);
+                    await this.handleMessagePayload('WaterInfo', payload);
+                }
+
+                if (fwBuryPoint.hasOwnProperty('mopremind')) {
+                    // Info whether 'Cleaning Cloth Reminder' is enabled
+                    val = fwBuryPoint.mopremind;
+                    this.emit('SettingInfoMopReminder', val);
+                }
+            } else if (fwBuryPoint.hasOwnProperty('waterAmount')) {
+                // Information about OZMO Pro waterbox is not always telling the truth,
+                // so we use this a trigger only
+                this.vacBot.run('GetWaterInfo');
             }
+
             if (fwBuryPoint.hasOwnProperty('AI')) {
                 // Info whether AIVI is enabled
                 val = fwBuryPoint.AI;
                 this.emit('SettingInfoAIVI', val);
             }
+
             if (fwBuryPoint.hasOwnProperty('isPressurized')) {
                 // Info whether 'Auto-Boost Suction' is enabled
-                val = fwBuryPoint.isPressurized;
-                this.emit('SettingInfoAutoBoostSuction', val);
+                const payload = {'enable': fwBuryPoint.isPressurized};
+                // The typo in the command is intended as Ecovacs as done it, when specifying this command
+                await this.handleMessagePayload('CarpertPressure', payload);
             }
             if (fwBuryPoint.hasOwnProperty('DND')) {
-                // Info whether 'Auto-Boost Suction' is enabled
-                val = fwBuryPoint.DND;
-                this.emit('DoNotDisturbEnabled', val);
+                // Info whether 'Do Not Disturb' is enabled
+                const payload = {'enable': fwBuryPoint.DND};
+                await this.handleMessagePayload('Block', payload);
             }
             if (fwBuryPoint.hasOwnProperty('continue')) {
                 // Info whether 'Continuous Cleaning' is enabled
-                val = fwBuryPoint.continue;
-                this.emit('ContinuousCleaningEnabled', val);
+                const payload = {'enable': fwBuryPoint.continue};
+                await this.handleMessagePayload('BreakPoint', payload);
+            }
+            if (fwBuryPoint.hasOwnProperty('multiMap')) {
+                // Info whether multi-map mode is enabled
+                val = fwBuryPoint.multiMap;
+                this.emit('SettingInfoMultiMap', val);
             }
 
             if (Array.isArray(fwBuryPoint)) {
@@ -520,7 +589,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     val = data.signal;
                     this.emit('SystemSignal', val);
                 }
-            }        }
+            }
+        }
         catch (e) {
             tools.envLog(`Error handling onFwBuryPoint payload: ${payload}`);
         }
