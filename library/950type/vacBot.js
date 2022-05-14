@@ -33,10 +33,15 @@ class VacBot_950type extends VacBot {
         this.trueDetect = null;
         this.cleanCount = 1;
         this.dusterRemind = {
-            enabled: null,
-            period: null
+            'enabled': null,
+            'period': null
         };
         this.carpetPressure = null;
+        this.cleanPreference = null;
+        this.liveLaunchPwdState = {
+            'state': null,
+            'hasPwd': null
+        };
         this.volume = 0;
         this.relocationState = null;
         this.firmwareVersion = null;
@@ -233,9 +238,24 @@ class VacBot_950type extends VacBot {
      */
     handleWaterInfo(payload) {
         this.waterLevel = payload['amount'];
-        this.waterboxInfo = payload['enable'];
-        tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
         tools.envLog("[VacBot] *** waterLevel = " + this.waterLevel);
+        if (this.sleepStatus === 0) {
+            this.waterboxInfo = payload['enable'];
+            tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
+            if (payload.hasOwnProperty('type')) {
+                // 1 = Regular
+                // 2 = OZMO Pro
+                this.moppingType = payload['type'];
+                tools.envLog("[VacBot] *** WaterInfo type = " + payload['type']);
+            }
+            if (payload.hasOwnProperty('sweepType')) {
+                // Scrubbing pattern
+                // 1 = Quick scrubbing
+                // 2 = Deep scrubbing
+                this.scrubbingType = payload['sweepType'];
+                tools.envLog("[VacBot] *** WaterInfo sweepType = " + payload['sweepType']);
+            }
+        }
     }
 
     /**
@@ -418,6 +438,19 @@ class VacBot_950type extends VacBot {
     handleCarpetPressure(payload) {
         this.carpetPressure = payload['enable'];
         tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
+    }
+
+    handleCleanPreference(payload) {
+        this.cleanPreference = payload['enable'];
+        tools.envLog("[VacBot] *** cleanPreference = " + this.cleanPreference);
+    }
+
+    handleLiveLaunchPwdState(payload) {
+        this.liveLaunchPwdState = {
+            state: payload.state,
+            hasPwd: payload.hasPwd
+        };
+        tools.envLog("[VacBot] *** cleanPreference = " + JSON.stringify(this.cleanPreference));
     }
 
     /**
@@ -814,9 +847,14 @@ class VacBot_950type extends VacBot {
                     this.lastComponentValues = {};
                     const componentsArray = [
                         dictionary.COMPONENT_TO_ECOVACS['filter'],
-                        dictionary.COMPONENT_TO_ECOVACS['main_brush'],
                         dictionary.COMPONENT_TO_ECOVACS['side_brush']
                     ];
+                    if (this.hasMainBrush()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
+                    }
+                    if (this.hasUnitCareInfo()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['unit_care']);
+                    }
                     this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;

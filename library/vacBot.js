@@ -55,6 +55,8 @@ class VacBot {
         this.cleanSpeed = null;
         this.waterLevel = null;
         this.waterboxInfo = null;
+        this.moppingType = 0;
+        this.scrubbingType = null;
         this.sleepStatus = null;
 
         this.deebotPosition = {
@@ -84,7 +86,11 @@ class VacBot {
         this.cleanLog_lastTotalTimeString = null;
         this.cleanLog_lastSquareMeters = null;
 
-        this.currentStats = null;
+        this.currentStats = {
+            'cleanedArea': null,
+            'cleanedSeconds': null,
+            'cleanType': null
+        };
 
         this.netInfoIP = null;
         this.netInfoWifiSSID = null;

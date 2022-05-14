@@ -15,6 +15,11 @@ declare class VacBot_950type extends VacBot {
         period: any;
     };
     carpetPressure: any;
+    cleanPreference: any;
+    liveLaunchPwdState: {
+        state: any;
+        hasPwd: any;
+    };
     volume: number;
     relocationState: any;
     firmwareVersion: any;
@@ -128,6 +133,8 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleCarpetPressure(payload: any): void;
+    handleCleanPreference(payload: any): void;
+    handleLiveLaunchPwdState(payload: any): void;
     /**
      * Handle the payload of the `Stats` response/message
      * @param {Object} payload
