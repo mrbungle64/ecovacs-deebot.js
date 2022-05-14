@@ -660,7 +660,6 @@ module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetCleanCount = SetCleanCount;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
-module.exports.SetDusterRemindPeriod = SetDusterRemindPeriod;
 module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVolume = SetVolume;
 module.exports.SetWaterLevel = SetWaterLevel;

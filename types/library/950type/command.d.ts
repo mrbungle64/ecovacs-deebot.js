@@ -178,10 +178,7 @@ export class SetDoNotDisturb extends VacBotCommand {
     constructor(enable?: number, start?: string, end?: string);
 }
 export class SetDusterRemind extends VacBotCommand {
-    constructor(enable?: number);
-}
-export class SetDusterRemindPeriod extends VacBotCommand {
-    constructor(period?: number);
+    constructor(enable?: number, period?: number);
 }
 export class SetTrueDetect extends VacBotCommand {
     constructor(enable?: number);
