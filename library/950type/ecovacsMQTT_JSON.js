@@ -479,63 +479,38 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('DustCaseInfo', val);
                 }
             }
-
-            if (fwBuryPoint.hasOwnProperty('waterAmount') || fwBuryPoint.hasOwnProperty('waterbox')) {
-                // Info about the water amount
-                this.vacBot.run("GetWaterInfo");
-            }
-
-            if (fwBuryPoint.hasOwnProperty('mopremind')) {
-                // Info whether 'Cleaning Cloth Reminder' is enabled
-                this.vacBot.run('GetDusterRemind');
-            }
-
-            if (fwBuryPoint.hasOwnProperty('AI')) {
-                // Info whether AIVI is enabled
-                val = fwBuryPoint.AI;
-                this.emit('SettingInfoAIVI', val);
-            }
-
-            if (fwBuryPoint.hasOwnProperty('isPressurized')) {
-                // Info whether 'Auto-Boost Suction' is enabled
-                const payload = {'enable': fwBuryPoint.isPressurized};
-                // The typo in the command is intended as Ecovacs as done it, when specifying this command
-                await this.handleMessagePayload('CarpertPressure', payload);
-            }
-            if (fwBuryPoint.hasOwnProperty('DND')) {
-                // Info whether 'Do Not Disturb' is enabled
-                const payload = {'enable': fwBuryPoint.DND};
-                await this.handleMessagePayload('Block', payload);
-            }
-            if (fwBuryPoint.hasOwnProperty('continue')) {
-                // Info whether 'Continuous Cleaning' is enabled
-                const payload = {'enable': fwBuryPoint.continue};
-                await this.handleMessagePayload('BreakPoint', payload);
-            }
             if (fwBuryPoint.hasOwnProperty('multiMap')) {
                 // Info whether multi-map mode is enabled
                 val = fwBuryPoint.multiMap;
                 this.emit('SettingInfoMultiMap', val);
             }
-
-            if (Array.isArray(fwBuryPoint)) {
-                const key = fwBuryPoint.length - 1;
-                const data = fwBuryPoint[key];
-                if (data.hasOwnProperty('uptime')) {
-                    // Uptime
-                    val = data.uptime.trim();
-                    this.emit('SystemUptime', val);
-                }
-                if (data.hasOwnProperty('meminfo')) {
-                    // MemInfo
-                    val = data.meminfo;
-                    this.emit('SystemMemInfo', val);
-                }
-                if (data.hasOwnProperty('signal')) {
-                    // Signal strength
-                    val = data.signal;
-                    this.emit('SystemSignal', val);
-                }
+            if (fwBuryPoint.hasOwnProperty('AI')) {
+                // Info whether AIVI is enabled
+                val = fwBuryPoint.AI;
+                this.emit('SettingInfoAIVI', val);
+            }
+            // ----------------------------------
+            // We use these properties as trigger
+            // ----------------------------------
+            if (fwBuryPoint.hasOwnProperty('waterAmount') || fwBuryPoint.hasOwnProperty('waterbox')) {
+                // Mopping functionality related data
+                this.vacBot.run("GetWaterInfo");
+            }
+            if (fwBuryPoint.hasOwnProperty('mopremind')) {
+                // Info whether 'Cleaning Cloth Reminder' is enabled
+                this.vacBot.run('GetDusterRemind');
+            }
+            if (fwBuryPoint.hasOwnProperty('isPressurized')) {
+                // Info whether 'Auto-Boost Suction' is enabled
+                this.vacBot.run('GetCarpetPressure');
+            }
+            if (fwBuryPoint.hasOwnProperty('DND')) {
+                // Info whether 'Do Not Disturb' is enabled
+                this.vacBot.run('GetDoNotDisturb');
+            }
+            if (fwBuryPoint.hasOwnProperty('continue')) {
+                // Info whether 'Continuous Cleaning' is enabled
+                this.vacBot.run('GetContinuousCleaning');
             }
         }
         catch (e) {
