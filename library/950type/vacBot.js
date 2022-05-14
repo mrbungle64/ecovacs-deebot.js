@@ -524,20 +524,22 @@ class VacBot_950type extends VacBot {
         const infoEvent = payload['info'];
         for (let mapIndex in infoEvent) {
             if (infoEvent.hasOwnProperty(mapIndex)) {
-                this.maps["maps"].push(
-                    new map.EcovacsMap(
-                        infoEvent[mapIndex]['mid'],
-                        infoEvent[mapIndex]['index'],
-                        infoEvent[mapIndex]['name'],
-                        infoEvent[mapIndex]['status'],
-                        infoEvent[mapIndex]['using'],
-                        infoEvent[mapIndex]['built']
-                    )
-                );
-                if (infoEvent[mapIndex]['using'] === 1) {
-                    this.currentMapName = infoEvent[mapIndex]['name'];
-                    this.currentMapMID = infoEvent[mapIndex]['mid'];
-                    this.currentMapIndex = infoEvent[mapIndex]['index'];
+                if (infoEvent[mapIndex]['mid'] !== '0') {
+                    this.maps["maps"].push(
+                        new map.EcovacsMap(
+                            infoEvent[mapIndex]['mid'],
+                            infoEvent[mapIndex]['index'],
+                            infoEvent[mapIndex]['name'],
+                            infoEvent[mapIndex]['status'],
+                            infoEvent[mapIndex]['using'],
+                            infoEvent[mapIndex]['built']
+                        )
+                    );
+                    if (infoEvent[mapIndex]['using'] === 1) {
+                        this.currentMapName = infoEvent[mapIndex]['name'];
+                        this.currentMapMID = infoEvent[mapIndex]['mid'];
+                        this.currentMapIndex = infoEvent[mapIndex]['index'];
+                    }
                 }
             }
         }
