@@ -480,67 +480,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
             }
 
-            const handleFwBuryPointWaterInfo = false;
-            if (handleFwBuryPointWaterInfo) {
-                if (fwBuryPoint.hasOwnProperty('waterAmount')) {
-                    // Info about the water amount
-                    this.vacBot.waterLevel = fwBuryPoint.waterAmount + 1; // Adapt for regular value
-                }
-                if (this.vacBot.sleepStatus === 0) {
-                    if (fwBuryPoint.hasOwnProperty('waterbox')) {
-                        // Info whether a waterbox is installed
-                        // and also which type:
-                        // 0 = No waterbox installed
-                        // 1 = Regular waterbox installed
-                        // 2 = OZMO Pro installed
-                        this.vacBot.waterboxInfo = Number(fwBuryPoint.waterbox >= 1);
-                        this.vacBot.moppingType = fwBuryPoint.waterbox;
-                    }
-                    if (this.vacBot.waterboxInfo >= 1) {
-                        if (fwBuryPoint.hasOwnProperty('mopmode')) {
-                            // Info about the waterbox and the scrubbing pattern type
-                            // 0 = No waterbox is installed
-                            // 1 = Waterbox is installed
-                            // 2 = Quick scrubbing (this doesn't work directly after installing ozmo pro waterbox)
-                            // 3 = Deep scrubbing (this doesn't work directly after installing ozmo pro waterbox)
+            if (fwBuryPoint.hasOwnProperty('waterAmount') || fwBuryPoint.hasOwnProperty('waterbox')) {
+                // Info about the water amount
+                this.vacBot.run("GetWaterInfo");
+            }
 
-                            // Check if it's valid, because `mopmode` doesn't have the correct value
-                            // directly after installing ozmo pro waterbox
-                            if ((this.vacBot.moppingType === 2) && (fwBuryPoint.mopmode >= 2)) {
-                                this.vacBot.scrubbingType = fwBuryPoint.mopmode - 1; // Adapt for regular value
-                            }
-                        }
-                    } else {
-                        this.vacBot.moppingType = 0;
-                    }
-                }
-                if ((this.vacBot.waterboxInfo !== null) && (this.vacBot.waterLevel !== null)) {
-                    const payload = {
-                        'enable': this.vacBot.waterboxInfo,
-                        'amount': this.vacBot.waterLevel,
-                        'sweepType': this.vacBot.scrubbingType,
-                        'type': this.vacBot.moppingType
-                    };
-                    if (this.bot.sleepStatus === 0) {
-                        Object.assign(payload, {
-                            'sweepType': this.vacBot.scrubbingType,
-                            'type': this.vacBot.moppingType
-                        });
-                    }
-                    console.log('WaterInfo');
-                    console.log(payload);
-                    await this.handleMessagePayload('WaterInfo', payload);
-                }
-
-                if (fwBuryPoint.hasOwnProperty('mopremind')) {
-                    // Info whether 'Cleaning Cloth Reminder' is enabled
-                    val = fwBuryPoint.mopremind;
-                    this.emit('SettingInfoMopReminder', val);
-                }
-            } else if (fwBuryPoint.hasOwnProperty('waterAmount')) {
-                // Information about OZMO Pro waterbox is not always telling the truth,
-                // so we use this a trigger only
-                this.vacBot.run('GetWaterInfo');
+            if (fwBuryPoint.hasOwnProperty('mopremind')) {
+                // Info whether 'Cleaning Cloth Reminder' is enabled
+                this.vacBot.run('GetDusterRemind');
             }
 
             if (fwBuryPoint.hasOwnProperty('AI')) {
