@@ -562,16 +562,9 @@ class GetDusterRemind extends VacBotCommand {
 }
 
 class SetDusterRemind extends VacBotCommand {
-    constructor(enable = 0) {
+    constructor(enable = 0, period = 30) {
         super('setDusterRemind', {
-            'enable': enable
-        });
-    }
-}
-
-class SetDusterRemindPeriod extends VacBotCommand {
-    constructor(period = 30) {
-        super('setDusterRemind', {
+            'enable': enable,
             'period': period
         });
     }

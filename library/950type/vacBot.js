@@ -950,15 +950,9 @@ class VacBot_950type extends VacBot {
             case "GetDusterRemind".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetDusterRemind());
                 break;
-            case "EnableDusterRemind".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetDusterRemind(1));
-                break;
-            case "DisableDusterRemind".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetDusterRemind(0));
-                break;
-            case "SetDusterRemindPeriod".toLowerCase():
+            case "SetDusterRemind".toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.SetDusterRemindPeriod(args[0]));
+                    this.sendCommand(new VacBotCommand.SetDusterRemind(args[0], args[1]));
                 }
                 break;
             case "GetCarpetPressure".toLowerCase():
