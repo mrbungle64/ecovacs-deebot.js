@@ -66,6 +66,12 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.8.1 (alpha)
+* Handle FwBuryPoint messages (e.g. T8/T9 series, experimental)
+* Handle some additional events (e.g. T8/T9 series)
+* Some fixes and improvements
+* Updated dependencies
+
 ### 0.8.0
 * (m8schmit) Added types for TypeScript
 * Lots of code documentation
