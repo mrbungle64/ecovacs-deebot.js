@@ -847,9 +847,14 @@ class VacBot_950type extends VacBot {
                     this.lastComponentValues = {};
                     const componentsArray = [
                         dictionary.COMPONENT_TO_ECOVACS['filter'],
-                        dictionary.COMPONENT_TO_ECOVACS['main_brush'],
                         dictionary.COMPONENT_TO_ECOVACS['side_brush']
                     ];
+                    if (this.hasMainBrush()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
+                    }
+                    if (this.hasUnitCareInfo()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['unit_care']);
+                    }
                     this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;
