@@ -44,6 +44,8 @@ declare class VacBot {
     cleanSpeed: any;
     waterLevel: any;
     waterboxInfo: any;
+    moppingType: number;
+    scrubbingType: any;
     sleepStatus: any;
     deebotPosition: {
         x: any;

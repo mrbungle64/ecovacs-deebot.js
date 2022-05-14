@@ -423,6 +423,14 @@ class Ecovacs extends EventEmitter {
                     'enabled': Boolean(Number(this.bot.waterboxInfo || 0)),
                     'level': this.bot.waterLevel
                 };
+                if (this.bot.sleepStatus === 0) {
+                    if (this.bot.moppingType !== null) {
+                        Object.assign(r['waterInfo'], {'moppingType': this.bot.moppingType});
+                    }
+                    if (this.bot.scrubbingType !== null) {
+                        Object.assign(r['waterInfo'], {'scrubbingType': this.bot.scrubbingType});
+                    }
+                }
             }
             this.emit('MoppingSystemInfo', r);
         }
