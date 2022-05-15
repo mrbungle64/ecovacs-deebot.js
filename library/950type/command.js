@@ -598,6 +598,20 @@ class GetCleanCount extends VacBotCommand {
     }
 }
 
+class SetCleanPreference extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setCleanPreference', {
+            'enable': enable
+        });
+    }
+}
+
+class GetCleanPreference extends VacBotCommand {
+    constructor() {
+        super('getCleanPreference');
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -618,6 +632,7 @@ module.exports.GetCarpetPressure = GetCarpetPressure;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetCleanCount = GetCleanCount;
 module.exports.GetCleanLogs = GetCleanLogs;
+module.exports.GetCleanPreference = GetCleanPreference;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanSum = GetCleanSum;
@@ -658,6 +673,7 @@ module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetCleanCount = SetCleanCount;
+module.exports.SetCleanPreference = SetCleanPreference;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetTrueDetect = SetTrueDetect;

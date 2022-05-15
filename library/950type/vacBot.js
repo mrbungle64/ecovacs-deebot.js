@@ -1004,6 +1004,14 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetCleanCount(args[0]));
                 }
                 break;
+            case "GetCleanPreference".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetCleanPreference());
+                break;
+            case "SetCleanPreference".toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetCleanPreference(args[0]));
+                }
+                break;
         }
     }
 }
