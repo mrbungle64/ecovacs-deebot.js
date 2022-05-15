@@ -958,6 +958,11 @@ class VacBot_950type extends VacBot {
             case "GetCarpetPressure".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetCarpetPressure());
                 break;
+            case "SetCarpetPressure".toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetCarpetPressure(args[0]));
+                }
+                break;
             case "EnableCarpetPressure".toLowerCase():
                 this.sendCommand(new VacBotCommand.SetCarpetPressure(1));
                 break;
@@ -1011,6 +1016,12 @@ class VacBot_950type extends VacBot {
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetCleanPreference(args[0]));
                 }
+                break;
+            case "EnableCleanPreference".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetCleanPreference(1));
+                break;
+            case "DisableCleanPreference".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetCleanPreference(0));
                 break;
         }
     }
