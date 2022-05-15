@@ -60,13 +60,11 @@ There is of course no claim to full functionality.
 
 * The generation of map images is currently not stable on 32-bit systems (e.g. most Raspberry Pi systems)
 * The cleaning log has an empty result on T9 series
-* The combined map data object does not work with T9 series
-* TrueDetect commands not working yet (tested on T9)
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
 
-### 0.8.1 (alpha)
+### 0.8.1 (beta)
 * Handle FwBuryPoint messages (e.g. T8/T9 series, experimental)
 * Handle some additional events (e.g. T8/T9 series)
 * Some fixes and improvements
