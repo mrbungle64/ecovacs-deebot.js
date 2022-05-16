@@ -69,6 +69,7 @@ There is of course no claim to full functionality.
 ### 0.8.1 (beta)
 * Handle FwBuryPoint messages (e.g. T8/T9 series, experimental)
 * Handle some additional events (e.g. T8/T9 series)
+* Added commands to enable/disable Clean Preference (e.g. T8/T9 series)
 * Some fixes and improvements
 * Updated dependencies
 
