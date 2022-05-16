@@ -4,6 +4,7 @@ exports.SupportedDevices = {
     "ls1ok3": {
         "name": "DEEBOT 900 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -18,6 +19,7 @@ exports.SupportedDevices = {
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -36,6 +38,7 @@ exports.SupportedDevices = {
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
         "950type": true,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -50,6 +53,7 @@ exports.SupportedDevices = {
     "123": {
         "name": "DEEBOT Slim2 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": false,
         "unit_care_info": false,
         "spot_area": false,
@@ -67,6 +71,7 @@ exports.KnownDevices = {
     "dl8fht": {
         "name": "DEEBOT 600 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -85,6 +90,7 @@ exports.KnownDevices = {
     "159": {
         "name": "DEEBOT OZMO 601",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -99,6 +105,7 @@ exports.KnownDevices = {
     "130": {
         "name": "DEEBOT OZMO 610 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -113,6 +120,7 @@ exports.KnownDevices = {
     "uv242z": {
         "name": "DEEBOT 710",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -139,6 +147,7 @@ exports.KnownDevices = {
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -153,6 +162,7 @@ exports.KnownDevices = {
     "2pv572": {
         "name": "DEEBOT OZMO 905",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -167,6 +177,7 @@ exports.KnownDevices = {
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -181,6 +192,7 @@ exports.KnownDevices = {
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
         "950type": true,
+        "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
         "spot_area": true,
@@ -195,6 +207,7 @@ exports.KnownDevices = {
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
         "950type": true,
+        "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
         "spot_area": true,
@@ -301,6 +314,7 @@ exports.KnownDevices = {
     "n6cwdb": {
         "name": "DEEBOT N8",
         "950type": true,
+        "950type_V2": true,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
@@ -387,6 +401,7 @@ exports.KnownDevices = {
     "126": {
         "name": "DEEBOT N79",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -409,6 +424,7 @@ exports.KnownDevices = {
     "ipzjy0": {
         "name": "DEEBOT U2",
         "950type": true,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -479,6 +495,7 @@ exports.KnownDevices = {
     "vsc5ia": {
         "name": "DEEBOT 500",
         "950type": false,
+        "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
@@ -505,6 +522,7 @@ exports.KnownDevices = {
     "02uwxm": {
         "name": "DEEBOT OZMO Slim10 Series",
         "950type": false,
+        "950type_V2": false,
         "main_brush": false,
         "unit_care_info": false,
         "spot_area": false,
