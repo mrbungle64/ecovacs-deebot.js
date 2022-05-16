@@ -356,6 +356,10 @@ exports.KnownDevices = {
         "name": "DEEBOT N9+",
         "deviceClassLink": "n6cwdb"
     },
+    "3yqsch": {
+        "name": "DEEBOT X1",
+        "deviceClassLink": "fqxoiu"
+    },
     "8bja83": {
         "name": "DEEBOT X1 Omni",
         "deviceClassLink": "fqxoiu"
