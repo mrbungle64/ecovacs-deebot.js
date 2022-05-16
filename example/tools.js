@@ -23,6 +23,7 @@ function dumpSomeVacbotData(vacbot, api) {
     console.log(`- Is known device: ${vacbot.isKnownDevice()}`);
     console.log(`- Is supported device: ${vacbot.isSupportedDevice()}`);
     console.log(`- Is 950 type model: ${vacbot.is950type()}`);
+    console.log(`- V2 commands are implemented: ${vacbot.is950type_V2()}`);
     console.log(`- Communication protocol: ${vacbot.getProtocol()}`);
     console.log(`- Main brush: ${vacbot.hasMainBrush()}`);
     console.log(`- Mapping capabilities: ${vacbot.hasMappingCapabilities()}`);
