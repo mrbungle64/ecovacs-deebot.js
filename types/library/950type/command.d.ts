@@ -56,6 +56,9 @@ export class GetCleanCount extends VacBotCommand {
 export class GetCleanLogs extends VacBotCommand {
     constructor(count?: number);
 }
+export class GetCleanPreference extends VacBotCommand {
+    constructor();
+}
 export class GetCleanSpeed extends VacBotCommand {
     constructor();
 }
@@ -168,11 +171,14 @@ export class SetAutoEmpty extends VacBotCommand {
 export class SetCarpetPressure extends VacBotCommand {
     constructor(enable?: number);
 }
-export class SetCleanSpeed extends VacBotCommand {
-    constructor(level: any);
-}
 export class SetCleanCount extends VacBotCommand {
     constructor(count?: number);
+}
+export class SetCleanPreference extends VacBotCommand {
+    constructor(enable?: number);
+}
+export class SetCleanSpeed extends VacBotCommand {
+    constructor(level: any);
 }
 export class SetDoNotDisturb extends VacBotCommand {
     constructor(enable?: number, start?: string, end?: string);
