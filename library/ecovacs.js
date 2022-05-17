@@ -339,11 +339,15 @@ class Ecovacs extends EventEmitter {
                 }
             }
         }
-        if (emitComponent['filter'] && emitComponent['side_brush'] && (!this.bot.hasMainBrush() || emitComponent['main_brush'])) {
+        if (emitComponent['filter'] &&
+            emitComponent['side_brush'] &&
+            (!this.bot.hasMainBrush() || emitComponent['main_brush']) &&
+            (!this.bot.hasUnitCareInfo() || emitComponent['unit_care'])) {
             this.emit('LifeSpan', {
                 'filter': this.bot.components['filter'],
                 'side_brush': this.bot.components['side_brush'],
-                'main_brush': this.bot.components['main_brush']
+                'main_brush': this.bot.components['main_brush'],
+                'unit_care': this.bot.components['unit_care']
             });
         }
     }
