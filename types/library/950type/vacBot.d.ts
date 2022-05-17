@@ -47,6 +47,11 @@ declare class VacBot_950type extends VacBot {
      */
     handlePos(payload: any): void;
     /**
+     * TODO: Find out the value of the 'Evt' message
+     * @param {Object} payload - The payload of the event.
+     */
+    handleEvt(payload: any): void;
+    /**
      * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
      * @param {Object} payload
      */

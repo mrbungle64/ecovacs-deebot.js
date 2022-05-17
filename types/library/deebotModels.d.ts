@@ -2,6 +2,7 @@ export var SupportedDevices: {
     ls1ok3: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -16,6 +17,7 @@ export var SupportedDevices: {
     "115": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -34,6 +36,7 @@ export var SupportedDevices: {
     yna5xi: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -48,6 +51,7 @@ export var SupportedDevices: {
     "123": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -64,6 +68,7 @@ export var KnownDevices: {
     dl8fht: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -82,6 +87,7 @@ export var KnownDevices: {
     "159": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -96,6 +102,7 @@ export var KnownDevices: {
     "130": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -110,6 +117,7 @@ export var KnownDevices: {
     uv242z: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -136,6 +144,7 @@ export var KnownDevices: {
     y79a7u: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -150,6 +159,7 @@ export var KnownDevices: {
     "2pv572": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -164,6 +174,7 @@ export var KnownDevices: {
     gd4uut: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -178,6 +189,7 @@ export var KnownDevices: {
     h18jkh: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -192,6 +204,7 @@ export var KnownDevices: {
     fqxoiu: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -298,6 +311,7 @@ export var KnownDevices: {
     n6cwdb: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -353,6 +367,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    "3yqsch": {
+        name: string;
+        deviceClassLink: string;
+    };
     "8bja83": {
         name: string;
         deviceClassLink: string;
@@ -380,6 +398,7 @@ export var KnownDevices: {
     "126": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -402,6 +421,7 @@ export var KnownDevices: {
     ipzjy0: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -472,6 +492,7 @@ export var KnownDevices: {
     vsc5ia: {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
@@ -498,6 +519,7 @@ export var KnownDevices: {
     "02uwxm": {
         name: string;
         "950type": boolean;
+        "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
         spot_area: boolean;

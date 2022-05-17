@@ -234,11 +234,24 @@ declare class VacBot {
      */
     is950type(): boolean;
     /**
+     * Returns true if V2 commands are implemented (newer 950 type models)
+     * e.g. Deebot N8/T8/T9/X1 series
+     * If the model is not registered, it returns false
+     * @returns {boolean}
+     */
+    is950type_V2(): boolean;
+    /**
      * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
      * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
      * @returns {boolean}
      */
     isNot950type(): boolean;
+    /**
+     * Returns true if V2 commands are not implemented
+     * e.g. Deebot OZMO 920/950 and all older models
+     * @returns {boolean}
+     */
+    isNot950type_V2(): boolean;
     /**
      * Returns true if the model is a N79 series model
      * @returns {boolean}
