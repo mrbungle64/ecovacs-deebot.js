@@ -109,10 +109,6 @@ class Ecovacs extends EventEmitter {
                 this.bot.handleCleanSpeed(payload);
                 this.emit('CleanSpeed', this.bot.cleanSpeed);
                 break;
-            case 'RelocationState':
-                this.bot.handleRelocationState(payload);
-                this.emit('RelocationState', this.bot.relocationState);
-                break;
             case 'LifeSpan':
                 payload = event.attrs;
                 this.bot.handleLifespan(payload);

@@ -205,6 +205,16 @@ class VacBot_950type extends VacBot {
     }
 
     /**
+     * TODO: Find out the value of the 'Evt' message
+     * @param {Object} payload - The payload of the event.
+     */
+    handleEvt(payload) {
+        tools.envLog("[VacBot] *** handleEvt payload = %s", JSON.stringify(payload));
+        const code = payload['code'];
+        tools.envLog("[VacBot] *** handleEvt code = %s", code);
+    }
+
+    /**
      * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
      * @param {Object} payload
      */

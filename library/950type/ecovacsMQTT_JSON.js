@@ -147,6 +147,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 await this.handleFwBuryPoint(payload);
                 break;
             }
+            case 'Evt': {
+                // TODO: Find out the value of the 'Evt' message
+                this.vacBot.handleEvt(payload);
+                break;
+            }
             case "Stats":
                 this.vacBot.handleStats(payload);
                 if (this.vacBot.currentStats) {
