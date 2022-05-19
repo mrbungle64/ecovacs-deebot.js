@@ -206,10 +206,13 @@ class EcovacsMQTT extends Ecovacs {
                 };
                 this.bot.handleResponseError(errorCodeObj);
                 // Error code 500 = wait for response timed out (see issue #19)
+                if (this.bot.errorCode === '500') {
+                    this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
+                }
                 if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                     this.emitLastError();
                 }
-                tools.envLog(`[EcovacsMQTT] callEcouserApi failure code ${response['errno']} (${response['error']})`);
+                tools.envLog(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
                 throw `Failure code ${response['errno']} (${response['error']})`;
             }
         } catch (e) {
