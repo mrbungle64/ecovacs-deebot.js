@@ -48,6 +48,7 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot U2 series
 * Deebot N8 series
 * Deebot OZMO T5
+* Deebot OZMO T10 Plus
 * Deebot (OZMO) T8 series
 * Deebot T9 series
 * Deebot X1 series
@@ -66,7 +67,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.8.1 (beta)
+### 0.8.1
 * Handle FwBuryPoint messages (e.g. T8/T9 series, experimental)
 * Handle some additional events (e.g. T8/T9 series)
 * Added commands to enable/disable Clean Preference (e.g. T8/T9 series)
