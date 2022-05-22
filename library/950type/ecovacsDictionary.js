@@ -27,7 +27,8 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'stop': 'stop',
     'pause': 'pause',
     'goCharging': 'returning',
-    'idle': 'idle'
+    'idle': 'idle',
+    'move': 'move'
 };
 
 exports.WATER_LEVEL_TO_ECOVACS = {
