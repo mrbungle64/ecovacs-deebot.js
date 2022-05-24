@@ -394,7 +394,15 @@ exports.KnownDevices = {
         "name": "DEEBOT X1 PLUS",
         "deviceClassLink": "fqxoiu"
     },
+    "jtmf04": {
+        "name": "DEEBOT T10",
+        "deviceClassLink": "fqxoiu"
+    },
     "rss8xk": {
+        "name": "DEEBOT T10 PLUS",
+        "deviceClassLink": "fqxoiu"
+    },
+    "p95mgv": {
         "name": "DEEBOT T10 PLUS",
         "deviceClassLink": "fqxoiu"
     },
