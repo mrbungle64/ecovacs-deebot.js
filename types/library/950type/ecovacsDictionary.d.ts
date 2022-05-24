@@ -28,6 +28,7 @@ export namespace CLEAN_MODE_FROM_ECOVACS {
     export { pause_1 as pause };
     export const goCharging: string;
     export const idle: string;
+    export const move: string;
 }
 export var WATER_LEVEL_TO_ECOVACS: {
     1: number;

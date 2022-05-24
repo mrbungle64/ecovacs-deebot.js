@@ -67,6 +67,10 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
+### 0.8.2 (beta)
+* Added Deebot T10 series
+* Some minor improvements
+
 ### 0.8.1
 * Handle FwBuryPoint messages (e.g. T8/T9 series, experimental)
 * Handle some additional events (e.g. T8/T9 series)
@@ -105,6 +109,7 @@ There is of course no claim to full functionality.
 * Start implementing V2 commands (e.g. T8 and T9 series)
 * Some minor changes and improvements
 * Fix for Deebot 710 series
+* Added Deebot X1 series
 
 ### 0.6.8
 * Some minor changes and improvements

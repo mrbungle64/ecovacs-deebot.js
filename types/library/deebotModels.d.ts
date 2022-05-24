@@ -391,7 +391,15 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    jtmf04: {
+        name: string;
+        deviceClassLink: string;
+    };
     rss8xk: {
+        name: string;
+        deviceClassLink: string;
+    };
+    p95mgv: {
         name: string;
         deviceClassLink: string;
     };
