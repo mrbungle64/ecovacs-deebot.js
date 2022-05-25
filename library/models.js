@@ -578,7 +578,7 @@ exports.KnownDevices = {
         "name": "K650",
         "950type": true,
         "950type_V2": false,
-        "main_brush": false,
+        "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
         "custom_area": false,

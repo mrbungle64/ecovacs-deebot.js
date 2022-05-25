@@ -63,6 +63,7 @@ There is of course no claim to full functionality.
 
 #### yeedi (experimental)
 
+* yeedi k650
 * yeedi 2 hybrid
 * yeedi mop station
 
