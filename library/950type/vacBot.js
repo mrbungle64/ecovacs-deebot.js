@@ -58,8 +58,9 @@ class VacBot_950type extends VacBot {
         this.currentCustomAreaValues = '';
         if (payload['state'] === 'clean') {
             let type = payload['cleanState']['type'];
-            if (typeof payload['cleanState']['content'] === 'object') {
-                type = payload['cleanState']['content']['type'];
+            const content = payload['cleanState']['content'];
+            if (typeof content === 'object') {
+                type = content['type'];
             }
             if (payload['cleanState']['motionState'] === 'working') {
                 this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
@@ -68,12 +69,19 @@ class VacBot_950type extends VacBot {
             }
             if ((type === 'spotArea') || (type === 'customArea')) {
                 let areaValues;
-                if (typeof payload['cleanState']['content'] === "object") {
-                    areaValues = payload['cleanState']['content']['value'];
+                if (typeof content === "object") {
+                    areaValues = content['value'];
                 } else {
-                    areaValues = payload['cleanState']['content'];
+                    areaValues = content;
                 }
                 if (type === 'customArea') {
+                    if (typeof content === 'object') {
+                        const doNotClean = content['donotClean'];
+                        if (doNotClean === 1) {
+                            // Controlled via Video Manager
+                            this.cleanReport = 'setLocation';
+                        }
+                    }
                     this.currentCustomAreaValues = areaValues;
                 }
                 else if (type === 'spotArea') {
