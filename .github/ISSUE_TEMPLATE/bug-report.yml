@@ -60,7 +60,7 @@ body:
     validations:
       required: true
     attributes:
-      label: From which source you have installed the adapter?
+      label: From which source you have installed the library?
       options:
         - GitHub
         - npm
