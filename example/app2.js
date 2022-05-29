@@ -11,13 +11,14 @@ const accountId = settingsFile.ACCOUNT_ID;
 const password = settingsFile.PASSWORD;
 const countryCode = settingsFile.COUNTRY_CODE;
 const deviceNumber = settingsFile.DEVICE_NUMBER;
+const domain = settingsFile.AUTH_DOMAIN ? settingsFile.AUTH_DOMAIN : '';
 
 // The passwordHash is a md5 hash of your Ecovacs password.
 const passwordHash = EcoVacsAPI.md5(password);
 // You need to provide a device ID uniquely identifying the machine you're using to connect
 const deviceId = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
 
-const api = new EcoVacsAPI(deviceId, countryCode);
+const api = new EcoVacsAPI(deviceId, countryCode, '', domain);
 
 // This logs you in through the HTTP API and retrieves the required
 // access tokens from the server side. This allows you to requests
@@ -29,7 +30,7 @@ api.connect(accountId, passwordHash).then(() => {
         console.log(`Devices: ${JSON.stringify(devices)}`);
         let vacuum = devices[deviceNumber];
         console.log(vacuum);
-        let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, api.getContinent());
+        let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum);
 
         // Once the session has started the bot will fire a 'ready' event.
         // At this point you can request information from your vacuum or send actions to it.

@@ -20,20 +20,23 @@ const packageInfo = require('./package.json');
  * @property @private {string} country - the country code of the country where the Ecovacs account is registered
  * @property @private {string} continent - the continent where the Ecovacs account is registered
  * @property @private {string} deviceId - the device ID of the bot
+ * @property @private {string} authDomain - the domain for the authentication API
  */
 class EcovacsAPI {
   /**
    * @param {string} deviceId - the device ID of the bot
    * @param {string} country - the country code of the country where the Ecovacs account is registered
-   * @param {string} [continent=''] - the continent code (deprecated)
+   * @param {string} [continent=''] - the continent code
+   * @param {string} [authDomain='ecovacs.com'] - the domain for the authentication API
    */
-  constructor(deviceId, country, continent = '') {
+  constructor(deviceId, country, continent = '', authDomain = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
 
-    this.resource = deviceId.substring(0, 8);
-    this.country = country.toUpperCase();
-    this.continent = continent !== '' ? continent : this.getContinent();
     this.deviceId = deviceId;
+    this.country = country.toUpperCase();
+    this.continent = continent ? continent : this.getContinent();
+    this.authDomain = authDomain ? authDomain : constants.AUTH_DOMAIN;
+    this.resource = deviceId.substring(0, 8);
   }
 
   /**
@@ -205,6 +208,7 @@ class EcovacsAPI {
     if (loginPath === constants.GETAUTHCODE_PATH) {
       portalPath = constants.PORTAL_GLOBAL_AUTHCODE;
     }
+    portalPath = tools.formatString(portalPath, {domain: this.authDomain});
     if (this.country === 'CN') {
       portalPath = portalPath.replace('.com','.cn');
     }

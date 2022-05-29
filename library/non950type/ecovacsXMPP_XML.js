@@ -137,7 +137,7 @@ class EcovacsXMPP_XML extends Ecovacs {
      * @returns {string} the Jabber Identifier of the device
      */
     getDeviceJID() {
-        return this.vacBot.vacuum.did + '@' + this.vacBot.vacuum['class'] + '.ecorobot.net/atom';
+        return this.vacBot.vacuum.did + '@' + this.vacBot.deviceClass + '.ecorobot.net/atom';
     }
 
     /**
