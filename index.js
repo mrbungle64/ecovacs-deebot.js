@@ -116,7 +116,9 @@ class EcovacsAPI {
    */
   getAuthParams(params) {
     let paramsSignIn = params;
-    paramsSignIn['openId'] = 'global';
+    if (this.authDomain !== 'yeedi.com') {
+      paramsSignIn['openId'] = 'global';
+    }
 
     let sign_on_text = constants.AUTH_CLIENT_KEY;
     let keys = Object.keys(paramsSignIn);
@@ -138,12 +140,18 @@ class EcovacsAPI {
    * @returns {Object}
    */
   getMetaObject() {
+    let appCode = 'global_e';
+    let appVersion = '1.6.3';
+    if (this.authDomain === 'yeedi.com') {
+      appCode = 'yd_' + appCode;
+      appVersion = '1.3.0';
+    }
     return {
       'country': this.country,
       'lang': 'EN',
       'deviceId': this.deviceId,
-      'appCode': 'global_e',
-      'appVersion': '1.6.3',
+      'appCode': appCode,
+      'appVersion': appVersion,
       'channel': 'google_play',
       'deviceType': '1'
     };
@@ -161,7 +169,11 @@ class EcovacsAPI {
     let searchParams;
     params['authTimespan'] = Date.now();
     if (loginPath === constants.GETAUTHCODE_PATH) {
-      params['bizType'] = 'ECOVACS_IOT';
+      if (this.authDomain === 'yeedi.com') {
+        portalPath = portalPath.replace('global/auth/getAuthCode','agreement/getUserAcceptInfo');
+      } else {
+        params['bizType'] = 'ECOVACS_IOT';
+      }
       params['deviceId'] = this.deviceId;
       portalUrl = new url.URL(tools.formatString(portalPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));
