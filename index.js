@@ -66,7 +66,7 @@ class EcovacsAPI {
     this.uid = result.uid;
     this.login_access_token = result.accessToken;
 
-    result = await this.callUserAuthApi(constants.GETAUTHCODE_PATH, {
+    result = await this.callUserAuthApi(constants.USER_GETAUTHCODE_PATH, {
       'uid': this.uid,
       'accessToken': this.login_access_token
     });
@@ -116,7 +116,7 @@ class EcovacsAPI {
    */
   getAuthParams(params) {
     let paramsSignIn = params;
-    if (this.authDomain !== 'yeedi.com') {
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
       paramsSignIn['openId'] = 'global';
     }
 
@@ -142,7 +142,7 @@ class EcovacsAPI {
   getMetaObject() {
     let appCode = 'global_e';
     let appVersion = '1.6.3';
-    if (this.authDomain === 'yeedi.com') {
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
       appCode = 'yd_' + appCode;
       appVersion = '1.3.0';
     }
@@ -168,10 +168,8 @@ class EcovacsAPI {
     let portalUrl;
     let searchParams;
     params['authTimespan'] = Date.now();
-    if (loginPath === constants.GETAUTHCODE_PATH) {
-      if (this.authDomain === 'yeedi.com') {
-        portalPath = portalPath.replace('global/auth/getAuthCode','agreement/getUserAcceptInfo');
-      } else {
+    if (loginPath === constants.USER_GETAUTHCODE_PATH) {
+      if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
         params['bizType'] = 'ECOVACS_IOT';
       }
       params['deviceId'] = this.deviceId;
@@ -216,15 +214,23 @@ class EcovacsAPI {
    * @returns {string} the portal path
    */
   getPortalPath(loginPath) {
-    let portalPath = constants.MAIN_URL_FORMAT;
-    if (loginPath === constants.GETAUTHCODE_PATH) {
-      portalPath = constants.PORTAL_GLOBAL_AUTHCODE;
+    let portalPath = constants.AUTH_GL_API;
+    if (loginPath === constants.USER_GETAUTHCODE_PATH) {
+      portalPath = constants.AUTH_GL_OPENAPI + '/' + this.getGlobalGetAuthcodePath();
     }
     portalPath = tools.formatString(portalPath, {domain: this.authDomain});
     if (this.country === 'CN') {
       portalPath = portalPath.replace('.com','.cn');
     }
     return portalPath;
+  }
+
+  getGlobalGetAuthcodePath() {
+    let globalGetAuthcodePath = constants.GLOBAL_GETAUTHCODE_PATH;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      globalGetAuthcodePath = constants.GLOBAL_GETAUTHCODE_PATH_YD;
+    }
+    return globalGetAuthcodePath;
   }
 
   /**
@@ -244,11 +250,9 @@ class EcovacsAPI {
       }
     }
 
-    tools.envLog(`[EcoVacsAPI] continent ${this.continent}`);
-
-    let portalUrlFormat = constants.PORTAL_URL_FORMAT;
+    let portalUrlFormat = constants.PORTAL_ECOUSER_API;
     if (this.country === 'CN') {
-      portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
+      portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
     }
     let portalUrl = tools.formatString(portalUrlFormat + "/" + api, {continent: this.continent});
     let headers = {
@@ -280,7 +284,7 @@ class EcovacsAPI {
       org = 'ECOCN';
       country = 'Chinese';
     }
-    return this.callPortalApi(constants.USERSAPI, 'loginByItToken', {
+    return this.callPortalApi(constants.USER_API_PATH, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
       'userId': this.uid,
       'token': this.auth_code,
@@ -297,7 +301,7 @@ class EcovacsAPI {
    * @returns {string} the login path is being returned.
    */
   getLoginPath() {
-    let loginPath = constants.LOGIN_PATH;
+    let loginPath = constants.USER_LOGIN_PATH;
     if (this.country === 'CN') {
       loginPath = `${loginPath}CheckMobile`;
     }
@@ -309,7 +313,7 @@ class EcovacsAPI {
    */
   getConfigProducts() {
     return new Promise((resolve, reject) => {
-      this.callPortalApi(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
+      this.callPortalApi(constants.PIM_PRODUCT_PATH + '/getConfigProducts', 'GetConfigProducts', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -331,7 +335,7 @@ class EcovacsAPI {
    * @param {string} func - the API function to be called
    * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
-  async getDevices(api = constants.USERSAPI, func = 'GetDeviceList') {
+  async getDevices(api = constants.USER_API_PATH, func = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
       this.callPortalApi(api, func, {
         'userid': this.uid,
@@ -354,8 +358,8 @@ class EcovacsAPI {
    * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
   async devices() {
-    const deviceList = await this.getDevices(constants.USERSAPI, 'GetDeviceList');
-    const globalDeviceList = await this.getDevices(constants.APPAPI, 'GetGlobalDeviceList');
+    const deviceList = await this.getDevices(constants.USER_API_PATH, 'GetDeviceList');
+    const globalDeviceList = await this.getDevices(constants.APPSVR_APP_PATH, 'GetGlobalDeviceList');
     return this.mergeDeviceLists(deviceList, globalDeviceList);
   }
 

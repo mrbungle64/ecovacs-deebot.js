@@ -12,7 +12,7 @@ const MAPINFOTYPE_TO_ECOVACS = {
 };
 
 class VacBotCommand {
-    constructor(name, args = {}, api = constants.IOTDEVMANAGERAPI) {
+    constructor(name, args = {}, api = constants.IOT_DEVMANAGER_PATH) {
         this.name = name;
         if (!args.hasOwnProperty('id')) {
             Object.assign(args, {
@@ -423,13 +423,13 @@ class GetSleepStatus extends VacBotCommand {
 
 class GetCleanLogs extends VacBotCommand {
     constructor(count = 3) {
-        super('GetCleanLogs', {'count': count}, constants.LGLOGAPI);
+        super('GetCleanLogs', {'count': count}, constants.LG_LOG_PATH);
     }
 }
 
 class GetLastCleanLog extends VacBotCommand {
     constructor() {
-        super('GetLastCleanLog', {}, constants.LGLOGAPI);
+        super('GetLastCleanLog', {}, constants.LG_LOG_PATH);
     }
 }
 

@@ -21,7 +21,7 @@ describe('API', function () {
             continents.push(continent);
 
             try {
-              const url = tools.formatString(constants.PORTAL_URL_FORMAT, {"continent": continent});
+              const url = tools.formatString(constants.PORTAL_ECOUSER_API, {"continent": continent});
               await axios.get(url);
             } catch (err) {
               if (err.code === 'ENOTFOUND') {

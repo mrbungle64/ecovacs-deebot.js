@@ -5,6 +5,7 @@
  * @property @private {string} country - the country code of the country where the Ecovacs account is registered
  * @property @private {string} continent - the continent where the Ecovacs account is registered
  * @property @private {string} deviceId - the device ID of the bot
+ * @property @private {string} authDomain - the domain for the authentication API
  */
 declare class EcovacsAPI {
     /**
@@ -63,13 +64,15 @@ declare class EcovacsAPI {
     /**
      * @param {string} deviceId - the device ID of the bot
      * @param {string} country - the country code of the country where the Ecovacs account is registered
-     * @param {string} [continent=''] - the continent code (deprecated)
+     * @param {string} [continent=''] - the continent code
+     * @param {string} [authDomain='ecovacs.com'] - the domain for the authentication API
      */
-    constructor(deviceId: string, country: string, continent?: string);
-    resource: string;
+    constructor(deviceId: string, country: string, continent?: string, authDomain?: string);
+    deviceId: string;
     country: string;
     continent: string;
-    deviceId: string;
+    authDomain: string;
+    resource: string;
     /**
      * @param {string} accountId - The account ID (Email or Ecovacs ID)
      * @param {string} passwordHash - The password hash
@@ -109,6 +112,7 @@ declare class EcovacsAPI {
      * @returns {string} the portal path
      */
     getPortalPath(loginPath: string): string;
+    getGlobalGetAuthcodePath(): string;
     /**
      * @param {string} api - the API path
      * @param {string} func - the API function to be called

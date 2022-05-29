@@ -67,7 +67,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (messagePayload) {
             if (messagePayload.hasOwnProperty('resp')) {
                 this.handleMessage(command.name, messagePayload['resp'], "response");
-            } else if (command.api === constants.LGLOGAPI) {
+            } else if (command.api === constants.LG_LOG_PATH) {
                 this.handleMessage(command.name, messagePayload, "logResponse");
             } else {
                 tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() invalid response");
