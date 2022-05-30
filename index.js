@@ -95,6 +95,9 @@ class EcovacsAPI {
     }
 
     let sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY;
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+      sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
+    }
     let keys = Object.keys(sign_on);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
@@ -104,6 +107,9 @@ class EcovacsAPI {
     sign_on_text += constants.AUTH_USERLOGIN_SECRET;
 
     params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY;
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+      params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
+    }
     params['authSign'] = EcovacsAPI.md5(sign_on_text);
 
     return EcovacsAPI.paramsToQueryList(params);
@@ -121,6 +127,9 @@ class EcovacsAPI {
     }
 
     let sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY;
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+      sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
+    }
     let keys = Object.keys(paramsSignIn);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
@@ -130,6 +139,9 @@ class EcovacsAPI {
     sign_on_text += constants.AUTH_GETAUTH_SECRET;
 
     params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY;
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+      params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
+    }
     params['authSign'] = EcovacsAPI.md5(sign_on_text);
 
     return EcovacsAPI.paramsToQueryList(params);
@@ -169,9 +181,7 @@ class EcovacsAPI {
     let searchParams;
     params['authTimespan'] = Date.now();
     if (loginPath === constants.USER_GETAUTHCODE_PATH) {
-      if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
         params['bizType'] = 'ECOVACS_IOT';
-      }
       params['deviceId'] = this.deviceId;
       portalUrl = new url.URL(tools.formatString(portalPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));

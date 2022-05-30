@@ -8,9 +8,11 @@ exports.AUTH_GL_OPENAPI = 'https://gl-{country}-openapi.{domain}/v1';
 
 exports.AUTH_USERLOGIN_SECRET = '6c319b2a5cd3e66e39159c2e28f2fce9';
 exports.AUTH_USERLOGIN_AUTH_APPKEY = '1520391301804';
+exports.AUTH_USERLOGIN_AUTH_APPKEY_YD = '1581917520081';
 
 exports.AUTH_GETAUTH_SECRET = '77ef58ce3afbe337da74aa8c5ab963a9';
 exports.AUTH_GETAUTH_AUTH_APPKEY = '1520391491841';
+exports.AUTH_GETAUTH_AUTH_APPKEY_YD = '1581923437995';
 
 exports.GLOBAL_GETAUTHCODE_PATH = 'global/auth/getAuthCode';
 exports.GLOBAL_GETAUTHCODE_PATH_YD = 'agreement/getUserAcceptInfo';
