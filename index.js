@@ -94,16 +94,16 @@ class EcovacsAPI {
       }
     }
 
-    let sign_on_text = constants.CLIENT_KEY;
+    let sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY;
     let keys = Object.keys(sign_on);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
       sign_on_text += k + "=" + sign_on[k];
     }
-    sign_on_text += constants.SECRET;
+    sign_on_text += constants.AUTH_USERLOGIN_SECRET;
 
-    params['authAppkey'] = constants.CLIENT_KEY;
+    params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY;
     params['authSign'] = EcovacsAPI.md5(sign_on_text);
 
     return EcovacsAPI.paramsToQueryList(params);
@@ -120,16 +120,16 @@ class EcovacsAPI {
       paramsSignIn['openId'] = 'global';
     }
 
-    let sign_on_text = constants.AUTH_CLIENT_KEY;
+    let sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY;
     let keys = Object.keys(paramsSignIn);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
       sign_on_text += k + "=" + paramsSignIn[k];
     }
-    sign_on_text += constants.AUTH_CLIENT_SECRET;
+    sign_on_text += constants.AUTH_GETAUTH_SECRET;
 
-    params['authAppkey'] = constants.AUTH_CLIENT_KEY;
+    params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY;
     params['authSign'] = EcovacsAPI.md5(sign_on_text);
 
     return EcovacsAPI.paramsToQueryList(params);
