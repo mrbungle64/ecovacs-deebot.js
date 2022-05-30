@@ -95,7 +95,7 @@ class EcovacsAPI {
     }
 
     let sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY;
-    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
       sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
     }
     let keys = Object.keys(sign_on);
@@ -107,7 +107,7 @@ class EcovacsAPI {
     sign_on_text += constants.AUTH_USERLOGIN_SECRET;
 
     params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY;
-    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
       params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
     }
     params['authSign'] = EcovacsAPI.md5(sign_on_text);
@@ -127,7 +127,7 @@ class EcovacsAPI {
     }
 
     let sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY;
-    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
       sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
     }
     let keys = Object.keys(paramsSignIn);
@@ -139,7 +139,7 @@ class EcovacsAPI {
     sign_on_text += constants.AUTH_GETAUTH_SECRET;
 
     params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY;
-    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
       params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
     }
     params['authSign'] = EcovacsAPI.md5(sign_on_text);
