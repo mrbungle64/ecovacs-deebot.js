@@ -104,7 +104,11 @@ class EcovacsAPI {
       let k = keys[i];
       sign_on_text += k + "=" + sign_on[k];
     }
-    sign_on_text += constants.AUTH_USERLOGIN_SECRET;
+    if (this.authDomain === constants.AUTH_DOMAIN) {
+      sign_on_text += constants.AUTH_USERLOGIN_SECRET;
+    } else {
+      sign_on_text += constants.AUTH_USERLOGIN_SECRET_YD;
+    }
 
     params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY;
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
@@ -136,7 +140,11 @@ class EcovacsAPI {
       let k = keys[i];
       sign_on_text += k + "=" + paramsSignIn[k];
     }
-    sign_on_text += constants.AUTH_GETAUTH_SECRET;
+    if (this.authDomain === constants.AUTH_DOMAIN) {
+      sign_on_text += constants.AUTH_GETAUTH_SECRET;
+    } else {
+      sign_on_text += constants.AUTH_GETAUTH_SECRET_YD;
+    }
 
     params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY;
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
