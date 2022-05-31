@@ -87,36 +87,23 @@ class EcovacsAPI {
   getUserLoginParams(params) {
     params['authTimeZone'] = 'GMT-8';
 
-    let sign_on = JSON.parse(JSON.stringify(this.getMetaObject()));
+    let authSignParams = JSON.parse(JSON.stringify(this.getMetaObject()));
     for (let key in params) {
       if (params.hasOwnProperty(key)) {
-        sign_on[key] = params[key];
+        authSignParams[key] = params[key];
       }
     }
 
-    let sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY;
+    let authAppkey = constants.AUTH_USERLOGIN_AUTH_APPKEY;
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      sign_on_text = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
+      authAppkey = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
     }
-    let keys = Object.keys(sign_on);
-    keys.sort();
-    for (let i = 0; i < keys.length; i++) {
-      let k = keys[i];
-      sign_on_text += k + "=" + sign_on[k];
-    }
-    if (this.authDomain === constants.AUTH_DOMAIN) {
-      sign_on_text += constants.AUTH_USERLOGIN_SECRET;
-    } else {
-      sign_on_text += constants.AUTH_USERLOGIN_SECRET_YD;
+    let authSecret = constants.AUTH_USERLOGIN_SECRET;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authSecret = constants.AUTH_USERLOGIN_SECRET_YD;
     }
 
-    params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      params['authAppkey'] = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
-    }
-    params['authSign'] = EcovacsAPI.md5(sign_on_text);
-
-    return EcovacsAPI.paramsToQueryList(params);
+    return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
   }
 
   /**
@@ -125,34 +112,48 @@ class EcovacsAPI {
    * @returns {string} the parameters
    */
   getAuthParams(params) {
-    let paramsSignIn = params;
-    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
-      paramsSignIn['openId'] = 'global';
+    let authSignParams = params;
+    authSignParams['openId'] = 'global';
+
+    let authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
+    }
+    let authSecret = constants.AUTH_GETAUTH_SECRET;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authSecret += constants.AUTH_GETAUTH_SECRET_YD;
     }
 
-    let sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      sign_on_text = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
-    }
-    let keys = Object.keys(paramsSignIn);
+    return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
+  }
+
+  /**
+   * Used to generate the URL search parameters for the request
+   * @param params - the basic set of parameters for the request
+   * @param authSignParams - additional set of parameters for the request
+   * @param authAppkey - The appkey for the request
+   * @param authSecret - The secret key for the request
+   * @returns An array of query strings
+   */
+  buildQueryList(params, authSignParams, authAppkey, authSecret) {
+    let authSignText = this.buildAuthSignText(authAppkey, authSignParams, authSecret);
+
+    params['authAppkey'] = authAppkey;
+    params['authSign'] = EcovacsAPI.md5(authSignText);
+
+    return tools.paramsToQueryList(params);
+  }
+
+  buildAuthSignText(authAppkey, authSignParams, authSecret) {
+    let authSignText = authAppkey;
+    let keys = Object.keys(authSignParams);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
-      sign_on_text += k + "=" + paramsSignIn[k];
+      authSignText += k + "=" + authSignParams[k];
     }
-    if (this.authDomain === constants.AUTH_DOMAIN) {
-      sign_on_text += constants.AUTH_GETAUTH_SECRET;
-    } else {
-      sign_on_text += constants.AUTH_GETAUTH_SECRET_YD;
-    }
-
-    params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      params['authAppkey'] = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
-    }
-    params['authSign'] = EcovacsAPI.md5(sign_on_text);
-
-    return EcovacsAPI.paramsToQueryList(params);
+    authSignText += authSecret;
+    return authSignText;
   }
 
   /**
@@ -553,21 +554,6 @@ class EcovacsAPI {
       key: EcovacsAPI.PUBLIC_KEY,
       padding: crypto.constants.RSA_PKCS1_PADDING
     }, Buffer.from(text)).toString('base64');
-  }
-
-  /**
-   * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-   * @param {Object} params - the parameters to be encoded
-   * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
-   */
-  static paramsToQueryList(params) {
-    let query = [];
-    for (let key in params) {
-      if (params.hasOwnProperty(key)) {
-        query.push(key + "=" + encodeURIComponent(params[key]));
-      }
-    }
-    return query.join('&');
   }
 }
 

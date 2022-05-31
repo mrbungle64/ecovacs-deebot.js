@@ -56,12 +56,6 @@ declare class EcovacsAPI {
      */
     static encrypt(text: string): string;
     /**
-     * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-     * @param {Object} params - the parameters to be encoded
-     * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
-     */
-    static paramsToQueryList(params: any): string;
-    /**
      * @param {string} deviceId - the device ID of the bot
      * @param {string} country - the country code of the country where the Ecovacs account is registered
      * @param {string} [continent=''] - the continent code
@@ -95,6 +89,16 @@ declare class EcovacsAPI {
      * @returns {string} the parameters
      */
     getAuthParams(params: any): string;
+    /**
+     * Used to generate the URL search parameters for the request
+     * @param params - the basic set of parameters for the request
+     * @param authSignParams - additional set of parameters for the request
+     * @param authAppkey - The appkey for the request
+     * @param authSecret - The secret key for the request
+     * @returns An array of query strings
+     */
+    buildQueryList(params: any, authSignParams: any, authAppkey: any, authSecret: any): string;
+    buildAuthSignText(authAppkey: any, authSignParams: any, authSecret: any): any;
     /**
      * Get the meta-object that will be used to make a request to the server
      * @returns {Object}

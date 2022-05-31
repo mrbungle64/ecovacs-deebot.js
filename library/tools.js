@@ -198,6 +198,21 @@ function isValidVirtualWallType(type) {
 }
 
 /**
+ * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
+ * @param {Object} params - the parameters to be encoded
+ * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
+ */
+function paramsToQueryList(params) {
+    let query = [];
+    for (let key in params) {
+        if (params.hasOwnProperty(key)) {
+            query.push(key + "=" + encodeURIComponent(params[key]));
+        }
+    }
+    return query.join('&');
+}
+
+/**
  * Prints to `stdout` only in development mode (`dev` or `development`)
  */
 let envLog = function () {
@@ -227,3 +242,4 @@ module.exports.getReqID = getReqID;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
 module.exports.createErrorDescription = createErrorDescription;
 module.exports.formatString = formatString;
+module.exports.paramsToQueryList = paramsToQueryList;
