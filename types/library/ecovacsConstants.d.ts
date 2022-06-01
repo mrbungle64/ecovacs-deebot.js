@@ -10,15 +10,12 @@ export var AUTH_GETAUTH_SECRET: string;
 export var AUTH_GETAUTH_AUTH_APPKEY: string;
 export var AUTH_GETAUTH_SECRET_YD: string;
 export var AUTH_GETAUTH_AUTH_APPKEY_YD: string;
-export var GLOBAL_GETAUTHCODE_PATH: string;
 export var REALM: string;
 export var PORTAL_ECOUSER_API: string;
 export var PORTAL_ECOUSER_API_CN: string;
 export var USER_API_PATH: string;
 export var USER_LOGIN_PATH: string;
 export var USER_GETAUTHCODE_PATH: string;
-export var PIM_PRODUCT_PATH: string;
-export var APPSVR_APP_PATH: string;
 export var IOT_DEVMANAGER_PATH: string;
 export var LG_LOG_PATH: string;
 //# sourceMappingURL=ecovacsConstants.d.ts.map

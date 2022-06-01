@@ -235,7 +235,7 @@ class EcovacsAPI {
   getPortalPath(loginPath) {
     let portalPath = constants.AUTH_GL_API;
     if (loginPath === constants.USER_GETAUTHCODE_PATH) {
-      portalPath = constants.AUTH_GL_OPENAPI + '/' + constants.GLOBAL_GETAUTHCODE_PATH;
+      portalPath = constants.AUTH_GL_OPENAPI;
     }
     portalPath = tools.formatString(portalPath, {domain: this.authDomain});
     if (this.country === 'CN') {
@@ -324,7 +324,7 @@ class EcovacsAPI {
    */
   getConfigProducts() {
     return new Promise((resolve, reject) => {
-      this.callPortalApi(constants.PIM_PRODUCT_PATH + '/getConfigProducts', 'GetConfigProducts', {
+      this.callPortalApi('pim/product/getConfigProducts', 'GetConfigProducts', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -370,7 +370,7 @@ class EcovacsAPI {
    */
   async devices() {
     const deviceList = await this.getDevices(constants.USER_API_PATH, 'GetDeviceList');
-    const globalDeviceList = await this.getDevices(constants.APPSVR_APP_PATH, 'GetGlobalDeviceList');
+    const globalDeviceList = await this.getDevices('appsvr/app.do', 'GetGlobalDeviceList');
     return this.mergeDeviceLists(deviceList, globalDeviceList);
   }
 
