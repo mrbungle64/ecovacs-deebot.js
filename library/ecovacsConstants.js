@@ -17,7 +17,6 @@ exports.AUTH_GETAUTH_SECRET_YD = '304a71592690995b2bb304e66b5ddee6';
 exports.AUTH_GETAUTH_AUTH_APPKEY_YD = '1581923437995';
 
 exports.GLOBAL_GETAUTHCODE_PATH = 'global/auth/getAuthCode';
-exports.GLOBAL_GETAUTHCODE_PATH_YD = 'agreement/getUserAcceptInfo';
 
 exports.REALM = 'ecouser.net';
 exports.PORTAL_ECOUSER_API = 'https://portal-{continent}.ecouser.net/api';

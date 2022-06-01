@@ -190,7 +190,7 @@ class EcovacsAPI {
     let searchParams;
     params['authTimespan'] = Date.now();
     if (loginPath === constants.USER_GETAUTHCODE_PATH) {
-        params['bizType'] = 'ECOVACS_IOT';
+      params['bizType'] = 'ECOVACS_IOT';
       params['deviceId'] = this.deviceId;
       portalUrl = new url.URL(tools.formatString(portalPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));
@@ -235,21 +235,13 @@ class EcovacsAPI {
   getPortalPath(loginPath) {
     let portalPath = constants.AUTH_GL_API;
     if (loginPath === constants.USER_GETAUTHCODE_PATH) {
-      portalPath = constants.AUTH_GL_OPENAPI + '/' + this.getGlobalGetAuthcodePath();
+      portalPath = constants.AUTH_GL_OPENAPI + '/' + constants.GLOBAL_GETAUTHCODE_PATH;
     }
     portalPath = tools.formatString(portalPath, {domain: this.authDomain});
     if (this.country === 'CN') {
       portalPath = portalPath.replace('.com','.cn');
     }
     return portalPath;
-  }
-
-  getGlobalGetAuthcodePath() {
-    let globalGetAuthcodePath = constants.GLOBAL_GETAUTHCODE_PATH;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      globalGetAuthcodePath = constants.GLOBAL_GETAUTHCODE_PATH_YD;
-    }
-    return globalGetAuthcodePath;
   }
 
   /**

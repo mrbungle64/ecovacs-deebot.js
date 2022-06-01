@@ -11,7 +11,6 @@ export var AUTH_GETAUTH_AUTH_APPKEY: string;
 export var AUTH_GETAUTH_SECRET_YD: string;
 export var AUTH_GETAUTH_AUTH_APPKEY_YD: string;
 export var GLOBAL_GETAUTHCODE_PATH: string;
-export var GLOBAL_GETAUTHCODE_PATH_YD: string;
 export var REALM: string;
 export var PORTAL_ECOUSER_API: string;
 export var PORTAL_ECOUSER_API_CN: string;

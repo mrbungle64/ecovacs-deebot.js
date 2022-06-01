@@ -116,7 +116,6 @@ declare class EcovacsAPI {
      * @returns {string} the portal path
      */
     getPortalPath(loginPath: string): string;
-    getGlobalGetAuthcodePath(): string;
     /**
      * @param {string} api - the API path
      * @param {string} func - the API function to be called
