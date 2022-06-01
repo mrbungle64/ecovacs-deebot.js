@@ -423,13 +423,13 @@ class GetSleepStatus extends VacBotCommand {
 
 class GetCleanLogs extends VacBotCommand {
     constructor(count = 3) {
-        super('GetCleanLogs', {'count': count}, constants.LG_LOG_PATH);
+        super('GetCleanLogs', {'count': count}, constants.CLEANLOGS_PATH);
     }
 }
 
 class GetLastCleanLog extends VacBotCommand {
     constructor() {
-        super('GetLastCleanLog', {}, constants.LG_LOG_PATH);
+        super('GetLastCleanLog', {}, constants.CLEANLOGS_PATH);
     }
 }
 

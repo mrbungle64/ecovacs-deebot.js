@@ -228,7 +228,7 @@ class EcovacsMQTT extends Ecovacs {
     getApiPath(command) {
         let api = constants.IOT_DEVMANAGER_PATH; // non 950 type models
         if (command.name === 'GetCleanLogs') {
-            api = constants.LG_LOG_PATH; // Cleaning log for non 950 type models (MQTT/XML)
+            api = constants.CLEANLOGS_PATH; // Cleaning log for non 950 type models (MQTT/XML)
         } else if (command.api) {
             api = command.api; // 950 type models
         }
