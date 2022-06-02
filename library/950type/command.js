@@ -2,7 +2,7 @@
 
 const tools = require('../tools');
 const constants_type = require('./ecovacsDictionary');
-const constants = require('../ecovacsConstants');
+const constants = require('../constants');
 
 const MAPINFOTYPE_TO_ECOVACS = {
     "outline": "ol",

@@ -705,4 +705,4 @@ export var KnownDevices: {
         map_image_supported: boolean;
     };
 };
-//# sourceMappingURL=deebotModels.d.ts.map
+//# sourceMappingURL=models.d.ts.map

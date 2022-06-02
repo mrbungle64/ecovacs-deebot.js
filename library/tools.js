@@ -1,6 +1,6 @@
 'use strict';
 
-const deebotModels = require('./deebotModels');
+const deebotModels = require('./models');
 
 function formatString(string) {
     if (arguments.length === 0) {

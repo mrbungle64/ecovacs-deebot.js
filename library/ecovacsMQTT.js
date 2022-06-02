@@ -2,7 +2,7 @@
 
 const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
-const constants = require('./ecovacsConstants');
+const constants = require('./constants');
 const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {

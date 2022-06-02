@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events');
 const tools = require('./tools');
-const constants = require('./ecovacsConstants');
+const constants = require('./constants');
 const {errorCodes} = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {

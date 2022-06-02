@@ -18,4 +18,4 @@ export var AUTH_USERLOGIN_SECRET_YD: string;
 export var AUTH_USERLOGIN_AUTH_APPKEY_YD: string;
 export var AUTH_GETAUTH_SECRET_YD: string;
 export var AUTH_GETAUTH_AUTH_APPKEY_YD: string;
-//# sourceMappingURL=ecovacsConstants.d.ts.map
+//# sourceMappingURL=constants.d.ts.map

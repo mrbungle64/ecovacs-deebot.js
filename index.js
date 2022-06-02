@@ -4,7 +4,7 @@ const url = require('url');
 const axios = require('axios').default;
 const crypto = require('crypto');
 const fs = require('fs');
-const constants = require('./library/ecovacsConstants');
+const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
 
