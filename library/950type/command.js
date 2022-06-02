@@ -1,7 +1,7 @@
 'use strict';
 
 const tools = require('../tools');
-const constants_type = require('./ecovacsDictionary');
+const constants_type = require('./dictionary');
 const constants = require('../constants');
 
 const MAPINFOTYPE_TO_ECOVACS = {

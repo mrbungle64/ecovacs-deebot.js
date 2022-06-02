@@ -5,7 +5,7 @@ const VacBot = require('../vacBot');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapTemplate');
-const dictionary = require('./ecovacsDictionary');
+const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 
 /**
