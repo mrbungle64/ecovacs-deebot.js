@@ -290,9 +290,15 @@ class EcovacsAPI {
    */
   callUserApiLoginByItToken() {
     let org = 'ECOWW';
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      org = 'ECOYDWW';
+    }
     let country = this.country;
     if (this.country === 'CN') {
       org = 'ECOCN';
+      if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+        org = 'ECOYDCN';
+      }
       country = 'Chinese';
     }
     return this.callPortalApi(constants.USER_API_PATH, 'loginByItToken', {
