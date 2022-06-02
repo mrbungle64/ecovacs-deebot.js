@@ -64,13 +64,13 @@ class EcovacsAPI {
       'password': passwordHash
     });
     this.uid = result.uid;
-    this.login_access_token = result.accessToken;
+    const loginAccessToken = result.accessToken;
 
     result = await this.callUserAuthApi(constants.USER_GETAUTHCODE_PATH, {
       'uid': this.uid,
-      'accessToken': this.login_access_token
+      'accessToken': loginAccessToken
     });
-    this.auth_code = result['authCode'];
+    this.authCode = result['authCode'];
 
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
@@ -304,7 +304,7 @@ class EcovacsAPI {
     return this.callPortalApi(constants.USER_API_PATH, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
       'userId': this.uid,
-      'token': this.auth_code,
+      'token': this.authCode,
       'realm': constants.REALM,
       'resource': this.resource,
       'org': org,

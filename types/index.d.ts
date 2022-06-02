@@ -74,8 +74,7 @@ declare class EcovacsAPI {
      */
     connect(accountId: string, passwordHash: string): Promise<string>;
     uid: any;
-    login_access_token: any;
-    auth_code: any;
+    authCode: any;
     user_access_token: any;
     /**
      * Get the parameters for the user login
