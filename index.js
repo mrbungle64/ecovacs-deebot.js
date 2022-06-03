@@ -113,7 +113,9 @@ class EcovacsAPI {
    */
   getAuthParams(params) {
     let authSignParams = params;
-    authSignParams['openId'] = 'global';
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+      authSignParams['openId'] = 'global';
+    }
 
     let authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY;
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
@@ -162,9 +164,9 @@ class EcovacsAPI {
    */
   getMetaObject() {
     let appCode = 'global_e';
-    let appVersion = '1.6.3';
+    let appVersion = '2.2.3';
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      appCode = 'yd_' + appCode;
+      appCode = 'yd_global_e';
       appVersion = '1.3.0';
     }
     return {
