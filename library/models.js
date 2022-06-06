@@ -589,18 +589,7 @@ exports.KnownDevices = {
     },
     "aaxesz": {
         "name": "yeedi vac 2 pro",
-        "950type": true,
-        "950type_V2": false,
-        "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "single_room": false,
-        "auto_empty_station": true,
-        "clean_speed": true,
-        "map_image_supported": true
+        "deviceClassLink": "mnx7f4"
     },
     "04z443": {
         "name": "yeedi vac max",
@@ -649,18 +638,7 @@ exports.KnownDevices = {
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "unit_care_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "single_room": false,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": true
+        "deviceClassLink": "vthpeg"
     },
     "9t30w8": {
         "name": "yeedi vac 2",
@@ -694,17 +672,6 @@ exports.KnownDevices = {
     },
     "09m4bu": {
         "name": "K650",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": false,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": true,
-        "voice_report": false,
-        "single_room": false,
-        "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false
+        "deviceClassLink": "3ab24g"
     }
 };
