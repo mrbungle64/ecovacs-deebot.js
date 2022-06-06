@@ -169,6 +169,7 @@ class EcovacsAPI {
       appCode = 'yd_global_e';
       appVersion = '1.3.0';
     }
+    // deviceType 1 = Android
     return {
       'country': this.country,
       'lang': 'EN',
@@ -192,7 +193,7 @@ class EcovacsAPI {
     let searchParams;
     params['authTimespan'] = Date.now();
     if (loginPath === constants.USER_GETAUTHCODE_PATH) {
-      params['bizType'] = 'ECOVACS_IOT';
+      params['bizType'] = '';
       params['deviceId'] = this.deviceId;
       portalUrl = new url.URL(tools.formatString(portalPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));
@@ -463,7 +464,7 @@ class EcovacsAPI {
       tools.envLog('vacBot_non950type identified');
       vacBotClass = require('./library/non950type/vacBot');
     }
-    return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country);
+    return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
   }
 
   /**

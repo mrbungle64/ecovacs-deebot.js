@@ -114,7 +114,11 @@ class EcovacsMQTT extends Ecovacs {
         }
         let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, {continent: this.continent});
         if (this.bot.is950type()) {
-            portalUrl = portalUrl + "?cv=1.67.3&t=a&av=1.3.1";
+            if (this.bot.authDomain === constants.AUTH_DOMAIN_YD) {
+                portalUrl = portalUrl + "?cv=1.94.76&t=a&av=1.3.0"; // yeedi
+            } else {
+                portalUrl = portalUrl + "?cv=1.94.78&t=a&av=2.2.4"; // Ecovacs
+            }
             if (apiPath === constants.IOT_DEVMANAGER_PATH) {
                 portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
             }

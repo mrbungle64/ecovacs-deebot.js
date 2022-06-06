@@ -23,8 +23,8 @@ class VacBot_950type extends VacBot {
      * @param {string} [country='DE'] - the country where the Ecovacs account is registered
      * @param {string} [serverAddress] - the server address of the MQTT server
      */
-    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
-        super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);
+    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
+        super(user, hostname, resource, secret, vacuum, continent, country, serverAddress, authDomain);
 
         this.breakPoint = null;
         this.block = null;
