@@ -635,7 +635,7 @@ exports.KnownDevices = {
     "vthpeg": {
         "name": "yeedi mop station",
         "950type": true,
-        "950type_V2": false,
+        "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
         "spot_area": true,
@@ -649,18 +649,18 @@ exports.KnownDevices = {
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": false,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "spot_area": true,
+        "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "9t30w8": {
         "name": "yeedi vac 2",
