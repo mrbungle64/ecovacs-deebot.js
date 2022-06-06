@@ -636,15 +636,15 @@ exports.KnownDevices = {
         "name": "yeedi mop station",
         "950type": true,
         "950type_V2": false,
-        "main_brush": false,
-        "unit_care_info": false,
+        "main_brush": true,
+        "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
         "single_room": false,
         "auto_empty_station": false,
-        "clean_speed": false,
+        "clean_speed": true,
         "map_image_supported": true
     },
     "zwvyi2": {
