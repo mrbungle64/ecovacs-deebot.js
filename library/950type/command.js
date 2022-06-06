@@ -612,6 +612,30 @@ class GetCleanPreference extends VacBotCommand {
     }
 }
 
+// TODO: Implement response
+class GetRecognization extends VacBotCommand {
+    constructor() {
+        super('getRecognization');
+    }
+}
+
+// TODO: Implement response
+class GetMapState extends VacBotCommand {
+    constructor() {
+        super('getMapState');
+    }
+}
+
+// TODO: Implement response
+class GetAIMap extends VacBotCommand {
+    constructor() {
+        super('getAIMap', {
+            'pointCount': 1,
+            'pointStart': 0
+        });
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -626,6 +650,7 @@ module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetAdvancedMode = GetAdvancedMode;
+module.exports.GetAIMap = GetAIMap;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetCarpetPressure = GetCarpetPressure;
@@ -647,11 +672,13 @@ module.exports.GetMapImage_V2 = GetMapImage_V2;
 module.exports.GetMapSet = GetMapSet;
 module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapSpotAreas = GetMapSpotAreas;
+module.exports.GetMapState = GetMapState;
 module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
 module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
 module.exports.GetMaps = GetMaps;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
+module.exports.GetRecognization = GetRecognization;
 module.exports.GetSchedule = GetSchedule;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetTrueDetect = GetTrueDetect;

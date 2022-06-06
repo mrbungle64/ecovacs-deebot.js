@@ -1041,6 +1041,15 @@ class VacBot_950type extends VacBot {
             case "DisableCleanPreference".toLowerCase():
                 this.sendCommand(new VacBotCommand.SetCleanPreference(0));
                 break;
+            case "GetRecognization".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetRecognization());
+                break;
+            case "GetMapState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMapState());
+                break;
+            case "GetAIMap".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAIMap());
+                break;
         }
     }
 }

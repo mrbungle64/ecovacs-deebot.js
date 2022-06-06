@@ -421,12 +421,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('Schedule', this.vacBot.schedule);
                 }
                 break;
-            case 'Clean'.toLowerCase(): {
+            case 'AIMap':
+            case 'Clean'.toLowerCase():
+            case 'MapState':
+            case 'Recognization':
                 if (payload) {
-                    tools.envLog(`[EcovacsMQTT_JSON] Payload for Clean message: ${JSON.stringify(payload)}`);
+                    tools.envLog(`[EcovacsMQTT_JSON] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
                 break;
-            }
             default:
                 tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
                 break;

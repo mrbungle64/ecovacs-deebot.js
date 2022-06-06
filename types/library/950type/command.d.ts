@@ -38,6 +38,9 @@ export class EnableDoNotDisturb extends SetDoNotDisturb {
 export class GetAdvancedMode extends VacBotCommand {
     constructor();
 }
+export class GetAIMap extends VacBotCommand {
+    constructor();
+}
 export class GetAutoEmpty extends VacBotCommand {
     constructor();
 }
@@ -101,6 +104,9 @@ export class GetMapSpotAreaInfo extends GetMapSubSet {
 export class GetMapSpotAreas extends GetMapSet {
     constructor(mapID: any);
 }
+export class GetMapState extends VacBotCommand {
+    constructor();
+}
 export class GetMapVirtualBoundaries extends GetMapSet {
 }
 export class GetMapVirtualBoundaryInfo extends GetMapSubSet {
@@ -112,6 +118,9 @@ export class GetNetInfo extends VacBotCommand {
     constructor();
 }
 export class GetPosition extends VacBotCommand {
+    constructor();
+}
+export class GetRecognization extends VacBotCommand {
     constructor();
 }
 export class GetSchedule extends VacBotCommand {
