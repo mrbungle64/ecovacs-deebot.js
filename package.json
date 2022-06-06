@@ -47,6 +47,6 @@
     "mocha": "^9.2.2",
     "node-machine-id": "^1.1.12",
     "nyc": "^15.1.0",
-    "typescript": "~4.6.4"
+    "typescript": "~4.7.3"
   }
 }
