@@ -11,7 +11,6 @@ exports.SupportedDevices = {
         "custom_area": true,
         "mopping_system": false,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
@@ -26,7 +25,6 @@ exports.SupportedDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": true
@@ -45,7 +43,6 @@ exports.SupportedDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
@@ -60,7 +57,6 @@ exports.SupportedDevices = {
         "custom_area": false,
         "mopping_system": false,
         "voice_report": false,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": false
@@ -78,7 +74,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -97,7 +92,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -112,7 +106,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": false,
-        'single_room': true,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -127,7 +120,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": false,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -154,7 +146,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -169,7 +160,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -184,7 +174,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -199,7 +188,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
@@ -214,7 +202,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": true,
         "clean_speed": true,
         "map_image_supported": true
@@ -321,7 +308,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
@@ -416,7 +402,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": false,
         "voice_report": false,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -439,7 +424,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -510,7 +494,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": false,
         "voice_report": false,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -537,7 +520,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": false,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": false
@@ -552,7 +534,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": false,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": true
@@ -567,7 +548,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": false,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": false
@@ -582,7 +562,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": true,
         "clean_speed": false,
         "map_image_supported": false
@@ -601,7 +580,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": true
@@ -616,7 +594,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": false,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": false
@@ -631,7 +608,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
@@ -650,7 +626,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": false,
         "voice_report": true,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": false
@@ -665,7 +640,6 @@ exports.KnownDevices = {
         "custom_area": false,
         "mopping_system": true,
         "voice_report": false,
-        "single_room": false,
         "auto_empty_station": false,
         "clean_speed": false,
         "map_image_supported": false
