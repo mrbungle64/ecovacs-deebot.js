@@ -689,6 +689,9 @@ class VacBot {
      * @returns {boolean}
      */
     is950type() {
+        if (this.is950type_V2()) {
+            return true;
+        }
         const defaultValue = this.useMqttProtocol();
         return this.getDeviceProperty('950type', defaultValue);
     }
