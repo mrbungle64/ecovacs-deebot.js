@@ -58,6 +58,14 @@ class VacBot_non950type extends VacBot {
         tools.envLog("[VacBot] *** clean last = %s seconds" + payload.attrs["last"]);
       }
 
+      if ((payload.attrs.hasOwnProperty('t')) && (payload.attrs.hasOwnProperty('a'))) {
+        this.currentStats = {
+          'cleanedArea': payload.attrs['a'],
+          'cleanedSeconds': payload.attrs['t'],
+          'cleanType': type
+        };
+      }
+
       this.currentSpotAreas = '';
       if (this.cleanReport === 'spot_area') {
         if (payload.attrs.hasOwnProperty('mid')) {
