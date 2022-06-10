@@ -9,7 +9,6 @@ export var SupportedDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -24,7 +23,6 @@ export var SupportedDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -43,7 +41,6 @@ export var SupportedDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -58,7 +55,6 @@ export var SupportedDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -75,7 +71,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -94,7 +89,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -109,7 +103,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -124,7 +117,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -151,7 +143,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -166,7 +157,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -181,7 +171,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -196,7 +185,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -211,7 +199,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -318,7 +305,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -413,7 +399,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -436,7 +421,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -507,7 +491,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -534,7 +517,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -549,7 +531,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -564,7 +545,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -579,25 +559,13 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
     };
     aaxesz: {
         name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
+        deviceClassLink: string;
     };
     "04z443": {
         name: string;
@@ -609,7 +577,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -624,7 +591,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -639,25 +605,13 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
     };
     zwvyi2: {
         name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
+        deviceClassLink: string;
     };
     "9t30w8": {
         name: string;
@@ -669,7 +623,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
@@ -684,25 +637,13 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        single_room: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
     };
     "09m4bu": {
         name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        single_room: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
+        deviceClassLink: string;
     };
 };
 //# sourceMappingURL=models.d.ts.map
