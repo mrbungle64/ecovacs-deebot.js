@@ -11,11 +11,12 @@ const accountId = settingsFile.ACCOUNT_ID;
 const password = settingsFile.PASSWORD;
 const countryCode = settingsFile.COUNTRY_CODE;
 const deviceNumber = settingsFile.DEVICE_NUMBER;
+const domain = settingsFile.AUTH_DOMAIN ? settingsFile.AUTH_DOMAIN : '';
 
 const passwordHash = EcoVacsAPI.md5(password);
 const deviceId = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
 
-const api = new EcoVacsAPI(deviceId, countryCode);
+const api = new EcoVacsAPI(deviceId, countryCode, '', domain);
 
 let mapData = null;
 let mapSpotAreaName = [];

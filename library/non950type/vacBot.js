@@ -5,7 +5,7 @@ const VacBot = require('../vacBot');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapTemplate');
-const dictionary = require('./ecovacsDictionary');
+const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 
 /**
@@ -23,8 +23,8 @@ class VacBot_non950type extends VacBot {
    * @param {string} [country='DE'] - the country where the Ecovacs account is registered
    * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
    */
-  constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
-    super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);
+  constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
+    super(user, hostname, resource, secret, vacuum, continent, country, serverAddress, authDomain);
 
     this.dustcaseInfo = null;
     this.mapPiecePacketsCrcArray = null;
@@ -56,6 +56,14 @@ class VacBot_non950type extends VacBot {
 
       if (payload.attrs.hasOwnProperty('last')) {
         tools.envLog("[VacBot] *** clean last = %s seconds" + payload.attrs["last"]);
+      }
+
+      if ((payload.attrs.hasOwnProperty('t')) && (payload.attrs.hasOwnProperty('a'))) {
+        this.currentStats = {
+          'cleanedArea': payload.attrs['a'],
+          'cleanedSeconds': payload.attrs['t'],
+          'cleanType': type
+        };
       }
 
       this.currentSpotAreas = '';

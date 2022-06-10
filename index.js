@@ -4,7 +4,7 @@ const url = require('url');
 const axios = require('axios').default;
 const crypto = require('crypto');
 const fs = require('fs');
-const constants = require('./library/ecovacsConstants');
+const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
 
@@ -20,20 +20,23 @@ const packageInfo = require('./package.json');
  * @property @private {string} country - the country code of the country where the Ecovacs account is registered
  * @property @private {string} continent - the continent where the Ecovacs account is registered
  * @property @private {string} deviceId - the device ID of the bot
+ * @property @private {string} authDomain - the domain for the authentication API
  */
 class EcovacsAPI {
   /**
    * @param {string} deviceId - the device ID of the bot
    * @param {string} country - the country code of the country where the Ecovacs account is registered
-   * @param {string} [continent=''] - the continent code (deprecated)
+   * @param {string} [continent=''] - the continent code
+   * @param {string} [authDomain='ecovacs.com'] - the domain for the authentication API
    */
-  constructor(deviceId, country, continent = '') {
+  constructor(deviceId, country, continent = '', authDomain = '') {
     tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
 
-    this.resource = deviceId.substring(0, 8);
-    this.country = country.toUpperCase();
-    this.continent = continent !== '' ? continent : this.getContinent();
     this.deviceId = deviceId;
+    this.country = country.toUpperCase();
+    this.continent = continent ? continent : this.getContinent();
+    this.authDomain = authDomain ? authDomain : constants.AUTH_DOMAIN;
+    this.resource = deviceId.substring(0, 8);
   }
 
   /**
@@ -61,13 +64,13 @@ class EcovacsAPI {
       'password': passwordHash
     });
     this.uid = result.uid;
-    this.login_access_token = result.accessToken;
+    const loginAccessToken = result.accessToken;
 
-    result = await this.callUserAuthApi(constants.GETAUTHCODE_PATH, {
+    result = await this.callUserAuthApi(constants.USER_GETAUTHCODE_PATH, {
       'uid': this.uid,
-      'accessToken': this.login_access_token
+      'accessToken': loginAccessToken
     });
-    this.auth_code = result['authCode'];
+    this.authCode = result['authCode'];
 
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
@@ -84,26 +87,23 @@ class EcovacsAPI {
   getUserLoginParams(params) {
     params['authTimeZone'] = 'GMT-8';
 
-    let sign_on = JSON.parse(JSON.stringify(this.getMetaObject()));
+    let authSignParams = JSON.parse(JSON.stringify(this.getMetaObject()));
     for (let key in params) {
       if (params.hasOwnProperty(key)) {
-        sign_on[key] = params[key];
+        authSignParams[key] = params[key];
       }
     }
 
-    let sign_on_text = constants.CLIENT_KEY;
-    let keys = Object.keys(sign_on);
-    keys.sort();
-    for (let i = 0; i < keys.length; i++) {
-      let k = keys[i];
-      sign_on_text += k + "=" + sign_on[k];
+    let authAppkey = constants.AUTH_USERLOGIN_AUTH_APPKEY;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authAppkey = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
     }
-    sign_on_text += constants.SECRET;
+    let authSecret = constants.AUTH_USERLOGIN_SECRET;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authSecret = constants.AUTH_USERLOGIN_SECRET_YD;
+    }
 
-    params['authAppkey'] = constants.CLIENT_KEY;
-    params['authSign'] = EcovacsAPI.md5(sign_on_text);
-
-    return EcovacsAPI.paramsToQueryList(params);
+    return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
   }
 
   /**
@@ -112,22 +112,50 @@ class EcovacsAPI {
    * @returns {string} the parameters
    */
   getAuthParams(params) {
-    let paramsSignIn = params;
-    paramsSignIn['openId'] = 'global';
+    let authSignParams = params;
+    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
+      authSignParams['openId'] = 'global';
+    }
 
-    let sign_on_text = constants.AUTH_CLIENT_KEY;
-    let keys = Object.keys(paramsSignIn);
+    let authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
+    }
+    let authSecret = constants.AUTH_GETAUTH_SECRET;
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      authSecret += constants.AUTH_GETAUTH_SECRET_YD;
+    }
+
+    return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
+  }
+
+  /**
+   * Used to generate the URL search parameters for the request
+   * @param params - the basic set of parameters for the request
+   * @param authSignParams - additional set of parameters for the request
+   * @param authAppkey - The appkey for the request
+   * @param authSecret - The secret key for the request
+   * @returns An array of query strings
+   */
+  buildQueryList(params, authSignParams, authAppkey, authSecret) {
+    let authSignText = this.buildAuthSignText(authAppkey, authSignParams, authSecret);
+
+    params['authAppkey'] = authAppkey;
+    params['authSign'] = EcovacsAPI.md5(authSignText);
+
+    return tools.paramsToQueryList(params);
+  }
+
+  buildAuthSignText(authAppkey, authSignParams, authSecret) {
+    let authSignText = authAppkey;
+    let keys = Object.keys(authSignParams);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
       let k = keys[i];
-      sign_on_text += k + "=" + paramsSignIn[k];
+      authSignText += k + "=" + authSignParams[k];
     }
-    sign_on_text += constants.AUTH_CLIENT_SECRET;
-
-    params['authAppkey'] = constants.AUTH_CLIENT_KEY;
-    params['authSign'] = EcovacsAPI.md5(sign_on_text);
-
-    return EcovacsAPI.paramsToQueryList(params);
+    authSignText += authSecret;
+    return authSignText;
   }
 
   /**
@@ -135,12 +163,19 @@ class EcovacsAPI {
    * @returns {Object}
    */
   getMetaObject() {
+    let appCode = 'global_e';
+    let appVersion = '2.2.3';
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      appCode = 'yd_global_e';
+      appVersion = '1.3.0';
+    }
+    // deviceType 1 = Android
     return {
       'country': this.country,
       'lang': 'EN',
       'deviceId': this.deviceId,
-      'appCode': 'global_e',
-      'appVersion': '1.6.3',
+      'appCode': appCode,
+      'appVersion': appVersion,
       'channel': 'google_play',
       'deviceType': '1'
     };
@@ -157,8 +192,8 @@ class EcovacsAPI {
     let portalUrl;
     let searchParams;
     params['authTimespan'] = Date.now();
-    if (loginPath === constants.GETAUTHCODE_PATH) {
-      params['bizType'] = 'ECOVACS_IOT';
+    if (loginPath === constants.USER_GETAUTHCODE_PATH) {
+      params['bizType'] = '';
       params['deviceId'] = this.deviceId;
       portalUrl = new url.URL(tools.formatString(portalPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getAuthParams(params));
@@ -201,10 +236,11 @@ class EcovacsAPI {
    * @returns {string} the portal path
    */
   getPortalPath(loginPath) {
-    let portalPath = constants.MAIN_URL_FORMAT;
-    if (loginPath === constants.GETAUTHCODE_PATH) {
-      portalPath = constants.PORTAL_GLOBAL_AUTHCODE;
+    let portalPath = constants.AUTH_GL_API;
+    if (loginPath === constants.USER_GETAUTHCODE_PATH) {
+      portalPath = constants.AUTH_GL_OPENAPI;
     }
+    portalPath = tools.formatString(portalPath, {domain: this.authDomain});
     if (this.country === 'CN') {
       portalPath = portalPath.replace('.com','.cn');
     }
@@ -228,11 +264,9 @@ class EcovacsAPI {
       }
     }
 
-    tools.envLog(`[EcoVacsAPI] continent ${this.continent}`);
-
-    let portalUrlFormat = constants.PORTAL_URL_FORMAT;
+    let portalUrlFormat = constants.PORTAL_ECOUSER_API;
     if (this.country === 'CN') {
-      portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
+      portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
     }
     let portalUrl = tools.formatString(portalUrlFormat + "/" + api, {continent: this.continent});
     let headers = {
@@ -259,15 +293,21 @@ class EcovacsAPI {
    */
   callUserApiLoginByItToken() {
     let org = 'ECOWW';
+    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+      org = 'ECOYDWW';
+    }
     let country = this.country;
     if (this.country === 'CN') {
       org = 'ECOCN';
+      if (this.authDomain === constants.AUTH_DOMAIN_YD) {
+        org = 'ECOYDCN';
+      }
       country = 'Chinese';
     }
-    return this.callPortalApi(constants.USERSAPI, 'loginByItToken', {
+    return this.callPortalApi(constants.USER_API_PATH, 'loginByItToken', {
       'edition': 'ECOGLOBLE',
       'userId': this.uid,
-      'token': this.auth_code,
+      'token': this.authCode,
       'realm': constants.REALM,
       'resource': this.resource,
       'org': org,
@@ -281,7 +321,7 @@ class EcovacsAPI {
    * @returns {string} the login path is being returned.
    */
   getLoginPath() {
-    let loginPath = constants.LOGIN_PATH;
+    let loginPath = constants.USER_LOGIN_PATH;
     if (this.country === 'CN') {
       loginPath = `${loginPath}CheckMobile`;
     }
@@ -293,7 +333,7 @@ class EcovacsAPI {
    */
   getConfigProducts() {
     return new Promise((resolve, reject) => {
-      this.callPortalApi(constants.PRODUCTAPI + '/getConfigProducts', 'GetConfigProducts', {
+      this.callPortalApi('pim/product/getConfigProducts', 'GetConfigProducts', {
         'userid': this.uid,
         'auth': {
           'with': 'users',
@@ -315,7 +355,7 @@ class EcovacsAPI {
    * @param {string} func - the API function to be called
    * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
-  async getDevices(api = constants.USERSAPI, func = 'GetDeviceList') {
+  async getDevices(api = constants.USER_API_PATH, func = 'GetDeviceList') {
     return new Promise((resolve, reject) => {
       this.callPortalApi(api, func, {
         'userid': this.uid,
@@ -338,8 +378,8 @@ class EcovacsAPI {
    * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
   async devices() {
-    const deviceList = await this.getDevices(constants.USERSAPI, 'GetDeviceList');
-    const globalDeviceList = await this.getDevices(constants.APPAPI, 'GetGlobalDeviceList');
+    const deviceList = await this.getDevices(constants.USER_API_PATH, 'GetDeviceList');
+    const globalDeviceList = await this.getDevices('appsvr/app.do', 'GetGlobalDeviceList');
     return this.mergeDeviceLists(deviceList, globalDeviceList);
   }
 
@@ -424,7 +464,7 @@ class EcovacsAPI {
       tools.envLog('vacBot_non950type identified');
       vacBotClass = require('./library/non950type/vacBot');
     }
-    return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country);
+    return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
   }
 
   /**
@@ -515,21 +555,6 @@ class EcovacsAPI {
       key: EcovacsAPI.PUBLIC_KEY,
       padding: crypto.constants.RSA_PKCS1_PADDING
     }, Buffer.from(text)).toString('base64');
-  }
-
-  /**
-   * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-   * @param {Object} params - the parameters to be encoded
-   * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
-   */
-  static paramsToQueryList(params) {
-    let query = [];
-    for (let key in params) {
-      if (params.hasOwnProperty(key)) {
-        query.push(key + "=" + encodeURIComponent(params[key]));
-      }
-    }
-    return query.join('&');
   }
 }
 

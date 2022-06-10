@@ -86,4 +86,10 @@ export function isCanvasModuleAvailable(): boolean;
  */
 export function createErrorDescription(message: string): string;
 export function formatString(string: any, ...args: any[]): any;
+/**
+ * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
+ * @param {Object} params - the parameters to be encoded
+ * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
+ */
+export function paramsToQueryList(params: any): string;
 //# sourceMappingURL=tools.d.ts.map

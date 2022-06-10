@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events');
 const tools = require('./tools');
-const constants = require('./ecovacsConstants');
+const constants = require('./constants');
 const {errorCodes} = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {
@@ -99,6 +99,10 @@ class Ecovacs extends EventEmitter {
                 this.emit('CurrentCustomAreaValues', this.bot.currentCustomAreaValues);
                 if (this.bot.currentCustomAreaValues) {
                     this.emit('LastUsedAreaValues', this.bot.currentCustomAreaValues);
+                }
+                if (this.bot.currentStats) {
+                    this.emit('CurrentStats', this.bot.currentStats);
+                    this.bot.currentStats = null;
                 }
                 this.emitMoppingSystemReport();
                 break;
@@ -317,9 +321,9 @@ class Ecovacs extends EventEmitter {
      */
     getEcovacsDictionary() {
         if (this.bot.is950type()) {
-            return require('./950type/ecovacsDictionary');
+            return require('./950type/dictionary');
         } else {
-            return require('./non950type/ecovacsDictionary');
+            return require('./non950type/dictionary');
         }
     }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const tools = require('../tools');
-const constants_type = require('./ecovacsDictionary');
+const constants_type = require('./dictionary');
 const Element = require('ltx').Element;
 
 class VacBotCommand {

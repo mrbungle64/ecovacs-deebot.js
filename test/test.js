@@ -5,7 +5,7 @@ const axios = require('axios');
 
 const ecovacsDeebot = require('../index.js');
 const tools = require('../library/tools.js');
-const constants = require('../library/ecovacsConstants');
+const constants = require('../library/constants');
 const i18n = require('../library/i18n');
 
 describe('API', function () {
@@ -21,7 +21,7 @@ describe('API', function () {
             continents.push(continent);
 
             try {
-              const url = tools.formatString(constants.PORTAL_URL_FORMAT, {"continent": continent});
+              const url = tools.formatString(constants.PORTAL_ECOUSER_API, {"continent": continent});
               await axios.get(url);
             } catch (err) {
               if (err.code === 'ENOTFOUND') {

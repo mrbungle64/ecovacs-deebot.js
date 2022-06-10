@@ -5,6 +5,7 @@
  * @property @private {string} country - the country code of the country where the Ecovacs account is registered
  * @property @private {string} continent - the continent where the Ecovacs account is registered
  * @property @private {string} deviceId - the device ID of the bot
+ * @property @private {string} authDomain - the domain for the authentication API
  */
 declare class EcovacsAPI {
     /**
@@ -55,21 +56,17 @@ declare class EcovacsAPI {
      */
     static encrypt(text: string): string;
     /**
-     * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
-     * @param {Object} params - the parameters to be encoded
-     * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
-     */
-    static paramsToQueryList(params: any): string;
-    /**
      * @param {string} deviceId - the device ID of the bot
      * @param {string} country - the country code of the country where the Ecovacs account is registered
-     * @param {string} [continent=''] - the continent code (deprecated)
+     * @param {string} [continent=''] - the continent code
+     * @param {string} [authDomain='ecovacs.com'] - the domain for the authentication API
      */
-    constructor(deviceId: string, country: string, continent?: string);
-    resource: string;
+    constructor(deviceId: string, country: string, continent?: string, authDomain?: string);
+    deviceId: string;
     country: string;
     continent: string;
-    deviceId: string;
+    authDomain: string;
+    resource: string;
     /**
      * @param {string} accountId - The account ID (Email or Ecovacs ID)
      * @param {string} passwordHash - The password hash
@@ -77,8 +74,7 @@ declare class EcovacsAPI {
      */
     connect(accountId: string, passwordHash: string): Promise<string>;
     uid: any;
-    login_access_token: any;
-    auth_code: any;
+    authCode: any;
     user_access_token: any;
     /**
      * Get the parameters for the user login
@@ -92,6 +88,16 @@ declare class EcovacsAPI {
      * @returns {string} the parameters
      */
     getAuthParams(params: any): string;
+    /**
+     * Used to generate the URL search parameters for the request
+     * @param params - the basic set of parameters for the request
+     * @param authSignParams - additional set of parameters for the request
+     * @param authAppkey - The appkey for the request
+     * @param authSecret - The secret key for the request
+     * @returns An array of query strings
+     */
+    buildQueryList(params: any, authSignParams: any, authAppkey: any, authSecret: any): string;
+    buildAuthSignText(authAppkey: any, authSignParams: any, authSecret: any): any;
     /**
      * Get the meta-object that will be used to make a request to the server
      * @returns {Object}

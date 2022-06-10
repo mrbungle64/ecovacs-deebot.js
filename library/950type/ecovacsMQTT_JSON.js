@@ -2,7 +2,7 @@
 
 const EcovacsMQTT = require('../ecovacsMQTT');
 const tools = require('../tools');
-const constants = require('../ecovacsConstants');
+const constants = require('../constants');
 
 class EcovacsMQTT_JSON extends EcovacsMQTT {
     /**
@@ -67,7 +67,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (messagePayload) {
             if (messagePayload.hasOwnProperty('resp')) {
                 this.handleMessage(command.name, messagePayload['resp'], "response");
-            } else if (command.api === constants.LGLOGAPI) {
+            } else if (command.api === constants.CLEANLOGS_PATH) {
                 this.handleMessage(command.name, messagePayload, "logResponse");
             } else {
                 tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() invalid response");
@@ -421,12 +421,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('Schedule', this.vacBot.schedule);
                 }
                 break;
-            case 'Clean'.toLowerCase(): {
+            case 'AIMap':
+            case 'Clean'.toLowerCase():
+            case 'MapState':
+            case 'Recognization':
                 if (payload) {
-                    tools.envLog(`[EcovacsMQTT_JSON] Payload for Clean message: ${JSON.stringify(payload)}`);
+                    tools.envLog(`[EcovacsMQTT_JSON] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
                 break;
-            }
             default:
                 tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
                 break;

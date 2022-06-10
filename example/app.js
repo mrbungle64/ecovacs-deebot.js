@@ -11,13 +11,14 @@ const accountId = settingsFile.ACCOUNT_ID;
 const password = settingsFile.PASSWORD;
 const countryCode = settingsFile.COUNTRY_CODE;
 const deviceNumber = settingsFile.DEVICE_NUMBER;
+const domain = settingsFile.AUTH_DOMAIN ? settingsFile.AUTH_DOMAIN : '';
 
 // The passwordHash is a md5 hash of your Ecovacs password.
 const passwordHash = EcoVacsAPI.md5(password);
 // You need to provide a device ID uniquely identifying the machine you're using to connect
 const deviceId = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
 
-let api = new EcoVacsAPI(deviceId, countryCode);
+const api = new EcoVacsAPI(deviceId, countryCode, '', domain);
 
 // This logs you in through the HTTP API and retrieves the required
 // access tokens from the server side. This allows you to requests

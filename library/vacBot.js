@@ -19,11 +19,13 @@ class VacBot {
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} continent - the continent where the Ecovacs account is registered
      * @param {string} [country] - the country where the Ecovacs account is registered
-     * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
+     * @param {string} [serverAddress=''] - the server address of the MQTT and XMPP server
+     * @param {string} [authDomain=''] - the domain for authorization
      */
-    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
+    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
 
         this.vacuum = vacuum;
+        this.authDomain = authDomain;
         this.is_ready = false;
 
         this.deviceClass = vacuum['class'];
@@ -687,6 +689,9 @@ class VacBot {
      * @returns {boolean}
      */
     is950type() {
+        if (this.is950type_V2()) {
+            return true;
+        }
         const defaultValue = this.useMqttProtocol();
         return this.getDeviceProperty('950type', defaultValue);
     }

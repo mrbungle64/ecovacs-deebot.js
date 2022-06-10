@@ -30,7 +30,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 * Deebot 900/901
 * Deebot OZMO 930
 * Deebot OZMO 920/950
-* Deebot OZMO T8 AIVI
+* Deebot T8 AIVI (T8 series)
 
 The models listed are those that I have in use myself or which are technically identical to these.
 
@@ -48,9 +48,9 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot U2 series
 * Deebot N8 series
 * Deebot OZMO T5
+* Deebot OZMO T10 Plus
 * Deebot (OZMO) T8 series
 * Deebot T9 series
-* Deebot T10 series
 * Deebot X1 series
 
 The models listed are either already known to work or are technically similar to these models.
@@ -66,6 +66,10 @@ There is of course no claim to full functionality.
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
+
+### 0.8.3 (alpha)
+* Initial support for yeedi devices
+* Added CurrentStats event for XMPP devices
 
 ### 0.8.2
 * Added Deebot T10 series

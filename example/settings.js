@@ -6,4 +6,5 @@ exports.PASSWORD = 'a1b2c3d4';
 // between country codes and continent codes.
 // If it doesn't appear to work try "WW", their world-wide catchall
 exports.COUNTRY_CODE = 'DE';
-exports.DEVICE_NUMBER = 0;
+exports.DEVICE_NUMBER = 0; // Starts at zero = the first device
+exports.AUTH_DOMAIN = ''; // Can be left blank by default

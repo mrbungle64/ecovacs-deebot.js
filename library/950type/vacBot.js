@@ -5,7 +5,7 @@ const VacBot = require('../vacBot');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapTemplate');
-const dictionary = require('./ecovacsDictionary');
+const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 
 /**
@@ -23,8 +23,8 @@ class VacBot_950type extends VacBot {
      * @param {string} [country='DE'] - the country where the Ecovacs account is registered
      * @param {string} [serverAddress] - the server address of the MQTT server
      */
-    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress) {
-        super(user, hostname, resource, secret, vacuum, continent, country, serverAddress);
+    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
+        super(user, hostname, resource, secret, vacuum, continent, country, serverAddress, authDomain);
 
         this.breakPoint = null;
         this.block = null;
@@ -58,8 +58,9 @@ class VacBot_950type extends VacBot {
         this.currentCustomAreaValues = '';
         if (payload['state'] === 'clean') {
             let type = payload['cleanState']['type'];
-            if (typeof payload['cleanState']['content'] === 'object') {
-                type = payload['cleanState']['content']['type'];
+            const content = payload['cleanState']['content'];
+            if (typeof content === 'object') {
+                type = content['type'];
             }
             if (payload['cleanState']['motionState'] === 'working') {
                 this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
@@ -68,12 +69,19 @@ class VacBot_950type extends VacBot {
             }
             if ((type === 'spotArea') || (type === 'customArea')) {
                 let areaValues;
-                if (typeof payload['cleanState']['content'] === "object") {
-                    areaValues = payload['cleanState']['content']['value'];
+                if (typeof content === "object") {
+                    areaValues = content['value'];
                 } else {
-                    areaValues = payload['cleanState']['content'];
+                    areaValues = content;
                 }
                 if (type === 'customArea') {
+                    if (typeof content === 'object') {
+                        const doNotClean = content['donotClean'];
+                        if (doNotClean === 1) {
+                            // Controlled via Video Manager
+                            this.cleanReport = 'setLocation';
+                        }
+                    }
                     this.currentCustomAreaValues = areaValues;
                 }
                 else if (type === 'spotArea') {
@@ -1032,6 +1040,15 @@ class VacBot_950type extends VacBot {
                 break;
             case "DisableCleanPreference".toLowerCase():
                 this.sendCommand(new VacBotCommand.SetCleanPreference(0));
+                break;
+            case "GetRecognization".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetRecognization());
+                break;
+            case "GetMapState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMapState());
+                break;
+            case "GetAIMap".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAIMap());
                 break;
         }
     }

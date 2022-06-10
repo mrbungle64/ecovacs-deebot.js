@@ -2,7 +2,7 @@
 
 const Ecovacs = require('./ecovacs');
 const tools = require('./tools');
-const constants = require('./ecovacsConstants');
+const constants = require('./constants');
 const axios = require("axios").default;
 
 class EcovacsMQTT extends Ecovacs {
@@ -108,14 +108,18 @@ class EcovacsMQTT extends Ecovacs {
      */
     getRequestUrl(command,params) {
         const apiPath = this.getApiPath(command);
-        let portalUrlFormat = constants.PORTAL_URL_FORMAT;
+        let portalUrlFormat = constants.PORTAL_ECOUSER_API;
         if (this.country === 'CN') {
-            portalUrlFormat = constants.PORTAL_URL_FORMAT_CN;
+            portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
         }
         let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, {continent: this.continent});
         if (this.bot.is950type()) {
-            portalUrl = portalUrl + "?cv=1.67.3&t=a&av=1.3.1";
-            if (apiPath === constants.IOTDEVMANAGERAPI) {
+            if (this.bot.authDomain === constants.AUTH_DOMAIN_YD) {
+                portalUrl = portalUrl + "?cv=1.94.76&t=a&av=1.3.0"; // yeedi
+            } else {
+                portalUrl = portalUrl + "?cv=1.94.78&t=a&av=2.2.4"; // Ecovacs
+            }
+            if (apiPath === constants.IOT_DEVMANAGER_PATH) {
                 portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
             }
         }
@@ -226,9 +230,9 @@ class EcovacsMQTT extends Ecovacs {
      * @returns {string} the API path that has to be called
      */
     getApiPath(command) {
-        let api = constants.IOTDEVMANAGERAPI; // non 950 type models
+        let api = constants.IOT_DEVMANAGER_PATH; // non 950 type models
         if (command.name === 'GetCleanLogs') {
-            api = constants.LGLOGAPI; // Cleaning log for non 950 type models (MQTT/XML)
+            api = constants.CLEANLOGS_PATH; // Cleaning log for non 950 type models (MQTT/XML)
         } else if (command.api) {
             api = command.api; // 950 type models
         }
