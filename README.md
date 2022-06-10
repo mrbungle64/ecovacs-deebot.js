@@ -68,7 +68,7 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.8.3 (alpha)
-* Initial support for yeedi devices
+* Initial support for yeedi devices (not working yet)
 * Added CurrentStats event for XMPP devices
 
 ### 0.8.2
