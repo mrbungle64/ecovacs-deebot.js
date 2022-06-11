@@ -13,6 +13,23 @@ declare class VacBot_non950type extends VacBot {
      */
     handleCleanReport(payload: any): void;
     /**
+     * Handle the values for `currentStats`
+     * @param {number} area - number of square meters
+     * @param {number} seconds - number of seconds
+     * @param {string} cleanType - the clean mode type
+     * @param {string} [type=''] - the action type
+     */
+    handleCurrentStatsValues(area: number, seconds: number, cleanType: string, type?: string): void;
+    /**
+     * Handle the payload of the `CleanSt` response/message (Stats)
+     * @param {Object} payload
+     */
+    handleCleanSt(payload: any): void;
+    /**
+     * @param {Object} payload
+     */
+    handleCurrentAreaValues(payload: any): void;
+    /**
      * Handle the payload of the `BatteryInfo` response/message (battery level)
      * @param {Object} payload
      */
@@ -88,11 +105,6 @@ declare class VacBot_non950type extends VacBot {
      * @param {Object} payload
      */
     handleOnOff(payload: any): void;
-    /**
-     * Handle the payload of the `CleanSt` response/message (Stats)
-     * @param {Object} payload
-     */
-    handleCleanSt(payload: any): void;
     /**
      * Handle the payload of the `Sched` response/message
      * @param {Object} payload
