@@ -177,6 +177,9 @@ export class Resume extends VacBotCommand {
 export class SetAdvancedMode extends VacBotCommand {
     constructor(enable?: number);
 }
+export class SetAirDrying extends VacBotCommand {
+    constructor(act?: string);
+}
 export class SetAutoEmpty extends VacBotCommand {
     constructor(enable?: number);
 }

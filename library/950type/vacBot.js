@@ -1033,6 +1033,17 @@ class VacBot_950type extends VacBot {
             case "GetCleanPreference".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetCleanPreference());
                 break;
+            case "SetAirDrying".toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetAirDrying(args[0]));
+                }
+                break;
+            case "AirDryingStart".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetAirDrying('start'));
+                break;
+            case "AirDryingStop".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetAirDrying('stop'));
+                break;
             case "SetCleanPreference".toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetCleanPreference(args[0]));

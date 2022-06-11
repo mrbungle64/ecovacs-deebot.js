@@ -618,6 +618,14 @@ class GetCleanPreference extends VacBotCommand {
     }
 }
 
+class SetAirDrying extends VacBotCommand {
+    constructor(act = 'stop') {
+        super('setAirDring', {
+            'act': act
+        });
+    }
+}
+
 // TODO: Implement response
 class GetRecognization extends VacBotCommand {
     constructor() {
@@ -703,6 +711,7 @@ module.exports.Relocate = Relocate;
 module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.Resume = Resume;
 module.exports.SetAdvancedMode = SetAdvancedMode;
+module.exports.SetAirDrying = SetAirDrying;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanCount = SetCleanCount;
