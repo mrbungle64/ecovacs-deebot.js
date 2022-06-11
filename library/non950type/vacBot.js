@@ -20,8 +20,9 @@ class VacBot_non950type extends VacBot {
    * @param {string} secret - the user access token
    * @param {Object} vacuum - the device object for the vacuum
    * @param {string} continent - the continent where the Ecovacs account is registered
-   * @param {string} [country='DE'] - the country where the Ecovacs account is registered
-   * @param {string} [serverAddress] - the server address of the MQTT and XMPP server
+   * @param {string} [country] - the country where the Ecovacs account is registered
+   * @param {string} [serverAddress=''] - the server address of the MQTT and XMPP server
+   * @param {string} [authDomain=''] - the domain for authorization
    */
   constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
     super(user, hostname, resource, secret, vacuum, continent, country, serverAddress, authDomain);
@@ -37,17 +38,20 @@ class VacBot_non950type extends VacBot {
    */
   handleCleanReport(payload) {
     if (payload.attrs) {
-      let type = payload.attrs['type'];
+      const attrs = payload.attrs;
+      let type = attrs['type'];
+      tools.envLog("[VacBot] *** handleCleanReport type = " + type);
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
         type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
       const cleanType = type;
       let command = '';
-      if (payload.attrs.hasOwnProperty('st')) {
-        command = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['st']];
-      }
-      else if (payload.attrs.hasOwnProperty('act')) {
-        command = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['act']];
+      if (attrs.hasOwnProperty('st')) {
+        command = dictionary.CLEAN_ACTION_FROM_ECOVACS[attrs['st']];
+        tools.envLog("[VacBot] *** handleCleanReport st = " + command);
+      } else if (attrs.hasOwnProperty('act')) {
+        command = dictionary.CLEAN_ACTION_FROM_ECOVACS[attrs['act']];
+        tools.envLog("[VacBot] *** handleCleanReport act = " + command);
       }
       if (command === 'stop' || command === 'pause') {
         type = command;
@@ -55,39 +59,77 @@ class VacBot_non950type extends VacBot {
       this.cleanReport = type;
       tools.envLog("[VacBot] *** cleanReport = " + this.cleanReport);
 
-      if (payload.attrs.hasOwnProperty('last')) {
-        tools.envLog("[VacBot] *** clean last = %s seconds" + payload.attrs["last"]);
+      if (attrs.hasOwnProperty('last')) {
+        tools.envLog("[VacBot] *** clean last = %s seconds" + attrs["last"]);
       }
 
-      if (type !== 'stop') {
-        if ((payload.attrs.hasOwnProperty('t')) && (payload.attrs.hasOwnProperty('a'))) {
-          this.currentStats = {
-            'cleanedArea': payload.attrs['a'],
-            'cleanedSeconds': payload.attrs['t'],
-            'cleanType': cleanType
-          };
-        }
+      if ((attrs.hasOwnProperty('a')) && (attrs.hasOwnProperty('t'))) {
+        this.handleCurrentStatsValues(Number(attrs.a), Number(attrs.t), cleanType, type);
       }
+      this.handleCurrentAreaValues(payload);
+    }
+  }
 
-      this.currentSpotAreas = '';
-      if (this.cleanReport === 'spot_area') {
-        if (payload.attrs.hasOwnProperty('mid')) {
-          this.currentSpotAreas = payload.attrs.mid;
-        }
+  /**
+   * Handle the values for `currentStats`
+   * @param {number} area - number of square meters
+   * @param {number} seconds - number of seconds
+   * @param {string} cleanType - the clean mode type
+   * @param {string} [type=''] - the action type
+   */
+  handleCurrentStatsValues(area, seconds, cleanType, type= '') {
+    // The OZMO 930 retains the stats values until the next cleaning start
+    // The values should be reset if device is stopped
+    if ((type !== 'stop') || (this.chargeStatus === 'returning')) {
+      this.currentStats = {
+        'cleanedArea': area,
+        'cleanedSeconds': seconds,
+        'cleanType': cleanType
+      };
+    } else {
+      this.currentStats = {
+        'cleanedArea': 0,
+        'cleanedSeconds': 0,
+        'cleanType': ''
+      };
+    }
+  }
+
+  /**
+   * Handle the payload of the `CleanSt` response/message (Stats)
+   * @param {Object} payload
+   */
+  handleCleanSt(payload) {
+    if (payload.attrs) {
+      const area = Number(payload.attrs.a);
+      const seconds = Number(payload.attrs.l);
+      const type = payload.attrs.type;
+      this.handleCurrentStatsValues(area, seconds, type);
+    }
+  }
+
+  /**
+   * @param {Object} payload
+   */
+  handleCurrentAreaValues(payload) {
+    this.currentSpotAreas = '';
+    if (this.cleanReport === 'spot_area') {
+      if (payload.attrs.hasOwnProperty('mid')) {
+        this.currentSpotAreas = payload.attrs.mid;
       }
-      else if (payload.attrs.hasOwnProperty('p')) {
-        let pValues = payload.attrs['p'];
-        const pattern = /^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/;
-        if (pattern.test(pValues)) {
-          const x1 = parseFloat(pValues.split(",")[0]).toFixed(1);
-          const y1 = parseFloat(pValues.split(",")[1]).toFixed(1);
-          const x2 = parseFloat(pValues.split(",")[2]).toFixed(1);
-          const y2 = parseFloat(pValues.split(",")[3]).toFixed(1);
-          this.currentCustomAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
-          tools.envLog("[VacBot] *** lastUsedAreaValues = " + pValues);
-        } else {
-          tools.envLog("[VacBot] *** lastUsedAreaValues invalid pValues = " + pValues);
-        }
+    }
+    else if (payload.attrs.hasOwnProperty('p')) {
+      let pValues = payload.attrs['p'];
+      const pattern = /^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/;
+      if (pattern.test(pValues)) {
+        const x1 = parseFloat(pValues.split(",")[0]).toFixed(1);
+        const y1 = parseFloat(pValues.split(",")[1]).toFixed(1);
+        const x2 = parseFloat(pValues.split(",")[2]).toFixed(1);
+        const y2 = parseFloat(pValues.split(",")[3]).toFixed(1);
+        this.currentCustomAreaValues = x1 + ',' + y1 + ',' + x2 + ',' + y2;
+        tools.envLog("[VacBot] *** lastUsedAreaValues = " + pValues);
+      } else {
+        tools.envLog("[VacBot] *** lastUsedAreaValues invalid pValues = " + pValues);
       }
     }
   }
@@ -251,6 +293,9 @@ class VacBot_non950type extends VacBot {
       if (dictionary.CHARGE_MODE_FROM_ECOVACS[chargeStatus]) {
         this.chargeStatus = dictionary.CHARGE_MODE_FROM_ECOVACS[chargeStatus];
         tools.envLog("[VacBot] *** chargeStatus = " + this.chargeStatus);
+        if ((!this.useMqttProtocol()) && (this.chargeStatus === 'returning')) {
+          this.run('GetCleanState');
+        }
       } else {
         tools.envLog("[VacBot] Unknown charging status '%s'", chargeStatus);
       }
@@ -412,23 +457,6 @@ class VacBot_non950type extends VacBot {
             break;
         }
       }
-    }
-  }
-
-  /**
-   * Handle the payload of the `CleanSt` response/message (Stats)
-   * @param {Object} payload
-   */
-  handleCleanSt(payload) {
-    if (payload.attrs) {
-      const area = parseInt(payload.attrs.a);
-      const seconds = parseInt(payload.attrs.l);
-      const type = payload.attrs.type;
-      this.currentStats = {
-        'cleanedArea': area,
-        'cleanedSeconds': seconds,
-        'cleanType': type
-      };
     }
   }
 
