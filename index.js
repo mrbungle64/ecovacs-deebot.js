@@ -113,9 +113,7 @@ class EcovacsAPI {
    */
   getAuthParams(params) {
     let authSignParams = params;
-    if (this.authDomain !== constants.AUTH_DOMAIN_YD) {
-      authSignParams['openId'] = 'global';
-    }
+    authSignParams['openId'] = 'global';
 
     let authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY;
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
@@ -123,7 +121,7 @@ class EcovacsAPI {
     }
     let authSecret = constants.AUTH_GETAUTH_SECRET;
     if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      authSecret += constants.AUTH_GETAUTH_SECRET_YD;
+      authSecret = constants.AUTH_GETAUTH_SECRET_YD;
     }
 
     return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
