@@ -212,6 +212,12 @@ class GetCleanState extends VacBotCommand {
     }
 }
 
+class GetCleanState_V2 extends VacBotCommand {
+    constructor() {
+        super('getCleanInfo_V2');
+    }
+}
+
 class GetChargeState extends VacBotCommand {
     constructor() {
         super('getChargeState');
@@ -660,6 +666,7 @@ module.exports.GetCleanLogs = GetCleanLogs;
 module.exports.GetCleanPreference = GetCleanPreference;
 module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
+module.exports.GetCleanState_V2 = GetCleanState_V2;
 module.exports.GetCleanSum = GetCleanSum;
 module.exports.GetContinuousCleaning = GetContinuousCleaning;
 module.exports.GetDoNotDisturb = GetDoNotDisturb;

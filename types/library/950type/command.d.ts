@@ -68,6 +68,9 @@ export class GetCleanSpeed extends VacBotCommand {
 export class GetCleanState extends VacBotCommand {
     constructor();
 }
+export class GetCleanState_V2 extends VacBotCommand {
+    constructor();
+}
 export class GetCleanSum extends VacBotCommand {
     constructor();
 }
