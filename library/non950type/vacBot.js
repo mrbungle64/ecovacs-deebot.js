@@ -41,6 +41,7 @@ class VacBot_non950type extends VacBot {
       if (dictionary.CLEAN_MODE_FROM_ECOVACS[type]) {
         type = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
       }
+      const cleanType = type;
       let command = '';
       if (payload.attrs.hasOwnProperty('st')) {
         command = dictionary.CLEAN_ACTION_FROM_ECOVACS[payload.attrs['st']];
@@ -63,7 +64,7 @@ class VacBot_non950type extends VacBot {
           this.currentStats = {
             'cleanedArea': payload.attrs['a'],
             'cleanedSeconds': payload.attrs['t'],
-            'cleanType': type
+            'cleanType': cleanType
           };
         }
       }
