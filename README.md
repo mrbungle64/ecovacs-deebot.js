@@ -36,6 +36,11 @@ The models listed are those that I have in use myself or which are technically i
 
 ### These models should work properly or at least partially
 
+The following models are either already known to work or are technically similar to these models.
+Nevertheless, the functionality may be partially limited.
+
+#### Ecovacs Deebot
+
 * Deebot Slim 2
 * Deebot N79 series
 * Deebot M88
@@ -53,8 +58,9 @@ The models listed are those that I have in use myself or which are technically i
 * Deebot T9 series
 * Deebot X1 series
 
-The models listed are either already known to work or are technically similar to these models.
-Nevertheless, the functionality may be partially limited.
+#### yeedi
+
+* yeedi mop station
 
 I try to achieve a wide range of functionality, but decide this case by case depending on complexity and various other criteria.
 There is of course no claim to full functionality.
@@ -68,7 +74,7 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.8.3 (alpha)
-* Initial support for yeedi devices (not working yet)
+* Initial support for yeedi devices
 * Added CurrentStats event for XMPP devices
 
 ### 0.8.2
