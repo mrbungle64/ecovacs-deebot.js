@@ -76,6 +76,7 @@ There is of course no claim to full functionality.
 ### 0.8.3 (alpha)
 * Initial support for yeedi devices
 * Added CurrentStats event for XMPP devices
+* Added commands for air drying the wiper blades
 
 ### 0.8.2
 * Added Deebot T10 series
