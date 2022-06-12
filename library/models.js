@@ -586,17 +586,17 @@ exports.KnownDevices = {
     },
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
-        "950type": false,
+        "950type": true,
         "950type_V2": false,
-        "main_brush": false,
+        "main_brush": true,
         "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
+        "spot_area": true,
+        "custom_area": true,
         "mopping_system": true,
-        "voice_report": false,
+        "voice_report": true,
         "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "vthpeg": {
         "name": "yeedi mop station",
