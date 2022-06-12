@@ -39,6 +39,9 @@ The models listed are those that I have in use myself or which are technically i
 The following models are either already known to work or are technically similar to these models.
 Nevertheless, the functionality may be partially limited.
 
+I try to achieve a wide range of functionality, but decide this case by case depending on complexity and various other criteria.
+There is of course no claim to full functionality.
+
 #### Ecovacs Deebot
 
 * Deebot Slim 2
@@ -58,12 +61,10 @@ Nevertheless, the functionality may be partially limited.
 * Deebot T9 series
 * Deebot X1 series
 
-#### yeedi
+#### yeedi (experimental)
 
+* yeedi 2 hybrid
 * yeedi mop station
-
-I try to achieve a wide range of functionality, but decide this case by case depending on complexity and various other criteria.
-There is of course no claim to full functionality.
 
 ## Known issues
 
@@ -74,7 +75,7 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.8.3 (alpha)
-* Initial support for yeedi devices
+* Added initial support for yeedi login and a few models
 * Added CurrentStats event for XMPP devices
 * Added commands for air drying the wiper blades
 
