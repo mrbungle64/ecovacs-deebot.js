@@ -6,12 +6,9 @@ exports.SupportedDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
-        "mopping_system": false,
         "voice_report": true,
-        "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
     },
@@ -20,13 +17,10 @@ exports.SupportedDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": false,
         "map_image_supported": true
     },
     "vi829v": {
@@ -38,28 +32,17 @@ exports.SupportedDevices = {
         "950type": true,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true
     },
     "123": {
         "name": "DEEBOT Slim2 Series",
         "950type": false,
-        "950type_V2": false,
-        "main_brush": false,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
-        "voice_report": false,
-        "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false
+        "950type_V2": false
     }
 };
 
@@ -69,14 +52,9 @@ exports.KnownDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "16wdph": {
         "name": "DEEBOT 661",
@@ -87,42 +65,25 @@ exports.KnownDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "130": {
         "name": "DEEBOT OZMO 610 Series",
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
         "mopping_system": true,
-        "voice_report": false,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "uv242z": {
         "name": "DEEBOT 710",
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "jr3pqa": {
         "name": "DEEBOT 711",
@@ -141,42 +102,32 @@ exports.KnownDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "voice_report": true
     },
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
@@ -397,14 +348,7 @@ exports.KnownDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
-        "voice_report": false,
-        "auto_empty_station": false,
         "clean_speed": true,
-        "map_image_supported": false
     },
     "155": {
         "name": "DEEBOT N79S/SE",
@@ -419,14 +363,9 @@ exports.KnownDevices = {
         "950type": true,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "rvo6ev": {
         "name": "DEEBOT U2",
@@ -489,14 +428,7 @@ exports.KnownDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
-        "voice_report": false,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "emzppx": {
         "name": "DEEBOT 501",
@@ -515,41 +447,35 @@ exports.KnownDevices = {
         "950type": false,
         "950type_V2": false,
         "main_brush": false,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
         "mopping_system": true,
         "voice_report": false,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false
+        "clean_speed": true
     },
     "h041es": {
         "name": "yeedi vac hybrid",
-        "950type": false,
+        "950type": true,
         "950type_V2": false,
         "main_brush": true,
-        "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
-        "mopping_system": false,
+        "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": false,
+        "auto_empty_station": true,
+        "clean_speed": true,
         "map_image_supported": true
     },
     "u5vcmk": {
         "name": "yeedi vac",
         "950type": false,
         "950type_V2": false,
-        "main_brush": false,
+        "main_brush": true,
         "unit_care_info": false,
         "spot_area": false,
         "custom_area": false,
         "mopping_system": false,
         "voice_report": true,
         "auto_empty_station": false,
-        "clean_speed": false,
+        "clean_speed": true,
         "map_image_supported": false
     },
     "mnx7f4": {
@@ -558,12 +484,12 @@ exports.KnownDevices = {
         "950type_V2": false,
         "main_brush": true,
         "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
+        "spot_area": true,
+        "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": false,
+        "clean_speed": true,
         "map_image_supported": false
     },
     "aaxesz": {
@@ -574,14 +500,14 @@ exports.KnownDevices = {
         "name": "yeedi vac max",
         "950type": true,
         "950type_V2": false,
-        "main_brush": false,
+        "main_brush": true,
         "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": false,
+        "auto_empty_station": true,
+        "clean_speed": true,
         "map_image_supported": true
     },
     "p5nx9u": {
@@ -618,21 +544,21 @@ exports.KnownDevices = {
     },
     "9t30w8": {
         "name": "yeedi vac 2",
-        "950type": false,
+        "950type": true,
         "950type_V2": false,
-        "main_brush": false,
+        "main_brush": true,
         "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
         "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "3ab24g": {
         "name": "K650",
-        "950type": false,
+        "950type": true,
         "950type_V2": false,
         "main_brush": false,
         "unit_care_info": false,
