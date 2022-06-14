@@ -283,29 +283,43 @@ exports.KnownDevices = {
         "name": "DEEBOT N8 PRO",
         "deviceClassLink": "n6cwdb"
     },
-    "85as7h": {
-        "name": "DEEBOT N8 PRO+",
-        "deviceClassLink": "n6cwdb"
-    },
-    "ifbw08": {
-        "name": "DEEBOT N8 PRO+",
+    "s1f8g7": {
+        "name": "DEEBOT N8 PRO CARE",
         "deviceClassLink": "n6cwdb"
     },
     "7bryc5": {
         "name": "DEEBOT N8+",
-        "deviceClassLink": "n6cwdb"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true
     },
     "b2jqs4": {
         "name": "DEEBOT N8+",
-        "deviceClassLink": "n6cwdb"
+        "deviceClassLink": "7bryc5"
+    },
+    "85as7h": {
+        "name": "DEEBOT N8 PRO+",
+        "deviceClassLink": "7bryc5"
+    },
+    "ifbw08": {
+        "name": "DEEBOT N8 PRO+",
+        "deviceClassLink": "7bryc5"
     },
     "a7lhb1": {
         "name": "DEEBOT N9+",
-        "deviceClassLink": "n6cwdb"
+        "deviceClassLink": "7bryc5"
     },
     "c2of2s": {
         "name": "DEEBOT N9+",
-        "deviceClassLink": "n6cwdb"
+        "deviceClassLink": "7bryc5"
     },
     "3yqsch": {
         "name": "DEEBOT X1",
@@ -341,6 +355,10 @@ exports.KnownDevices = {
     },
     "p95mgv": {
         "name": "DEEBOT T10 PLUS",
+        "deviceClassLink": "fqxoiu"
+    },
+    "9s1s80": {
+        "name": "DEEBOT T10 TURBO",
         "deviceClassLink": "fqxoiu"
     },
     "126": {
