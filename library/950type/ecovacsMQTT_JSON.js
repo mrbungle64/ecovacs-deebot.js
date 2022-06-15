@@ -87,7 +87,25 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let resultCodeMessage = "ok";
         let payload = message;
 
-        if (type === "incoming") {
+        if (topic === 'getMapInfo_V2') {
+            eventName = 'getCachedMapInfo';
+            const mid = message['body']['data']['mid'];
+            payload = {
+                "enable": 1,
+                "info":
+                    [
+                        {
+                            "mid": mid,
+                            "status": 1,
+                            "index": 0,
+                            "using": 1,
+                            "built": 1,
+                            "name": "Standard"
+                        }
+                    ]
+            };
+        }
+        else if (type === "incoming") {
             eventName = topic.split('/')[2];
             message = JSON.parse(message);
             payload = message['body']['data'];

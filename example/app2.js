@@ -100,19 +100,6 @@ api.connect(accountId, passwordHash).then(() => {
                 console.log('CurrentCustomAreaValues: ' + values);
             });
 
-            // Please uncomment this code block if you want to use GetMaps cmd
-            // to retrieve every single event (without retrieving the map data object)
-            // Please do not uncomment this code block if you want to retrieve the full map data object (standard)
-            // But if you do please also comment out 'MapDataObject' and 'MapImage'
-
-            /*vacbot.on('Maps', (maps) => {
-                console.log('Maps: ' + JSON.stringify(maps));
-                for (const i in maps['maps']) {
-                    const mapID = maps['maps'][i]['mapID'];
-                    vacbot.run('GetSpotAreas', mapID);
-                    vacbot.run('GetVirtualBoundaries', mapID);
-                }
-            });
             vacbot.on('MapSpotAreas', (spotAreas) => {
                 console.log('MapSpotAreas: ' + JSON.stringify(spotAreas));
                 for (const i in spotAreas['mapSpotAreas']) {
@@ -139,7 +126,7 @@ api.connect(accountId, passwordHash).then(() => {
             });
             vacbot.on('MapVirtualBoundaryInfo', (virtualBoundary) => {
                 console.log('MapVirtualBoundaryInfo: ' + JSON.stringify(virtualBoundary));
-            });*/
+            });
 
             // Please comment out 'MapDataObject' and 'MapImage' if you want to use the code block above
             vacbot.on('MapDataObject', (mapDataObject) => {
@@ -186,9 +173,7 @@ api.connect(accountId, passwordHash).then(() => {
             if (vacbot.hasMappingCapabilities()) {
                 vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
-                const createMapDataObject = true; // default = false
-                const createMapImage = false; // default = createMapDataObject && vacbot.isMapImageSupported();
-                vacbot.run('GetMaps', createMapDataObject, createMapImage);
+                vacbot.run('GetMapInfo_V2');
             }
         }, 6000);
 

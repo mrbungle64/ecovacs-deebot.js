@@ -1011,15 +1011,8 @@ class VacBot_950type extends VacBot {
                 break;
             }
             // TODO: this should be consolidated (and also the other V2 commands)
-            case "GetMapImage_V2".toLowerCase(): {
-                const mapID = args[0].toString(); // mapID is a string
-                const mapType = args[1] || '1,4';
-                this.createMapDataObject = true;
-                this.createMapImage = true;
-                this.createMapImageOnly = args[2] !== undefined ? args[2] : true;
-                if (Number(mapID) > 0) {
-                    this.sendCommand(new VacBotCommand.GetMapImage_V2(mapID, mapType));
-                }
+            case "GetMapInfo_V2".toLowerCase(): {
+                this.sendCommand(new VacBotCommand.GetMapInfo_V2());
                 break;
             }
             case "GetCleanCount".toLowerCase():
