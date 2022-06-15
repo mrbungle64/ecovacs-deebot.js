@@ -618,6 +618,13 @@ class GetCleanPreference extends VacBotCommand {
     }
 }
 
+// TODO: Handle response data
+class GetAirDrying extends VacBotCommand {
+    constructor() {
+        super('getAirDring');
+    }
+}
+
 class SetAirDrying extends VacBotCommand {
     constructor(act = 'stop') {
         super('setAirDring', {
@@ -626,21 +633,21 @@ class SetAirDrying extends VacBotCommand {
     }
 }
 
-// TODO: Implement response
+// TODO: Handle response data
 class GetRecognization extends VacBotCommand {
     constructor() {
         super('getRecognization');
     }
 }
 
-// TODO: Implement response
+// TODO: Handle response data
 class GetMapState extends VacBotCommand {
     constructor() {
         super('getMapState');
     }
 }
 
-// TODO: Implement response
+// TODO: Handle response data
 class GetAIMap extends VacBotCommand {
     constructor() {
         super('getAIMap', {
@@ -664,6 +671,7 @@ module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetAdvancedMode = GetAdvancedMode;
+module.exports.GetAirDrying = GetAirDrying;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
