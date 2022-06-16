@@ -159,6 +159,10 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.on('Schedule', (object) => {
                 console.log('Schedule: ' + JSON.stringify(object));
             });
+
+            vacbot.on('messageReceived', (value) => {
+                console.log('messageReceived: ' + value);
+            });
         });
 
         vacbot.connect();
@@ -166,7 +170,7 @@ api.connect(accountId, passwordHash).then(() => {
         tools.dumpSomeVacbotData(vacbot, api);
 
         setTimeout(() => {
-            vacbot.run('GetCleanState');
+            vacbot.run('GetCleanState_V2');
             vacbot.run('GetChargeState');
             vacbot.run('GetBatteryState');
 

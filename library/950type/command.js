@@ -330,7 +330,7 @@ class GetMapImage extends VacBotCommand {
 }
 
 class GetMapInfo_V2 extends VacBotCommand {
-        constructor(mapID, mapType = '0') {
+        constructor(mapType = '0') {
         super('getMapInfo_V2', {
             'type': mapType
         });
