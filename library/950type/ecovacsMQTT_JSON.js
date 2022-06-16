@@ -484,7 +484,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         return commandPrefix;
     }
 
-    async handleV2commands(abbreviatedCommand) {
+    handleV2commands(abbreviatedCommand) {
         if (this.vacBot.authDomain === constants.AUTH_DOMAIN_YD) {
             switch (abbreviatedCommand) {
                 case 'MapInfo_V2':
