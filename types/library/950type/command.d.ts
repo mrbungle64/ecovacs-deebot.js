@@ -38,6 +38,9 @@ export class EnableDoNotDisturb extends SetDoNotDisturb {
 export class GetAdvancedMode extends VacBotCommand {
     constructor();
 }
+export class GetAirDrying extends VacBotCommand {
+    constructor();
+}
 export class GetAIMap extends VacBotCommand {
     constructor();
 }

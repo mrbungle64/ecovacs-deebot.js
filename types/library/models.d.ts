@@ -4,12 +4,9 @@ export var SupportedDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
-        mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
     };
@@ -18,13 +15,10 @@ export var SupportedDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
         map_image_supported: boolean;
     };
     vi829v: {
@@ -36,12 +30,10 @@ export var SupportedDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
     };
@@ -49,15 +41,6 @@ export var SupportedDevices: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
-        main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
     };
 };
 export var KnownDevices: {
@@ -66,14 +49,9 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     "16wdph": {
         name: string;
@@ -84,42 +62,25 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     "130": {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
         mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     uv242z: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     jr3pqa: {
         name: string;
@@ -138,42 +99,32 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     "2pv572": {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     gd4uut: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
     };
     h18jkh: {
         name: string;
@@ -329,19 +280,33 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
-    "85as7h": {
-        name: string;
-        deviceClassLink: string;
-    };
-    ifbw08: {
+    s1f8g7: {
         name: string;
         deviceClassLink: string;
     };
     "7bryc5": {
         name: string;
-        deviceClassLink: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        unit_care_info: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        auto_empty_station: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
     };
     b2jqs4: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "85as7h": {
+        name: string;
+        deviceClassLink: string;
+    };
+    ifbw08: {
         name: string;
         deviceClassLink: string;
     };
@@ -389,19 +354,16 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    "9s1s80": {
+        name: string;
+        deviceClassLink: string;
+    };
     "126": {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     "155": {
         name: string;
@@ -416,14 +378,9 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     rvo6ev: {
         name: string;
@@ -486,14 +443,7 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     emzppx: {
         name: string;
@@ -512,21 +462,15 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
-        map_image_supported: boolean;
     };
     h041es: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
-        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
