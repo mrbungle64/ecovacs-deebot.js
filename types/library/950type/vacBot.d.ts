@@ -156,6 +156,11 @@ declare class VacBot_950type extends VacBot {
      */
     handleCachedMapInfo(payload: any): void;
     /**
+     * Handle the payload of the `MapInfo_V2` response/message
+     * @param {Object} payload
+     */
+    handleMapInfoV2(payload: any): void;
+    /**
      * Handle the payload of the `MapSet` response/message
      * @param {Object} payload
      */

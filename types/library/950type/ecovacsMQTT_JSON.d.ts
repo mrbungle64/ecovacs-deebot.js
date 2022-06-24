@@ -13,6 +13,7 @@ declare class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @returns {string} the prefix of the command
      */
     getCommandPrefix(command: string): string;
+    handleV2commands(abbreviatedCommand: any): any;
     /**
      * Handle onFwBuryPoint message (e.g. T8/T9 series)
      * This is presumably some kind of debug or internal message
