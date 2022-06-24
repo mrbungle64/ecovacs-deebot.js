@@ -568,6 +568,30 @@ class VacBot_950type extends VacBot {
     }
 
     /**
+     * Handle the payload of the `MapInfo_V2` response/message
+     * @param {Object} payload
+     */
+    handleMapInfoV2(payload) {
+        this.currentMapMID = payload['mid'];
+        this.currentMapName = 'standard';
+        this.currentMapIndex = 0;
+        this.maps = {'maps': []};
+        this.maps['maps'].push(
+            new map.EcovacsMap(
+                this.currentMapMID,
+                this.currentMapIndex,
+                this.currentMapName,
+                1,
+                1,
+                1)
+        );
+        tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
+        tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
+        tools.envLog("[VacBot] *** currentMapIndex = " + this.currentMapIndex);
+        tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
+    }
+
+    /**
      * Handle the payload of the `MapSet` response/message
      * @param {Object} payload
      */
@@ -1010,16 +1034,9 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
-            // TODO: this should be consolidated (and also the other V2 commands)
-            case "GetMapImage_V2".toLowerCase(): {
-                const mapID = args[0].toString(); // mapID is a string
-                const mapType = args[1] || '1,4';
-                this.createMapDataObject = true;
-                this.createMapImage = true;
-                this.createMapImageOnly = args[2] !== undefined ? args[2] : true;
-                if (Number(mapID) > 0) {
-                    this.sendCommand(new VacBotCommand.GetMapImage_V2(mapID, mapType));
-                }
+            // `GetMapInfo_V2` is only tested with yeedi mop station
+            case "GetMapInfo_V2".toLowerCase(): {
+                this.sendCommand(new VacBotCommand.GetMapInfo_V2());
                 break;
             }
             case "GetCleanCount".toLowerCase():

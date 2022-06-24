@@ -138,7 +138,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         // e.g. N9, T8, T9 series
         // Not sure if the lowercase variant is necessary
         if (abbreviatedCommand.endsWith("_V2") || abbreviatedCommand.endsWith("_v2")) {
-            abbreviatedCommand = abbreviatedCommand.slice(0, -3);
+            abbreviatedCommand = this.handleV2commands(abbreviatedCommand);
         }
         this.emit('messageReceived', command  + ' => ' + abbreviatedCommand);
         const payload = this.getPayload(event);
@@ -191,15 +191,26 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleRelocationState(payload);
                 this.emit("RelocationState", this.vacBot.relocationState);
                 break;
-            case "CachedMapInfo":
+            case "MapInfo_V2":
                 try {
-                    this.vacBot.handleCachedMapInfo(payload);
-                    this.emit("CurrentMapName", this.vacBot.currentMapName);
+                    this.vacBot.handleMapInfoV2(payload);
                     this.emit("CurrentMapMID", this.vacBot.currentMapMID);
+                    this.emit("CurrentMapName", this.vacBot.currentMapName);
                     this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
                     this.emit("Maps", this.vacBot.maps);
                 } catch (e) {
-                    tools.envLog("[EcovacsMQTT_JSON] Error on CachedMapInfo: %s", e.message);
+                    tools.envLog("[EcovacsMQTT_JSON] Error on handling MapInfo_V2: %s", e.message);
+                }
+                break;
+            case "CachedMapInfo":
+                try {
+                    this.vacBot.handleCachedMapInfo(payload);
+                    this.emit("CurrentMapMID", this.vacBot.currentMapMID);
+                    this.emit("CurrentMapName", this.vacBot.currentMapName);
+                    this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
+                    this.emit("Maps", this.vacBot.maps);
+                } catch (e) {
+                    tools.envLog("[EcovacsMQTT_JSON] Error on handling CachedMapInfo: %s", e.message);
                 }
                 break;
             case "MapInfo":
@@ -471,6 +482,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             commandPrefix = 'get';
         }
         return commandPrefix;
+    }
+
+    handleV2commands(abbreviatedCommand) {
+        if (this.vacBot.authDomain === constants.AUTH_DOMAIN_YD) {
+            switch (abbreviatedCommand) {
+                case 'MapInfo_V2':
+                    return abbreviatedCommand;
+            }
+        }
+        return abbreviatedCommand.slice(0, -3);
     }
 
     /**

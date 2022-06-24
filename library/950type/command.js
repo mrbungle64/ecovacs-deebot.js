@@ -329,10 +329,9 @@ class GetMapImage extends VacBotCommand {
     }
 }
 
-class GetMapImage_V2 extends VacBotCommand {
-        constructor(mapID, mapType = '1,4') {
+class GetMapInfo_V2 extends VacBotCommand {
+        constructor(mapType = '0') {
         super('getMapInfo_V2', {
-            'mid': mapID,
             'type': mapType
         });
     }
@@ -691,7 +690,7 @@ module.exports.GetError = GetError;
 module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.GetMapImage = GetMapImage;
-module.exports.GetMapImage_V2 = GetMapImage_V2;
+module.exports.GetMapInfo_V2 = GetMapInfo_V2;
 module.exports.GetMapSet = GetMapSet;
 module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapSpotAreas = GetMapSpotAreas;
