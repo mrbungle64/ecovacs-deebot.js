@@ -79,6 +79,7 @@ There is of course no claim to full functionality.
 * Added initial support for yeedi login and a few models
 * Added CurrentStats event for XMPP devices
 * Added commands for air drying the wiper blades
+* Bumped canvas to 2.9.2
 
 ### 0.8.2
 * Added Deebot T10 series
