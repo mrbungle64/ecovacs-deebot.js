@@ -180,7 +180,7 @@ api.connect(accountId, passwordHash).then(() => {
             if (vacbot.hasMappingCapabilities()) {
                 vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
-                vacbot.run('GetMapInfo_V2');
+                vacbot.run('GetMaps');
             }
         }, 6000);
 

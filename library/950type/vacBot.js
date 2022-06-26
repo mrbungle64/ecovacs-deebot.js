@@ -825,7 +825,14 @@ class VacBot_950type extends VacBot {
                 if (args.length >= 2) {
                     this.createMapImage = !!args[1];
                 }
-                this.sendCommand(new VacBotCommand.GetMaps());
+                // Workaround for some yeedi models
+                // TODO: Find a better solution
+                if ((this.deviceClass === 'p5nx9u') || (this.deviceClass === 'vthpeg')) {
+                    this.sendCommand(new VacBotCommand.GetMapInfo_V2());
+                }
+                else {
+                    this.sendCommand(new VacBotCommand.GetMaps());
+                }
                 break;
             }
             case "GetSpotAreas".toLowerCase(): {
@@ -1032,11 +1039,6 @@ class VacBot_950type extends VacBot {
                 if (area !== '') {
                     this.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings));
                 }
-                break;
-            }
-            // `GetMapInfo_V2` is only tested with yeedi mop station
-            case "GetMapInfo_V2".toLowerCase(): {
-                this.sendCommand(new VacBotCommand.GetMapInfo_V2());
                 break;
             }
             case "GetCleanCount".toLowerCase():
