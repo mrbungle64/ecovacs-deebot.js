@@ -9,7 +9,7 @@
 [![Number of downloads](https://img.shields.io/npm/dt/ecovacs-deebot.svg)](https://www.npmjs.com/package/ecovacs-deebot)
 [![github-workflow](https://github.com/mrbungle64/ecovacs-deebot.js/actions/workflows/node.js.yml/badge.svg)](https://github.com/mrbungle64/ecovacs-deebot.js)
 
-Library for running Ecovacs Deebot vacuum cleaner robots
+Library for running Ecovacs Deebot (and also some yeedi) vacuum cleaner robots
 
 ## Installation
 
@@ -65,6 +65,7 @@ There is of course no claim to full functionality.
 
 * yeedi k650
 * yeedi 2 hybrid
+* yeedi vac hybrid
 * yeedi mop station
 
 ## Known issues
@@ -79,7 +80,7 @@ There is of course no claim to full functionality.
 * Added initial support for yeedi login and a few models
 * Added CurrentStats event for XMPP devices
 * Added commands for air drying the wiper blades
-* Bumped canvas to 2.9.2
+* Bumped canvas to 2.9.3
 
 ### 0.8.2
 * Added Deebot T10 series
