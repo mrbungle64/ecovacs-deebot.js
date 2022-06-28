@@ -39,6 +39,20 @@ exports.SupportedDevices = {
         "clean_speed": true,
         "map_image_supported": true
     },
+    "h18jkh": {
+        "name": "DEEBOT OZMO T8",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": false,
+        "clean_speed": true,
+        "map_image_supported": true
+    },
     "123": {
         "name": "DEEBOT Slim2 Series",
         "950type": false,
@@ -128,20 +142,6 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true
-    },
-    "h18jkh": {
-        "name": "DEEBOT OZMO T8",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "unit_care_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": true
     },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
@@ -474,6 +474,7 @@ exports.KnownDevices = {
         "950type": true,
         "950type_V2": false,
         "main_brush": true,
+        "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
