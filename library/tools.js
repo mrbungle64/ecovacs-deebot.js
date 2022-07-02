@@ -26,10 +26,11 @@ function isCanvasModuleAvailable() {
 
 /**
  * Translates the Node.js error message for some network related error messages (e.g. `ENOTFOUND`)
- * @param {string} message - The error message received from the server.
+ * @param {string} message - The error message received from the server
+ * @param {string} [command=''] - The command
  * @returns {string} the error description
  */
-function createErrorDescription(message) {
+function createErrorDescription(message, command= '') {
     if (message.includes('ENOTFOUND')) {
         return `DNS lookup failed: ${message}`;
     } else if (message.includes('EHOSTUNREACH')) {
@@ -38,6 +39,8 @@ function createErrorDescription(message) {
         return `Connection is interrupted: ${message}`;
     } else if (message.includes('ETIMEDOUT') || message.includes('EAI_AGAIN')) {
         return `Network connectivity error: ${message}`;
+    } else if (command !== '') {
+        return `Received error message: ${message} for command ${command}`;
     } else {
         return `Received error message: ${message}`;
     }

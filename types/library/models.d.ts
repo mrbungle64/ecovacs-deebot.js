@@ -37,6 +37,20 @@ export var SupportedDevices: {
         clean_speed: boolean;
         map_image_supported: boolean;
     };
+    h18jkh: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        unit_care_info: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        auto_empty_station: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+    };
     "123": {
         name: string;
         "950type": boolean;
@@ -125,20 +139,6 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-    };
-    h18jkh: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
     };
     fqxoiu: {
         name: string;
@@ -471,6 +471,7 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;

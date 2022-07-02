@@ -194,7 +194,7 @@ class EcovacsMQTT extends Ecovacs {
                 response = res.data;
                 tools.envLog("[EcovacsMQTT] got %s", JSON.stringify(response));
             } catch (e) {
-                this.emitNetworkError(e.message);
+                this.emitNetworkError(e.message, command.name);
                 throw e.message;
             }
 

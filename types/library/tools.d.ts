@@ -81,10 +81,11 @@ export function getReqID(): string;
 export function isCanvasModuleAvailable(): boolean;
 /**
  * Translates the Node.js error message for some network related error messages (e.g. `ENOTFOUND`)
- * @param {string} message - The error message received from the server.
+ * @param {string} message - The error message received from the server
+ * @param {string} [command=''] - The command
  * @returns {string} the error description
  */
-export function createErrorDescription(message: string): string;
+export function createErrorDescription(message: string, command?: string): string;
 export function formatString(string: any, ...args: any[]): any;
 /**
  * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"

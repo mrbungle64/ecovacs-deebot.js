@@ -55,8 +55,9 @@ declare class Ecovacs extends EventEmitter {
     /**
      * Emit a network related error message
      * @param {string} message - the error message
+     * @param {string} [command=''] - the command
      */
-    emitNetworkError(message: string): void;
+    emitNetworkError(message: string, command?: string): void;
     /**
      * Emit an error by a given error code
      * @param {string} errorCode
