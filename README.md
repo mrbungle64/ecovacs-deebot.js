@@ -77,10 +77,16 @@ There is of course no claim to full functionality.
 ## Changelog
 
 ### 0.8.3 (alpha)
-* Added initial support for yeedi login and a few models
+* Added initial support for yeedi login
+* and also for a few models
+  * yeedi k650
+  * yeedi 2 hybrid
+  * yeedi vac hybrid
+  * yeedi mop station
 * Added CurrentStats event for XMPP devices
 * Added commands for air drying the wiper blades
 * Bumped canvas to 2.9.3
+* Some minor improvements
 
 ### 0.8.2
 * Added Deebot T10 series
