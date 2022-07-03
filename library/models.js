@@ -370,11 +370,11 @@ exports.KnownDevices = {
     },
     "155": {
         "name": "DEEBOT N79S/SE",
-        "deviceClassLink": "155"
+        "deviceClassLink": "126"
     },
     "165": {
         "name": "DEEBOT N79T/W",
-        "deviceClassLink": "155"
+        "deviceClassLink": "126"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
