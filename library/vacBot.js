@@ -664,6 +664,10 @@ class VacBot {
         this.ecovacs.on(name, func);
     }
 
+    once(name, func) {
+        this.ecovacs.once(name, func);
+    }
+
     /**
      * If the value of `company` is `eco-ng`
      * the model uses MQTT as protocol
