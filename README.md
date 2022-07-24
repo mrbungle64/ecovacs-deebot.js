@@ -85,6 +85,7 @@ There is of course no claim to full functionality.
   * yeedi mop station
 * Added CurrentStats event for XMPP devices
 * Added commands for air drying the wiper blades
+* Added 'donotClean' for CustomArea_V2 command
 * Bumped canvas to 2.9.3
 * Some minor improvements
 
