@@ -111,12 +111,12 @@ class CustomArea extends Clean {
 }
 
 class CustomArea_V2 extends Clean_V2 {
-    constructor(area = '', cleanings = 1) {
+    constructor(area = '', cleanings = 1, donotClean = 0) {
         let cleaningAsNumber = Number(cleanings);
         super('customArea', 'start', {
             'content': {
                 'total': 0,
-                'donotClean': 0,
+                'donotClean': donotClean,
                 'count': cleaningAsNumber,
                 'value': area
             }

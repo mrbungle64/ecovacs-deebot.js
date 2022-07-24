@@ -933,6 +933,7 @@ class VacBot {
         }
         tools.envLog("[VacBot] Sending command `%s` with id %s", command.name, command.getId());
         let actionPayload = this.useMqttProtocol() ? command : command.toXml();
+        tools.envLog("[VacBot] Payload: %s", JSON.stringify(actionPayload));
         (async () => {
             try {
                 await this.ecovacs.sendCommand(actionPayload);

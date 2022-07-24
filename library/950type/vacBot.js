@@ -1036,8 +1036,9 @@ class VacBot_950type extends VacBot {
             case "CustomArea_V2".toLowerCase(): {
                 const area = args[0].toString();
                 const cleanings = args[1] || 1;
+                const donotClean = args[2] || 0;
                 if (area !== '') {
-                    this.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings));
+                    this.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings, donotClean));
                 }
                 break;
             }
