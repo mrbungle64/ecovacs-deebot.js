@@ -95,8 +95,6 @@ class Ecovacs extends EventEmitter {
                 }
                 this.bot.handleCleanReport(payload);
                 this.emit('CleanReport', this.bot.cleanReport);
-                this.emit('CurrentSpotAreas', this.bot.currentSpotAreas);
-                this.emit('CurrentCustomAreaValues', this.bot.currentCustomAreaValues);
                 if (this.bot.currentCustomAreaValues) {
                     this.emit('LastUsedAreaValues', this.bot.currentCustomAreaValues);
                 }
@@ -104,6 +102,8 @@ class Ecovacs extends EventEmitter {
                     this.emit('CurrentStats', this.bot.currentStats);
                     this.bot.currentStats = null;
                 }
+                this.emit('CurrentSpotAreas', this.bot.currentSpotAreas);
+                this.emit('CurrentCustomAreaValues', this.bot.currentCustomAreaValues);
                 this.emitMoppingSystemReport();
                 break;
             case 'CleanSpeed':
