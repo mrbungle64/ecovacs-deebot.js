@@ -56,7 +56,16 @@ exports.SupportedDevices = {
     "123": {
         "name": "DEEBOT Slim2 Series",
         "950type": false,
-        "950type_V2": false
+        "950type_V2": false,
+        "main_brush": false,
+        "unit_care_info": false,
+        "spot_area": false,
+        "custom_area": false,
+        "mopping_system": false,
+        "voice_report": false,
+        "auto_empty_station": false,
+        "clean_speed": false,
+        "map_image_supported": false
     }
 };
 
