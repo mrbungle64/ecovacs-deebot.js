@@ -13,7 +13,7 @@ export class CustomArea extends Clean {
     constructor(action?: string, area?: string, cleanings?: number);
 }
 export class CustomArea_V2 extends Clean_V2 {
-    constructor(area?: string, cleanings?: number);
+    constructor(area?: string, cleanings?: number, donotClean?: number);
 }
 export class DeleteMapVirtualBoundary extends DeleteMapSubSet {
 }

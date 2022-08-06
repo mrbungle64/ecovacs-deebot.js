@@ -216,6 +216,7 @@ declare class VacBot {
      */
     connect(): void;
     on(name: any, func: any): void;
+    once(name: any, func: any): void;
     /**
      * If the value of `company` is `eco-ng`
      * the model uses MQTT as protocol
