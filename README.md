@@ -76,7 +76,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.8.3 (beta)
+### 0.8.3
 * Added initial support for yeedi login
 * and also for a few models
   * yeedi k650
