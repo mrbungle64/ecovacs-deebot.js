@@ -40,7 +40,7 @@
     "canvas": "2.9.3"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "devDependencies": {
     "@types/node": "^17.0.45",
