@@ -15,9 +15,7 @@ Library for running Ecovacs Deebot (and also some yeedi) vacuum cleaner robots
 
 Information on how to install this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Installation).
 
-It is recommended to use version 14.x or 16.x of Node.js.
-
-The minimum required version is 12.x, but support for this version may will be dropped soon.
+The minimum required version is 14.x. It is recommended to use version 14.x or 16.x of Node.js.
 
 ## Usage
 
@@ -75,6 +73,10 @@ There is of course no claim to full functionality.
 * "Edge" command does not work with Deebot U2 (starts auto clean instead)
 
 ## Changelog
+
+### 0.9.0 (alpha)
+* Bump minimum required version of Node.js to 14.x
+* Bump dependencies
 
 ### 0.8.3
 * Added initial support for yeedi login
