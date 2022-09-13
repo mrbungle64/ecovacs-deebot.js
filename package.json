@@ -43,7 +43,7 @@
     "node": ">=14"
   },
   "devDependencies": {
-    "@types/node": "^17.0.45",
+    "@types/node": "^18.7.17",
     "eslint": "^8.23.0",
     "mocha": "^10.0.0",
     "node-machine-id": "^1.1.12",
