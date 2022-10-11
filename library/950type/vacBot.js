@@ -45,6 +45,7 @@ class VacBot_950type extends VacBot {
         this.volume = 0;
         this.relocationState = null;
         this.firmwareVersion = null;
+        this.airDryingStatus = null;
     }
 
     /**
@@ -273,6 +274,24 @@ class VacBot_950type extends VacBot {
                 this.scrubbingType = payload['sweepType'];
                 tools.envLog("[VacBot] *** WaterInfo sweepType = " + payload['sweepType']);
             }
+        }
+    }
+
+     /**
+     * Handle the payload of the `AirDring` response/message (air drying status)
+     * @param {Object} payload
+     */
+      handleAirDryingState(payload) {
+        tools.envLog("[handleAirDryingState] payload: ", JSON.stringify(payload));
+        let airDryingStatus = null;
+        const status = parseInt(payload['status']);
+        if (status === 1) {
+            airDryingStatus = 'airdrying';
+        } else if (status === 2) {
+            airDryingStatus = 'idle';
+        }
+        if (airDryingStatus) {
+            this.airDryingStatus = airDryingStatus;
         }
     }
 
