@@ -843,6 +843,14 @@ class VacBot {
     }
 
     /**
+     * Returns true if the model has air drying functionality
+     * @returns {boolean}
+     */
+    hasAirDrying() {
+        return this.getDeviceProperty('air_drying');
+    }
+
+    /**
      * Returns true if the model has power adjustment functionality
      * @returns {boolean}
      */
