@@ -561,6 +561,7 @@ exports.KnownDevices = {
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
+        "air_drying": true,
         "voice_report": true,
         "auto_empty_station": false,
         "clean_speed": true,
