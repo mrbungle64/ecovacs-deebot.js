@@ -617,7 +617,6 @@ class GetCleanPreference extends VacBotCommand {
     }
 }
 
-// TODO: Handle response data
 class GetAirDrying extends VacBotCommand {
     constructor() {
         super('getAirDring');

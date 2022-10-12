@@ -25,7 +25,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### Supported models
 
-The supported models are those that I own myself:
+The supported models are those that I own myself (or which are technically identical to these):
 
 * Deebot Slim 2
 * Deebot 900/901
@@ -76,6 +76,7 @@ There is of course no claim to full functionality.
 
 ### 0.9.0 (alpha)
 * Bump minimum required version of Node.js to 14.x
+* (apfelnutzer) Added handling for the air drying message
 * Bump dependencies
 
 ### 0.8.3
