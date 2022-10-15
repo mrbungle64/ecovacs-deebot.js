@@ -32,7 +32,7 @@
     "ltx": "3.0.0",
     "mqtt": "4.3.7",
     "simple-xmpp": "2.3.1",
-    "@xmldom/xmldom": "0.8.2",
+    "@xmldom/xmldom": "0.8.3",
     "lzma": "2.3.2",
     "uniqid": "5.4.0"
   },
@@ -43,8 +43,8 @@
     "node": ">=14"
   },
   "devDependencies": {
-    "@types/node": "^17.0.45",
-    "eslint": "^8.23.0",
+    "@types/node": "^18.11.0",
+    "eslint": "^8.25.0",
     "mocha": "^10.0.0",
     "node-machine-id": "^1.1.12",
     "nyc": "^15.1.0",
