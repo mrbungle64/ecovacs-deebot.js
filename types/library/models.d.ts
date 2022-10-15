@@ -558,6 +558,7 @@ export var KnownDevices: {
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
+        air_drying: boolean;
         voice_report: boolean;
         auto_empty_station: boolean;
         clean_speed: boolean;

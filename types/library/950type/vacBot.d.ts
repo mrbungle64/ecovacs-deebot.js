@@ -23,6 +23,7 @@ declare class VacBot_950type extends VacBot {
     volume: number;
     relocationState: any;
     firmwareVersion: any;
+    airDryingStatus: string;
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
@@ -68,6 +69,11 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleWaterInfo(payload: any): void;
+    /**
+    * Handle the payload of the `AirDring` response/message (air drying status)
+    * @param {Object} payload
+    */
+    handleAirDryingState(payload: any): void;
     /**
      * Handle the payload of the `ChargeState` response/message (charge status)
      * @param {Object} payload

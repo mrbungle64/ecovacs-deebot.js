@@ -328,6 +328,11 @@ declare class VacBot {
      */
     hasMoppingSystem(): boolean;
     /**
+     * Returns true if the model has air drying functionality
+     * @returns {boolean}
+     */
+    hasAirDrying(): boolean;
+    /**
      * Returns true if the model has power adjustment functionality
      * @returns {boolean}
      */
