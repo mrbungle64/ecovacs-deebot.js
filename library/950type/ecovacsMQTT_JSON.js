@@ -90,7 +90,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (type === "incoming") {
             eventName = topic.split('/')[2];
             message = JSON.parse(message);
-            payload = message['body']['data'];
+            if (message['body'] && message['body']['data']) {
+                payload = message['body']['data'];
+            }
         } else if (type === "response") {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
