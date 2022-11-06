@@ -78,7 +78,8 @@ There is of course no claim to full functionality.
 * Breaking change: Bump minimum required version of Node.js to 14.x
 * (apfelnutzer) Added handling for the air drying message
 * Bugfix issue #219
-* Bump dependencies
+* Added some error codes
+* Bump dependencies (incl. fix for CVE-2022-39353)
 
 ### 0.8.3
 * Added initial support for yeedi login
