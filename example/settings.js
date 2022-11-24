@@ -7,4 +7,4 @@ exports.PASSWORD = 'a1b2c3d4';
 // If it doesn't appear to work try "WW", their world-wide catchall
 exports.COUNTRY_CODE = 'DE';
 exports.DEVICE_NUMBER = 0; // Starts at zero = the first device
-exports.AUTH_DOMAIN = ''; // Can be left blank by default
+exports.AUTH_DOMAIN = ''; // Can be left blank for Ecovacs - 'yeedi.com' for yeedi devices

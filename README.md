@@ -74,7 +74,7 @@ There is of course no claim to full functionality.
 
 ## Changelog
 
-### 0.9.0 (beta)
+### 0.9.0
 * Breaking change: Bump minimum required version of Node.js to 14.x
 * (apfelnutzer) Added handling for the air drying message
 * Bugfix issue #219
