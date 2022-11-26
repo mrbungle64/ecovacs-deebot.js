@@ -124,6 +124,19 @@ class CustomArea_V2 extends Clean_V2 {
     }
 }
 
+class MapPoint_V2 extends Clean_V2 {
+    constructor(area = '') {
+        super('mapPoint', 'start', {
+            'content': {
+                'total': 0,
+                'donotClean': 0,
+                'count': 0,
+                'value': area
+            }
+        });
+    }
+}
+
 class Pause extends VacBotCommand {
     constructor() {
         super('clean', {
@@ -705,6 +718,7 @@ module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWaterInfo = GetWaterInfo;
+module.exports.MapPoint_V2 = MapPoint_V2;
 module.exports.Move = Move;
 module.exports.MoveBackward = MoveBackward;
 module.exports.MoveForward = MoveForward;

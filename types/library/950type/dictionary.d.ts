@@ -5,6 +5,7 @@ export namespace CLEAN_MODE_TO_ECOVACS {
     const spotArea: string;
     const stop: string;
     const customArea: string;
+    const mapPoint: string;
 }
 export namespace CLEAN_ACTION_TO_ECOVACS {
     export const start: string;

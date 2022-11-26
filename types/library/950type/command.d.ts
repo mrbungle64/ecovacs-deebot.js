@@ -144,6 +144,9 @@ export class GetVolume extends VacBotCommand {
 export class GetWaterInfo extends VacBotCommand {
     constructor();
 }
+export class MapPoint_V2 extends Clean_V2 {
+    constructor(area?: string);
+}
 export class Move extends VacBotCommand {
     constructor(action: any);
 }

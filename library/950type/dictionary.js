@@ -9,7 +9,8 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'spot': 'spot',
     'spotArea': 'spotArea',
     'stop': 'stop',
-    'customArea': 'customArea'
+    'customArea': 'customArea',
+    'mapPoint': 'mapPoint'
 };
 
 exports.CLEAN_ACTION_TO_ECOVACS = {
