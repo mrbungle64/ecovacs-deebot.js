@@ -370,6 +370,14 @@ exports.KnownDevices = {
         "name": "DEEBOT T10 TURBO",
         "deviceClassLink": "fqxoiu"
     },
+    "lx3j7m": {
+        "name": "DEEBOT T10 OMNI",
+        "deviceClassLink": "fqxoiu"
+    },
+    "bro5wu": {
+        "name": "DEEBOT X1e OMNI",
+        "deviceClassLink": "fqxoiu"
+    },
     "126": {
         "name": "DEEBOT N79",
         "950type": false,
@@ -524,6 +532,10 @@ exports.KnownDevices = {
         "name": "yeedi vac 2 pro",
         "deviceClassLink": "mnx7f4"
     },
+    "rwp09o": {
+        "name": "yeedi Floor 3+",
+        "deviceClassLink": "mnx7f4"
+    },
     "04z443": {
         "name": "yeedi vac max",
         "950type": true,
@@ -569,6 +581,14 @@ exports.KnownDevices = {
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
+        "deviceClassLink": "vthpeg"
+    },
+    "t5e5o6": {
+        "name": "yeedi Floor 3 Station",
+        "deviceClassLink": "vthpeg"
+    },
+    "kd0una": {
+        "name": "yeedi Floor 3 Station",
         "deviceClassLink": "vthpeg"
     },
     "9t30w8": {
