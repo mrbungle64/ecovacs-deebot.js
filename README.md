@@ -31,7 +31,7 @@ The supported models are those that I own myself (or which are technically ident
 * Deebot 900/901
 * Deebot OZMO 930
 * Deebot OZMO 920/950
-* Deebot T8 AIVI (T8 series)
+* Deebot T8 AIVI
 
 ### These models should work properly or at least partially
 
@@ -54,9 +54,9 @@ There is of course no claim to full functionality.
 * Deebot U2 series
 * Deebot N8 series
 * Deebot OZMO T5
-* Deebot OZMO T10 Plus
 * Deebot (OZMO) T8 series
 * Deebot T9 series
+* Deebot T10 series
 * Deebot X1 series
 
 #### yeedi (experimental)
