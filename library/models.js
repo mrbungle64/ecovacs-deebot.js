@@ -622,5 +622,10 @@ exports.KnownDevices = {
     "09m4bu": {
         "name": "K650",
         "deviceClassLink": "3ab24g"
+    },
+    "sdp1y1": {
+        name: "AIRBOT Z1",
+        "950type": true,
+        "950type_V2": true
     }
 };
