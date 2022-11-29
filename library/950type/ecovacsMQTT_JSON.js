@@ -446,6 +446,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     tools.envLog(`[EcovacsMQTT_JSON] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
                 break;
+            case 'GetAirQuality':
+            case 'GetAirSpeed':
+            case 'GetHumidity':
+            case 'GetTemperature':
+                if (payload) {
+                    tools.envLog(`[AirPurifier] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
+                }
+                break;
             default:
                 tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
                 break;

@@ -1113,6 +1113,18 @@ class VacBot_950type extends VacBot {
             case "GetAIMap".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAIMap());
                 break;
+            case "GetAirQuality".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAirQuality());
+                break;
+            case "GetAirSpeed".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAirSpeed());
+                break;
+            case "GetHumidity".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetHumidity());
+                break;
+            case "GetTemperature".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetTemperature());
+                break;
         }
     }
 }
