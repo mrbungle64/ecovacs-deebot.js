@@ -46,6 +46,17 @@ class VacBot_950type extends VacBot {
         this.relocationState = null;
         this.firmwareVersion = null;
         this.airDryingStatus = null;
+
+        // Air Purifier
+        this.airQuality = {
+            'particulateMatter25': null,
+            'pm_10': null,
+            'particulateMatter10': null,
+            'airQualityIndex': null,
+            'volatileOrganicCompounds': null,
+            'temperature': null,
+            'humidity': null
+        };
     }
 
     /**
@@ -816,6 +827,18 @@ class VacBot_950type extends VacBot {
         }
         tools.envLog("[VacBot] *** errorCode = " + this.errorCode);
         tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
+    }
+
+    handleAirQuality(payload) {
+        this.airQuality = {
+            'particulateMatter25': payload['pm25'],
+            'pm_10': payload['pm_10'],
+            'particulateMatter10': payload['pm10'],
+            'airQualityIndex': payload['aq'],
+            'volatileOrganicCompounds': payload['voc'],
+            'temperature': payload['tem'],
+            'humidity': payload['hum']
+        };
     }
 
     /**
