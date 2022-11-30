@@ -627,5 +627,10 @@ exports.KnownDevices = {
         name: "AIRBOT Z1",
         "950type": true,
         "950type_V2": true
+    },
+    "20anby": {
+        name: "Z1 Air Quality Monitor",
+        "950type": true,
+        "950type_V2": true
     }
 };
