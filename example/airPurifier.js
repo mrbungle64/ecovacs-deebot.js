@@ -25,30 +25,30 @@ const api = new EcoVacsAPI(deviceId, countryCode, '', domain);
 // the devices linked to your account to prepare connectivity to your vacuum.
 api.connect(accountId, passwordHash).then(() => {
 
-  api.devices().then((devices) => {
-    console.log('Devices:', JSON.stringify(devices));
+    api.devices().then((devices) => {
 
-    let vacuum = devices[deviceNumber];
-    let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, api.getContinent());
+        console.log(`Devices: ${JSON.stringify(devices)}`);
+        let vacuum = devices[deviceNumber];
+        console.log(vacuum);
+        let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum);
 
-    // Once the session has started the airbot will fire a "ready" event.
-    // At this point you can request information from your vacuum or send actions to it.
-    vacbot.on('ready', () => {
+        // Once the session has started the airbot will fire a "ready" event.
+        // At this point you can request information from your vacuum or send actions to it.
+        vacbot.on('ready', () => {
 
-      console.log('\nairbot ready\n');
+            console.log('\nairbot ready\n');
 
-      vacbot.run('GetCleanState');
-      vacbot.run('GetChargeState');
-      vacbot.run('GetBatteryState');
-      vacbot.run('GetSleepStatus');
+            vacbot.run('GetChargeState');
+            vacbot.run('GetBatteryState');
+            vacbot.run('GetSleepStatus');
 
-      vacbot.run('GetAirQuality');
-      vacbot.run('GetAirSpeed');
-      vacbot.run('GetHumidity');
-      vacbot.run('GetTemperature');
+            vacbot.run('GetAirQuality');
+            vacbot.run('GetAirSpeed');
+            vacbot.run('GetHumidity');
+            vacbot.run('GetTemperature');
+        });
+        vacbot.connect();
     });
-    vacbot.connect();
-  });
 }).catch((e) => {
-  console.error(`Failure in connecting: ${e.message}`);
+    console.error(`Failure in connecting: ${e.message}`);
 });

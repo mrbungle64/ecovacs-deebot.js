@@ -624,12 +624,12 @@ exports.KnownDevices = {
         "deviceClassLink": "3ab24g"
     },
     "sdp1y1": {
-        name: "AIRBOT Z1",
+        "name": "AIRBOT Z1",
         "950type": true,
         "950type_V2": true
     },
     "20anby": {
-        name: "Z1 Air Quality Monitor",
+        "name": "Z1 Air Quality Monitor",
         "950type": true,
         "950type_V2": true
     }
