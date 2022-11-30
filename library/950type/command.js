@@ -672,25 +672,25 @@ class GetAIMap extends VacBotCommand {
 
 class GetAirQuality extends VacBotCommand {
     constructor() {
-        super('GetAirQuality');
+        super('getAirQuality');
     }
 }
 
 class GetAirSpeed extends VacBotCommand {
     constructor() {
-        super('GetAirSpeed');
+        super('getAirSpeed');
     }
 }
 
 class GetHumidity extends VacBotCommand {
     constructor() {
-        super('GetHumidity');
+        super('getHumidity');
     }
 }
 
 class GetTemperature extends VacBotCommand {
     constructor() {
-        super('GetTemperature');
+        super('getTemperature');
     }
 }
 
