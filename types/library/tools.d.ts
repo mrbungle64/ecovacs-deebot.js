@@ -1,9 +1,85 @@
 /**
+ * Translates the Node.js error message for some network related error messages (e.g. `ENOTFOUND`)
+ * @param {string} message - The error message received from the server
+ * @param {string} [command=''] - The command
+ * @returns {string} the error description
+ */
+export function createErrorDescription(message: string, command?: string): string;
+/**
+ * Prints to `stdout` only in development mode (`dev` or `development`)
+ */
+export function envLog(...args: any[]): void;
+export function formatString(string: any, ...args: any[]): any;
+/**
+ * Get all known devices, including the supported devices and the known devices
+ * @returns {Object} a dictionary of all known devices
+ */
+export function getAllKnownDevices(): any;
+/**
+ * Get the value of the given property for the device class
+ * @param {string} deviceClass - The device class to get the property for
+ * @param {string} property - The property to get
+ * @param {any} [defaultValue=false] - The default value to return if the property is not found
+ * @returns {any} The value of the property for the device class
+ */
+export function getDeviceProperty(deviceClass: string, property: string, defaultValue?: any): any;
+/**
+ * @returns {Object} a dictionary of known devices
+ */
+export function getKnownDevices(): any;
+/**
+ * Generate a somewhat random string for request id with 8 chars.
+ * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
+ * @returns {string} the generated ID
+ */
+export function getReqID(): string;
+/**
+ * @returns {Object} a dictionary of supported devices
+ */
+export function getSupportedDevices(): any;
+/**
+ * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
+ * @param {number} totalSeconds - The total number of seconds to format
+ * @returns {string} a string that is formatted as hours, minutes, and seconds
+ */
+export function getTimeStringFormatted(totalSeconds: number): string;
+/**
+ * @param {string} deviceClass - The device class of the device
+ * @returns {boolean} a Boolean value whether the device a 710 series model
+ */
+export function is710series(deviceClass: string): boolean;
+/**
+ * @param {string} deviceClass - The device class of the device
+ * @returns {boolean} a Boolean value whether the device is an air purifier
+ */
+export function isAirPurifier(deviceClass: string): boolean;
+/**
+ * @returns {boolean} whether the canvas module is available
+ */
+export function isCanvasModuleAvailable(): boolean;
+/**
+ * Check if the deviceClass belongs to a known model
+ * @param {string} deviceClass - The device class to check for
+ * @returns {boolean} whether the deviceClass belongs to a known model
+ */
+export function isKnownDevice(deviceClass: string): boolean;
+/**
+ * @param {string} deviceClass - The device class of the device
+ * @returns {boolean} a Boolean value whether the device a N79 series model
+ */
+export function isN79series(deviceClass: string): boolean;
+/**
  * Returns true if the value is an object, false if it is not
  * @param {any} val - The value to check.
  * @returns {boolean} whether it is an object
  */
 export function isObject(val: any): boolean;
+/**
+ * Check if the deviceClass belongs to a supported model
+ * @param {string} deviceClass - The device class to check for
+ * @returns {boolean} whether the deviceClass belongs to a supported model
+ */
+export function isSupportedDevice(deviceClass: string): boolean;
 /**
  * Given a string, return true if it is a valid JSON string, false otherwise
  * @param {string} jsonString - The string to be tested
@@ -16,77 +92,6 @@ export function isValidJsonString(jsonString: string): boolean;
  * @returns {boolean} whether it is a virtual wall type
  */
 export function isValidVirtualWallType(type: string): boolean;
-/**
- * Prints to `stdout` only in development mode (`dev` or `development`)
- */
-export function envLog(...args: any[]): void;
-/**
- * Get all known devices, including the supported devices and the known devices
- * @returns {Object} a dictionary of all known devices
- */
-export function getAllKnownDevices(): any;
-/**
- * @returns {Object} a dictionary of supported devices
- */
-export function getSupportedDevices(): any;
-/**
- * @returns {Object} a dictionary of known devices
- */
-export function getKnownDevices(): any;
-/**
- * Check if the deviceClass belongs to a supported model
- * @param {string} deviceClass - The device class to check for
- * @returns {boolean} whether the deviceClass belongs to a supported model
- */
-export function isSupportedDevice(deviceClass: string): boolean;
-/**
- * Check if the deviceClass belongs to a known model
- * @param {string} deviceClass - The device class to check for
- * @returns {boolean} whether the deviceClass belongs to a known model
- */
-export function isKnownDevice(deviceClass: string): boolean;
-/**
- * Get the value of the given property for the device class
- * @param {string} deviceClass - The device class to get the property for
- * @param {string} property - The property to get
- * @param {any} [defaultValue=false] - The default value to return if the property is not found
- * @returns {any} The value of the property for the device class
- */
-export function getDeviceProperty(deviceClass: string, property: string, defaultValue?: any): any;
-/**
- * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
- * @param {number} totalSeconds - The total number of seconds to format
- * @returns {string} a string that is formatted as hours, minutes, and seconds
- */
-export function getTimeStringFormatted(totalSeconds: number): string;
-/**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device a N79 series model
- */
-export function isN79series(deviceClass: string): boolean;
-/**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device a 710 series model
- */
-export function is710series(deviceClass: string): boolean;
-/**
- * Generate a somewhat random string for request id with 8 chars.
- * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
- * @returns {string} the generated ID
- */
-export function getReqID(): string;
-/**
- * @returns {boolean} whether the canvas module is available
- */
-export function isCanvasModuleAvailable(): boolean;
-/**
- * Translates the Node.js error message for some network related error messages (e.g. `ENOTFOUND`)
- * @param {string} message - The error message received from the server
- * @param {string} [command=''] - The command
- * @returns {string} the error description
- */
-export function createErrorDescription(message: string, command?: string): string;
-export function formatString(string: any, ...args: any[]): any;
 /**
  * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
  * @param {Object} params - the parameters to be encoded

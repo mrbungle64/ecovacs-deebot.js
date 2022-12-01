@@ -676,34 +676,7 @@ class GetAirQuality extends VacBotCommand {
     }
 }
 
-class AirClean extends VacBotCommand {
-    constructor() {
-        super('airClean', {
-            'type': 'auto'
-        });
-    }
-}
-
-class GetAirSpeed extends VacBotCommand {
-    constructor() {
-        super('getAirSpeed');
-    }
-}
-
-class GetHumidity extends VacBotCommand {
-    constructor() {
-        super('getHumidity');
-    }
-}
-
-class GetTemperature extends VacBotCommand {
-    constructor() {
-        super('getTemperature');
-    }
-}
-
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
-module.exports.AirClean = AirClean;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.Clean_V2 = Clean_V2;
@@ -784,6 +757,3 @@ module.exports.Stop = Stop;
 
 // Air Purifier (e.g. AIRBOT Z1)
 module.exports.GetAirQuality = GetAirQuality;
-module.exports.GetAirSpeed = GetAirSpeed;
-module.exports.GetHumidity = GetHumidity;
-module.exports.GetTemperature = GetTemperature;

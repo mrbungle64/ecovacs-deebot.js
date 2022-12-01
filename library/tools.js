@@ -85,6 +85,20 @@ function isN79series(deviceClass) {
 }
 
 /**
+ * @param {string} deviceClass - The device class of the device
+ * @returns {boolean} a Boolean value whether the device is an air purifier
+ */
+function isAirPurifier(deviceClass) {
+    switch (deviceClass) {
+        case 'sdp1y1': // AIRBOT Z1
+        case '20anby': // Z1 Air Quality Monitor
+            return true;
+        default:
+            return false;
+    }
+}
+
+/**
  * Get all known devices, including the supported devices and the known devices
  * @returns {Object} a dictionary of all known devices
  */
@@ -228,21 +242,22 @@ let envLog = function () {
     }
 };
 
+module.exports.createErrorDescription = createErrorDescription;
+module.exports.envLog = envLog;
+module.exports.formatString = formatString;
+module.exports.getAllKnownDevices = getAllKnownDevices;
+module.exports.getDeviceProperty = getDeviceProperty;
+module.exports.getKnownDevices = getKnownDevices;
+module.exports.getReqID = getReqID;
+module.exports.getSupportedDevices = getSupportedDevices;
+module.exports.getTimeStringFormatted = getTimeStringFormatted;
+module.exports.is710series = is710series;
+module.exports.isAirPurifier = isAirPurifier;
+module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
+module.exports.isKnownDevice = isKnownDevice;
+module.exports.isN79series = isN79series;
 module.exports.isObject = isObject;
+module.exports.isSupportedDevice = isSupportedDevice;
 module.exports.isValidJsonString = isValidJsonString;
 module.exports.isValidVirtualWallType = isValidVirtualWallType;
-module.exports.envLog = envLog;
-module.exports.getAllKnownDevices = getAllKnownDevices;
-module.exports.getSupportedDevices = getSupportedDevices;
-module.exports.getKnownDevices = getKnownDevices;
-module.exports.isSupportedDevice = isSupportedDevice;
-module.exports.isKnownDevice = isKnownDevice;
-module.exports.getDeviceProperty = getDeviceProperty;
-module.exports.getTimeStringFormatted = getTimeStringFormatted;
-module.exports.isN79series = isN79series;
-module.exports.is710series = is710series;
-module.exports.getReqID = getReqID;
-module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
-module.exports.createErrorDescription = createErrorDescription;
-module.exports.formatString = formatString;
 module.exports.paramsToQueryList = paramsToQueryList;

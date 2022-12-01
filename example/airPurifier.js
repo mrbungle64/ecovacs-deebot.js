@@ -51,7 +51,7 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.run('GetBatteryState');
             vacbot.run('GetSleepStatus');
 
-            //vacbot.run('AirClean');
+            //vacbot.run('Clean_V2');
 
             vacbot.run('GetAirQuality');
             //vacbot.run('GetAirSpeed');

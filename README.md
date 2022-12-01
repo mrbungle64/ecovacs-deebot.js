@@ -76,6 +76,7 @@ There is of course no claim to full functionality.
 
 ### 0.9.1 (alpha)
 * Added MapPoint_V2 shortcut command
+* Added some experimental commands for air purifier Z1
 
 ### 0.9.0
 * Breaking change: Bump minimum required version of Node.js to 14.x
