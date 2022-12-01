@@ -676,6 +676,91 @@ class GetAirQuality extends VacBotCommand {
     }
 }
 
+class SinglePoint_V2 extends Clean_V2 {
+    constructor(spotCoordinates = '') {
+        super('singlePoint', 'start', {
+            'content': {
+                'value': spotCoordinates
+            }
+        });
+    }
+}
+
+class Area_V2 extends Clean_V2 {
+    constructor() {
+        super('area', 'start');
+    }
+}
+
+class SetThreeModule extends VacBotCommand {
+    constructor(level = 0, type = '', enable = 0) {
+        super('setThreeModule', {
+            'level': level,
+            'type': type,
+            'enable': enable,
+            'state': 0,
+            'err': 0,
+            'work': 0
+        });
+    }
+}
+
+class SetFreshenerLevel extends SetThreeModule {
+    constructor(level = 0, enable = 0) {
+        super(level, 'smell', enable);
+    }
+}
+
+
+class SetHumidifierLevel extends SetThreeModule {
+    constructor(level = 0, enable = 0) {
+        super(level, 'humidify', enable);
+    }
+}
+
+class SetUVCleaner extends SetThreeModule {
+    constructor(enable = 0) {
+        super(0, 'uvLight', enable);
+    }
+}
+
+class SetAtmoLight extends VacBotCommand {
+    constructor(intensity = 0) {
+        super('setAtmoLight', {
+            'intensity': intensity,
+            'type': 'system',
+            'total': 4
+        });
+    }
+}
+
+class SetBlueSpeaker extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setBlueSpeaker', {
+            'enable': enable,
+            'name': 'ECOVACS Z1',
+            'resetTime': 1
+        });
+    }
+}
+
+class GetMapSet_V2 extends VacBotCommand {
+    constructor(mapID, type = 'ar') {
+        super('getMapSet_V2', {
+            'mid': mapID,
+            'type': type
+        });
+    }
+}
+
+class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapArray) {
+        super('setMapSet_V2', {
+            subsets: mapArray
+        });
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -757,3 +842,13 @@ module.exports.Stop = Stop;
 
 // Air Purifier (e.g. AIRBOT Z1)
 module.exports.GetAirQuality = GetAirQuality;
+module.exports.SinglePoint_V2 = SinglePoint_V2;
+module.exports.Area_V2 = Area_V2;
+module.exports.GetMapSet_V2 = GetMapSet_V2;
+module.exports.SetMapSet_V2 = SetMapSet_V2;
+module.exports.SetThreeModule = SetThreeModule;
+module.exports.SetFreshenerLevel = SetFreshenerLevel;
+module.exports.SetHumidifierLevel = SetHumidifierLevel;
+module.exports.SetUVCleaner = SetUVCleaner;
+module.exports.SetAtmoLight = SetAtmoLight;
+module.exports.SetBlueSpeaker = SetBlueSpeaker;

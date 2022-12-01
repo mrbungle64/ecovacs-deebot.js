@@ -1141,6 +1141,36 @@ class VacBot_950type extends VacBot {
             case "GetAirQuality".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAirQuality());
                 break;
+            case "SinglePoint_V2".toLowerCase():
+                this.sendCommand(new VacBotCommand.SinglePoint_V2(args[0]));
+                break;
+            case "Area_V2".toLowerCase():
+                this.sendCommand(new VacBotCommand.Area_V2());
+                break;
+            case "GetMapSet_V2".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMapSet_V2());
+                break;
+            case "SetMapSet_V2".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0]));
+                break;
+            case "SetThreeModule".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetThreeModule(args[0], args[1], args[2]));
+                break;
+            case "SetFreshenerLevel".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetFreshenerLevel(args[0], args[1]));
+                break;
+            case "SetHumidifierLevel".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetHumidifierLevel(args[0], args[1]));
+                break;
+            case "SetUVCleaner".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetUVCleaner(args[0]));
+                break;
+            case "SetAtmoLight".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetAtmoLight(args[0]));
+                break;
+            case "SetBlueSpeaker".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetBlueSpeaker(args[0]));
+                break;
         }
     }
 }
