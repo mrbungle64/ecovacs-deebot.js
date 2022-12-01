@@ -1148,6 +1148,12 @@ class VacBot_950type extends VacBot {
             case "GetTemperature".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetTemperature());
                 break;
+            case "AirClean".toLowerCase(): {
+                const power = args[0] || '50';
+                const last = args[1] || '10';
+                this.sendCommand(new VacBotCommand.AirClean(power, last));
+                break;
+            }
         }
     }
 }

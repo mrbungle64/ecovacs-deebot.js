@@ -1,5 +1,8 @@
 export class AddMapVirtualBoundary extends AddMapSubSet {
 }
+export class AirClean extends VacBotCommand {
+    constructor(power?: string, last?: string);
+}
 export class Charge extends VacBotCommand {
     constructor();
 }
@@ -226,6 +229,18 @@ export class SpotArea_V2 extends Clean_V2 {
     constructor(area?: string, cleanings?: number);
 }
 export class Stop extends VacBotCommand {
+    constructor();
+}
+export class GetAirQuality extends VacBotCommand {
+    constructor();
+}
+export class GetAirSpeed extends VacBotCommand {
+    constructor();
+}
+export class GetHumidity extends VacBotCommand {
+    constructor();
+}
+export class GetTemperature extends VacBotCommand {
     constructor();
 }
 declare class AddMapSubSet extends VacBotCommand {

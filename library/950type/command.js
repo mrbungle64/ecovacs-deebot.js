@@ -676,6 +676,16 @@ class GetAirQuality extends VacBotCommand {
     }
 }
 
+class AirClean extends VacBotCommand {
+    constructor(power = '50', last = '10') {
+        super('airClean', {
+            'type': "MultiPoint",
+            'power': power,
+            'last': last
+        });
+    }
+}
+
 class GetAirSpeed extends VacBotCommand {
     constructor() {
         super('getAirSpeed');
@@ -695,6 +705,7 @@ class GetTemperature extends VacBotCommand {
 }
 
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
+module.exports.AirClean = AirClean;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.Clean_V2 = Clean_V2;

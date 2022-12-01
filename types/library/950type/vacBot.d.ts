@@ -24,6 +24,15 @@ declare class VacBot_950type extends VacBot {
     relocationState: any;
     firmwareVersion: any;
     airDryingStatus: string;
+    airQuality: {
+        particulateMatter25: any;
+        pm_10: any;
+        particulateMatter10: any;
+        airQualityIndex: any;
+        volatileOrganicCompounds: any;
+        temperature: any;
+        humidity: any;
+    };
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
@@ -210,6 +219,7 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleResponseError(payload: any): void;
+    handleAirQuality(payload: any): void;
 }
 import VacBot = require("../vacBot");
 import map = require("../mapTemplate");
