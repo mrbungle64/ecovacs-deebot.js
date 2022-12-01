@@ -95,8 +95,7 @@ class VacBot_950type extends VacBot {
                         }
                     }
                     this.currentCustomAreaValues = areaValues;
-                }
-                else if (type === 'spotArea') {
+                } else if (type === 'spotArea') {
                     this.currentSpotAreas = areaValues;
                 }
             }
@@ -130,7 +129,7 @@ class VacBot_950type extends VacBot {
             this.batteryIsLow = !!Number(payload['isLow']);
             tools.envLog(`[VacBot] *** batteryIsLow = ${this.batteryIsLow}`);
         }
-        tools.envLog(`[VacBot] *** batteryLevel = ${this.batteryLevel}%`, );
+        tools.envLog(`[VacBot] *** batteryLevel = ${this.batteryLevel}%`);
     }
 
     /**
@@ -288,11 +287,11 @@ class VacBot_950type extends VacBot {
         }
     }
 
-     /**
+    /**
      * Handle the payload of the `AirDring` response/message (air drying status)
      * @param {Object} payload
      */
-      handleAirDryingState(payload) {
+    handleAirDryingState(payload) {
         tools.envLog("[handleAirDryingState] payload: ", JSON.stringify(payload));
         let airDryingStatus = null;
         const status = parseInt(payload['status']);
@@ -532,8 +531,8 @@ class VacBot_950type extends VacBot {
                 });
                 if (cleanCtl.type === 'spotArea') {
                     Object.assign(cleanCtl, {
-                            'spotAreas': json.content
-                        });
+                        'spotAreas': json.content
+                    });
                 }
             }
             const onlyOnce = Number(resultData.repeat) === 0;
@@ -871,8 +870,7 @@ class VacBot_950type extends VacBot {
                 // TODO: Find a better solution
                 if ((this.deviceClass === 'p5nx9u') || (this.deviceClass === 'vthpeg')) {
                     this.sendCommand(new VacBotCommand.GetMapInfo_V2());
-                }
-                else {
+                } else {
                     this.sendCommand(new VacBotCommand.GetMaps());
                 }
                 break;

@@ -79,9 +79,9 @@ declare class VacBot_950type extends VacBot {
      */
     handleWaterInfo(payload: any): void;
     /**
-    * Handle the payload of the `AirDring` response/message (air drying status)
-    * @param {Object} payload
-    */
+     * Handle the payload of the `AirDring` response/message (air drying status)
+     * @param {Object} payload
+     */
     handleAirDryingState(payload: any): void;
     /**
      * Handle the payload of the `ChargeState` response/message (charge status)
