@@ -1,7 +1,7 @@
 export class AddMapVirtualBoundary extends AddMapSubSet {
 }
 export class AirClean extends VacBotCommand {
-    constructor(power?: string, last?: string);
+    constructor();
 }
 export class Charge extends VacBotCommand {
     constructor();

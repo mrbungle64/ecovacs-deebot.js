@@ -52,13 +52,11 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.run('GetSleepStatus');
 
             //vacbot.run('AirClean');
-            //vacbot.run('AirClean', '100'); // power = 100
-            //vacbot.run('AirClean', '100', '10'); // last = 10
 
             vacbot.run('GetAirQuality');
-            vacbot.run('GetAirSpeed');
-            vacbot.run('GetHumidity');
-            vacbot.run('GetTemperature');
+            //vacbot.run('GetAirSpeed');
+            //vacbot.run('GetHumidity');
+            //vacbot.run('GetTemperature');
         });
         vacbot.connect();
     });

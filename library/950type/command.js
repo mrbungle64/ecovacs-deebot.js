@@ -677,11 +677,9 @@ class GetAirQuality extends VacBotCommand {
 }
 
 class AirClean extends VacBotCommand {
-    constructor(power = '50', last = '10') {
+    constructor() {
         super('airClean', {
-            'type': "MultiPoint",
-            'power': power,
-            'last': last
+            'type': 'auto'
         });
     }
 }
