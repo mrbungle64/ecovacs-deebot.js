@@ -10,7 +10,9 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'spotArea': 'spotArea',
     'stop': 'stop',
     'customArea': 'customArea',
-    'mapPoint': 'mapPoint'
+    'mapPoint': 'mapPoint',
+    'singlePoint': 'singlePoint',
+    'area': 'area'
 };
 
 exports.CLEAN_ACTION_TO_ECOVACS = {
@@ -29,7 +31,9 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'pause': 'pause',
     'goCharging': 'returning',
     'idle': 'idle',
-    'move': 'move'
+    'move': 'move',
+    'singlePoint': 'singlePoint',
+    'area': 'area'
 };
 
 exports.WATER_LEVEL_TO_ECOVACS = {

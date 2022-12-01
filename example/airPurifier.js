@@ -53,6 +53,18 @@ api.connect(accountId, passwordHash).then(() => {
 
             //vacbot.run('Clean_V2');
 
+            // Clean air at position 0,0 (position of charge dock)
+            //vacbot.run('SinglePoint_V2', '0,0');
+
+            // Enable UV-Cleaner
+            // vacbot.run('SetUVCleaner', 0);
+
+            // Set target humidity to 55 (and enable himidification)
+            // vacbot.run('SetHumidifierLevel', 55, 1);
+
+            // Enable freshener and set itensity to medium
+            // vacbot.run('SetFreshenerLevel', 2, 1);
+
             vacbot.run('GetAirQuality');
             //vacbot.run('GetAirSpeed');
             //vacbot.run('GetHumidity');
