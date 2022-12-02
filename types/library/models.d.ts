@@ -367,6 +367,14 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    lx3j7m: {
+        name: string;
+        deviceClassLink: string;
+    };
+    bro5wu: {
+        name: string;
+        deviceClassLink: string;
+    };
     "126": {
         name: string;
         "950type": boolean;
@@ -521,6 +529,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    rwp09o: {
+        name: string;
+        deviceClassLink: string;
+    };
     "04z443": {
         name: string;
         "950type": boolean;
@@ -568,6 +580,14 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    t5e5o6: {
+        name: string;
+        deviceClassLink: string;
+    };
+    kd0una: {
+        name: string;
+        deviceClassLink: string;
+    };
     "9t30w8": {
         name: string;
         "950type": boolean;
@@ -599,6 +619,16 @@ export var KnownDevices: {
     "09m4bu": {
         name: string;
         deviceClassLink: string;
+    };
+    sdp1y1: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+    };
+    "20anby": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
     };
 };
 //# sourceMappingURL=models.d.ts.map
