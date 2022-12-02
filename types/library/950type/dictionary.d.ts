@@ -6,6 +6,8 @@ export namespace CLEAN_MODE_TO_ECOVACS {
     const stop: string;
     const customArea: string;
     const mapPoint: string;
+    const singlePoint: string;
+    const area: string;
 }
 export namespace CLEAN_ACTION_TO_ECOVACS {
     export const start: string;
@@ -30,6 +32,10 @@ export namespace CLEAN_MODE_FROM_ECOVACS {
     export const goCharging: string;
     export const idle: string;
     export const move: string;
+    const singlePoint_1: string;
+    export { singlePoint_1 as singlePoint };
+    const area_1: string;
+    export { area_1 as area };
 }
 export var WATER_LEVEL_TO_ECOVACS: {
     1: number;

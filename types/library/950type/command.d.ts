@@ -231,6 +231,36 @@ export class Stop extends VacBotCommand {
 export class GetAirQuality extends VacBotCommand {
     constructor();
 }
+export class SinglePoint_V2 extends Clean_V2 {
+    constructor(spotCoordinates?: string);
+}
+export class Area_V2 extends Clean_V2 {
+    constructor();
+}
+export class GetMapSet_V2 extends VacBotCommand {
+    constructor(mapID: any, type?: string);
+}
+export class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapArray: any);
+}
+export class SetThreeModule extends VacBotCommand {
+    constructor(level?: number, type?: string, enable?: number);
+}
+export class SetFreshenerLevel extends SetThreeModule {
+    constructor(level?: number, enable?: number);
+}
+export class SetHumidifierLevel extends SetThreeModule {
+    constructor(level?: number, enable?: number);
+}
+export class SetUVCleaner extends SetThreeModule {
+    constructor(enable?: number);
+}
+export class SetAtmoLight extends VacBotCommand {
+    constructor(intensity?: number);
+}
+export class SetBlueSpeaker extends VacBotCommand {
+    constructor(enable?: number);
+}
 declare class AddMapSubSet extends VacBotCommand {
     constructor(mapID: any, coordinates: any, mapSubSetType?: string);
 }
