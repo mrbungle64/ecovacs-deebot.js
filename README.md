@@ -49,10 +49,23 @@ There is of course no claim to full functionality.
 * Deebot T10 series
 * Deebot X1 series
 
+#### yeedi
+
+* yeedi k650
+* yeedi 2 hybrid
+* yeedi vac hybrid
+* yeedi mop station
+
+#### Ecovacs Airbot (experimental)
+
+* AIRBOT Z1
+
 #### Legacy models (soon to be discontinued)
 
-These models use XML for data transport and also different characteristics for commands and events than current models.
-**The support for these models will be discontinued soon**.
+These models use XML for data transport and also different characteristics for commands and events than the current models.
+I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
+
+**Support for these models will therefore soon be discontinued**.
 
 * Deebot Slim 2
 * Deebot N79 series
@@ -65,13 +78,6 @@ These models use XML for data transport and also different characteristics for c
 * Deebot OZMO 900/905
 * Deebot OZMO 930
 * Deebot OZMO Slim 10/11
-
-#### yeedi (experimental)
-
-* yeedi k650
-* yeedi 2 hybrid
-* yeedi vac hybrid
-* yeedi mop station
 
 ## Known issues
 
