@@ -737,6 +737,15 @@ class VacBot {
     }
 
     /**
+     * Returns true if the model is a fully supported model
+     * @returns {boolean}
+     */
+    isFullySupportedModel() {
+        return tools.isSupportedDevice(this.deviceClass);
+    }
+
+    /**
+     * @deprecated
      * Returns true if the model is a supported model
      * @returns {boolean}
      */
@@ -748,8 +757,33 @@ class VacBot {
      * Returns true if the model is a known model
      * @returns {boolean}
      */
+    isKnownModel() {
+        return this.isKnownDevice();
+    }
+
+    /**
+     * @deprecated
+     * Returns true if the model is a known model
+     * @returns {boolean}
+     */
     isKnownDevice() {
         return tools.isKnownDevice(this.deviceClass);
+    }
+
+    /**
+     * Returns true if the model is a legacy model
+     * @returns {boolean}
+     */
+    isLegacyModel() {
+        return tools.isLegacyModel(this.deviceClass);
+    }
+
+    /**
+     * Returns the type of the model
+     * @returns {String}
+     */
+    getModelType() {
+        return tools.getModelType(this.deviceClass);
     }
 
     /**

@@ -144,6 +144,26 @@ function isKnownDevice(deviceClass) {
 }
 
 /**
+ * Returns true if the model is a legacy model
+ * @returns {boolean}
+ */
+function isLegacyModel(deviceClass) {
+    return getModelType(deviceClass) === 'legacy';
+}
+
+/**
+ * Returns the type of the model
+ * @returns {String}
+ */
+function getModelType(deviceClass) {
+    const devices = JSON.parse(JSON.stringify(getKnownDevices()));
+    if (devices.hasOwnProperty(deviceClass) || isSupportedDevice(deviceClass)) {
+        return getDeviceProperty(deviceClass, 'type', 'unknown');
+    }
+    return 'unknown';
+}
+
+/**
  * Get the value of the given property for the device class
  * @param {string} deviceClass - The device class to get the property for
  * @param {string} property - The property to get
@@ -248,6 +268,7 @@ module.exports.formatString = formatString;
 module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getKnownDevices = getKnownDevices;
+module.exports.getModelType = getModelType;
 module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
@@ -255,6 +276,7 @@ module.exports.is710series = is710series;
 module.exports.isAirPurifier = isAirPurifier;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
 module.exports.isKnownDevice = isKnownDevice;
+module.exports.isLegacyModel = isLegacyModel;
 module.exports.isN79series = isN79series;
 module.exports.isObject = isObject;
 module.exports.isSupportedDevice = isSupportedDevice;
