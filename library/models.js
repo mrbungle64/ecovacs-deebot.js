@@ -1,58 +1,17 @@
 // noinspection SpellCheckingInspection
 
 exports.SupportedDevices = {
-    "ls1ok3": {
-        "name": "DEEBOT 900 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "map_image_supported": true
-    },
-    "115": {
-        "name": "DEEBOT OZMO/PRO 930 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "map_image_supported": true
-    },
     "vi829v": {
         "name": "DEEBOT OZMO 920",
         "deviceClassLink": "yna5xi"
     },
-    "yna5xi": {
-        "name": "DEEBOT OZMO 950 Series",
-        "950type": true,
-        "950type_V2": false,
-        "main_brush": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "map_image_supported": true
-    },
-    "h18jkh": {
-        "name": "DEEBOT OZMO T8",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "unit_care_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": true
-    },
+    "x5d34r": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "h18jkh"
+    }
+};
+
+exports.KnownDevices = {
     "123": {
         "name": "DEEBOT Slim2 Series",
         "950type": false,
@@ -65,11 +24,55 @@ exports.SupportedDevices = {
         "voice_report": false,
         "auto_empty_station": false,
         "clean_speed": false,
-        "map_image_supported": false
-    }
-};
-
-exports.KnownDevices = {
+        "map_image_supported": false,
+        "type": "legacy"
+    },
+    "126": {
+        "name": "DEEBOT N79",
+        "950type": false,
+        "950type_V2": false,
+        "main_brush": true,
+        "clean_speed": true,
+        "type": "legacy"
+    },
+    "155": {
+        "name": "DEEBOT N79S/SE",
+        "deviceClassLink": "126"
+    },
+    "165": {
+        "name": "DEEBOT N79T/W",
+        "deviceClassLink": "126"
+    },
+    "02uwxm": {
+        "name": "DEEBOT OZMO Slim10 Series",
+        "950type": false,
+        "950type_V2": false,
+        "main_brush": false,
+        "mopping_system": true,
+        "voice_report": false,
+        "clean_speed": true,
+        "type": "legacy"
+    },
+    "vsc5ia": {
+        "name": "DEEBOT 500",
+        "950type": false,
+        "950type_V2": false,
+        "main_brush": true,
+        "clean_speed": true,
+        "type": "legacy"
+    },
+    "emzppx": {
+        "name": "DEEBOT 501",
+        "deviceClassLink": "vsc5ia"
+    },
+    "r8ead0": {
+        "name": "DEEBOT 502",
+        "deviceClassLink": "vsc5ia"
+    },
+    "9akc61": {
+        "name": "DEEBOT 505",
+        "deviceClassLink": "vsc5ia"
+    },
     "dl8fht": {
         "name": "DEEBOT 600 Series",
         "950type": false,
@@ -77,7 +80,8 @@ exports.KnownDevices = {
         "main_brush": true,
         "mopping_system": true,
         "voice_report": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "legacy"
     },
     "16wdph": {
         "name": "DEEBOT 661",
@@ -90,7 +94,8 @@ exports.KnownDevices = {
         "main_brush": true,
         "mopping_system": true,
         "voice_report": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "legacy"
     },
     "130": {
         "name": "DEEBOT OZMO 610 Series",
@@ -98,7 +103,8 @@ exports.KnownDevices = {
         "950type_V2": false,
         "main_brush": true,
         "mopping_system": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "legacy"
     },
     "uv242z": {
         "name": "DEEBOT 710",
@@ -106,7 +112,8 @@ exports.KnownDevices = {
         "950type_V2": false,
         "main_brush": true,
         "voice_report": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "legacy"
     },
     "jr3pqa": {
         "name": "DEEBOT 711",
@@ -120,6 +127,18 @@ exports.KnownDevices = {
         "name": "DEEBOT 715",
         "deviceClassLink": "uv242z"
     },
+    "ls1ok3": {
+        "name": "DEEBOT 900 Series",
+        "950type": false,
+        "950type_V2": false,
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "voice_report": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "type": "legacy"
+    },
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
         "950type": false,
@@ -129,7 +148,8 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "legacy"
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
@@ -140,7 +160,20 @@ exports.KnownDevices = {
         "custom_area": true,
         "mopping_system": true,
         "voice_report": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "legacy"
+    },
+    "115": {
+        "name": "DEEBOT OZMO/PRO 930 Series",
+        "950type": false,
+        "950type_V2": false,
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "map_image_supported": true,
+        "type": "legacy"
     },
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
@@ -150,10 +183,32 @@ exports.KnownDevices = {
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
-        "voice_report": true
+        "voice_report": true,
+        "type": "legacy"
     },
-    "fqxoiu": {
-        "name": "DEEBOT OZMO T8+",
+    "yna5xi": {
+        "name": "DEEBOT OZMO 950 Series",
+        "950type": true,
+        "950type_V2": false,
+        "main_brush": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "type": "950"
+    },
+    "9rft3c": {
+        "name": "DEEBOT OZMO T5",
+        "deviceClassLink": "yna5xi"
+    },
+    "jffnlf": {
+        "name": "DEEBOT N3 MAX",
+        "deviceClassLink": "yna5xi"
+    },
+    "h18jkh": {
+        "name": "DEEBOT OZMO T8",
         "950type": true,
         "950type_V2": true,
         "main_brush": true,
@@ -164,11 +219,12 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": true,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "T8"
     },
-    "9rft3c": {
-        "name": "DEEBOT OZMO T5",
-        "deviceClassLink": "yna5xi"
+    "fqxoiu": {
+        "name": "DEEBOT OZMO T8+",
+        "deviceClassLink": "h18jkh"
     },
     "b742vd": {
         "name": "DEEBOT OZMO T8",
@@ -180,23 +236,19 @@ exports.KnownDevices = {
     },
     "55aiho": {
         "name": "DEEBOT OZMO T8+",
-        "deviceClassLink": "fqxoiu"
-    },
-    "x5d34r": {
-        "name": "DEEBOT OZMO T8 AIVI",
         "deviceClassLink": "h18jkh"
     },
     "tpnwyu": {
         "name": "DEEBOT OZMO T8 AIVI +",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "h18jkh"
     },
     "34vhpm": {
         "name": "DEEBOT OZMO T8 AIVI +",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "h18jkh"
     },
     "w16crm": {
         "name": "DEEBOT OZMO T8 AIVI +",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "h18jkh"
     },
     "wgxm70": {
         "name": "DEEBOT T8",
@@ -216,7 +268,7 @@ exports.KnownDevices = {
     },
     "vdehg6": {
         "name": "DEEBOT T8 AIVI +",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "h18jkh"
     },
     "no61kx": {
         "name": "DEEBOT T8 POWER",
@@ -224,39 +276,42 @@ exports.KnownDevices = {
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
-        "deviceClassLink": "h18jkh"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "type": "T9"
     },
     "ipohi5": {
         "name": "DEEBOT T9",
-        "deviceClassLink": "h18jkh"
+        "deviceClassLink": "ucn2xe"
     },
     "lhbd50": {
         "name": "DEEBOT T9+",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "um2ywg": {
         "name": "DEEBOT T9+",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "659yh8": {
         "name": "DEEBOT T9 AIVI",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "kw9ayx": {
         "name": "DEEBOT T9 AIVI Plus",
-        "deviceClassLink": "fqxoiu"
-    },
-    "jffnlf": {
-        "name": "DEEBOT N3 MAX",
-        "deviceClassLink": "yna5xi"
-    },
-    "r5zxjr": {
-        "name": "DEEBOT N7",
-        "deviceClassLink": "yna5xi"
+        "deviceClassLink": "ucn2xe"
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
@@ -270,7 +325,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": false,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "T9"
     },
     "r5y7re": {
         "name": "DEEBOT N8",
@@ -298,100 +354,75 @@ exports.KnownDevices = {
     },
     "7bryc5": {
         "name": "DEEBOT N8+",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "unit_care_info": false,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": true,
-        "clean_speed": true,
-        "map_image_supported": true
+        "deviceClassLink": "n6cwdb"
     },
     "b2jqs4": {
         "name": "DEEBOT N8+",
-        "deviceClassLink": "7bryc5"
+        "deviceClassLink": "n6cwdb"
     },
     "85as7h": {
         "name": "DEEBOT N8 PRO+",
-        "deviceClassLink": "7bryc5"
+        "deviceClassLink": "n6cwdb"
     },
     "ifbw08": {
         "name": "DEEBOT N8 PRO+",
-        "deviceClassLink": "7bryc5"
+        "deviceClassLink": "n6cwdb"
     },
     "a7lhb1": {
         "name": "DEEBOT N9+",
-        "deviceClassLink": "7bryc5"
+        "deviceClassLink": "n6cwdb"
     },
     "c2of2s": {
         "name": "DEEBOT N9+",
-        "deviceClassLink": "7bryc5"
+        "deviceClassLink": "n6cwdb"
     },
     "3yqsch": {
         "name": "DEEBOT X1",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "8bja83": {
         "name": "DEEBOT X1 Omni",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "1b23du": {
         "name": "DEEBOT X1 OMNI",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "1vxt52": {
         "name": "DEEBOT X1 OMNI",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "2o4lnm": {
         "name": "DEEBOT X1 TURBO",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "jtmf04": {
         "name": "DEEBOT T10",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "rss8xk": {
         "name": "DEEBOT T10 PLUS",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "p95mgv": {
         "name": "DEEBOT T10 PLUS",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "9s1s80": {
         "name": "DEEBOT T10 TURBO",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "lx3j7m": {
         "name": "DEEBOT T10 OMNI",
-        "deviceClassLink": "fqxoiu"
+        "deviceClassLink": "ucn2xe"
     },
     "bro5wu": {
         "name": "DEEBOT X1e OMNI",
-        "deviceClassLink": "fqxoiu"
-    },
-    "126": {
-        "name": "DEEBOT N79",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "clean_speed": true,
-    },
-    "155": {
-        "name": "DEEBOT N79S/SE",
-        "deviceClassLink": "126"
-    },
-    "165": {
-        "name": "DEEBOT N79T/W",
-        "deviceClassLink": "126"
+        "deviceClassLink": "ucn2xe"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
@@ -400,7 +431,8 @@ exports.KnownDevices = {
         "main_brush": true,
         "mopping_system": true,
         "voice_report": true,
-        "clean_speed": true
+        "clean_speed": true,
+        "type": "U2"
     },
     "rvo6ev": {
         "name": "DEEBOT U2",
@@ -458,33 +490,9 @@ exports.KnownDevices = {
         "name": "DEEBOT U2 SE",
         "deviceClassLink": "ipzjy0"
     },
-    "vsc5ia": {
-        "name": "DEEBOT 500",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "clean_speed": true
-    },
-    "emzppx": {
-        "name": "DEEBOT 501",
-        "deviceClassLink": "vsc5ia"
-    },
-    "r8ead0": {
-        "name": "DEEBOT 502",
-        "deviceClassLink": "vsc5ia"
-    },
-    "9akc61": {
-        "name": "DEEBOT 505",
-        "deviceClassLink": "vsc5ia"
-    },
-    "02uwxm": {
-        "name": "DEEBOT OZMO Slim10 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": false,
-        "mopping_system": true,
-        "voice_report": false,
-        "clean_speed": true
+    "r5zxjr": {
+        "name": "DEEBOT N7",
+        "deviceClassLink": "ipzjy0"
     },
     "h041es": {
         "name": "yeedi vac hybrid",
@@ -498,7 +506,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": true,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "yeedi"
     },
     "u5vcmk": {
         "name": "yeedi vac",
@@ -512,7 +521,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": false,
         "clean_speed": true,
-        "map_image_supported": false
+        "map_image_supported": false,
+        "type": "yeedi"
     },
     "mnx7f4": {
         "name": "yeedi vac station",
@@ -526,7 +536,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": true,
         "clean_speed": true,
-        "map_image_supported": false
+        "map_image_supported": false,
+        "type": "yeedi"
     },
     "aaxesz": {
         "name": "yeedi vac 2 pro",
@@ -548,7 +559,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": true,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "yeedi"
     },
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
@@ -562,7 +574,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": false,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "yeedi"
     },
     "vthpeg": {
         "name": "yeedi mop station",
@@ -577,7 +590,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": false,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "yeedi"
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
@@ -603,7 +617,8 @@ exports.KnownDevices = {
         "voice_report": true,
         "auto_empty_station": true,
         "clean_speed": true,
-        "map_image_supported": true
+        "map_image_supported": true,
+        "type": "yeedi"
     },
     "3ab24g": {
         "name": "K650",
@@ -617,7 +632,8 @@ exports.KnownDevices = {
         "voice_report": false,
         "auto_empty_station": false,
         "clean_speed": false,
-        "map_image_supported": false
+        "map_image_supported": false,
+        "type": "yeedi"
     },
     "09m4bu": {
         "name": "K650",
@@ -626,11 +642,11 @@ exports.KnownDevices = {
     "sdp1y1": {
         "name": "AIRBOT Z1",
         "950type": true,
-        "950type_V2": true
+        "950type_V2": true,
+        "type": "Z1"
     },
     "20anby": {
         "name": "Z1 Air Quality Monitor",
-        "950type": true,
-        "950type_V2": true
+        "deviceClassLink": "sdp1y1"
     }
 };
