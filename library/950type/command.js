@@ -877,12 +877,6 @@ class GetOta extends VacBotCommand {
     }
 }
 
-class GetBattery extends VacBotCommand {
-    constructor() {
-        super('getBattery');
-    }
-}
-
 class GetThreeModuleStatus extends VacBotCommand {
     constructor() {
         super('getThreeModuleStatus');
@@ -1008,7 +1002,6 @@ module.exports.SetBlueSpeaker = SetBlueSpeaker;
 module.exports.SetVoiceSimple = SetVoiceSimple;
 module.exports.SetBlock = SetBlock;
 module.exports.SetMonitorAirState = SetMonitorAirState;
-module.exports.GetPos = GetPos;
 module.exports.SetAngleFollow = SetAngleFollow;
 module.exports.SetMic = SetMic;
 module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
@@ -1022,7 +1015,6 @@ module.exports.GetTimeZone = GetTimeZone;
 module.exports.GetTotalStats = GetTotalStats;
 module.exports.GetWifiList = GetWifiList;
 module.exports.GetOta = GetOta;
-module.exports.GetBattery = GetBattery;
 module.exports.GetThreeModuleStatus = GetThreeModuleStatus;
 module.exports.GetScene = GetScene;
 module.exports.GetListenMusic = GetListenMusic;

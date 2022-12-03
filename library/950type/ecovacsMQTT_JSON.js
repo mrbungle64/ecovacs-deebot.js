@@ -542,7 +542,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('HumanoidFollowVideo', this.vacBot.humanoidFollow_Video);
                 }
                 break;
-
             case 'FwBuryPoint-bd_sysinfo':
                 this.vacBot.handleSysinfo(event[0]);
                 if (this.vacBot.sysinfo) {
