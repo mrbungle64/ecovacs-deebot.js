@@ -49,10 +49,10 @@ There is of course no claim to full functionality.
 * Deebot T10 series
 * Deebot X1 series
 
-##### Legacy models (soon to be discontinued)
+#### Legacy models (soon to be discontinued)
 
-These models use XML for communication.
-The support for these models will be discontinued soon.
+These models use XML for data transport and also different characteristics for commands and events than current models.
+**The support for these models will be discontinued soon**.
 
 * Deebot Slim 2
 * Deebot N79 series
