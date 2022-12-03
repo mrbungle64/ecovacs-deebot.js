@@ -261,6 +261,12 @@ declare class VacBot {
      */
     isN79series(): boolean;
     /**
+     * Returns true if the model is a fully supported model
+     * @returns {boolean}
+     */
+    isFullySupportedModel(): boolean;
+    /**
+     * @deprecated
      * Returns true if the model is a supported model
      * @returns {boolean}
      */
@@ -269,7 +275,23 @@ declare class VacBot {
      * Returns true if the model is a known model
      * @returns {boolean}
      */
+    isKnownModel(): boolean;
+    /**
+     * @deprecated
+     * Returns true if the model is a known model
+     * @returns {boolean}
+     */
     isKnownDevice(): boolean;
+    /**
+     * Returns true if the model is a legacy model
+     * @returns {boolean}
+     */
+    isLegacyModel(): boolean;
+    /**
+     * Returns the type of the model
+     * @returns {String}
+     */
+    getModelType(): string;
     /**
      * Get the value of the given property for the device class
      * @param {string} property - The property to get
