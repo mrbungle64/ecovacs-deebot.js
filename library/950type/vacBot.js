@@ -57,6 +57,22 @@ class VacBot_950type extends VacBot {
             'temperature': null,
             'humidity': null
         };
+
+        this.mic = null;
+        this.humanoidFollow = null;
+        this.angleFollow = null;
+        this.aiBlockPlate = null;
+        this.autonomousClean = null;
+        this.bluetoothSpeaker = null;
+        this.childLock = null;
+        this.drivingWheel = null;
+        this.monitorAirState = null;
+        this.angleWakeup = null;
+        this.efficiency = null;
+        this.atmoLightIntensity = null;
+        this.humanoidFollow_Video = null;
+        this.humanoidFollow_Yiko = null;
+        this.sysinfo = null;
     }
 
     /**
@@ -838,6 +854,149 @@ class VacBot_950type extends VacBot {
             'temperature': payload['tem'],
             'humidity': payload['hum']
         };
+    }
+
+    /**
+     * Handle the payload of the `AiBlockPlate` response/message
+     * @param {Object} payload
+     */
+    handleGetAiBlockPlate(payload) {
+        this.aiBlockPlate = payload['on'];
+        tools.envLog("[VacBot] *** AiBlockPlate = " + this.aiBlockPlate);
+    }
+
+    /**
+     * Handle the payload of the `MonitorAirState` response/message
+     * @param {Object} payload
+     */
+    handleGetMonitorAirState(payload) {
+        this.monitorAirState = payload['on'];
+        tools.envLog("[VacBot] *** MonitorAirState = " + this.monitorAirState);
+    }
+
+    /**
+     * Handle the payload of the `AngleFollow` response/message
+     * @param {Object} payload
+     */
+    handleGetAngleFollow(payload) {
+        this.angleFollow = payload['on'];
+        tools.envLog("[VacBot] *** AngleFollow = " + this.angleFollow);
+    }
+
+    /**
+     * Handle the payload of the `Mic` response/message
+     * @param {Object} payload
+     */
+    handleGetMic(payload) {
+        this.mic = payload['on'];
+        tools.envLog("[VacBot] *** Mic = " + this.mic);
+    }
+
+    /**
+     * Handle the payload of the `VoiceSimple` response/message
+     * @param {Object} payload
+     */
+    handleGetVoiceSimple(payload) {
+        this.voiceSimple = payload['on'];
+        tools.envLog("[VacBot] *** VoiceSimple = " + this.voiceSimple);
+    }
+
+    /**
+     * Handle the payload of the `DrivingWheel` response/message
+     * @param {Object} payload
+     */
+    handleGetDrivingWheel(payload) {
+        this.drivingWheel = payload['on'];
+        tools.envLog("[VacBot] *** DrivingWheel = " + this.drivingWheel);
+    }
+
+    /**
+     * Handle the payload of the `ChildLock` response/message
+     * @param {Object} payload
+     */
+    handleGetChildLock(payload) {
+        this.childLock = payload['on'];
+        tools.envLog("[VacBot] *** ChildLock = " + this.childLock);
+    }
+
+    /**
+     * Handle the payload of the `VoiceAssistantState` response/message
+     * @param {Object} payload
+     */
+    handleVoiceAssistantState(payload) {
+        this.voiceAssistantState = payload['enable'];
+        tools.envLog("[VacBot] *** VoiceAssistantState = " + this.voiceAssistantState);
+    }
+
+    /**
+     * Handle the payload of the `HumanoidFollow` response/message
+     * @param {Object} payload
+     */
+    handleHumanoidFollow(payload) {
+        this.humanoidFollow_Yiko = payload['yiko'];
+        this.humanoidFollow_Video = payload['video'];
+        tools.envLog("[VacBot] *** HumanoidFollow");
+        tools.envLog("[VacBot] ***    Yiko: " + this.humanoidFollow_Yiko );
+        tools.envLog("[VacBot] ***    Video: " + this.humanoidFollow_Video );
+    }
+
+    /**
+     * Handle the payload of the `AutonomousClean` response/message
+     * @param {Object} payload
+     */
+    handleGetAutonomousClean(payload) {
+        this.autonomousClean = payload['on'];
+        tools.envLog("[VacBot] *** AutonomousClean = " + this.autonomousClean);
+    }
+
+    /**
+     * Handle the payload of the `BlueSpeaker` response/message
+     * @param {Object} payload
+     */
+    handleGetBlueSpeaker(payload) {
+        this.bluetoothSpeaker = payload['enable'];
+        tools.envLog("[VacBot] *** BlueSpeaker = " + this.bluetoothSpeaker);
+        tools.envLog("[VacBot] ***    pairing timeout = " + payload['time']);
+        tools.envLog("[VacBot] ***    devicename = " + payload['name']);
+    }
+
+    /**
+     * Handle the payload of the `AngleWakeup` response/message
+     * @param {Object} payload
+     */
+    handleAngleWakeup(payload) {
+        this.angleWakeup = payload['on'];
+        tools.envLog("[VacBot] *** AngleWakeup = " + this.angleWakeup);
+    }
+
+    /**
+     * Handle the payload of the `Efficiency` response/message
+     * @param {Object} payload
+     */
+    handleEfficiency(payload) {
+        this.efficiency = payload['efficiency'];
+        tools.envLog("[VacBot] *** Efficiency = " + this.efficiency);
+    }
+
+    /**
+     * Handle the payload of the `Efficiency` response/message
+     * @param {Object} payload
+     */
+    handleGetAtmoLight(payload) {
+        this.atmoLightIntensity = payload['intensity'];
+        tools.envLog("[VacBot] *** AtmoLight(intensity) = " + this.atmoLightIntensity + " of " +  payload['total']);
+    }
+
+    handleSysinfo(event) {
+        this.sysinfo = {
+            'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9),
+            'uptime': event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).lastIndexOf(",")),
+            'signal': event['signal'],
+            'meminfo': event['signal'],
+            'pos': event['pos']
+        };
+        tools.envLog("[VacBot] *** System informations:");
+        tools.envLog(this.sysinfo);
     }
 
     /**

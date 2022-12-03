@@ -761,6 +761,158 @@ class SetMapSet_V2 extends VacBotCommand {
     }
 }
 
+class SetVoiceSimple extends VacBotCommand {
+    constructor(on = 0) {
+        super('setVoiceSimple', {
+            'on': on
+        });
+    }
+}
+
+class SetMonitorAirState extends VacBotCommand {
+    constructor(on = 0) {
+        super('setMonitorAirState', {
+            'on': on
+        });
+    }
+}
+
+class SetAngleFollow extends VacBotCommand {
+    constructor(on = 0) {
+        super('setAngleFollow', {
+            'on': on
+        });
+    }
+}
+
+class SetMic extends VacBotCommand {
+    constructor(on = 0) {
+        super('setMic', {
+            'on': on
+        });
+    }
+}
+
+class SetBlock extends VacBotCommand {
+    constructor(enable = 0, start = '00:00', end = '00:00') {
+        super('setBlock', {
+            'enable': enable,
+            'start': start,
+            'end': end
+        });
+    }
+}
+
+class GetPos extends VacBotCommand {
+    constructor(objects = ['chargePos', 'deebotPos']) {
+        super('getPos', {
+            objects
+        });
+    }
+}
+
+class GetLiveLaunchPwdState extends VacBotCommand {
+    constructor() {
+        super('getLiveLaunchPwdState');
+    }
+}
+
+class GetHumanoidFollow extends VacBotCommand {
+    constructor() {
+        super('getHumanoidFollow');
+    }
+}
+
+class GetMonitorAirState extends VacBotCommand {
+    constructor() {
+        super('getMonitorAirState');
+    }
+}
+
+class GetVoiceSimple extends VacBotCommand {
+    constructor() {
+        super('getVoiceSimple');
+    }
+}
+
+class GetDrivingWheel extends VacBotCommand {
+    constructor() {
+        super('getDrivingWheel');
+    }
+}
+
+class GetChildLock extends VacBotCommand {
+    constructor() {
+        super('getChildLock');
+    }
+}
+
+class GetBlock extends VacBotCommand {
+    constructor() {
+        super('getBlock');
+    }
+}
+
+class GetTimeZone extends VacBotCommand {
+    constructor() {
+        super('getTimeZone');
+    }
+}
+
+class GetTotalStats extends VacBotCommand {
+    constructor() {
+        super('getTotalStats');
+    }
+}
+
+class GetWifiList extends VacBotCommand {
+    constructor() {
+        super('getWifiList');
+    }
+}
+
+class GetOta extends VacBotCommand {
+    constructor() {
+        super('getOta');
+    }
+}
+
+class GetBattery extends VacBotCommand {
+    constructor() {
+        super('getBattery');
+    }
+}
+
+class GetThreeModuleStatus extends VacBotCommand {
+    constructor() {
+        super('getThreeModuleStatus');
+    }
+}
+
+class GetScene extends VacBotCommand {
+    constructor() {
+        super('getScene');
+    }
+}
+
+class GetListenMusic extends VacBotCommand {
+    constructor() {
+        super('getListenMusic');
+    }
+}
+
+class VideoOpened extends VacBotCommand {
+    constructor() {
+        super('videoOpened');
+    }
+}
+
+class GetAudioCallState extends VacBotCommand {
+    constructor() {
+        super('getAudioCallState');
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -788,6 +940,7 @@ module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanState_V2 = GetCleanState_V2;
 module.exports.GetCleanSum = GetCleanSum;
+module.exports.GetMajorMap = GetMajorMap;
 module.exports.GetContinuousCleaning = GetContinuousCleaning;
 module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetDusterRemind = GetDusterRemind;
@@ -852,3 +1005,26 @@ module.exports.SetHumidifierLevel = SetHumidifierLevel;
 module.exports.SetUVCleaner = SetUVCleaner;
 module.exports.SetAtmoLight = SetAtmoLight;
 module.exports.SetBlueSpeaker = SetBlueSpeaker;
+module.exports.SetVoiceSimple = SetVoiceSimple;
+module.exports.SetBlock = SetBlock;
+module.exports.SetMonitorAirState = SetMonitorAirState;
+module.exports.GetPos = GetPos;
+module.exports.SetAngleFollow = SetAngleFollow;
+module.exports.SetMic = SetMic;
+module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
+module.exports.GetHumanoidFollow = GetHumanoidFollow;
+module.exports.GetMonitorAirState = GetMonitorAirState;
+module.exports.GetVoiceSimple = GetVoiceSimple;
+module.exports.GetDrivingWheel = GetDrivingWheel;
+module.exports.GetChildLock = GetChildLock;
+module.exports.GetBlock = GetBlock;
+module.exports.GetTimeZone = GetTimeZone;
+module.exports.GetTotalStats = GetTotalStats;
+module.exports.GetWifiList = GetWifiList;
+module.exports.GetOta = GetOta;
+module.exports.GetBattery = GetBattery;
+module.exports.GetThreeModuleStatus = GetThreeModuleStatus;
+module.exports.GetScene = GetScene;
+module.exports.GetListenMusic = GetListenMusic;
+module.exports.VideoOpened = VideoOpened;
+module.exports.GetAudioCallState = GetAudioCallState;

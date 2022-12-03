@@ -452,6 +452,106 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('AirQuality', this.vacBot.airQuality);
                 }
                 break;
+
+            // AirBot Z1
+            case 'Mic':
+                this.vacBot.handleGetMic(payload);
+                if (this.vacBot.mic) {
+                    this.emit('Mic', this.vacBot.mic);
+                }
+                break;
+            case 'MonitorAirState':
+                this.vacBot.handleGetMonitorAirState(payload);
+                if (this.vacBot.monitorAirState) {
+                    this.emit('MonitorAirState', this.vacBot.monitorAirState);
+                }
+                break;
+            case 'DrivingWheel':
+                this.vacBot.handleGetDrivingWheel(payload);
+                if (this.vacBot.drivingWheel) {
+                    this.emit('DrivingWheel', this.vacBot.drivingWheel);
+                }
+                break;
+            case 'VoiceSimple':
+                this.vacBot.handleGetVoiceSimple(payload);
+                if (this.vacBot.voiceSimple) {
+                    this.emit('VoiceSimple', this.vacBot.voiceSimple);
+                }
+                break;
+            case 'AiBlockPlate':
+                this.vacBot.handleGetAiBlockPlate(payload);
+                if (this.vacBot.aiBlockPlate) {
+                    this.emit('AiBlockPlate', this.vacBot.aiBlockPlate);
+                }
+                break;
+            case 'BlueSpeaker':
+                this.vacBot.handleGetBlueSpeaker(payload);
+                if (this.vacBot.bluetoothSpeaker) {
+                    this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
+                }
+                break;
+            case 'ChildLock':
+                this.vacBot.handleGetChildLock(payload);
+                if (this.vacBot.childLock) {
+                    this.emit('ChildLock', this.vacBot.childLock);
+                }
+                break;
+
+            case 'AngleFollow':
+                this.vacBot.handleGetAngleFollow(payload);
+                if (this.vacBot.angleFollow) {
+                    this.emit('AngleFollow', this.vacBot.angleFollow);
+                }
+                break;
+            case 'AngleWakeup':
+                this.vacBot.handleAngleWakeup(payload);
+                if (this.vacBot.angleWakeup) {
+                    this.emit('AngleWakeup', this.vacBot.angleWakeup);
+                }
+                break;
+            case 'AutonomousClean':
+                this.vacBot.handleGetAutonomousClean(payload);
+                if (this.vacBot.autonomousClean) {
+                    this.emit('AutonomousClean', this.vacBot.autonomousClean);
+                }
+                break;
+            case 'VoiceAssistantState':
+                this.vacBot.handleVoiceAssistantState(payload);
+                if (this.vacBot.voiceAssistantState) {
+                    this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
+                }
+                break;
+            case 'Efficiency':
+                this.vacBot.handleEfficiency(payload);
+                if (this.vacBot.efficiency) {
+                    this.emit('Efficiency', this.vacBot.efficiency);
+                }
+                break;
+            case 'AtmoLight':
+                this.vacBot.hanleGetAtmoLight(payload);
+                if (this.vacBot.atmoLightIntensity) {
+                    this.emit('AtmoLight', this.vacBot.atmoLightIntensity);
+                }
+                break;
+            case 'HumanoidFollow':
+                this.vacBot.handleHumanoidFollow(payload);
+                if (this.vacBot.humanoidFollow_Yiko) {
+                    this.emit('HumanoidFollowYiko', this.vacBot.humanoidFollow_Yiko);
+                }
+                if (this.vacBot.humanoidFollow_Video) {
+                    this.emit('HumanoidFollowVideo', this.vacBot.humanoidFollow_Video);
+                }
+                break;
+
+            case 'FwBuryPoint-bd_sysinfo':
+                this.vacBot.handleSysinfo(event[0]);
+                if (this.vacBot.sysinfo) {
+                    this.emit('AirBotSysinfo', this.vacBot.sysinfo);
+                }
+                break;
+            case 'FwBuryPoint-bd_setting-ev':
+                // Event -> Config stored...
+                break;
             case 'AirSpeed':
             case 'Humidity':
             case 'Temperature':
