@@ -23,22 +23,36 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Models
 
-### Supported models
+### Fully supported models
 
-The supported models are those that I own myself (or which are technically identical to these):
+The supported models are those that I own myself
 
-* Deebot OZMO 920/950
+* Deebot OZMO 920
 * Deebot T8 AIVI
 
-### These models should work properly or at least partially
+### Other supported models
 
-The following models are either already known to work or are technically similar to these models.
+These models should work properly or at least partially.
+They are either already known to work or are technically similar to these models.
 Nevertheless, the functionality may be partially limited.
 
 I try to achieve a wide range of functionality, but decide this case by case depending on complexity and various other criteria.
 There is of course no claim to full functionality.
 
 #### Ecovacs Deebot
+
+* Deebot OZMO 950/T5
+* Deebot N8 series
+* Deebot U2 series
+* Deebot T8 series
+* Deebot T9 series
+* Deebot T10 series
+* Deebot X1 series
+
+##### Legacy models (soon to be discontinued)
+
+These models use XML for communication.
+The support for these models will be discontinued soon.
 
 * Deebot Slim 2
 * Deebot N79 series
@@ -51,13 +65,6 @@ There is of course no claim to full functionality.
 * Deebot OZMO 900/905
 * Deebot OZMO 930
 * Deebot OZMO Slim 10/11
-* Deebot U2 series
-* Deebot N8 series
-* Deebot OZMO T5
-* Deebot (OZMO) T8 series
-* Deebot T9 series
-* Deebot T10 series
-* Deebot X1 series
 
 #### yeedi (experimental)
 
