@@ -27,9 +27,6 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 The supported models are those that I own myself (or which are technically identical to these):
 
-* Deebot Slim 2
-* Deebot 900/901
-* Deebot OZMO 930
 * Deebot OZMO 920/950
 * Deebot T8 AIVI
 
@@ -43,13 +40,16 @@ There is of course no claim to full functionality.
 
 #### Ecovacs Deebot
 
+* Deebot Slim 2
 * Deebot N79 series
 * Deebot M88
 * Deebot 500
 * Deebot 600/601/605
 * Deebot 710/711
+* Deebot 900/901
 * Deebot OZMO 610
 * Deebot OZMO 900/905
+* Deebot OZMO 930
 * Deebot OZMO Slim 10/11
 * Deebot U2 series
 * Deebot N8 series
