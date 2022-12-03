@@ -20,8 +20,9 @@ function dumpSomeVacbotData(vacbot, api) {
     console.log(`- Name: ${vacbot.getName()}`);
     console.log(`- Model: ${vacbot.deviceModel}`);
     console.log(`- Image url: ${vacbot.deviceImageURL}`);
-    console.log(`- Is known device: ${vacbot.isKnownDevice()}`);
-    console.log(`- Is supported device: ${vacbot.isSupportedDevice()}`);
+    console.log(`- Is fully supported model: ${vacbot.isSupportedDevice()}`);
+    console.log(`- Is a at least partly supported model: ${vacbot.isKnownDevice()}`);
+    console.log(`- Is legacy model: ${vacbot.isLegacyModel()}`);
     console.log(`- Is 950 type model: ${vacbot.is950type()}`);
     console.log(`- V2 commands are implemented: ${vacbot.is950type_V2()}`);
     console.log(`- Communication protocol: ${vacbot.getProtocol()}`);

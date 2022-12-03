@@ -23,19 +23,17 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Models
 
-### Supported models
+### Fully supported models
 
-The supported models are those that I own myself (or which are technically identical to these):
+The supported models are those that I own myself
 
-* Deebot Slim 2
-* Deebot 900/901
-* Deebot OZMO 930
-* Deebot OZMO 920/950
+* Deebot OZMO 920
 * Deebot T8 AIVI
 
-### These models should work properly or at least partially
+### Other supported models
 
-The following models are either already known to work or are technically similar to these models.
+These models should work properly or at least partially.
+They are either already known to work or are technically similar to these models.
 Nevertheless, the functionality may be partially limited.
 
 I try to achieve a wide range of functionality, but decide this case by case depending on complexity and various other criteria.
@@ -43,28 +41,43 @@ There is of course no claim to full functionality.
 
 #### Ecovacs Deebot
 
-* Deebot N79 series
-* Deebot M88
-* Deebot 500
-* Deebot 600/601/605
-* Deebot 710/711
-* Deebot OZMO 610
-* Deebot OZMO 900/905
-* Deebot OZMO Slim 10/11
-* Deebot U2 series
+* Deebot OZMO 950/T5
 * Deebot N8 series
-* Deebot OZMO T5
-* Deebot (OZMO) T8 series
+* Deebot U2 series
+* Deebot T8 series
 * Deebot T9 series
 * Deebot T10 series
 * Deebot X1 series
 
-#### yeedi (experimental)
+#### yeedi
 
 * yeedi k650
 * yeedi 2 hybrid
 * yeedi vac hybrid
 * yeedi mop station
+
+#### Ecovacs Airbot (experimental)
+
+* AIRBOT Z1
+
+#### Legacy models (soon to be discontinued)
+
+These models use XML for data transport and also different characteristics for commands and events than the current models.
+I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
+
+**Support for these models will therefore soon be discontinued**.
+
+* Deebot Slim 2
+* Deebot N79 series
+* Deebot M88
+* Deebot 500
+* Deebot 600/601/605
+* Deebot 710/711
+* Deebot 900/901
+* Deebot OZMO 610
+* Deebot OZMO 900/905
+* Deebot OZMO 930
+* Deebot OZMO Slim 10/11
 
 ## Known issues
 

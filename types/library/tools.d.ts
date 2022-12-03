@@ -28,6 +28,11 @@ export function getDeviceProperty(deviceClass: string, property: string, default
  */
 export function getKnownDevices(): any;
 /**
+ * Returns the type of the model
+ * @returns {String}
+ */
+export function getModelType(deviceClass: any): string;
+/**
  * Generate a somewhat random string for request id with 8 chars.
  * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
  * @returns {string} the generated ID
@@ -63,6 +68,11 @@ export function isCanvasModuleAvailable(): boolean;
  * @returns {boolean} whether the deviceClass belongs to a known model
  */
 export function isKnownDevice(deviceClass: string): boolean;
+/**
+ * Returns true if the model is a legacy model
+ * @returns {boolean}
+ */
+export function isLegacyModel(deviceClass: any): boolean;
 /**
  * @param {string} deviceClass - The device class of the device
  * @returns {boolean} a Boolean value whether the device a N79 series model
