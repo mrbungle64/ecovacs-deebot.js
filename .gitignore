@@ -13,4 +13,4 @@ library/map/
 .vs/*
 .vscode/*
 
-example/settings.js
+*/settings.js
