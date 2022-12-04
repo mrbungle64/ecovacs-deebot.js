@@ -142,7 +142,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (abbreviatedCommand.endsWith("_V2") || abbreviatedCommand.endsWith("_v2")) {
             abbreviatedCommand = this.handleV2commands(abbreviatedCommand);
         }
-        this.emit('messageReceived', command  + ' => ' + abbreviatedCommand);
+        this.emit('messageReceived', command + ' => ' + abbreviatedCommand);
         const payload = this.getPayload(event);
         switch (abbreviatedCommand) {
             case 'FwBuryPoint': {
@@ -163,7 +163,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'AirDring':
                 this.bot.handleAirDryingState(payload);
-                this.emit('AirDryingState', this.bot.airDryingStatus);
+                if (this.bot.airDryingStatus) {
+                    this.emit('AirDryingState', this.bot.airDryingStatus);
+                }
                 break;
             case "ChargeState":
                 this.vacBot.handleChargeState(payload);
@@ -173,8 +175,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "Battery":
                 this.vacBot.handleBattery(payload);
-                this.emit("BatteryInfo", this.vacBot.batteryLevel);
-                this.emit("BatteryIsLow", this.vacBot.batteryIsLow);
+                if (this.vacBot.batteryLevel) {
+                    this.emit("BatteryInfo", this.vacBot.batteryLevel);
+                    this.emit("BatteryIsLow", this.vacBot.batteryIsLow);
+                }
                 break;
             case "CleanInfo":
                 this.vacBot.handleCleanInfo(payload);
@@ -565,8 +569,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // Info whether 'Continuous Cleaning' is enabled
                 this.vacBot.run('GetContinuousCleaning');
             }
-        }
-        catch (e) {
+        } catch (e) {
             tools.envLog(`Error handling onFwBuryPoint payload: ${payload}`);
         }
     }
