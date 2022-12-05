@@ -25,7 +25,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ### Fully supported models
 
-The supported models are those that I own myself
+The fully supported models are those that I own myself:
 
 * Deebot OZMO 920
 * Deebot T8 AIVI
@@ -82,8 +82,10 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 ## Known issues
 
 * The generation of map images is currently not stable on 32-bit systems (e.g. most Raspberry Pi systems)
+* The "Edge" command does not work with Deebot U2 (starts auto clean instead)
+* The "Move" commands do not work with Deebot OZMO T8 AIVI (and maybe also for some other models)
 * The cleaning log has an empty result on T9 series
-* "Edge" command does not work with Deebot U2 (starts auto clean instead)
+* The generation of map image data does not work properly with the Deebot X1 series
 
 ## Changelog
 
