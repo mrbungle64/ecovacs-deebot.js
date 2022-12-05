@@ -112,7 +112,14 @@ class VacBot_950type extends VacBot {
                 'aqStart': null,
                 'aqEnd': null
             }
-        }
+        };
+        this.currentTask = {
+            'type': null,
+            'triggeredBy': null,
+            'failed': null
+        };
+        this.obstacleTypes = null;
+        this.avoidedObstacles = null;
     }
 
     /**
@@ -574,6 +581,20 @@ class VacBot_950type extends VacBot {
             'cleanedSeconds': payload['time'],
             'cleanType': payload['type']
         };
+        if(payload.hasOwnProperty('avoidCount')) {
+            if(this.avoidedObstacles != payload['avoidCount'])
+            {
+                tools.envLog("[VacBot] *** whoops...there was something in the way");
+            }
+            this.avoidedObstacles = payload['avoidCount'];
+        }
+        if(payload.hasOwnProperty('aiopen') && payload['aiopen'] == 1) {
+            if(this.obstacleTypes != payload['aitypes'])
+            {
+                tools.envLog("[VacBot] *** there was something new blocking my way 😕");
+            }
+            this.obstacleTypes = payload['aitypes'];
+        }
     }
 
     /**
@@ -1106,6 +1127,24 @@ class VacBot_950type extends VacBot {
             'mapId': payload['mid'],
             'locationPoints': payload['items']
         };
+        tools.envLog("[VacBot] *** Obstacles:");
+        tools.envLog(payload['items']);
+    }
+
+    handleTask(type, payload) {
+        this.currentTask = {
+            'type': type,
+            'triggerType': payload.hasOwnProperty('triggerType') ? payload['triggerType'] : 'none',
+            'failed': false
+        };
+        if(payload.hasOwnProperty('go_fail')) {
+            this.currentTask.failed = true;
+        }
+        if(payload.hasOwnProperty('stopReason')) {
+            // why has it stopped?
+        }
+        tools.envLog("[VacBot] *** Task:");
+        tools.envLog(this.currentTask);
     }
 
     /**

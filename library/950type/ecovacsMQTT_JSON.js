@@ -582,17 +582,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 */
                 break;
             case 'FwBuryPoint-bd_air-quality':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "index": "0000000505",
-                    "ts": "1670137366923",
-                    "pm1": 4,
-                    "pm10": 6,
-                    "pm25": 5,
-                    "voc": 6
-                }
-                */
+                this.vacBot.handleAirQuality(
+                    {
+                        'pm25': payload['pm25'],
+                        'pm_10': payload['pm1'],
+                        'particulateMatter10': payload['pm10'],
+                        'airQualityIndex':this.vacBot.airQuality.airQualityIndex,
+                        'volatileOrganicCompounds': payload['voc'],
+                        'temperature': this.vacBot.airQuality.temperature,
+                        'humidity': this.vacBot.airQuality.humidity
+                    }
+                );
                 break;
             case 'FwBuryPoint-bd_gyrostart':
                 /*
@@ -630,130 +630,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 */
                 break;
             case 'FwBuryPoint-bd_task-return-normal-start':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "index": "0000000561",
-                    "ts": "1670148367610",
-                    "mid": "1720240719",
-                    "bid": "3901670148367610",
-                    "sid": "8911670148367606",
-                    "triggerType": "workcomplete",
-                    "returnId": "4571670148367610",
-                    "cleanId": "6921670148325555"
-                }
-                */
-               break;
-            case 'FwBuryPoint-bd_task-clean-move-start':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "ts": "1670148617826",
-                    "index": "0000000584",
-                    "mid": "1720240719",
-                    "bid": "2631670148617826",
-                    "sid": "1541670148617825",
-                    "triggerType": "app",
-                    "cleanId": "4831670148577809",
-                    "pauseId": "",
-                    "resumeId": "",
-                    "time": 0,
-                    "volume": 0,
-                    "stopReason": 0,
-                    "buildstate": "built",
-                    "uvlight": 1,
-                    "smell": 1,
-                    "smell_level": 1,
-                    "humidify": 0,
-                    "humidify_level": 45,
-                    "go_fail": 1
-                }
-                */
-                break;
-            case 'FwBuryPoint-bd_task-clean-move-stop':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "ts": "1670148365606",
-                    "index": "0000000558",
-                    "mid": "1720240719",
-                    "bid": "1341670148365606",
-                    "sid": "5971670148365606",
-                    "triggerType": "app",
-                    "cleanId": "6921670148325555",
-                    "pauseId": "",
-                    "resumeId": "",
-                    "time": 15,
-                    "volume": 60,
-                    "stopReason": 1,
-                    "buildstate": "built",
-                    "uvlight": 1,
-                    "smell": 1,
-                    "smell_level": 1,
-                    "humidify": 0,
-                    "humidify_level": 45,
-                    "go_fail": 1
-                }
-                */
-               break;
             case 'FwBuryPoint-bd_task-return-normal-stop':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "ts": "1670148389297",
-                    "index": "0000000568",
-                    "mid": "1720240719",
-                    "bid": "9151670148389297",
-                    "sid": "8861670148389296",
-                    "triggerType": "workcomplete",
-                    "returnId": "4571670148367610",
-                    "pauseId": "",
-                    "resumeId": "",
-                    "cleanId": "6921670148325555"
-                }
-
-                */
-                break;
+            case 'FwBuryPoint-bd_task-clean-move-start':
+            case 'FwBuryPoint-bd_task-clean-move-stop':
             case 'FwBuryPoint-bd_task-clean-current-spot-start':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "index": "0000000571",
-                    "ts": "1670148512820",
-                    "mid": "1720240719",
-                    "bid": "8021670148512820",
-                    "sid": "9651670148512819",
-                    "triggerType": "app",
-                    "cleanId": "6851670148512820",
-                    "buildstate": "built"
-                }
-                */
-                break;
             case 'FwBuryPoint-bd_task-clean-current-spot-stop':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "ts": "1670148550894",
-                    "index": "0000000574",
-                    "mid": "1720240719",
-                    "bid": "1331670148550893",
-                    "sid": "4071670148550892",
-                    "triggerType": "app",
-                    "cleanId": "6851670148512820",
-                    "pauseId": "",
-                    "resumeId": "",
-                    "time": 0,
-                    "volume": 0,
-                    "stopReason": 0,
-                    "buildstate": "built",
-                    "uvlight": 1,
-                    "smell": 1,
-                    "smell_level": 1,
-                    "humidify": 0,
-                    "humidify_level": 45,
-                    "areaType": 0
-                }
-                */
+            case 'FwBuryPoint-bd_task-clean-specified-spot-start':
+            case 'FwBuryPoint-bd_task-clean-specified-spot-stop':
+                this.vacBot.handleTask(
+                    abbreviatedCommand.substring(20), 
+                    payload
+                );
                 break;
             case 'FwBuryPoint-bd_dtofstart':
                 /*
@@ -820,6 +707,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     "rr": 657
                 }
                 */
+                break;
+            case 'ThreeModuleStatus':
+                this.vacBot.handleThreeModule(payload);
                 break;
             case 'AirbotAutoModel':
                 this.vacBot.handleAirbotAutoModel(payload);
