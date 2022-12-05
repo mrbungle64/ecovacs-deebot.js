@@ -834,6 +834,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'AreaPoint':
+                // Hindernisse, die beim Reinigen erkannt werden (AIVI)
                 break;
             case 'AirSpeed':
             case 'Humidity':

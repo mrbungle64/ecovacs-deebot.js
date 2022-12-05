@@ -907,6 +907,39 @@ class GetAudioCallState extends VacBotCommand {
     }
 }
 
+class GetVoice extends VacBotCommand {
+    constructor() {
+        super('getVoice');
+    }
+}
+
+class GetVoiceLifeRemindState extends VacBotCommand {
+    constructor() {
+        super('getVoiceLifeRemindState');
+    }
+}
+
+class SetVoiceAssistantState extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setVoiceAssistantState', {
+            'enable': enable
+        });
+    }
+}
+
+class SetVoice extends VacBotCommand {
+    constructor(enable = 0, md5sum = null, size = 0, type = null, url = null, vid = 'default') {
+        super('setVoice', {
+            'enable': enable,
+            'md5': md5sum,
+            'size': size,
+            'type': type,
+            'url': url,
+            'vid': vid
+        });
+    }
+}
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
@@ -1020,3 +1053,7 @@ module.exports.GetScene = GetScene;
 module.exports.GetListenMusic = GetListenMusic;
 module.exports.VideoOpened = VideoOpened;
 module.exports.GetAudioCallState = GetAudioCallState;
+module.exports.GetVoice = GetVoice;
+module.exports.SetVoice = SetVoice;
+module.exports.SetVoiceAssistantState = SetVoiceAssistantState;
+module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
