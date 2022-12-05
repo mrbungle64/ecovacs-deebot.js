@@ -36,6 +36,12 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'area': 'area'
 };
 
+exports.GOCHARGING_REASONS = {
+    'workComplete': 'workComplete',
+    'cleaningCloth': 'cleaningCloth',
+    'none': 'none'
+};
+
 exports.WATER_LEVEL_TO_ECOVACS = {
     1: 1,     //low
     2: 2,     //middle

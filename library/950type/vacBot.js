@@ -63,16 +63,56 @@ class VacBot_950type extends VacBot {
         this.angleFollow = null;
         this.aiBlockPlate = null;
         this.autonomousClean = null;
-        this.bluetoothSpeaker = null;
+        this.bluetoothSpeaker = {
+            'enabled': null,
+            'timeout': null,
+            'name': null
+        };
         this.childLock = null;
         this.drivingWheel = null;
         this.monitorAirState = null;
         this.angleWakeup = null;
         this.efficiency = null;
         this.atmoLightIntensity = null;
-        this.humanoidFollow_Video = null;
-        this.humanoidFollow_Yiko = null;
-        this.sysinfo = null;
+        this.humanoidFollow = {
+            'video': null,
+            'yiko': null
+        };
+        this.sysinfo = {
+            'load': null,
+            'uptime': null,
+            'signal': null,
+            'meminfo': null,
+            'pos': null
+        };
+        this.blockTime = {
+            'from': null,
+            'to': null
+        };
+        this.humidification = {
+            'enabled': null,
+            'level': null
+        };
+        this.airFreshening = {
+            'enabled': null,
+            'level': null,
+            'error': null
+        };
+        this.uvAirCleaning = {
+            'enabled': null
+        };
+        this.areaPoint = {
+            'mapId': null,
+            'locationPoints': null
+        };
+        this.airbotAutoModel = {
+            'enable': null,
+            'trigger': null,
+            'aq': {
+                'aqStart': null,
+                'aqEnd': null
+            }
+        }
     }
 
     /**
@@ -444,6 +484,13 @@ class VacBot_950type extends VacBot {
     handleBlock(payload) {
         this.block = payload['enable'];
         tools.envLog("[VacBot] *** block = " + this.block);
+        if(payload.hasOwnProperty('start')) {
+            this.blockTime = {
+                "from": payload['start'],
+                "to": payload['end']
+            };
+            tools.envLog(this.blockTime);
+        }
     }
 
     /**
@@ -933,11 +980,12 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleHumanoidFollow(payload) {
-        this.humanoidFollow_Yiko = payload['yiko'];
-        this.humanoidFollow_Video = payload['video'];
+        this.humanoidFollow = {
+            'yiko': payload['yiko'],
+            'video': payload['video']
+        };
         tools.envLog("[VacBot] *** HumanoidFollow");
-        tools.envLog("[VacBot] ***    Yiko: " + this.humanoidFollow_Yiko );
-        tools.envLog("[VacBot] ***    Video: " + this.humanoidFollow_Video );
+        tools.envLog(this.humanoidFollow );
     }
 
     /**
@@ -954,10 +1002,13 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleGetBlueSpeaker(payload) {
-        this.bluetoothSpeaker = payload['enable'];
-        tools.envLog("[VacBot] *** BlueSpeaker = " + this.bluetoothSpeaker);
-        tools.envLog("[VacBot] ***    pairing timeout = " + payload['time']);
-        tools.envLog("[VacBot] ***    devicename = " + payload['name']);
+        this.bluetoothSpeaker = {
+            'enabled': payload['enable'],
+            'timeout': payload['time'],
+            'name': payload['name']
+        };
+        tools.envLog("[VacBot] *** BlueSpeaker");
+        tools.envLog(this.bluetoothSpeaker);
     }
 
     /**
@@ -987,16 +1038,74 @@ class VacBot_950type extends VacBot {
         tools.envLog("[VacBot] *** AtmoLight(intensity) = " + this.atmoLightIntensity + " of " +  payload['total']);
     }
 
-    handleSysinfo(event) {
+    /**
+     * Handle the payload of the `(FwBuryPoint-)Sysinfo` response/message
+     * @param {Object} payload
+     */
+    handleSysinfo(payload) {
+        let event = JSON.parse(payload)['body'][0];
         this.sysinfo = {
-            'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9),
+            'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9).replace("\\n","").replace("\\", ""),
             'uptime': event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).lastIndexOf(",")),
             'signal': event['signal'],
-            'meminfo': event['signal'],
+            'meminfo': event['meminfo'],
             'pos': event['pos']
         };
         tools.envLog("[VacBot] *** System informations:");
         tools.envLog(this.sysinfo);
+    }
+
+    /**
+     * Handle the payload of the `AirbotAutoMode` response/message
+     * @param {Object} payload
+     */
+    handleAirbotAutoModel(payload) {
+        this.airbotAutoModel = {
+            'enable': payload['enable'],
+            'trigger': payload['trigger'],
+            'aq': {
+                'aqStart': payload['aqStart'],
+                'aqEnd': payload['aqEnd']
+            }
+        };
+    }
+
+    /**
+     * Handle the payload of the `ThreeModule` (UV, Humidifier, AirFreshener) response/message
+     * @param {Object} payload
+     */
+    handleThreeModule(payload) {
+        payload.forEach((module) => {
+            if(module.type == 'uvLight') {
+                this.uvAirCleaning = {
+                    'enabled': module.enable
+                };
+            }
+            if(module.type == 'smell') {
+                this.airFreshening = {
+                    'enabled': module.enable,
+                    'level': module.level,
+                    'error': module.err
+                };
+            }
+            if(module.type == 'humidify') {
+                this.humidification = {
+                    'enabled': module.enable,
+                    'level': module.level
+                };
+            }
+        });
+    }
+
+    /**
+     * Handle the payload of the `AreaPoint` response/message
+     * @param {Object} payload
+     */
+    handleAreaPoint(payload) {
+        this.areaPoint = {
+            'mapId': payload['mid'],
+            'locationPoints': payload['items']
+        };
     }
 
     /**
@@ -1329,6 +1438,69 @@ class VacBot_950type extends VacBot {
                 break;
             case "SetBlueSpeaker".toLowerCase():
                 this.sendCommand(new VacBotCommand.SetBlueSpeaker(args[0]));
+                break;
+            case "SetVoiceSimple".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetVoiceSimple(args[0]));
+                break;
+            case "SetBlock".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetBlock(args[0], args[1], args[2]));
+                break;
+            case "SetMonitorAirState".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetMonitorAirState(args[0]));
+                break;
+            case "SetAngleFollow".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetAngleFollow(args[0]));
+                break;
+            case "SetMic".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetMic(args[0]));
+                break;
+            case "GetLiveLaunchPwdState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetLiveLaunchPwdState());
+                break;
+            case "GetHumanoidFollow".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetHumanoidFollow());
+                break;
+            case "GetMonitorAirState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMonitorAirState());
+                break;
+            case "GetVoiceSimple".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetVoiceSimple());
+                break;
+            case "GetDrivingWheel".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetDrivingWheel());
+                break;
+            case "GetChildLock".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetChildLock());
+                break;
+            case "GetBlock".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetBlock());
+                break;
+            case "GetTimeZone".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetTimeZone());
+                break;
+            case "GetTotalStats".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetTotalStats());
+                break;
+            case "GetWifiList".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetWifiList());
+                break;
+            case "GetOta".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetOta());
+                break;
+            case "GetThreeModuleStatus".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetThreeModuleStatus());
+                break;
+            case "GetScene".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetScene());
+                break;
+            case "GetListenMusic".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetListenMusic());
+                break;
+            case "VideoOpened".toLowerCase():
+                this.sendCommand(new VacBotCommand.VideoOpened());
+                break;
+            case "GetAudioCallState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAudioCallState());
                 break;
         }
     }
