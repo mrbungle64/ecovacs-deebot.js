@@ -455,6 +455,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
             // T9 AIVI
             case 'DModule':
+                // Lufterfrischermodul (hab ich leider nicht)
                 // {"status":1,"enable":1}
                 break;
             case 'AIMapAndMapSet':
@@ -556,30 +557,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('Sysinfo', this.vacBot.sysinfo);
                 }
                 break;
-            case 'FwBuryPoint-bd_setting-ev':
+            case 'FwBuryPoint-bd_relocation':
+                tools.envLog("[EcovacsMQTT_JSON] Relocation...");
+                break;
+            case 'FwBuryPoint-bd_setting-evt':
                 // Event -> Config stored...
                 break;
             case 'FwBuryPoint-bd_setting':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "index": "0000000553",
-                    "ts": "1670148325554",
-                    "id": "8181670148325554",
-                    "continue": 0,
-                    "DND": 1,
-                    "cameraBlock": 1,
-                    "fanLevel": 2,
-                    "voiceLevel": 0,
-                    "simpleMode": 0,
-                    "follow": 0,
-                    "wheelTruck": 1,
-                    "childLock": 1,
-                    "blueSpeaker": 0,
-                    "angleWakeup": 0,
-                    "efficiency": 0
-                }
-                */
+                tools.envLog("[EcovacsMQTT_JSON] Saved settings:");
+                tools.envLog(payload);
                 break;
             case 'FwBuryPoint-bd_air-quality':
                 this.vacBot.handleAirQuality(
@@ -643,14 +629,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 );
                 break;
             case 'FwBuryPoint-bd_dtofstart':
-                /*
-                {
-                    "gid": "G1669968164685",
-                    "ts": "1670148313548",
-                    "index": "0000000548",
-                    "dsc": 0
-                }
-                */
+                // DToF-Laser-Sensor
                break;
             case 'FwBuryPoint-bd_returnchargeinfo':
                 /*
@@ -700,8 +679,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // ich VERMUTE, es handelt sich um Signal(stärke)werte vom/zum externen Sensor
                 /*
                 {
-                    "gid": "G1669968164685",
-                    "index": "0000000595",
                     "ts": "1670148786607",
                     "cr": 26,
                     "rr": 657
@@ -731,6 +708,24 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'Temperature':
                 if (payload) {
                     tools.envLog(`[AirPurifier] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
+                }
+                break;
+            case 'setVoice':
+                tools.envLog(`[EcovacsMQTT_JSON] SETVOICE:`);
+                tools.envLog(payload);
+                break;
+            case 'Voice':
+                if (payload && payload.downloads) {
+                    payload.downloads.forEach((dlObject) => {
+                        if(dlObject.status == "dl") {
+                            tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
+                        } else if(dlObject.status == "dld") {
+                            tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
+                        } else {
+                            tools.envLog(`[EcovacsMQTT_JSON] unknown download state`);
+                            tools.envLog(dlObject);
+                        }
+                    });
                 }
                 break;
             default:
@@ -842,8 +837,38 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             if (fwBuryMessage == 'bd_sysinfo') {
                 this.vacBot.handleSysinfo(JSON.stringify({'body': fwBuryPoint}));
                 return;
-            } else if (fwBuryMessage == 'bd_sysinfo') {
-                this.vacBot.handleSysinfo(JSON.stringify({'body': fwBuryPoint}));
+            } else if (fwBuryMessage == 'bd_wifi_24g') {
+                return;
+            } else if (fwBuryMessage == 'bd_onoffline') {
+                return;
+            } else if (fwBuryMessage == 'bd_PowerOnOff') {
+                return;
+            } else if (fwBuryMessage == 'bd_fbi08') {
+                return;
+            } else if (fwBuryMessage == 'bd_returnchargeinfo') {
+                return;
+            } else if (fwBuryMessage == 'bd_returndock') {
+                return;
+            } else if (fwBuryMessage == 'bd_trigger') {
+                return;
+            } else if (fwBuryMessage == 'bd_task') {
+                return;
+            } else if (fwBuryMessage == 'bd_sensortriggerinfo') {
+                return;
+            } else if (fwBuryMessage == 'bd_cri01') {
+                return;
+            } else if (fwBuryMessage == 'bd_cc10') {
+                // Charging Case
+                return;
+            } else if (fwBuryMessage == 'bd_vslaminfo') {
+                return;
+            } else if (fwBuryMessage == 'bd_planinfo') {
+                return;
+            } else if (fwBuryMessage == 'bd_extramap') {
+                return;
+            } else if (fwBuryMessage == 'bd_light') {
+                return;
+            } else if (fwBuryMessage == 'bd_cache') {
                 return;
             }
 

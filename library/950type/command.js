@@ -928,14 +928,46 @@ class SetVoiceAssistantState extends VacBotCommand {
 }
 
 class SetVoice extends VacBotCommand {
-    constructor(enable = 0, md5sum = null, size = 0, type = null, url = null, vid = 'default') {
+    constructor(enable = 0, md5sum = '', size = 0, type = '', url = '', vid = 'default') {
         super('setVoice', {
             'enable': enable,
             'md5': md5sum,
-            'size': size,
+            'size': '' + size,
             'type': type,
             'url': url,
             'vid': vid
+        });
+    }
+}
+
+class GetBreakPoint extends VacBotCommand {
+    constructor() {
+        super('getBreakPoint');
+    }
+}
+
+class GetRelocationState extends VacBotCommand {
+    constructor() {
+        super('getRelocationState');
+    }
+}
+
+class GetAntiDrop extends VacBotCommand {
+    constructor() {
+        super('getAntiDrop');
+    }
+}
+
+class GetAirDring extends VacBotCommand {
+    constructor() {
+        super('getAirDring');
+    }
+}
+
+class GetMapTrace_V2 extends VacBotCommand {
+    constructor(type = 0) {
+        super('getMapTrace_V2', {
+            'type': type
         });
     }
 }
@@ -1057,3 +1089,9 @@ module.exports.GetVoice = GetVoice;
 module.exports.SetVoice = SetVoice;
 module.exports.SetVoiceAssistantState = SetVoiceAssistantState;
 module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
+module.exports.GetBreakPoint = GetBreakPoint;
+module.exports.GetRelocationState = GetRelocationState;
+module.exports.GetAntiDrop = GetAntiDrop;
+module.exports.GetAirDring = GetAirDring;
+module.exports.GetMapTrace_V2 = GetMapTrace_V2;
+module.exports.GetPos = GetPos;

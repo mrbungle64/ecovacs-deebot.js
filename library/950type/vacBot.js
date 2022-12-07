@@ -1253,6 +1253,9 @@ class VacBot_950type extends VacBot {
                     if (this.hasUnitCareInfo()) {
                         componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['unit_care']);
                     }
+                    if (this.hasRoundMopInfo()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['round_mop']);
+                    }
                     this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;
@@ -1541,7 +1544,34 @@ class VacBot_950type extends VacBot {
             case "GetAudioCallState".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAudioCallState());
                 break;
-        }
+            case "SetVoice".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetVoice(args[0], args[1], args[2], args[3], args[4], args[5]));
+                break;
+            case "SetVoiceAssistantState".toLowerCase():
+                this.sendCommand(new VacBotCommand.SetVoiceAssistantState(args[0]));
+                break;
+            case "GetVoiceLifeRemindState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetVoiceLifeRemindState());
+                break;
+            case "GetBreakPoint".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetBreakPoint());
+                break;
+            case "GetRelocationState".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetRelocationState());
+                break;
+            case "GetAntiDrop".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAntiDrop());
+                break;
+            case "GetAirDring".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAirDring());
+                break;
+            case "GetMapTrace_V2".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
+                break;
+            case "GetPos".toLowerCase():
+                this.sendCommand(new VacBotCommand.GetPos(args[0]));
+                break;
+            }
     }
 }
 

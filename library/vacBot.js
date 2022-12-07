@@ -813,6 +813,14 @@ class VacBot {
     }
 
     /**
+     * Returns true if you can retrieve information about "round mop" (life span)
+     * @returns {boolean}
+     */
+    hasRoundMopInfo() {
+        return this.getDeviceProperty('round_mop_info');
+    }
+
+    /**
      * Returns true if the model has Edge cleaning mode
      * It is assumed that a model can have either an Edge or Spot Area mode
      * @returns {boolean}

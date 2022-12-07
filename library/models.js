@@ -583,6 +583,7 @@ exports.KnownDevices = {
         "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
+        "round_mop_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
