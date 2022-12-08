@@ -7,6 +7,7 @@ const fs = require('fs');
 const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
+const querystring = require('node:querystring');
 
 /** @type {Object} */
 const countries = require('./countries.json').countries;
@@ -224,6 +225,65 @@ class EcovacsAPI {
       }
     } catch (err) {
       tools.envLog(`[EcoVacsAPI] callUserAuthApi error: ${err}`);
+      throw err;
+    }
+  }
+
+  async callLogsApi(device) {
+    let portalPath = constants.APP_ECOUSER_API;
+    if (this.country === 'CN') {
+      portalPath = constants.APP_ECOUSER_API;
+    }
+
+    portalPath = tools.formatString(portalPath, {continent: this.continent});
+    if (this.country === 'CN') {
+      portalPath = portalPath.replace('.com','.cn');
+    }
+    portalPath = portalPath + '/dln/api/log/clean_result/list?';
+
+    let auth = {
+      "realm": constants.REALM,
+      "with": "users",
+      "userid": this.uid,
+      "token": this.user_access_token,
+      "resource": "IOS10F74C3Gb"
+    };
+
+    let queryParams = {
+      'auth': JSON.stringify(auth),
+      'channel': 'google_play',
+      'did': device,
+      'et1': '1670527884797',
+      'lang': 'EN',
+      'logType': 'clean',
+      'reqid': '##REQID##',
+      'res': '##RES##',
+      'size': 20,
+      'version': 'v2'
+    };
+
+    let config = {
+      headers: {
+        'Authorization': 'Bearer ' + this.user_access_token,
+        'appid': 'ecovacs',
+        'plat': 'android',
+        'userid': this.uid,
+        'user-agent': 'EcovacsHome/2.3.7 (Android; Scale/2.00)',
+        'v': '2.3.7',
+        'country':  this.country,
+        'sign': 'ece3c220f9ac5c8377394995e0b1c2d5dd79a3df'
+      }
+    };
+
+    let searchParams = querystring.encode(queryParams);
+    tools.envLog(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
+
+    try {
+      const res = await axios.get(portalPath + searchParams, config);
+      const result = res.data;
+      console.info(res);
+    } catch (err) {
+      tools.envLog(`[EcoVacsAPI] callLogsApi error: ${err}`);
       throw err;
     }
   }

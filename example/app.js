@@ -50,6 +50,9 @@ api.connect(accountId, passwordHash).then(() => {
       vacbot.on('ChargeState', (value) => {
         console.log("Charge status: " + value);
       });
+
+      api.callLogsApi(vacuum.did);
+
     });
     vacbot.connect();
   });

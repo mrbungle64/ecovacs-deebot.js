@@ -5,7 +5,10 @@ exports.AUTH_GL_OPENAPI = 'https://gl-{country}-openapi.{domain}/v1/global/auth/
 
 exports.REALM = 'ecouser.net';
 exports.PORTAL_ECOUSER_API = 'https://portal-{continent}.ecouser.net/api';
-exports.PORTAL_ECOUSER_API_CN = 'https://portal.ecouser.net/api/';
+exports.PORTAL_ECOUSER_API_CN = 'https://portal.ecouser.net/api';
+
+exports.APP_ECOUSER_API = 'https://portal-{continent}.ecouser.net/app';
+exports.APP_ECOUSER_API_CN = 'https://portal.ecouser.net/app';
 
 exports.USER_API_PATH = 'users/user.do';
 exports.USER_LOGIN_PATH = 'user/login';
@@ -14,6 +17,7 @@ exports.USER_GETAUTHCODE_PATH = 'user/getAuthCode';
 exports.IOT_DEVMANAGER_PATH = 'iot/devmanager.do';
 
 exports.CLEANLOGS_PATH = 'lg/log.do';
+exports.CLEAN_RESULT_API = 'dln/api/log/clean_result/list';
 
 // Ecovacs
 exports.AUTH_DOMAIN = 'ecovacs.com';
