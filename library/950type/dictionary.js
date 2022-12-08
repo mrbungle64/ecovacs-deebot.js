@@ -36,6 +36,12 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'area': 'area'
 };
 
+exports.GOCHARGING_REASONS = {
+    'workComplete': 'workComplete',
+    'cleaningCloth': 'cleaningCloth',
+    'none': 'none'
+};
+
 exports.WATER_LEVEL_TO_ECOVACS = {
     1: 1,     //low
     2: 2,     //middle
@@ -67,14 +73,16 @@ exports.COMPONENT_TO_ECOVACS = {
     'main_brush': 'brush',
     'side_brush': 'sideBrush',
     'filter': 'heap',
-    'unit_care': 'unitCare'
+    'unit_care': 'unitCare',
+    'round_mop': 'roundMop'
 };
 
 exports.COMPONENT_FROM_ECOVACS = {
     'brush': 'main_brush',
     'sideBrush': 'side_brush',
     'heap': 'filter',
-    'unitCare': 'unit_care'
+    'unitCare': 'unit_care',
+    'roundMop': 'round_mop'
 };
 
 exports.MOVE_ACTION = {

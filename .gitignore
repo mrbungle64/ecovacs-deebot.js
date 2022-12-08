@@ -12,3 +12,5 @@ example/myInfo.js
 library/map/
 .vs/*
 .vscode/*
+
+*/settings.js

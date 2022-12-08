@@ -456,12 +456,318 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('AirQuality', this.vacBot.airQuality);
                 }
                 break;
+
+            // T9 AIVI
+            case 'DModule':
+                // Lufterfrischermodul (hab ich leider nicht)
+                this.vacBot.handleDModule(payload);
+                if(this.vacBot.dmodule.enabled) {
+                    this.emit("DModuleEnabled", this.vacBot.dmodule.enabled);
+                    this.emit("DModuleStatus", this.vacBot.dmodule.status);
+                }
+                break;
+            case 'AIMapAndMapSet':
+                // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
+                break;
+            // AirBot Z1
+            case 'Mic':
+                this.vacBot.handleGetMic(payload);
+                if (this.vacBot.mic) {
+                    this.emit('Mic', this.vacBot.mic);
+                }
+                break;
+            case 'MonitorAirState':
+                this.vacBot.handleGetMonitorAirState(payload);
+                if (this.vacBot.monitorAirState) {
+                    this.emit('MonitorAirState', this.vacBot.monitorAirState);
+                }
+                break;
+            case 'DrivingWheel':
+                this.vacBot.handleGetDrivingWheel(payload);
+                if (this.vacBot.drivingWheel) {
+                    this.emit('DrivingWheel', this.vacBot.drivingWheel);
+                }
+                break;
+            case 'VoiceSimple':
+                this.vacBot.handleGetVoiceSimple(payload);
+                if (this.vacBot.voiceSimple) {
+                    this.emit('VoiceSimple', this.vacBot.voiceSimple);
+                }
+                break;
+            case 'AiBlockPlate':
+                this.vacBot.handleGetAiBlockPlate(payload);
+                if (this.vacBot.aiBlockPlate) {
+                    this.emit('AiBlockPlate', this.vacBot.aiBlockPlate);
+                }
+                break;
+            case 'BlueSpeaker':
+                this.vacBot.handleGetBlueSpeaker(payload);
+                if (this.vacBot.bluetoothSpeaker) {
+                    this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
+                }
+                break;
+            case 'ChildLock':
+                this.vacBot.handleGetChildLock(payload);
+                if (this.vacBot.childLock) {
+                    this.emit('ChildLock', this.vacBot.childLock);
+                }
+                break;
+
+            case 'AngleFollow':
+                this.vacBot.handleGetAngleFollow(payload);
+                if (this.vacBot.angleFollow) {
+                    this.emit('AngleFollow', this.vacBot.angleFollow);
+                }
+                break;
+            case 'AngleWakeup':
+                this.vacBot.handleAngleWakeup(payload);
+                if (this.vacBot.angleWakeup) {
+                    this.emit('AngleWakeup', this.vacBot.angleWakeup);
+                }
+                break;
+            case 'AutonomousClean':
+                this.vacBot.handleGetAutonomousClean(payload);
+                if (this.vacBot.autonomousClean) {
+                    this.emit('AutonomousClean', this.vacBot.autonomousClean);
+                }
+                break;
+            case 'VoiceAssistantState':
+                this.vacBot.handleVoiceAssistantState(payload);
+                if (this.vacBot.voiceAssistantState) {
+                    this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
+                }
+                break;
+            case 'Efficiency':
+                this.vacBot.handleEfficiency(payload);
+                if (this.vacBot.efficiency) {
+                    this.emit('Efficiency', this.vacBot.efficiency);
+                }
+                break;
+            case 'AtmoLight':
+                this.vacBot.handleGetAtmoLight(payload);
+                if (this.vacBot.atmoLightIntensity) {
+                    this.emit('AtmoLight', this.vacBot.atmoLightIntensity);
+                }
+                break;
+            case 'HumanoidFollow':
+                this.vacBot.handleHumanoidFollow(payload);
+                if (this.vacBot.humanoidFollow_Yiko) {
+                    this.emit('HumanoidFollowYiko', this.vacBot.humanoidFollow_Yiko);
+                }
+                if (this.vacBot.humanoidFollow_Video) {
+                    this.emit('HumanoidFollowVideo', this.vacBot.humanoidFollow_Video);
+                }
+                break;
+            case 'FwBuryPoint-bd_sysinfo':
+                this.vacBot.handleSysinfo(payload);
+                if (this.vacBot.sysinfo) {
+                    this.emit('Sysinfo', this.vacBot.sysinfo);
+                }
+                break;
+            case 'FwBuryPoint-bd_relocation':
+                tools.envLog("[EcovacsMQTT_JSON] Relocating...");
+                break;
+            case 'FwBuryPoint-bd_setting-evt':
+                // Event -> Config stored...
+                break;
+            case 'FwBuryPoint-bd_setting':
+                tools.envLog("[EcovacsMQTT_JSON] Saved settings:");
+                tools.envLog(payload);
+                break;
+            case 'FwBuryPoint-bd_air-quality':
+                this.vacBot.handleAirQuality(
+                    {
+                        'pm25': payload['pm25'],
+                        'pm_10': payload['pm1'],
+                        'particulateMatter10': payload['pm10'],
+                        'airQualityIndex':this.vacBot.airQuality.airQualityIndex,
+                        'volatileOrganicCompounds': payload['voc'],
+                        'temperature': this.vacBot.airQuality.temperature,
+                        'humidity': this.vacBot.airQuality.humidity
+                    }
+                );
+                break;
+            case 'FwBuryPoint-bd_gyrostart':
+                /*
+                {
+                    "gid":"G1669968164685",
+                    "ts":"1670148323348",
+                    "index":"0000000552",
+                    "gst":400
+                }
+                */
+                break;
+            case 'FwBuryPoint-bd_basicinfo':
+                /*
+                {
+                    "gid": "G1669968164685",
+                    "index": "0000000551",
+                    "ts": "1670148317338",
+                    "orig": {
+                        "battery": 100,
+                        "chargeState": 0,
+                        "robotState": 0,
+                        "robotPos": "-11,248",
+                        "chargerPos": "27,427",
+                        "onCharger": 1
+                    },
+                    "new": {
+                        "battery": 100,
+                        "chargeState": 0,
+                        "robotState": 0,
+                        "robotPos": "-21,161",
+                        "chargerPos": "27,427",
+                        "onCharger": 0
+                    }
+                }
+                */
+                break;
+            case 'onFwBuryPoint-bd_errorcode':
+                tools.envLog("[EcovacsMQTT_JSON] Got error: " + payload['body']['code']);
+                break;
+            case 'FwBuryPoint-bd_task-return-normal-start':
+            case 'FwBuryPoint-bd_task-return-normal-stop':
+            case 'FwBuryPoint-bd_task-clean-move-start':
+            case 'FwBuryPoint-bd_task-clean-move-stop':
+            case 'FwBuryPoint-bd_task-clean-current-spot-start':
+            case 'FwBuryPoint-bd_task-clean-current-spot-stop':
+            case 'FwBuryPoint-bd_task-clean-specified-spot-start':
+            case 'FwBuryPoint-bd_task-clean-specified-spot-stop':
+                this.vacBot.handleTask(
+                    abbreviatedCommand.substring(20),
+                    payload
+                );
+                this.emit('TaskStarted',abbreviatedCommand.substring(20), payload);
+                break;
+            case 'FwBuryPoint-bd_dtofstart':
+                // DToF-Laser-Sensor
+               break;
+            case 'FwBuryPoint-bd_returnchargeinfo':
+                /*
+                {
+                    "gid": "G1669968164685",
+                    "index": "0000000564",
+                    "ts": "1670148387296",
+                    "startType": 0,
+                    "finishType": 0,
+                    "planResult": 1,
+                    "planElapsedTime": 0,
+                    "totalElapsedTime": 0,
+                    "jointElapsedTime": 0,
+                    "detectMiddleCodeWhenPlanFinish": 0,
+                    "detectOmniWallWhenPlanFinish": 0,
+                    "detectCodeWhenPlanFinish": 0,
+                    "chargingStatus": 0
+                }
+                */
+                break;
+            case 'FwBuryPoint-bd_basicinfo-evt':
+                /*
+                {
+                    "gid": "G1669968164685",
+                    "index": "0000000563",
+                    "ts": "1670148384758",
+                    "orig": {
+                        "battery": 98,
+                        "chargeState": 0,
+                        "robotState": 0,
+                        "robotPos": "9,403",
+                        "chargerPos": "27,427",
+                        "onCharger": 1
+                    },
+                    "new": {
+                        "battery": 98,
+                        "chargeState": 1,
+                        "robotState": 0,
+                        "robotPos": "9,402",
+                        "chargerPos": "27,427",
+                        "onCharger": 1
+                    }
+                }
+                */
+                break;
+            case 'FwBuryPoint-bd_cri04':
+                // ich VERMUTE, es handelt sich um Signal(stärke)werte vom/zum externen Sensor
+                /*
+                {
+                    "ts": "1670148786607",
+                    "cr": 26,
+                    "rr": 657
+                }
+                */
+                break;
+            case 'ThreeModuleStatus':
+                this.vacBot.handleThreeModule(payload);
+                if (this.vacBot.airFreshening.enabled) {
+                    this.emit('AirFreshening', this.vacBot.airbotAutoModel);
+                }
+                if (this.vacBot.humidification.enabled) {
+                    this.emit('Humidification', this.vacBot.humidification);
+                }
+                if (this.vacBot.uvAirCleaning.enabled) {
+                    this.emit('UVAirCleaning', this.vacBot.uvAirCleaning);
+                }
+                break;
+            case 'AirbotAutoModel':
+                this.vacBot.handleAirbotAutoModel(payload);
+                if (this.vacBot.airbotAutoModel) {
+                    this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
+                }
+                break;
+            case 'ThreeModule':
+                this.vacBot.handleThreeModule(payload);
+                if (this.vacBot.threeModule) {
+                    this.emit('ThreeModule', this.vacBot.threeModule);
+                }
+                break;
+            case 'AreaPoint':
+                // Hindernisse, die beim Reinigen erkannt werden (AIVI)
+                break;
             case 'AirSpeed':
             case 'Humidity':
             case 'Temperature':
                 if (payload) {
                     tools.envLog(`[AirPurifier] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
+                break;
+            case 'setVoice':
+                tools.envLog(`[EcovacsMQTT_JSON] SETVOICE:`);
+                tools.envLog(payload);
+                this.emit('SetVoice', payload);
+                break;
+            case 'Voice':
+                if (payload && payload.downloads) {
+                    payload.downloads.forEach((dlObject) => {
+                        if(dlObject.status == "dl") {
+                            tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
+                            this.emit('VoiceDownloadProgress', dlObject);
+                        } else if(dlObject.status == "dld") {
+                            tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
+                            this.emit('VoiceDownloadComplete', dlObject);
+                        } else {
+                            tools.envLog(`[EcovacsMQTT_JSON] unknown download state`);
+                            tools.envLog(dlObject);
+                        }
+                    });
+                }
+                break;
+            case 'WifiList':
+                this.vacBot.handleWiFiList(payload);
+                this.emit('WifiList', payload);
+                break;
+            case 'ListenMusic':
+                tools.envLog(event);
+                break;
+            case 'Ota':
+                this.vacBot.handleOverTheAirUpdate(payload);
+                this.emit('Ota', payload);
+                break;
+            case 'TimeZone':
+                this.vacBot.handleTimeZone(payload);
+                this.emit('TimeZone', payload);
+                break;
+            case 'AudioCallState':
+                this.vacBot.handleAudioCallState(event);
                 break;
             default:
                 tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
@@ -525,9 +831,67 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      */
     async handleFwBuryPoint(payload) {
         try {
-            const fwBuryPoint = JSON.parse(JSON.parse(payload['content'])['d']['body']['data']['d_val']);
-            tools.envLog(fwBuryPoint);
+            let content = JSON.parse(payload['content']);
+            const fwBuryMessage = content["rn"];
+            tools.envLog(fwBuryMessage);
+            let dVal = content['d']['body']['data']['d_val'];
+            let dValObject = null;
+
+            // try to fix invalid JSON
+            try {
+                dValObject = (typeof dVal == 'string') ? JSON.parse(dVal) : dVal;
+            } catch(e) {
+                if(dVal.indexOf("}") < dVal.indexOf("{")) {
+                    if(dVal.indexOf("]") > -1 && dVal.indexOf("[") == -1) {
+                        dVal = "[" + dVal.substring(dVal.indexOf("{"));
+                    } else {
+                        dVal = "[" + dVal.substring(dVal.indexOf("{"));
+                    }
+                } else if(dVal.indexOf("]") < dVal.indexOf("[")) {
+                    dVal = "[" + dVal.substring(dVal.indexOf("{"));
+                }
+                dValObject = JSON.parse(dVal);
+            }
+
+            const fwBuryPoint = dValObject;
             let val;
+
+            if (fwBuryMessage == 'bd_sysinfo') {
+                this.vacBot.handleSysinfo(JSON.stringify({'body': fwBuryPoint}));
+                return;
+            } else if (fwBuryMessage == 'bd_wifi_24g') {
+                //
+            } else if (fwBuryMessage == 'bd_onoffline') {
+                // after reconnection
+            } else if (fwBuryMessage == 'bd_PowerOnOff') {
+                // after powered on
+            } else if (fwBuryMessage == 'bd_fbi08') {
+                // unknown
+            } else if (fwBuryMessage == 'bd_returnchargeinfo') {
+                // charging informations
+            } else if (fwBuryMessage == 'bd_returndock') {
+                // returning to dock
+            } else if (fwBuryMessage == 'bd_trigger') {
+                // when pyhsical- or app button is pressed
+            } else if (fwBuryMessage == 'bd_task') {
+                // when a tasks starts
+            } else if (fwBuryMessage == 'bd_sensortriggerinfo') {
+                // when a sensor gets triggered
+            } else if (fwBuryMessage == 'bd_cri01') {
+                // unknown
+            } else if (fwBuryMessage == 'bd_cc10') {
+                // Charging Case
+            } else if (fwBuryMessage == 'bd_vslaminfo') {
+                // unknown
+            } else if (fwBuryMessage == 'bd_planinfo') {
+                // unknown
+            } else if (fwBuryMessage == 'bd_extramap') {
+                // seems to get raised, when the robot found extra space that is not on the map
+            } else if (fwBuryMessage == 'bd_light') {
+                // unknown
+            } else if (fwBuryMessage == 'bd_cache') {
+                // unknown
+            }
 
             if (fwBuryPoint.hasOwnProperty('code')) {
                 if (fwBuryPoint.code === 110) {
