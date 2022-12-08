@@ -1100,7 +1100,7 @@ class VacBot_950type extends VacBot {
     handleSysinfo(payload) {
         let event = JSON.parse(payload)['body'][0];
         this.sysinfo = {
-            'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9).replace("\\n","").replace("\\", ""),
+            'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9),
             'uptime': event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).lastIndexOf(",")),
             'signal': event['signal'],
             'meminfo': event['meminfo'],
