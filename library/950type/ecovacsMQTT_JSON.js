@@ -457,8 +457,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'DModule':
                 // Lufterfrischermodul (hab ich leider nicht)
                 this.vacBot.handleDModule(payload);
-                this.emit("DModuleEnabled", this.vacBot.dmodule.enabled);
-                this.emit("DModuleStatus", this.vacBot.dmodule.status);
+                if(this.vacBot.dmodule.enabled) {
+                    this.emit("DModuleEnabled", this.vacBot.dmodule.enabled);
+                    this.emit("DModuleStatus", this.vacBot.dmodule.status);
+                }
                 break;
             case 'AIMapAndMapSet':
                 // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
@@ -631,6 +633,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     abbreviatedCommand.substring(20),
                     payload
                 );
+                this.emit('TaskStarted',abbreviatedCommand.substring(20), payload);
                 break;
             case 'FwBuryPoint-bd_dtofstart':
                 // DToF-Laser-Sensor
@@ -691,6 +694,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'ThreeModuleStatus':
                 this.vacBot.handleThreeModule(payload);
+                if (this.vacBot.airFreshening.enabled) {
+                    this.emit('AirFreshening', this.vacBot.airbotAutoModel);
+                }
+                if (this.vacBot.humidification.enabled) {
+                    this.emit('Humidification', this.vacBot.humidification);
+                }
+                if (this.vacBot.uvAirCleaning.enabled) {
+                    this.emit('UVAirCleaning', this.vacBot.uvAirCleaning);
+                }
                 break;
             case 'AirbotAutoModel':
                 this.vacBot.handleAirbotAutoModel(payload);
@@ -700,8 +712,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'ThreeModule':
                 this.vacBot.handleThreeModule(payload);
-                if (this.vacBot.threeModules) {
-                    this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
+                if (this.vacBot.threeModule) {
+                    this.emit('ThreeModule', this.vacBot.threeModule);
                 }
                 break;
             case 'AreaPoint':
@@ -717,14 +729,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'setVoice':
                 tools.envLog(`[EcovacsMQTT_JSON] SETVOICE:`);
                 tools.envLog(payload);
+                this.emit('SetVoice', payload);
                 break;
             case 'Voice':
                 if (payload && payload.downloads) {
                     payload.downloads.forEach((dlObject) => {
                         if(dlObject.status == "dl") {
                             tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
+                            this.emit('VoiceDownloadProgress', dlObject);
                         } else if(dlObject.status == "dld") {
                             tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
+                            this.emit('VoiceDownloadComplete', dlObject);
                         } else {
                             tools.envLog(`[EcovacsMQTT_JSON] unknown download state`);
                             tools.envLog(dlObject);
@@ -732,20 +747,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     });
                 }
                 break;
-            case 'setRelocationState':
-                tools.envLog(`[EcovacsMQTT_JSON] setRelocationState: ` + event['resultCodeMessage']);
-                break;
             case 'WifiList':
                 this.vacBot.handleWiFiList(payload);
+                this.emit('WifiList', payload);
                 break;
             case 'ListenMusic':
                 tools.envLog(event);
                 break;
             case 'Ota':
                 this.vacBot.handleOverTheAirUpdate(payload);
+                this.emit('Ota', payload);
                 break;
             case 'TimeZone':
                 this.vacBot.handleTimeZone(payload);
+                this.emit('TimeZone', payload);
                 break;
             case 'AudioCallState':
                 this.vacBot.handleAudioCallState(event);
