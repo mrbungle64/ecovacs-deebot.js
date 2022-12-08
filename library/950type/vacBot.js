@@ -506,7 +506,7 @@ class VacBot_950type extends VacBot {
     handleBlock(payload) {
         this.block = payload['enable'];
         tools.envLog("[VacBot] *** block = " + this.block);
-        if(payload.hasOwnProperty('start')) {
+        if (payload.hasOwnProperty('start')) {
             this.blockTime = {
                 "from": payload['start'],
                 "to": payload['end']
@@ -586,7 +586,7 @@ class VacBot_950type extends VacBot {
     }
 
     handleWiFiList(payload) {
-        if(payload.list) {
+        if (payload.list) {
             tools.envLog("[VacBot] *** Configured networks:");
             payload.list.forEach((network) => {
                 tools.envLog(
@@ -599,11 +599,11 @@ class VacBot_950type extends VacBot {
 
     handleOverTheAirUpdate(payload) {
         this.OTA = payload;
-        tools.envLog(`[OTA] status: ` + payload);
+        tools.envLog(`[OTA] status: ` + JSON.stringify(payload));
     }
 
     handleTimeZone(payload) {
-        this.timezone = "GMT" + (payload.tzm > 0 ? "+" : "-") +  (payload.tzm / 60) + ":00";
+        this.timezone = "GMT" + (payload.tzm > 0 ? "+" : "-") + (payload.tzm / 60) + ":00";
     }
 
     /**
@@ -617,16 +617,14 @@ class VacBot_950type extends VacBot {
             'cleanedSeconds': payload['time'],
             'cleanType': payload['type']
         };
-        if(payload.hasOwnProperty('avoidCount')) {
-            if(this.avoidedObstacles != payload['avoidCount'])
-            {
+        if (payload.hasOwnProperty('avoidCount')) {
+            if (this.avoidedObstacles !== payload['avoidCount']) {
                 tools.envLog("[VacBot] *** whoops...there was something in the way");
             }
             this.avoidedObstacles = payload['avoidCount'];
         }
-        if(payload.hasOwnProperty('aiopen') && payload['aiopen'] == 1) {
-            if(this.obstacleTypes != payload['aitypes'])
-            {
+        if (payload.hasOwnProperty('aiopen') && Number(payload['aiopen']) === 1) {
+            if (this.obstacleTypes !== payload['aitypes']) {
                 tools.envLog("[VacBot] *** there was something new blocking my way 😕");
             }
             this.obstacleTypes = payload['aitypes'];
@@ -1042,7 +1040,7 @@ class VacBot_950type extends VacBot {
             'video': payload['video']
         };
         tools.envLog("[VacBot] *** HumanoidFollow");
-        tools.envLog(this.humanoidFollow );
+        tools.envLog(this.humanoidFollow);
     }
 
     /**
@@ -1092,7 +1090,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetAtmoLight(payload) {
         this.atmoLightIntensity = payload['intensity'];
-        tools.envLog("[VacBot] *** AtmoLight(intensity) = " + this.atmoLightIntensity + " of " +  payload['total']);
+        tools.envLog("[VacBot] *** AtmoLight(intensity) = " + this.atmoLightIntensity + " of " + payload['total']);
     }
 
     /**
@@ -1133,19 +1131,19 @@ class VacBot_950type extends VacBot {
      */
     handleThreeModule(payload) {
         payload.forEach((module) => {
-            if(module.type == 'uvLight') {
+            if (module.type === 'uvLight') {
                 this.uvAirCleaning = {
                     'enabled': module.enable
                 };
             }
-            if(module.type == 'smell') {
+            if (module.type === 'smell') {
                 this.airFreshening = {
                     'enabled': module.enable,
                     'level': module.level,
                     'error': module.err
                 };
             }
-            if(module.type == 'humidify') {
+            if (module.type === 'humidify') {
                 this.humidification = {
                     'enabled': module.enable,
                     'level': module.level
@@ -1173,10 +1171,10 @@ class VacBot_950type extends VacBot {
             'triggerType': payload.hasOwnProperty('triggerType') ? payload['triggerType'] : 'none',
             'failed': false
         };
-        if(payload.hasOwnProperty('go_fail')) {
+        if (payload.hasOwnProperty('go_fail')) {
             this.currentTask.failed = true;
         }
-        if(payload.hasOwnProperty('stopReason')) {
+        if (payload.hasOwnProperty('stopReason')) {
             // why has it stopped?
         }
         tools.envLog("[VacBot] *** Task:");
@@ -1613,7 +1611,7 @@ class VacBot_950type extends VacBot {
             case "GetMapTrace_V2".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
                 break;
-            }
+        }
     }
 }
 
