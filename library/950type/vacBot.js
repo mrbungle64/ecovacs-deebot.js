@@ -120,6 +120,15 @@ class VacBot_950type extends VacBot {
         };
         this.obstacleTypes = null;
         this.avoidedObstacles = null;
+        this.OTA = {
+            'status': null,
+            'result': null,
+            'isForce': null,
+            'progress': null,
+            'supportAuto': null,
+            'ver': null
+        };
+        this.timezone = null;
     }
 
     /**
@@ -567,7 +576,28 @@ class VacBot_950type extends VacBot {
             state: payload.state,
             hasPwd: payload.hasPwd
         };
-        tools.envLog("[VacBot] *** cleanPreference = " + JSON.stringify(this.cleanPreference));
+        tools.envLog("[VacBot] *** liveLaunchPwdState = " + JSON.stringify(this.iveLaunchPwdState));
+    }
+
+    handleWiFiList(payload) {
+        if(payload.list) {
+            tools.envLog("[VacBot] *** Configured networks:");
+            payload.list.forEach((network) => {
+                tools.envLog(
+                    network
+                );
+            });
+        }
+        tools.envLog("[VacBot] *** My mac address: " + payload.mac);
+    }
+
+    handleOverTheAirUpdate(payload) {
+        this.OTA = payload;
+        tools.envLog(`[OTA] status: ` + payload);
+    }
+
+    handleTimeZone(payload) {
+        this.timezone = "GMT" + (payload.tzm > 0 ? "+" : "-") +  (payload.tzm / 60) + ":00";
     }
 
     /**
@@ -1147,6 +1177,12 @@ class VacBot_950type extends VacBot {
         tools.envLog(this.currentTask);
     }
 
+
+    handleAudioCallState(event) {
+        tools.envLog("[VacBot] *** AudioCallState:");
+        tools.envLog(event);
+    }
+
     /**
      * Run a specific command
      * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
@@ -1562,14 +1598,8 @@ class VacBot_950type extends VacBot {
             case "GetAntiDrop".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAntiDrop());
                 break;
-            case "GetAirDring".toLowerCase():
-                this.sendCommand(new VacBotCommand.GetAirDring());
-                break;
             case "GetMapTrace_V2".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
-                break;
-            case "GetPos".toLowerCase():
-                this.sendCommand(new VacBotCommand.GetPos(args[0]));
                 break;
             }
     }

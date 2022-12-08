@@ -558,7 +558,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'FwBuryPoint-bd_relocation':
-                tools.envLog("[EcovacsMQTT_JSON] Relocation...");
+                tools.envLog("[EcovacsMQTT_JSON] Relocating...");
                 break;
             case 'FwBuryPoint-bd_setting-evt':
                 // Event -> Config stored...
@@ -615,6 +615,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 */
                 break;
+            case 'onFwBuryPoint-bd_errorcode':
+                tools.envLog("[EcovacsMQTT_JSON] Got error: " + payload['body']['code']);
+                break;
             case 'FwBuryPoint-bd_task-return-normal-start':
             case 'FwBuryPoint-bd_task-return-normal-stop':
             case 'FwBuryPoint-bd_task-clean-move-start':
@@ -624,7 +627,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'FwBuryPoint-bd_task-clean-specified-spot-start':
             case 'FwBuryPoint-bd_task-clean-specified-spot-stop':
                 this.vacBot.handleTask(
-                    abbreviatedCommand.substring(20), 
+                    abbreviatedCommand.substring(20),
                     payload
                 );
                 break;
@@ -731,6 +734,21 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'setRelocationState':
                 tools.envLog(`[EcovacsMQTT_JSON] setRelocationState: ` + event['resultCodeMessage']);
                 break;
+            case 'WifiList':
+                this.vacBot.handleWiFiList(payload);
+                break;
+            case 'ListenMusic':
+                tools.envLog(event);
+                break;
+            case 'Ota':
+                this.vacBot.handleOverTheAirUpdate(payload);
+                break;
+            case 'TimeZone':
+                this.vacBot.handleTimeZone(payload);
+                break;
+            case 'AudioCallState':
+                this.vacBot.handleAudioCallState(event);
+                break;
             default:
                 tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
                 break;
@@ -792,25 +810,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @param {Object} payload
      */
     async handleFwBuryPoint(payload) {
-        console.info(payload);
-        // T9 AIVI:
-        // bd_setting"                  d_val":{"gid":"G1669769599208","index":"0000000090","simpleMode":0,"AI":1,"isPressurized":1,"fanspeed":2,"continue":0,"waterAmount":0,"DND":0,"mopremind":0,"mopmode":0,"aromamode":1,"personalClean":0,"autocollect":1,"occurrenceTime":"1670157430023"}}}}}
-        // bd_basicinfo"                d_val":{"gid":"G1669769599208","index":"0000000103","battery":100,"waterbox":4,"sleep":1,"charge":2,"robotstate":0,"robotPos":"-491,53","chargePos":"345,91","chargetype":3,"dirtboxState":1,"occurrenceTime":"1670157527468"}}}}}
-        // bd_trigger"                  d_val":{"gid":"G1669769599208","index":"0000000113","triggerType":"key","occurrenceTime":"1670167987297"}}}}
-        // bd_fbi08"                    d_val":[{"gid":"G1670167991098","index":4,"occurrenceTime":"1670167991099","dsc":0}]}}}}
-        // bd_cc10"                     d_val":{"gid":"G1670167998033","index":3,"occurrenceTime":"1670167998033","chargecase":3}}}}}
-        // bd_PowerOnOff"               d_val":{"gid":"G1669769599208","index":"0000000109","occurrenceTime":"1670167987284","act":"PowerOn","trigger":1}}}}}
-        // bd_errorcode"                d_val":{"gid":"G1669769599208","information":32,"index":"0000000110","code":209,"state":0,"ldsinfo":0,"content":"","occurrenceTime":"1670167987290"}}}}}
-
-        // Yeedi Mop Station:
-        // bd_returndock"               d_val":"{\\"index\\":\\"0000000098\\",\\"occurrenceTime\\":\\"1670186048946\\",\\"gid\\":\\"G0000000009389\\",\\"task\\":\\"stop\\",\\"result\\":1}"}}}}
-        // bd_extramap"                 d_val":"{\\"index\\":\\"0000000099\\",\\"occurrenceTime\\":\\"1670186056711\\",\\"gid\\":\\"G0000000009389\\",\\"extratype\\":4294967294}"}}}}
-        // bd_returnchargeinfo"         d_val":"{\\"index\\":\\"0000000097\\",\\"occurrenceTime\\":\\"1670186048924\\",\\"gid\\":\\"G0000000009389\\",\\"occurrenceTime\\":\\"1670184584380\\",\\"startType\\":3,\\"finishType\\":1,\\"planResult\\":0,\\"planElapsedTime\\":23,\\"totalElapsedTime\\":57,\\"jointElapsedTime\\":34,\\"detectMiddleCodeWhenPlanFinish\\":0,\\"detectOmniWallWhenPlanFinish\\":0,\\"detectCodeWhenPlanFinish\\":0}"}}}}
-        // bd_light"                    d_val":"{\\"index\\":\\"0000000086\\",\\"occurrenceTime\\":\\"1670185985053\\",\\"gid\\":\\"G0000000009389\\",\\"efficiency\\":43,\\"state\\":0}"}}}}
-        // bd_vslaminfo"                d_val":"{\\"index\\":\\"0000000085\\",\\"occurrenceTime\\":\\"1670185985052\\",\\"gid\\":\\"G0000000009389\\",\\"efficiency\\":64,\\"multiplex\\":34,\\"gyrodelta\\":\\"0,0,0,0,0,0\\"}"}}}}
-        // bd_planinfo"                 d_val":"{\\"occurrenceTime\\":\\"1670185985027\\",\\"index\\":\\"0000000084\\",\\"occurrenceTime\\":\\"1670185985027\\",\\"gid\\":\\"G0000000009389\\",\\"naviSuccessRate\\":0.692308,\\"naviSuccessCount\\":27,\\"naviCount\\":39,\\"escCount\\":1,\\"escSuccessRate\\":1,\\"carpetArea\\":0,\\"escPose\\":[{\\"x\\":1.426899,\\"y\\":-0.557692,\\"theta\\":3.058327}],\\"escType\\":[{\\"type\\":6}]}"}}}}
-        // bd_errorcode"                d_val":"{\\"index\\":\\"0000000083\\",\\"occurrenceTime\\":\\"1670185921309\\",\\"gid\\":\\"G0000000009389\\",\\"information\\":18,\\"code\\":111,\\"state\\":0}"}}}}
-
         try {
             let content = JSON.parse(payload['content']);
             const fwBuryMessage = content["rn"];
@@ -841,38 +840,37 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleSysinfo(JSON.stringify({'body': fwBuryPoint}));
                 return;
             } else if (fwBuryMessage == 'bd_wifi_24g') {
-                return;
+                //
             } else if (fwBuryMessage == 'bd_onoffline') {
-                return;
+                // after reconnection
             } else if (fwBuryMessage == 'bd_PowerOnOff') {
-                return;
+                // after powered on
             } else if (fwBuryMessage == 'bd_fbi08') {
-                return;
+                // unknown
             } else if (fwBuryMessage == 'bd_returnchargeinfo') {
-                return;
+                // charging informations
             } else if (fwBuryMessage == 'bd_returndock') {
-                return;
+                // returning to dock
             } else if (fwBuryMessage == 'bd_trigger') {
-                return;
+                // when pyhsical- or app button is pressed
             } else if (fwBuryMessage == 'bd_task') {
-                return;
+                // when a tasks starts
             } else if (fwBuryMessage == 'bd_sensortriggerinfo') {
-                return;
+                // when a sensor gets triggered
             } else if (fwBuryMessage == 'bd_cri01') {
-                return;
+                // unknown
             } else if (fwBuryMessage == 'bd_cc10') {
                 // Charging Case
-                return;
             } else if (fwBuryMessage == 'bd_vslaminfo') {
-                return;
+                // unknown
             } else if (fwBuryMessage == 'bd_planinfo') {
-                return;
+                // unknown
             } else if (fwBuryMessage == 'bd_extramap') {
-                return;
+                // seems to get raised, when the robot found extra space that is not on the map
             } else if (fwBuryMessage == 'bd_light') {
-                return;
+                // unknown
             } else if (fwBuryMessage == 'bd_cache') {
-                return;
+                // unknown
             }
 
             if (fwBuryPoint.hasOwnProperty('code')) {
@@ -918,7 +916,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
         catch (e) {
             tools.envLog(`Error handling onFwBuryPoint payload: ${payload}`);
-            tools.envLog(e);
         }
     }
 }
