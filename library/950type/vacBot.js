@@ -129,6 +129,10 @@ class VacBot_950type extends VacBot {
             'ver': null
         };
         this.timezone = null;
+        this.dmodule = {
+            'enabled': null,
+            'status': null
+        };
     }
 
     /**
@@ -1181,6 +1185,12 @@ class VacBot_950type extends VacBot {
     handleAudioCallState(event) {
         tools.envLog("[VacBot] *** AudioCallState:");
         tools.envLog(event);
+    }
+
+    handleDModule(payload) {
+        this.dmodule = payload;
+        tools.envLog("[VacBot] *** DModule:");
+        tools.envLog(payload);
     }
 
     /**

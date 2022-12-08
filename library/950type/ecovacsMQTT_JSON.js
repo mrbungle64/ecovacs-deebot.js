@@ -456,12 +456,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             // T9 AIVI
             case 'DModule':
                 // Lufterfrischermodul (hab ich leider nicht)
-                // {"status":1,"enable":1}
+                this.vacBot.handleDModule(payload);
+                this.emit("DModuleEnabled", this.vacBot.dmodule.enabled);
+                this.emit("DModuleStatus", this.vacBot.dmodule.status);
                 break;
             case 'AIMapAndMapSet':
                 // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
                 break;
-
             // AirBot Z1
             case 'Mic':
                 this.vacBot.handleGetMic(payload);
