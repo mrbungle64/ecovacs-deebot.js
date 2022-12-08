@@ -53,6 +53,7 @@ class EcovacsMQTT extends Ecovacs {
     connect() {
         let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
         tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
+        tools.envLog("[EcovacsMQTT] client_id: %s, Password %s", this.username + '/' + this.resource, this.secret);
         this.client = this.mqtt.connect(url, {
             clientId: this.username + '/' + this.resource,
             username: this.username,
