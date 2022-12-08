@@ -728,6 +728,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     });
                 }
                 break;
+            case 'setRelocationState':
+                tools.envLog(`[EcovacsMQTT_JSON] setRelocationState: ` + event['resultCodeMessage']);
+                break;
             default:
                 tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
                 break;

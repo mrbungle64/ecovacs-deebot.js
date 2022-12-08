@@ -958,12 +958,6 @@ class GetAntiDrop extends VacBotCommand {
     }
 }
 
-class GetAirDring extends VacBotCommand {
-    constructor() {
-        super('getAirDring');
-    }
-}
-
 class GetMapTrace_V2 extends VacBotCommand {
     constructor(type = 0) {
         super('getMapTrace_V2', {
@@ -1092,6 +1086,4 @@ module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
 module.exports.GetBreakPoint = GetBreakPoint;
 module.exports.GetRelocationState = GetRelocationState;
 module.exports.GetAntiDrop = GetAntiDrop;
-module.exports.GetAirDring = GetAirDring;
 module.exports.GetMapTrace_V2 = GetMapTrace_V2;
-module.exports.GetPos = GetPos;
