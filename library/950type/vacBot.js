@@ -956,6 +956,13 @@ class VacBot_950type extends VacBot {
             'temperature': payload['tem'],
             'humidity': payload['hum']
         };
+        tools.envLog("[VacBot] *** AirQuality particulateMatter25 = " + this.airQuality.particulateMatter25);
+        tools.envLog("[VacBot] *** AirQuality pm_10 = " + this.airQuality.pm_10);
+        tools.envLog("[VacBot] *** AirQuality particulateMatter10 = " + this.airQuality.particulateMatter10);
+        tools.envLog("[VacBot] *** AirQuality airQualityIndex = " + this.airQuality.airQualityIndex);
+        tools.envLog("[VacBot] *** AirQuality volatileOrganicCompounds = " + this.airQuality.volatileOrganicCompounds);
+        tools.envLog("[VacBot] *** AirQuality temperature = " + this.airQuality.temperature);
+        tools.envLog("[VacBot] *** AirQuality humidity = " + this.airQuality.humidity);
     }
 
     /**
