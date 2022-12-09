@@ -250,7 +250,7 @@ class EcovacsAPI {
     };
 
     let ts = Date.now();
-    let sign = crypto.createHash('sha1').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
+    let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
 
 
     let queryParams = {
@@ -276,7 +276,8 @@ class EcovacsAPI {
         'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
         'v': '2.3.7',
         'country':  this.country,
-        'sign': sign
+        'sign': sign,
+        'signType': 'sha256'
       }
     };
 
@@ -294,7 +295,7 @@ class EcovacsAPI {
   async downloadSecuredContent(url, targetFilename) {
 
     let ts = Date.now();
-    let sign = crypto.createHash('sha1').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
+    let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
 
     let config = {
       headers: {
@@ -306,7 +307,8 @@ class EcovacsAPI {
         'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
         'v': '2.3.7',
         'country':  this.country,
-        'sign': sign
+        'sign': sign,
+        'signType': 'sha256'
       },
       responseType: 'arraybuffer'
     };
