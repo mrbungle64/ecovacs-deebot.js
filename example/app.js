@@ -52,7 +52,8 @@ api.connect(accountId, passwordHash).then(() => {
       });
 
       api.callLogsApi(vacuum.did).then((logData) => {
-        if(logData && logData.code === 0) {
+        vacbot.handleCleanLogs(logData);
+        /*if(logData && logData.code === 0) {
           console.log("+--------------------------------------------------+");
           logData.data.forEach((logEntry) => {
             console.log("| " + (new Date(logEntry.ts * 1000).toLocaleString()) + " [*] " + ( logEntry.type === 'auto' ? 'AUTO-Reinigung' : ( logEntry.type === 'spotArea' ? 'Bereichsreinigung' : logEntry.type ) )   );
@@ -61,7 +62,7 @@ api.connect(accountId, passwordHash).then(() => {
             api.downloadSecuredContent(logEntry.imageUrl, "./" + logEntry.imageUrl.substring(logEntry.imageUrl.lastIndexOf("=") + 1) + ".png");
             console.log("+--------------------------------------------------+");
           });
-        }
+        }*/
       });
     });
     vacbot.connect();
