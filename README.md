@@ -90,9 +90,10 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 ## Changelog
 
 ### 0.9.1 (alpha)
-* Added MapPoint_V2 shortcut command
+* (bhuebschen) Added some commands for T9 series and yeedi mop station
+* (bhuebschen) Implemented cleaning log call for T9 based models
 * (bhuebschen) Added numerous commands for AIRBOT Z1 (Air Purifier)
-* (bhuebschen) Added also some commands for T9 AIVI and yeedi mop station
+* Added MapPoint_V2 shortcut command for T9 based models
 
 ### 0.9.0
 * Breaking change: Bump minimum required version of Node.js to 14.x
