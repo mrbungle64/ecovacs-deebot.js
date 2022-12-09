@@ -7,6 +7,7 @@ const fs = require('fs');
 const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
+const querystring = require('node:querystring');
 
 /** @type {Object} */
 const countries = require('./countries.json').countries;
@@ -224,6 +225,105 @@ class EcovacsAPI {
       }
     } catch (err) {
       tools.envLog(`[EcoVacsAPI] callUserAuthApi error: ${err}`);
+      throw err;
+    }
+  }
+
+  async callLogsApi(device) {
+    let portalPath = constants.APP_ECOUSER_API;
+    if (this.country === 'CN') {
+      portalPath = constants.APP_ECOUSER_API;
+    }
+
+    portalPath = tools.formatString(portalPath, {continent: this.continent});
+    if (this.country === 'CN') {
+      portalPath = portalPath.replace('.com','.cn');
+    }
+    portalPath = portalPath + '/dln/api/log/clean_result/list?';
+
+    let auth = {
+      "realm": constants.REALM,
+      "with": "users",
+      "userid": this.uid,
+      "token": this.user_access_token,
+      "resource": "IOS10F74C3Gb"
+    };
+
+    let ts = Date.now();
+    let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
+
+
+    let queryParams = {
+      'auth': JSON.stringify(auth),
+      'channel': 'google_play',
+      'did': device,
+      'et1': ts,
+      'defaultLang': 'EN',
+      'logType': 'clean',
+      'reqid': '##REQID##',
+      'res': 'fFfb', //seems to be static
+      'size': 20,
+      'version': 'v2'
+    };
+
+    let config = {
+      headers: {
+        'Authorization': 'Bearer ' + this.user_access_token,
+        'token': this.user_access_token,
+        'appid': 'ecovacs',
+        'plat': 'android',
+        'userid': this.uid,
+        'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
+        'v': '2.3.7',
+        'country':  this.country,
+        'sign': sign,
+        'signType': 'sha256'
+      }
+    };
+
+    let searchParams = querystring.encode(queryParams);
+    tools.envLog(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
+    try {
+      const res = await axios.get(portalPath + searchParams, config);
+      return res.data;
+    } catch (err) {
+      tools.envLog(`[EcoVacsAPI] callLogsApi error: ${err}`);
+      throw err;
+    }
+  }
+
+  async downloadSecuredContent(url, targetFilename) {
+
+    let ts = Date.now();
+    let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
+
+    let config = {
+      headers: {
+        'Authorization': 'Bearer ' + this.user_access_token,
+        'token': this.user_access_token,
+        'appid': 'ecovacs',
+        'plat': 'android',
+        'userid': this.uid,
+        'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
+        'v': '2.3.7',
+        'country':  this.country,
+        'sign': sign,
+        'signType': 'sha256'
+      },
+      responseType: 'arraybuffer'
+    };
+
+    try {
+      const res = await axios.get(url, config);
+      const result = res.data;
+      const fs = require('fs');
+      fs.writeFile(targetFilename, result, err => {
+        if (err) {
+          tools.envLog(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
+        }
+      });
+    } catch (err) {
+      tools.envLog(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
       throw err;
     }
   }

@@ -421,6 +421,8 @@ class VacBot_950type extends VacBot {
             logs = payload['logs'];
         } else if (payload.hasOwnProperty('log')) {
             logs = payload['log'];
+        } else if (payload.hasOwnProperty('data')) {
+            logs = payload['data'];
         }
 
         for (let logIndex in logs) {
