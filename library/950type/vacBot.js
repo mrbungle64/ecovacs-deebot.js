@@ -1352,6 +1352,25 @@ class VacBot_950type extends VacBot {
                 if (this.getModelType() === 'T9') {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
+                        let cleanLog = [];
+                        for (let i in this.cleanLog) {
+                            if (this.cleanLog.hasOwnProperty(i)) {
+                                cleanLog.push(this.cleanLog[i]);
+                            }
+                        }
+                        this.ecovacs.emit("CleanLog", cleanLog);
+                        this.ecovacs.emit("CleanLog_lastImageUrl", this.cleanLog_lastImageUrl);
+                        this.ecovacs.emit("CleanLog_lastImageTimestamp", this.cleanLog_lastTimestamp); // Deprecated
+                        this.ecovacs.emit("CleanLog_lastTimestamp", this.cleanLog_lastTimestamp);
+                        this.ecovacs.emit("CleanLog_lastSquareMeters", this.cleanLog_lastSquareMeters);
+                        this.ecovacs.emit("CleanLog_lastTotalTimeString", this.cleanLog_lastTotalTimeString);
+                        this.ecovacs.emit('LastCleanLogs', {
+                            'timestamp': this.cleanLog_lastTimestamp,
+                            'squareMeters': this.cleanLog_lastSquareMeters,
+                            'totalTime': this.cleanLog_lastTotalTime,
+                            'totalTimeFormatted': this.cleanLog_lastTotalTimeString,
+                            'imageUrl': this.cleanLog_lastImageUrl
+                        });
                     });
                 } else {
                     this.sendCommand(new VacBotCommand.GetCleanLogs());
