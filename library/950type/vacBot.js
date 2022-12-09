@@ -1349,7 +1349,13 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetWaterInfo());
                 break;
             case "GetCleanLogs".toLowerCase():
-                this.sendCommand(new VacBotCommand.GetCleanLogs());
+                if (this.getModelType() === 'T9') {
+                    this.callCleanResultsLogsApi().then((logData) => {
+                        this.handleCleanLogs(logData);
+                    });
+                } else {
+                    this.sendCommand(new VacBotCommand.GetCleanLogs());
+                }
                 break;
             case "GetError".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetError());

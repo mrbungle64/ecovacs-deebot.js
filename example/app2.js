@@ -181,23 +181,7 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.run('GetBatteryState');
 
             vacbot.run('GetLifeSpan');
-            if (vacbot.getModelType() === 'T9') {
-                vacbot.callCleanResultsLogsApi().then((logData) => {
-                    vacbot.handleCleanLogs(logData);
-                    if (logData && logData.code === 0) {
-                        console.log("+--------------------------------------------------+");
-                        logData.data.forEach((logEntry) => {
-                            console.log("| " + (new Date(logEntry.ts * 1000).toLocaleString()) + " [*] " + (logEntry.type === 'auto' ? 'AUTO-Reinigung' : (logEntry.type === 'spotArea' ? 'Bereichsreinigung' : logEntry.type)));
-                            console.log("| " + logEntry.area + "m² " + Math.round(logEntry.last / 60) + "min");
-                            console.log("| Hindernisse wurden " + logEntry.aiavoid + " Mal umfahren");
-                            api.downloadSecuredContent(logEntry.imageUrl, "./" + logEntry.imageUrl.substring(logEntry.imageUrl.lastIndexOf("=") + 1) + ".png");
-                            console.log("+--------------------------------------------------+");
-                        });
-                    }
-                });
-            } else {
-                vacbot.run('GetCleanLogs');
-            }
+            vacbot.run('GetCleanLogs');
 
             if (vacbot.hasMappingCapabilities()) {
                 vacbot.run('GetChargerPos');
