@@ -282,10 +282,8 @@ class EcovacsAPI {
 
     let searchParams = querystring.encode(queryParams);
     tools.envLog(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
-
     try {
       const res = await axios.get(portalPath + searchParams, config);
-      console.info(res.data);
       return res.data;
     } catch (err) {
       tools.envLog(`[EcoVacsAPI] callLogsApi error: ${err}`);

@@ -52,11 +52,10 @@ api.connect(accountId, passwordHash).then(() => {
       });
 
       api.callLogsApi(vacuum.did).then((logData) => {
-        console.info(logData);
         if(logData && logData.code === 0) {
           console.log("+--------------------------------------------------+");
           logData.data.forEach((logEntry) => {
-            console.log("| " + (new Date(logEntry.ts).toLocaleString()) + " [*] " + ( logEntry.type === 'auto' ? 'AUTO-Reinigung' : ( logEntry.type === 'spotArea' ? 'Bereichsreinigung' : logEntry.type ) )   );
+            console.log("| " + (new Date(logEntry.ts * 1000).toLocaleString()) + " [*] " + ( logEntry.type === 'auto' ? 'AUTO-Reinigung' : ( logEntry.type === 'spotArea' ? 'Bereichsreinigung' : logEntry.type ) )   );
             console.log("| " + logEntry.area + "m² " + Math.round(logEntry.last / 60) + "min" );
             console.log("| Hindernisse wurden " + logEntry.aiavoid + " Mal umfahren" );
             api.downloadSecuredContent(logEntry.imageUrl, "./" + logEntry.imageUrl.substring(logEntry.imageUrl.lastIndexOf("=") + 1) + ".png");
