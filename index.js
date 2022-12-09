@@ -249,15 +249,19 @@ class EcovacsAPI {
       "resource": "IOS10F74C3Gb"
     };
 
+    let ts = Date.now();
+    let sign = crypto.createHash('sha1').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
+
+
     let queryParams = {
       'auth': JSON.stringify(auth),
       'channel': 'google_play',
       'did': device,
-      'et1': '1670527884797',
-      'lang': 'EN',
+      'et1': ts,
+      'defaultLang': 'EN',
       'logType': 'clean',
       'reqid': '##REQID##',
-      'res': '##RES##',
+      'res': 'fFfb', //seems to be static
       'size': 20,
       'version': 'v2'
     };
@@ -265,13 +269,14 @@ class EcovacsAPI {
     let config = {
       headers: {
         'Authorization': 'Bearer ' + this.user_access_token,
+        'token': this.user_access_token,
         'appid': 'ecovacs',
         'plat': 'android',
         'userid': this.uid,
-        'user-agent': 'EcovacsHome/2.3.7 (Android; Scale/2.00)',
+        'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
         'v': '2.3.7',
         'country':  this.country,
-        'sign': 'ece3c220f9ac5c8377394995e0b1c2d5dd79a3df'
+        'sign': sign
       }
     };
 
@@ -280,10 +285,45 @@ class EcovacsAPI {
 
     try {
       const res = await axios.get(portalPath + searchParams, config);
-      const result = res.data;
-      console.info(res);
+      console.info(res.data);
+      return res.data;
     } catch (err) {
       tools.envLog(`[EcoVacsAPI] callLogsApi error: ${err}`);
+      throw err;
+    }
+  }
+
+  async downloadSecuredContent(url, targetFilename) {
+
+    let ts = Date.now();
+    let sign = crypto.createHash('sha1').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
+
+    let config = {
+      headers: {
+        'Authorization': 'Bearer ' + this.user_access_token,
+        'token': this.user_access_token,
+        'appid': 'ecovacs',
+        'plat': 'android',
+        'userid': this.uid,
+        'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
+        'v': '2.3.7',
+        'country':  this.country,
+        'sign': sign
+      },
+      responseType: 'arraybuffer'
+    };
+
+    try {
+      const res = await axios.get(url, config);
+      const result = res.data;
+      const fs = require('fs');
+      fs.writeFile(targetFilename, result, err => {
+        if (err) {
+          tools.envLog(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
+        }
+      });
+    } catch (err) {
+      tools.envLog(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
       throw err;
     }
   }

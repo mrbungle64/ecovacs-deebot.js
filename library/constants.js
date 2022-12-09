@@ -32,3 +32,10 @@ exports.AUTH_USERLOGIN_SECRET_YD = 'ed5b3dd9a0253de7d90305d077eb5fee';
 exports.AUTH_USERLOGIN_AUTH_APPKEY_YD = '1581917520081';
 exports.AUTH_GETAUTH_SECRET_YD = '304a71592690995b2bb304e66b5ddee6';
 exports.AUTH_GETAUTH_AUTH_APPKEY_YD = '1581923437995';
+
+exports.APP_ID = "ecovacs";
+exports.APP_ID_GLOBAL = "ecovacs";
+exports.APP_ID_YEEDI = "yeedi";
+exports.APP_SECRET = "2ea31cf06e6711eaa0aff7b9558a534e";
+exports.APP_SECRET_GLOBAL = "2ea31cf06e6711eaa0aff7b9558a534e";
+exports.APP_SECRET_YEEDI = "8b611ff06e6211eab47193426edbdb27";
