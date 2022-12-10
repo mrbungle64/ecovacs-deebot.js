@@ -29,10 +29,12 @@ class VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
 
         this.country = country;
-        this.did = vacuum.did;
-        this.user_access_token = secret;
         this.continent = continent;
+        this.did = vacuum.did;
+        this.res = vacuum.resource;
+        this.resource = resource;
         this.uid = user;
+        this.user_access_token = secret;
 
         this.vacuum = vacuum;
         this.authDomain = authDomain;
@@ -1039,7 +1041,7 @@ class VacBot {
             "with": "users",
             "userid": this.uid,
             "token": this.user_access_token,
-            "resource": "IOS10F74C3Gb"
+            "resource": this.resource
         };
 
         let ts = Date.now();
@@ -1054,7 +1056,7 @@ class VacBot {
             'defaultLang': 'EN',
             'logType': 'clean',
             'reqid': '##REQID##',
-            'res': 'fFfb', //seems to be static
+            'res': this.res,
             'size': 20,
             'version': 'v2'
         };
