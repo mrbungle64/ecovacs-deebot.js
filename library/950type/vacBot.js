@@ -1107,16 +1107,20 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleSysinfo(payload) {
-        let event = JSON.parse(payload)['body'][0];
-        this.sysinfo = {
-            'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9),
-            'uptime': event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).lastIndexOf(",")),
-            'signal': event['signal'],
-            'meminfo': event['meminfo'],
-            'pos': event['pos']
-        };
-        tools.envLog("[VacBot] *** System informations:");
-        tools.envLog(this.sysinfo);
+        try {
+            let event = JSON.parse(payload)['body'][0];
+            this.sysinfo = {
+                'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9),
+                'uptime': event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).lastIndexOf(",")),
+                'signal': event['signal'],
+                'meminfo': event['meminfo'],
+                'pos': event['pos']
+            };
+            tools.envLog("[VacBot] *** System informations:");
+            tools.envLog(this.sysinfo);
+        } catch (e) {
+            tools.envLog("[VacBot] Error handling System information: " + e.toString());
+        }
     }
 
     /**
@@ -1170,8 +1174,7 @@ class VacBot_950type extends VacBot {
             'mapId': payload['mid'],
             'locationPoints': payload['items']
         };
-        tools.envLog("[VacBot] *** Obstacles:");
-        tools.envLog(payload['items']);
+        tools.envLog("[VacBot] *** Obstacles: " + payload['items']);
     }
 
     handleTask(type, payload) {
@@ -1186,20 +1189,16 @@ class VacBot_950type extends VacBot {
         if (payload.hasOwnProperty('stopReason')) {
             // why has it stopped?
         }
-        tools.envLog("[VacBot] *** Task:");
-        tools.envLog(this.currentTask);
+        tools.envLog("[VacBot] *** Task: " + JSON.stringify(this.currentTask));
     }
 
-
     handleAudioCallState(event) {
-        tools.envLog("[VacBot] *** AudioCallState:");
-        tools.envLog(event);
+        tools.envLog("[VacBot] *** Unhandled AudioCallState: " + JSON.stringify(event));
     }
 
     handleDModule(payload) {
         this.dmodule = payload;
-        tools.envLog("[VacBot] *** DModule:");
-        tools.envLog(payload);
+        tools.envLog("[VacBot] *** DModule: " + JSON.stringify(payload));
     }
 
     /**
