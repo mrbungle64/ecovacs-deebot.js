@@ -343,7 +343,7 @@ class GetMapImage extends VacBotCommand {
 }
 
 class GetMapInfo_V2 extends VacBotCommand {
-        constructor(mapType = '0') {
+    constructor(mapType = '0') {
         super('getMapInfo_V2', {
             'type': mapType
         });
@@ -711,7 +711,6 @@ class SetFreshenerLevel extends SetThreeModule {
     }
 }
 
-
 class SetHumidifierLevel extends SetThreeModule {
     constructor(level = 0, enable = 0) {
         super(level, 'humidify', enable);
@@ -979,9 +978,9 @@ module.exports.Edge = Edge;
 module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
+module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAirDrying = GetAirDrying;
-module.exports.GetAIMap = GetAIMap;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetCarpetPressure = GetCarpetPressure;
@@ -993,13 +992,13 @@ module.exports.GetCleanSpeed = GetCleanSpeed;
 module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanState_V2 = GetCleanState_V2;
 module.exports.GetCleanSum = GetCleanSum;
-module.exports.GetMajorMap = GetMajorMap;
 module.exports.GetContinuousCleaning = GetContinuousCleaning;
 module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
 module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.GetMajorMap = GetMajorMap;
 module.exports.GetMapImage = GetMapImage;
 module.exports.GetMapInfo_V2 = GetMapInfo_V2;
 module.exports.GetMapSet = GetMapSet;
@@ -1047,43 +1046,43 @@ module.exports.SpotArea_V2 = SpotArea_V2;
 module.exports.Stop = Stop;
 
 // Air Purifier (e.g. AIRBOT Z1)
-module.exports.GetAirQuality = GetAirQuality;
-module.exports.SinglePoint_V2 = SinglePoint_V2;
 module.exports.Area_V2 = Area_V2;
-module.exports.GetMapSet_V2 = GetMapSet_V2;
-module.exports.SetMapSet_V2 = SetMapSet_V2;
-module.exports.SetThreeModule = SetThreeModule;
-module.exports.SetFreshenerLevel = SetFreshenerLevel;
-module.exports.SetHumidifierLevel = SetHumidifierLevel;
-module.exports.SetUVCleaner = SetUVCleaner;
-module.exports.SetAtmoLight = SetAtmoLight;
-module.exports.SetBlueSpeaker = SetBlueSpeaker;
-module.exports.SetVoiceSimple = SetVoiceSimple;
-module.exports.SetBlock = SetBlock;
-module.exports.SetMonitorAirState = SetMonitorAirState;
-module.exports.SetAngleFollow = SetAngleFollow;
-module.exports.SetMic = SetMic;
-module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
-module.exports.GetHumanoidFollow = GetHumanoidFollow;
-module.exports.GetMonitorAirState = GetMonitorAirState;
-module.exports.GetVoiceSimple = GetVoiceSimple;
-module.exports.GetDrivingWheel = GetDrivingWheel;
-module.exports.GetChildLock = GetChildLock;
+module.exports.GetAirQuality = GetAirQuality;
+module.exports.GetAntiDrop = GetAntiDrop;
+module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetBlock = GetBlock;
+module.exports.GetBreakPoint = GetBreakPoint;
+module.exports.GetChildLock = GetChildLock;
+module.exports.GetDrivingWheel = GetDrivingWheel;
+module.exports.GetHumanoidFollow = GetHumanoidFollow;
+module.exports.GetListenMusic = GetListenMusic;
+module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
+module.exports.GetMapSet_V2 = GetMapSet_V2;
+module.exports.GetMapTrace_V2 = GetMapTrace_V2;
+module.exports.GetMonitorAirState = GetMonitorAirState;
+module.exports.GetOta = GetOta;
+module.exports.GetRelocationState = GetRelocationState;
+module.exports.GetScene = GetScene;
+module.exports.GetThreeModuleStatus = GetThreeModuleStatus;
 module.exports.GetTimeZone = GetTimeZone;
 module.exports.GetTotalStats = GetTotalStats;
-module.exports.GetWifiList = GetWifiList;
-module.exports.GetOta = GetOta;
-module.exports.GetThreeModuleStatus = GetThreeModuleStatus;
-module.exports.GetScene = GetScene;
-module.exports.GetListenMusic = GetListenMusic;
-module.exports.VideoOpened = VideoOpened;
-module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetVoice = GetVoice;
+module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
+module.exports.GetVoiceSimple = GetVoiceSimple;
+module.exports.GetWifiList = GetWifiList;
+module.exports.SetAngleFollow = SetAngleFollow;
+module.exports.SetAtmoLight = SetAtmoLight;
+module.exports.SetBlock = SetBlock;
+module.exports.SetBlueSpeaker = SetBlueSpeaker;
+module.exports.SetFreshenerLevel = SetFreshenerLevel;
+module.exports.SetHumidifierLevel = SetHumidifierLevel;
+module.exports.SetMapSet_V2 = SetMapSet_V2;
+module.exports.SetMic = SetMic;
+module.exports.SetMonitorAirState = SetMonitorAirState;
+module.exports.SetThreeModule = SetThreeModule;
+module.exports.SetUVCleaner = SetUVCleaner;
 module.exports.SetVoice = SetVoice;
 module.exports.SetVoiceAssistantState = SetVoiceAssistantState;
-module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
-module.exports.GetBreakPoint = GetBreakPoint;
-module.exports.GetRelocationState = GetRelocationState;
-module.exports.GetAntiDrop = GetAntiDrop;
-module.exports.GetMapTrace_V2 = GetMapTrace_V2;
+module.exports.SetVoiceSimple = SetVoiceSimple;
+module.exports.SinglePoint_V2 = SinglePoint_V2;
+module.exports.VideoOpened = VideoOpened;

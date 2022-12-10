@@ -1532,7 +1532,9 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetAirQuality());
                 break;
             case "SinglePoint_V2".toLowerCase():
-                this.sendCommand(new VacBotCommand.SinglePoint_V2(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SinglePoint_V2(args[0]));
+                }
                 break;
             case "Area_V2".toLowerCase():
                 this.sendCommand(new VacBotCommand.Area_V2());
@@ -1541,40 +1543,64 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetMapSet_V2());
                 break;
             case "SetMapSet_V2".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0]));
+                }
                 break;
             case "SetThreeModule".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetThreeModule(args[0], args[1], args[2]));
+                if (args.length >= 3) {
+                    this.sendCommand(new VacBotCommand.SetThreeModule(args[0], args[1], args[2]));
+                }
                 break;
             case "SetFreshenerLevel".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetFreshenerLevel(args[0], args[1]));
+                if (args.length >= 2) {
+                    this.sendCommand(new VacBotCommand.SetFreshenerLevel(args[0], args[1]));
+                }
                 break;
             case "SetHumidifierLevel".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetHumidifierLevel(args[0], args[1]));
+                if (args.length >= 2) {
+                    this.sendCommand(new VacBotCommand.SetHumidifierLevel(args[0], args[1]));
+                }
                 break;
             case "SetUVCleaner".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetUVCleaner(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetUVCleaner(args[0]));
+                }
                 break;
             case "SetAtmoLight".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetAtmoLight(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetAtmoLight(args[0]));
+                }
                 break;
             case "SetBlueSpeaker".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetBlueSpeaker(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetBlueSpeaker(args[0]));
+                }
                 break;
             case "SetVoiceSimple".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetVoiceSimple(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetVoiceSimple(args[0]));
+                }
                 break;
             case "SetBlock".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetBlock(args[0], args[1], args[2]));
+                if (args.length >= 3) {
+                    this.sendCommand(new VacBotCommand.SetBlock(args[0], args[1], args[2]));
+                }
                 break;
             case "SetMonitorAirState".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetMonitorAirState(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetMonitorAirState(args[0]));
+                }
                 break;
             case "SetAngleFollow".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetAngleFollow(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetAngleFollow(args[0]));
+                }
                 break;
             case "SetMic".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetMic(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetMic(args[0]));
+                }
                 break;
             case "GetLiveLaunchPwdState".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetLiveLaunchPwdState());
@@ -1625,10 +1651,14 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetAudioCallState());
                 break;
             case "SetVoice".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetVoice(args[0], args[1], args[2], args[3], args[4], args[5]));
+                if (args.length >= 6) {
+                    this.sendCommand(new VacBotCommand.SetVoice(args[0], args[1], args[2], args[3], args[4], args[5]));
+                }
                 break;
             case "SetVoiceAssistantState".toLowerCase():
-                this.sendCommand(new VacBotCommand.SetVoiceAssistantState(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetVoiceAssistantState(args[0]));
+                }
                 break;
             case "GetVoiceLifeRemindState".toLowerCase():
                 this.sendCommand(new VacBotCommand.GetVoiceLifeRemindState());
@@ -1643,7 +1673,9 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetAntiDrop());
                 break;
             case "GetMapTrace_V2".toLowerCase():
-                this.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
+                }
                 break;
         }
     }
