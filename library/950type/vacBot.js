@@ -626,7 +626,7 @@ class VacBot_950type extends VacBot {
             this.avoidedObstacles = payload['avoidCount'];
         }
         if (payload.hasOwnProperty('aiopen') && Number(payload['aiopen']) === 1) {
-            if (this.obstacleTypes !== payload['aitypes']) {
+            if (JSON.stringify(this.obstacleTypes) !== JSON.stringify(payload['aitypes'])) {
                 tools.envLog("[VacBot] *** there was something new blocking my way 😕");
             }
             this.obstacleTypes = payload['aitypes'];
