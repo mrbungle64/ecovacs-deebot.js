@@ -12,7 +12,8 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'customArea': 'customArea',
     'mapPoint': 'mapPoint',
     'singlePoint': 'singlePoint',
-    'area': 'area'
+    'area': 'area',
+    'move': 'move'
 };
 
 exports.CLEAN_ACTION_TO_ECOVACS = {
