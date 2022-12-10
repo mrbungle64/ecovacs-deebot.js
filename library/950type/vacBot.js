@@ -115,7 +115,7 @@ class VacBot_950type extends VacBot {
         };
         this.currentTask = {
             'type': null,
-            'triggeredBy': null,
+            'triggerType': null,
             'failed': null
         };
         this.obstacleTypes = null;
@@ -584,7 +584,7 @@ class VacBot_950type extends VacBot {
             state: payload.state,
             hasPwd: payload.hasPwd
         };
-        tools.envLog("[VacBot] *** liveLaunchPwdState = " + JSON.stringify(this.iveLaunchPwdState));
+        tools.envLog("[VacBot] *** liveLaunchPwdState = " + JSON.stringify(this.liveLaunchPwdState));
     }
 
     handleWiFiList(payload) {

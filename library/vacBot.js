@@ -1045,8 +1045,7 @@ class VacBot {
         };
 
         let ts = Date.now();
-        let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SECRET + ts.toString()).digest("hex");
-
+        let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
 
         let queryParams = {
             'auth': JSON.stringify(auth),
