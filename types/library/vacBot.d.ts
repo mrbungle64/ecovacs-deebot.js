@@ -17,6 +17,13 @@ declare class VacBot {
      * @param {string} [authDomain=''] - the domain for authorization
      */
     constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country?: string, serverAddress?: string, authDomain?: string);
+    country: string;
+    continent: string;
+    did: any;
+    res: any;
+    resource: string;
+    uid: string;
+    user_access_token: string;
     vacuum: any;
     authDomain: string;
     is_ready: boolean;
@@ -310,6 +317,11 @@ declare class VacBot {
      */
     hasUnitCareInfo(): boolean;
     /**
+     * Returns true if you can retrieve information about "round mop" (life span)
+     * @returns {boolean}
+     */
+    hasRoundMopInfo(): boolean;
+    /**
      * Returns true if the model has Edge cleaning mode
      * It is assumed that a model can have either an Edge or Spot Area mode
      * @returns {boolean}
@@ -414,5 +426,7 @@ declare class VacBot {
      * @returns {string} The log data with `did` and `secret` removed
      */
     removeFromLogs(logData: string): string;
+    callCleanResultsLogsApi(): Promise<any>;
+    downloadSecuredContent(url: any, targetFilename: any): Promise<void>;
 }
 //# sourceMappingURL=vacBot.d.ts.map

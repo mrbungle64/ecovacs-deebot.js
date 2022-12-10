@@ -367,6 +367,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    "7zya6u": {
+        name: string;
+        deviceClassLink: string;
+    };
     a7lhb1: {
         name: string;
         deviceClassLink: string;
@@ -582,6 +586,7 @@ export var KnownDevices: {
         "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
+        round_mop_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;

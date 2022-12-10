@@ -35,13 +35,13 @@ export class EnableContinuousCleaning extends VacBotCommand {
 export class EnableDoNotDisturb extends SetDoNotDisturb {
     constructor(start?: string, end?: string);
 }
+export class GetAIMap extends VacBotCommand {
+    constructor();
+}
 export class GetAdvancedMode extends VacBotCommand {
     constructor();
 }
 export class GetAirDrying extends VacBotCommand {
-    constructor();
-}
-export class GetAIMap extends VacBotCommand {
     constructor();
 }
 export class GetAutoEmpty extends VacBotCommand {
@@ -94,6 +94,9 @@ export class GetLastCleanLog extends VacBotCommand {
 }
 export class GetLifeSpan extends VacBotCommand {
     constructor(componentsArray: any);
+}
+export class GetMajorMap extends VacBotCommand {
+    constructor();
 }
 export class GetMapImage extends VacBotCommand {
     constructor(mapID: any, mapType?: string);
@@ -228,23 +231,89 @@ export class SpotArea_V2 extends Clean_V2 {
 export class Stop extends VacBotCommand {
     constructor();
 }
+export class Area_V2 extends Clean_V2 {
+    constructor();
+}
 export class GetAirQuality extends VacBotCommand {
     constructor();
 }
-export class SinglePoint_V2 extends Clean_V2 {
-    constructor(spotCoordinates?: string);
+export class GetAntiDrop extends VacBotCommand {
+    constructor();
 }
-export class Area_V2 extends Clean_V2 {
+export class GetAudioCallState extends VacBotCommand {
+    constructor();
+}
+export class GetBlock extends VacBotCommand {
+    constructor();
+}
+export class GetBreakPoint extends VacBotCommand {
+    constructor();
+}
+export class GetChildLock extends VacBotCommand {
+    constructor();
+}
+export class GetDrivingWheel extends VacBotCommand {
+    constructor();
+}
+export class GetHumanoidFollow extends VacBotCommand {
+    constructor();
+}
+export class GetListenMusic extends VacBotCommand {
+    constructor();
+}
+export class GetLiveLaunchPwdState extends VacBotCommand {
     constructor();
 }
 export class GetMapSet_V2 extends VacBotCommand {
     constructor(mapID: any, type?: string);
 }
-export class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapArray: any);
+export class GetMapTrace_V2 extends VacBotCommand {
+    constructor(type?: number);
 }
-export class SetThreeModule extends VacBotCommand {
-    constructor(level?: number, type?: string, enable?: number);
+export class GetMonitorAirState extends VacBotCommand {
+    constructor();
+}
+export class GetOta extends VacBotCommand {
+    constructor();
+}
+export class GetRelocationState extends VacBotCommand {
+    constructor();
+}
+export class GetScene extends VacBotCommand {
+    constructor();
+}
+export class GetThreeModuleStatus extends VacBotCommand {
+    constructor();
+}
+export class GetTimeZone extends VacBotCommand {
+    constructor();
+}
+export class GetTotalStats extends VacBotCommand {
+    constructor();
+}
+export class GetVoice extends VacBotCommand {
+    constructor();
+}
+export class GetVoiceLifeRemindState extends VacBotCommand {
+    constructor();
+}
+export class GetVoiceSimple extends VacBotCommand {
+    constructor();
+}
+export class GetWifiList extends VacBotCommand {
+    constructor();
+}
+export class SetAngleFollow extends VacBotCommand {
+    constructor(on?: number);
+}
+export class SetAtmoLight extends VacBotCommand {
+    constructor(intensity?: number);
+}
+export class SetBlock extends VacBotCommand {
+    constructor(enable?: number, start?: string, end?: string);
+}
+export class SetBlueSpeaker extends VacBotCommand {
+    constructor(enable?: number);
 }
 export class SetFreshenerLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);
@@ -252,14 +321,35 @@ export class SetFreshenerLevel extends SetThreeModule {
 export class SetHumidifierLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);
 }
+export class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapArray: any);
+}
+export class SetMic extends VacBotCommand {
+    constructor(on?: number);
+}
+export class SetMonitorAirState extends VacBotCommand {
+    constructor(on?: number);
+}
+export class SetThreeModule extends VacBotCommand {
+    constructor(level?: number, type?: string, enable?: number);
+}
 export class SetUVCleaner extends SetThreeModule {
     constructor(enable?: number);
 }
-export class SetAtmoLight extends VacBotCommand {
-    constructor(intensity?: number);
+export class SetVoice extends VacBotCommand {
+    constructor(enable?: number, md5sum?: string, size?: number, type?: string, url?: string, vid?: string);
 }
-export class SetBlueSpeaker extends VacBotCommand {
+export class SetVoiceAssistantState extends VacBotCommand {
     constructor(enable?: number);
+}
+export class SetVoiceSimple extends VacBotCommand {
+    constructor(on?: number);
+}
+export class SinglePoint_V2 extends Clean_V2 {
+    constructor(spotCoordinates?: string);
+}
+export class VideoOpened extends VacBotCommand {
+    constructor();
 }
 declare class AddMapSubSet extends VacBotCommand {
     constructor(mapID: any, coordinates: any, mapSubSetType?: string);

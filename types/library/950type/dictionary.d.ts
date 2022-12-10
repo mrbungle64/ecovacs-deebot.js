@@ -8,6 +8,7 @@ export namespace CLEAN_MODE_TO_ECOVACS {
     const mapPoint: string;
     const singlePoint: string;
     const area: string;
+    const move: string;
 }
 export namespace CLEAN_ACTION_TO_ECOVACS {
     export const start: string;
@@ -31,11 +32,17 @@ export namespace CLEAN_MODE_FROM_ECOVACS {
     export { pause_1 as pause };
     export const goCharging: string;
     export const idle: string;
-    export const move: string;
+    const move_1: string;
+    export { move_1 as move };
     const singlePoint_1: string;
     export { singlePoint_1 as singlePoint };
     const area_1: string;
     export { area_1 as area };
+}
+export namespace GOCHARGING_REASONS {
+    const workComplete: string;
+    const cleaningCloth: string;
+    const none: string;
 }
 export var WATER_LEVEL_TO_ECOVACS: {
     1: number;
@@ -66,12 +73,14 @@ export namespace COMPONENT_TO_ECOVACS {
     const side_brush: string;
     const filter: string;
     const unit_care: string;
+    const round_mop: string;
 }
 export namespace COMPONENT_FROM_ECOVACS {
     const brush: string;
     const sideBrush: string;
     const heap: string;
     const unitCare: string;
+    const roundMop: string;
 }
 export namespace MOVE_ACTION {
     export const backward: string;

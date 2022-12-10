@@ -1103,8 +1103,7 @@ class VacBot {
                 'country':  this.country,
                 'sign': sign,
                 'signType': 'sha256'
-            },
-            responseType: 'arraybuffer'
+            }
         };
 
         try {
