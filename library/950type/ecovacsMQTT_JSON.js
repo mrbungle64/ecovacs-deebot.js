@@ -738,10 +738,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'Voice':
                 if (payload && payload.downloads) {
                     payload.downloads.forEach((dlObject) => {
-                        if(dlObject.status == "dl") {
+                        if(dlObject.status === "dl") {
                             tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
                             this.emit('VoiceDownloadProgress', dlObject);
-                        } else if(dlObject.status == "dld") {
+                        } else if(dlObject.status === "dld") {
                             tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
                             this.emit('VoiceDownloadComplete', dlObject);
                         } else {

@@ -7,7 +7,7 @@ const {errorCodes} = require('./errorCodes.json');
 const constants = require("./constants");
 const crypto = require("crypto");
 const querystring = require("node:querystring");
-const {default: axios} = require("axios");
+const axios = require('axios').default;
 
 /**
  * @class VacBot
