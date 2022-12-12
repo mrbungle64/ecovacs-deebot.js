@@ -839,10 +839,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
             // try to fix invalid JSON
             try {
-                dValObject = (typeof dVal == 'string') ? JSON.parse(dVal) : dVal;
+                dValObject = (typeof dVal === 'string') ? JSON.parse(dVal) : dVal;
             } catch(e) {
                 if(dVal.indexOf("}") < dVal.indexOf("{")) {
-                    if(dVal.indexOf("]") > -1 && dVal.indexOf("[") == -1) {
+                    if(dVal.indexOf("]") > -1 && dVal.indexOf("[") === -1) {
                         dVal = "[" + dVal.substring(dVal.indexOf("{"));
                     } else {
                         dVal = "[" + dVal.substring(dVal.indexOf("{"));
@@ -856,40 +856,40 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             const fwBuryPoint = dValObject;
             let val;
 
-            if (fwBuryMessage == 'bd_sysinfo') {
+            if (fwBuryMessage === 'bd_sysinfo') {
                 this.vacBot.handleSysinfo(JSON.stringify({'body': fwBuryPoint}));
                 return;
-            } else if (fwBuryMessage == 'bd_wifi_24g') {
+            } else if (fwBuryMessage === 'bd_wifi_24g') {
                 //
-            } else if (fwBuryMessage == 'bd_onoffline') {
+            } else if (fwBuryMessage === 'bd_onoffline') {
                 // after reconnection
-            } else if (fwBuryMessage == 'bd_PowerOnOff') {
+            } else if (fwBuryMessage === 'bd_PowerOnOff') {
                 // after powered on
-            } else if (fwBuryMessage == 'bd_fbi08') {
+            } else if (fwBuryMessage === 'bd_fbi08') {
                 // unknown
-            } else if (fwBuryMessage == 'bd_returnchargeinfo') {
+            } else if (fwBuryMessage === 'bd_returnchargeinfo') {
                 // charging informations
-            } else if (fwBuryMessage == 'bd_returndock') {
+            } else if (fwBuryMessage === 'bd_returndock') {
                 // returning to dock
-            } else if (fwBuryMessage == 'bd_trigger') {
+            } else if (fwBuryMessage === 'bd_trigger') {
                 // when pyhsical- or app button is pressed
-            } else if (fwBuryMessage == 'bd_task') {
+            } else if (fwBuryMessage === 'bd_task') {
                 // when a tasks starts
-            } else if (fwBuryMessage == 'bd_sensortriggerinfo') {
+            } else if (fwBuryMessage === 'bd_sensortriggerinfo') {
                 // when a sensor gets triggered
-            } else if (fwBuryMessage == 'bd_cri01') {
+            } else if (fwBuryMessage === 'bd_cri01') {
                 // unknown
-            } else if (fwBuryMessage == 'bd_cc10') {
+            } else if (fwBuryMessage === 'bd_cc10') {
                 // Charging Case
-            } else if (fwBuryMessage == 'bd_vslaminfo') {
+            } else if (fwBuryMessage === 'bd_vslaminfo') {
                 // unknown
-            } else if (fwBuryMessage == 'bd_planinfo') {
+            } else if (fwBuryMessage === 'bd_planinfo') {
                 // unknown
-            } else if (fwBuryMessage == 'bd_extramap') {
+            } else if (fwBuryMessage === 'bd_extramap') {
                 // seems to get raised, when the robot found extra space that is not on the map
-            } else if (fwBuryMessage == 'bd_light') {
+            } else if (fwBuryMessage === 'bd_light') {
                 // unknown
-            } else if (fwBuryMessage == 'bd_cache') {
+            } else if (fwBuryMessage === 'bd_cache') {
                 // unknown
             }
 
