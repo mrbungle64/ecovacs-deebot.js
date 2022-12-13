@@ -386,7 +386,7 @@ exports.KnownDevices = {
         "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
-        "round_mop": true,
+        "round_mop_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -418,7 +418,7 @@ exports.KnownDevices = {
         "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
-        "round_mop": false,
+        "round_mop_info": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -580,8 +580,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": false,
         "type": "yeedi",
-        "unit_care_info": true,
-        "round_mop": true
+        "unit_care_info": true
     },
     "rwp09o": {
         "name": "yeedi Floor 3+",

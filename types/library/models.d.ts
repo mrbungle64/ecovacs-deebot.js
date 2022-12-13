@@ -385,7 +385,7 @@ export var KnownDevices: {
         "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
-        round_mop: boolean;
+        round_mop_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -417,7 +417,7 @@ export var KnownDevices: {
         "950type_V2": boolean;
         main_brush: boolean;
         unit_care_info: boolean;
-        round_mop: boolean;
+        round_mop_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -580,7 +580,6 @@ export var KnownDevices: {
         map_image_supported: boolean;
         type: string;
         unit_care_info: boolean;
-        round_mop: boolean;
     };
     rwp09o: {
         name: string;

@@ -320,11 +320,6 @@ declare class VacBot {
      * Returns true if you can retrieve information about "round mop" (life span)
      * @returns {boolean}
      */
-    hasRoundMops(): boolean;
-    /**
-     * Returns true if you can retrieve information about "round mop" (life span)
-     * @returns {boolean}
-     */
     hasRoundMopInfo(): boolean;
     /**
      * Returns true if the model has Edge cleaning mode

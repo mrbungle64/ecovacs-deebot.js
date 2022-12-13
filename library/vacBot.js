@@ -828,14 +828,6 @@ class VacBot {
      * Returns true if you can retrieve information about "round mop" (life span)
      * @returns {boolean}
      */
-    hasRoundMops() {
-        return this.getDeviceProperty('round_mop');
-    }
-
-    /**
-     * Returns true if you can retrieve information about "round mop" (life span)
-     * @returns {boolean}
-     */
     hasRoundMopInfo() {
         return this.getDeviceProperty('round_mop_info');
     }
@@ -1099,23 +1091,24 @@ class VacBot {
         let ts = Date.now();
         let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
 
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + this.user_access_token,
-                'token': this.user_access_token,
-                'appid': 'ecovacs',
-                'plat': 'android',
-                'userid': this.uid,
-                'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
-                'v': '2.3.7',
-                'country':  this.country,
-                'sign': sign,
-                'signType': 'sha256'
-            }
+        let headers = {
+            'Authorization': 'Bearer ' + this.user_access_token,
+            'token': this.user_access_token,
+            'appid': 'ecovacs',
+            'plat': 'android',
+            'userid': this.uid,
+            'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
+            'v': '2.3.7',
+            'country': this.country,
+            'sign': sign,
+            'signType': 'sha256'
         };
 
         try {
-            const res = await axios.get(url, config);
+            const res = await axios.get(url, {
+                headers,
+                responseType: 'arraybuffer'
+            });
             const result = res.data;
             const fs = require('fs');
             fs.writeFile(targetFilename, result, err => {
