@@ -427,6 +427,7 @@ declare class VacBot {
      */
     removeFromLogs(logData: string): string;
     callCleanResultsLogsApi(): Promise<any>;
+    getCryptoHashStringForSecuredContent(): string;
     downloadSecuredContent(url: any, targetFilename: any): Promise<void>;
 }
 //# sourceMappingURL=vacBot.d.ts.map
