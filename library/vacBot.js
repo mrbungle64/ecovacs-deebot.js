@@ -1086,10 +1086,13 @@ class VacBot {
         }
     }
 
-    async downloadSecuredContent(url, targetFilename) {
+    getCryptoHashStringForSecuredContent() {
+        const ts = Date.now();
+        return constants.APP_ID + constants.APP_SK + ts.toString();
+    }
 
-        let ts = Date.now();
-        let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
+    async downloadSecuredContent(url, targetFilename) {
+        let sign = crypto.createHash('sha256').update(this.getCryptoHashStringForSecuredContent()).digest("hex");
 
         let headers = {
             'Authorization': 'Bearer ' + this.user_access_token,
