@@ -346,22 +346,20 @@ class VacBot_950type extends VacBot {
     handleWaterInfo(payload) {
         this.waterLevel = payload['amount'];
         tools.envLog("[VacBot] *** waterLevel = " + this.waterLevel);
-        if (this.sleepStatus === 0) {
-            this.waterboxInfo = payload['enable'];
-            tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
-            if (payload.hasOwnProperty('type')) {
-                // 1 = Regular
-                // 2 = OZMO Pro
-                this.moppingType = payload['type'];
-                tools.envLog("[VacBot] *** WaterInfo type = " + payload['type']);
-            }
-            if (payload.hasOwnProperty('sweepType')) {
-                // Scrubbing pattern
-                // 1 = Quick scrubbing
-                // 2 = Deep scrubbing
-                this.scrubbingType = payload['sweepType'];
-                tools.envLog("[VacBot] *** WaterInfo sweepType = " + payload['sweepType']);
-            }
+        this.waterboxInfo = payload['enable'];
+        tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
+        if (payload.hasOwnProperty('type')) {
+            // 1 = Regular
+            // 2 = OZMO Pro
+            this.moppingType = payload['type'];
+            tools.envLog("[VacBot] *** WaterInfo type = " + payload['type']);
+        }
+        if (payload.hasOwnProperty('sweepType')) {
+            // Scrubbing pattern
+            // 1 = Quick scrubbing
+            // 2 = Deep scrubbing
+            this.scrubbingType = payload['sweepType'];
+            tools.envLog("[VacBot] *** WaterInfo sweepType = " + payload['sweepType']);
         }
     }
 
