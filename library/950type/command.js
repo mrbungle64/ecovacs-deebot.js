@@ -802,14 +802,6 @@ class SetBlock extends VacBotCommand {
     }
 }
 
-class GetPos extends VacBotCommand {
-    constructor(objects = ['chargePos', 'deebotPos']) {
-        super('getPos', {
-            objects
-        });
-    }
-}
-
 class GetLiveLaunchPwdState extends VacBotCommand {
     constructor() {
         super('getLiveLaunchPwdState');
