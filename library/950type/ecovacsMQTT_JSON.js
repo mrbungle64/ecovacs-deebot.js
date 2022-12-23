@@ -172,6 +172,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (this.vacBot.chargeStatus) {
                     this.emit("ChargeState", this.vacBot.chargeStatus);
                 }
+                if (this.vacBot.chargeMode) {
+                    this.emit("ChargeMode", this.vacBot.chargeMode);
+                }
                 break;
             case "Battery":
                 this.vacBot.handleBattery(payload);

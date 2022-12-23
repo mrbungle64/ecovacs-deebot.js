@@ -66,6 +66,7 @@ class VacBot {
         this.batteryIsLow = false;
         this.cleanReport = null;
         this.chargeStatus = null;
+        this.chargeMode = null;
         this.cleanSpeed = null;
         this.waterLevel = null;
         this.waterboxInfo = null;

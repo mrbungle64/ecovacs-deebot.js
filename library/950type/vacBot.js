@@ -397,6 +397,9 @@ class VacBot_950type extends VacBot {
         if (status) {
             this.chargeStatus = status;
         }
+        if (payload.hasOwnProperty('mode')) {
+            this.chargeMode = payload['mode'];
+        }
     }
 
     /**
