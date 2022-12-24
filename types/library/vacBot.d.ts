@@ -50,6 +50,7 @@ declare class VacBot {
     batteryIsLow: boolean;
     cleanReport: any;
     chargeStatus: any;
+    chargeMode: any;
     cleanSpeed: any;
     waterLevel: any;
     waterboxInfo: any;
