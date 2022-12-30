@@ -29,6 +29,7 @@ class VacBot_950type extends VacBot {
         this.breakPoint = null;
         this.block = null;
         this.autoEmpty = null;
+        this.autoEmptyStatus = null;
         this.advancedMode = null;
         this.trueDetect = null;
         this.cleanCount = 1;
@@ -409,6 +410,7 @@ class VacBot_950type extends VacBot {
      */
     handleCleanLogs(payload) {
         let logs = [];
+        this.cleanLog = [];
         if (payload.hasOwnProperty('logs')) {
             logs = payload['logs'];
         } else if (payload.hasOwnProperty('log')) {
@@ -518,7 +520,15 @@ class VacBot_950type extends VacBot {
      */
     handleAutoEmpty(payload) {
         this.autoEmpty = payload['enable'];
-        tools.envLog("[VacBot] *** autoEmpty = " + this.autoEmpty);
+        if (payload.hasOwnProperty('status')) {
+            // 0 disabled
+            // 1 enabled
+            // 2 dust bag not full
+            // 5 dust bag need to be changed
+            this.autoEmptyStatus = payload['status'];
+            tools.envLogResult(`autoEmptyStatus: ${this.autoEmptyStatus}`);
+        }
+        tools.envLogResult(`autoEmpty: ${this.autoEmpty}`);
     }
 
     /**
