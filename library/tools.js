@@ -1,6 +1,7 @@
 'use strict';
 
 const deebotModels = require('./models');
+const chalk = require('chalk');
 
 function formatString(string) {
     if (arguments.length === 0) {
@@ -30,7 +31,7 @@ function isCanvasModuleAvailable() {
  * @param {string} [command=''] - The command
  * @returns {string} the error description
  */
-function createErrorDescription(message, command= '') {
+function createErrorDescription(message, command = '') {
     if (message.includes('ENOTFOUND')) {
         return `DNS lookup failed: ${message}`;
     } else if (message.includes('EHOSTUNREACH')) {
@@ -215,7 +216,7 @@ function isObject(val) {
  */
 function isValidJsonString(jsonString) {
     try {
-        envLog('[tools] isValidJsonString() str: %s', jsonString);
+        envLog(`[tools] isValidJsonString() str: ${jsonString}`);
         JSON.parse(jsonString);
     } catch (e) {
         envLog('[tools] isValidJsonString() false');
@@ -247,6 +248,116 @@ function paramsToQueryList(params) {
         }
     }
     return query.join('&');
+}
+
+function verbose(message) {
+    if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
+        if (message !== '') {
+            return true;
+        }
+    }
+    return false;
+}
+
+function envLogHeader(message) {
+    if (verbose(message)) {
+        console.log(chalk.bgRgb(255, 233, 0).blue(' function ') + ' ' + chalk.rgb(255, 233, 0)(message));
+    }
+}
+
+function envLogCommand(message) {
+    if (verbose(message)) {
+        console.log(chalk.bgRgb(255, 233, 0).blue(' command ') + ' ' + chalk.rgb(255, 233, 0)(message));
+    }
+}
+
+function envLogMqtt(message) {
+    if (verbose(message)) {
+        console.log(chalk.bgRgb(255, 233, 0).black(' MQTT ') + ' ' + message);
+    }
+}
+
+function envLogResult(message) {
+    if (verbose(message)) {
+        console.log(chalk.bgGreen.white(' result ') + ' ' + message);
+    }
+}
+
+function envLogSuccess(message) {
+    if (verbose(message)) {
+        console.log(chalk.bgGreen.white(' success ') + ' ' + chalk.green(message));
+    }
+}
+
+function envLogNotice(message) {
+    if (verbose(message)) {
+        console.log(chalk.bgRgb(255, 233, 0).black(' notice ') + ' ' + chalk.italic(message));
+    }
+}
+
+function envLogPayload(message) {
+    if (verbose(message)) {
+        if (typeof message === 'object') {
+            console.log(chalk.bgGreen.white(' payload '));
+            console.log(message);
+        } else if (message !== '') {
+            console.log(chalk.bgGreen.white(' payload ') + ' ' + chalk.green(message));
+        }
+    }
+}
+
+function envLogInfo(message) {
+    if (verbose(message)) {
+        logInfo(message);
+    }
+}
+
+function envLogWarn(message) {
+    if (verbose(message)) {
+        logWarn(message);
+    }
+}
+
+function envLogError(message) {
+    if (verbose(message)) {
+        logError(message);
+    }
+}
+
+function envLogRaw(message) {
+    if (verbose(message)) {
+        console.log(message);
+    }
+}
+
+function logEvent(event, value) {
+    if (typeof value === 'object') {
+        console.log(chalk.bgGreen.white(' event ') + ' ' + chalk.green(event));
+        console.log(value);
+    } else {
+        console.log(chalk.bgGreen.white(' event ') + ' ' + chalk.green(event) + ' ' + value);
+    }
+}
+
+function logInfo(message) {
+    if (typeof message === 'object') {
+        console.log(chalk.bgWhite.black(' object '));
+        console.log(message);
+    } else if (message !== '') {
+        console.log(chalk.bgWhite.black(' info ') + ' ' + message);
+    }
+}
+
+function logWarn(message) {
+    if (message !== '') {
+        console.log(chalk.bgRgb(255, 164, 0).white(' warn ') + ' ' + chalk.rgb(255, 164, 0)(message));
+    }
+}
+
+function logError(message) {
+    if (message !== '') {
+        console.log(chalk.bgRed.white(' error ') + ' ' + chalk.red(message));
+    }
 }
 
 /**
@@ -283,3 +394,20 @@ module.exports.isSupportedDevice = isSupportedDevice;
 module.exports.isValidJsonString = isValidJsonString;
 module.exports.isValidVirtualWallType = isValidVirtualWallType;
 module.exports.paramsToQueryList = paramsToQueryList;
+
+module.exports.envLogCommand = envLogCommand;
+module.exports.envLogError = envLogError;
+module.exports.envLogHeader = envLogHeader;
+module.exports.envLogInfo = envLogInfo;
+module.exports.envLogMqtt = envLogMqtt;
+module.exports.envLogNotice = envLogNotice;
+module.exports.envLogPayload = envLogPayload;
+module.exports.envLogRaw = envLogRaw;
+module.exports.envLogResult = envLogResult;
+module.exports.envLogSuccess = envLogSuccess;
+module.exports.envLogWarn = envLogWarn;
+
+module.exports.logError = logError;
+module.exports.logEvent = logEvent;
+module.exports.logInfo = logInfo;
+module.exports.logWarn = logWarn;
