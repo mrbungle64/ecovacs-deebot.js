@@ -28,10 +28,10 @@ api.connect(accountId, passwordHash).then(() => {
         let vacbot = api.getVacBotObj(vacuum);
         vacbot.on('ready', () => {
 
-            console.log('\nvacbot ready\n');
+            api.logInfo('vacbot ready');
 
             vacbot.on('MapDataObject', (mapDataObject) => {
-                console.log('MapDataObject:' + JSON.stringify(mapDataObject));
+                api.logEvent('MapDataObject', mapDataObject);
                 mapData = Object.assign(mapDataObject[0]);
                 for (let i = 0; i < mapData.mapSpotAreas.length; i++) {
                     const mapSpotArea = mapData.mapSpotAreas[i];
@@ -41,7 +41,7 @@ api.connect(accountId, passwordHash).then(() => {
             });
 
             vacbot.on('Error', (value) => {
-                console.log('Error: ' + value);
+                api.logError('Error: ' + value);
             });
         });
 
@@ -62,7 +62,7 @@ api.connect(accountId, passwordHash).then(() => {
         // Catch ctrl-c to exit program
         //
         process.on('SIGINT', function () {
-            console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
+            api.logInfo("Gracefully shutting down from SIGINT (Ctrl+C)");
             disconnect();
         });
 
@@ -78,12 +78,12 @@ api.connect(accountId, passwordHash).then(() => {
             try {
                 vacbot.disconnect();
             } catch (e) {
-                console.log('Failure in disconnecting: ', e.message);
+                api.logError(`Failure in disconnecting: ${e.message}`);
             }
-            console.log("Exiting...");
+            api.logInfo('Exiting...');
             process.exit();
         }
     });
 }).catch((e) => {
-    console.error(`Failure in connecting: ${e.message}`);
+    api.logError(`Failure in connecting: ${e.message}`);
 });

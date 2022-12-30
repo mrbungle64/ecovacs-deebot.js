@@ -26,7 +26,7 @@ const api = new EcoVacsAPI(deviceId, countryCode, '', domain);
 api.connect(accountId, passwordHash).then(() => {
 
   api.devices().then((devices) => {
-    console.log('Devices:', JSON.stringify(devices));
+    api.logInfo(`Devices: ${JSON.stringify(devices)}`);
 
     let vacuum = devices[deviceNumber];
     let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, api.getContinent());
@@ -35,20 +35,20 @@ api.connect(accountId, passwordHash).then(() => {
     // At this point you can request information from your vacuum or send actions to it.
     vacbot.on('ready', () => {
 
-      console.log('\nvacbot ready\n');
+      api.logInfo('vacbot ready');
 
       vacbot.run('GetBatteryState');
       vacbot.run('GetCleanState');
       vacbot.run('GetChargeState');
 
       vacbot.on('BatteryInfo', (battery) => {
-        console.log('Battery level: ' + Math.round(battery));
+        api.logEvent('Battery level', Math.round(battery));
       });
       vacbot.on('CleanReport', (value) => {
-        console.log("Clean status: " + value);
+        api.logEvent('Clean status', value);
       });
       vacbot.on('ChargeState', (value) => {
-        console.log("Charge status: " + value);
+        api.logEvent('Charge status:', value);
       });
     });
     vacbot.connect();

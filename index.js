@@ -7,7 +7,6 @@ const fs = require('fs');
 const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
-const querystring = require('node:querystring');
 
 /** @type {Object} */
 const countries = require('./countries.json').countries;
@@ -31,7 +30,7 @@ class EcovacsAPI {
    * @param {string} [authDomain='ecovacs.com'] - the domain for the authentication API
    */
   constructor(deviceId, country, continent = '', authDomain = '') {
-    tools.envLog("[EcovacsAPI] Setting up EcovacsAPI instance");
+    tools.envLogInfo('Setting up EcovacsAPI instance');
 
     this.deviceId = deviceId;
     this.country = country.toUpperCase();
@@ -46,6 +45,8 @@ class EcovacsAPI {
    * @returns {Promise<string>}
    */
   async connect(accountId, passwordHash) {
+    tools.envLogHeader(`connect(accountId,passwordHash)`);
+
     let error;
     if (!accountId) {
       error = new Error('No account ID provided');
@@ -76,7 +77,7 @@ class EcovacsAPI {
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
     this.uid = result['userId'];
-    tools.envLog('[EcovacsAPI] EcovacsAPI connection complete');
+    tools.envLogSuccess('user authentication complete');
     return 'ready';
   }
 
@@ -186,7 +187,11 @@ class EcovacsAPI {
    * @returns {Promise<Object>} an object including access token and user ID
    */
   async callUserAuthApi(loginPath, params) {
-    tools.envLog(`[EcovacsAPI] Calling main api ${loginPath} with ${JSON.stringify(params)}`);
+    if (loginPath === 'user/login') {
+      tools.envLogHeader(`callUserAuthApi('${loginPath}',{account:accountId,password:passwordHash})`);
+    } else {
+      tools.envLogHeader(`callUserAuthApi('${loginPath}',${JSON.stringify(params)})`);
+    }
     let portalPath = this.getPortalPath(loginPath);
     let portalUrl;
     let searchParams;
@@ -201,17 +206,17 @@ class EcovacsAPI {
       portalUrl = new url.URL(tools.formatString(portalPath + "/" + loginPath, this.getMetaObject()));
       searchParams = new url.URLSearchParams(this.getUserLoginParams(params));
     }
-    tools.envLog(`[EcoVacsAPI] callUserAuthApi calling ${portalUrl.href}`);
 
     const axiosConfig = {
       params: searchParams
     };
-    tools.envLog(`[EcoVacsAPI] callUserAuthApi config ${searchParams.toString()}`);
 
+    tools.envLogInfo(`portalUrl.href: '${portalUrl.href}'`);
+    tools.envLogInfo(`searchParams: '${searchParams.toString()}'`);
     try {
       const res = await axios.get(portalUrl.href, axiosConfig);
       const result = res.data;
-      tools.envLog(`[EcoVacsAPI] callUserAuthApi data: ${JSON.stringify(result)}`);
+      tools.envLogPayload(result);
       if (result.code === '0000') {
         return result.data;
       } else {
@@ -224,7 +229,7 @@ class EcovacsAPI {
         throw error;
       }
     } catch (err) {
-      tools.envLog(`[EcoVacsAPI] callUserAuthApi error: ${err}`);
+      tools.envLogError(`error: '${err}'`);
       throw err;
     }
   }
@@ -247,13 +252,13 @@ class EcovacsAPI {
   }
 
   /**
-   * @param {string} api - the API path
+   * @param {string} loginPath - the API path
    * @param {string} func - the API function to be called
    * @param {Object} args - an object with the params for the POST request
    * @returns {Promise<Object>}
    */
-  async callPortalApi(api, func, args) {
-    tools.envLog("[EcovacsAPI] calling user api %s with %s", func, JSON.stringify(args));
+  async callPortalApi(loginPath, func, args) {
+    tools.envLogHeader(`callPortalApi('${loginPath}','${func}','${JSON.stringify(args)}')`);
     let params = {
       'todo': func
     };
@@ -262,26 +267,28 @@ class EcovacsAPI {
         params[key] = args[key];
       }
     }
+    tools.envLogInfo(`params: ${JSON.stringify(params)}`);
 
     let portalUrlFormat = constants.PORTAL_ECOUSER_API;
     if (this.country === 'CN') {
       portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
     }
-    let portalUrl = tools.formatString(portalUrlFormat + "/" + api, {continent: this.continent});
+    let portalUrl = tools.formatString(portalUrlFormat + "/" + loginPath, {continent: this.continent});
     let headers = {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(JSON.stringify(params))
     };
-    tools.envLog(`[EcoVacsAPI] Calling ${portalUrl}`);
+    tools.envLogInfo(`portalUrl: '${portalUrl}'`);
     const res = await axios.post(portalUrl, params, {
       headers: headers
     });
 
     const response = res.data;
-    tools.envLog("[EcovacsAPI] got %s", JSON.stringify(response));
     if ((response['result'] !== 'ok') && (response['ret'] !== 'ok') && (response['msg'] !== 'success')) {
-        tools.envLog(`[EcovacsAPI] callPortalApi failure code ${response['errno']} (${response['error']}) for call ${func} and args ${JSON.stringify(args)}`);
+        tools.envLogError(`failure code '${response['errno']}' (${response['error']}) for call '${func}'`);
         throw new Error(`Failure code ${response['errno']} (${response['error']}) for call ${func}`);
+    } else {
+      tools.envLogPayload(response);
     }
     return response;
   }
@@ -452,15 +459,19 @@ class EcovacsAPI {
    * @param {string} [continent] - the continent
    * @returns {Object} a corresponding instance of the `VacBot` class
    */
-  getVacBot(user, hostname, resource, userToken, vacuum, continent) {
+  getVacBot(user, hostname, resource, userToken, vacuum, continent = '') {
+    tools.envLogHeader(`getVacBot('${user}','${hostname}','${resource}','${userToken}','${vacuum}','${continent}')`);
+    if (continent !== '') {
+      tools.envLogWarn(`got value '${continent}' for continent (deprecated)`);
+    }
     let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
     if (is950Type) {
-      tools.envLog('vacBot_950type identified');
+      tools.envLogSuccess(`'950type' model identified`);
       vacBotClass = require('./library/950type/vacBot');
     } else {
-      tools.envLog('vacBot_non950type identified');
+      tools.envLogWarn(`'non950type' model identified (deprecated)`);
       vacBotClass = require('./library/non950type/vacBot');
     }
     return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
@@ -554,6 +565,22 @@ class EcovacsAPI {
       key: EcovacsAPI.PUBLIC_KEY,
       padding: crypto.constants.RSA_PKCS1_PADDING
     }, Buffer.from(text)).toString('base64');
+  }
+
+  logInfo(message) {
+    tools.logInfo(message);
+  }
+
+  logWarn(message) {
+    tools.logWarn(message);
+  }
+
+  logError(message) {
+    tools.logError(message);
+  }
+
+  logEvent(event, value) {
+    tools.logEvent(event, value);
   }
 }
 

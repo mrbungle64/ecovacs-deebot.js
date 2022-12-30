@@ -145,7 +145,7 @@ class VacBot {
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
         this.ecovacs.on('ready', () => {
-            tools.envLog('[VacBot] Ready event!');
+            tools.envLogInfo(`[VacBot] Ready event!`);
             this.is_ready = true;
         });
 
@@ -171,7 +171,7 @@ class VacBot {
                     try {
                         await this.handleMapsEvent(mapData);
                     } catch (e) {
-                        tools.envLog('[vacBot] Error handleMapsEvent: ' + e.message);
+                        tools.envLogInfo(`[vacBot] Error handleMapsEvent: ${e.message}`);
                     }
                 })();
             }
@@ -182,7 +182,7 @@ class VacBot {
                     try {
                         await this.handleMapSpotAreasEvent(spotAreas);
                     } catch (e) {
-                        tools.envLog('[vacBot] Error handleMapSpotAreasEvent: ' + e.message);
+                        tools.envLogInfo(`[vacBot] Error handleMapSpotAreasEvent: ${e.message}`);
                     }
                 })();
             }
@@ -193,7 +193,7 @@ class VacBot {
                     try {
                         await this.handleMapSpotAreaInfo(spotAreaInfo);
                     } catch (e) {
-                        tools.envLog('[vacBot] Error handleMapSpotAreaInfo: ' + e.message);
+                        tools.envLogInfo(`[vacBot] Error handleMapSpotAreaInfo: ${e.message}`);
                     }
                 })();
             }
@@ -204,7 +204,7 @@ class VacBot {
                     try {
                         await this.handleMapVirtualBoundaries(virtualBoundaries);
                     } catch (e) {
-                        tools.envLog('[vacBot] Error handleMapVirtualBoundaries: ' + e.message);
+                        tools.envLogInfo(`[vacBot] Error handleMapVirtualBoundaries: ${e.message}`);
                     }
                 })();
             }
@@ -215,7 +215,7 @@ class VacBot {
                     try {
                         await this.handleMapVirtualBoundaryInfo(virtualBoundaryInfo);
                     } catch (e) {
-                        tools.envLog('[vacBot] Error handleMapVirtualBoundaryInfo: ' + e.message);
+                        tools.envLogInfo(`[vacBot] Error handleMapVirtualBoundaryInfo: ${e.message}`);
                     }
                 })();
             }
@@ -226,7 +226,7 @@ class VacBot {
                     try {
                         await this.handleMapImageInfo(mapImageInfo);
                     } catch (e) {
-                        tools.envLog('[vacBot] Error handleMapImageInfo: ' + e.message);
+                        tools.envLogInfo(`[vacBot] Error handleMapImageInfo: ${e.message}`);
                     }
                 })();
             }
@@ -994,13 +994,12 @@ class VacBot {
                 this.mapPiecePacketsSent[command.getId()] = command.args.pid;
             }
         }
-        tools.envLog("[VacBot] Sending command `%s` with id %s", command.name, command.getId());
         let actionPayload = this.useMqttProtocol() ? command : command.toXml();
         (async () => {
             try {
                 await this.ecovacs.sendCommand(actionPayload);
             } catch (e) {
-                tools.envLog("[vacBot] Error sendCommand: " + e.message);
+                tools.envLogError(`[vacBot] Error sendCommand: ${e.message}`);
             }
         })();
     }
@@ -1077,12 +1076,12 @@ class VacBot {
         };
 
         let searchParams = querystring.encode(queryParams);
-        tools.envLog(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
+        tools.envLogInfo(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
         try {
             const res = await axios.get(portalPath + searchParams, config);
             return res.data;
         } catch (err) {
-            tools.envLog(`[EcoVacsAPI] callLogsApi error: ${err}`);
+            tools.envLogInfo(`[EcoVacsAPI] callLogsApi error: ${err}`);
             throw err;
         }
     }
@@ -1117,11 +1116,11 @@ class VacBot {
             const fs = require('fs');
             fs.writeFile(targetFilename, result, err => {
                 if (err) {
-                    tools.envLog(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
+                    tools.envLogInfo(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
                 }
             });
         } catch (err) {
-            tools.envLog(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
+            tools.envLogInfo(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
             throw err;
         }
     }

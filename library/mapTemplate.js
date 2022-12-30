@@ -97,7 +97,7 @@ class EcovacsMapImageBase {
             try {
                 await this.initCanvas();
             } catch (e) {
-                tools.envLog(`[EcovacsMapImageBase] initCanvas failed: ${e.message}`);
+                tools.envLogInfo(`[EcovacsMapImageBase] initCanvas failed: ${e.message}`);
             }
         })();
     }
@@ -407,7 +407,7 @@ class EcovacsMapImage extends EcovacsMapImageBase {
             try {
                 await this.initCanvas();
             } catch (e) {
-                tools.envLog(`[EcovacsMapImage] initCanvas failed: ${e.message}`);
+                tools.envLogInfo(`[EcovacsMapImage] initCanvas failed: ${e.message}`);
             }
         })();
     }

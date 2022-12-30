@@ -24,35 +24,35 @@ let mapSpotAreaName = [];
 api.connect(accountId, passwordHash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[deviceNumber];
-        console.log(vacuum);
+        api.logInfo(vacuum);
         let vacbot = api.getVacBotObj(vacuum);
         vacbot.on('ready', () => {
 
-            console.log('\nvacbot ready\n');
+            api.logInfo('vacbot ready');
 
             vacbot.on('Position', (object) => {
-                console.log(`Position (x,y): ${object.x},${object.y}`);
+                api.logInfo(`Position (x,y): ${object.x},${object.y}`);
                 if (object.distanceToChargingStation) {
-                    console.log(`Distance to charger (m): ${object.distanceToChargingStation}`);
+                    api.logInfo(`Distance to charger (m): ${object.distanceToChargingStation}`);
                 }
             });
 
             vacbot.on('ChargingPosition', (object) => {
-                console.log(`Charging position (x,y): ${object.x},${object.y}`);
+                api.logInfo(`Charging position (x,y): ${object.x},${object.y}`);
             });
 
             vacbot.on('CurrentSpotAreas', (values) => {
-                console.log(`Current spot areas: ${values}`);
+                api.logInfo(`Current spot areas: ${values}`);
             });
             vacbot.on('CurrentCustomAreaValues', (values) => {
-                console.log(`Current custom area values (x1,y1,x2,y2): ${values}`);
+                api.logInfo(`Current custom area values (x1,y1,x2,y2): ${values}`);
             });
             vacbot.on('LastUsedAreaValues', (values) => {
-                console.log(`Last used custom area values (x1,y1,x2,y2): ${values}`);
+                api.logInfo(`Last used custom area values (x1,y1,x2,y2): ${values}`);
             });
 
             vacbot.on('MapSpotAreas', (spotAreas) => {
-                console.log('MapSpotAreas: ' + JSON.stringify(spotAreas));
+                api.logInfo('MapSpotAreas: ' + JSON.stringify(spotAreas));
                 for (const i in spotAreas['mapSpotAreas']) {
                     const spotAreaID = spotAreas['mapSpotAreas'][i]['mapSpotAreaID'];
                     vacbot.run('GetSpotAreaInfo', spotAreas['mapID'], spotAreaID);
@@ -60,10 +60,10 @@ api.connect(accountId, passwordHash).then(() => {
                 initGetPosition();
             });
             vacbot.on('MapSpotAreaInfo', (area) => {
-                console.log('MapSpotAreaInfo: ' + JSON.stringify(area));
+                api.logInfo('MapSpotAreaInfo: ' + JSON.stringify(area));
             });
             vacbot.on('MapVirtualBoundaries', (virtualBoundaries) => {
-                console.log('MapVirtualBoundaries: ' + JSON.stringify(virtualBoundaries));
+                api.logInfo('MapVirtualBoundaries: ' + JSON.stringify(virtualBoundaries));
                 const mapID = virtualBoundaries['mapID'];
                 const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
                 const virtualBoundaryArray = [];
@@ -77,14 +77,14 @@ api.connect(accountId, passwordHash).then(() => {
                 }
             });
             vacbot.on('MapVirtualBoundaryInfo', (virtualBoundary) => {
-                console.log('MapVirtualBoundaryInfo: ' + JSON.stringify(virtualBoundary));
+                api.logInfo('MapVirtualBoundaryInfo: ' + JSON.stringify(virtualBoundary));
             });
 
             vacbot.on('CurrentMapName', (value) => {
-                console.log(`Current map name: ${value}`);
+                api.logInfo(`Current map name: ${value}`);
             });
             vacbot.on('CurrentMapMID', (mapID) => {
-                console.log(`Current map ID: ${mapID}`);
+                api.logInfo(`Current map ID: ${mapID}`);
                 vacbot.run('GetSpotAreas', mapID);
             });
 
@@ -92,15 +92,15 @@ api.connect(accountId, passwordHash).then(() => {
                 if (mapData && mapData.mapSpotAreas[spotAreaID]) {
                     if (mapSpotAreaName[mapData.mapSpotAreas[spotAreaID].mapSpotAreaID]) {
                         const mapSpotArea = mapData.mapSpotAreas[spotAreaID];
-                        console.log(`Current spot area ${spotAreaID} = ${mapSpotAreaName[mapSpotArea.mapSpotAreaID]}`);
+                        api.logInfo(`Current spot area ${spotAreaID} = ${mapSpotAreaName[mapSpotArea.mapSpotAreaID]}`);
                     } else {
-                        console.log(`Current spot area ID ${spotAreaID}`);
+                        api.logInfo(`Current spot area ID ${spotAreaID}`);
                     }
                 }
             });
 
             vacbot.on('Error', (value) => {
-                console.log('Error: ' + value);
+                api.logError('Error: ' + value);
             });
         });
 
@@ -137,12 +137,12 @@ api.connect(accountId, passwordHash).then(() => {
             try {
                 vacbot.disconnect();
             } catch (e) {
-                console.log('Failure in disconnecting: ', e.message);
+                api.logError(`Failure in disconnecting: ${e.message}`);
             }
-            console.log("Exiting...");
+            api.logInfo('Exiting...');
             process.exit();
         }
     });
 }).catch((e) => {
-    console.error(`Failure in connecting: ${e.message}`);
+    api.logError(`Failure in connecting: ${e.message}`);
 });

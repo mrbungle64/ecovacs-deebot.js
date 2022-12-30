@@ -35,14 +35,15 @@ class EcovacsMQTT extends Ecovacs {
      * @see https://deebot.readthedocs.io/advanced/protocols/mqtt/#mqtt
      */
     subscribe() {
+        tools.envLogHeader(`subscribe()`);
         const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
-        console.log(channel);
+        tools.envLogInfo(`atr channel: '${channel}'`);
         this.client.subscribe(channel, (error, granted) => {
             if (!error) {
-                tools.envLog('[EcovacsMQTT] Subscribed to atr channel');
-                this.emit('ready', 'Client connected. Subscribe successful');
+                tools.envLogSuccess(`successfully subscribed to atr channel`);
+                this.emit('ready', 'Successfully subscribed to atr channel');
             } else {
-                tools.envLog('[EcovacsMQTT] Subscribe err: %s', error.toString());
+                tools.envLogError(`subscribe error: ${error.toString()}`);
             }
         });
     }
@@ -51,11 +52,14 @@ class EcovacsMQTT extends Ecovacs {
      * Connect to the MQTT server and listen to broadcast messages
      */
     connect() {
+        tools.envLogHeader(`connect()`);
         let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
-        tools.envLog("[EcovacsMQTT] Connecting as %s to %s", this.username, url);
-        tools.envLog("[EcovacsMQTT] client_id: %s, Password %s", this.username + '/' + this.resource, this.secret);
+        const clientId = this.username + '/' + this.resource;
+        tools.envLogInfo(`url: '${url}'`);
+        tools.envLogInfo(`username: '${this.username}'`);
+        tools.envLogInfo(`clientId: '${clientId}'`);
         this.client = this.mqtt.connect(url, {
-            clientId: this.username + '/' + this.resource,
+            clientId: clientId,
             username: this.username,
             password: this.secret,
             protocolVersion: 4,
@@ -66,7 +70,7 @@ class EcovacsMQTT extends Ecovacs {
         let ecovacsMQTT = this;
 
         this.client.on('connect', function () {
-            tools.envLog('[EcovacsMQTT] client connected');
+            tools.envLogSuccess(`MQTT client connected`);
             ecovacsMQTT.subscribe();
         });
 
@@ -78,7 +82,7 @@ class EcovacsMQTT extends Ecovacs {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT server is offline or not reachable');
             } catch (e) {
-                tools.envLog('[EcovacsMQTT] MQTT server is offline or not reachable');
+                tools.envLogError(`MQTT server is offline or not reachable`);
             }
         });
 
@@ -86,7 +90,7 @@ class EcovacsMQTT extends Ecovacs {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
             } catch (e) {
-                tools.envLog('[EcovacsMQTT] MQTT client received disconnect event');
+                tools.envLogWarn(`MQTT client received disconnect event`);
             }
         });
 
@@ -94,12 +98,12 @@ class EcovacsMQTT extends Ecovacs {
             try {
                 ecovacsMQTT.emitNetworkError(`MQTT client error: ${error.message}`);
             } catch (e) {
-                tools.envLog(`MQTT client error: ${error.message}`);
+                tools.envLogError(`MQTT client error: '${error.message}'`);
             }
         });
 
         this.on("ready", (event) => {
-            tools.envLog('[EcovacsMQTT] Received ready event');
+            tools.envLogSuccess(`MQTT client received ready event`);
         });
     }
 
@@ -183,6 +187,8 @@ class EcovacsMQTT extends Ecovacs {
      * @returns {Promise<void>}
      */
     async sendCommand(command) {
+        tools.envLogCommand(command.name);
+        tools.envLogPayload(command.args);
         try {
             const params = this.getRequestObject(command);
             const portalUrl = this.getRequestUrl(command, params);
@@ -193,7 +199,7 @@ class EcovacsMQTT extends Ecovacs {
                     headers: headers
                 });
                 response = res.data;
-                tools.envLog("[EcovacsMQTT] got %s", JSON.stringify(response));
+                tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
             } catch (e) {
                 this.emitNetworkError(e.message, command.name);
                 throw e.message;
@@ -217,11 +223,11 @@ class EcovacsMQTT extends Ecovacs {
                 if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
                     this.emitLastError();
                 }
-                tools.envLog(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
+                tools.envLogInfo(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
                 throw `Failure code ${response['errno']} (${response['error']})`;
             }
         } catch (e) {
-            tools.envLog("[EcovacsMQTT] Error making call to Ecovacs API: " + e.toString());
+            tools.envLogError(`error sending command: ${e.toString()}`);
         }
     }
 
@@ -292,12 +298,12 @@ class EcovacsMQTT extends Ecovacs {
      * Disconnect the MQTT client
      */
     disconnect() {
-        tools.envLog("[EcovacsMQTT] Closing MQTT Client...");
+        tools.envLogInfo(`[EcovacsMQTT] Closing MQTT Client...`);
         try {
             this.client.end();
-            tools.envLog("[EcovacsMQTT] Closed MQTT Client");
+            tools.envLogInfo(`[EcovacsMQTT] Closed MQTT Client`);
         } catch(e) {
-            tools.envLog("[EcovacsMQTT] Error closing MQTT Client:  %s", e.toString());
+            tools.envLogInfo(`[EcovacsMQTT] Error closing MQTT Client: ${e.toString()}`);
         }
     }
 }

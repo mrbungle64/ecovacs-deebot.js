@@ -141,7 +141,6 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleCleanInfo(payload) {
-        tools.envLog("[handleCleanInfo] payload: ", JSON.stringify(payload));
         this.currentSpotAreas = '';
         this.currentCustomAreaValues = '';
         if (payload['state'] === 'clean') {
@@ -184,7 +183,7 @@ class VacBot_950type extends VacBot {
                 const chargeStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
                 if (chargeStatus) {
                     this.chargeStatus = chargeStatus;
-                    tools.envLog("[VacBot] *** chargeStatus = %s", this.chargeStatus);
+                    tools.envLogResult(`chargeStatus = ${this.chargeStatus}`);
                 }
             } else if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'idle') {
                 // when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
@@ -192,7 +191,7 @@ class VacBot_950type extends VacBot {
                 this.run('GetChargeState');
             }
         }
-        tools.envLog("[VacBot] *** cleanReport = %s", this.cleanReport);
+        tools.envLogResult(`cleanReport: ${this.cleanReport}`);
     }
 
     /**
@@ -206,8 +205,8 @@ class VacBot_950type extends VacBot {
         } else {
             this.batteryIsLow = (this.batteryLevel >= 15);
         }
-        tools.envLog(`[VacBot] *** batteryLevel = ${this.batteryLevel}%`);
-        tools.envLog(`[VacBot] *** batteryIsLow = ${this.batteryIsLow}`);
+        tools.envLogResult(`batteryLevel: ${this.batteryLevel}%`);
+        tools.envLogResult(`batteryIsLow: ${this.batteryIsLow}`);
     }
 
     /**
@@ -230,10 +229,10 @@ class VacBot_950type extends VacBot {
                 const total = payload[index]["total"];
                 const lifespan = parseInt(left) / parseInt(total) * 100;
                 this.components[component] = Number(lifespan.toFixed(2));
-                tools.envLog("[VacBot] lifespan %s: %s", component, this.components[component]);
+                tools.envLogResult(`lifespan ${component}: ${this.components[component]}`);
             }
         }
-        tools.envLog("[VacBot] lifespan components : %s", JSON.stringify(this.components));
+        tools.envLogResult(`lifespan components : ${JSON.stringify(this.components)}`);
     }
 
     /**
@@ -259,7 +258,7 @@ class VacBot_950type extends VacBot {
                     a: chargePos[0]['a'],
                     changeFlag: true
                 };
-                tools.envLog("[VacBot] *** chargePosition = " + JSON.stringify(this.chargePosition));
+                tools.envLogResult(`chargePosition: ${JSON.stringify(this.chargePosition)}`);
             }
         }
         // as deebotPos and chargePos can also appear in other messages (CleanReport)
@@ -285,7 +284,7 @@ class VacBot_950type extends VacBot {
                     const chargePos = this.chargePosition.x + ',' + this.chargePosition.y;
                     distanceToChargingStation = mapTools.getDistanceToChargingStation(pos, chargePos);
                 }
-                tools.envLog("[VacBot] *** currentSpotAreaID = " + currentSpotAreaID);
+                tools.envLogResult(`currentSpotAreaID = '${currentSpotAreaID}'`);
                 this.deebotPosition = {
                     x: deebotPos['x'],
                     y: deebotPos['y'],
@@ -296,7 +295,7 @@ class VacBot_950type extends VacBot {
                     changeFlag: true,
                     distanceToChargingStation: distanceToChargingStation
                 };
-                tools.envLog("[VacBot] *** deebotPosition = " + JSON.stringify(this.deebotPosition));
+                tools.envLogResult(`deebotPosition: ${JSON.stringify(this.deebotPosition)}`);
             }
         }
     }
@@ -308,7 +307,7 @@ class VacBot_950type extends VacBot {
     handleEvt(payload) {
         tools.envLog("[VacBot] *** handleEvt payload = %s", JSON.stringify(payload));
         const code = payload['code'];
-        tools.envLog("[VacBot] *** handleEvt code = %s", code);
+        tools.envLogWarn(`Unhandled Evt code: '${code}'`);
     }
 
     /**
@@ -318,7 +317,7 @@ class VacBot_950type extends VacBot {
     handleSpeed(payload) {
         const speed = payload['speed'];
         this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
-        tools.envLog("[VacBot] *** cleanSpeed = %s", this.cleanSpeed);
+        tools.envLogResult(`cleanSpeed: ${this.cleanSpeed}`);
     }
 
     /**
@@ -332,10 +331,10 @@ class VacBot_950type extends VacBot {
         this.netInfoWifiSignal = payload['rssi'];
         this.netInfoMAC = payload['mac'];
 
-        tools.envLog("[VacBot] *** netInfoIP = %s", this.netInfoIP);
-        tools.envLog("[VacBot] *** netInfoWifiSSID = %s", this.netInfoWifiSSID);
-        tools.envLog("[VacBot] *** netInfoWifiSignal = %s", this.netInfoWifiSignal);
-        tools.envLog("[VacBot] *** netInfoMAC = %s", this.netInfoMAC);
+        tools.envLogResult(`netInfoIP: ${this.netInfoIP}`);
+        tools.envLogResult(`netInfoWifiSSID: ${this.netInfoWifiSSID}`);
+        tools.envLogResult(`netInfoWifiSignal: ${this.netInfoWifiSignal}`);
+        tools.envLogResult(`netInfoMAC: ${this.netInfoMAC}`);
     }
 
     /**
@@ -345,21 +344,21 @@ class VacBot_950type extends VacBot {
      */
     handleWaterInfo(payload) {
         this.waterLevel = payload['amount'];
-        tools.envLog("[VacBot] *** waterLevel = " + this.waterLevel);
+        tools.envLogResult(`waterLevel: ${this.waterLevel}`);
         this.waterboxInfo = payload['enable'];
-        tools.envLog("[VacBot] *** waterboxInfo = " + this.waterboxInfo);
+        tools.envLogResult(`waterboxInfo: ${this.waterboxInfo}`);
         if (payload.hasOwnProperty('type')) {
             // 1 = Regular
             // 2 = OZMO Pro
             this.moppingType = payload['type'];
-            tools.envLog("[VacBot] *** WaterInfo type = " + payload['type']);
+            tools.envLogResult(`WaterInfo type: ${this.moppingType}`);
         }
         if (payload.hasOwnProperty('sweepType')) {
             // Scrubbing pattern
             // 1 = Quick scrubbing
             // 2 = Deep scrubbing
             this.scrubbingType = payload['sweepType'];
-            tools.envLog("[VacBot] *** WaterInfo sweepType = " + payload['sweepType']);
+            tools.envLogResult(`WaterInfo sweepType: ${this.scrubbingType}`);
         }
     }
 
@@ -368,7 +367,6 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleAirDryingState(payload) {
-        tools.envLog("[handleAirDryingState] payload: ", JSON.stringify(payload));
         let airDryingStatus = null;
         const status = parseInt(payload['status']);
         if (status === 1) {
@@ -378,6 +376,7 @@ class VacBot_950type extends VacBot {
         }
         if (airDryingStatus) {
             this.airDryingStatus = airDryingStatus;
+            tools.envLogResult(`AirDryingState: ${payload['sweepType']}`);
         }
     }
 
@@ -408,7 +407,7 @@ class VacBot_950type extends VacBot {
      */
     handleSleepStatus(payload) {
         this.sleepStatus = payload['enable'];
-        tools.envLog("[VacBot] *** sleepStatus = " + this.sleepStatus);
+        tools.envLogResult(`sleepStatus: ${this.sleepStatus}`);
     }
 
     /**
@@ -416,7 +415,6 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleCleanLogs(payload) {
-        tools.envLog("[handleCleanLogs] payload: ", this.removeFromLogs(JSON.stringify(payload)));
         let logs = [];
         if (payload.hasOwnProperty('logs')) {
             logs = payload['logs'];
@@ -442,11 +440,11 @@ class VacBot_950type extends VacBot {
                         this.cleanLog_lastSquareMeters = squareMeters;
                         this.cleanLog_lastTotalTime = len;
                         this.cleanLog_lastTotalTimeString = totalTimeString;
-                        tools.envLog("[VacBot] *** cleanLog_lastImageUrl = " + this.cleanLog_lastImageUrl);
-                        tools.envLog("[VacBot] *** cleanLog_lastTimestamp = " + this.cleanLog_lastTimestamp);
-                        tools.envLog("[VacBot] *** cleanLog_lastSquareMeters = " + this.cleanLog_lastSquareMeters);
-                        tools.envLog("[VacBot] *** cleanLog_lastTotalTime = " + this.cleanLog_lastTotalTime);
-                        tools.envLog("[VacBot] *** cleanLog_lastTotalTimeString = " + this.cleanLog_lastTotalTimeString);
+                        tools.envLogResult(`cleanLog_lastImageUrl: ${this.cleanLog_lastImageUrl}`);
+                        tools.envLogResult(`cleanLog_lastTimestamp: ${this.cleanLog_lastTimestamp}`);
+                        tools.envLogResult(`cleanLog_lastSquareMeters: ${this.cleanLog_lastSquareMeters}`);
+                        tools.envLogResult(`cleanLog_lastTotalTime: ${this.cleanLog_lastTotalTime}`);
+                        tools.envLogResult(`cleanLog_lastTotalTimeString: ${this.cleanLog_lastTotalTimeString}`);
                     }
                     this.cleanLog[logEntry['id']] = {
                         'squareMeters': squareMeters,
@@ -462,7 +460,7 @@ class VacBot_950type extends VacBot {
                 }
             }
         }
-        tools.envLog("[VacBot] *** cleanLogs = " + this.cleanLog);
+        tools.envLogResult(`cleanLogs: ${JSON.stringify(this.cleanLog)}`);
     }
 
     /**
@@ -473,6 +471,9 @@ class VacBot_950type extends VacBot {
         this.cleanSum_totalSquareMeters = parseInt(payload['area']);
         this.cleanSum_totalSeconds = parseInt(payload['time']);
         this.cleanSum_totalNumber = parseInt(payload['count']);
+        tools.envLogResult(`totalSquareMeters: ${this.cleanSum_totalSquareMeters}`);
+        tools.envLogResult(`totalSeconds: ${this.cleanSum_totalSeconds}`);
+        tools.envLogResult(`totalNumber: ${this.cleanSum_totalNumber}`);
     }
 
     /**
@@ -481,7 +482,7 @@ class VacBot_950type extends VacBot {
      */
     handleRelocationState(payload) {
         this.relocationState = payload['state'];
-        tools.envLog("[VacBot] *** relocationState = " + this.relocationState);
+        tools.envLogResult(`relocationState: ${this.relocationState}`);
     }
 
     /**
@@ -490,7 +491,7 @@ class VacBot_950type extends VacBot {
      */
     handleVolume(payload) {
         this.volume = payload['volume'];
-        tools.envLog("[VacBot] *** volume = " + this.volume);
+        tools.envLogResult(`volume: ${this.volume}`);
     }
 
     /**
@@ -499,7 +500,7 @@ class VacBot_950type extends VacBot {
      */
     handleBreakPoint(payload) {
         this.breakPoint = payload['enable'];
-        tools.envLog("[VacBot] *** breakPoint = " + this.breakPoint);
+        tools.envLogResult(`breakPoint: ${this.breakPoint}`);
     }
 
     /**
@@ -508,13 +509,13 @@ class VacBot_950type extends VacBot {
      */
     handleBlock(payload) {
         this.block = payload['enable'];
-        tools.envLog("[VacBot] *** block = " + this.block);
+        tools.envLogResult(`block: ${this.block}`);
         if (payload.hasOwnProperty('start')) {
             this.blockTime = {
                 "from": payload['start'],
                 "to": payload['end']
             };
-            tools.envLog(this.blockTime);
+            tools.envLogResult(`blockTime: ${JSON.stringify(this.blockTime)}`);
         }
     }
 
@@ -533,7 +534,7 @@ class VacBot_950type extends VacBot {
      */
     handleAdvancedMode(payload) {
         this.advancedMode = payload['enable'];
-        tools.envLog("[VacBot] *** advancedMode = " + this.advancedMode);
+        tools.envLogResult(`advancedMode: ${this.advancedMode}`);
     }
 
     /**
@@ -542,7 +543,7 @@ class VacBot_950type extends VacBot {
      */
     handleTrueDetect(payload) {
         this.trueDetect = payload['enable'];
-        tools.envLog("[VacBot] *** trueDetect = " + this.trueDetect);
+        tools.envLogResult(`trueDetect: ${this.trueDetect}`);
     }
 
     /**
@@ -551,7 +552,7 @@ class VacBot_950type extends VacBot {
      */
     handleCleanCount(payload) {
         this.cleanCount = payload['count'];
-        tools.envLog("[VacBot] *** cleanCount = " + this.cleanCount);
+        tools.envLogResult(`cleanCount: ${this.cleanCount}`);
     }
 
     /**
@@ -563,7 +564,7 @@ class VacBot_950type extends VacBot {
             enabled: payload['enable'],
             period: payload['period']
         };
-        tools.envLog("[VacBot] *** dusterRemind = " + JSON.stringify(this.dusterRemind));
+        tools.envLogResult(`dusterRemind: ${JSON.stringify(this.dusterRemind)}`);
     }
 
     /**
@@ -572,12 +573,12 @@ class VacBot_950type extends VacBot {
      */
     handleCarpetPressure(payload) {
         this.carpetPressure = payload['enable'];
-        tools.envLog("[VacBot] *** carpetPressure = " + this.carpetPressure);
+        tools.envLogResult(`carpetPressure: ${this.carpetPressure}`);
     }
 
     handleCleanPreference(payload) {
         this.cleanPreference = payload['enable'];
-        tools.envLog("[VacBot] *** cleanPreference = " + this.cleanPreference);
+        tools.envLogResult(`cleanPreference: ${this.cleanPreference}`);
     }
 
     handleLiveLaunchPwdState(payload) {
@@ -585,24 +586,22 @@ class VacBot_950type extends VacBot {
             state: payload.state,
             hasPwd: payload.hasPwd
         };
-        tools.envLog("[VacBot] *** liveLaunchPwdState = " + JSON.stringify(this.liveLaunchPwdState));
+        tools.envLogResult(`liveLaunchPwdState: ${JSON.stringify(this.liveLaunchPwdState)}`);
     }
 
     handleWiFiList(payload) {
         if (payload.list) {
-            tools.envLog("[VacBot] *** Configured networks:");
+            tools.envLogInfo('Configured networks:');
             payload.list.forEach((network) => {
-                tools.envLog(
-                    network
-                );
+                tools.envLogInfo('- ' + network);
             });
         }
-        tools.envLog("[VacBot] *** My mac address: " + payload.mac);
+        tools.envLogInfo(`mac address: ${payload.mac}`);
     }
 
     handleOverTheAirUpdate(payload) {
         this.OTA = payload;
-        tools.envLog(`[OTA] status: ` + JSON.stringify(payload));
+        tools.envLogInfo(`ota status: ${JSON.stringify(payload)}`);
     }
 
     handleTimeZone(payload) {
@@ -614,7 +613,6 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleStats(payload) {
-        tools.envLog("[handleStats] payload: " + JSON.stringify(payload));
         this.currentStats = {
             'cleanedArea': payload['area'],
             'cleanedSeconds': payload['time'],
@@ -622,13 +620,15 @@ class VacBot_950type extends VacBot {
         };
         if (payload.hasOwnProperty('avoidCount')) {
             if (this.avoidedObstacles !== payload['avoidCount']) {
-                tools.envLog("[VacBot] *** whoops...there was something in the way");
+                tools.envLogNotice('whoops ... there might be something in the way');
+                tools.envLogResult(`avoidedObstacles: ${this.avoidedObstacles}`);
             }
             this.avoidedObstacles = payload['avoidCount'];
         }
         if (payload.hasOwnProperty('aiopen') && Number(payload['aiopen']) === 1) {
             if (JSON.stringify(this.obstacleTypes) !== JSON.stringify(payload['aitypes'])) {
-                tools.envLog("[VacBot] *** there was something new blocking my way 😕");
+                tools.envLogNotice('whoops ... there might be something new blocking my way');
+                tools.envLogResult(`obstacleTypes: ${this.obstacleTypes}`);
             }
             this.obstacleTypes = payload['aitypes'];
         }
@@ -680,6 +680,9 @@ class VacBot_950type extends VacBot {
             };
             this.schedule.push(object);
         }
+        if (this.schedule.length) {
+            tools.envLogResult(`schedule: ${JSON.stringify(this.schedule)}`);
+        }
     }
 
     /**
@@ -711,10 +714,10 @@ class VacBot_950type extends VacBot {
                 }
             }
         }
-        tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
-        tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
-        tools.envLog("[VacBot] *** currentMapIndex = " + this.currentMapIndex);
-        tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
+        tools.envLogResult(`currentMapName: ${this.currentMapName}`);
+        tools.envLogResult(`currentMapMID: ${this.currentMapMID}`);
+        tools.envLogResult(`currentMapIndex: ${this.currentMapIndex}`);
+        tools.envLogResult(`maps: ${JSON.stringify(this.maps)}`);
     }
 
     /**
@@ -735,10 +738,10 @@ class VacBot_950type extends VacBot {
                 1,
                 1)
         );
-        tools.envLog("[VacBot] *** currentMapName = " + this.currentMapName);
-        tools.envLog("[VacBot] *** currentMapMID = " + this.currentMapMID);
-        tools.envLog("[VacBot] *** currentMapIndex = " + this.currentMapIndex);
-        tools.envLog("[VacBot] *** maps = " + JSON.stringify(this.maps));
+        tools.envLogResult(`currentMapName: ${this.currentMapName}`);
+        tools.envLogResult(`currentMapMID: ${this.currentMapMID}`);
+        tools.envLogResult(`currentMapIndex: ${this.currentMapIndex}`);
+        tools.envLogResult(`maps: ${JSON.stringify(this.maps)}`);
     }
 
     /**
@@ -751,7 +754,7 @@ class VacBot_950type extends VacBot {
             if (this.currentMapMID) {
                 mapMID = this.currentMapMID;
             } else {
-                tools.envLog("[VacBot] *** mid is not a number. Skipping message for map");
+                tools.envLogWarn('mid is not a number. Skipping message for map');
                 return {mapsetEvent: 'skip'};
             }
         }
@@ -762,20 +765,19 @@ class VacBot_950type extends VacBot {
                     mapSpotAreas.push(new map.EcovacsMapSpotArea(payload['subsets'][mapIndex]['mssid']));
                 }
             }
-            tools.envLog("[VacBot] *** MapSpotAreas = " + JSON.stringify(mapSpotAreas));
+            tools.envLogResult(`MapSpotAreas: ${JSON.stringify(mapSpotAreas)}`);
             return {
                 mapsetEvent: 'MapSpotAreas',
                 mapsetData: mapSpotAreas
             };
         } else if ((payload['type'] === 'vw') || (payload['type'] === 'mw')) {
             if (typeof this.mapVirtualBoundaries[mapMID] === 'undefined') {
-                tools.envLog("[VacBot] *** initialize mapVirtualBoundaries for map " + mapMID);
+                tools.envLogResult(`initialize mapVirtualBoundaries for map ${mapMID}`);
                 this.mapVirtualBoundaries[mapMID] = new map.EcovacsMapVirtualBoundaries(mapMID);  //initialize array for mapVirtualBoundaries if not existing
                 this.mapVirtualBoundariesResponses[mapMID] = [false, false];
             }
             for (let mapIndex in payload['subsets']) {
                 if (payload['subsets'].hasOwnProperty(mapIndex)) {
-                    tools.envLog("[VacBot] *** push mapVirtualBoundaries for mssid " + payload['subsets'][mapIndex]['mssid']);
                     this.mapVirtualBoundaries[mapMID].push(new map.EcovacsMapVirtualBoundary(payload['subsets'][mapIndex]['mssid'], payload['type']));
                 }
             }
@@ -784,21 +786,21 @@ class VacBot_950type extends VacBot {
             } else if (payload['type'] === 'mw') {
                 this.mapVirtualBoundariesResponses[mapMID][1] = true;
             }
-            tools.envLog("[VacBot] *** mapVirtualBoundaries = " + JSON.stringify(this.mapVirtualBoundaries[mapMID]));
+            tools.envLogResult(`mapVirtualBoundaries: ${JSON.stringify(this.mapVirtualBoundaries[mapMID])}`);
             if (this.mapVirtualBoundariesResponses[mapMID][0] && this.mapVirtualBoundariesResponses[mapMID][1]) { //only return if both responses were processed
                 return {
                     mapsetEvent: 'MapVirtualBoundaries',
                     mapsetData: this.mapVirtualBoundaries[mapMID]
                 };
             } else {
-                tools.envLog("[VacBot] *** skip message for map  " + mapMID);
+                tools.envLogWarn(`skip message for map  ` + mapMID);
                 return {
                     mapsetEvent: 'skip'
                 };
             }
         }
 
-        tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(payload['type']));
+        tools.envLogWarn(`unknown mapset type: ${JSON.stringify(payload['type'])}`);
         return {mapsetEvent: 'error'};
     }
 
@@ -845,14 +847,14 @@ class VacBot_950type extends VacBot {
                 this.mapVirtualBoundaryInfos[mapMID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
             }
             this.mapVirtualBoundaryInfos[mapMID][payload['mssid']] = mapVirtualBoundaryInfo;
-            tools.envLog("[VacBot] *** MapVirtualBoundaryInfo = " + JSON.stringify(mapVirtualBoundaryInfo));
+            tools.envLogResult(`MapVirtualBoundaryInfo: ${JSON.stringify(mapVirtualBoundaryInfo)}`);
             return {
                 mapsubsetEvent: 'MapVirtualBoundaryInfo',
                 mapsubsetData: mapVirtualBoundaryInfo
             };
         }
 
-        tools.envLog("[VacBot] *** unknown mapset type = " + JSON.stringify(payload['type']));
+        tools.envLogWarn(`unknown mapset type: ${JSON.stringify(payload['type'])}`);
         return {
             mapsubsetEvent: 'error'
         };
@@ -880,7 +882,7 @@ class VacBot_950type extends VacBot {
         try {
             return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
         } catch (e) {
-            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+            tools.envLogError(`error calling getBase64PNG: ${e.message}`);
             throw new Error(e);
         }
     }
@@ -924,7 +926,7 @@ class VacBot_950type extends VacBot {
         try {
             return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
         } catch (e) {
-            tools.envLog('[VacBot] Error calling getBase64PNG: %s', e.message);
+            tools.envLogError(`error calling getBase64PNG: ${e.message}`);
             throw new Error(e);
         }
     }
@@ -945,8 +947,10 @@ class VacBot_950type extends VacBot {
         } else {
             this.errorDescription = 'unknown errorCode: ' + this.errorCode;
         }
-        tools.envLog("[VacBot] *** errorCode = " + this.errorCode);
-        tools.envLog("[VacBot] *** errorDescription = " + this.errorDescription);
+        if (this.errorCode !== '0') {
+            tools.envLogWarn(`errorCode: ${this.errorCode}`);
+            tools.envLogWarn(`errorDescription: ${this.errorDescription}`);
+        }
     }
 
     handleAirQuality(payload) {
@@ -959,13 +963,13 @@ class VacBot_950type extends VacBot {
             'temperature': payload['tem'],
             'humidity': payload['hum']
         };
-        tools.envLog("[VacBot] *** AirQuality particulateMatter25 = " + this.airQuality.particulateMatter25);
-        tools.envLog("[VacBot] *** AirQuality pm_10 = " + this.airQuality.pm_10);
-        tools.envLog("[VacBot] *** AirQuality particulateMatter10 = " + this.airQuality.particulateMatter10);
-        tools.envLog("[VacBot] *** AirQuality airQualityIndex = " + this.airQuality.airQualityIndex);
-        tools.envLog("[VacBot] *** AirQuality volatileOrganicCompounds = " + this.airQuality.volatileOrganicCompounds);
-        tools.envLog("[VacBot] *** AirQuality temperature = " + this.airQuality.temperature);
-        tools.envLog("[VacBot] *** AirQuality humidity = " + this.airQuality.humidity);
+        tools.envLogResult(`particulateMatter25: ${this.airQuality.particulateMatter25}`);
+        tools.envLogResult(`pm_10: ${this.airQuality.pm_10}`);
+        tools.envLogResult(`particulateMatter10: ${this.airQuality.particulateMatter10}`);
+        tools.envLogResult(`airQualityIndex: ${this.airQuality.airQualityIndex}`);
+        tools.envLogResult(`volatileOrganicCompounds: ${this.airQuality.volatileOrganicCompounds}`);
+        tools.envLogResult(`temperature: ${this.airQuality.temperature}`);
+        tools.envLogResult(`humidity: ${this.airQuality.humidity}`);
     }
 
     /**
@@ -974,7 +978,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetAiBlockPlate(payload) {
         this.aiBlockPlate = payload['on'];
-        tools.envLog("[VacBot] *** AiBlockPlate = " + this.aiBlockPlate);
+        tools.envLogResult(`aiBlockPlate: ${this.aiBlockPlate}`);
     }
 
     /**
@@ -983,7 +987,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetMonitorAirState(payload) {
         this.monitorAirState = payload['on'];
-        tools.envLog("[VacBot] *** MonitorAirState = " + this.monitorAirState);
+        tools.envLogResult(`monitorAirState: ${this.monitorAirState}`);
     }
 
     /**
@@ -992,7 +996,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetAngleFollow(payload) {
         this.angleFollow = payload['on'];
-        tools.envLog("[VacBot] *** AngleFollow = " + this.angleFollow);
+        tools.envLogResult(`angleFollow: ${this.angleFollow}`);
     }
 
     /**
@@ -1001,7 +1005,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetMic(payload) {
         this.mic = payload['on'];
-        tools.envLog("[VacBot] *** Mic = " + this.mic);
+        tools.envLogResult(`mic: ${this.mic}`);
     }
 
     /**
@@ -1010,7 +1014,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetVoiceSimple(payload) {
         this.voiceSimple = payload['on'];
-        tools.envLog("[VacBot] *** VoiceSimple = " + this.voiceSimple);
+        tools.envLogResult(`voiceSimple: ${this.voiceSimple}`);
     }
 
     /**
@@ -1019,7 +1023,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetDrivingWheel(payload) {
         this.drivingWheel = payload['on'];
-        tools.envLog("[VacBot] *** DrivingWheel = " + this.drivingWheel);
+        tools.envLogResult(`drivingWheel: ${this.drivingWheel}`);
     }
 
     /**
@@ -1028,7 +1032,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetChildLock(payload) {
         this.childLock = payload['on'];
-        tools.envLog("[VacBot] *** ChildLock = " + this.childLock);
+        tools.envLogResult(`childLock: ${this.childLock}`);
     }
 
     /**
@@ -1037,7 +1041,7 @@ class VacBot_950type extends VacBot {
      */
     handleVoiceAssistantState(payload) {
         this.voiceAssistantState = payload['enable'];
-        tools.envLog("[VacBot] *** VoiceAssistantState = " + this.voiceAssistantState);
+        tools.envLogResult(`voiceAssistantState: ${this.voiceAssistantState}`);
     }
 
     /**
@@ -1049,8 +1053,7 @@ class VacBot_950type extends VacBot {
             'yiko': payload['yiko'],
             'video': payload['video']
         };
-        tools.envLog("[VacBot] *** HumanoidFollow");
-        tools.envLog(this.humanoidFollow);
+        tools.envLogResult(`humanoidFollow: ${JSON.stringify(this.humanoidFollow)}`);
     }
 
     /**
@@ -1059,7 +1062,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetAutonomousClean(payload) {
         this.autonomousClean = payload['on'];
-        tools.envLog("[VacBot] *** AutonomousClean = " + this.autonomousClean);
+        tools.envLogResult(`autonomousClean: ${this.autonomousClean}`);
     }
 
     /**
@@ -1072,8 +1075,7 @@ class VacBot_950type extends VacBot {
             'timeout': payload['time'],
             'name': payload['name']
         };
-        tools.envLog("[VacBot] *** BlueSpeaker");
-        tools.envLog(this.bluetoothSpeaker);
+        tools.envLogResult(`bluetoothSpeaker: ${JSON.stringify(this.bluetoothSpeaker)}`);
     }
 
     /**
@@ -1082,7 +1084,7 @@ class VacBot_950type extends VacBot {
      */
     handleAngleWakeup(payload) {
         this.angleWakeup = payload['on'];
-        tools.envLog("[VacBot] *** AngleWakeup = " + this.angleWakeup);
+        tools.envLogResult(`angleWakeup: ${this.angleWakeup}`);
     }
 
     /**
@@ -1091,7 +1093,7 @@ class VacBot_950type extends VacBot {
      */
     handleEfficiency(payload) {
         this.efficiency = payload['efficiency'];
-        tools.envLog("[VacBot] *** Efficiency = " + this.efficiency);
+        tools.envLogResult(`efficiency: ${this.efficiency}`);
     }
 
     /**
@@ -1100,7 +1102,7 @@ class VacBot_950type extends VacBot {
      */
     handleGetAtmoLight(payload) {
         this.atmoLightIntensity = payload['intensity'];
-        tools.envLog("[VacBot] *** AtmoLight(intensity) = " + this.atmoLightIntensity + " of " + payload['total']);
+        tools.envLogResult(`atmoLightIntensity: ${this.atmoLightIntensity} of ${payload['total']}`);
     }
 
     /**
@@ -1117,10 +1119,9 @@ class VacBot_950type extends VacBot {
                 'meminfo': event['meminfo'],
                 'pos': event['pos']
             };
-            tools.envLog("[VacBot] *** System informations:");
-            tools.envLog(this.sysinfo);
+            tools.envLogResult(`system information: ${JSON.stringify(this.sysinfo)}`);
         } catch (e) {
-            tools.envLog("[VacBot] Error handling System information: " + e.toString());
+            tools.envLogWarn(`error handling System information: ${e.toString()}`);
         }
     }
 
@@ -1137,6 +1138,7 @@ class VacBot_950type extends VacBot {
                 'aqEnd': payload['aqEnd']
             }
         };
+        tools.envLogResult(`airbotAutoModel: ${JSON.stringify(this.airbotAutoModel)}`);
     }
 
     /**
@@ -1175,7 +1177,7 @@ class VacBot_950type extends VacBot {
             'mapId': payload['mid'],
             'locationPoints': payload['items']
         };
-        tools.envLog("[VacBot] *** Obstacles: " + payload['items']);
+        tools.envLogResult(`areaPoint: ${JSON.stringify(this.areaPoint)}`);
     }
 
     handleTask(type, payload) {
@@ -1190,16 +1192,16 @@ class VacBot_950type extends VacBot {
         if (payload.hasOwnProperty('stopReason')) {
             // why has it stopped?
         }
-        tools.envLog("[VacBot] *** Task: " + JSON.stringify(this.currentTask));
+        tools.envLogResult(`Task: ${JSON.stringify(this.currentTask)}`);
     }
 
     handleAudioCallState(event) {
-        tools.envLog("[VacBot] *** Unhandled AudioCallState: " + JSON.stringify(event));
+        tools.envLogResult(`Unhandled AudioCallState: ${JSON.stringify(event)}`);
     }
 
     handleDModule(payload) {
         this.dmodule = payload;
-        tools.envLog("[VacBot] *** DModule: " + JSON.stringify(payload));
+        tools.envLogResult(`DModule: ${JSON.stringify(payload)}`);
     }
 
     /**

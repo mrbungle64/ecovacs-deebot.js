@@ -70,7 +70,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             } else if (command.api === constants.CLEANLOGS_PATH) {
                 this.handleMessage(command.name, messagePayload, "logResponse");
             } else {
-                tools.envLog("[EcovacsMQTT_JSON] handleCommandResponse() invalid response");
+                tools.envLogWarn(`handleCommandResponse invalid response`);
             }
         }
     }
@@ -90,13 +90,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (type === "incoming") {
             eventName = topic.split('/')[2];
             message = JSON.parse(message);
+            tools.envLogMqtt(topic);
+            tools.envLogMqtt(eventName);
             if (message['body'] && message['body']['data']) {
                 payload = message['body']['data'];
             }
+            tools.envLogPayload(payload);
         } else if (type === "response") {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
             payload = message['body']['data'];
+            tools.envLogPayload(payload);
             if (message['header']) {
                 const header = message['header'];
                 if (this.vacBot.firmwareVersion !== header['fwVer']) {
@@ -108,6 +112,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
             }
         } else if (type === "logResponse") {
+            tools.envLogInfo(`got message with type 'logResponse'`);
+            tools.envLogPayload(message);
             resultCodeMessage = message['ret'];
         }
 
@@ -212,7 +218,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
                     this.emit("Maps", this.vacBot.maps);
                 } catch (e) {
-                    tools.envLog("[EcovacsMQTT_JSON] Error on handling MapInfo_V2: %s", e.message);
+                    tools.envLogError(`error on handling MapInfo_V2: ${e.message}`);
                 }
                 break;
             case "CachedMapInfo":
@@ -223,12 +229,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
                     this.emit("Maps", this.vacBot.maps);
                 } catch (e) {
-                    tools.envLog("[EcovacsMQTT_JSON] Error on handling CachedMapInfo: %s", e.message);
+                    tools.envLogError(`error on handling CachedMapInfo: ${e.message}`);
                 }
                 break;
             case "MapInfo":
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
-                    tools.envLog("[EcovacsMQTT_JSON] getMapInfo responded: %s", JSON.stringify(payload));
+                    tools.envLogWarn(`getMapInfo responded: ${JSON.stringify(payload)}`);
                 } else if (tools.isCanvasModuleAvailable()) {
                     let mapImage = await this.vacBot.handleMapInfo(payload);
                     if (mapImage !== null) {
@@ -448,7 +454,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'MapState':
             case 'Recognization':
                 if (payload) {
-                    tools.envLog(`[EcovacsMQTT_JSON] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
+                    tools.envLogInfo(`payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
                 break;
             case 'AirQuality':
@@ -566,14 +572,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'FwBuryPoint-bd_relocation':
-                tools.envLog("[EcovacsMQTT_JSON] Relocating...");
                 break;
             case 'FwBuryPoint-bd_setting-evt':
                 // Event -> Config stored...
                 break;
             case 'FwBuryPoint-bd_setting':
-                tools.envLog("[EcovacsMQTT_JSON] Saved settings:");
-                tools.envLog(payload);
                 break;
             case 'FwBuryPoint-bd_air-quality':
                 this.vacBot.handleAirQuality(
@@ -624,7 +627,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 */
                 break;
             case 'onFwBuryPoint-bd_errorcode':
-                tools.envLog("[EcovacsMQTT_JSON] Got error: " + payload['body']['code']);
                 break;
             case 'FwBuryPoint-bd_task-return-normal-start':
             case 'FwBuryPoint-bd_task-return-normal-stop':
@@ -728,26 +730,26 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'Humidity':
             case 'Temperature':
                 if (payload) {
-                    tools.envLog(`[AirPurifier] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
+                    tools.envLogInfo(`[AirPurifier] Payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
                 break;
             case 'setVoice':
-                tools.envLog(`[EcovacsMQTT_JSON] SETVOICE:`);
-                tools.envLog(payload);
+                tools.envLogInfo(`[EcovacsMQTT_JSON] SETVOICE:`);
+                tools.envLogInfo(payload);
                 this.emit('SetVoice', payload);
                 break;
             case 'Voice':
                 if (payload && payload.downloads) {
                     payload.downloads.forEach((dlObject) => {
-                        if(dlObject.status === "dl") {
-                            tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
+                        if (dlObject.status === "dl") {
+                            tools.envLogInfo(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
                             this.emit('VoiceDownloadProgress', dlObject);
-                        } else if(dlObject.status === "dld") {
-                            tools.envLog(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
+                        } else if (dlObject.status === "dld") {
+                            tools.envLogInfo(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
                             this.emit('VoiceDownloadComplete', dlObject);
                         } else {
-                            tools.envLog(`[EcovacsMQTT_JSON] unknown download state`);
-                            tools.envLog(dlObject);
+                            tools.envLogInfo(`[EcovacsMQTT_JSON] unknown download state`);
+                            tools.envLogInfo(dlObject);
                         }
                     });
                 }
@@ -757,7 +759,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit('WifiList', payload);
                 break;
             case 'ListenMusic':
-                tools.envLog(event);
+                tools.envLogInfo(event);
                 break;
             case 'Ota':
                 this.vacBot.handleOverTheAirUpdate(payload);
@@ -771,7 +773,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleAudioCallState(event);
                 break;
             default:
-                tools.envLog(`[EcovacsMQTT_JSON] Payload for unknown command ${command}: ${JSON.stringify(payload)}`);
+                tools.envLogWarn(`got payload for unknown command '${command}': ${JSON.stringify(payload)}`);
                 break;
         }
     }
@@ -834,7 +836,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         try {
             let content = JSON.parse(payload['content']);
             const fwBuryMessage = content["rn"];
-            tools.envLog(fwBuryMessage);
+            tools.envLogInfo(fwBuryMessage);
             let dVal = content['d']['body']['data']['d_val'];
             let dValObject = null;
 
@@ -935,7 +937,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.run('GetContinuousCleaning');
             }
         } catch (e) {
-            tools.envLog(`Error handling onFwBuryPoint payload: ${payload}`);
+            tools.envLogWarn(`error handling onFwBuryPoint payload: '${e.message}'`);
+            tools.envLogPayload(payload);
         }
     }
 }
