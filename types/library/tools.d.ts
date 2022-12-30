@@ -108,4 +108,19 @@ export function isValidVirtualWallType(type: string): boolean;
  * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
  */
 export function paramsToQueryList(params: any): string;
+export function envLogCommand(message: any): void;
+export function envLogError(message: any): void;
+export function envLogHeader(message: any): void;
+export function envLogInfo(message: any): void;
+export function envLogMqtt(message: any): void;
+export function envLogNotice(message: any): void;
+export function envLogPayload(message: any): void;
+export function envLogRaw(message: any): void;
+export function envLogResult(message: any): void;
+export function envLogSuccess(message: any): void;
+export function envLogWarn(message: any): void;
+export function logError(message: any): void;
+export function logEvent(event: any, value: any): void;
+export function logInfo(message: any): void;
+export function logWarn(message: any): void;
 //# sourceMappingURL=tools.d.ts.map

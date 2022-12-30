@@ -7,6 +7,7 @@ declare class VacBot_950type extends VacBot {
     breakPoint: any;
     block: any;
     autoEmpty: any;
+    autoEmptyStatus: any;
     advancedMode: any;
     trueDetect: any;
     cleanCount: number;
@@ -153,7 +154,7 @@ declare class VacBot_950type extends VacBot {
      */
     handleWaterInfo(payload: any): void;
     /**
-     * Handle the payload of the `AirDring` response/message (air drying status)
+     * Handle the payload of the `AirDring` (sic) response/message (air drying status)
      * @param {Object} payload
      */
     handleAirDryingState(payload: any): void;
@@ -198,32 +199,32 @@ declare class VacBot_950type extends VacBot {
      */
     handleBlock(payload: any): void;
     /**
-     * Handle the payload of the `AutoEmpty` response/message
+     * Handle the payload of the 'AutoEmpty' response/message
      * @param {Object} payload
      */
     handleAutoEmpty(payload: any): void;
     /**
-     * Handle the payload of the `AdvancedMode` response/message
+     * Handle the payload of the 'AdvancedMode' response/message
      * @param {Object} payload
      */
     handleAdvancedMode(payload: any): void;
     /**
-     * Handle the payload of the `TrueDetect` response/message
+     * Handle the payload of the 'TrueDetect' response/message
      * @param {Object} payload
      */
     handleTrueDetect(payload: any): void;
     /**
-     * Handle the payload of the `CleanCount` response/message
+     * Handle the payload of the 'CleanCount' response/message
      * @param {Object} payload
      */
     handleCleanCount(payload: any): void;
     /**
-     * Handle the payload of the `DusterRemind` response/message
+     * Handle the payload of the 'DusterRemind' response/message
      * @param {Object} payload
      */
     handleDusterRemind(payload: any): void;
     /**
-     * Handle the payload of the `CarpertPressure` (sic) response/message
+     * Handle the payload of the 'CarpertPressure' (sic) response/message
      * @param {Object} payload
      */
     handleCarpetPressure(payload: any): void;
@@ -233,27 +234,27 @@ declare class VacBot_950type extends VacBot {
     handleOverTheAirUpdate(payload: any): void;
     handleTimeZone(payload: any): void;
     /**
-     * Handle the payload of the `Stats` response/message
+     * Handle the payload of the 'Stats' response/message
      * @param {Object} payload
      */
     handleStats(payload: any): void;
     /**
-     * Handle the payload of the `Sched` response/message (Schedule)
+     * Handle the payload of the 'Sched' response/message (Schedule)
      * @param {Object} payload
      */
     handleSched(payload: any): void;
     /**
-     * Handle the payload of the `CachedMapInfo` response/message
+     * Handle the payload of the 'CachedMapInfo' response/message
      * @param {Object} payload
      */
     handleCachedMapInfo(payload: any): void;
     /**
-     * Handle the payload of the `MapInfo_V2` response/message
+     * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
      */
     handleMapInfoV2(payload: any): void;
     /**
-     * Handle the payload of the `MapSet` response/message
+     * Handle the payload of the 'MapSet' response/message
      * @param {Object} payload
      */
     handleMapSet(payload: any): {
@@ -264,13 +265,13 @@ declare class VacBot_950type extends VacBot {
         mapsetData: any;
     };
     /**
-     * Handle the payload of the `MapSubSet` response/message
+     * Handle the payload of the 'MapSubSet' response/message
      * @param {Object} payload
      * @returns {Promise<Object>}
      */
     handleMapSubset(payload: any): Promise<any>;
     /**
-     * Handle the payload of the `MapInfo` response/message
+     * Handle the payload of the 'MapInfo' response/message
      * @param {Object} payload
      * @returns {Promise<Object>}
      */
@@ -292,100 +293,100 @@ declare class VacBot_950type extends VacBot {
         mapBase64PNG: string;
     }>;
     /**
-     * Handle the payload of the `Error` response/message
+     * Handle the payload of the 'Error' response/message
      * @param {Object} payload
      */
     handleResponseError(payload: any): void;
     handleAirQuality(payload: any): void;
     /**
-     * Handle the payload of the `AiBlockPlate` response/message
+     * Handle the payload of the 'AiBlockPlate' response/message
      * @param {Object} payload
      */
     handleGetAiBlockPlate(payload: any): void;
     /**
-     * Handle the payload of the `MonitorAirState` response/message
+     * Handle the payload of the 'MonitorAirState' response/message
      * @param {Object} payload
      */
     handleGetMonitorAirState(payload: any): void;
     /**
-     * Handle the payload of the `AngleFollow` response/message
+     * Handle the payload of the 'AngleFollow' response/message
      * @param {Object} payload
      */
     handleGetAngleFollow(payload: any): void;
     /**
-     * Handle the payload of the `Mic` response/message
+     * Handle the payload of the 'Mic' response/message
      * @param {Object} payload
      */
     handleGetMic(payload: any): void;
     /**
-     * Handle the payload of the `VoiceSimple` response/message
+     * Handle the payload of the 'VoiceSimple' response/message
      * @param {Object} payload
      */
     handleGetVoiceSimple(payload: any): void;
     voiceSimple: any;
     /**
-     * Handle the payload of the `DrivingWheel` response/message
+     * Handle the payload of the 'DrivingWheel' response/message
      * @param {Object} payload
      */
     handleGetDrivingWheel(payload: any): void;
     /**
-     * Handle the payload of the `ChildLock` response/message
+     * Handle the payload of the 'ChildLock' response/message
      * @param {Object} payload
      */
     handleGetChildLock(payload: any): void;
     /**
-     * Handle the payload of the `VoiceAssistantState` response/message
+     * Handle the payload of the 'VoiceAssistantState' response/message
      * @param {Object} payload
      */
     handleVoiceAssistantState(payload: any): void;
     voiceAssistantState: any;
     /**
-     * Handle the payload of the `HumanoidFollow` response/message
+     * Handle the payload of the 'HumanoidFollow' response/message
      * @param {Object} payload
      */
     handleHumanoidFollow(payload: any): void;
     /**
-     * Handle the payload of the `AutonomousClean` response/message
+     * Handle the payload of the 'AutonomousClean' response/message
      * @param {Object} payload
      */
     handleGetAutonomousClean(payload: any): void;
     /**
-     * Handle the payload of the `BlueSpeaker` response/message
+     * Handle the payload of the 'BlueSpeaker' response/message
      * @param {Object} payload
      */
     handleGetBlueSpeaker(payload: any): void;
     /**
-     * Handle the payload of the `AngleWakeup` response/message
+     * Handle the payload of the 'AngleWakeup' response/message
      * @param {Object} payload
      */
     handleAngleWakeup(payload: any): void;
     /**
-     * Handle the payload of the `Efficiency` response/message
+     * Handle the payload of the 'Efficiency' response/message
      * @param {Object} payload
      */
     handleEfficiency(payload: any): void;
     /**
-     * Handle the payload of the `Efficiency` response/message
+     * Handle the payload of the 'Efficiency' response/message
      * @param {Object} payload
      */
     handleGetAtmoLight(payload: any): void;
     /**
-     * Handle the payload of the `(FwBuryPoint-)Sysinfo` response/message
+     * Handle the payload of the '(FwBuryPoint-)Sysinfo' response/message
      * @param {Object} payload
      */
     handleSysinfo(payload: any): void;
     /**
-     * Handle the payload of the `AirbotAutoMode` response/message
+     * Handle the payload of the 'AirbotAutoMode' response/message
      * @param {Object} payload
      */
     handleAirbotAutoModel(payload: any): void;
     /**
-     * Handle the payload of the `ThreeModule` (UV, Humidifier, AirFreshener) response/message
+     * Handle the payload of the 'ThreeModule' (UV, Humidifier, AirFreshener) response/message
      * @param {Object} payload
      */
     handleThreeModule(payload: any): void;
     /**
-     * Handle the payload of the `AreaPoint` response/message
+     * Handle the payload of the 'AreaPoint' response/message
      * @param {Object} payload
      */
     handleAreaPoint(payload: any): void;

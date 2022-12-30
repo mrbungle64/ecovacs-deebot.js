@@ -116,12 +116,12 @@ declare class EcovacsAPI {
      */
     getPortalPath(loginPath: string): string;
     /**
-     * @param {string} api - the API path
+     * @param {string} loginPath - the API path
      * @param {string} func - the API function to be called
      * @param {Object} args - an object with the params for the POST request
      * @returns {Promise<Object>}
      */
-    callPortalApi(api: string, func: string, args: any): Promise<any>;
+    callPortalApi(loginPath: string, func: string, args: any): Promise<any>;
     /**
      * It calls the API to login by access token
      * @returns {Promise<Object>} an object including user token and user ID
@@ -196,6 +196,10 @@ declare class EcovacsAPI {
      * @returns {boolean} a boolean value
      */
     getCanvasModuleIsAvailable(): boolean;
+    logInfo(message: any): void;
+    logWarn(message: any): void;
+    logError(message: any): void;
+    logEvent(event: any, value: any): void;
 }
 declare namespace EcovacsAPI {
     const PUBLIC_KEY: string;

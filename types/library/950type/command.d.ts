@@ -89,9 +89,6 @@ export class GetDusterRemind extends VacBotCommand {
 export class GetError extends VacBotCommand {
     constructor();
 }
-export class GetLastCleanLog extends VacBotCommand {
-    constructor();
-}
 export class GetLifeSpan extends VacBotCommand {
     constructor(componentsArray: any);
 }
@@ -355,7 +352,7 @@ declare class AddMapSubSet extends VacBotCommand {
     constructor(mapID: any, coordinates: any, mapSubSetType?: string);
 }
 declare class VacBotCommand {
-    constructor(name: any, args?: {}, api?: string);
+    constructor(name: any, payload?: {}, api?: string);
     name: any;
     args: {};
     api: string;
