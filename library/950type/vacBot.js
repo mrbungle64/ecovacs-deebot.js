@@ -156,7 +156,7 @@ class VacBot_950type extends VacBot {
             }
             if ((type === 'spotArea') || (type === 'customArea')) {
                 let areaValues;
-                if (typeof content === "object") {
+                if (typeof content === `object`) {
                     areaValues = content['value'];
                 } else {
                     areaValues = content;
@@ -217,16 +217,16 @@ class VacBot_950type extends VacBot {
     handleLifespan(payload) {
         for (let index in payload) {
             if (payload[index]) {
-                const type = payload[index]["type"];
+                const type = payload[index][`type`];
                 let component = type;
                 if (dictionary.COMPONENT_FROM_ECOVACS[type]) {
                     component = dictionary.COMPONENT_FROM_ECOVACS[type];
                 } else {
-                    tools.envLog('[VacBot] Unknown life span component type: %s', type);
+                    tools.envLogWarn(`unknown life span component type: ${type}`);
                     this.ecovacs.emit('Debug', `Unknown life span component type: ${type}`);
                 }
-                const left = payload[index]["left"];
-                const total = payload[index]["total"];
+                const left = payload[index]['left'];
+                const total = payload[index]['total'];
                 const lifespan = parseInt(left) / parseInt(total) * 100;
                 this.components[component] = Number(lifespan.toFixed(2));
                 tools.envLogResult(`lifespan ${component}: ${this.components[component]}`);
@@ -305,7 +305,6 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload - The payload of the event.
      */
     handleEvt(payload) {
-        tools.envLog("[VacBot] *** handleEvt payload = %s", JSON.stringify(payload));
         const code = payload['code'];
         tools.envLogWarn(`Unhandled Evt code: '${code}'`);
     }
@@ -363,7 +362,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `AirDring` response/message (air drying status)
+     * Handle the payload of the `AirDring` (sic) response/message (air drying status)
      * @param {Object} payload
      */
     handleAirDryingState(payload) {
@@ -385,17 +384,11 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleChargeState(payload) {
-        tools.envLog("[handleChargeState] payload: ", JSON.stringify(payload));
-        let status = null;
-        const isCharging = parseInt(payload['isCharging']);
-        if (isCharging === 1) {
-            status = 'charging';
-        } else if (isCharging === 0) {
-            status = 'idle';
+        this.chargeStatus = 'idle';
+        if (parseInt(payload['isCharging']) === 1) {
+            this.chargeStatus = 'charging';
         }
-        if (status) {
-            this.chargeStatus = status;
-        }
+        this.chargeMode = 'slot';
         if (payload.hasOwnProperty('mode')) {
             this.chargeMode = payload['mode'];
         }
@@ -512,15 +505,15 @@ class VacBot_950type extends VacBot {
         tools.envLogResult(`block: ${this.block}`);
         if (payload.hasOwnProperty('start')) {
             this.blockTime = {
-                "from": payload['start'],
-                "to": payload['end']
+                'from': payload['start'],
+                'to': payload['end']
             };
             tools.envLogResult(`blockTime: ${JSON.stringify(this.blockTime)}`);
         }
     }
 
     /**
-     * Handle the payload of the `AutoEmpty` response/message
+     * Handle the payload of the 'AutoEmpty' response/message
      * @param {Object} payload
      */
     handleAutoEmpty(payload) {
@@ -529,7 +522,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `AdvancedMode` response/message
+     * Handle the payload of the 'AdvancedMode' response/message
      * @param {Object} payload
      */
     handleAdvancedMode(payload) {
@@ -538,7 +531,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `TrueDetect` response/message
+     * Handle the payload of the 'TrueDetect' response/message
      * @param {Object} payload
      */
     handleTrueDetect(payload) {
@@ -547,7 +540,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `CleanCount` response/message
+     * Handle the payload of the 'CleanCount' response/message
      * @param {Object} payload
      */
     handleCleanCount(payload) {
@@ -556,7 +549,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `DusterRemind` response/message
+     * Handle the payload of the 'DusterRemind' response/message
      * @param {Object} payload
      */
     handleDusterRemind(payload) {
@@ -568,7 +561,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `CarpertPressure` (sic) response/message
+     * Handle the payload of the 'CarpertPressure' (sic) response/message
      * @param {Object} payload
      */
     handleCarpetPressure(payload) {
@@ -605,11 +598,11 @@ class VacBot_950type extends VacBot {
     }
 
     handleTimeZone(payload) {
-        this.timezone = "GMT" + (payload.tzm > 0 ? "+" : "-") + (payload.tzm / 60) + ":00";
+        this.timezone = 'GMT' + (payload.tzm > 0 ? '+' : '-') + (payload.tzm / 60) + ':00';
     }
 
     /**
-     * Handle the payload of the `Stats` response/message
+     * Handle the payload of the 'Stats' response/message
      * @param {Object} payload
      */
     handleStats(payload) {
@@ -635,7 +628,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `Sched` response/message (Schedule)
+     * Handle the payload of the 'Sched' response/message (Schedule)
      * @param {Object} payload
      */
     handleSched(payload) {
@@ -686,17 +679,17 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `CachedMapInfo` response/message
+     * Handle the payload of the 'CachedMapInfo' response/message
      * @param {Object} payload
      */
     handleCachedMapInfo(payload) {
         this.currentMapName = 'unknown';
-        this.maps = {"maps": []};
+        this.maps = {'maps': []};
         const infoEvent = payload['info'];
         for (let mapIndex in infoEvent) {
             if (infoEvent.hasOwnProperty(mapIndex)) {
                 if (infoEvent[mapIndex]['mid'] !== '0') {
-                    this.maps["maps"].push(
+                    this.maps['maps'].push(
                         new map.EcovacsMap(
                             infoEvent[mapIndex]['mid'],
                             infoEvent[mapIndex]['index'],
@@ -721,7 +714,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `MapInfo_V2` response/message
+     * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
      */
     handleMapInfoV2(payload) {
@@ -745,7 +738,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `MapSet` response/message
+     * Handle the payload of the 'MapSet' response/message
      * @param {Object} payload
      */
     handleMapSet(payload) {
@@ -805,7 +798,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `MapSubSet` response/message
+     * Handle the payload of the 'MapSubSet' response/message
      * @param {Object} payload
      * @returns {Promise<Object>}
      */
@@ -861,26 +854,28 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `MapInfo` response/message
+     * Handle the payload of the 'MapInfo' response/message
      * @param {Object} payload
      * @returns {Promise<Object>}
      */
     async handleMapInfo(payload) {
-        let mapMID = payload['mid'];
+        const mapMID = payload['mid'];
+        const type = payload['type'];
         if (isNaN(mapMID)) {
             return null;
         }
         if (typeof this.mapImages[mapMID] === 'undefined') {
             this.mapImages[mapMID] = [];
         }
-        if (typeof this.mapImages[mapMID][payload['type']] === 'undefined') {
-            this.mapImages[mapMID][payload['type']] = new map.EcovacsMapImage(mapMID, payload['type'], payload['totalWidth'], payload['totalHeight'], payload['pixel'], payload['totalCount']);
+        if (typeof this.mapImages[mapMID][type] === 'undefined') {
+            const ecovacsMapImage = new map.EcovacsMapImage(mapMID, type, payload['totalWidth'], payload['totalHeight'], payload['pixel'], payload['totalCount']);
+            this.mapImages[mapMID][type] = ecovacsMapImage;
         }
         if (payload['pieceValue'] !== '') {
-            await this.mapImages[mapMID][payload['type']].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value']);
+            await this.mapImages[mapMID][type].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value']);
         }
         try {
-            return await this.mapImages[mapMID][payload['type']].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+            return await this.mapImages[mapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
         } catch (e) {
             tools.envLogError(`error calling getBase64PNG: ${e.message}`);
             throw new Error(e);
@@ -932,7 +927,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `Error` response/message
+     * Handle the payload of the 'Error' response/message
      * @param {Object} payload
      */
     handleResponseError(payload) {
@@ -945,7 +940,7 @@ class VacBot_950type extends VacBot {
                 this.errorDescription = this.errorDescription + ': ' + payload.error;
             }
         } else {
-            this.errorDescription = 'unknown errorCode: ' + this.errorCode;
+            this.errorDescription = `unknown errorCode: ${this.errorCode}`;
         }
         if (this.errorCode !== '0') {
             tools.envLogWarn(`errorCode: ${this.errorCode}`);
@@ -973,7 +968,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `AiBlockPlate` response/message
+     * Handle the payload of the 'AiBlockPlate' response/message
      * @param {Object} payload
      */
     handleGetAiBlockPlate(payload) {
@@ -982,7 +977,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `MonitorAirState` response/message
+     * Handle the payload of the 'MonitorAirState' response/message
      * @param {Object} payload
      */
     handleGetMonitorAirState(payload) {
@@ -991,7 +986,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `AngleFollow` response/message
+     * Handle the payload of the 'AngleFollow' response/message
      * @param {Object} payload
      */
     handleGetAngleFollow(payload) {
@@ -1000,7 +995,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `Mic` response/message
+     * Handle the payload of the 'Mic' response/message
      * @param {Object} payload
      */
     handleGetMic(payload) {
@@ -1009,7 +1004,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `VoiceSimple` response/message
+     * Handle the payload of the 'VoiceSimple' response/message
      * @param {Object} payload
      */
     handleGetVoiceSimple(payload) {
@@ -1018,7 +1013,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `DrivingWheel` response/message
+     * Handle the payload of the 'DrivingWheel' response/message
      * @param {Object} payload
      */
     handleGetDrivingWheel(payload) {
@@ -1027,7 +1022,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `ChildLock` response/message
+     * Handle the payload of the 'ChildLock' response/message
      * @param {Object} payload
      */
     handleGetChildLock(payload) {
@@ -1036,7 +1031,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `VoiceAssistantState` response/message
+     * Handle the payload of the 'VoiceAssistantState' response/message
      * @param {Object} payload
      */
     handleVoiceAssistantState(payload) {
@@ -1045,7 +1040,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `HumanoidFollow` response/message
+     * Handle the payload of the 'HumanoidFollow' response/message
      * @param {Object} payload
      */
     handleHumanoidFollow(payload) {
@@ -1057,7 +1052,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `AutonomousClean` response/message
+     * Handle the payload of the 'AutonomousClean' response/message
      * @param {Object} payload
      */
     handleGetAutonomousClean(payload) {
@@ -1066,7 +1061,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `BlueSpeaker` response/message
+     * Handle the payload of the 'BlueSpeaker' response/message
      * @param {Object} payload
      */
     handleGetBlueSpeaker(payload) {
@@ -1079,7 +1074,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `AngleWakeup` response/message
+     * Handle the payload of the 'AngleWakeup' response/message
      * @param {Object} payload
      */
     handleAngleWakeup(payload) {
@@ -1088,7 +1083,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `Efficiency` response/message
+     * Handle the payload of the 'Efficiency' response/message
      * @param {Object} payload
      */
     handleEfficiency(payload) {
@@ -1097,7 +1092,7 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `Efficiency` response/message
+     * Handle the payload of the 'Efficiency' response/message
      * @param {Object} payload
      */
     handleGetAtmoLight(payload) {
@@ -1106,15 +1101,15 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `(FwBuryPoint-)Sysinfo` response/message
+     * Handle the payload of the '(FwBuryPoint-)Sysinfo' response/message
      * @param {Object} payload
      */
     handleSysinfo(payload) {
         try {
             let event = JSON.parse(payload)['body'][0];
             this.sysinfo = {
-                'load': event['uptime'].substring(event['uptime'].indexOf("average") + 9),
-                'uptime': event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf("up") + 3).indexOf("users")).lastIndexOf(",")),
+                'load': event['uptime'].substring(event['uptime'].indexOf('average') + 9),
+                'uptime': event['uptime'].substring(event['uptime'].indexOf('up') + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).indexOf('users')).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).indexOf('users')).lastIndexOf(',')),
                 'signal': event['signal'],
                 'meminfo': event['meminfo'],
                 'pos': event['pos']

@@ -12,14 +12,14 @@ const MAPINFOTYPE_TO_ECOVACS = {
 };
 
 class VacBotCommand {
-    constructor(name, args = {}, api = constants.IOT_DEVMANAGER_PATH) {
+    constructor(name, payload = {}, api = constants.IOT_DEVMANAGER_PATH) {
         this.name = name;
-        if (!args.hasOwnProperty('id')) {
-            Object.assign(args, {
+        if (!payload.hasOwnProperty('id')) {
+            Object.assign(payload, {
                 'id': tools.getReqID()
             });
         }
-        this.args = args;
+        this.args = payload;
         this.api = api;
     }
 
@@ -30,23 +30,22 @@ class VacBotCommand {
 
 class Clean extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
-        let initCmd = {
+        let payload = {
             'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
             'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action]
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
-                initCmd[key] = kwargs[key];
+                payload[key] = kwargs[key];
             }
         }
-        tools.envLog('initCmd %s', initCmd);
-        super('clean', initCmd);
+        super('clean', payload);
     }
 }
 
 class Clean_V2 extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
-        let initCmd = {
+        let payload = {
             'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
             'content': {
                 'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
@@ -54,11 +53,10 @@ class Clean_V2 extends VacBotCommand {
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
-                Object.assign(initCmd[key], kwargs[key]);
+                Object.assign(payload[key], kwargs[key]);
             }
         }
-        tools.envLog('initCmd %s', initCmd);
-        super('clean_V2', initCmd);
+        super('clean_V2', payload);
     }
 }
 
@@ -442,12 +440,6 @@ class GetSleepStatus extends VacBotCommand {
 class GetCleanLogs extends VacBotCommand {
     constructor(count = 3) {
         super('GetCleanLogs', {'count': count}, constants.CLEANLOGS_PATH);
-    }
-}
-
-class GetLastCleanLog extends VacBotCommand {
-    constructor() {
-        super('GetLastCleanLog', {}, constants.CLEANLOGS_PATH);
     }
 }
 
@@ -988,7 +980,6 @@ module.exports.GetContinuousCleaning = GetContinuousCleaning;
 module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
-module.exports.GetLastCleanLog = GetLastCleanLog;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.GetMajorMap = GetMajorMap;
 module.exports.GetMapImage = GetMapImage;
