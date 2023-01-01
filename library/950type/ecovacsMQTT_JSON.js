@@ -370,15 +370,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'AutoEmpty':
                 this.vacBot.handleAutoEmpty(payload);
                 this.emit("AutoEmpty", this.vacBot.autoEmpty);
-                if (this.vacBot.autoEmptyStatus >= 0) {
-                    const autoEmptyStatus = {
-                        'autoEmptyEnabled': this.vacBot.autoEmpty,
-                        'stationStatus': this.vacBot.autoEmptyStatus,
-                        'stationActive': (this.vacBot.autoEmptyStatus === 1),
-                        'dustBagFull': (this.vacBot.autoEmptyStatus === 5)
-                    };
-                    this.emit("AutoEmptyStatus", autoEmptyStatus);
-                }
+                const autoEmptyStatus = {
+                    'autoEmptyEnabled': (this.vacBot.autoEmpty === 1),
+                    'stationStatus': this.vacBot.autoEmptyStatus,
+                    'stationActive': (this.vacBot.autoEmptyStatus === 1),
+                    'dustBagFull': (this.vacBot.autoEmptyStatus === 5)
+                };
+                this.emit("AutoEmptyStatus", autoEmptyStatus);
                 break;
             case 'Volume':
                 this.vacBot.handleVolume(payload);
