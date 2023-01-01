@@ -89,7 +89,11 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Changelog
 
-### 0.9.1 (beta)
+### 0.9.2 (alpha)
+* Improve logging
+* Some improvements for auto empty station, dnd mode and cleaning log
+
+### 0.9.1
 * (bhuebschen) Added some commands for T9 series and yeedi mop station
 * (bhuebschen) Implemented cleaning log call for T9 based models
 * (bhuebschen) Added numerous commands for AIRBOT Z1 (Air Purifier)
