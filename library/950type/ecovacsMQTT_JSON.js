@@ -83,10 +83,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      */
     handleMessage(topic, message, type = "incoming") {
         let eventName = topic;
-        let resultCode = "0";
+        let resultCode = 0;
         let resultCodeMessage = "ok";
         let payload = message;
-
         if (type === "incoming") {
             eventName = topic.split('/')[2];
             message = JSON.parse(message);
@@ -117,19 +116,24 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             resultCodeMessage = message['ret'];
         }
 
-        const result = {
-            "resultCode": resultCode,
-            "resultCodeMessage": resultCodeMessage,
-            "payload": payload
-        };
-
-        (async () => {
-            try {
-                await this.handleMessagePayload(eventName, result);
-            } catch (e) {
-                this.emitError('-2', e.message);
-            }
-        })();
+        if ((payload !== undefined) && (resultCode === 0)) {
+            (async () => {
+                try {
+                    await this.handleMessagePayload(eventName, payload);
+                } catch (e) {
+                    this.emitError('-2', e.message);
+                }
+            })();
+        } else if (resultCode != 0) {
+            tools.envLogError(`got unexpected resultCode for command '${eventName}': ${resultCode}`);
+            tools.envLogError(`resultCodeMessage for command '${eventName}': '${resultCodeMessage}`);
+            return;
+        } else if (payload === undefined) {
+            tools.envLogWarn(`got empty payload for command '${eventName}'`);
+            return;
+        } else {
+            tools.envLogError(`something unexpected happend for command '${eventName}'`);
+        }
     }
 
     /**
@@ -139,7 +143,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @param {Object} event - the event object received from the Ecovacs API
      * @returns {Promise<void>}
      */
-    async handleMessagePayload(command, event) {
+    async handleMessagePayload(command, payload) {
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
         abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
@@ -149,7 +153,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             abbreviatedCommand = this.handleV2commands(abbreviatedCommand);
         }
         this.emit('messageReceived', command + ' => ' + abbreviatedCommand);
-        const payload = this.getPayload(event);
         switch (abbreviatedCommand) {
             case 'FwBuryPoint': {
                 await this.handleFwBuryPoint(payload);
@@ -789,18 +792,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     /**
-     * Given an event, return the payload
-     * @param {Object} event - The event object that was passed to the handler
-     * @returns The payload of the event
-     */
-    getPayload(event) {
-        if (event.hasOwnProperty('payload')) {
-            return event['payload'];
-        }
-        return event;
-    }
-
-    /**
      * Given a command, return the prefix of the command
      * @param {string} command - the command that was sent
      * @returns {string} the prefix of the command
@@ -819,9 +810,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (command.startsWith("report")) {
             commandPrefix = 'report';
         }
-        // Remove from "get" commands
+        // Remove "get" from the command
         if (command.startsWith("get") || command.startsWith("Get")) {
             commandPrefix = 'get';
+        }
+        // Remove "set" from the command
+        if (command.startsWith("set") || command.startsWith("Set")) {
+            commandPrefix = 'set';
         }
         return commandPrefix;
     }
