@@ -410,9 +410,14 @@ class VacBot {
                 break;
             }
             case "SetWaterLevel".toLowerCase(): {
-                const level = Number(args[0]);
-                if ((level >= 1) && (level <= 4)) {
-                    this.sendCommand(new this.vacBotCommand.SetWaterLevel(level));
+                const amount = Number(args[0]);
+                const sweepType = Number(args[1]);
+                if ((amount >= 1) && (amount <= 4)) {
+                    if ((sweepType === 1) || (sweepType === 2)) {
+                        this.sendCommand(new this.vacBotCommand.SetWaterLevel(amount, sweepType));
+                    } else {
+                        this.sendCommand(new this.vacBotCommand.SetWaterLevel(amount));
+                    }
                 }
                 break;
             }
