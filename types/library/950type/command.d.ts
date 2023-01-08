@@ -214,7 +214,7 @@ export class SetVolume extends VacBotCommand {
     constructor(volume?: number);
 }
 export class SetWaterLevel extends VacBotCommand {
-    constructor(level: any);
+    constructor(level: any, sweepType?: number);
 }
 export class Spot extends Clean {
     constructor();

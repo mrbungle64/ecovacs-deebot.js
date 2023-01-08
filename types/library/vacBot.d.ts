@@ -55,7 +55,7 @@ declare class VacBot {
     waterLevel: any;
     waterboxInfo: any;
     moppingType: number;
-    scrubbingType: any;
+    scrubbingType: number;
     sleepStatus: any;
     deebotPosition: {
         x: any;
@@ -418,7 +418,11 @@ declare class VacBot {
      */
     sendCommand(command: any): void;
     /**
-     * It disconnects the robot
+     * Disconnect from MQTT server (fully async)
+     */
+    disconnectAsync(): Promise<void>;
+    /**
+     * Disconnect from MQTT server
      */
     disconnect(): void;
     /**

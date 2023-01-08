@@ -76,7 +76,7 @@ declare class Ecovacs extends EventEmitter {
     /**
      * @abstract
      */
-    disconnect(): void;
+    disconnect(): Promise<void>;
 }
 import EventEmitter = require("events");
 //# sourceMappingURL=ecovacs.d.ts.map

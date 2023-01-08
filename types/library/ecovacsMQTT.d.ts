@@ -1,6 +1,7 @@
 export = EcovacsMQTT;
 declare class EcovacsMQTT extends Ecovacs {
     mqtt: typeof import("mqtt");
+    channel: string;
     username: string;
     payloadType: string;
     /**
@@ -77,6 +78,10 @@ declare class EcovacsMQTT extends Ecovacs {
      * @returns {Object} the JSON object
      */
     getAuthObject(): any;
+    /**
+     * Disconnect the MQTT client
+     */
+    disconnect(): Promise<any>;
 }
 import Ecovacs = require("./ecovacs");
 //# sourceMappingURL=ecovacsMQTT.d.ts.map
