@@ -140,7 +140,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      * Handles the message command and the payload
      * and delegates the event object to the corresponding method
      * @param {string} command - the incoming message command
-     * @param {Object} event - the event object received from the Ecovacs API
      * @returns {Promise<void>}
      */
     async handleMessagePayload(command, payload) {

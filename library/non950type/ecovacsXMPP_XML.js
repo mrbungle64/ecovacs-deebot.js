@@ -167,7 +167,7 @@ class EcovacsXMPP_XML extends Ecovacs {
     /**
      * Disconnects from the XMPP server
      */
-    disconnect() {
+    async disconnect() {
         tools.envLog("[EcovacsXMPP_XML] Disconnect from the XMPP server");
         this.simpleXmpp.disconnect();
         clearInterval(this.pingInterval);

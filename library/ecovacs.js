@@ -444,7 +444,6 @@ class Ecovacs extends EventEmitter {
 
     /**
      * @abstract
-     * Only used for MQTT connection
      */
     async disconnect() {}
 }
