@@ -71,7 +71,7 @@ class VacBot {
         this.waterLevel = null;
         this.waterboxInfo = null;
         this.moppingType = 0;
-        this.scrubbingType = null;
+        this.scrubbingType = 0;
         this.sleepStatus = null;
 
         this.deebotPosition = {
