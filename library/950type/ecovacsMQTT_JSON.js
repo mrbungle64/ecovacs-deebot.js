@@ -917,6 +917,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 val = fwBuryPoint.AI;
                 this.emit('SettingInfoAIVI', val);
             }
+            if (fwBuryPoint.hasOwnProperty('aromamode')) {
+                // aromamode: 0 = disabled, 1 = enabled
+                val = fwBuryPoint.aromamode;
+                this.emit('AromaMode', val);
+            }
             // ----------------------------------
             // We use these properties as trigger
             // ----------------------------------
