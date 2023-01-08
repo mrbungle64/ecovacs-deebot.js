@@ -902,7 +902,6 @@ class VacBot_950type extends VacBot {
             return;
         }
         if (!this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
-            console.log('DEBUG reset livemap');
             const type = payload['type'];
             const pieceWidth = payload['pieceWidth'];
             const pieceHeight = payload['pieceHeight'];

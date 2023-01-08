@@ -24,7 +24,7 @@ let mapSpotAreaName = [];
 api.connect(accountId, passwordHash).then(() => {
     api.devices().then((devices) => {
         let vacuum = devices[deviceNumber];
-        console.log(vacuum);
+        api.logInfo(vacuum);
         let vacbot = api.getVacBotObj(vacuum);
         vacbot.on('ready', () => {
 

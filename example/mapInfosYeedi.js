@@ -122,7 +122,7 @@ api.connect(accountId, passwordHash).then(() => {
         // Catch ctrl-c to exit program
         //
         process.on('SIGINT', function () {
-            console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
+            api.logInfo("Gracefully shutting down from SIGINT (Ctrl+C)");
             disconnect();
         });
 

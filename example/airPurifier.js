@@ -27,24 +27,24 @@ api.connect(accountId, passwordHash).then(() => {
 
     api.devices().then((devices) => {
 
-        console.log(`Devices: ${JSON.stringify(devices)}`);
+        api.logInfo(`Devices: ${JSON.stringify(devices)}`);
         let vacuum = devices[deviceNumber];
-        console.log(vacuum);
+        api.logInfo(vacuum);
         let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum);
 
         // Once the session has started the airbot will fire a "ready" event.
         // At this point you can request information from your vacuum or send actions to it.
         vacbot.on('ready', () => {
-            console.log('\nairbot ready\n');
+            api.logInfo('airbot ready');
 
             vacbot.on('AirQuality', (obj) => {
-                console.log('AirQuality object: ' + JSON.stringify(obj));
-                console.log('Particulate Matter 25 (PM25): ' + obj.particulateMatter25 + 'μg/m3');
-                console.log('Particulate Matter 10 (PM10): ' + obj.particulateMatter10 + 'μg/m3');
-                console.log('Air Quality Index: ' + obj.airQualityIndex);
-                console.log('Volatile Organic Compounds Index: ' + obj.volatileOrganicCompounds);
-                console.log('Temperature: ' + obj.temperature + '°C');
-                console.log('Humidity: ' + obj.humidity + '%');
+                api.logInfo('AirQuality object: ' + JSON.stringify(obj));
+                api.logInfo('Particulate Matter 25 (PM25): ' + obj.particulateMatter25 + 'μg/m3');
+                api.logInfo('Particulate Matter 10 (PM10): ' + obj.particulateMatter10 + 'μg/m3');
+                api.logInfo('Air Quality Index: ' + obj.airQualityIndex);
+                api.logInfo('Volatile Organic Compounds Index: ' + obj.volatileOrganicCompounds);
+                api.logInfo('Temperature: ' + obj.temperature + '°C');
+                api.logInfo('Humidity: ' + obj.humidity + '%');
             });
 
             vacbot.run('GetChargeState');
@@ -73,5 +73,5 @@ api.connect(accountId, passwordHash).then(() => {
         vacbot.connect();
     });
 }).catch((e) => {
-    console.error(`Failure in connecting: ${e.message}`);
+    api.logError(`Failure in connecting: ${e.message}`);
 });
