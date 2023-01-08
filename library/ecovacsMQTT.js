@@ -22,10 +22,10 @@ class EcovacsMQTT extends Ecovacs {
         super(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort);
 
         this.mqtt = require('mqtt');
+        this.channel = '';
         // MQTT is using domain without tld extension
         const customDomain = hostname.split(".")[0];
         this.username = user + '@' + customDomain;
-
         // The payload type is either 'x' (XML) or 'j' (JSON)
         this.payloadType = '';
     }
@@ -36,9 +36,9 @@ class EcovacsMQTT extends Ecovacs {
      */
     subscribe() {
         tools.envLogHeader(`subscribe()`);
-        const channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
-        tools.envLogInfo(`atr channel: '${channel}'`);
-        this.client.subscribe(channel, (error, granted) => {
+        this.channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
+        tools.envLogInfo(`atr channel: '${this.channel}'`);
+        this.client.subscribe(this.channel, (error, granted) => {
             if (!error) {
                 tools.envLogSuccess(`successfully subscribed to atr channel`);
                 this.emit('ready', 'Successfully subscribed to atr channel');
@@ -297,14 +297,20 @@ class EcovacsMQTT extends Ecovacs {
     /**
      * Disconnect the MQTT client
      */
-    disconnect() {
-        tools.envLogInfo(`[EcovacsMQTT] Closing MQTT Client...`);
-        try {
-            this.client.end();
-            tools.envLogInfo(`[EcovacsMQTT] Closed MQTT Client`);
-        } catch(e) {
-            tools.envLogInfo(`[EcovacsMQTT] Error closing MQTT Client: ${e.toString()}`);
-        }
+    async disconnect() {
+        return new Promise((resolve, reject) => {
+            this.client.unsubscribe(this.channel, error => {
+                if (error) {
+                    tools.envLogError(`error unsubscribing from the atr channel: ${error.toString()}`);
+                    reject(false);
+                } else {
+                    tools.envLogSuccess(`successfully unsubscribed from the atr channel`);
+                    tools.envLogInfo(`now trying to close MQTT client connection ...`);
+                    this.client.end();
+                    resolve(true);
+                }
+            });
+        })
     }
 }
 

@@ -1004,17 +1004,30 @@ class VacBot {
             try {
                 await this.ecovacs.sendCommand(actionPayload);
             } catch (e) {
-                tools.envLogError(`[vacBot] Error sendCommand: ${e.message}`);
+                tools.envLogError(`error sendCommand: ${e.message}`);
             }
         })();
     }
 
     /**
-     * It disconnects the robot
+     * Disconnect from MQTT server (fully async)
+     */
+    async disconnectAsync() {
+        try {
+            await this.ecovacs.disconnect();
+            this.is_ready = false;
+        } catch (e) {
+            tools.envLogError(`error disconnecting: ${e.message}`);
+        }
+    }
+
+    /**
+     * Disconnect from MQTT server
      */
     disconnect() {
-        this.ecovacs.disconnect();
-        this.is_ready = false;
+        (async () => {
+            await this.disconnectAsync();
+        })();
     }
 
     /**

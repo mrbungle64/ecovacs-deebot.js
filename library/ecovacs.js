@@ -444,8 +444,9 @@ class Ecovacs extends EventEmitter {
 
     /**
      * @abstract
+     * Only used for MQTT connection
      */
-    disconnect() {}
+    async disconnect() {}
 }
 
 module.exports = Ecovacs;
