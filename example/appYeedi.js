@@ -203,13 +203,15 @@ api.connect(accountId, passwordHash).then(() => {
         });
 
         function disconnect() {
-            try {
-                vacbot.disconnect();
-            } catch (e) {
-                api.logError(`Failure in disconnecting: ${e.message}`);
-            }
-            api.logInfo('Exiting...');
-            process.exit();
+            (async () => {
+                try {
+                    await vacbot.disconnectAsync();
+                    api.logEvent("Exiting...");
+                    process.exit();
+                } catch (e) {
+                    api.logError('Failure in disconnecting: ', e.message);
+                }
+            })();
         }
     });
 }).catch((e) => {

@@ -90,8 +90,14 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 ## Changelog
 
 ### 0.9.2 (alpha)
-* Improve logging
-* Some improvements for auto empty station, dnd mode and cleaning log
+* Some improvements for
+  * auto empty station
+  * dnd mode
+  * cleaning logs
+  * mopping modes
+* Improved disconnecting from MQTT server
+* Improved logging (dev environment)
+* Some other improvements and fixes
 
 ### 0.9.1
 * (bhuebschen) Added some commands for T9 series and yeedi mop station

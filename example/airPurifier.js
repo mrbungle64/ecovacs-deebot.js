@@ -71,6 +71,26 @@ api.connect(accountId, passwordHash).then(() => {
             //vacbot.run('GetTemperature');
         });
         vacbot.connect();
+
+        //
+        // Catch ctrl-c to exit program
+        //
+        process.on('SIGINT', function () {
+            api.logInfo('\nGracefully shutting down from SIGINT (Ctrl+C)');
+            disconnect();
+        });
+
+        function disconnect() {
+            (async () => {
+                try {
+                    await vacbot.disconnectAsync();
+                    api.logEvent("Exiting...");
+                    process.exit();
+                } catch (e) {
+                    api.logError('Failure in disconnecting: ', e.message);
+                }
+            })();
+        }
     });
 }).catch((e) => {
     api.logError(`Failure in connecting: ${e.message}`);

@@ -1030,18 +1030,6 @@ class VacBot {
         })();
     }
 
-    /**
-     * Replace the `did` and `secret` with "[REMOVED]"
-     * @param {string} logData - The log data to be removed
-     * @returns {string} The log data with `did` and `secret` removed
-     */
-    removeFromLogs(logData) {
-        let output = logData;
-        output = output.replace(new RegExp("(" + this.vacuum.did + ")", "g"), "[REMOVED]");
-        output = output.replace(new RegExp("(" + this.ecovacs.secret + ")", "g"), "[REMOVED]");
-        return output;
-    }
-
     async callCleanResultsLogsApi() {
         let portalPath = constants.APP_ECOUSER_API;
         if (this.country === 'CN') {
