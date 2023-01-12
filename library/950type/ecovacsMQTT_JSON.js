@@ -333,10 +333,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleWaterInfo(payload);
                 this.emit("WaterLevel", this.vacBot.waterLevel);
                 this.emit("WaterBoxInfo", this.vacBot.waterboxInfo);
-                if (this.vacBot.moppingType > 0) {
+                if (this.vacBot.moppingType !== null) {
                     this.emit("WaterBoxMoppingType", this.vacBot.moppingType);
                 }
-                if (this.vacBot.scrubbingType > 0) {
+                if (this.vacBot.scrubbingType !== null) {
                     this.emit("WaterBoxScrubbingType", this.vacBot.scrubbingType);
                 }
                 this.emitMoppingSystemReport();

@@ -54,8 +54,8 @@ declare class VacBot {
     cleanSpeed: any;
     waterLevel: any;
     waterboxInfo: any;
-    moppingType: number;
-    scrubbingType: number;
+    moppingType: any;
+    scrubbingType: any;
     sleepStatus: any;
     deebotPosition: {
         x: any;
@@ -425,12 +425,6 @@ declare class VacBot {
      * Disconnect from MQTT server
      */
     disconnect(): void;
-    /**
-     * Replace the `did` and `secret` with "[REMOVED]"
-     * @param {string} logData - The log data to be removed
-     * @returns {string} The log data with `did` and `secret` removed
-     */
-    removeFromLogs(logData: string): string;
     callCleanResultsLogsApi(): Promise<any>;
     getCryptoHashStringForSecuredContent(): string;
     downloadSecuredContent(url: any, targetFilename: any): Promise<void>;
