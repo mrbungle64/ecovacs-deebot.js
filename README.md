@@ -54,6 +54,7 @@ There is of course no claim to full functionality.
 * yeedi k650
 * yeedi 2 hybrid
 * yeedi vac hybrid
+* yeedi vac max
 * yeedi mop station
 
 #### Ecovacs Airbot (experimental)
@@ -187,10 +188,10 @@ He documented his [findings on the protocol](http://github.com/wpietri/sucks/blo
 
 ## Disclaimer
 
-I am in no way affiliated with ECOVACS.
+I am in no way affiliated with Ecovacs Robotics Co., Ltd. or yeedi Technology Limited.
 
 ## License
 
 GNU GENERAL PUBLIC LICENSE
 
-Copyright (c) 2022 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2023 Sascha Hölzel <mrb1232@posteo.de>
