@@ -55,6 +55,7 @@ There is of course no claim to full functionality.
 * yeedi 2 hybrid
 * yeedi vac hybrid
 * yeedi vac max
+* yeedi vac 2 pro
 * yeedi mop station
 
 #### Ecovacs Airbot (experimental)
