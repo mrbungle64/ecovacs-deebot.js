@@ -165,7 +165,7 @@ class VacBot_950type extends VacBot {
                 if (type === 'customArea') {
                     if (typeof content === 'object') {
                         const doNotClean = content['donotClean'];
-                        if (doNotClean === 1) {
+                        if ((doNotClean === 1) || (areaValues.split(',').length === 2)) {
                             // Controlled via Video Manager
                             this.cleanReport = 'setLocation';
                         }
