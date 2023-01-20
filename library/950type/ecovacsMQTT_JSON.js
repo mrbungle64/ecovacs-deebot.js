@@ -169,7 +169,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.vacBot.currentStats = null;
                 }
                 break;
-            case 'AirDring':
+            case 'AirDring': // The typo in 'AirDring' is intended
                 this.bot.handleAirDryingState(payload);
                 if (this.bot.airDryingStatus) {
                     this.emit('AirDryingState', this.bot.airDryingStatus);
@@ -469,16 +469,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     tools.envLogInfo(`payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
                 break;
-            case 'AirQuality':
-                this.vacBot.handleAirQuality(payload);
-                if (this.vacBot.airQuality) {
-                    this.emit('AirQuality', this.vacBot.airQuality);
-                }
-                break;
-
             // T9 AIVI
-            case 'DModule':
-                // Lufterfrischermodul (hab ich leider nicht)
+            case 'DModule': // Air Freshener module
                 this.vacBot.handleDModule(payload);
                 if(this.vacBot.dmodule.enabled) {
                     this.emit("DModuleEnabled", this.vacBot.dmodule.enabled);
@@ -488,7 +480,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'AIMapAndMapSet':
                 // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
                 break;
+
             // AirBot Z1
+            case 'AirQuality':
+                this.vacBot.handleAirQuality(payload);
+                if (this.vacBot.airQuality) {
+                    this.emit('AirQuality', this.vacBot.airQuality);
+                }
+                break;
             case 'Mic':
                 this.vacBot.handleGetMic(payload);
                 if (this.vacBot.mic) {
@@ -702,7 +701,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 */
                 break;
             case 'FwBuryPoint-bd_cri04':
-                // ich VERMUTE, es handelt sich um Signal(stärke)werte vom/zum externen Sensor
+                // Vermutung: es handelt sich um Signal(stärke)werte vom/zum externen Sensor
+                // Assumption: these are signal values (strength) from/to the external sensor
                 /*
                 {
                     "ts": "1670148786607",
@@ -737,6 +737,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'AreaPoint':
                 // Hindernisse, die beim Reinigen erkannt werden (AIVI)
+                // Obstacles detected during cleaning (AIVI)
                 break;
             case 'AirSpeed':
             case 'Humidity':
