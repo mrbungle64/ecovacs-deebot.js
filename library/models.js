@@ -326,7 +326,7 @@ exports.KnownDevices = {
         "auto_empty_station": false,
         "clean_speed": true,
         "map_image_supported": true,
-        "type": "T9"
+        "type": "N8"
     },
     "r5y7re": {
         "name": "DEEBOT N8",
