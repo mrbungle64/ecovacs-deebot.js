@@ -512,6 +512,24 @@ class EcovacsMapSpotAreaInfo {
         this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
         this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
         this.mapSpotAreaSubType = mapSubType;
+        this.index = null;
+        this.cleanSet = {};
+    }
+
+    setIndex(index) {
+        this.index = index;
+    }
+
+    setCleanSet(cleanSet) {
+        const dictionary = require('./950type/dictionary');
+        const cleanSetArray = cleanSet.split(',');
+        if (cleanSetArray.length === 3) {
+            this.cleanSet = {
+                'cleanCount': Number(cleanSetArray[0]),
+                'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[Number(cleanSetArray[1])],
+                'waterLevel': Number(cleanSetArray[2])
+            };
+        }
     }
 
     toJSON() {

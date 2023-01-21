@@ -59,6 +59,10 @@ export class EcovacsMapSpotAreaInfo {
     mapSpotAreaBoundaries: any;
     mapSpotAreaCanvas: import("canvas").Canvas;
     mapSpotAreaSubType: string;
+    index: any;
+    cleanSet: {};
+    setIndex(index: any): void;
+    setCleanSet(cleanSet: any): void;
     toJSON(): {
         mapID: any;
         mapSpotAreaID: any;

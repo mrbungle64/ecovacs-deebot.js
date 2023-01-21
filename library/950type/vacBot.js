@@ -836,6 +836,14 @@ class VacBot_950type extends VacBot {
                 payload['subtype'],
                 customName
             );
+            // Cleaning preference
+            if (payload.hasOwnProperty('cleanset') && (payload['cleanset'] !== '')) {
+                mapSpotAreaInfo.setCleanSet(payload['cleanset']);
+            }
+            // Cleaning sequence
+            if (payload.hasOwnProperty('index')) {
+                mapSpotAreaInfo.setIndex(payload['index']);
+            }
             if (typeof this.mapSpotAreaInfos[mapMID] === 'undefined') {
                 this.mapSpotAreaInfos[mapMID] = []; //initialize array for mapSpotAreaInfos if not existing
             }
