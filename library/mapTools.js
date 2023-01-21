@@ -38,18 +38,18 @@ function getDistance(x1, y1, x2, y2) {
  * The function checks for the spot area for the given position
  * @param {number} x - The x-coordinate of the point to check
  * @param {number} y - The y-coordinate of the point to check
- * @param {Object} spotAreaInfos - an object instance of EcovacsMapSpotAreaInfo
+ * @param {Object} spotAreaInfo - an object instance of EcovacsMapSpotAreaInfo
  * @returns {string} the ID of the spot area (`unknown` if not determinable or `void` if Canvas module is not installed)
  */
-function isPositionInSpotArea(x, y, spotAreaInfos) {
+function isPositionInSpotArea(x, y, spotAreaInfo) {
     // Source: https://github.com/substack/point-in-polygon/blob/master/index.js
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
     if (tools.isCanvasModuleAvailable()) {
-        for (let infoID in spotAreaInfos) {
-            if (spotAreaInfos.hasOwnProperty(infoID)) {
-                if (spotAreaInfos[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(x, y)) {
-                    return spotAreaInfos[infoID]["mapSpotAreaID"];
+        for (let infoID in spotAreaInfo) {
+            if (spotAreaInfo.hasOwnProperty(infoID)) {
+                if (spotAreaInfo[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(x, y)) {
+                    return spotAreaInfo[infoID]["mapSpotAreaID"];
                 }
             }
         }
