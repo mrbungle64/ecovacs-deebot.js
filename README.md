@@ -99,6 +99,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
   * mopping modes
 * Improved disconnecting from MQTT server
 * Improved logging (dev environment)
+* Handle cleaning sequence and preference for each spot area
 * Some other improvements and fixes
 
 ### 0.9.1
