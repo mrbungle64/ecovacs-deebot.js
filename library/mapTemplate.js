@@ -512,19 +512,19 @@ class EcovacsMapSpotAreaInfo {
         this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
         this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
         this.mapSpotAreaSubType = mapSubType;
-        this.index = null;
-        this.cleanSet = {};
+        this.mapSpotAreaSequenceNumber = null;
+        this.mapSpotAreaCleanSet = {};
     }
 
     setIndex(index) {
-        this.index = index;
+        this.mapSpotAreaSequenceNumber = index;
     }
 
     setCleanSet(cleanSet) {
         const dictionary = require('./950type/dictionary');
         const cleanSetArray = cleanSet.split(',');
         if (cleanSetArray.length === 3) {
-            this.cleanSet = {
+            this.mapSpotAreaCleanSet = {
                 'cleanCount': Number(cleanSetArray[0]),
                 'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[Number(cleanSetArray[1])],
                 'waterLevel': Number(cleanSetArray[2])
@@ -539,7 +539,9 @@ class EcovacsMapSpotAreaInfo {
             mapSpotAreaName: this.mapSpotAreaName,
             mapSpotAreaConnections: this.mapSpotAreaConnections,
             mapSpotAreaBoundaries: this.mapSpotAreaBoundaries,
-            mapSpotAreaSubType: this.mapSpotAreaSubType
+            mapSpotAreaSubType: this.mapSpotAreaSubType,
+            mapSpotAreaSequenceNumber: this.mapSpotAreaSequenceNumber,
+            mapSpotAreaCleanSet: this.mapSpotAreaCleanSet
         };
     }
 }
