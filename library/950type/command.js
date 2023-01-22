@@ -670,6 +670,15 @@ class GetBorderSpin extends VacBotCommand {
     }
 }
 
+class SetBorderSpin extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setBorderSpin', {
+            'enable': enable,
+            'type': 1
+        });
+    }
+}
+
 class GetSweepMode extends VacBotCommand {
     constructor() {
         super('getSweepMode');

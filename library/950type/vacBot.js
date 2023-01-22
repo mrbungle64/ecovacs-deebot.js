@@ -1588,6 +1588,17 @@ class VacBot_950type extends VacBot {
             case 'GetBorderSpin'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetBorderSpin());
                 break;
+            case 'EnableBorderSpin'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetBorderSpin(1));
+                break;
+            case 'DisableBorderSpin'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetBorderSpin(0));
+                break;
+            case 'SetBorderSpin'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetBorderSpin(args[0]));
+                }
+                break;
             case 'GetAirQuality'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAirQuality());
                 break;
