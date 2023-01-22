@@ -1574,6 +1574,17 @@ class VacBot_950type extends VacBot {
             case 'GetSweepMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetSweepMode());
                 break;
+            case 'EnableSweepMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetSweepMode(1));
+                break;
+            case 'DisableSweepMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetSweepMode(0));
+                break;
+            case 'SetSweepMode'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetSweepMode(args[0]));
+                }
+                break;
             case 'GetBorderSpin'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetBorderSpin());
                 break;
