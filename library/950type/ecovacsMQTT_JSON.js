@@ -93,8 +93,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             tools.envLogMqtt(eventName);
             if (message['body'] && message['body']['data']) {
                 payload = message['body']['data'];
+                tools.envLogPayload(payload);
+            } else {
+                tools.envLogWarn('Unhandled MQTT message payload ...')
+                tools.envLogPayload(payload);
+                return;
             }
-            tools.envLogPayload(payload);
         } else if (type === "response") {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];

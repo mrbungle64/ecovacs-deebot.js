@@ -1237,7 +1237,7 @@ class VacBot_950type extends VacBot {
     }
 
     handleAudioCallState(event) {
-        tools.envLogResult(`Unhandled AudioCallState: ${JSON.stringify(event)}`);
+        tools.envLogWarn(`Unhandled AudioCallState: ${JSON.stringify(event)}`);
     }
 
     handleDModule(payload) {
