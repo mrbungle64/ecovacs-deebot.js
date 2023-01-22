@@ -645,43 +645,45 @@ class VacBot_950type extends VacBot {
         this.schedule = [];
         for (let c = 0; c < payload.length; c++) {
             const resultData = payload[c];
-            let cleanCtl = {
-                'type': 'auto'
-            };
-            if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
-                const json = JSON.parse(resultData.content.jsonStr);
-                Object.assign(cleanCtl, {
-                    'type': json.type
-                });
-                if (cleanCtl.type === 'spotArea') {
+            if (resultData.repeat !== undefined) {
+                let cleanCtl = {
+                    'type': 'auto'
+                };
+                if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
+                    const json = JSON.parse(resultData.content.jsonStr);
                     Object.assign(cleanCtl, {
-                        'spotAreas': json.content
+                        'type': json.type
                     });
+                    if (cleanCtl.type === 'spotArea') {
+                        Object.assign(cleanCtl, {
+                            'spotAreas': json.content
+                        });
+                    }
                 }
+                const onlyOnce = Number(resultData.repeat) === 0;
+                const weekdays = resultData.repeat.split('');
+                const weekdaysObj = {
+                    'Mon': Boolean(Number(weekdays[1])),
+                    'Tue': Boolean(Number(weekdays[2])),
+                    'Wed': Boolean(Number(weekdays[3])),
+                    'Thu': Boolean(Number(weekdays[4])),
+                    'Fri': Boolean(Number(weekdays[5])),
+                    'Sat': Boolean(Number(weekdays[6])),
+                    'Sun': Boolean(Number(weekdays[0]))
+                };
+                const object = {
+                    'sid': resultData.sid,
+                    'cleanCmd': cleanCtl,
+                    'content': resultData.content,
+                    'enabled': Boolean(Number(resultData.enable)),
+                    'onlyOnce': onlyOnce,
+                    'weekdays': weekdaysObj,
+                    'hour': resultData.hour,
+                    'minute': resultData.minute,
+                    'mapID': resultData.mid
+                };
+                this.schedule.push(object);
             }
-            const onlyOnce = Number(resultData.repeat) === 0;
-            const weekdays = resultData.repeat.split('');
-            const weekdaysObj = {
-                'Mon': Boolean(Number(weekdays[1])),
-                'Tue': Boolean(Number(weekdays[2])),
-                'Wed': Boolean(Number(weekdays[3])),
-                'Thu': Boolean(Number(weekdays[4])),
-                'Fri': Boolean(Number(weekdays[5])),
-                'Sat': Boolean(Number(weekdays[6])),
-                'Sun': Boolean(Number(weekdays[0]))
-            };
-            const object = {
-                'sid': resultData.sid,
-                'cleanCmd': cleanCtl,
-                'content': resultData.content,
-                'enabled': Boolean(Number(resultData.enable)),
-                'onlyOnce': onlyOnce,
-                'weekdays': weekdaysObj,
-                'hour': resultData.hour,
-                'minute': resultData.minute,
-                'mapID': resultData.mid
-            };
-            this.schedule.push(object);
         }
         if (this.schedule.length) {
             tools.envLogResult(`schedule: ${JSON.stringify(this.schedule)}`);
