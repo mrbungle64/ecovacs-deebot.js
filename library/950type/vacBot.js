@@ -47,6 +47,8 @@ class VacBot_950type extends VacBot {
         this.relocationState = null;
         this.firmwareVersion = null;
         this.airDryingStatus = null;
+        this.sweepMode = null;
+        this.borderSpin = null;
 
         // Air Purifier
         this.airQuality = {
@@ -376,7 +378,32 @@ class VacBot_950type extends VacBot {
         }
         if (airDryingStatus) {
             this.airDryingStatus = airDryingStatus;
-            tools.envLogResult(`AirDryingState: ${payload['sweepType']}`);
+            tools.envLogResult(`AirDryingState: ${this.airDryingStatus}`);
+        }
+    }
+
+    /**
+     * Handle the payload of the `BorderSpin` response/message
+     * @param {Object} payload
+     */
+    handleBorderSpin(payload) {
+        const enable = payload['enable'];
+        const type = payload['type']; // The value of type seems to be always 1
+        if (type) {
+            this.borderSpin = enable;
+            tools.envLogResult(`BorderSpin: ${this.borderSpin}`);
+        }
+    }
+
+    /**
+     * Handle the payload of the `SweepMode` response/message
+     * @param {Object} payload
+     */
+    handleSweepMode(payload) {
+        const type = parseInt(payload['type']);
+        if (type) {
+            this.sweepMode = type;
+            tools.envLogResult(`SweepMode: ${this.sweepMode}`);
         }
     }
 
@@ -1543,6 +1570,12 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetAIMap'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAIMap());
+                break;
+            case 'GetSweepMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetSweepMode());
+                break;
+            case 'GetBorderSpin'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetBorderSpin());
                 break;
             case 'GetAirQuality'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAirQuality());

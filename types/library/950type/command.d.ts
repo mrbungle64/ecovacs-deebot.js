@@ -50,6 +50,9 @@ export class GetAutoEmpty extends VacBotCommand {
 export class GetBatteryState extends VacBotCommand {
     constructor();
 }
+export class GetBorderSpin extends VacBotCommand {
+    constructor();
+}
 export class GetCarpetPressure extends VacBotCommand {
     constructor();
 }
@@ -133,6 +136,9 @@ export class GetSchedule extends VacBotCommand {
     constructor();
 }
 export class GetSleepStatus extends VacBotCommand {
+    constructor();
+}
+export class GetSweepMode extends VacBotCommand {
     constructor();
 }
 export class GetTrueDetect extends VacBotCommand {

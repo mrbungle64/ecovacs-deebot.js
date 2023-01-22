@@ -664,6 +664,18 @@ class GetAIMap extends VacBotCommand {
     }
 }
 
+class GetBorderSpin extends VacBotCommand {
+    constructor() {
+        super('getBorderSpin');
+    }
+}
+
+class GetSweepMode extends VacBotCommand {
+    constructor() {
+        super('getSweepMode');
+    }
+}
+
 // Air Purifier (e.g. AIRBOT Z1)
 
 class GetAirQuality extends VacBotCommand {
@@ -971,6 +983,7 @@ module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAirDrying = GetAirDrying;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
+module.exports.GetBorderSpin = GetBorderSpin;
 module.exports.GetCarpetPressure = GetCarpetPressure;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetCleanCount = GetCleanCount;
@@ -1000,6 +1013,7 @@ module.exports.GetPosition = GetPosition;
 module.exports.GetRecognization = GetRecognization;
 module.exports.GetSchedule = GetSchedule;
 module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWaterInfo = GetWaterInfo;

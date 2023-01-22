@@ -25,6 +25,8 @@ declare class VacBot_950type extends VacBot {
     relocationState: any;
     firmwareVersion: any;
     airDryingStatus: string;
+    sweepMode: number;
+    borderSpin: any;
     airQuality: {
         particulateMatter25: any;
         pm_10: any;
@@ -158,6 +160,16 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleAirDryingState(payload: any): void;
+    /**
+     * Handle the payload of the `BorderSpin` response/message
+     * @param {Object} payload
+     */
+    handleBorderSpin(payload: any): void;
+    /**
+     * Handle the payload of the `SweepMode` response/message
+     * @param {Object} payload
+     */
+    handleSweepMode(payload: any): void;
     /**
      * Handle the payload of the `ChargeState` response/message (charge status)
      * @param {Object} payload
