@@ -47,6 +47,7 @@ class VacBot_950type extends VacBot {
         this.relocationState = null;
         this.firmwareVersion = null;
         this.airDryingStatus = null;
+        this.mopOnlyMode = null;
         this.sweepMode = null;
         this.borderSpin = null;
 
@@ -395,6 +396,13 @@ class VacBot_950type extends VacBot {
         }
     }
 
+    handleCustomAreaMode(payload) {
+        if (payload.hasOwnProperty('sweepMode')) {
+            this.sweepMode = payload['sweepMode'];
+            tools.envLogResult(`CustomAreaMode sweepMode: ${this.sweepMode}`);
+        }
+    }
+
     /**
      * Handle the payload of the `SweepMode` response/message
      * @param {Object} payload
@@ -402,8 +410,8 @@ class VacBot_950type extends VacBot {
     handleSweepMode(payload) {
         const type = parseInt(payload['type']);
         if (type) {
-            this.sweepMode = type;
-            tools.envLogResult(`SweepMode: ${this.sweepMode}`);
+            this.mopOnlyMode = Boolean(type);
+            tools.envLogResult(`mopOnlyMode: ${this.mopOnlyMode}`);
         }
     }
 

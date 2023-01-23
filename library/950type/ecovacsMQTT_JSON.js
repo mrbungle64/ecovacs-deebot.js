@@ -183,9 +183,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.bot.handleBorderSpin(payload);
                 this.emit('BorderSpin', this.bot.borderSpin);
                 break;
+            case 'CustomAreaMode':
+                this.bot.handleCustomAreaMode(payload);
+                // SweepMode is taken from the CustomAreaMode message
+                // (not from the SweepMode message)
+                this.emit('SweepMode', this.bot.sweepMode);
+                break;
             case 'SweepMode':
                 this.bot.handleSweepMode(payload);
-                this.emit('SweepMode', this.bot.sweepMode);
+                // MopOnlyMode is taken from the SweepMode message
+                this.emit('MopOnlyMode', this.bot.mopOnlyMode);
                 break;
             case "ChargeState":
                 this.vacBot.handleChargeState(payload);
