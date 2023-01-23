@@ -367,6 +367,18 @@ class GetMapSet extends VacBotCommand {
     }
 }
 
+// Not yet used and untested
+class SetMapSet extends VacBotCommand {
+    constructor(mapID, subsets, act = 'merge') {
+        super('setMapSet', {
+            'mid': mapID,
+            'subsets': subsets,
+            'act': act,
+            'type': 'ar'
+        });
+    }
+}
+
 class GetMapSpotAreas extends GetMapSet {
     constructor(mapID) {
         super(mapID, 'ar');
@@ -1056,6 +1068,7 @@ module.exports.SetCleanPreference = SetCleanPreference;
 module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
+module.exports.SetMapSet = SetMapSet;
 module.exports.SetSweepMode = SetSweepMode;
 module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVolume = SetVolume;
