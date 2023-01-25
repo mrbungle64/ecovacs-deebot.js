@@ -399,7 +399,7 @@ class VacBot_950type extends VacBot {
     handleCustomAreaMode(payload) {
         if (payload.hasOwnProperty('sweepMode')) {
             this.sweepMode = payload['sweepMode'];
-            tools.envLogResult(`CustomAreaMode sweepMode: ${this.sweepMode}`);
+            tools.envLogResult(`SweepMode: ${this.sweepMode}`);
         }
     }
 

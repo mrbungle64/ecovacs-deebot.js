@@ -195,6 +195,9 @@ export class SetAirDrying extends VacBotCommand {
 export class SetAutoEmpty extends VacBotCommand {
     constructor(enable?: number);
 }
+export class SetBorderSpin extends VacBotCommand {
+    constructor(enable?: number);
+}
 export class SetCarpetPressure extends VacBotCommand {
     constructor(enable?: number);
 }
@@ -212,6 +215,12 @@ export class SetDoNotDisturb extends VacBotCommand {
 }
 export class SetDusterRemind extends VacBotCommand {
     constructor(enable?: number, period?: number);
+}
+export class SetMapSet extends VacBotCommand {
+    constructor(mapID: any, subsets: any, act?: string);
+}
+export class SetSweepMode extends VacBotCommand {
+    constructor(type?: number);
 }
 export class SetTrueDetect extends VacBotCommand {
     constructor(enable?: number);
