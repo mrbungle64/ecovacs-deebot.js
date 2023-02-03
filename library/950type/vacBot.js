@@ -1399,7 +1399,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetWaterInfo());
                 break;
             case 'GetCleanLogs'.toLowerCase():
-                if (this.getModelType() === 'T9') {
+                if ((this.getModelType() === 'T9') || (this.getModelType() === 'X1')) {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
                         let cleanLog = [];
