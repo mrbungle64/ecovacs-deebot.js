@@ -644,6 +644,12 @@ class GetAirDrying extends VacBotCommand {
     }
 }
 
+class GetStationState extends VacBotCommand {
+    constructor() {
+        super('getStationState');
+    }
+}
+
 class SetAirDrying extends VacBotCommand {
     constructor(act = 'stop') {
         super('setAirDring', {
@@ -1042,6 +1048,7 @@ module.exports.GetPosition = GetPosition;
 module.exports.GetRecognization = GetRecognization;
 module.exports.GetSchedule = GetSchedule;
 module.exports.GetSleepStatus = GetSleepStatus;
+module.exports.GetStationState = GetStationState;
 module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;

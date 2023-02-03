@@ -1544,6 +1544,9 @@ class VacBot_950type extends VacBot {
             case 'GetCleanPreference'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetCleanPreference());
                 break;
+            case 'GetStationState'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetStationState());
+                break;
             case 'GetAirDrying'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAirDrying());
                 break;
