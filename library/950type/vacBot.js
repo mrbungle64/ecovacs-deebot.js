@@ -408,9 +408,8 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleSweepMode(payload) {
-        const type = parseInt(payload['type']);
-        if (type) {
-            this.mopOnlyMode = Boolean(type);
+        if (payload.hasOwnProperty('type')) {
+            this.mopOnlyMode = Boolean(payload['type']);
             tools.envLogResult(`mopOnlyMode: ${this.mopOnlyMode}`);
         }
     }
