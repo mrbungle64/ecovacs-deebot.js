@@ -387,6 +387,7 @@ exports.KnownDevices = {
         "main_brush": true,
         "unit_care_info": true,
         "round_mop_info": true,
+        "air_drying": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
