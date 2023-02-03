@@ -90,6 +90,9 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Changelog
 
+### 0.9.3 (alpha)
+* Several improvements
+
 ### 0.9.2
 * Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
 * Handle cleaning incoming sequence and preference for each spot area
