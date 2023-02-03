@@ -13,7 +13,9 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'mapPoint': 'mapPoint',
     'singlePoint': 'singlePoint',
     'area': 'area',
-    'move': 'move'
+    'move': 'move',
+    'drying': 'drying',
+    'washing': 'washing'
 };
 
 exports.CLEAN_ACTION_TO_ECOVACS = {
@@ -34,7 +36,9 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'idle': 'idle',
     'move': 'move',
     'singlePoint': 'singlePoint',
-    'area': 'area'
+    'area': 'area',
+    'drying': 'drying',
+    'washing': 'washing'
 };
 
 exports.GOCHARGING_REASONS = {
