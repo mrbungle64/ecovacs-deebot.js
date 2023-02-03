@@ -83,23 +83,18 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Known issues
 
-* The generation of map images is currently not stable on 32-bit systems (e.g. most Raspberry Pi systems)
+* The generation of map images may not be stable on 32-bit systems (e.g. most Raspberry Pi systems)
 * The "Edge" command does not work with Deebot U2 (starts auto clean instead)
 * The "Move" commands do not work with Deebot OZMO T8 AIVI (and maybe also for some other models)
-* The cleaning log has an empty result on T9 series
 * The generation of map image data does not work properly with the Deebot X1 series
 
 ## Changelog
 
-### 0.9.2 (alpha)
-* Some improvements for
-  * auto empty station
-  * dnd mode
-  * cleaning logs
-  * mopping modes
-* Improved disconnecting from MQTT server
+### 0.9.2
+* Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
+* Handle cleaning incoming sequence and preference for each spot area
+* Improved disconnecting from the MQTT server
 * Improved logging (dev environment)
-* Handle cleaning sequence and preference for each spot area
 * Some other improvements and fixes
 
 ### 0.9.1
