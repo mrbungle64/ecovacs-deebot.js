@@ -1547,6 +1547,17 @@ class VacBot_950type extends VacBot {
             case 'GetStationState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetStationState());
                 break;
+            case 'GetWashInterval'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetWashInterval());
+                break;
+            case 'SetWashInterval'.toLowerCase():
+                if (args.length >= 1) {
+                    const washInterval = Number(args[0]);
+                    if ((washInterval === 10) || (washInterval === 15) || (washInterval === 25)) {
+                        this.sendCommand(new VacBotCommand.SetWashInterval(washInterval));
+                    }
+                }
+                break;
             case 'GetAirDrying'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAirDrying());
                 break;

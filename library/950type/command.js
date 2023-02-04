@@ -650,6 +650,20 @@ class GetStationState extends VacBotCommand {
     }
 }
 
+class GetWashInterval extends VacBotCommand {
+    constructor() {
+        super('getWashInterval');
+    }
+}
+
+class SetWashInterval extends VacBotCommand {
+    constructor(interval = 10) {
+        super('setWashInterval', {
+            interval: interval
+        });
+    }
+}
+
 class SetAirDrying extends VacBotCommand {
     constructor(act = 'stop') {
         super('setAirDring', {
@@ -1051,6 +1065,7 @@ module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetStationState = GetStationState;
 module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
+module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.MapPoint_V2 = MapPoint_V2;
@@ -1079,12 +1094,12 @@ module.exports.SetMapSet = SetMapSet;
 module.exports.SetSweepMode = SetSweepMode;
 module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVolume = SetVolume;
+module.exports.SetWashInterval = SetWashInterval;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.Spot = Spot;
 module.exports.SpotArea = SpotArea;
 module.exports.SpotArea_V2 = SpotArea_V2;
 module.exports.Stop = Stop;
-
 
 // Air Purifier (e.g. AIRBOT Z1)
 module.exports.Area_V2 = Area_V2;
