@@ -142,6 +142,11 @@ class VacBot_950type extends VacBot {
             'state': null
         };
         this.washInterval = null;
+        this.aiCleanItemState = {
+            items: [],
+            particleRemoval: null,
+            petPoopPrevention: null
+        };
     }
 
     /**
@@ -398,6 +403,24 @@ class VacBot_950type extends VacBot {
             // 2 = Deep scrubbing
             this.scrubbingType = payload['sweepType'];
             tools.envLogResult(`WaterInfo sweepType: ${this.scrubbingType}`);
+        }
+    }
+
+    /**
+     * Handle the payload of the `AICleanItemState` response/message
+     * @param {Object} payload
+     */
+    handleAICleanItemState(payload) {
+        if (payload.hasOwnProperty('items')) {
+            const items = payload.items;
+            const particleRemoval = Boolean(items[0].state);
+            const petPoopPrevention = Boolean(items[2].state);
+            this.aiCleanItemState = {
+                items: items,
+                particleRemoval: particleRemoval,
+                petPoopPrevention: petPoopPrevention
+            };
+            tools.envLogResult(`AirDryingState: ${JSON.stringify(this.aiCleanItemState)}`);
         }
     }
 
@@ -1626,6 +1649,9 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetMapState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetMapState());
+                break;
+            case 'GetAICleanItemState'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAICleanItemState());
                 break;
             case 'GetAIMap'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAIMap());

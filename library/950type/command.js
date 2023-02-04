@@ -638,6 +638,12 @@ class GetCleanPreference extends VacBotCommand {
     }
 }
 
+class GetAICleanItemState extends VacBotCommand {
+    constructor() {
+        super('getAICleanItemState');
+    }
+}
+
 class GetAirDrying extends VacBotCommand {
     constructor() {
         super('getAirDring');
@@ -1027,6 +1033,7 @@ module.exports.Edge = Edge;
 module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
+module.exports.GetAICleanItemState = GetAICleanItemState;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAirDrying = GetAirDrying;

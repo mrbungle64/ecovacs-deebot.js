@@ -194,6 +194,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // MopOnlyMode is taken from the SweepMode message
                 this.emit('MopOnlyMode', this.bot.mopOnlyMode);
                 break;
+            case 'AICleanItemState':
+                this.bot.handleAICleanItemState(payload);
+                if (this.bot.aiCleanItemState.items.length) {
+                    this.emit('AICleanItemState', this.bot.aiCleanItemState);
+                }
+                break;
             case "ChargeState":
                 this.vacBot.handleChargeState(payload);
                 if (this.vacBot.chargeStatus) {
