@@ -111,12 +111,23 @@ declare class VacBot_950type extends VacBot {
         enabled: any;
         status: any;
     };
+    stationState: {
+        type: any;
+        state: any;
+    };
+    washInterval: any;
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
      * @param {Object} payload
      */
     handleCleanInfo(payload: any): void;
+    /**
+     * Handle the payload of the `StationState` response/message
+     * @param {Object} payload
+     */
+    handleStationState(payload: any): void;
+    handleWashInterval(payload: any): void;
     /**
      * Handle the payload of the `Battery` response/message (battery level)
      * @param {Object} payload
@@ -158,6 +169,8 @@ declare class VacBot_950type extends VacBot {
     handleWaterInfo(payload: any): void;
     /**
      * Handle the payload of the `AirDring` (sic) response/message (air drying status)
+     * Seems to work for yeedi only
+     * See StationState for Deebot X1 series
      * @param {Object} payload
      */
     handleAirDryingState(payload: any): void;

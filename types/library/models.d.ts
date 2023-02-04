@@ -390,14 +390,26 @@ export var KnownDevices: {
         custom_area: boolean;
         mopping_system: boolean;
         voice_report: boolean;
-        auto_empty_station: boolean;
         clean_speed: boolean;
         map_image_supported: boolean;
         type: string;
     };
     "8bja83": {
         name: string;
-        deviceClassLink: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        unit_care_info: boolean;
+        round_mop_info: boolean;
+        air_drying: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        auto_empty_station: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+        type: string;
     };
     "1b23du": {
         name: string;
@@ -409,7 +421,19 @@ export var KnownDevices: {
     };
     "2o4lnm": {
         name: string;
-        deviceClassLink: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        unit_care_info: boolean;
+        round_mop_info: boolean;
+        air_drying: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+        type: string;
     };
     n4gstt: {
         name: string;

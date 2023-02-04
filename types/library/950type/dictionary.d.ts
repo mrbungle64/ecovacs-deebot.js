@@ -9,6 +9,9 @@ export namespace CLEAN_MODE_TO_ECOVACS {
     const singlePoint: string;
     const area: string;
     const move: string;
+    const drying: string;
+    const washing: string;
+    const comeClean: string;
 }
 export namespace CLEAN_ACTION_TO_ECOVACS {
     export const start: string;
@@ -38,6 +41,12 @@ export namespace CLEAN_MODE_FROM_ECOVACS {
     export { singlePoint_1 as singlePoint };
     const area_1: string;
     export { area_1 as area };
+    const drying_1: string;
+    export { drying_1 as drying };
+    const washing_1: string;
+    export { washing_1 as washing };
+    const comeClean_1: string;
+    export { comeClean_1 as comeClean };
 }
 export namespace GOCHARGING_REASONS {
     const workComplete: string;

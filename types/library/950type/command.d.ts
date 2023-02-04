@@ -138,10 +138,16 @@ export class GetSchedule extends VacBotCommand {
 export class GetSleepStatus extends VacBotCommand {
     constructor();
 }
+export class GetStationState extends VacBotCommand {
+    constructor();
+}
 export class GetSweepMode extends VacBotCommand {
     constructor();
 }
 export class GetTrueDetect extends VacBotCommand {
+    constructor();
+}
+export class GetWashInterval extends VacBotCommand {
     constructor();
 }
 export class GetVolume extends VacBotCommand {
@@ -227,6 +233,9 @@ export class SetTrueDetect extends VacBotCommand {
 }
 export class SetVolume extends VacBotCommand {
     constructor(volume?: number);
+}
+export class SetWashInterval extends VacBotCommand {
+    constructor(interval?: number);
 }
 export class SetWaterLevel extends VacBotCommand {
     constructor(level: any, sweepType?: number);
