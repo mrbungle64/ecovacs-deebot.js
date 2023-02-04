@@ -393,6 +393,7 @@ exports.KnownDevices = {
         "voice_report": true,
         "clean_speed": true,
         "map_image_supported": true,
+        "hosted_mode": true,
         "type": "X1"
     },
     "8bja83": {
@@ -410,6 +411,7 @@ exports.KnownDevices = {
         "auto_empty_station": true,
         "clean_speed": true,
         "map_image_supported": true,
+        "hosted_mode": true,
         "type": "X1"
     },
     "1b23du": {
@@ -434,6 +436,7 @@ exports.KnownDevices = {
         "voice_report": true,
         "clean_speed": true,
         "map_image_supported": true,
+        "hosted_mode": true,
         "type": "X1"
     },
     "n4gstt": {
@@ -450,6 +453,7 @@ exports.KnownDevices = {
         "auto_empty_station": true,
         "clean_speed": true,
         "map_image_supported": true,
+        "hosted_mode": true,
         "type": "X1"
     },
     "jtmf04": {
