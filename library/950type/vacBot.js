@@ -219,8 +219,8 @@ class VacBot_950type extends VacBot {
         this.stationState = {
             'type': type,
             'state': state,
-            'isSelfCleaning': ((type === 3) && state),
-            'isAirDrying': ((type === 2) && state),
+            'isAirDrying': Boolean((type === 2) && state),
+            'isSelfCleaning': Boolean((type === 3) && state),
             'isActive': Boolean(state)
         };
         tools.envLogResult(`isSelfCleaning: ${this.stationState.isSelfCleaning}`);
