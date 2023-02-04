@@ -223,6 +223,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emit("CurrentCustomAreaValues", this.vacBot.currentCustomAreaValues);
                 this.emit("CurrentSpotAreas", this.vacBot.currentSpotAreas);
                 break;
+            case "StationState":
+                this.vacBot.handleStationState(payload);
+                if (this.vacBot.stationState.type !== null) {
+                    this.emit("StationState", this.vacBot.stationState);
+                    const airDryingState = this.bot.stationState.isAirDrying ? 'airdrying': 'idle';
+                    this.emit('AirDryingState', airDryingState);
+                }
+                break;
+            case "WashInterval":
+                this.vacBot.handleWashInterval(payload);
+                if (this.vacBot.washInterval !== null) {
+                    this.emit("WashInterval", this.vacBot.washInterval);
+                }
+                break;
             case "Speed":
                 this.vacBot.handleSpeed(payload);
                 this.emit("CleanSpeed", this.vacBot.cleanSpeed);

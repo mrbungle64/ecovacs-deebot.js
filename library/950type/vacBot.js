@@ -137,6 +137,11 @@ class VacBot_950type extends VacBot {
             'enabled': null,
             'status': null
         };
+        this.stationState = {
+            'type' :null,
+            'state': null
+        };
+        this.washInterval = null;
     }
 
     /**
@@ -196,6 +201,37 @@ class VacBot_950type extends VacBot {
             }
         }
         tools.envLogResult(`cleanReport: ${this.cleanReport}`);
+    }
+
+    /**
+     * Handle the payload of the `StationState` response/message
+     * @param {Object} payload
+     */
+    handleStationState(payload) {
+        let type = 0;
+        let state = 0;
+        if (payload.hasOwnProperty('content')) {
+            type = payload['content']['type'];
+        }
+        if (payload.hasOwnProperty('state')) {
+            state = payload['state'];
+        }
+        this.stationState = {
+            'type': type,
+            'state': state,
+            'isSelfCleaning': ((type === 3) && state),
+            'isAirDrying': ((type === 2) && state),
+            'isActive': Boolean(state)
+        };
+        tools.envLogResult(`isSelfCleaning: ${this.stationState.isSelfCleaning}`);
+        tools.envLogResult(`isAirDrying: ${this.stationState.isAirDrying}`);
+    }
+
+    handleWashInterval(payload) {
+        if (payload.hasOwnProperty('interval')) {
+            this.washInterval = payload['interval'];
+            tools.envLogResult(`washInterval: ${this.washInterval}`);
+        }
     }
 
     /**
@@ -367,6 +403,8 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the `AirDring` (sic) response/message (air drying status)
+     * Seems to work for yeedi only
+     * See StationState for Deebot X1 series
      * @param {Object} payload
      */
     handleAirDryingState(payload) {
