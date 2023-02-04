@@ -684,6 +684,18 @@ class SetAirDrying extends VacBotCommand {
     }
 }
 
+class Drying extends Clean_V2 {
+    constructor(action = 'start') {
+        super('drying', action);
+    }
+}
+
+class Washing extends Clean_V2 {
+    constructor(action = 'start') {
+        super('washing', action);
+    }
+}
+
 // TODO: Handle response data
 class GetRecognization extends VacBotCommand {
     constructor() {
@@ -1035,6 +1047,7 @@ module.exports.CustomArea_V2 = CustomArea_V2;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
+module.exports.Drying = Drying;
 module.exports.Edge = Edge;
 module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
@@ -1078,8 +1091,8 @@ module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetStationState = GetStationState;
 module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
-module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetVolume = GetVolume;
+module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.HostedCleanMode = HostedCleanMode;
 module.exports.MapPoint_V2 = MapPoint_V2;
@@ -1114,6 +1127,7 @@ module.exports.Spot = Spot;
 module.exports.SpotArea = SpotArea;
 module.exports.SpotArea_V2 = SpotArea_V2;
 module.exports.Stop = Stop;
+module.exports.Washing = Washing;
 
 // Air Purifier (e.g. AIRBOT Z1)
 module.exports.Area_V2 = Area_V2;

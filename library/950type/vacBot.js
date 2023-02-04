@@ -1590,6 +1590,16 @@ class VacBot_950type extends VacBot {
             case 'HostedCleanMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.HostedCleanMode());
                 break;
+            case 'Drying'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.Drying(args[0]));
+                }
+                break;
+            case 'Washing'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.Washing(args[0]));
+                }
+                break;
             case 'MapPoint_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
@@ -1627,14 +1637,26 @@ class VacBot_950type extends VacBot {
                 break;
             case 'SetAirDrying'.toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.SetAirDrying(args[0]));
+                    if (this.getModelType() === 'yeedi') {
+                        this.sendCommand(new VacBotCommand.SetAirDrying(args[0]));
+                    } else {
+                        this.sendCommand(new VacBotCommand.Drying(args[0]));
+                    }
                 }
                 break;
             case 'AirDryingStart'.toLowerCase():
-                this.sendCommand(new VacBotCommand.SetAirDrying('start'));
+                if (this.getModelType() === 'yeedi') {
+                    this.sendCommand(new VacBotCommand.SetAirDrying('start'));
+                } else {
+                    this.sendCommand(new VacBotCommand.Drying('start'));
+                }
                 break;
             case 'AirDryingStop'.toLowerCase():
-                this.sendCommand(new VacBotCommand.SetAirDrying('stop'));
+                if (this.getModelType() === 'yeedi') {
+                    this.sendCommand(new VacBotCommand.SetAirDrying('stop'));
+                } else {
+                    this.sendCommand(new VacBotCommand.Drying('stop'));
+                }
                 break;
             case 'SetCleanPreference'.toLowerCase():
                 if (args.length >= 1) {
