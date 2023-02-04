@@ -74,7 +74,7 @@ class Spot extends Clean {
     }
 }
 
-class HostedModeClean extends Clean_V2 {
+class HostedCleanMode extends Clean_V2 {
     constructor() {
         super('entrust', 'start');
     }
@@ -1081,7 +1081,7 @@ module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWaterInfo = GetWaterInfo;
-module.exports.HostedModeClean = HostedModeClean;
+module.exports.HostedCleanMode = HostedCleanMode;
 module.exports.MapPoint_V2 = MapPoint_V2;
 module.exports.Move = Move;
 module.exports.MoveBackward = MoveBackward;
