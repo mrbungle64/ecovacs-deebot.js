@@ -1658,6 +1658,12 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.Drying('stop'));
                 }
                 break;
+            case 'WashingStart'.toLowerCase():
+                this.sendCommand(new VacBotCommand.Washing('start'));
+                break;
+            case 'WashingStop'.toLowerCase():
+                this.sendCommand(new VacBotCommand.Washing('stop'));
+                break;
             case 'SetCleanPreference'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetCleanPreference(args[0]));
