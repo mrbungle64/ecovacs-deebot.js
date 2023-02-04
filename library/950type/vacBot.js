@@ -1587,6 +1587,9 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
+            case 'HostedModeClean'.toLowerCase():
+                this.sendCommand(new VacBotCommand.HostedModeClean());
+                break;
             case 'MapPoint_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
