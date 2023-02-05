@@ -23,6 +23,9 @@ export class DisableContinuousCleaning extends VacBotCommand {
 export class DisableDoNotDisturb extends VacBotCommand {
     constructor();
 }
+export class Drying extends VacBotCommand {
+    constructor(act: any);
+}
 export class Edge extends Clean {
     constructor();
 }
@@ -34,6 +37,9 @@ export class EnableContinuousCleaning extends VacBotCommand {
 }
 export class EnableDoNotDisturb extends SetDoNotDisturb {
     constructor(start?: string, end?: string);
+}
+export class GetAICleanItemState extends VacBotCommand {
+    constructor();
 }
 export class GetAIMap extends VacBotCommand {
     constructor();
@@ -147,13 +153,16 @@ export class GetSweepMode extends VacBotCommand {
 export class GetTrueDetect extends VacBotCommand {
     constructor();
 }
-export class GetWashInterval extends VacBotCommand {
-    constructor();
-}
 export class GetVolume extends VacBotCommand {
     constructor();
 }
+export class GetWashInterval extends VacBotCommand {
+    constructor();
+}
 export class GetWaterInfo extends VacBotCommand {
+    constructor();
+}
+export class HostedCleanMode extends Clean_V2 {
     constructor();
 }
 export class MapPoint_V2 extends Clean_V2 {
@@ -231,6 +240,9 @@ export class SetSweepMode extends VacBotCommand {
 export class SetTrueDetect extends VacBotCommand {
     constructor(enable?: number);
 }
+export class SetVoiceAssistantState extends VacBotCommand {
+    constructor(enable?: number);
+}
 export class SetVolume extends VacBotCommand {
     constructor(volume?: number);
 }
@@ -251,6 +263,9 @@ export class SpotArea_V2 extends Clean_V2 {
 }
 export class Stop extends VacBotCommand {
     constructor();
+}
+export class Washing extends Clean_V2 {
+    constructor(action?: string);
 }
 export class Area_V2 extends Clean_V2 {
     constructor();
@@ -343,7 +358,7 @@ export class SetHumidifierLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);
 }
 export class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapArray: any);
+    constructor(mapID: any, mapArray: any);
 }
 export class SetMic extends VacBotCommand {
     constructor(on?: number);
@@ -359,9 +374,6 @@ export class SetUVCleaner extends SetThreeModule {
 }
 export class SetVoice extends VacBotCommand {
     constructor(enable?: number, md5sum?: string, size?: number, type?: string, url?: string, vid?: string);
-}
-export class SetVoiceAssistantState extends VacBotCommand {
-    constructor(enable?: number);
 }
 export class SetVoiceSimple extends VacBotCommand {
     constructor(on?: number);

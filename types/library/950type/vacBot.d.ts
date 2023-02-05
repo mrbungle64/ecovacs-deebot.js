@@ -116,6 +116,11 @@ declare class VacBot_950type extends VacBot {
         state: any;
     };
     washInterval: any;
+    aiCleanItemState: {
+        items: any[];
+        particleRemoval: any;
+        petPoopPrevention: any;
+    };
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
@@ -127,6 +132,12 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleStationState(payload: any): void;
+    /**
+     * Handle the payload of the `handleStationInfo` response/message
+     * @param {Object} payload
+     */
+    handleStationInfo(payload: any): void;
+    stationInfo: any;
     handleWashInterval(payload: any): void;
     /**
      * Handle the payload of the `Battery` response/message (battery level)
@@ -167,6 +178,11 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleWaterInfo(payload: any): void;
+    /**
+     * Handle the payload of the `AICleanItemState` response/message
+     * @param {Object} payload
+     */
+    handleAICleanItemState(payload: any): void;
     /**
      * Handle the payload of the `AirDring` (sic) response/message (air drying status)
      * Seems to work for yeedi only
