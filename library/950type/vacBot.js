@@ -1592,7 +1592,14 @@ class VacBot_950type extends VacBot {
                 break;
             case 'Drying'.toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.Drying(args[0]));
+                    let act = args[0];
+                    if (isNaN(act)) {
+                        act = 4; // stop
+                        if (act.toLowerCase() === 'start') {
+                            act = 1;
+                        }
+                    }
+                    this.sendCommand(new VacBotCommand.Drying(act));
                 }
                 break;
             case 'Washing'.toLowerCase():

@@ -684,15 +684,20 @@ class SetAirDrying extends VacBotCommand {
     }
 }
 
-class Drying extends Clean_V2 {
-    constructor(action = 'start') {
-        super('drying', action);
-    }
-}
-
 class Washing extends Clean_V2 {
     constructor(action = 'start') {
         super('washing', action);
+    }
+}
+
+// Air Drying
+// Ecovacs Deebot X1 series
+class Drying extends VacBotCommand {
+    constructor(act) {
+        super('stationAction', {
+            "act": act,
+            "type": 2
+        });
     }
 }
 
