@@ -380,6 +380,82 @@ exports.KnownDevices = {
         "name": "DEEBOT N9+",
         "deviceClassLink": "n6cwdb"
     },
+    "jtmf04": {
+        "name": "DEEBOT T10",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "hosted_mode": true,
+        "yiko": true,
+        "type": "T9"
+    },
+    "rss8xk": {
+        "name": "DEEBOT T10 PLUS",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "hosted_mode": true,
+        "yiko": true,
+        "type": "T9"
+    },
+    "p95mgv": {
+        "name": "DEEBOT T10 PLUS",
+        "deviceClassLink": "rss8xk"
+    },
+    "9s1s80": {
+        "name": "DEEBOT T10 TURBO",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "air_drying": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "hosted_mode": true,
+        "yiko": true,
+        "type": "T9"
+    },
+    "lx3j7m": {
+        "name": "DEEBOT T10 OMNI",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "air_drying": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "hosted_mode": true,
+        "yiko": true,
+        "type": "T9"
+    },
     "3yqsch": {
         "name": "DEEBOT X1",
         "950type": true,
@@ -394,6 +470,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": true,
         "hosted_mode": true,
+        "yiko": true,
         "type": "X1"
     },
     "8bja83": {
@@ -412,6 +489,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": true,
         "hosted_mode": true,
+        "yiko": true,
         "type": "X1"
     },
     "1b23du": {
@@ -420,6 +498,10 @@ exports.KnownDevices = {
     },
     "1vxt52": {
         "name": "DEEBOT X1 OMNI",
+        "deviceClassLink": "8bja83"
+    },
+    "bro5wu": {
+        "name": "DEEBOT X1e OMNI",
         "deviceClassLink": "8bja83"
     },
     "2o4lnm": {
@@ -437,6 +519,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": true,
         "hosted_mode": true,
+        "yiko": true,
         "type": "X1"
     },
     "n4gstt": {
@@ -454,31 +537,8 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": true,
         "hosted_mode": true,
+        "yiko": true,
         "type": "X1"
-    },
-    "jtmf04": {
-        "name": "DEEBOT T10",
-        "deviceClassLink": "n4gstt"
-    },
-    "rss8xk": {
-        "name": "DEEBOT T10 PLUS",
-        "deviceClassLink": "n4gstt"
-    },
-    "p95mgv": {
-        "name": "DEEBOT T10 PLUS",
-        "deviceClassLink": "n4gstt"
-    },
-    "9s1s80": {
-        "name": "DEEBOT T10 TURBO",
-        "deviceClassLink": "3yqsch"
-    },
-    "lx3j7m": {
-        "name": "DEEBOT T10 OMNI",
-        "deviceClassLink": "3yqsch"
-    },
-    "bro5wu": {
-        "name": "DEEBOT X1e OMNI",
-        "deviceClassLink": "3yqsch"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
