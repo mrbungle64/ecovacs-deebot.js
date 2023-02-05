@@ -1854,6 +1854,12 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetVoiceAssistantState(args[0]));
                 }
                 break;
+            case 'EnableVoiceAssistant':
+                this.sendCommand(new VacBotCommand.SetVoiceAssistantState(1));
+                break;
+            case 'DisableVoiceAssistant':
+                this.sendCommand(new VacBotCommand.SetVoiceAssistantState(0));
+                break;
             case 'GetVoiceLifeRemindState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetVoiceLifeRemindState());
                 break;
