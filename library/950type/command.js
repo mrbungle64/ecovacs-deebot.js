@@ -74,6 +74,7 @@ class Spot extends Clean {
     }
 }
 
+// "Hosted mode" Ecovacs Deebot X1 series
 class HostedCleanMode extends Clean_V2 {
     constructor() {
         super('entrust', 'start');
@@ -676,6 +677,8 @@ class SetWashInterval extends VacBotCommand {
     }
 }
 
+// Air Drying
+// Yeedi Mop Station
 class SetAirDrying extends VacBotCommand {
     constructor(act = 'stop') {
         super('setAirDring', {
@@ -685,7 +688,7 @@ class SetAirDrying extends VacBotCommand {
 }
 
 class Washing extends Clean_V2 {
-    constructor(action = 'start') {
+    constructor(action = 'stop') {
         super('washing', action);
     }
 }

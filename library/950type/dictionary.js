@@ -24,7 +24,7 @@ exports.CLEAN_ACTION_TO_ECOVACS = {
     'start': 'start',
     'pause': 'pause',
     'resume': 'resume',
-    'stop': 'stop',
+    'stop': 'stop'
 };
 
 exports.CLEAN_MODE_FROM_ECOVACS = {
