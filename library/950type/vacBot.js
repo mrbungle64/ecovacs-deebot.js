@@ -1748,8 +1748,8 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetMapSet_V2());
                 break;
             case 'SetMapSet_V2'.toLowerCase():
-                if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0]));
+                if ((args.length >= 2) && (typeof args[1] === 'object')) {
+                    this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]));
                 }
                 break;
             case 'SetThreeModule'.toLowerCase():

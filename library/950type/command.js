@@ -842,8 +842,9 @@ class GetMapSet_V2 extends VacBotCommand {
 }
 
 class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapArray) {
+    constructor(mapID, mapArray) {
         super('setMapSet_V2', {
+            mid: mapID,
             subsets: mapArray
         });
     }
