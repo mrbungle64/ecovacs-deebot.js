@@ -232,6 +232,16 @@ class VacBot_950type extends VacBot {
         tools.envLogResult(`isAirDrying: ${this.stationState.isAirDrying}`);
     }
 
+    /**
+     * Handle the payload of the `handleStationInfo` response/message
+     * @param {Object} payload
+     */
+    handleStationInfo(payload) {
+        // TODO: Handle the payload,
+        //  but it seems that there's nothing too important
+        this.stationInfo = payload;
+    }
+
     handleWashInterval(payload) {
         if (payload.hasOwnProperty('interval')) {
             this.washInterval = payload['interval'];
@@ -1581,9 +1591,9 @@ class VacBot_950type extends VacBot {
             case 'CustomArea_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 const cleanings = args[1] || 1;
-                const donotClean = args[2] || 0;
+                const doNotClean = args[2] || 0;
                 if (area !== '') {
-                    this.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings, donotClean));
+                    this.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings, doNotClean));
                 }
                 break;
             }
@@ -1592,14 +1602,15 @@ class VacBot_950type extends VacBot {
                 break;
             case 'Drying'.toLowerCase():
                 if (args.length >= 1) {
-                    let act = args[0];
+                    let value = args[0];
+                    let act = Number(value);
                     if (isNaN(act)) {
-                        act = 4; // stop
-                        if (act.toLowerCase() === 'start') {
-                            act = 1;
-                        }
+                        // 'start' and 'stop' are also valid arguments
+                        act = value === 'start' ? 1 : 4;
                     }
-                    this.sendCommand(new VacBotCommand.Drying(act));
+                    if ((act === 1) || (act === 4)) {
+                        this.sendCommand(new VacBotCommand.Drying(act));
+                    }
                 }
                 break;
             case 'Washing'.toLowerCase():
