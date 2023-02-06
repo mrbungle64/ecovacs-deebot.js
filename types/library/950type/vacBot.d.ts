@@ -121,6 +121,13 @@ declare class VacBot_950type extends VacBot {
         particleRemoval: any;
         petPoopPrevention: any;
     };
+    stationInfo: {
+        state: any;
+        name: any;
+        model: any;
+        sn: any;
+        wkVer: any;
+    };
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
@@ -137,7 +144,6 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleStationInfo(payload: any): void;
-    stationInfo: any;
     handleWashInterval(payload: any): void;
     /**
      * Handle the payload of the `Battery` response/message (battery level)

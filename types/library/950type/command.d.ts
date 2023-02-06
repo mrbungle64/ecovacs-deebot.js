@@ -141,10 +141,16 @@ export class GetRecognization extends VacBotCommand {
 export class GetSchedule extends VacBotCommand {
     constructor();
 }
+export class GetSchedule_V2 extends VacBotCommand {
+    constructor();
+}
 export class GetSleepStatus extends VacBotCommand {
     constructor();
 }
 export class GetStationState extends VacBotCommand {
+    constructor();
+}
+export class GetStationInfo extends VacBotCommand {
     constructor();
 }
 export class GetSweepMode extends VacBotCommand {
@@ -160,6 +166,9 @@ export class GetWashInterval extends VacBotCommand {
     constructor();
 }
 export class GetWaterInfo extends VacBotCommand {
+    constructor();
+}
+export class GetVoiceAssistantState extends VacBotCommand {
     constructor();
 }
 export class HostedCleanMode extends Clean_V2 {
