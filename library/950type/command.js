@@ -351,6 +351,7 @@ class GetMapImage extends VacBotCommand {
     }
 }
 
+// yeedi Mop Station
 class GetMapInfo_V2 extends VacBotCommand {
     constructor(mapType = '0') {
         super('getMapInfo_V2', {
@@ -358,6 +359,17 @@ class GetMapInfo_V2 extends VacBotCommand {
         });
     }
 }
+
+/*
+// Ecovacs Deebot X1
+class GetMapInfo_V2 extends VacBotCommand {
+    constructor(mapID, type = '1') {
+        super('getMapInfo_V2', {
+            'mid': mapID,
+            'type': type
+        });
+    }
+} */
 
 class GetMaps extends VacBotCommand {
     constructor() {
@@ -588,6 +600,14 @@ class GetSchedule extends VacBotCommand {
     }
 }
 
+class GetSchedule_V2 extends VacBotCommand {
+    constructor() {
+        super('getSched_V2', {
+            type: 1
+        });
+    }
+}
+
 class GetDusterRemind extends VacBotCommand {
     constructor() {
         super('getDusterRemind');
@@ -660,6 +680,12 @@ class GetAirDrying extends VacBotCommand {
 class GetStationState extends VacBotCommand {
     constructor() {
         super('getStationState');
+    }
+}
+
+class GetStationInfo extends VacBotCommand {
+    constructor() {
+        super('getStationInfo');
     }
 }
 
@@ -1102,8 +1128,10 @@ module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
 module.exports.GetRecognization = GetRecognization;
 module.exports.GetSchedule = GetSchedule;
+module.exports.GetSchedule_V2 = GetSchedule_V2;
 module.exports.GetSleepStatus = GetSleepStatus;
 module.exports.GetStationState = GetStationState;
+module.exports.GetStationInfo = GetStationInfo;
 module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;
