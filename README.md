@@ -91,8 +91,9 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 ## Changelog
 
 ### 0.9.3 (alpha)
-* Added several commands for X1 series (and also maybe other models)
-* Some other improvements and fixes
+* Added several commands and events for X1 series (and also maybe other models)
+  * e.g. HostedCleanMode, StationState, Washing, Drying, WashIntervalState, AICleanItemState
+* Several other improvements and optimizations
 
 ### 0.9.2
 * Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
