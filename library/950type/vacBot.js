@@ -147,6 +147,13 @@ class VacBot_950type extends VacBot {
             particleRemoval: null,
             petPoopPrevention: null
         };
+        this.stationInfo = {
+            state: null,
+            name: null,
+            model: null,
+            sn: null,
+            wkVer: null
+        };
     }
 
     /**
@@ -237,9 +244,14 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleStationInfo(payload) {
-        // TODO: Handle the payload,
-        //  but it seems that there's nothing too important
-        this.stationInfo = payload;
+        this.stationInfo = {
+            state: payload.state,
+            name: payload.name,
+            model: payload.model,
+            sn: payload.sn,
+            wkVer: payload.wkVer
+        };
+        tools.envLogResult(`StationInfo: ${JSON.stringify(this.stationInfo)}`);
     }
 
     handleWashInterval(payload) {

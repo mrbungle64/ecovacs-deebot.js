@@ -239,6 +239,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "StationInfo":
                 this.vacBot.handleStationInfo(payload);
+                this.emit('StationInfo', this.vacBot.stationInfo);
                 break;
             case "WashInterval":
                 this.vacBot.handleWashInterval(payload);
