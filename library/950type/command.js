@@ -1000,6 +1000,12 @@ class GetVoiceLifeRemindState extends VacBotCommand {
     }
 }
 
+class GetVoiceAssistantState extends VacBotCommand {
+    constructor() {
+        super('getVoiceAssistantState');
+    }
+}
+
 class SetVoiceAssistantState extends VacBotCommand {
     constructor(enable = 0) {
         super('setVoiceAssistantState', {
@@ -1103,6 +1109,7 @@ module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetWaterInfo = GetWaterInfo;
+module.exports.GetVoiceAssistantState = GetVoiceAssistantState;
 module.exports.HostedCleanMode = HostedCleanMode;
 module.exports.MapPoint_V2 = MapPoint_V2;
 module.exports.Move = Move;

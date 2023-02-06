@@ -1860,6 +1860,9 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetVoice(args[0], args[1], args[2], args[3], args[4], args[5]));
                 }
                 break;
+            case 'GetVoiceAssistantState'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetVoiceAssistantState());
+                break;
             case 'SetVoiceAssistantState'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetVoiceAssistantState(args[0]));
