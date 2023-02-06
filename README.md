@@ -91,7 +91,8 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 ## Changelog
 
 ### 0.9.3 (alpha)
-* Added several commands for X1 series (and also maybe other models) 
+* Added several commands for X1 series (and also maybe other models)
+* Some other improvements and fixes
 
 ### 0.9.2
 * Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
@@ -109,7 +110,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ### 0.9.0
 * Breaking change: Bump minimum required version of Node.js to 14.x
-* (apfelnutzer) Added handling for the air drying message
+* (apfelnutzer) Added handling for the air drying message (yeedi Mop Station)
 * Bugfix issue #219
 * Added some error codes
 * Bump dependencies (incl. fix for CVE-2022-39353)
