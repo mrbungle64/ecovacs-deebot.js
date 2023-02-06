@@ -1655,7 +1655,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetStationInfo());
                 break;
             case "GetSchedule_V2".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.GetSchedule_V2());
+                this.sendCommand(new VacBotCommand.GetSchedule_V2());
                 break;
             case 'GetWashInterval'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetWashInterval());
