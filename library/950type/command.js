@@ -1079,6 +1079,8 @@ class GetMapTrace_V2 extends VacBotCommand {
     }
 }
 
+module.exports.Generic = VacBotCommand;
+
 module.exports.AddMapVirtualBoundary = AddMapVirtualBoundary;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;

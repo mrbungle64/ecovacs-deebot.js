@@ -414,6 +414,8 @@ class GetSchedule extends VacBotCommand {
     }
 }
 
+module.exports.Generic = VacBotCommand;
+
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.CustomArea = CustomArea;

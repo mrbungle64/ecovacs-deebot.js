@@ -326,6 +326,10 @@ class VacBot {
      */
     run(command, ...args) {
         switch (command.toLowerCase()) {
+            case "Generic".toLowerCase(): {
+                this.sendCommand(new this.vacBotCommand.Generic(args[0], args[1]));
+                break;
+            }
             case "Clean".toLowerCase(): {
                 this.sendCommand(new this.vacBotCommand.Clean());
                 break;
