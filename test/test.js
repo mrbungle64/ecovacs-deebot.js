@@ -21,7 +21,11 @@ describe('API', function () {
             continents.push(continent);
 
             try {
-              const url = tools.formatString(constants.PORTAL_ECOUSER_API, {"continent": continent});
+              let portalUrlFormat = constants.PORTAL_ECOUSER_API;
+              if (continent === 'WW') {
+                portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
+              }
+              const url = tools.formatString(portalUrlFormat, {"continent": continent});
               await axios.get(url);
             } catch (err) {
               if (err.code === 'ENOTFOUND') {
