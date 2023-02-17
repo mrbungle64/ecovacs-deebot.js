@@ -116,6 +116,8 @@ class EcovacsMQTT extends Ecovacs {
         let portalUrlFormat = constants.PORTAL_ECOUSER_API;
         if (this.country === 'CN') {
             portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
+        } else if (this.country === 'WW') {
+            portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
         }
         let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, {continent: this.continent});
         if (this.bot.is950type()) {

@@ -5,6 +5,7 @@ exports.AUTH_GL_OPENAPI = 'https://gl-{country}-openapi.{domain}/v1/global/auth/
 
 exports.REALM = 'ecouser.net';
 exports.PORTAL_ECOUSER_API = 'https://api-app.dc-{continent}.ww.ecouser.net/api';
+exports.PORTAL_ECOUSER_API_LEGACY = 'https://portal-{continent}.ecouser.net/api';
 exports.PORTAL_ECOUSER_API_CN = 'https://portal.ecouser.net/api';
 
 exports.APP_ECOUSER_API = 'https://portal-{continent}.ecouser.net/app';
