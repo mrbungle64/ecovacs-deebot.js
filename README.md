@@ -94,6 +94,8 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 * Added several commands and events for X1 series (and also maybe other models)
   * e.g. HostedCleanMode, StationState, Washing, Drying, WashIntervalState, AICleanItemState
 * Several other improvements and optimizations
+* Use different url for ecouser api
+* Added Generic command
 
 ### 0.9.2
 * Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
