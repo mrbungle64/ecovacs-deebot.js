@@ -262,6 +262,7 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleTrueDetect(payload: any): void;
+    handleRecognization(payload: any): void;
     /**
      * Handle the payload of the 'CleanCount' response/message
      * @param {Object} payload

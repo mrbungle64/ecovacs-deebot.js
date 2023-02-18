@@ -2,6 +2,7 @@ export var AUTH_GL_API: string;
 export var AUTH_GL_OPENAPI: string;
 export var REALM: string;
 export var PORTAL_ECOUSER_API: string;
+export var PORTAL_ECOUSER_API_LEGACY: string;
 export var PORTAL_ECOUSER_API_CN: string;
 export var APP_ECOUSER_API: string;
 export var APP_ECOUSER_API_CN: string;

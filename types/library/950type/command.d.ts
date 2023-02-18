@@ -1,3 +1,10 @@
+declare class VacBotCommand {
+    constructor(name: any, payload?: {}, api?: string);
+    name: any;
+    args: {};
+    api: string;
+    getId(): any;
+}
 export class AddMapVirtualBoundary extends AddMapSubSet {
 }
 export class Charge extends VacBotCommand {
@@ -243,6 +250,9 @@ export class SetDusterRemind extends VacBotCommand {
 export class SetMapSet extends VacBotCommand {
     constructor(mapID: any, subsets: any, act?: string);
 }
+export class SetRecognization extends VacBotCommand {
+    constructor(state?: number);
+}
 export class SetSweepMode extends VacBotCommand {
     constructor(type?: number);
 }
@@ -396,18 +406,11 @@ export class VideoOpened extends VacBotCommand {
 declare class AddMapSubSet extends VacBotCommand {
     constructor(mapID: any, coordinates: any, mapSubSetType?: string);
 }
-declare class VacBotCommand {
-    constructor(name: any, payload?: {}, api?: string);
-    name: any;
-    args: {};
-    api: string;
-    getId(): any;
-}
 declare class DeleteMapSubSet extends VacBotCommand {
     constructor(mapID: any, mapSubSetID: any, type?: string);
 }
 declare class GetMapSubSet extends VacBotCommand {
     constructor(mapID: any, mapSubSetID: any, type?: string);
 }
-export {};
+export { VacBotCommand as Generic };
 //# sourceMappingURL=command.d.ts.map

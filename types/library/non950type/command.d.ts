@@ -1,3 +1,10 @@
+declare class VacBotCommand {
+    constructor(name: any, args?: {});
+    name: any;
+    args: {};
+    toXml(): any;
+    getId(): any;
+}
 export class Charge extends VacBotCommand {
     constructor();
 }
@@ -145,12 +152,5 @@ export class SpotArea extends Clean {
 export class Stop extends Clean {
     constructor();
 }
-declare class VacBotCommand {
-    constructor(name: any, args?: {});
-    name: any;
-    args: {};
-    toXml(): any;
-    getId(): any;
-}
-export {};
+export { VacBotCommand as Generic };
 //# sourceMappingURL=command.d.ts.map
