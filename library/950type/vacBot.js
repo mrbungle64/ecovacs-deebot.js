@@ -666,6 +666,14 @@ class VacBot_950type extends VacBot {
         tools.envLogResult(`trueDetect: ${this.trueDetect}`);
     }
 
+    handleRecognization(payload) {
+        this.trueDetect = payload['state'];
+        tools.envLogResult(`trueDetect: ${this.trueDetect}`);
+        if (payload) {
+            tools.envLogInfo(`payload for Recognization message: ${JSON.stringify(payload)}`);
+        }
+    }
+
     /**
      * Handle the payload of the 'CleanCount' response/message
      * @param {Object} payload
@@ -1532,14 +1540,35 @@ class VacBot_950type extends VacBot {
             case 'GetAdvancedMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAdvancedMode());
                 break;
+            case 'GetRecognization'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetRecognization());
+                break;
+            case 'SetRecognization'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
+                break;
             case 'GetTrueDetect'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetTrueDetect());
+                if (this.getModelName().includes('T8 AIVI')) {
+                    this.sendCommand(new VacBotCommand.GetRecognization());
+                } else {
+                    this.sendCommand(new VacBotCommand.GetTrueDetect());
+                }
                 break;
             case 'EnableTrueDetect'.toLowerCase():
-                this.sendCommand(new VacBotCommand.SetTrueDetect(1));
+                if (this.getModelName().includes('T8 AIVI')) {
+                    this.sendCommand(new VacBotCommand.SetRecognization(1));
+                } else {
+                    this.sendCommand(new VacBotCommand.SetTrueDetect(1));
+                }
                 break;
             case 'DisableTrueDetect'.toLowerCase():
-                this.sendCommand(new VacBotCommand.SetTrueDetect(0));
+                if (this.getModelName().includes('T8 AIVI')) {
+                    this.sendCommand(new VacBotCommand.SetRecognization(0));
+                } else {
+                    this.sendCommand(new VacBotCommand.SetTrueDetect(0));
+                }
+                break;
+            case 'SetTrueDetect'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
                 break;
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase():
@@ -1710,9 +1739,6 @@ class VacBot_950type extends VacBot {
                 break;
             case 'DisableCleanPreference'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetCleanPreference(0));
-                break;
-            case 'GetRecognization'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetRecognization());
                 break;
             case 'GetMapState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetMapState());

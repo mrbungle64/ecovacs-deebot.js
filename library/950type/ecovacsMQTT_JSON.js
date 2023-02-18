@@ -435,6 +435,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleTrueDetect(payload);
                 this.emit("TrueDetect", this.vacBot.trueDetect);
                 break;
+            case 'Recognization':
+                this.vacBot.handleRecognization(payload);
+                this.emit('TrueDetect', this.vacBot.trueDetect);
+                break;
             case 'CleanCount':
                 this.vacBot.handleCleanCount(payload);
                 this.emit("CleanCount", this.vacBot.cleanCount);
@@ -507,7 +511,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'AIMap':
             case 'Clean'.toLowerCase():
             case 'MapState':
-            case 'Recognization':
                 if (payload) {
                     tools.envLogInfo(`payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }

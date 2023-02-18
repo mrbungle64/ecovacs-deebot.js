@@ -730,10 +730,17 @@ class Drying extends VacBotCommand {
     }
 }
 
-// TODO: Handle response data
 class GetRecognization extends VacBotCommand {
     constructor() {
         super('getRecognization');
+    }
+}
+
+class SetRecognization extends VacBotCommand {
+    constructor(state = 0) {
+        super('setRecognization', {
+            'state': state
+        });
     }
 }
 
@@ -1164,6 +1171,7 @@ module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetMapSet = SetMapSet;
+module.exports.SetRecognization = SetRecognization;
 module.exports.SetSweepMode = SetSweepMode;
 module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVoiceAssistantState = SetVoiceAssistantState;
