@@ -83,7 +83,8 @@ exports.COMPONENT_TO_ECOVACS = {
     'side_brush': 'sideBrush',
     'filter': 'heap',
     'unit_care': 'unitCare',
-    'round_mop': 'roundMop'
+    'round_mop': 'roundMop',
+    'dModule': 'dModule'
 };
 
 exports.COMPONENT_FROM_ECOVACS = {
@@ -91,7 +92,8 @@ exports.COMPONENT_FROM_ECOVACS = {
     'sideBrush': 'side_brush',
     'heap': 'filter',
     'unitCare': 'unit_care',
-    'roundMop': 'round_mop'
+    'roundMop': 'round_mop',
+    'dModule': 'dModule'
 };
 
 exports.MOVE_ACTION = {
