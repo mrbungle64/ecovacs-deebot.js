@@ -95,6 +95,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
   * e.g. HostedCleanMode, StationState, Washing, Drying, WashIntervalState, AICleanItemState
 * Several other improvements and optimizations
 * Use different url for ecouser api
+* Added air freshener life span component
 * Added Generic command
 
 ### 0.9.2
