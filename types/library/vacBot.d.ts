@@ -323,6 +323,11 @@ declare class VacBot {
      */
     hasRoundMopInfo(): boolean;
     /**
+     * Returns true if you can retrieve information about "air freshener" (life span)
+     * @returns {boolean}
+     */
+    hasAirFreshenerInfo(): boolean;
+    /**
      * Returns true if the model has Edge cleaning mode
      * It is assumed that a model can have either an Edge or Spot Area mode
      * @returns {boolean}
