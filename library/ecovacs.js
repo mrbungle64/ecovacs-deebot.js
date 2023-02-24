@@ -343,6 +343,7 @@ class Ecovacs extends EventEmitter {
             emitComponent['side_brush'] &&
             (!this.bot.hasMainBrush() || emitComponent['main_brush']) &&
             (!this.bot.hasRoundMopInfo() || emitComponent['round_mop']) &&
+            (!this.bot.hasAirFreshenerInfo() || emitComponent['air_freshener']) &&
             (!this.bot.hasUnitCareInfo() || emitComponent['unit_care'])) {
             this.emit('LifeSpan', {
                 'filter': this.bot.components['filter'],

@@ -84,7 +84,7 @@ exports.COMPONENT_TO_ECOVACS = {
     'filter': 'heap',
     'unit_care': 'unitCare',
     'round_mop': 'roundMop',
-    'dModule': 'dModule'
+    'air_freshener': 'dModule'
 };
 
 exports.COMPONENT_FROM_ECOVACS = {
@@ -93,7 +93,7 @@ exports.COMPONENT_FROM_ECOVACS = {
     'heap': 'filter',
     'unitCare': 'unit_care',
     'roundMop': 'round_mop',
-    'dModule': 'dModule'
+    'dModule': 'air_freshener'
 };
 
 exports.MOVE_ACTION = {

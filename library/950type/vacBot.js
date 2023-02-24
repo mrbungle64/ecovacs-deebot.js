@@ -1452,6 +1452,9 @@ class VacBot_950type extends VacBot {
                     if (this.hasRoundMopInfo()) {
                         componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['round_mop']);
                     }
+                    if (this.hasAirFreshenerInfo()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['air_freshener']);
+                    }
                     this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
                 } else {
                     this.emitFullLifeSpanEvent = false;

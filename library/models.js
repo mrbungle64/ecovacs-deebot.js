@@ -280,6 +280,7 @@ exports.KnownDevices = {
         "950type_V2": true,
         "main_brush": true,
         "unit_care_info": true,
+        "air_freshener_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -303,15 +304,26 @@ exports.KnownDevices = {
     },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
-        "deviceClassLink": "ucn2xe"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "unit_care_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "type": "T9"
     },
     "659yh8": {
         "name": "DEEBOT T9 AIVI",
-        "deviceClassLink": "ucn2xe"
+        "deviceClassLink": "8kwdb4"
     },
     "kw9ayx": {
         "name": "DEEBOT T9 AIVI Plus",
-        "deviceClassLink": "ucn2xe"
+        "deviceClassLink": "8kwdb4"
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
@@ -404,6 +416,7 @@ exports.KnownDevices = {
         "main_brush": true,
         "unit_care_info": true,
         "round_mop_info": false,
+        "air_freshener_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -529,6 +542,7 @@ exports.KnownDevices = {
         "main_brush": true,
         "unit_care_info": true,
         "round_mop_info": false,
+        "air_freshener_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
