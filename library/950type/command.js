@@ -751,6 +751,12 @@ class GetMapState extends VacBotCommand {
     }
 }
 
+class GetMultiMapState extends VacBotCommand {
+    constructor() {
+        super('getMultiMapState');
+    }
+}
+
 // TODO: Handle response data
 class GetAIMap extends VacBotCommand {
     constructor() {
@@ -1133,6 +1139,7 @@ module.exports.GetMapState = GetMapState;
 module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
 module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
 module.exports.GetMaps = GetMaps;
+module.exports.GetMultiMapState = GetMultiMapState;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
 module.exports.GetRecognization = GetRecognization;

@@ -455,6 +455,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleCleanPreference(payload);
                 this.emit("CleanPreference", this.vacBot.cleanPreference);
                 break;
+            case 'MultiMapState':
+                this.vacBot.handleMultiMapState(payload);
+                this.emit("MultiMapState", this.vacBot.multiMapState);
+                break;
             case 'LiveLaunchPwdState':
                 this.vacBot.handleLiveLaunchPwdState(payload);
                 this.emit("LiveLaunchPwdState", this.vacBot.liveLaunchPwdState);

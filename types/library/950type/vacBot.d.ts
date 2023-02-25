@@ -128,6 +128,7 @@ declare class VacBot_950type extends VacBot {
         sn: any;
         wkVer: any;
     };
+    multiMapState: any;
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
@@ -217,6 +218,11 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleSleepStatus(payload: any): void;
+    /**
+     * Handle the payload of the `Sleep` response/message (sleep status)
+     * @param {Object} payload
+     */
+    handleMultiMapState(payload: any): void;
     /**
      * Handle the payload of the `CleanLogs` response/message
      * @param {Object} payload

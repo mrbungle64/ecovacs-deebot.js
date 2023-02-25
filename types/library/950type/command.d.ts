@@ -136,6 +136,9 @@ export class GetMapVirtualBoundaryInfo extends GetMapSubSet {
 export class GetMaps extends VacBotCommand {
     constructor();
 }
+export class GetMultiMapState extends VacBotCommand {
+    constructor();
+}
 export class GetNetInfo extends VacBotCommand {
     constructor();
 }

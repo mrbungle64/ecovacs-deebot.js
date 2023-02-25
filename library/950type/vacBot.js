@@ -154,6 +154,7 @@ class VacBot_950type extends VacBot {
             sn: null,
             wkVer: null
         };
+        this.multiMapState = null;
     }
 
     /**
@@ -519,6 +520,15 @@ class VacBot_950type extends VacBot {
     handleSleepStatus(payload) {
         this.sleepStatus = payload['enable'];
         tools.envLogResult(`sleepStatus: ${this.sleepStatus}`);
+    }
+
+    /**
+     * Handle the payload of the `Sleep` response/message (sleep status)
+     * @param {Object} payload
+     */
+    handleMultiMapState(payload) {
+        this.multiMapState = payload['enable'];
+        tools.envLogResult(`multiMapState: ${this.multiMapState}`);
     }
 
     /**
@@ -1745,6 +1755,9 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetMapState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetMapState());
+                break;
+            case 'GetMultiMapState'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMultiMapState());
                 break;
             case 'GetAICleanItemState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAICleanItemState());
