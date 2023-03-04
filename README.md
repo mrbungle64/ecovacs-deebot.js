@@ -90,13 +90,12 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Changelog
 
-### 0.9.3 (beta)
+### 0.9.3
+* Switched to new endpoint for ecouser API
 * Added several commands and events for X1 series (and also maybe other models)
   * e.g. HostedCleanMode, StationState, Washing, Drying, WashIntervalState, AICleanItemState
 * Several other improvements and optimizations
-* Use different url for ecouser api
-* Added air freshener life span component
-* Added Generic command
+  * e.g. added air freshener life span component and the Generic command
 
 ### 0.9.2
 * Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
