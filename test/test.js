@@ -26,7 +26,7 @@ describe('API', function () {
                 portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
               }
               const url = tools.formatString(portalUrlFormat, {"continent": continent});
-              await axios.get(url);
+              await axios.get(url, {timeout: 5000});
             } catch (err) {
               if (err.code === 'ENOTFOUND') {
                 throw Error(err);
