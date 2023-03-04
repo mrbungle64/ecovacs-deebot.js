@@ -31,8 +31,11 @@ class VacBotCommand {
 class Clean extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
-            'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
-            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action]
+            "act": constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            "count": 1,
+            "donotClean": 0,
+            "router": "plan",
+            "type": constants_type.CLEAN_MODE_TO_ECOVACS[mode]
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
@@ -46,10 +49,14 @@ class Clean extends VacBotCommand {
 class Clean_V2 extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
-            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
-            'content': {
-                'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode],
-            }
+            "act": constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            "content": {
+                "count": 1,
+                "donotClean": "",
+                'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode]
+            },
+            "mode": "",
+            "router": "plan"
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
@@ -96,8 +103,6 @@ class SpotArea_V2 extends Clean_V2 {
         let cleaningAsNumber = Number(cleanings);
         super('spotArea', 'start', {
             'content': {
-                'total': 0,
-                'donotClean': 0,
                 'count': cleaningAsNumber,
                 'value': area
             }
