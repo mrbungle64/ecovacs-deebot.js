@@ -91,6 +91,9 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Changelog
 
+### 0.9.4 (beta)
+* Fix API call for countries with continent "WW"
+
 ### 0.9.3
 * Switched to new endpoint for ecouser API
 * Added several commands and events for X1 series (and also maybe other models)
