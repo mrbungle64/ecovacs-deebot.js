@@ -1,6 +1,7 @@
 {
   "eventCodes": {
     "1007": "Mop installed",
+    "1026": "Charging dock not found",
     "1052": "Change mop reminder",
     "1053": "Obstacle",
     "1061": "Resuming cleaning after position retrieved",
