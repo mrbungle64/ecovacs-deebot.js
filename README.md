@@ -91,7 +91,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Changelog
 
-### 0.9.4 (beta)
+### 0.9.4
 * Fix API call for countries with continent "WW"
 
 ### 0.9.3
