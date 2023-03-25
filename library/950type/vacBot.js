@@ -1672,6 +1672,18 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.Washing(args[0]));
                 }
                 break;
+            case 'GoToPosition'.toLowerCase(): {
+                let area = args[0].toString();
+                if (area !== '') {
+                    if ((this.getModelType() === 'T9') || (this.getModelType() === 'X1')) {
+                        this.run('MapPoint_V2', area);
+                    } else if (this.getModelType() === 'T8') {
+                        area = area + ',' + area;
+                        this.run('CustomArea_V2', area, 1, 1);
+                    }
+                }
+                break;
+            }
             case 'MapPoint_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
