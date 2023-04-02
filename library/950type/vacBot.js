@@ -1654,24 +1654,6 @@ class VacBot_950type extends VacBot {
             case 'HostedCleanMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.HostedCleanMode());
                 break;
-            case 'Drying'.toLowerCase():
-                if (args.length >= 1) {
-                    let value = args[0];
-                    let act = Number(value);
-                    if (isNaN(act)) {
-                        // 'start' and 'stop' are also valid arguments
-                        act = value === 'start' ? 1 : 4;
-                    }
-                    if ((act === 1) || (act === 4)) {
-                        this.sendCommand(new VacBotCommand.Drying(act));
-                    }
-                }
-                break;
-            case 'Washing'.toLowerCase():
-                if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.Washing(args[0]));
-                }
-                break;
             case 'GoToPosition'.toLowerCase(): {
                 let area = args[0].toString();
                 if (area !== '') {
@@ -1738,14 +1720,32 @@ class VacBot_950type extends VacBot {
                 if (this.getModelType() === 'yeedi') {
                     this.sendCommand(new VacBotCommand.SetAirDrying('start'));
                 } else {
-                    this.sendCommand(new VacBotCommand.Drying('start'));
+                    this.sendCommand(new VacBotCommand.Drying(1));
                 }
                 break;
             case 'AirDryingStop'.toLowerCase():
                 if (this.getModelType() === 'yeedi') {
                     this.sendCommand(new VacBotCommand.SetAirDrying('stop'));
                 } else {
-                    this.sendCommand(new VacBotCommand.Drying('stop'));
+                    this.sendCommand(new VacBotCommand.Drying(4));
+                }
+                break;
+            case 'Drying'.toLowerCase():
+                if (args.length >= 1) {
+                    let value = args[0];
+                    let act = Number(value);
+                    if (isNaN(act)) {
+                        // 'start' and 'stop' are also valid arguments
+                        act = value === 'start' ? 1 : 4;
+                    }
+                    if ((act === 1) || (act === 4)) {
+                        this.sendCommand(new VacBotCommand.Drying(act));
+                    }
+                }
+                break;
+            case 'Washing'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.Washing(args[0]));
                 }
                 break;
             case 'WashingStart'.toLowerCase():
