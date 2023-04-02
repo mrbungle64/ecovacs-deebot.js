@@ -91,8 +91,9 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ## Changelog
 
-### 0.9.5 (alpha)
+### 0.9.5
 * Added GoToPosition shortcut function (e.g. T8, T9 and X1 series)
+* Fix AirDryingStart and AirDryingStop commands
 
 ### 0.9.4
 * Fix API call for countries with continent "WW"
