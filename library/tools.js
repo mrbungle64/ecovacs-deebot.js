@@ -99,6 +99,16 @@ function isAirPurifier(deviceClass) {
     }
 }
 
+function getCmdForObstacleDetection(modelName) {
+    if (modelName.includes('T8 AIVI')) {
+        return "Recognization";
+    } else if (modelName.includes('T9 AIVI')) {
+        return "Recognization";
+    } else {
+        return "TrueDetect";
+    }
+}
+
 /**
  * Get all known devices, including the supported devices and the known devices
  * @returns {Object} a dictionary of all known devices
@@ -382,6 +392,7 @@ module.exports.getKnownDevices = getKnownDevices;
 module.exports.getModelType = getModelType;
 module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
+module.exports.getCmdForObstacleDetection = getCmdForObstacleDetection;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
 module.exports.is710series = is710series;
 module.exports.isAirPurifier = isAirPurifier;

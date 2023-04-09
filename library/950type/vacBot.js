@@ -1560,28 +1560,38 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 break;
             case 'GetTrueDetect'.toLowerCase():
-                if (this.getModelName().includes('T8 AIVI')) {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
                     this.sendCommand(new VacBotCommand.GetRecognization());
                 } else {
                     this.sendCommand(new VacBotCommand.GetTrueDetect());
                 }
                 break;
+            case 'EnableAIVI'.toLowerCase():
+            case 'EnableAIVI3D'.toLowerCase():
             case 'EnableTrueDetect'.toLowerCase():
-                if (this.getModelName().includes('T8 AIVI')) {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
                     this.sendCommand(new VacBotCommand.SetRecognization(1));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(1));
                 }
                 break;
+            case 'DisableAIVI'.toLowerCase():
+            case 'DisableAIVI3D'.toLowerCase():
             case 'DisableTrueDetect'.toLowerCase():
-                if (this.getModelName().includes('T8 AIVI')) {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
                     this.sendCommand(new VacBotCommand.SetRecognization(0));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(0));
                 }
                 break;
+            case 'SetAIVI'.toLowerCase():
+            case 'SetAIVI3D'.toLowerCase():
             case 'SetTrueDetect'.toLowerCase():
-                this.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
+                    this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
+                } else {
+                    this.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
+                }
                 break;
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase():
