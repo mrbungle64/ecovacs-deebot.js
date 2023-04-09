@@ -41,7 +41,7 @@ function getDistance(x1, y1, x2, y2) {
  * @param {Object} spotAreaInfo - an object instance of EcovacsMapSpotAreaInfo
  * @returns {string} the ID of the spot area (`unknown` if not determinable or `void` if Canvas module is not installed)
  */
-function isPositionInSpotArea(x, y, spotAreaInfo) {
+function getCurrentSpotAreaID(x, y, spotAreaInfo) {
     // Source: https://github.com/substack/point-in-polygon/blob/master/index.js
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -61,4 +61,4 @@ function isPositionInSpotArea(x, y, spotAreaInfo) {
 }
 
 module.exports.getDistanceToChargingStation = getDistanceToChargingStation;
-module.exports.isPositionInSpotArea = isPositionInSpotArea;
+module.exports.getCurrentSpotAreaID = getCurrentSpotAreaID;

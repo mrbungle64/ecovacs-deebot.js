@@ -204,7 +204,7 @@ class VacBot_non950type extends VacBot {
       const posX = Number(payload.attrs['p'].split(",")[0]);
       const posY = Number(payload.attrs['p'].split(",")[1]);
       const angle = payload.attrs['a'];
-      let currentSpotAreaID = mapTools.isPositionInSpotArea(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
+      let currentSpotAreaID = mapTools.getCurrentSpotAreaID(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
       let distanceToChargingStation = null;
       if (this.chargePosition) {
         const pos = posX + ',' + posY;
