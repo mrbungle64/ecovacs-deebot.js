@@ -42,6 +42,7 @@ export function getReqID(): string;
  * @returns {Object} a dictionary of supported devices
  */
 export function getSupportedDevices(): any;
+export function getCmdForObstacleDetection(modelName: any): "Recognization" | "TrueDetect";
 /**
  * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
  * @param {number} totalSeconds - The total number of seconds to format
