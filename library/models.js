@@ -790,5 +790,35 @@ exports.KnownDevices = {
     "20anby": {
         "name": "Z1 Air Quality Monitor",
         "deviceClassLink": "sdp1y1"
+    },
+    "m1wkuw": {
+        "name": "DEEBOT N10",
+        "deviceClassLink": "jtmf04"
+    },
+    "umwv6z": {
+        "name": "DEEBOT N10 PLUS",
+        "deviceClassLink": "rss8xk"
+    },
+    "clojes": {
+        "name": "DEEBOT N10 MAX+",
+        "deviceClassLink": "rss8xk"
+    },
+    "p1jij8": {
+        "name": "DEEBOT T20 OMNI",
+        "deviceClassLink": "lx3j7m"
+    },
+    "626v6g": {
+        "name": "DEEBOT TEO+",
+        "deviceClassLink": "rss8xk"
+    },
+    "zjavof": {
+        "name": "DEEBOT NEO+",
+        "deviceClassLink": "rss8xk"
+    },
+    "5xu9h3": {
+        "name": "GOAT",
+        "950type": true,
+        "950type_V2": true,
+        "type": "GOAT"
     }
 };
