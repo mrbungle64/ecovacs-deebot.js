@@ -376,7 +376,7 @@ class GetMapInfo_V2 extends VacBotCommand {
     }
 } */
 
-class GetMaps extends VacBotCommand {
+class GetCachedMapInfo extends VacBotCommand {
     constructor() {
         super('getCachedMapInfo');
     }
@@ -1120,6 +1120,7 @@ module.exports.GetAirDrying = GetAirDrying;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetBorderSpin = GetBorderSpin;
+module.exports.GetCachedMapInfo = GetCachedMapInfo;
 module.exports.GetCarpetPressure = GetCarpetPressure;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetCleanCount = GetCleanCount;
@@ -1143,7 +1144,6 @@ module.exports.GetMapSpotAreas = GetMapSpotAreas;
 module.exports.GetMapState = GetMapState;
 module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
 module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
-module.exports.GetMaps = GetMaps;
 module.exports.GetMultiMapState = GetMultiMapState;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;

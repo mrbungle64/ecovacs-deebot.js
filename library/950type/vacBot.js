@@ -1372,7 +1372,8 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
-            case 'GetMaps'.toLowerCase(): {
+            case 'GetMaps'.toLowerCase():
+            case 'GetCachedMapInfo'.toLowerCase():
                 this.createMapImageOnly = false;
                 this.createMapDataObject = !!args[0] || false;
                 this.createMapImage = this.createMapDataObject && this.isMapImageSupported();
@@ -1384,10 +1385,9 @@ class VacBot_950type extends VacBot {
                 if ((this.deviceClass === 'p5nx9u') || (this.deviceClass === 'vthpeg')) {
                     this.sendCommand(new VacBotCommand.GetMapInfo_V2());
                 } else {
-                    this.sendCommand(new VacBotCommand.GetMaps());
+                    this.sendCommand(new VacBotCommand.GetCachedMapInfo());
                 }
                 break;
-            }
             case 'GetSpotAreas'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
