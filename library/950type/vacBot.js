@@ -933,7 +933,7 @@ class VacBot_950type extends VacBot {
                     mapsetData: this.mapVirtualBoundaries[mapMID]
                 };
             } else {
-                tools.envLogWarn(`skip message for map  ` + mapMID);
+                tools.envLogWarn(`Skip mapVirtualBoundaries for map ` + mapMID);
                 return {
                     mapsetEvent: 'skip'
                 };
@@ -1380,7 +1380,7 @@ class VacBot_950type extends VacBot {
                 if (args.length >= 2) {
                     this.createMapImage = !!args[1];
                 }
-                // Workaround for some yeedi models
+                // Workaround for some yeedi models (e.g. yeedi mop station)
                 // TODO: Find a better solution
                 if ((this.deviceClass === 'p5nx9u') || (this.deviceClass === 'vthpeg')) {
                     this.sendCommand(new VacBotCommand.GetMapInfo_V2());
@@ -1827,7 +1827,11 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.Area_V2());
                 break;
             case 'GetMapSet_V2'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetMapSet_V2());
+                if (args.length === 1) {
+                    this.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]));
+                } else if (args.length >= 2) {
+                    this.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]));
+                }
                 break;
             case 'SetMapSet_V2'.toLowerCase():
                 if ((args.length >= 2) && (typeof args[1] === 'object')) {
