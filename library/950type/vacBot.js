@@ -898,6 +898,10 @@ class VacBot_950type extends VacBot {
                 return {mapsetEvent: 'skip'};
             }
         }
+        if (payload['subsets'] && !payload['subsets'].length) {
+            tools.envLogWarn('Skipping message: subsets empty');
+            return {mapsetEvent: 'skip'};
+        }
         if (payload['type'] === 'ar') {
             let mapSpotAreas = new map.EcovacsMapSpotAreas(mapMID, payload['msid']);
             for (let mapIndex in payload['subsets']) {
