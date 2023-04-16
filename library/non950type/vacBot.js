@@ -4,7 +4,8 @@ const VacBotCommand = require('./command');
 const VacBot = require('../vacBot');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
-const map = require('../mapTemplate');
+const map = require('../mapInfo');
+const mapTemplate = require('../mapTemplate');
 const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 
@@ -682,7 +683,7 @@ class VacBot_non950type extends VacBot {
         this.mapImages[mapID] = [];
       }
       if (typeof this.mapImages[mapID][type] === 'undefined') {
-        this.mapImages[mapID][type] = new map.EcovacsLiveMapImage(mapID, type, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
+        this.mapImages[mapID][type] = new mapTemplate.EcovacsLiveMapImage(mapID, type, columnGrid, rowGrid, columnPiece, rowPiece, pixelWidth, crc);
       }
       this.mapPiecePacketsSent = [];
       for (let c = 0; c < this.mapPiecePacketsCrcArray.length; c++) {

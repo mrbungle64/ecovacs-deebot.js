@@ -4,7 +4,8 @@ const VacBotCommand = require('./command');
 const VacBot = require('../vacBot');
 const tools = require('../tools');
 const mapTools = require('../mapTools');
-const map = require('../mapTemplate');
+const map = require('../mapInfo');
+const mapTemplate = require('../mapTemplate');
 const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 
@@ -344,7 +345,9 @@ class VacBot_950type extends VacBot {
             if (changed) {
                 const posX = Number(deebotPos['x']);
                 const posY = Number(deebotPos['y']);
-                let currentSpotAreaID = mapTools.getCurrentSpotAreaID(posX, posY, this.mapSpotAreaInfos[this.currentMapMID]);
+                let currentSpotAreaID = mapTools.getCurrentSpotAreaID(
+                    posX, posY, this.mapSpotAreaInfos[this.currentMapMID]
+                );
                 let isInvalid = Number(deebotPos['invalid']) === 1;
                 let distanceToChargingStation = null;
                 if (this.chargePosition) {
@@ -961,7 +964,7 @@ class VacBot_950type extends VacBot {
         if (payload['type'] === 'ar') {
             let mapSpotAreaBoundaries = payload['value'];
             if (payload['compress']) {
-                mapSpotAreaBoundaries = await map.mapPieceToIntArray(payload['value']);
+                mapSpotAreaBoundaries = await mapTemplate.mapPieceToIntArray(payload['value']);
             }
             let customName = '';
             if (payload['name']) {
@@ -1027,7 +1030,7 @@ class VacBot_950type extends VacBot {
             this.mapImages[mapMID] = [];
         }
         if (typeof this.mapImages[mapMID][type] === 'undefined') {
-            this.mapImages[mapMID][type] = new map.EcovacsMapImage(
+            this.mapImages[mapMID][type] = new mapTemplate.EcovacsMapImage(
                 mapMID, type,
                 payload['totalWidth'], payload['totalHeight'],
                 payload['pixel'], payload['totalCount']
@@ -1068,7 +1071,7 @@ class VacBot_950type extends VacBot {
             const cellHeight = payload['cellHeight'];
             const pixel = payload['pixel'];
             const value = payload['value'];
-            this.liveMapImage = new map.EcovacsLiveMapImage(
+            this.liveMapImage = new mapTemplate.EcovacsLiveMapImage(
                 mapMID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, value);
         } else {
             this.liveMapImage.updateMapDataPiecesCrc(payload['value']);
