@@ -1027,14 +1027,24 @@ class VacBot_950type extends VacBot {
             this.mapImages[mapMID] = [];
         }
         if (typeof this.mapImages[mapMID][type] === 'undefined') {
-            const ecovacsMapImage = new map.EcovacsMapImage(mapMID, type, payload['totalWidth'], payload['totalHeight'], payload['pixel'], payload['totalCount']);
-            this.mapImages[mapMID][type] = ecovacsMapImage;
+            this.mapImages[mapMID][type] = new map.EcovacsMapImage(
+                mapMID, type,
+                payload['totalWidth'], payload['totalHeight'],
+                payload['pixel'], payload['totalCount']
+            );
         }
         if (payload['pieceValue'] !== '') {
-            await this.mapImages[mapMID][type].updateMapPiece(payload['index'], payload['startX'], payload['startY'], payload['width'], payload['height'], payload['crc'], payload['value']);
+            await this.mapImages[mapMID][type].updateMapPiece(
+                payload['index'],
+                payload['startX'], payload['startY'],
+                payload['width'], payload['height'],
+                payload['crc'], payload['value']
+            );
         }
         try {
-            return await this.mapImages[mapMID][type].getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+            return await this.mapImages[mapMID][type].getBase64PNG(
+                this.deebotPosition, this.chargePosition, this.currentMapMID
+            );
         } catch (e) {
             tools.envLogError(`error calling getBase64PNG: ${e.message}`);
             throw new Error(e);
