@@ -255,7 +255,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleRelocationState(payload);
                 this.emit("RelocationState", this.vacBot.relocationState);
                 break;
-            case "MapInfo_V2":
+            case "MapInfo_V2_Yeedi":
                 try {
                     this.vacBot.handleMapInfoV2(payload);
                     this.emit("CurrentMapMID", this.vacBot.currentMapMID);
@@ -263,7 +263,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
                     this.emit("Maps", this.vacBot.maps);
                 } catch (e) {
-                    tools.envLogError(`error on handling MapInfo_V2: ${e.message}`);
+                    tools.envLogError(`error on handling MapInfo_V2 (yeedi): ${e.message}`);
                 }
                 break;
             case "CachedMapInfo":
@@ -276,6 +276,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 } catch (e) {
                     tools.envLogError(`error on handling CachedMapInfo: ${e.message}`);
                 }
+                break;
+            case "MapInfo_V2":
+                tools.envLogWarn(`Handle MapInfo_V2`);
                 break;
             case "MapInfo":
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
@@ -872,10 +875,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     handleV2commands(abbreviatedCommand) {
-        if (this.vacBot.authDomain === constants.AUTH_DOMAIN_YD) {
-            switch (abbreviatedCommand) {
-                case 'MapInfo_V2':
-                    return abbreviatedCommand;
+        if (abbreviatedCommand === 'MapInfo_V2') {
+            if (this.vacBot.authDomain === constants.AUTH_DOMAIN_YD) {
+                return 'MapInfo_V2_Yeedi';
+            } else {
+                return abbreviatedCommand;
             }
         }
         return abbreviatedCommand.slice(0, -3);

@@ -1397,7 +1397,7 @@ class VacBot_950type extends VacBot {
                 // Workaround for some yeedi models (e.g. yeedi mop station)
                 // TODO: Find a better solution
                 if ((this.deviceClass === 'p5nx9u') || (this.deviceClass === 'vthpeg')) {
-                    this.sendCommand(new VacBotCommand.GetMapInfo_V2());
+                    this.sendCommand(new VacBotCommand.GetMapInfo_V2_Yeedi());
                 } else {
                     this.sendCommand(new VacBotCommand.GetCachedMapInfo());
                 }
@@ -1409,6 +1409,25 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
+            case 'GetMapInfo_V2'.toLowerCase():
+                if (args.length === 1) {
+                    this.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0]));
+                } else if (args.length >= 2) {
+                    this.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0], args[1]));
+                }
+                break;
+            case 'GetMapSet_V2'.toLowerCase():
+                if (args.length === 1) {
+                    this.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]));
+                } else if (args.length >= 2) {
+                    this.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]));
+                }
+                break;
+            case 'SetMapSet_V2'.toLowerCase():
+                if ((args.length >= 2) && (typeof args[1] === 'object')) {
+                    this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]));
+                }
+                break;
             case 'GetSpotAreaInfo'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
@@ -1458,6 +1477,9 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             }
+            case 'GetMajorMap'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMajorMap());
+                break;
             case 'GetLifeSpan'.toLowerCase(): {
                 if (!args.length) {
                     this.emitFullLifeSpanEvent = true;
@@ -1839,18 +1861,6 @@ class VacBot_950type extends VacBot {
                 break;
             case 'Area_V2'.toLowerCase():
                 this.sendCommand(new VacBotCommand.Area_V2());
-                break;
-            case 'GetMapSet_V2'.toLowerCase():
-                if (args.length === 1) {
-                    this.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]));
-                } else if (args.length >= 2) {
-                    this.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]));
-                }
-                break;
-            case 'SetMapSet_V2'.toLowerCase():
-                if ((args.length >= 2) && (typeof args[1] === 'object')) {
-                    this.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]));
-                }
                 break;
             case 'SetThreeModule'.toLowerCase():
                 if (args.length >= 3) {

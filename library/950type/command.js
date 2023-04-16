@@ -357,7 +357,7 @@ class GetMapImage extends VacBotCommand {
 }
 
 // yeedi Mop Station
-class GetMapInfo_V2 extends VacBotCommand {
+class GetMapInfo_V2_Yeedi extends VacBotCommand {
     constructor(mapType = '0') {
         super('getMapInfo_V2', {
             'type': mapType
@@ -365,16 +365,15 @@ class GetMapInfo_V2 extends VacBotCommand {
     }
 }
 
-/*
 // Ecovacs Deebot X1
 class GetMapInfo_V2 extends VacBotCommand {
-    constructor(mapID, type = '1') {
+    constructor(mapID, type = '0') {
         super('getMapInfo_V2', {
             'mid': mapID,
             'type': type
         });
     }
-} */
+}
 
 class GetCachedMapInfo extends VacBotCommand {
     constructor() {
@@ -385,6 +384,15 @@ class GetCachedMapInfo extends VacBotCommand {
 class GetMapSet extends VacBotCommand {
     constructor(mapID, type = 'ar') {
         super('getMapSet', {
+            'mid': mapID,
+            'type': type
+        });
+    }
+}
+
+class GetMapSet_V2 extends VacBotCommand {
+    constructor(mapID, type = 'ar') {
+        super('getMapSet_V2', {
             'mid': mapID,
             'type': type
         });
@@ -409,7 +417,19 @@ class GetMapSpotAreas extends GetMapSet {
     }
 }
 
+class GetMapSpotAreas_V2 extends GetMapSet_V2 {
+    constructor(mapID) {
+        super(mapID, 'ar');
+    }
+}
+
 class GetMapVirtualBoundaries extends GetMapSet {
+    constructor(mapID, mapVirtualBoundaryType = 'vw') {
+        super(mapID, mapVirtualBoundaryType);
+    }
+}
+
+class GetMapVirtualBoundaries_V2 extends GetMapSet_V2 {
     constructor(mapID, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapVirtualBoundaryType);
     }
@@ -876,15 +896,6 @@ class SetBlueSpeaker extends VacBotCommand {
     }
 }
 
-class GetMapSet_V2 extends VacBotCommand {
-    constructor(mapID, type = 'ar') {
-        super('getMapSet_V2', {
-            'mid': mapID,
-            'type': type
-        });
-    }
-}
-
 class SetMapSet_V2 extends VacBotCommand {
     constructor(mapID, mapArray) {
         super('setMapSet_V2', {
@@ -1138,11 +1149,16 @@ module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.GetMajorMap = GetMajorMap;
 module.exports.GetMapImage = GetMapImage;
 module.exports.GetMapInfo_V2 = GetMapInfo_V2;
+module.exports.GetMapInfo_V2_Yeedi = GetMapInfo_V2_Yeedi;
 module.exports.GetMapSet = GetMapSet;
+module.exports.GetMapSet_V2 = GetMapSet_V2;
 module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapSpotAreas = GetMapSpotAreas;
+module.exports.GetMapSpotAreas_V2 = GetMapSpotAreas_V2;
 module.exports.GetMapState = GetMapState;
+module.exports.GetMapTrace_V2 = GetMapTrace_V2;
 module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
+module.exports.GetMapVirtualBoundaries_V2 = GetMapVirtualBoundaries_V2;
 module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
 module.exports.GetMultiMapState = GetMultiMapState;
 module.exports.GetNetInfo = GetNetInfo;
@@ -1183,6 +1199,7 @@ module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetMapSet = SetMapSet;
+module.exports.SetMapSet_V2 = SetMapSet_V2;
 module.exports.SetRecognization = SetRecognization;
 module.exports.SetSweepMode = SetSweepMode;
 module.exports.SetTrueDetect = SetTrueDetect;
@@ -1208,8 +1225,6 @@ module.exports.GetDrivingWheel = GetDrivingWheel;
 module.exports.GetHumanoidFollow = GetHumanoidFollow;
 module.exports.GetListenMusic = GetListenMusic;
 module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
-module.exports.GetMapSet_V2 = GetMapSet_V2;
-module.exports.GetMapTrace_V2 = GetMapTrace_V2;
 module.exports.GetMonitorAirState = GetMonitorAirState;
 module.exports.GetOta = GetOta;
 module.exports.GetRelocationState = GetRelocationState;
@@ -1227,7 +1242,6 @@ module.exports.SetBlock = SetBlock;
 module.exports.SetBlueSpeaker = SetBlueSpeaker;
 module.exports.SetFreshenerLevel = SetFreshenerLevel;
 module.exports.SetHumidifierLevel = SetHumidifierLevel;
-module.exports.SetMapSet_V2 = SetMapSet_V2;
 module.exports.SetMic = SetMic;
 module.exports.SetMonitorAirState = SetMonitorAirState;
 module.exports.SetThreeModule = SetThreeModule;
