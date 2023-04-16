@@ -790,5 +790,35 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    m1wkuw: {
+        name: string;
+        deviceClassLink: string;
+    };
+    umwv6z: {
+        name: string;
+        deviceClassLink: string;
+    };
+    clojes: {
+        name: string;
+        deviceClassLink: string;
+    };
+    p1jij8: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "626v6g": {
+        name: string;
+        deviceClassLink: string;
+    };
+    zjavof: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "5xu9h3": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
 };
 //# sourceMappingURL=models.d.ts.map

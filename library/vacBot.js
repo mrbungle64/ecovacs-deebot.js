@@ -2,7 +2,8 @@
 
 const tools = require('./tools');
 const i18n = require('./i18n');
-const map = require('./mapTemplate');
+const map = require('./mapInfo');
+const mapTemplate = require('./mapTemplate');
 const {errorCodes} = require('./errorCodes.json');
 const constants = require("./constants");
 const crypto = require("crypto");
@@ -160,7 +161,7 @@ class VacBot {
                 } else {
                     this.ecovacs.emit('MapDataObject', this.mapDataObject);
                 }
-                map.mapDataObject = this.mapDataObject; // clone to mapTemplate
+                mapTemplate.mapDataObject = this.mapDataObject; // clone to mapTemplate
                 this.mapDataObject = null;
             }
         });
@@ -514,7 +515,7 @@ class VacBot {
      */
     async handleMapSpotAreasEvent(spotAreas) {
         const mapID = spotAreas['mapID'];
-        const mapObject = map.getMapObject(this.mapDataObject, mapID);
+        const mapObject = mapTemplate.getMapObject(this.mapDataObject, mapID);
         if (mapObject) {
             mapObject['mapSpotAreas'] = [];
             for (const i in spotAreas['mapSpotAreas']) {
@@ -542,7 +543,7 @@ class VacBot {
      */
     async handleMapVirtualBoundaries(virtualBoundaries) {
         const mapID = virtualBoundaries['mapID'];
-        const mapObject = map.getMapObject(this.mapDataObject, mapID);
+        const mapObject = mapTemplate.getMapObject(this.mapDataObject, mapID);
         if (mapObject) {
             mapObject['mapVirtualBoundaries'] = [];
             const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
@@ -632,7 +633,7 @@ class VacBot {
      */
     async handleMapImageInfo(mapImageInfo) {
         const mapID = mapImageInfo['mapID'];
-        const mapObject = map.getMapObject(this.mapDataObject, mapID);
+        const mapObject = mapTemplate.getMapObject(this.mapDataObject, mapID);
         if (mapObject) {
             mapObject['mapImage']= mapImageInfo;
         }

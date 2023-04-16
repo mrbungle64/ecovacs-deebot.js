@@ -66,6 +66,9 @@ export class GetBatteryState extends VacBotCommand {
 export class GetBorderSpin extends VacBotCommand {
     constructor();
 }
+export class GetCachedMapInfo extends VacBotCommand {
+    constructor();
+}
 export class GetCarpetPressure extends VacBotCommand {
     constructor();
 }
@@ -115,9 +118,15 @@ export class GetMapImage extends VacBotCommand {
     constructor(mapID: any, mapType?: string);
 }
 export class GetMapInfo_V2 extends VacBotCommand {
+    constructor(mapID: any, type?: string);
+}
+export class GetMapInfo_V2_Yeedi extends VacBotCommand {
     constructor(mapType?: string);
 }
 export class GetMapSet extends VacBotCommand {
+    constructor(mapID: any, type?: string);
+}
+export class GetMapSet_V2 extends VacBotCommand {
     constructor(mapID: any, type?: string);
 }
 export class GetMapSpotAreaInfo extends GetMapSubSet {
@@ -126,15 +135,20 @@ export class GetMapSpotAreaInfo extends GetMapSubSet {
 export class GetMapSpotAreas extends GetMapSet {
     constructor(mapID: any);
 }
+export class GetMapSpotAreas_V2 extends GetMapSet_V2 {
+    constructor(mapID: any);
+}
 export class GetMapState extends VacBotCommand {
     constructor();
 }
+export class GetMapTrace_V2 extends VacBotCommand {
+    constructor(type?: number);
+}
 export class GetMapVirtualBoundaries extends GetMapSet {
 }
-export class GetMapVirtualBoundaryInfo extends GetMapSubSet {
+export class GetMapVirtualBoundaries_V2 extends GetMapSet_V2 {
 }
-export class GetMaps extends VacBotCommand {
-    constructor();
+export class GetMapVirtualBoundaryInfo extends GetMapSubSet {
 }
 export class GetMultiMapState extends VacBotCommand {
     constructor();
@@ -253,6 +267,9 @@ export class SetDusterRemind extends VacBotCommand {
 export class SetMapSet extends VacBotCommand {
     constructor(mapID: any, subsets: any, act?: string);
 }
+export class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapID: any, mapArray: any);
+}
 export class SetRecognization extends VacBotCommand {
     constructor(state?: number);
 }
@@ -322,12 +339,6 @@ export class GetListenMusic extends VacBotCommand {
 export class GetLiveLaunchPwdState extends VacBotCommand {
     constructor();
 }
-export class GetMapSet_V2 extends VacBotCommand {
-    constructor(mapID: any, type?: string);
-}
-export class GetMapTrace_V2 extends VacBotCommand {
-    constructor(type?: number);
-}
 export class GetMonitorAirState extends VacBotCommand {
     constructor();
 }
@@ -378,9 +389,6 @@ export class SetFreshenerLevel extends SetThreeModule {
 }
 export class SetHumidifierLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);
-}
-export class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapID: any, mapArray: any);
 }
 export class SetMic extends VacBotCommand {
     constructor(on?: number);

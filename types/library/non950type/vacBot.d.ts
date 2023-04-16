@@ -124,10 +124,7 @@ declare class VacBot_non950type extends VacBot {
      */
     handleMapSet(payload: any): {
         mapsetEvent: string;
-        mapsetData: map.EcovacsMapSpotAreas;
-    } | {
-        mapsetEvent: string;
-        mapsetData: map.EcovacsMapVirtualBoundaries;
+        mapsetData: any;
     } | {
         mapsetEvent: string;
         mapsetData?: undefined;
@@ -160,5 +157,4 @@ declare class VacBot_non950type extends VacBot {
     handleResponseError(payload: any): void;
 }
 import VacBot = require("../vacBot");
-import map = require("../mapTemplate");
 //# sourceMappingURL=vacBot.d.ts.map

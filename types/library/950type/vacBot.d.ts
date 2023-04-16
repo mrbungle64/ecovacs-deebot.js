@@ -337,7 +337,7 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleMajorMap(payload: any): void;
-    liveMapImage: map.EcovacsLiveMapImage;
+    liveMapImage: mapTemplate.EcovacsLiveMapImage;
     /**
      * @todo: finish the implementation
      * @param {Object} payload
@@ -451,5 +451,5 @@ declare class VacBot_950type extends VacBot {
     handleDModule(payload: any): void;
 }
 import VacBot = require("../vacBot");
-import map = require("../mapTemplate");
+import mapTemplate = require("../mapTemplate");
 //# sourceMappingURL=vacBot.d.ts.map
