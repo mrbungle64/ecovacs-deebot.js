@@ -15,7 +15,7 @@ Library for running Ecovacs Deebot (and also some yeedi) vacuum cleaner robots
 
 Information on how to install this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Installation).
 
-The minimum required version of Node.js is 14.x. It is recommended to use version 14.x or 16.x
+The minimum required version of Node.js is 14.x. It is recommended to use version 16.x or 18.x
 
 ## Usage
 
@@ -28,7 +28,7 @@ Information on how to use this library can be found [here](https://github.com/mr
 The fully supported models are those that I own myself:
 
 * Deebot OZMO 920
-* Deebot T8 AIVI
+* Deebot OZMO T8 AIVI
 * Deebot X1 Turbo
 
 ### Other supported models
