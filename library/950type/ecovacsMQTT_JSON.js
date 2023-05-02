@@ -284,7 +284,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
                     tools.envLogWarn(`getMapInfo responded: ${JSON.stringify(payload)}`);
                 } else if (tools.isCanvasModuleAvailable()) {
-                    let mapImage = await this.vacBot.handleMapInfo(payload);
+                    let mapImage = await this.vacBot.handleMapImage(payload);
                     if (mapImage !== null) {
                         this.emit("MapImageData", mapImage);
                         if (this.vacBot.createMapImageOnly) {
@@ -308,17 +308,22 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // TODO: implement MapTrace
                 break;
             case "MapSet": {
-                //handle spotAreas, virtualWalls, noMopZones
+                // Handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.vacBot.handleMapSet(payload);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
                     this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             }
+            case "MapSet_V2":
+                // TODO: handle subsets
+                tools.envLogWarn(`Unhandled MapSet_V2`);
+                break;
             case "MapSubSet": {
-                //handle spotAreas, virtualWalls, noMopZones
+                // Handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = await this.vacBot.handleMapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
+                    // MapSpotAreaInfo, MapVirtualBoundaryInfo
                     this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
@@ -875,6 +880,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
     }
 
     handleV2commands(abbreviatedCommand) {
+        if (abbreviatedCommand === 'MapSet_V2') {
+            // TODO: handle subsets
+            return abbreviatedCommand;
+        };
         if (abbreviatedCommand === 'MapInfo_V2') {
             if (this.vacBot.authDomain === constants.AUTH_DOMAIN_YD) {
                 return 'MapInfo_V2_Yeedi';

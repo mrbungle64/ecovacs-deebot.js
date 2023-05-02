@@ -274,6 +274,7 @@ class Ecovacs extends EventEmitter {
                 // Spot area and virtual wall data
                 let mapsubset = await this.bot.handlePullM(payload);
                 if (mapsubset && (mapsubset['mapsubsetEvent'] !== 'error')) {
+                    // MapSpotAreaInfo, MapVirtualBoundaryInfo
                     this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);
                 }
                 break;

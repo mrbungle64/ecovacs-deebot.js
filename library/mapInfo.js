@@ -98,7 +98,7 @@ class EcovacsMapSpotAreaInfo {
         this.mapSpotAreaCleanSet = {};
     }
 
-    setIndex(index) {
+    setSequenceNumber(index) {
         this.mapSpotAreaSequenceNumber = index;
     }
 

@@ -986,7 +986,7 @@ class VacBot_950type extends VacBot {
             }
             // Cleaning sequence
             if (payload.hasOwnProperty('index')) {
-                mapSpotAreaInfo.setIndex(payload['index']);
+                mapSpotAreaInfo.setSequenceNumber(payload['index']);
             }
             if (typeof this.mapSpotAreaInfos[mapMID] === 'undefined') {
                 this.mapSpotAreaInfos[mapMID] = []; //initialize array for mapSpotAreaInfos if not existing
@@ -1020,7 +1020,7 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      * @returns {Promise<Object>}
      */
-    async handleMapInfo(payload) {
+    async handleMapImage(payload) {
         const mapMID = payload['mid'];
         const type = payload['type'];
         if (isNaN(mapMID)) {
@@ -1379,7 +1379,7 @@ class VacBot_950type extends VacBot {
         super.run(command, ...args);
         switch (command.toLowerCase()) {
             case 'GetMapImage'.toLowerCase(): {
-                const mapID = args[0].toString(); // mapID is a string
+                const mapID = args[0].toString(); // mapID has to be a string
                 const mapType = args[1] || 'outline';
                 this.createMapDataObject = true;
                 this.createMapImage = true;
@@ -1434,7 +1434,7 @@ class VacBot_950type extends VacBot {
             case 'GetSpotAreaInfo'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
-                if ((Number(mapID) > 0) && (spotAreaID !== '')) {
+                if ((Number(mapID) > 0) && (spotAreaID !== '') && (spotAreaID !== undefined)) {
                     this.sendCommand(new VacBotCommand.GetMapSpotAreaInfo(mapID, spotAreaID));
                 }
                 break;
@@ -1457,7 +1457,7 @@ class VacBot_950type extends VacBot {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
-                if ((Number(mapID) > 0) && (spotAreaID !== '')) {
+                if ((Number(mapID) > 0) && (spotAreaID !== '') && (spotAreaID !== undefined)) {
                     this.sendCommand(new VacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type));
                 }
                 break;
@@ -1754,7 +1754,11 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             case 'GetAirDrying'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetAirDrying());
+                if (this.getModelType() === 'yeedi') {
+                    this.sendCommand(new VacBotCommand.GetAirDrying());
+                } else {
+                    this.sendCommand(new VacBotCommand.GetStationState());
+                }
                 break;
             case 'SetAirDrying'.toLowerCase():
                 if (args.length >= 1) {
