@@ -1378,6 +1378,7 @@ class VacBot_950type extends VacBot {
     run(command, ...args) {
         super.run(command, ...args);
         switch (command.toLowerCase()) {
+            case 'GetMapInfo'.toLowerCase():
             case 'GetMapImage'.toLowerCase(): {
                 const mapID = args[0].toString(); // mapID has to be a string
                 const mapType = args[1] || 'outline';
@@ -1385,7 +1386,7 @@ class VacBot_950type extends VacBot {
                 this.createMapImage = true;
                 this.createMapImageOnly = args[2] !== undefined ? args[2] : true;
                 if (Number(mapID) > 0) {
-                    this.sendCommand(new VacBotCommand.GetMapImage(mapID, mapType));
+                    this.sendCommand(new VacBotCommand.GetMapInfo(mapID, mapType));
                 }
                 break;
             }

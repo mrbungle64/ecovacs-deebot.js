@@ -344,7 +344,7 @@ class GetMajorMap extends VacBotCommand {
     }
 }
 
-class GetMapImage extends VacBotCommand {
+class GetMapInfo extends VacBotCommand {
     constructor(mapID, mapType = 'outline') {
         if (MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
             mapType = MAPINFOTYPE_TO_ECOVACS[mapType];
@@ -1147,7 +1147,7 @@ module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
 module.exports.GetLifeSpan = GetLifeSpan;
 module.exports.GetMajorMap = GetMajorMap;
-module.exports.GetMapImage = GetMapImage;
+module.exports.GetMapInfo = GetMapInfo;
 module.exports.GetMapInfo_V2 = GetMapInfo_V2;
 module.exports.GetMapInfo_V2_Yeedi = GetMapInfo_V2_Yeedi;
 module.exports.GetMapSet = GetMapSet;

@@ -227,7 +227,7 @@ class VacBot {
                 this.run('GetMajorMap');
                 for (let m=0; m < this.mapImageDataQueue.length; m++) {
                     const mapID = this.mapImageDataQueue[m]['mapID'];
-                    this.run('GetMapImage', mapID, 'outline', false);
+                    this.run('GetMapInfo', mapID, 'outline', false); // GetMapImage
                 }
             }
             if (this.mapDataObject && !this.mapImageDataQueue.length) {
@@ -265,7 +265,7 @@ class VacBot {
                     });
                     if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
                         this.mapImageDataQueue.push({
-                            'type': 'GetMapImage',
+                            'type': 'GetMapInfo',
                             'mapID': mapID
                         });
                     }
@@ -423,7 +423,7 @@ class VacBot {
             mapObject['mapImage'] = mapImageData;
         }
         this.mapImageDataQueue = this.mapImageDataQueue.filter(item => {
-            return !((item.mapID === mapID) && (item.type === 'GetMapImage'));
+            return !((item.mapID === mapID) && (item.type === 'GetMapInfo'));
         });
         if ((this.mapImageDataQueue.length === 0) || this.createMapImageOnly) {
             this.ecovacs.emit('MapDataReady');
