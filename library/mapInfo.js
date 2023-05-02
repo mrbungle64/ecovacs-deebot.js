@@ -1,4 +1,5 @@
 'use strict';
+
 const tools = require("./tools");
 
 /**
@@ -184,6 +185,24 @@ class EcovacsMapVirtualBoundaryInfo {
     }
 }
 
+function getMapObject(mapDataObject, mapID) {
+    if (mapDataObject) {
+        return mapDataObject.find((map) => {
+            return map.mapID === mapID;
+        });
+    }
+    return null;
+}
+
+function getCurrentMapObject(mapDataObject) {
+    if (mapDataObject) {
+        return mapDataObject.find((map) => {
+            return map.mapIsCurrentMap === true;
+        });
+    }
+    return null;
+}
+
 function getSpotAreaObject(mapDataObject, mapID, spotAreaID) {
     if (mapDataObject) {
         const mapSpotAreasObject = mapDataObject.find((map) => {
@@ -243,5 +262,7 @@ module.exports.EcovacsMapSpotAreas = EcovacsMapSpotAreas;
 module.exports.EcovacsMapVirtualBoundaries = EcovacsMapVirtualBoundaries;
 module.exports.EcovacsMapVirtualBoundary = EcovacsMapVirtualBoundary;
 module.exports.EcovacsMapVirtualBoundaryInfo = EcovacsMapVirtualBoundaryInfo;
+module.exports.getCurrentMapObject = getCurrentMapObject;
+module.exports.getMapObject = getMapObject;
 module.exports.getSpotAreaObject = getSpotAreaObject;
 module.exports.getVirtualBoundaryObject = getVirtualBoundaryObject;

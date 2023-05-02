@@ -1,8 +1,8 @@
 'use strict';
 
+const map = require('./mapInfo');
 const tools = require('./tools.js');
 const lzma = require('lzma');
-const map = require('./mapTemplate');
 
 const MAPINFOTYPE_FROM_ECOVACS = {
     "ol": "outline",
@@ -48,8 +48,6 @@ const MAP_COLORS = {
 };
 
 const POSITION_OFFSET = 400; // the positions of the charger and the Deebot need an offset of 400 pixels
-
-let mapDataObject = null;
 
 class EcovacsMapImageBase {
     constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel) {
@@ -189,7 +187,7 @@ class EcovacsMapImageBase {
         }
     }
 
-    async getBase64PNG(deebotPosition, chargerPosition, currentMapMID) {
+    async getBase64PNG(deebotPosition, chargerPosition, currentMapMID, mapDataObject) {
         if (!tools.isCanvasModuleAvailable()) {
             return null;
         }
@@ -209,14 +207,12 @@ class EcovacsMapImageBase {
         // Draw floor map
         finalContext.drawImage(this.mapFloorCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
 
-        // Get mapObject
-        let mapObject = null;
-
-        if (map.mapDataObject !== null) {
+        if (mapDataObject !== null) {
+            let mapObject;
             if (this.mapID === undefined) {
-                mapObject = getCurrentMapObject(map.mapDataObject);
+                mapObject = map.getCurrentMapObject(mapDataObject);
             } else {
-                mapObject = getMapObject(map.mapDataObject, this.mapID);
+                mapObject = map.getMapObject(mapDataObject, this.mapID);
             }
             // Draw spotAreas
             let areaCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
@@ -237,6 +233,8 @@ class EcovacsMapImageBase {
                     areaContext.closePath();
                     areaContext.fillStyle = SPOTAREA_COLORS[mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaID'] % SPOTAREA_COLORS.length];
                     areaContext.fill();
+                    areaContext.strokeStyle = '#64b5f6';
+                    areaContext.stroke();
                 }
             }
             finalContext.drawImage(areaCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
@@ -443,27 +441,6 @@ function getRotatedCanvasFromImage(image, angle) {
     return rotatedCanvas;
 }
 
-function getMapObject(mapDataObject, mapID) {
-    if (mapDataObject) {
-        return mapDataObject.find((map) => {
-            return map.mapID === mapID;
-        });
-    }
-    return null;
-}
-
-function getCurrentMapObject(mapDataObject) {
-    if (mapDataObject) {
-        return mapDataObject.find((map) => {
-            return map.mapIsCurrentMap === true;
-        });
-    }
-    return null;
-}
-
 module.exports.EcovacsLiveMapImage = EcovacsLiveMapImage;
 module.exports.EcovacsMapImage = EcovacsMapImage;
-module.exports.getCurrentMapObject = getCurrentMapObject;
-module.exports.getMapObject = getMapObject;
-module.exports.mapDataObject = mapDataObject;
 module.exports.mapPieceToIntArray = mapPieceToIntArray;

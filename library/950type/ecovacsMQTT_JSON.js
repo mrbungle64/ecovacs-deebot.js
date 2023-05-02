@@ -277,9 +277,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     tools.envLogError(`error on handling CachedMapInfo: ${e.message}`);
                 }
                 break;
-            case "MapInfo_V2":
-                tools.envLogWarn(`Handle MapInfo_V2`);
-                break;
             case "MapInfo":
                 if (commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
                     tools.envLogWarn(`getMapInfo responded: ${JSON.stringify(payload)}`);
@@ -293,19 +290,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     }
                 }
                 break;
-            case 'MajorMap':
-                // TODO: finish implementing MajorMap
-                //this.vacBot.handleMajorMap(payload);
-                break;
-            case 'MinorMap':
-                // TODO: finish implementing MinorMap
-                /*let mapImage = this.vacBot.handleMinorMap(payload);
-                if (mapImage !== null) {
-                    this.emit("MapLiveImage", mapImage);
-                }*/
-                break;
-            case 'MapTrace':
-                // TODO: implement MapTrace
+            case "MapInfo_V2":
+                tools.envLogWarn(`Unhandled MapInfo_V2`);
                 break;
             case "MapSet": {
                 // Handle spotAreas, virtualWalls, noMopZones
@@ -328,6 +314,20 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             }
+            case 'MajorMap':
+                // TODO: finish implementing MajorMap
+                //this.vacBot.handleMajorMap(payload);
+                break;
+            case 'MinorMap':
+                // TODO: finish implementing MinorMap
+                /*let mapImage = this.vacBot.handleMinorMap(payload);
+                if (mapImage !== null) {
+                    this.emit("MapLiveImage", mapImage);
+                }*/
+                break;
+            case 'MapTrace':
+                // TODO: implement MapTrace
+                break;
             case "LifeSpan":
                 this.vacBot.handleLifespan(payload);
                 if (!this.vacBot.emitFullLifeSpanEvent) {

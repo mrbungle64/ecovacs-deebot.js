@@ -3,7 +3,6 @@
 const tools = require('./tools');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
-const mapTemplate = require('./mapTemplate');
 const {errorCodes} = require('./errorCodes.json');
 const constants = require("./constants");
 const crypto = require("crypto");
@@ -126,6 +125,7 @@ class VacBot {
         this.createMapImageOnly = false;
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
+        this.mapImageDataQueue = [];
 
         this.schedule = [];
 
@@ -150,22 +150,6 @@ class VacBot {
             this.is_ready = true;
         });
 
-        this.on('MapDataReady', () => {
-            if (this.mapDataObject) {
-                if (this.createMapImageOnly) {
-                    if (this.mapDataObject[0] && this.mapDataObject[0].mapImage) {
-                        this.createMapDataObject = false;
-                        this.ecovacs.emit('MapImage', this.mapDataObject[0].mapImage);
-                        this.createMapImageOnly = false;
-                    }
-                } else {
-                    this.ecovacs.emit('MapDataObject', this.mapDataObject);
-                }
-                mapTemplate.mapDataObject = this.mapDataObject; // clone to mapTemplate
-                this.mapDataObject = null;
-            }
-        });
-
         this.on('Maps', (mapData) => {
             if (this.createMapDataObject) {
                 (async () => {
@@ -177,6 +161,7 @@ class VacBot {
                 })();
             }
         });
+
         this.on('MapSpotAreas', (spotAreas) => {
             if (this.createMapDataObject) {
                 (async () => {
@@ -188,6 +173,7 @@ class VacBot {
                 })();
             }
         });
+
         this.on('MapSpotAreaInfo', (spotAreaInfo) => {
             if (this.createMapDataObject) {
                 (async () => {
@@ -199,6 +185,7 @@ class VacBot {
                 })();
             }
         });
+
         this.on('MapVirtualBoundaries', (virtualBoundaries) => {
             if (this.createMapDataObject) {
                 (async () => {
@@ -210,6 +197,7 @@ class VacBot {
                 })();
             }
         });
+
         this.on('MapVirtualBoundaryInfo', (virtualBoundaryInfo) => {
             if (this.createMapDataObject) {
                 (async () => {
@@ -221,17 +209,227 @@ class VacBot {
                 })();
             }
         });
-        this.on('MapImageData', (mapImageInfo) => {
+
+        this.on('MapImageData', (mapImageData) => {
             if (this.createMapDataObject) {
                 (async () => {
                     try {
-                        await this.handleMapImageInfo(mapImageInfo);
+                        await this.handleMapImageData(mapImageData);
                     } catch (e) {
                         tools.envLogInfo(`[vacBot] Error handleMapImageInfo: ${e.message}`);
                     }
                 })();
             }
         });
+
+        this.on('MapDataReady', () => {
+            if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
+                this.run('GetMajorMap');
+                for (let m=0; m < this.mapImageDataQueue.length; m++) {
+                    const mapID = this.mapImageDataQueue[m]['mapID'];
+                    this.run('GetMapSpotAreas_V2', mapID);
+                    this.run('GetMapInfo_V2', mapID, '0');
+                    this.run('GetMapImage', mapID, 'outline', false);
+                }
+            }
+            if (this.mapDataObject && !this.mapImageDataQueue.length) {
+                if (this.createMapImageOnly) {
+                    if (this.mapDataObject[0] && this.mapDataObject[0].mapImage) {
+                        this.createMapDataObject = false;
+                        this.ecovacs.emit('MapImage', this.mapDataObject[0].mapImage);
+                        this.createMapImageOnly = false;
+                    }
+                } else {
+                    this.ecovacs.emit('MapDataObject', this.mapDataObject);
+                }
+            } else {
+                tools.envLogWarn('mapDataObject is empty');
+            }
+        });
+    }
+
+    /**
+     * Handle object with infos about the maps to provide a full map data object
+     * @param {Object} mapsData
+     * @returns {Promise<void>}
+     */
+    async handleMapsEvent(mapsData) {
+        if (!this.mapDataObject) {
+            this.mapDataObject = [];
+            for (const m in mapsData['maps']) {
+                if (Object.prototype.hasOwnProperty.call(mapsData['maps'], m)) {
+                    const mapID = mapsData['maps'][m]['mapID'];
+                    this.mapDataObject.push(mapsData['maps'][m].toJSON());
+                    this.run('GetSpotAreas', mapID);
+                    this.mapDataObjectQueue.push({
+                        'type': 'GetSpotAreas',
+                        'mapID': mapID
+                    });
+                    if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
+                        this.mapImageDataQueue.push({
+                            'type': 'GetMapImage',
+                            'mapID': mapID
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle object with spot area data to provide a full map data object
+     * @param {Object} spotAreasObject
+     * @returns {Promise<void>}
+     */
+    async handleMapSpotAreasEvent(spotAreasObject) {
+        const mapID = spotAreasObject['mapID'];
+        const mapObject = map.getMapObject(this.mapDataObject, mapID);
+        if (mapObject) {
+            mapObject['mapSpotAreas'] = [];
+            for (const s in spotAreasObject['mapSpotAreas']) {
+                if (Object.prototype.hasOwnProperty.call(spotAreasObject['mapSpotAreas'], s)) {
+                    const mapSpotAreaData = spotAreasObject['mapSpotAreas'][s];
+                    const mapSpotAreaID = mapSpotAreaData['mapSpotAreaID'];
+                    mapObject['mapSpotAreas'].push(mapSpotAreaData.toJSON());
+                    this.run('GetSpotAreaInfo', mapID, mapSpotAreaID);
+                    this.mapDataObjectQueue.push({
+                        'type': 'GetSpotAreaInfo',
+                        'mapID': mapID,
+                        'mapSpotAreaID': mapSpotAreaID
+                    });
+                }
+            }
+        }
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            return !((item.mapID === mapID) && (item.type === 'GetSpotAreas'));
+        });
+
+        this.run('GetVirtualBoundaries', mapID);
+        this.mapDataObjectQueue.push({
+            'type': 'GetVirtualBoundaries',
+            'mapID': mapID
+        });
+        setTimeout(()=> {
+            this.handleZeroVirtualBoundariesForMap(mapID);
+        }, this.mapDataObject.length * 500);
+    }
+
+    /**
+     * Handle object with spot area info data to provide a full map data object
+     * @param {Object} spotAreaInfo
+     * @returns {Promise<void>}
+     */
+    async handleMapSpotAreaInfo(spotAreaInfo) {
+        const mapID = spotAreaInfo['mapID'];
+        const mapSpotAreaID = spotAreaInfo['mapSpotAreaID'];
+        const spotAreaObject = map.getSpotAreaObject(this.mapDataObject, mapID, mapSpotAreaID);
+        if (spotAreaObject) {
+            Object.assign(spotAreaObject, spotAreaInfo.toJSON());
+        }
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            if ((item.mapID === mapID) && (item.type === 'GetSpotAreaInfo')) {
+                if (item.mapSpotAreaID === mapSpotAreaID) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        this.handleMapDataReady();
+    }
+
+    /**
+     * Handle object with virtual boundary data to provide a full map data object
+     * @param {Object} virtualBoundaries
+     * @returns {Promise<void>}
+     */
+    async handleMapVirtualBoundaries(virtualBoundaries) {
+        const mapID = virtualBoundaries['mapID'];
+        const mapObject = map.getMapObject(this.mapDataObject, mapID);
+        if (mapObject) {
+            mapObject['mapVirtualBoundaries'] = [];
+            const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
+            const virtualBoundaryArray = [];
+            for (const i in virtualBoundariesCombined) {
+                if (virtualBoundariesCombined.hasOwnProperty(i)) {
+                    virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
+                }
+            }
+            for (const i in virtualBoundaryArray) {
+                if (virtualBoundaryArray.hasOwnProperty(i)) {
+                    const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
+                    const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
+                    mapObject['mapVirtualBoundaries'].push(virtualBoundaryArray[i].toJSON());
+                    this.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
+                    this.mapDataObjectQueue.push({
+                        'type': 'GetVirtualBoundaryInfo',
+                        'mapID': mapID,
+                        'mapVirtualBoundaryID': mapVirtualBoundaryID,
+                        'mapVirtualBoundaryType': mapVirtualBoundaryType
+                    });
+                }
+            }
+        }
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            return !((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries'));
+        });
+        this.handleMapDataReady();
+    }
+
+    /**
+     * Handle object with virtual boundary info data to provide a full map data object
+     * @param {Object} virtualBoundaryInfo
+     * @returns {Promise<void>}
+     */
+    async handleMapVirtualBoundaryInfo(virtualBoundaryInfo) {
+        const mapID = virtualBoundaryInfo['mapID'];
+        const virtualBoundaryID = virtualBoundaryInfo['mapVirtualBoundaryID'];
+        const virtualBoundaryObject = map.getVirtualBoundaryObject(this.mapDataObject, mapID, virtualBoundaryID);
+        if (virtualBoundaryObject) {
+            Object.assign(virtualBoundaryObject, virtualBoundaryInfo.toJSON());
+        }
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            if ((item.mapID === mapID) && (item.type === 'GetVirtualBoundaryInfo')) {
+                if (item.mapVirtualBoundaryType === virtualBoundaryInfo.mapVirtualBoundaryType) {
+                    if (item.mapVirtualBoundaryID === virtualBoundaryID) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+        this.handleMapDataReady();
+    }
+
+    handleZeroVirtualBoundariesForMap(mapID) {
+        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
+            return !((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries'));
+        });
+        this.handleMapDataReady();
+    }
+
+    handleMapDataReady() {
+        if (this.mapDataObjectQueue.length === 0) {
+            this.ecovacs.emit('MapDataReady');
+        }
+    }
+
+    /**
+     * Handle object with map image data to provide a full map data object
+     * @param {Object} mapImageData
+     * @returns {Promise<void>}
+     */
+    async handleMapImageData(mapImageData) {
+        const mapID = mapImageData['mapID'];
+        const mapObject = map.getMapObject(this.mapDataObject, mapID);
+        if (mapObject) {
+            mapObject['mapImage'] = mapImageData;
+        }
+        this.mapImageDataQueue = this.mapImageDataQueue.filter(item => {
+            return !((item.mapID === mapID) && (item.type === 'GetMapImage'));
+        });
+        if ((this.mapImageDataQueue.length === 0) || this.createMapImageOnly) {
+            this.ecovacs.emit('MapDataReady');
+        }
     }
 
     /**
@@ -470,178 +668,6 @@ class VacBot {
             case "MoveTurnAround".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.MoveTurnAround());
                 break;
-        }
-    }
-
-    /**
-     * Handle object with map info data to provide a full map data object
-     * @param {Object} mapData
-     * @returns {Promise<void>}
-     */
-    async handleMapsEvent(mapData) {
-        if (!this.mapDataObject) {
-            this.mapDataObject = [];
-            for (const i in mapData['maps']) {
-                if (Object.prototype.hasOwnProperty.call(mapData['maps'], i)) {
-                    const mapID = mapData['maps'][i]['mapID'];
-                    this.mapDataObject.push(mapData['maps'][i].toJSON());
-                    this.run('GetSpotAreas', mapID);
-                    this.mapDataObjectQueue.push({
-                        'type': 'GetSpotAreas',
-                        'mapID': mapID
-                    });
-                    this.run('GetVirtualBoundaries', mapID);
-                    this.mapDataObjectQueue.push({
-                        'type': 'GetVirtualBoundaries',
-                        'mapID': mapID
-                    });
-                    // 950 type models
-                    if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
-                        this.run('GetMapImage', mapID, 'outline', false);
-                        this.mapDataObjectQueue.push({
-                            'type': 'GetMapImage',
-                            'mapID': mapID
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Handle object with spot area data to provide a full map data object
-     * @param {Object} spotAreas
-     * @returns {Promise<void>}
-     */
-    async handleMapSpotAreasEvent(spotAreas) {
-        const mapID = spotAreas['mapID'];
-        const mapObject = mapTemplate.getMapObject(this.mapDataObject, mapID);
-        if (mapObject) {
-            mapObject['mapSpotAreas'] = [];
-            for (const i in spotAreas['mapSpotAreas']) {
-                if (Object.prototype.hasOwnProperty.call(spotAreas['mapSpotAreas'], i)) {
-                    const mapSpotAreaID = spotAreas['mapSpotAreas'][i]['mapSpotAreaID'];
-                    mapObject['mapSpotAreas'].push(spotAreas['mapSpotAreas'][i].toJSON());
-                    this.run('GetSpotAreaInfo', spotAreas['mapID'], mapSpotAreaID);
-                    this.mapDataObjectQueue.push({
-                        'type': 'GetSpotAreaInfo',
-                        'mapID': spotAreas['mapID'],
-                        'mapSpotAreaID': mapSpotAreaID
-                    });
-                }
-            }
-        }
-        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            return !((item.mapID === mapID) && (item.type === 'GetSpotAreas'));
-        });
-    }
-
-    /**
-     * Handle object with virtual boundary data to provide a full map data object
-     * @param {Object} virtualBoundaries
-     * @returns {Promise<void>}
-     */
-    async handleMapVirtualBoundaries(virtualBoundaries) {
-        const mapID = virtualBoundaries['mapID'];
-        const mapObject = mapTemplate.getMapObject(this.mapDataObject, mapID);
-        if (mapObject) {
-            mapObject['mapVirtualBoundaries'] = [];
-            const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
-            const virtualBoundaryArray = [];
-            for (const i in virtualBoundariesCombined) {
-                if (virtualBoundariesCombined.hasOwnProperty(i)) {
-                    virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
-                }
-            }
-            for (const i in virtualBoundaryArray) {
-                if (virtualBoundaryArray.hasOwnProperty(i)) {
-                    const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
-                    const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
-                    mapObject['mapVirtualBoundaries'].push(virtualBoundaryArray[i].toJSON());
-                    this.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
-                    this.mapDataObjectQueue.push({
-                        'type': 'GetVirtualBoundaryInfo',
-                        'mapID': mapID,
-                        'mapVirtualBoundaryID': mapVirtualBoundaryID,
-                        'mapVirtualBoundaryType': mapVirtualBoundaryType
-                    });
-                }
-            }
-        }
-        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            return !((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries'));
-        });
-    }
-
-    /**
-     * Handle object with spot area info data to provide a full map data object
-     * @param {Object} spotAreaInfo
-     * @returns {Promise<void>}
-     */
-    async handleMapSpotAreaInfo(spotAreaInfo) {
-        const mapID = spotAreaInfo['mapID'];
-        const mapSpotAreaID = spotAreaInfo['mapSpotAreaID'];
-        const mapSpotAreasObject = map.getSpotAreaObject(this.mapDataObject, mapID, mapSpotAreaID);
-        if (mapSpotAreasObject) {
-            Object.assign(mapSpotAreasObject, spotAreaInfo.toJSON());
-        }
-        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'GetSpotAreaInfo')) {
-                if (item.mapSpotAreaID === mapSpotAreaID) {
-                    return false;
-                }
-            }
-            return true;
-        });
-        if (this.mapDataObjectQueue.length === 0) {
-            this.ecovacs.emit('MapDataReady');
-        }
-    }
-
-    /**
-     * Handle object with virtual boundary info data to provide a full map data object
-     * @param {Object} virtualBoundaryInfo
-     * @returns {Promise<void>}
-     */
-    async handleMapVirtualBoundaryInfo(virtualBoundaryInfo) {
-        const mapID = virtualBoundaryInfo['mapID'];
-        const virtualBoundaryID = virtualBoundaryInfo['mapVirtualBoundaryID'];
-        const mapVirtualBoundaryObject = map.getVirtualBoundaryObject(this.mapDataObject, mapID, virtualBoundaryID);
-        if (mapVirtualBoundaryObject) {
-            Object.assign(mapVirtualBoundaryObject, virtualBoundaryInfo.toJSON());
-        }
-        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            if ((item.mapID === mapID) && (item.type === 'GetVirtualBoundaryInfo')) {
-                if (item.mapVirtualBoundaryType === virtualBoundaryInfo.mapVirtualBoundaryType) {
-                    if (item.mapVirtualBoundaryID === virtualBoundaryID) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        });
-        if (this.mapDataObjectQueue.length === 0) {
-            this.ecovacs.emit('MapDataReady');
-        }
-    }
-
-
-    /**
-     * Handle object with map image data to provide a full map data object
-     * @param {Object} mapImageInfo
-     * @returns {Promise<void>}
-     */
-    async handleMapImageInfo(mapImageInfo) {
-        const mapID = mapImageInfo['mapID'];
-        const mapObject = mapTemplate.getMapObject(this.mapDataObject, mapID);
-        if (mapObject) {
-            mapObject['mapImage']= mapImageInfo;
-        }
-        this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
-            return !((item.mapID === mapID) && (item.type === 'GetMapImage'));
-        });
-        if (this.mapDataObjectQueue.length === 0) {
-            this.ecovacs.emit('MapDataReady');
         }
     }
 
