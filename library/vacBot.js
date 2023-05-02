@@ -227,8 +227,6 @@ class VacBot {
                 this.run('GetMajorMap');
                 for (let m=0; m < this.mapImageDataQueue.length; m++) {
                     const mapID = this.mapImageDataQueue[m]['mapID'];
-                    this.run('GetMapSpotAreas_V2', mapID);
-                    this.run('GetMapInfo_V2', mapID, '0');
                     this.run('GetMapImage', mapID, 'outline', false);
                 }
             }
