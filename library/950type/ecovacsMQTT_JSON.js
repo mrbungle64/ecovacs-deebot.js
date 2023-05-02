@@ -150,9 +150,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
         abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
-        // e.g. N9, T8, T9 series
-        // Not sure if the lowercase variant is necessary
-        if (abbreviatedCommand.endsWith("_V2") || abbreviatedCommand.endsWith("_v2")) {
+        // e.g. T8, T9, T10, N8, X1 series
+        if (abbreviatedCommand.endsWith("_V2")) {
             abbreviatedCommand = this.handleV2commands(abbreviatedCommand);
         }
         this.emit('messageReceived', command + ' => ' + abbreviatedCommand);

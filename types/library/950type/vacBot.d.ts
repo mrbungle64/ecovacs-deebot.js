@@ -331,7 +331,7 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      * @returns {Promise<Object>}
      */
-    handleMapInfo(payload: any): Promise<any>;
+    handleMapImage(payload: any): Promise<any>;
     /**
      * @todo: finish the implementation
      * @param {Object} payload

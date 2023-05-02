@@ -14,9 +14,6 @@ export class EcovacsMapImage extends EcovacsMapImageBase {
     updateMapPiece(pieceIndex: any, pieceStartX: any, pieceStartY: any, pieceWidth: any, pieceHeight: any, pieceCrc: any, pieceValue: any, checkPieceCrc?: boolean): Promise<void>;
     mapDataPiecesCrc: any;
 }
-export function getCurrentMapObject(mapDataObject: any): any;
-export function getMapObject(mapDataObject: any, mapID: any): any;
-export let mapDataObject: any;
 export function mapPieceToIntArray(pieceValue: any): Promise<any>;
 declare class EcovacsMapImageBase {
     constructor(mapID: any, mapType: any, mapTotalWidth: any, mapTotalHeight: any, mapPixel: any);
@@ -39,7 +36,7 @@ declare class EcovacsMapImageBase {
     transferMapInfo: boolean;
     initCanvas(): Promise<void>;
     drawMapPieceToCanvas(mapPieceCompressed: any, mapPieceStartX: any, mapPieceStartY: any, mapPieceWidth: any, mapPieceHeight: any): Promise<void>;
-    getBase64PNG(deebotPosition: any, chargerPosition: any, currentMapMID: any): Promise<{
+    getBase64PNG(deebotPosition: any, chargerPosition: any, currentMapMID: any, mapDataObject: any): Promise<{
         mapID: any;
         mapType: any;
         mapBase64PNG: string;
