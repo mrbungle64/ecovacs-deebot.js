@@ -8,6 +8,7 @@ const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
 const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
+const constants = require("../constants");
 
 /**
  * This class is relevant for 950 type models
@@ -1081,17 +1082,27 @@ class VacBot_950type extends VacBot {
             }
         }
         if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
+            const crcList = payload['value'];
+            const crcArray = crcList.split(',');
+            for (let c = 0; c < crcArray.length; c++) {
+                if (crcArray[c] !== constants.CRC_EMPTY_PIECE) { // skipping empty pieces
+                    this.sendCommand(new VacBotCommand.GetMinorMap(mapID, c));
+                }
+            }
+            // TODO: Implement liveMapImage
+            this.sendCommand(new VacBotCommand.GetMapTrace());
+            // TODO: handle liveMapImage
             /*const type = payload['type'];
             const pieceWidth = payload['pieceWidth'];
             const pieceHeight = payload['pieceHeight'];
             const cellWidth = payload['cellWidth'];
             const cellHeight = payload['cellHeight'];
             const pixel = payload['pixel'];
-            const value = payload['value'];
             this.liveMapImage = new mapTemplate.EcovacsLiveMapImage(
-                mapMID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, value);
+                mapID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, crcList);*/
         } else {
-            this.liveMapImage.updateMapDataPiecesCrc(payload['value']);
+            // TODO: handle liveMapImage
+            //this.liveMapImage.updateMapDataPiecesCrc(crcList);
         }
     }
 
@@ -1113,13 +1124,24 @@ class VacBot_950type extends VacBot {
         if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
             return null;
         }
-        await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
+        //await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
         try {
-            return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID);
+            //return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID, this.mapDataObject);
         } catch (e) {
             tools.envLogError(`error calling getBase64PNG: ${e.message}`);
             throw new Error(e);
         }
+    }
+
+    async handleMapTrace(payload) {
+        tools.envLogInfo('handleMapTrace');
+        tools.envLogPayload(payload);
+        /*
+        const pointCount = payload[pointCount];
+        const tid = payload[tid];
+        const totalCount = payload[totalCount];
+        const traceStart = payload[traceStart];
+        const traceValue = payload[traceValue];*/
     }
 
     /**
