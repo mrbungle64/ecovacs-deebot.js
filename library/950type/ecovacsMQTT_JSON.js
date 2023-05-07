@@ -314,18 +314,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             }
             case 'MajorMap':
+                this.vacBot.handleMajorMap(payload);
                 // TODO: finish implementing MajorMap
-                //this.vacBot.handleMajorMap(payload);
-                break;
-            case 'MinorMap':
-                // TODO: finish implementing MinorMap
-                /*let mapImage = this.vacBot.handleMinorMap(payload);
-                if (mapImage !== null) {
-                    this.emit("MapLiveImage", mapImage);
-                }*/
                 break;
             case 'MapTrace':
-                // TODO: implement MapTrace
+                this.vacBot.handleMapTrace(payload);
+                // TODO: finish implementing MapTrace
+                break;
+            case 'MinorMap':
+                let mapImage = this.vacBot.handleMinorMap(payload);
+                // TODO: finish implementing MinorMap and emit MapLiveImage
                 break;
             case "LifeSpan":
                 this.vacBot.handleLifespan(payload);
