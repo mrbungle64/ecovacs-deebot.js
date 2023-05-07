@@ -344,6 +344,25 @@ class GetMajorMap extends VacBotCommand {
     }
 }
 
+class GetMinorMap extends VacBotCommand {
+    constructor(mid, pieceIndex, type = 'ol') {
+        super('getMinorMap', {
+            'mid': mid,
+            'pieceIndex': pieceIndex,
+            'type': type
+        });
+    }
+}
+
+class GetMapTrace extends VacBotCommand {
+    constructor(traceStart = 0, pointCount = 400) {
+        super('getMapTrace', {
+            'traceStart': traceStart,
+            'pointCount': pointCount
+        });
+    }
+}
+
 class GetMapInfo extends VacBotCommand {
     constructor(mapID, mapType = 'outline') {
         if (MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
@@ -1160,6 +1179,8 @@ module.exports.GetMapTrace_V2 = GetMapTrace_V2;
 module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
 module.exports.GetMapVirtualBoundaries_V2 = GetMapVirtualBoundaries_V2;
 module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
+module.exports.GetMapTrace = GetMapTrace;
+module.exports.GetMinorMap = GetMinorMap;
 module.exports.GetMultiMapState = GetMultiMapState;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
