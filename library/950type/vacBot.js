@@ -1021,23 +1021,23 @@ class VacBot_950type extends VacBot {
      * @returns {Promise<Object>}
      */
     async handleMapImage(payload) {
-        const mapMID = payload['mid'];
+        const mapID = payload['mid'];
         const type = payload['type'];
-        if (isNaN(mapMID)) {
+        if (isNaN(mapID)) {
             return null;
         }
-        if (typeof this.mapImages[mapMID] === 'undefined') {
-            this.mapImages[mapMID] = [];
+        if (typeof this.mapImages[mapID] === 'undefined') {
+            this.mapImages[mapID] = [];
         }
-        if (typeof this.mapImages[mapMID][type] === 'undefined') {
-            this.mapImages[mapMID][type] = new mapTemplate.EcovacsMapImage(
-                mapMID, type,
+        if (typeof this.mapImages[mapID][type] === 'undefined') {
+            this.mapImages[mapID][type] = new mapTemplate.EcovacsMapImage(
+                mapID, type,
                 payload['totalWidth'], payload['totalHeight'],
                 payload['pixel'], payload['totalCount']
             );
         }
         if (payload['pieceValue'] !== '') {
-            await this.mapImages[mapMID][type].updateMapPiece(
+            await this.mapImages[mapID][type].updateMapPiece(
                 payload['index'],
                 payload['startX'], payload['startY'],
                 payload['width'], payload['height'],
@@ -1045,7 +1045,7 @@ class VacBot_950type extends VacBot {
             );
         }
         try {
-            return await this.mapImages[mapMID][type].getBase64PNG(
+            return await this.mapImages[mapID][type].getBase64PNG(
                 this.deebotPosition, this.chargePosition, this.currentMapMID, this.mapDataObject
             );
         } catch (e) {
@@ -1059,12 +1059,12 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleMajorMap(payload) {
-        let mapMID = payload['mid'];
-        if (isNaN(mapMID)) {
+        let mapID = payload['mid'];
+        if (isNaN(mapID)) {
             return;
         }
-        if (!this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
-            const type = payload['type'];
+        if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
+            /*const type = payload['type'];
             const pieceWidth = payload['pieceWidth'];
             const pieceHeight = payload['pieceHeight'];
             const cellWidth = payload['cellWidth'];
@@ -1084,8 +1084,8 @@ class VacBot_950type extends VacBot {
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
     async handleMinorMap(payload) {
-        let mapMID = payload['mid'];
-        if (isNaN(mapMID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapMID)) {
+        let mapID = payload['mid'];
+        if (isNaN(mapID) || !this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
             return null;
         }
         await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
