@@ -10,6 +10,8 @@ const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 const constants = require("../constants");
 
+const HANDLE_LIVE_MAP = false;
+
 /**
  * This class is relevant for 950 type models
  * e.g. Deebot OZMO 920/950, T8 series, T9 series (which are all MQTT based models)
@@ -140,7 +142,7 @@ class VacBot_950type extends VacBot {
             'status': null
         };
         this.stationState = {
-            'type' :null,
+            'type': null,
             'state': null
         };
         this.washInterval = null;
@@ -840,20 +842,18 @@ class VacBot_950type extends VacBot {
         for (let mapIndex in infoEvent) {
             if (infoEvent.hasOwnProperty(mapIndex)) {
                 if (infoEvent[mapIndex]['mid'] !== '0') {
-                    this.maps['maps'].push(
-                        new map.EcovacsMap(
-                            infoEvent[mapIndex]['mid'],
-                            infoEvent[mapIndex]['index'],
-                            infoEvent[mapIndex]['name'],
-                            infoEvent[mapIndex]['status'],
-                            infoEvent[mapIndex]['using'],
-                            infoEvent[mapIndex]['built']
-                        )
+                    const mapID = infoEvent[mapIndex]['mid'];
+                    const index = infoEvent[mapIndex]['index'];
+                    const name = infoEvent[mapIndex]['name'];
+                    const status = infoEvent[mapIndex]['status'];
+                    const using = infoEvent[mapIndex]['using'];
+                    const built = infoEvent[mapIndex]['built'];
+                    this.maps['maps'].push(new map.EcovacsMap(mapID, index, name, status, using, built)
                     );
                     if (infoEvent[mapIndex]['using'] === 1) {
-                        this.currentMapName = infoEvent[mapIndex]['name'];
-                        this.currentMapMID = infoEvent[mapIndex]['mid'];
-                        this.currentMapIndex = infoEvent[mapIndex]['index'];
+                        this.currentMapMID = mapID;
+                        this.currentMapName = name;
+                        this.currentMapIndex = index;
                     }
                 }
             }
@@ -875,12 +875,8 @@ class VacBot_950type extends VacBot {
         this.maps = {'maps': []};
         this.maps['maps'].push(
             new map.EcovacsMap(
-                this.currentMapMID,
-                this.currentMapIndex,
-                this.currentMapName,
-                1,
-                1,
-                1)
+                this.currentMapMID, this.currentMapIndex, this.currentMapName, 1, 1, 1
+            )
         );
         tools.envLogResult(`currentMapName: ${this.currentMapName}`);
         tools.envLogResult(`currentMapMID: ${this.currentMapMID}`);
@@ -910,7 +906,9 @@ class VacBot_950type extends VacBot {
             let mapSpotAreas = new map.EcovacsMapSpotAreas(mapID, payload['msid']);
             for (let mapIndex in payload['subsets']) {
                 if (payload['subsets'].hasOwnProperty(mapIndex)) {
-                    mapSpotAreas.push(new map.EcovacsMapSpotArea(payload['subsets'][mapIndex]['mssid']));
+                    mapSpotAreas.push(
+                        new map.EcovacsMapSpotArea(payload['subsets'][mapIndex]['mssid'])
+                    );
                 }
             }
             tools.envLogResult(`MapSpotAreas: ${JSON.stringify(mapSpotAreas)}`);
@@ -921,12 +919,15 @@ class VacBot_950type extends VacBot {
         } else if ((payload['type'] === 'vw') || (payload['type'] === 'mw')) {
             if (typeof this.mapVirtualBoundaries[mapID] === 'undefined') {
                 tools.envLogResult(`initialize mapVirtualBoundaries for map ${mapID}`);
-                this.mapVirtualBoundaries[mapID] = new map.EcovacsMapVirtualBoundaries(mapID);  //initialize array for mapVirtualBoundaries if not existing
+                // initialize array for mapVirtualBoundaries if not existing
+                this.mapVirtualBoundaries[mapID] = new map.EcovacsMapVirtualBoundaries(mapID);
                 this.mapVirtualBoundariesResponses[mapID] = [false, false];
             }
             for (let mapIndex in payload['subsets']) {
                 if (payload['subsets'].hasOwnProperty(mapIndex)) {
-                    this.mapVirtualBoundaries[mapID].push(new map.EcovacsMapVirtualBoundary(payload['subsets'][mapIndex]['mssid'], payload['type']));
+                    this.mapVirtualBoundaries[mapID].push(
+                        new map.EcovacsMapVirtualBoundary(payload['subsets'][mapIndex]['mssid'], payload['type'])
+                    );
                 }
             }
             if (payload['type'] === 'vw') {
@@ -935,16 +936,15 @@ class VacBot_950type extends VacBot {
                 this.mapVirtualBoundariesResponses[mapID][1] = true;
             }
             tools.envLogResult(`mapVirtualBoundaries: ${JSON.stringify(this.mapVirtualBoundaries[mapID])}`);
-            if (this.mapVirtualBoundariesResponses[mapID][0] && this.mapVirtualBoundariesResponses[mapID][1]) { //only return if both responses were processed
+            if (this.mapVirtualBoundariesResponses[mapID][0] && this.mapVirtualBoundariesResponses[mapID][1]) {
+                // only return if both responses were processed
                 return {
                     mapsetEvent: 'MapVirtualBoundaries',
                     mapsetData: this.mapVirtualBoundaries[mapID]
                 };
             } else {
-                tools.envLogWarn(`Skip mapVirtualBoundaries for map ` + mapID);
-                return {
-                    mapsetEvent: 'skip'
-                };
+                tools.envLogWarn(`Skipping mapVirtualBoundaries for map ` + mapID);
+                return {mapsetEvent: 'skip'};
             }
         }
 
@@ -964,9 +964,7 @@ class VacBot_950type extends VacBot {
                 mapID = this.currentMapMID;
             } else {
                 tools.envLogWarn('mid is not a number. Skipping message for MapSubset');
-                return {
-                    mapsubsetEvent: 'error'
-                };
+                return {mapsubsetEvent: 'error'};
             }
         }
         if (payload['type'] === 'ar') {
@@ -1018,9 +1016,7 @@ class VacBot_950type extends VacBot {
         }
 
         tools.envLogWarn(`unknown mapset type: ${JSON.stringify(payload['type'])}`);
-        return {
-            mapsubsetEvent: 'error'
-        };
+        return {mapsubsetEvent: 'error'};
     }
 
     /**
@@ -1081,8 +1077,8 @@ class VacBot_950type extends VacBot {
                 return null;
             }
         }
+        const crcList = payload['value'];
         if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
-            const crcList = payload['value'];
             const crcArray = crcList.split(',');
             for (let c = 0; c < crcArray.length; c++) {
                 if (crcArray[c] !== constants.CRC_EMPTY_PIECE) { // skipping empty pieces
@@ -1092,17 +1088,21 @@ class VacBot_950type extends VacBot {
             // TODO: Implement liveMapImage
             this.sendCommand(new VacBotCommand.GetMapTrace());
             // TODO: handle liveMapImage
-            /*const type = payload['type'];
-            const pieceWidth = payload['pieceWidth'];
-            const pieceHeight = payload['pieceHeight'];
-            const cellWidth = payload['cellWidth'];
-            const cellHeight = payload['cellHeight'];
-            const pixel = payload['pixel'];
-            this.liveMapImage = new mapTemplate.EcovacsLiveMapImage(
-                mapID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, crcList);*/
+            if (HANDLE_LIVE_MAP) {
+                const type = payload['type'];
+                const pieceWidth = payload['pieceWidth'];
+                const pieceHeight = payload['pieceHeight'];
+                const cellWidth = payload['cellWidth'];
+                const cellHeight = payload['cellHeight'];
+                const pixel = payload['pixel'];
+                this.liveMapImage = new mapTemplate.EcovacsLiveMapImage(
+                    mapID, type, pieceWidth, pieceHeight, cellWidth, cellHeight, pixel, crcList);
+            }
         } else {
             // TODO: handle liveMapImage
-            //this.liveMapImage.updateMapDataPiecesCrc(crcList);
+            if (HANDLE_LIVE_MAP) {
+                this.liveMapImage.updateMapDataPiecesCrc(crcList);
+            }
         }
     }
 
@@ -1124,12 +1124,16 @@ class VacBot_950type extends VacBot {
         if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
             return null;
         }
-        //await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
-        try {
-            //return this.liveMapImage.getBase64PNG(this.deebotPosition, this.chargePosition, this.currentMapMID, this.mapDataObject);
-        } catch (e) {
-            tools.envLogError(`error calling getBase64PNG: ${e.message}`);
-            throw new Error(e);
+        if (HANDLE_LIVE_MAP) {
+            await this.liveMapImage.updateMapPiece(payload['pieceIndex'], payload['pieceValue']);
+            try {
+                return this.liveMapImage.getBase64PNG(
+                    this.deebotPosition, this.chargePosition, this.currentMapMID, this.mapDataObject
+                );
+            } catch (e) {
+                tools.envLogError(`error calling getBase64PNG: ${e.message}`);
+                throw new Error(e);
+            }
         }
     }
 
