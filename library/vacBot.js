@@ -224,7 +224,6 @@ class VacBot {
 
         this.on('MapDataReady', () => {
             if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
-                this.run('GetMajorMap');
                 for (let m=0; m < this.mapImageDataQueue.length; m++) {
                     const mapID = this.mapImageDataQueue[m]['mapID'];
                     this.run('GetMapInfo', mapID, 'outline', false); // GetMapImage

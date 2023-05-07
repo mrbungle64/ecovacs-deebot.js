@@ -1417,6 +1417,7 @@ class VacBot_950type extends VacBot {
             }
             case 'GetMaps'.toLowerCase():
             case 'GetCachedMapInfo'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMajorMap());
                 this.createMapImageOnly = false;
                 this.createMapDataObject = !!args[0] || false;
                 this.createMapImage = this.createMapDataObject && this.isMapImageSupported();
