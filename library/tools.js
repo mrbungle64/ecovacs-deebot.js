@@ -287,6 +287,17 @@ function envLogMqtt(message) {
     }
 }
 
+function envLogFwBuryPoint(message) {
+    if (verbose(message)) {
+        if (typeof message === 'object') {
+            console.log(chalk.bgMagenta.white(' FwBuryPoint '));
+            console.log(message);
+        } else if (message !== '') {
+            console.log(chalk.bgMagenta.white(' FwBuryPoint ') + ' ' + chalk.white(message));
+        }
+    }
+}
+
 function envLogResult(message) {
     if (verbose(message)) {
         console.log(chalk.bgGreen.white(' result ') + ' ' + message);
@@ -408,6 +419,7 @@ module.exports.paramsToQueryList = paramsToQueryList;
 
 module.exports.envLogCommand = envLogCommand;
 module.exports.envLogError = envLogError;
+module.exports.envLogFwBuryPoint = envLogFwBuryPoint;
 module.exports.envLogHeader = envLogHeader;
 module.exports.envLogInfo = envLogInfo;
 module.exports.envLogMqtt = envLogMqtt;
