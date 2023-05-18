@@ -914,10 +914,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 fwBuryPoint = dValObject;
             }
 
-            if (fwBuryPointEvent === 'bd_sysinfo') {
-                this.vacBot.handleSysinfo(JSON.stringify({'body': fwBuryPoint}));
-                return;
-            } else if (fwBuryPointEvent === 'bd_wifi_24g') {
+            if (fwBuryPointEvent === 'bd_wifi_24g') {
                 //
             } else if (fwBuryPointEvent === 'bd_onoffline') {
                 // after reconnection
