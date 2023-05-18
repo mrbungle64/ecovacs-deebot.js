@@ -889,29 +889,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             if (payload.hasOwnProperty('new')) {
                 tools.envLogFwBuryPoint(payload);
                 fwBuryPoint = payload.new;
-                // example:
-                /* {
-                         "gid": "G1669968164685",
-                         "index": "0000000551",
-                         "ts": "1670148317338",
-                         "orig": {
-                             "battery": 100,
-                             "chargeState": 0,
-                             "robotState": 0,
-                             "robotPos": "-11,248",
-                             "chargerPos": "27,427",
-                             "onCharger": 1
-                         },
-                         "new": {
-                             "battery": 100,
-                             "chargeState": 0,
-                             "robotState": 0,
-                             "robotPos": "-21,161",
-                             "chargerPos": "27,427",
-                             "onCharger": 0
-                         }
-                     } */
-            } else if (payload['content']) {
+            } else if (payload.hasOwnProperty('content')) {
                 const content = JSON.parse(payload['content']);
                 fwBuryPointEvent = content["rn"];
                 tools.envLogFwBuryPoint(`event: ${fwBuryPointEvent}`);
@@ -986,7 +964,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     return true;
                 }
             }
-
             if (fwBuryPoint.hasOwnProperty('multiMap')) {
                 // Info whether multi-map mode is enabled
                 const val = fwBuryPoint.multiMap;
@@ -1006,7 +983,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 return true;
             }
             // ----------------------------------
-            // We use these properties as trigger
+            // Use these properties as trigger
             // ----------------------------------
             if (fwBuryPoint.hasOwnProperty('waterAmount') || fwBuryPoint.hasOwnProperty('waterbox')) {
                 // Mopping functionality related data
