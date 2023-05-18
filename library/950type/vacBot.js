@@ -8,6 +8,7 @@ const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
 const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
+const {eventCodes} = require('../eventCodes.json');
 const constants = require("../constants");
 
 const HANDLE_LIVE_MAP = false;
@@ -380,7 +381,11 @@ class VacBot_950type extends VacBot {
      */
     handleEvt(payload) {
         const code = payload['code'];
-        tools.envLogWarn(`Unhandled Evt code: '${code}'`);
+        if (eventCodes.hasOwnProperty(code)) {
+            tools.envLogWarn(`Evt code: '${eventCodes[code]}'`);
+        } else {
+            tools.envLogWarn(`Unhandled Evt code: '${code}'`);
+        }
     }
 
     /**

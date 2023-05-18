@@ -1,5 +1,6 @@
 {
   "eventCodes": {
+    "1001": "Mop only mode enabled",
     "1007": "Mop installed",
     "1026": "Charging dock not found",
     "1052": "Change mop reminder",
@@ -8,6 +9,7 @@
     "1062": "Unable to locate starting new map",
     "1068": "Relocate failed return to charge",
     "1071": "Relocate success",
-    "1088": "Relocate failed"
+    "1088": "Relocate failed",
+    "1140": "Mop only mode disabled"
   }
 }
