@@ -111,6 +111,7 @@ export function isValidVirtualWallType(type: string): boolean;
 export function paramsToQueryList(params: any): string;
 export function envLogCommand(message: any): void;
 export function envLogError(message: any): void;
+export function envLogFwBuryPoint(message: any): void;
 export function envLogHeader(message: any): void;
 export function envLogInfo(message: any): void;
 export function envLogMqtt(message: any): void;

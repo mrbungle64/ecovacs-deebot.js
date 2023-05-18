@@ -56,12 +56,6 @@ export namespace GOCHARGING_REASONS {
     const cleaningCloth: string;
     const none: string;
 }
-export var WATER_LEVEL_TO_ECOVACS: {
-    1: number;
-    2: number;
-    3: number;
-    4: number;
-};
 export var CLEAN_SPEED_TO_ECOVACS: {
     1: number;
     2: number;

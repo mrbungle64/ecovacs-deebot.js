@@ -14,7 +14,7 @@ declare class EcovacsMQTT_JSON extends EcovacsMQTT {
      * The main advantage of this message is that it's fired immediately
      * @param {Object} payload
      */
-    handleFwBuryPoint(payload: any): Promise<void>;
+    handleFwBuryPoint(payload: any): Promise<boolean>;
 }
 import EcovacsMQTT = require("../ecovacsMQTT");
 //# sourceMappingURL=ecovacsMQTT_JSON.d.ts.map

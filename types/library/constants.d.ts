@@ -28,4 +28,5 @@ export var APP_ID_YEEDI: string;
 export var APP_SK: string;
 export var APP_SK_GLOBAL: string;
 export var APP_SK_YEEDI: string;
+export var CRC_EMPTY_PIECE: string;
 //# sourceMappingURL=constants.d.ts.map

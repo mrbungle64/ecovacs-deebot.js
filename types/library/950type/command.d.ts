@@ -150,6 +150,12 @@ export class GetMapVirtualBoundaries_V2 extends GetMapSet_V2 {
 }
 export class GetMapVirtualBoundaryInfo extends GetMapSubSet {
 }
+export class GetMapTrace extends VacBotCommand {
+    constructor(traceStart?: number, pointCount?: number);
+}
+export class GetMinorMap extends VacBotCommand {
+    constructor(mid: any, pieceIndex: any, type?: string);
+}
 export class GetMultiMapState extends VacBotCommand {
     constructor();
 }

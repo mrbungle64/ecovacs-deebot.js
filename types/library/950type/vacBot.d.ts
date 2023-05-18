@@ -336,18 +336,19 @@ declare class VacBot_950type extends VacBot {
      * @todo: finish the implementation
      * @param {Object} payload
      */
-    handleMajorMap(payload: any): void;
+    handleMajorMap(payload: any): any;
     liveMapImage: mapTemplate.EcovacsLiveMapImage;
     /**
      * @todo: finish the implementation
      * @param {Object} payload
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
-    handleMinorMap(payload: any): Promise<null | {
+    handleMinorMap(payload: any): Promise<{
         mapID: any;
         mapType: any;
         mapBase64PNG: string;
     }>;
+    handleMapTrace(payload: any): Promise<void>;
     /**
      * Handle the payload of the 'Error' response/message
      * @param {Object} payload
