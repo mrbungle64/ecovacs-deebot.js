@@ -160,6 +160,7 @@ class VacBot_950type extends VacBot {
             wkVer: null
         };
         this.multiMapState = null;
+        this.evt = {};
     }
 
     /**
@@ -380,9 +381,14 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload - The payload of the event.
      */
     handleEvt(payload) {
+        this.evt = {};
         const code = payload['code'];
         if (eventCodes.hasOwnProperty(code)) {
             tools.envLogWarn(`Evt code: '${eventCodes[code]}'`);
+            this.evt = {
+                code: code,
+                event: eventCodes[code]
+            };
         } else {
             tools.envLogWarn(`Unhandled Evt code: '${code}'`);
         }

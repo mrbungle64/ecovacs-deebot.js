@@ -167,8 +167,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         }
         switch (abbreviatedCommand) {
             case 'Evt': {
-                // TODO: Find out the value of the 'Evt' message
                 this.vacBot.handleEvt(payload);
+                if (this.vacBot.evt.event) {
+                    this.emit("Evt", this.vacBot.evt);
+                }
                 break;
             }
             case "Stats":
@@ -675,6 +677,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('TaskStarted', this.currentTask);
                     break;
                 }
+            }
             case 'FwBuryPoint-bd_dtofstart': // DToF-Laser-Sensor
             case 'FwBuryPoint-bd_errorcode':
             case 'FwBuryPoint-bd_relocation':
@@ -682,18 +685,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'FwBuryPoint-bd_setting-evt': // Event -> Config stored...
                 break;
             case 'FwBuryPoint-bd_gyrostart':
-                /*
-                {
+                /* {
                     "gid":"G1669968164685",
                     "ts":"1670148323348",
                     "index":"0000000552",
                     "gst":400
-                }
-                */
+                } */
                 break;
             case 'FwBuryPoint-bd_returnchargeinfo':
-                /*
-                {
+                /* {
                     "gid": "G1669968164685",
                     "index": "0000000564",
                     "ts": "1670148387296",
@@ -707,12 +707,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     "detectOmniWallWhenPlanFinish": 0,
                     "detectCodeWhenPlanFinish": 0,
                     "chargingStatus": 0
-                }
-                */
+                } */
                 break;
             case 'FwBuryPoint-bd_basicinfo-evt':
-                /*
-                {
+                /* {
                     "gid": "G1669968164685",
                     "index": "0000000563",
                     "ts": "1670148384758",
@@ -732,19 +730,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         "chargerPos": "27,427",
                         "onCharger": 1
                     }
-                }
-                */
+                } */
                 break;
             case 'FwBuryPoint-bd_cri04':
                 // Vermutung: es handelt sich um Signal(stärke)werte vom/zum externen Sensor
                 // Assumption: these are signal values (strength) from/to the external sensor
-                /*
-                {
+                /* {
                     "ts": "1670148786607",
                     "cr": 26,
                     "rr": 657
-                }
-                */
+                } */
                 break;
             case 'ThreeModuleStatus':
                 this.vacBot.handleThreeModule(payload);
