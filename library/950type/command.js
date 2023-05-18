@@ -292,9 +292,6 @@ class SetCleanSpeed extends VacBotCommand {
 
 class SetWaterLevel extends VacBotCommand {
     constructor(level, sweepType = 0) {
-        if (constants_type.WATER_LEVEL_TO_ECOVACS.hasOwnProperty(level)) {
-            level = constants_type.WATER_LEVEL_TO_ECOVACS[level];
-        }
         const payload = {
             'amount': level
         };
