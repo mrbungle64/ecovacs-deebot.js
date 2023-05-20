@@ -671,8 +671,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'FwBuryPoint-bd_task-clean-current-spot-start':
             case 'FwBuryPoint-bd_task-clean-current-spot-stop':
             case 'FwBuryPoint-bd_task-clean-specified-spot-start':
-            case 'FwBuryPoint-bd_task-clean-specified-spot-stop':
-                this.vacBot.handleTask(abbreviatedCommand.substring(20), payload);
+            case 'FwBuryPoint-bd_task-clean-specified-spot-stop': {
+                const fwBuryPointEvent = abbreviatedCommand.substring(20);
+                this.vacBot.handleTask(fwBuryPointEvent, payload);
                 if (this.currentTask) {
                     this.emit('TaskStarted', this.currentTask);
                     break;
