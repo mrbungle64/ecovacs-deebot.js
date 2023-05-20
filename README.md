@@ -93,6 +93,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ### 0.9.6 (alpha)
 * Added some new models (incl. GOAT, T20 OMNI)
+* Added shortcut commands for sweep mode
 * Some improvements and fixes
 
 ### 0.9.5
