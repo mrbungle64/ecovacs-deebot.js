@@ -1913,6 +1913,10 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetSweepMode(args[0]));
                 }
                 break;
+            case 'GetSweepMode'.toLowerCase():
+            case 'GetCustomAreaMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetCustomAreaMode());
+                break;
             case 'SetSweepMode'.toLowerCase():
             case 'SetCustomAreaMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetCustomAreaMode(args[0]));

@@ -840,6 +840,12 @@ class GetSweepMode extends VacBotCommand {
     }
 }
 
+class GetCustomAreaMode extends VacBotCommand {
+    constructor() {
+        super('getCustomAreaMode');
+    }
+}
+
 /*
 Sets the sweep only mode for e.g. X1 series
  */
@@ -1172,6 +1178,7 @@ module.exports.GetCleanState = GetCleanState;
 module.exports.GetCleanState_V2 = GetCleanState_V2;
 module.exports.GetCleanSum = GetCleanSum;
 module.exports.GetContinuousCleaning = GetContinuousCleaning;
+module.exports.GetCustomAreaMode = GetCustomAreaMode;
 module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
