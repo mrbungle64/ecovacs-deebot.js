@@ -99,6 +99,9 @@ export class GetCleanSum extends VacBotCommand {
 export class GetContinuousCleaning extends VacBotCommand {
     constructor();
 }
+export class GetCustomAreaMode extends VacBotCommand {
+    constructor();
+}
 export class GetDoNotDisturb extends VacBotCommand {
     constructor();
 }
@@ -263,6 +266,9 @@ export class SetCleanPreference extends VacBotCommand {
 }
 export class SetCleanSpeed extends VacBotCommand {
     constructor(level: any);
+}
+export class SetCustomAreaMode extends VacBotCommand {
+    constructor(sweepMode?: number);
 }
 export class SetDoNotDisturb extends VacBotCommand {
     constructor(enable?: number, start?: string, end?: string);
