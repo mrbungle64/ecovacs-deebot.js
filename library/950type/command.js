@@ -302,6 +302,17 @@ class SetWaterLevel extends VacBotCommand {
     }
 }
 
+/*
+Sets the sweep mode for X1 series
+ */
+class SetCustomAreaMode extends VacBotCommand {
+    constructor(sweepMode = 0) {
+        super('setCustomAreaMode', {
+            'sweepMode': sweepMode
+        });
+    }
+}
+
 class GetWaterInfo extends VacBotCommand {
     constructor() {
         super('getWaterInfo');
@@ -829,6 +840,9 @@ class GetSweepMode extends VacBotCommand {
     }
 }
 
+/*
+Sets the sweep only mode for e.g. X1 series
+ */
 class SetSweepMode extends VacBotCommand {
     constructor(type = 0) {
         super('setSweepMode', {
@@ -1214,6 +1228,7 @@ module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanCount = SetCleanCount;
 module.exports.SetCleanPreference = SetCleanPreference;
 module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.SetCustomAreaMode = SetCustomAreaMode;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetMapSet = SetMapSet;

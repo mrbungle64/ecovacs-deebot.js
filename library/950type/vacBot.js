@@ -1894,19 +1894,27 @@ class VacBot_950type extends VacBot {
             case 'GetAIMap'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAIMap());
                 break;
-            case 'GetSweepMode'.toLowerCase():
+            case 'GetMopOnlyMode'.toLowerCase():
+            case 'GetSweepOnlyMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetSweepMode());
                 break;
-            case 'EnableSweepMode'.toLowerCase():
+            case 'EnableMopOnlyMode'.toLowerCase():
+            case 'EnableSweepOnlyMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetSweepMode(1));
                 break;
-            case 'DisableSweepMode'.toLowerCase():
+            case 'DisableMopOnlyMode'.toLowerCase():
+            case 'DisableSweepOnlyMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetSweepMode(0));
                 break;
-            case 'SetSweepMode'.toLowerCase():
+            case 'SetMopOnlyMode'.toLowerCase():
+            case 'SetSweepOnlyMode'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetSweepMode(args[0]));
                 }
+                break;
+            case 'SetSweepMode'.toLowerCase():
+            case 'SetCustomAreaMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetCustomAreaMode(args[0]));
                 break;
             case 'GetBorderSpin'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetBorderSpin());
