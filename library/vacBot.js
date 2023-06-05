@@ -843,11 +843,27 @@ class VacBot {
     }
 
     /**
+     * Returns true if the model has a filter
+     * @returns {boolean}
+     */
+    hasFilter() {
+        return this.getDeviceProperty('filter');
+    }
+
+    /**
      * Returns true if the model has a main brush
      * @returns {boolean}
      */
     hasMainBrush() {
         return this.getDeviceProperty('main_brush');
+    }
+
+    /**
+     * Returns true if the model has a side brush
+     * @returns {boolean}
+     */
+    hasSideBrush() {
+        return this.getDeviceProperty('side_brush');
     }
 
     /**

@@ -1553,10 +1553,13 @@ class VacBot_950type extends VacBot {
                     this.emitFullLifeSpanEvent = true;
                     this.components = {};
                     this.lastComponentValues = {};
-                    const componentsArray = [
-                        dictionary.COMPONENT_TO_ECOVACS['filter'],
-                        dictionary.COMPONENT_TO_ECOVACS['side_brush']
-                    ];
+                    const componentsArray = [];
+                    if (this.hasFilter()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['filter']);
+                    }
+                    if (this.hasSideBrush()) {
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['side_brush']);
+                    }
                     if (this.hasMainBrush()) {
                         componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
                     }
@@ -1569,7 +1572,9 @@ class VacBot_950type extends VacBot {
                     if (this.hasAirFreshenerInfo()) {
                         componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['air_freshener']);
                     }
-                    this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
+                    if (componentsArray.length) {
+                        this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
+                    }
                 } else {
                     this.emitFullLifeSpanEvent = false;
                     const component = args[0];
