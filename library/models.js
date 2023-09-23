@@ -606,6 +606,14 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "X1"
     },
+    "e6ofmn": {
+        "name": "DEEBOT X2",
+        "deviceClassLink": "8bja83"
+    },
+    "lf3bn4": {
+        "name": "DEEBOT X2",
+        "deviceClassLink": "8bja83"
+    },
     "ipzjy0": {
         "name": "DEEBOT U2",
         "950type": true,
