@@ -43,7 +43,7 @@
     "canvas": "2.10.2"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",
