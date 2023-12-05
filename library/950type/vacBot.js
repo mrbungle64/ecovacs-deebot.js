@@ -849,22 +849,19 @@ class VacBot_950type extends VacBot {
     handleCachedMapInfo(payload) {
         this.currentMapName = 'unknown';
         this.maps = {'maps': []};
-        const infoEvent = payload['info'];
-        for (let mapIndex in infoEvent) {
-            if (infoEvent.hasOwnProperty(mapIndex)) {
-                if (infoEvent[mapIndex]['mid'] !== '0') {
-                    const mapID = infoEvent[mapIndex]['mid'];
-                    const index = infoEvent[mapIndex]['index'];
-                    const name = infoEvent[mapIndex]['name'];
-                    const status = infoEvent[mapIndex]['status'];
-                    const using = infoEvent[mapIndex]['using'];
-                    const built = infoEvent[mapIndex]['built'];
-                    this.maps['maps'].push(new map.EcovacsMap(mapID, index, name, status, using, built)
+        const info = payload['info'];
+        for (let mapIndex in info) {
+            if (info.hasOwnProperty(mapIndex)) {
+                if (info[mapIndex]['mid'] !== '0') {
+                    const data = info[mapIndex];
+                    const ecovacsMap = new map.EcovacsMap(
+                        data['mid'], data['index'], data['name'], data['status'], data['using'], data['built']
                     );
-                    if (infoEvent[mapIndex]['using'] === 1) {
-                        this.currentMapMID = mapID;
-                        this.currentMapName = name;
-                        this.currentMapIndex = index;
+                    this.maps['maps'].push(ecovacsMap);
+                    if (info[mapIndex]['using'] === 1) {
+                        this.currentMapMID = data['mid'];
+                        this.currentMapName = data['name'];
+                        this.currentMapIndex = data['index'];
                     }
                 }
             }
