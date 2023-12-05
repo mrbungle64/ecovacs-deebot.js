@@ -545,6 +545,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
 
             // AirBot Z1
+            case 'JCYAirQuality':
             case 'AirQuality':
                 this.vacBot.handleAirQuality(payload);
                 if (this.vacBot.airQuality) {
