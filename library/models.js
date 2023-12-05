@@ -865,11 +865,13 @@ exports.KnownDevices = {
         "name": "AIRBOT Z1",
         "950type": true,
         "950type_V2": true,
-        "type": "Z1"
+        "type": "airbot"
     },
     "20anby": {
         "name": "Z1 Air Quality Monitor",
-        "deviceClassLink": "sdp1y1"
+        "950type": true,
+        "950type_V2": true,
+        "type": "aqMonitor"
     },
     "m1wkuw": {
         "name": "DEEBOT N10",
@@ -899,6 +901,6 @@ exports.KnownDevices = {
         "name": "GOAT",
         "950type": true,
         "950type_V2": true,
-        "type": "GOAT"
+        "type": "goat"
     }
 };
