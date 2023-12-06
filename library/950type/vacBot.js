@@ -1538,27 +1538,31 @@ class VacBot_950type extends VacBot {
                     this.emitFullLifeSpanEvent = true;
                     this.components = {};
                     this.lastComponentValues = {};
-                    const componentsArray = [];
-                    if (this.hasFilter()) {
-                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['filter']);
-                    }
-                    if (this.hasSideBrush()) {
-                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['side_brush']);
-                    }
-                    if (this.hasMainBrush()) {
-                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
-                    }
-                    if (this.hasUnitCareInfo()) {
-                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['unit_care']);
-                    }
-                    if (this.hasRoundMopInfo()) {
-                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['round_mop']);
-                    }
-                    if (this.hasAirFreshenerInfo()) {
-                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['air_freshener']);
-                    }
-                    if (componentsArray.length) {
-                        this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
+                    if (this.getModelType() === 'airbot') {
+                        this.sendCommand(new VacBotCommand.GetLifeSpan([]));
+                    } else {
+                        const componentsArray = [];
+                        if (this.hasFilter()) {
+                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['filter']);
+                        }
+                        if (this.hasSideBrush()) {
+                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['side_brush']);
+                        }
+                        if (this.hasMainBrush()) {
+                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
+                        }
+                        if (this.hasUnitCareInfo()) {
+                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['unit_care']);
+                        }
+                        if (this.hasRoundMopInfo()) {
+                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['round_mop']);
+                        }
+                        if (this.hasAirFreshenerInfo()) {
+                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['air_freshener']);
+                        }
+                        if (componentsArray.length) {
+                            this.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
+                        }
                     }
                 } else {
                     this.emitFullLifeSpanEvent = false;
