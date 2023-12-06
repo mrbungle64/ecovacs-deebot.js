@@ -335,19 +335,23 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "LifeSpan":
                 this.vacBot.handleLifespan(payload);
-                if (!this.vacBot.emitFullLifeSpanEvent) {
-                    for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
-                        if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
-                            if (this.vacBot.components[component]) {
-                                if (this.vacBot.components[component] !== this.vacBot.lastComponentValues[component]) {
-                                    this.emit("LifeSpan_" + component, this.vacBot.components[component]);
-                                    this.vacBot.lastComponentValues[component] = this.vacBot.components[component];
+                if (this.vacBot.getModelType() === 'airbot') {
+                    this.emit("LifeSpan", this.vacBot.components);
+                } else {
+                    if (!this.vacBot.emitFullLifeSpanEvent) {
+                        for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+                            if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
+                                if (this.vacBot.components[component]) {
+                                    if (this.vacBot.components[component] !== this.vacBot.lastComponentValues[component]) {
+                                        this.emit("LifeSpan_" + component, this.vacBot.components[component]);
+                                        this.vacBot.lastComponentValues[component] = this.vacBot.components[component];
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        this.handleLifeSpanCombined();
                     }
-                } else {
-                    this.handleLifeSpanCombined();
                 }
                 break;
             case "Pos":
