@@ -652,19 +652,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     break;
                 }
             case 'FwBuryPoint-bd_air-quality':
-                if (this.vacBot.airQuality) {
-                    this.vacBot.handleAirQuality({
-                        'pm25': payload['pm25'],
-                        'pm_10': payload['pm1'],
-                        'particulateMatter10': payload['pm10'],
-                        'airQualityIndex': this.vacBot.airQuality.airQualityIndex,
-                        'volatileOrganicCompounds': payload['voc'],
-                        'temperature': this.vacBot.airQuality.temperature,
-                        'humidity': this.vacBot.airQuality.humidity
-                    });
-                    this.emit('AirQuality', this.vacBot.airQuality);
-                    break;
-                }
+                this.vacBot.run('GetAirQuality');
+                break;
             case 'FwBuryPoint-bd_task-return-normal-start':
             case 'FwBuryPoint-bd_task-return-normal-stop':
             case 'FwBuryPoint-bd_task-clean-move-start':
