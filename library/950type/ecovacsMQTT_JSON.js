@@ -732,28 +732,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     "rr": 657
                 } */
                 break;
-            case 'ThreeModuleStatus':
-                this.vacBot.handleThreeModule(payload);
-                if (this.vacBot.airFreshening.enabled) {
-                    this.emit('AirFreshening', this.vacBot.airbotAutoModel);
-                }
-                if (this.vacBot.humidification.enabled) {
-                    this.emit('Humidification', this.vacBot.humidification);
-                }
-                if (this.vacBot.uvAirCleaning.enabled) {
-                    this.emit('UVAirCleaning', this.vacBot.uvAirCleaning);
-                }
-                break;
             case 'AirbotAutoModel':
                 this.vacBot.handleAirbotAutoModel(payload);
                 if (this.vacBot.airbotAutoModel) {
                     this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
                 }
                 break;
-            case 'ThreeModule':
+            case 'ThreeModuleStatus':
                 this.vacBot.handleThreeModule(payload);
-                if (this.vacBot.threeModule) {
-                    this.emit('ThreeModule', this.vacBot.threeModule);
+                if (this.vacBot.threeModuleStatus) {
+                    this.emit('ThreeModuleStatus', this.vacBot.threeModuleStatus);
                 }
                 break;
             case 'AreaPoint':

@@ -110,6 +110,7 @@ class VacBot_950type extends VacBot {
         this.uvAirCleaning = {
             'enabled': null
         };
+        this.threeModuleStatus = [];
         this.areaPoint = {
             'mapId': null,
             'locationPoints': null
@@ -1376,26 +1377,8 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleThreeModule(payload) {
-        payload.forEach((module) => {
-            if (module.type === 'uvLight') {
-                this.uvAirCleaning = {
-                    'enabled': module.enable
-                };
-            }
-            if (module.type === 'smell') {
-                this.airFreshening = {
-                    'enabled': module.enable,
-                    'level': module.level,
-                    'error': module.err
-                };
-            }
-            if (module.type === 'humidify') {
-                this.humidification = {
-                    'enabled': module.enable,
-                    'level': module.level
-                };
-            }
-        });
+        this.threeModuleStatus = payload;
+        tools.envLogResult(`threeModuleStatus: ${JSON.stringify(this.threeModuleStatus)}`);
     }
 
     /**
