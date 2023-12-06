@@ -865,6 +865,8 @@ exports.KnownDevices = {
         "name": "AIRBOT Z1",
         "950type": true,
         "950type_V2": true,
+        "map_image_supported": false,
+        "yiko": true,
         "type": "airbot"
     },
     "20anby": {
