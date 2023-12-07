@@ -98,18 +98,6 @@ class VacBot_950type extends VacBot {
             'from': null,
             'to': null
         };
-        this.humidification = {
-            'enabled': null,
-            'level': null
-        };
-        this.airFreshening = {
-            'enabled': null,
-            'level': null,
-            'error': null
-        };
-        this.uvAirCleaning = {
-            'enabled': null
-        };
         this.threeModuleStatus = [];
         this.areaPoint = {
             'mapId': null,
@@ -1181,7 +1169,7 @@ class VacBot_950type extends VacBot {
 
     handleAirQuality(payload) {
         if (!payload.pm25) {
-            // Handle 'JCYAirQuality' event for Z1 AirQuality Monitor
+            // Handle 'onJCYAirQuality' event for Z1 AirQuality Monitor
             const keys = Object.keys(payload);
             payload = payload[keys[0]];
         }
@@ -1930,7 +1918,12 @@ class VacBot_950type extends VacBot {
                 }
                 break;
             case 'GetAirQuality'.toLowerCase():
+                // Airbot Z1
                 this.sendCommand(new VacBotCommand.GetAirQuality());
+                break;
+            case 'GetJCYAirQuality'.toLowerCase():
+                // Z1 Air Quality Monitor
+                this.sendCommand(new VacBotCommand.GetJCYAirQuality());
                 break;
             case 'SinglePoint_V2'.toLowerCase():
                 if (args.length >= 1) {

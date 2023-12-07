@@ -548,9 +548,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
                 break;
 
-            // AirBot Z1
-            case 'JCYAirQuality':
+            // =========
+            // AIRBOT Z1
+            // =========
             case 'AirQuality':
+            case 'JCYAirQuality': // Z1 Air Quality Monitor
                 this.vacBot.handleAirQuality(payload);
                 if (this.vacBot.airQuality) {
                     this.emit('AirQuality', this.vacBot.airQuality);
@@ -598,7 +600,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('ChildLock', this.vacBot.childLock);
                 }
                 break;
-
             case 'AngleFollow':
                 this.vacBot.handleGetAngleFollow(payload);
                 if (this.vacBot.angleFollow) {
@@ -678,63 +679,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'FwBuryPoint-bd_relocation':
             case 'FwBuryPoint-bd_setting':
             case 'FwBuryPoint-bd_setting-evt': // Event -> Config stored...
-                break;
             case 'FwBuryPoint-bd_gyrostart':
-                /* {
-                    "gid":"G1669968164685",
-                    "ts":"1670148323348",
-                    "index":"0000000552",
-                    "gst":400
-                } */
-                break;
             case 'FwBuryPoint-bd_returnchargeinfo':
-                /* {
-                    "gid": "G1669968164685",
-                    "index": "0000000564",
-                    "ts": "1670148387296",
-                    "startType": 0,
-                    "finishType": 0,
-                    "planResult": 1,
-                    "planElapsedTime": 0,
-                    "totalElapsedTime": 0,
-                    "jointElapsedTime": 0,
-                    "detectMiddleCodeWhenPlanFinish": 0,
-                    "detectOmniWallWhenPlanFinish": 0,
-                    "detectCodeWhenPlanFinish": 0,
-                    "chargingStatus": 0
-                } */
-                break;
             case 'FwBuryPoint-bd_basicinfo-evt':
-                /* {
-                    "gid": "G1669968164685",
-                    "index": "0000000563",
-                    "ts": "1670148384758",
-                    "orig": {
-                        "battery": 98,
-                        "chargeState": 0,
-                        "robotState": 0,
-                        "robotPos": "9,403",
-                        "chargerPos": "27,427",
-                        "onCharger": 1
-                    },
-                    "new": {
-                        "battery": 98,
-                        "chargeState": 1,
-                        "robotState": 0,
-                        "robotPos": "9,402",
-                        "chargerPos": "27,427",
-                        "onCharger": 1
-                    }
-                } */
                 break;
             case 'FwBuryPoint-bd_cri04':
                 // Vermutung: es handelt sich um Signal(stärke)werte vom/zum externen Sensor
                 // Assumption: these are signal values (strength) from/to the external sensor
-                /* {
-                    "ts": "1670148786607",
-                    "cr": 26,
-                    "rr": 657
-                } */
                 break;
             case 'AirbotAutoModel':
                 this.vacBot.handleAirbotAutoModel(payload);

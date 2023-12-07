@@ -865,6 +865,12 @@ class GetAirQuality extends VacBotCommand {
     }
 }
 
+class GetJCYAirQuality extends VacBotCommand {
+    constructor() {
+        super('getJCYAirQuality');
+    }
+}
+
 class SinglePoint_V2 extends Clean_V2 {
     constructor(spotCoordinates = '') {
         super('singlePoint', 'start', {
@@ -1263,6 +1269,7 @@ module.exports.GetBreakPoint = GetBreakPoint;
 module.exports.GetChildLock = GetChildLock;
 module.exports.GetDrivingWheel = GetDrivingWheel;
 module.exports.GetHumanoidFollow = GetHumanoidFollow;
+module.exports.GetJCYAirQuality = GetJCYAirQuality;
 module.exports.GetListenMusic = GetListenMusic;
 module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
 module.exports.GetMonitorAirState = GetMonitorAirState;
