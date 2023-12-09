@@ -631,9 +631,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'AtmoLight':
-                this.vacBot.handleGetAtmoLight(payload);
+                this.vacBot.handleAtmoLight(payload);
                 if (this.vacBot.atmoLightIntensity) {
                     this.emit('AtmoLight', this.vacBot.atmoLightIntensity);
+                }
+                break;
+            case 'AtmoVolume':
+                this.vacBot.handleAtmoVolume(payload);
+                if (this.vacBot.atmoVolume) {
+                    this.emit('AtmoVolume', this.vacBot.atmoVolume);
                 }
                 break;
             case 'HumanoidFollow':

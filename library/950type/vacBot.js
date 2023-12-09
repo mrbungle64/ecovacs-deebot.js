@@ -83,6 +83,7 @@ class VacBot_950type extends VacBot {
         this.angleWakeup = null;
         this.efficiency = null;
         this.atmoLightIntensity = null;
+        this.atmoVolume = null;
         this.humanoidFollow = {
             'video': null,
             'yiko': null
@@ -389,7 +390,10 @@ class VacBot_950type extends VacBot {
      */
     handleSpeed(payload) {
         const speed = payload['speed'];
-        this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
+        this.cleanSpeed = speed;
+        if (this.getModelType() !== 'airbot') {
+            this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
+        }
         tools.envLogResult(`cleanSpeed: ${this.cleanSpeed}`);
     }
 
@@ -1167,6 +1171,11 @@ class VacBot_950type extends VacBot {
         }
     }
 
+    /**
+     * Handles the air quality data received from the payload.
+     *
+     * @param {object} payload - The air quality data payload.
+     */
     handleAirQuality(payload) {
         if (!payload.pm25) {
             // Handle 'onJCYAirQuality' event for Z1 AirQuality Monitor
@@ -1175,20 +1184,20 @@ class VacBot_950type extends VacBot {
         }
         this.airQuality = {
             'particulateMatter25': payload['pm25'],
-            'pm_10': payload['pm_10'],
             'particulateMatter10': payload['pm10'],
             'airQualityIndex': payload['aq'],
             'volatileOrganicCompounds': payload['voc'],
             'temperature': payload['tem'],
-            'humidity': payload['hum']
+            'humidity': payload['hum'],
+            'pm_10': payload['pm_10']
         };
         tools.envLogResult(`particulateMatter25: ${this.airQuality.particulateMatter25}`);
-        tools.envLogResult(`pm_10: ${this.airQuality.pm_10}`);
         tools.envLogResult(`particulateMatter10: ${this.airQuality.particulateMatter10}`);
         tools.envLogResult(`airQualityIndex: ${this.airQuality.airQualityIndex}`);
         tools.envLogResult(`volatileOrganicCompounds: ${this.airQuality.volatileOrganicCompounds}`);
         tools.envLogResult(`temperature: ${this.airQuality.temperature}`);
         tools.envLogResult(`humidity: ${this.airQuality.humidity}`);
+        tools.envLogResult(`pm_10: ${this.airQuality.pm_10}`);
     }
 
     /**
@@ -1319,9 +1328,14 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'Efficiency' response/message
      * @param {Object} payload
      */
-    handleGetAtmoLight(payload) {
+    handleAtmoLight(payload) {
         this.atmoLightIntensity = payload['intensity'];
         tools.envLogResult(`atmoLightIntensity: ${this.atmoLightIntensity} of ${payload['total']}`);
+    }
+
+    handleAtmoVolume(payload) {
+        this.atmoVolume = payload['volume'];
+        tools.envLogResult(`atmoVolume: ${this.atmoVolume} of ${payload['total']}`);
     }
 
     /**
@@ -1953,9 +1967,9 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetUVCleaner(args[0]));
                 }
                 break;
-            case 'SetAtmoLight'.toLowerCase():
+            case 'SetFanSpeed'.toLowerCase():
                 if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.SetAtmoLight(args[0]));
+                    this.sendCommand(new VacBotCommand.SetFanSpeed(args[0]));
                 }
                 break;
             case 'SetBlueSpeaker'.toLowerCase():
@@ -1987,6 +2001,34 @@ class VacBot_950type extends VacBot {
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetMic(args[0]));
                 }
+                break;
+            case 'SetAirbotAutoModel'.toLowerCase():
+                if (args.length >= 3) {
+                    // on, aqEnd, aqStart
+                    this.sendCommand(new VacBotCommand.SetAirbotAutoModel(args[0], args[1], args[2]));
+                }
+                break;
+            case 'SetAutonomousClean'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetAutonomousClean(args[0]));
+                }
+                break;
+            case 'SetAtmoVolume'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetAtmoVolume(args[0]));
+                }
+                break;
+            case 'SetAtmoLight'.toLowerCase():
+                if (args.length >= 1) {
+                    // intensity
+                    this.sendCommand(new VacBotCommand.SetAtmoLight(args[0]));
+                }
+                break;
+            case 'GetAtmoVolume'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAtmoVolume());
+                break;
+            case 'GetAtmoLight'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAtmoLight());
                 break;
             case 'GetLiveLaunchPwdState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetLiveLaunchPwdState());

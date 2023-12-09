@@ -279,10 +279,33 @@ class GetError extends VacBotCommand {
     }
 }
 
+/**
+ * Set the fan speed for vacuum cleaners
+ * @extends VacBotCommand
+ */
 class SetCleanSpeed extends VacBotCommand {
     constructor(level) {
         if (constants_type.CLEAN_SPEED_TO_ECOVACS.hasOwnProperty(level)) {
             level = constants_type.CLEAN_SPEED_TO_ECOVACS[level];
+        }
+        super('setSpeed', {
+            'speed': level
+        });
+    }
+}
+
+/**
+ * Set the fan speed for Airbot Z1
+ * 1 = quiet
+ * 2 = standard
+ * 3 = strong
+ * 4 = smart
+ * @extends VacBotCommand
+ */
+class SetFanSpeed extends VacBotCommand {
+    constructor(level) {
+        if ((level < 1) || (level > 4)) {
+            level = 4; // smart
         }
         super('setSpeed', {
             'speed': level
@@ -871,6 +894,18 @@ class GetJCYAirQuality extends VacBotCommand {
     }
 }
 
+class GetAtmoLight extends VacBotCommand {
+    constructor() {
+        super('getAtmoLight');
+    }
+}
+
+class GetAtmoVolume extends VacBotCommand {
+    constructor() {
+        super('getAtmoVolume');
+    }
+}
+
 class SinglePoint_V2 extends Clean_V2 {
     constructor(spotCoordinates = '') {
         super('singlePoint', 'start', {
@@ -985,6 +1020,36 @@ class SetBlock extends VacBotCommand {
             'enable': enable,
             'start': start,
             'end': end
+        });
+    }
+}
+
+class SetAutonomousClean extends VacBotCommand {
+    constructor(on = 0) {
+        super('setAutonomousClean', {
+            'on': on
+        });
+    }
+}
+
+class SetAtmoVolume extends VacBotCommand {
+    constructor(volume = 0) {
+        super('setAtmoVolume', {
+            "total": 16,
+            "type": "system",
+            "volume": volume
+        });
+    }
+}
+
+class SetAirbotAutoModel extends VacBotCommand {
+    constructor(on = 0, aqEnd = 2, aqStart = 3) {
+        super('setAirbotAutoModel', {
+            "aq": {
+                "aqEnd": aqEnd,
+                "aqStart": aqStart
+            },
+            'on': on
         });
     }
 }
@@ -1264,6 +1329,8 @@ module.exports.Area_V2 = Area_V2;
 module.exports.GetAirQuality = GetAirQuality;
 module.exports.GetAntiDrop = GetAntiDrop;
 module.exports.GetAudioCallState = GetAudioCallState;
+module.exports.GetAtmoLight = GetAtmoLight;
+module.exports.GetAtmoVolume = GetAtmoVolume;
 module.exports.GetBlock = GetBlock;
 module.exports.GetBreakPoint = GetBreakPoint;
 module.exports.GetChildLock = GetChildLock;
@@ -1283,10 +1350,14 @@ module.exports.GetVoice = GetVoice;
 module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
 module.exports.GetVoiceSimple = GetVoiceSimple;
 module.exports.GetWifiList = GetWifiList;
+module.exports.SetAirbotAutoModel = SetAirbotAutoModel;
 module.exports.SetAngleFollow = SetAngleFollow;
 module.exports.SetAtmoLight = SetAtmoLight;
+module.exports.SetAtmoVolume = SetAtmoVolume;
+module.exports.SetAutonomousClean = SetAutonomousClean;
 module.exports.SetBlock = SetBlock;
 module.exports.SetBlueSpeaker = SetBlueSpeaker;
+module.exports.SetFanSpeed = SetFanSpeed;
 module.exports.SetFreshenerLevel = SetFreshenerLevel;
 module.exports.SetHumidifierLevel = SetHumidifierLevel;
 module.exports.SetMic = SetMic;
