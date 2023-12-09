@@ -1061,7 +1061,7 @@ class SetAirbotAutoModel extends VacBotCommand {
                 "aqEnd": aqEnd,
                 "aqStart": aqStart
             },
-            'on': on
+            'enable': on
         });
     }
 }
