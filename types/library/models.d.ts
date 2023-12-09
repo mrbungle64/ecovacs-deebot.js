@@ -1,21 +1,41 @@
-export namespace SupportedDevices {
-    namespace vi829v {
-        const name: string;
-        const deviceClassLink: string;
-    }
-    namespace x5d34r {
-        const name_1: string;
-        export { name_1 as name };
-        const deviceClassLink_1: string;
-        export { deviceClassLink_1 as deviceClassLink };
-    }
-}
+export var SupportedDevices: {
+    vi829v: {
+        name: string;
+        deviceClassLink: string;
+    };
+    x5d34r: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "2o4lnm": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
+        unit_care_info: boolean;
+        round_mop_info: boolean;
+        air_drying: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+        hosted_mode: boolean;
+        yiko: boolean;
+        type: string;
+    };
+};
 export var KnownDevices: {
     "123": {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -31,6 +51,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         clean_speed: boolean;
         type: string;
     };
@@ -47,6 +69,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         mopping_system: boolean;
         voice_report: boolean;
         clean_speed: boolean;
@@ -57,6 +81,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         clean_speed: boolean;
         type: string;
     };
@@ -77,6 +103,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         mopping_system: boolean;
         voice_report: boolean;
         clean_speed: boolean;
@@ -91,6 +119,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         mopping_system: boolean;
         voice_report: boolean;
         clean_speed: boolean;
@@ -101,6 +131,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         mopping_system: boolean;
         clean_speed: boolean;
         type: string;
@@ -110,6 +142,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         voice_report: boolean;
         clean_speed: boolean;
         type: string;
@@ -131,6 +165,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         voice_report: boolean;
@@ -143,6 +179,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -155,6 +193,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -167,6 +207,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -179,6 +221,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -190,6 +234,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -211,6 +257,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -278,6 +326,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         air_freshener_info: boolean;
         spot_area: boolean;
@@ -306,6 +356,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -329,6 +381,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -396,6 +450,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         spot_area: boolean;
@@ -413,6 +469,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         air_freshener_info: boolean;
@@ -436,6 +494,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         air_drying: boolean;
@@ -454,6 +514,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         air_drying: boolean;
@@ -473,6 +535,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         spot_area: boolean;
@@ -490,6 +554,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         air_drying: boolean;
@@ -516,29 +582,13 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
-    "2o4lnm": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        unit_care_info: boolean;
-        round_mop_info: boolean;
-        air_drying: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-        hosted_mode: boolean;
-        yiko: boolean;
-        type: string;
-    };
     n4gstt: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         air_freshener_info: boolean;
@@ -553,11 +603,21 @@ export var KnownDevices: {
         yiko: boolean;
         type: string;
     };
+    e6ofmn: {
+        name: string;
+        deviceClassLink: string;
+    };
+    lf3bn4: {
+        name: string;
+        deviceClassLink: string;
+    };
     ipzjy0: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         mopping_system: boolean;
         voice_report: boolean;
         clean_speed: boolean;
@@ -628,6 +688,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -643,6 +705,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -658,6 +722,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -673,6 +739,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -692,6 +760,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -707,6 +777,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -722,6 +794,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         round_mop_info: boolean;
         spot_area: boolean;
@@ -751,6 +825,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -766,6 +842,8 @@ export var KnownDevices: {
         "950type": boolean;
         "950type_V2": boolean;
         main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
         unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
@@ -784,11 +862,17 @@ export var KnownDevices: {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
+        clean_speed: boolean;
+        spot_area: boolean;
+        map_image_supported: boolean;
+        yiko: boolean;
         type: string;
     };
     "20anby": {
         name: string;
-        deviceClassLink: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
     };
     m1wkuw: {
         name: string;

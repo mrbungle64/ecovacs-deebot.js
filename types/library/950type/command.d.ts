@@ -264,6 +264,10 @@ export class SetCleanCount extends VacBotCommand {
 export class SetCleanPreference extends VacBotCommand {
     constructor(enable?: number);
 }
+/**
+ * Set the fan speed for vacuum cleaners
+ * @extends VacBotCommand
+ */
 export class SetCleanSpeed extends VacBotCommand {
     constructor(level: any);
 }
@@ -330,6 +334,18 @@ export class GetAntiDrop extends VacBotCommand {
 export class GetAudioCallState extends VacBotCommand {
     constructor();
 }
+export class GetAtmoLight extends VacBotCommand {
+    constructor();
+}
+export class GetAtmoVolume extends VacBotCommand {
+    constructor();
+}
+export class GetAutonomousClean extends VacBotCommand {
+    constructor();
+}
+export class GetAirbotAutoModel extends VacBotCommand {
+    constructor();
+}
 export class GetBlock extends VacBotCommand {
     constructor();
 }
@@ -343,6 +359,9 @@ export class GetDrivingWheel extends VacBotCommand {
     constructor();
 }
 export class GetHumanoidFollow extends VacBotCommand {
+    constructor();
+}
+export class GetJCYAirQuality extends VacBotCommand {
     constructor();
 }
 export class GetListenMusic extends VacBotCommand {
@@ -384,17 +403,37 @@ export class GetVoiceSimple extends VacBotCommand {
 export class GetWifiList extends VacBotCommand {
     constructor();
 }
+export class SetAirbotAutoModel extends VacBotCommand {
+    constructor(on?: number, aqEnd?: number, aqStart?: number);
+}
 export class SetAngleFollow extends VacBotCommand {
     constructor(on?: number);
 }
 export class SetAtmoLight extends VacBotCommand {
     constructor(intensity?: number);
 }
+export class SetAtmoVolume extends VacBotCommand {
+    constructor(volume?: number);
+}
+export class SetAutonomousClean extends VacBotCommand {
+    constructor(on?: number);
+}
 export class SetBlock extends VacBotCommand {
     constructor(enable?: number, start?: string, end?: string);
 }
 export class SetBlueSpeaker extends VacBotCommand {
     constructor(enable?: number);
+}
+/**
+ * Set the fan speed for Airbot Z1
+ * 1 = quiet
+ * 2 = standard
+ * 3 = strong
+ * 4 = smart
+ * @extends VacBotCommand
+ */
+export class SetFanSpeed extends VacBotCommand {
+    constructor(level: any);
 }
 export class SetFreshenerLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);

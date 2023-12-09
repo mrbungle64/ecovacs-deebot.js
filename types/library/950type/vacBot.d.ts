@@ -56,6 +56,7 @@ declare class VacBot_950type extends VacBot {
     angleWakeup: any;
     efficiency: any;
     atmoLightIntensity: any;
+    atmoVolume: any;
     sysinfo: {
         load: any;
         uptime: any;
@@ -67,18 +68,7 @@ declare class VacBot_950type extends VacBot {
         from: any;
         to: any;
     };
-    humidification: {
-        enabled: any;
-        level: any;
-    };
-    airFreshening: {
-        enabled: any;
-        level: any;
-        error: any;
-    };
-    uvAirCleaning: {
-        enabled: any;
-    };
+    threeModuleStatus: any[];
     areaPoint: {
         mapId: any;
         locationPoints: any;
@@ -355,7 +345,12 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleResponseError(payload: any): void;
-    handleAirQuality(payload: any): void;
+    /**
+     * Handles the air quality data received from the payload.
+     *
+     * @param {object} payload - The air quality data payload.
+     */
+    handleAirQuality(payload: object): void;
     /**
      * Handle the payload of the 'AiBlockPlate' response/message
      * @param {Object} payload
@@ -427,7 +422,8 @@ declare class VacBot_950type extends VacBot {
      * Handle the payload of the 'Efficiency' response/message
      * @param {Object} payload
      */
-    handleGetAtmoLight(payload: any): void;
+    handleAtmoLight(payload: any): void;
+    handleAtmoVolume(payload: any): void;
     /**
      * Handle the payload of the '(FwBuryPoint-)Sysinfo' response/message
      * @param {Object} payload

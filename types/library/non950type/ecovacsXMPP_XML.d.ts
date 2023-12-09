@@ -2,7 +2,7 @@ export = EcovacsXMPP_XML;
 declare class EcovacsXMPP_XML extends Ecovacs {
     vacBot: any;
     iqElementId: number;
-    pingInterval: NodeJS.Timer;
+    pingInterval: NodeJS.Timeout;
     simpleXmpp: any;
     /**
      * Connect to the Ecovacs server

@@ -83,12 +83,17 @@ export namespace COMPONENT_TO_ECOVACS {
     const air_freshener: string;
 }
 export namespace COMPONENT_FROM_ECOVACS {
-    const brush: string;
-    const sideBrush: string;
-    const heap: string;
-    const unitCare: string;
-    const roundMop: string;
-    const dModule: string;
+    export const brush: string;
+    export const sideBrush: string;
+    export const heap: string;
+    export const unitCare: string;
+    export const roundMop: string;
+    export const dModule: string;
+    const filter_1: string;
+    export { filter_1 as filter };
+    export const uv: string;
+    export const humidify: string;
+    export const wbCare: string;
 }
 export namespace MOVE_ACTION {
     export const backward: string;

@@ -13,7 +13,7 @@ declare class EcovacsMQTT extends Ecovacs {
      * Connect to the MQTT server and listen to broadcast messages
      */
     connect(): void;
-    client: import("mqtt").Client;
+    client: import("mqtt").MqttClient;
     /**
      * @param {Object} command - the command object
      * @param {Object} params

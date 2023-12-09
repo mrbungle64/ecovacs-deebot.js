@@ -311,10 +311,20 @@ declare class VacBot {
      */
     getDeviceProperty(property: string, defaultValue?: any): any;
     /**
+     * Returns true if the model has a filter
+     * @returns {boolean}
+     */
+    hasFilter(): boolean;
+    /**
      * Returns true if the model has a main brush
      * @returns {boolean}
      */
     hasMainBrush(): boolean;
+    /**
+     * Returns true if the model has a side brush
+     * @returns {boolean}
+     */
+    hasSideBrush(): boolean;
     /**
      * Returns true if you can retrieve information about "unit care" (life span)
      * @returns {boolean}
