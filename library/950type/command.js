@@ -906,6 +906,18 @@ class GetAtmoVolume extends VacBotCommand {
     }
 }
 
+class GetAutonomousClean extends VacBotCommand {
+    constructor() {
+        super('getAutonomousClean');
+    }
+}
+
+class GetAirbotAutoModel extends VacBotCommand {
+    constructor() {
+        super('getAirbotAutoModel');
+    }
+}
+
 class SinglePoint_V2 extends Clean_V2 {
     constructor(spotCoordinates = '') {
         super('singlePoint', 'start', {
@@ -1331,6 +1343,8 @@ module.exports.GetAntiDrop = GetAntiDrop;
 module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetAtmoLight = GetAtmoLight;
 module.exports.GetAtmoVolume = GetAtmoVolume;
+module.exports.GetAutonomousClean = GetAutonomousClean;
+module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
 module.exports.GetBlock = GetBlock;
 module.exports.GetBreakPoint = GetBreakPoint;
 module.exports.GetChildLock = GetChildLock;

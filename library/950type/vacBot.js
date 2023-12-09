@@ -1367,8 +1367,8 @@ class VacBot_950type extends VacBot {
             'enable': payload['enable'],
             'trigger': payload['trigger'],
             'aq': {
-                'aqStart': payload['aqStart'],
-                'aqEnd': payload['aqEnd']
+                'aqStart': payload['aq']['aqStart'],
+                'aqEnd': payload['aq']['aqEnd']
             }
         };
         tools.envLogResult(`airbotAutoModel: ${JSON.stringify(this.airbotAutoModel)}`);
@@ -2029,6 +2029,12 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetAtmoLight'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAtmoLight());
+                break;
+            case 'GetAutonomousClean'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAutonomousClean());
+                break;
+            case 'GetAirbotAutoModel'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAirbotAutoModel());
                 break;
             case 'GetLiveLaunchPwdState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetLiveLaunchPwdState());
