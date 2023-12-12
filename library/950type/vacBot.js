@@ -99,6 +99,7 @@ class VacBot_950type extends VacBot {
             'from': null,
             'to': null
         };
+        this.threeModule = [];
         this.threeModuleStatus = [];
         this.areaPoint = {
             'mapId': null,
@@ -1376,9 +1377,20 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'ThreeModule' (UV, Humidifier, AirFreshener) response/message
+     * It contains the current level set for Air Freshening and Humidification
      * @param {Object} payload
      */
     handleThreeModule(payload) {
+        this.threeModule = payload;
+        tools.envLogResult(`threeModule: ${JSON.stringify(this.threeModule)}`);
+    }
+
+    /**
+     * Handle the payload of the 'ThreeModuleStatus' (UV, Humidifier, AirFreshener) response/message
+     * It contains the working status of these modules
+     * @param {Object} payload
+     */
+    handleThreeModuleStatus(payload) {
         this.threeModuleStatus = payload;
         tools.envLogResult(`threeModuleStatus: ${JSON.stringify(this.threeModuleStatus)}`);
     }
@@ -2068,6 +2080,9 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetOta'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetOta());
+                break;
+            case 'GetThreeModule'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetThreeModule());
                 break;
             case 'GetThreeModuleStatus'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetThreeModuleStatus());

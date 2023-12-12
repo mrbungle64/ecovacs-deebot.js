@@ -699,8 +699,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
                 }
                 break;
-            case 'ThreeModuleStatus':
+            case 'ThreeModule':
                 this.vacBot.handleThreeModule(payload);
+                if (this.vacBot.threeModule) {
+                    this.emit('ThreeModule', this.vacBot.threeModule);
+                }
+                break;
+            case 'ThreeModuleStatus':
+                this.vacBot.handleThreeModuleStatus(payload);
                 if (this.vacBot.threeModuleStatus) {
                     this.emit('ThreeModuleStatus', this.vacBot.threeModuleStatus);
                 }

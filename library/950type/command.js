@@ -1132,6 +1132,12 @@ class GetOta extends VacBotCommand {
     }
 }
 
+class GetThreeModule extends VacBotCommand {
+    constructor() {
+        super('getThreeModule');
+    }
+}
+
 class GetThreeModuleStatus extends VacBotCommand {
     constructor() {
         super('getThreeModuleStatus');
@@ -1357,6 +1363,7 @@ module.exports.GetMonitorAirState = GetMonitorAirState;
 module.exports.GetOta = GetOta;
 module.exports.GetRelocationState = GetRelocationState;
 module.exports.GetScene = GetScene;
+module.exports.GetThreeModule = GetThreeModule;
 module.exports.GetThreeModuleStatus = GetThreeModuleStatus;
 module.exports.GetTimeZone = GetTimeZone;
 module.exports.GetTotalStats = GetTotalStats;
