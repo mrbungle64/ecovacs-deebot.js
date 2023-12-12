@@ -1134,7 +1134,7 @@ class GetOta extends VacBotCommand {
 
 class GetThreeModule extends VacBotCommand {
     constructor() {
-        super('getThreeModule');
+        super('getThreeModule', []);
     }
 }
 
