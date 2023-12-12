@@ -1984,6 +1984,9 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetFanSpeed(args[0]));
                 }
                 break;
+            case 'GetBlueSpeaker'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetBlueSpeaker());
+                break;
             case 'SetBlueSpeaker'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetBlueSpeaker(args[0]));

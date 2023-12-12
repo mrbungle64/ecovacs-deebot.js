@@ -975,6 +975,12 @@ class SetAtmoLight extends VacBotCommand {
     }
 }
 
+class GetBlueSpeaker extends VacBotCommand {
+    constructor() {
+        super('getBlueSpeaker');
+    }
+}
+
 class SetBlueSpeaker extends VacBotCommand {
     constructor(enable = 0) {
         super('setBlueSpeaker', {
@@ -1352,6 +1358,7 @@ module.exports.GetAtmoVolume = GetAtmoVolume;
 module.exports.GetAutonomousClean = GetAutonomousClean;
 module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
 module.exports.GetBlock = GetBlock;
+module.exports.GetBlueSpeaker = GetBlueSpeaker;
 module.exports.GetBreakPoint = GetBreakPoint;
 module.exports.GetChildLock = GetChildLock;
 module.exports.GetDrivingWheel = GetDrivingWheel;

@@ -548,9 +548,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
                 break;
 
-            // =========
-            // AIRBOT Z1
-            // =========
+            // ==================================
+            // AIRBOT Z1 / Z1 Air Quality Monitor
+            // ==================================
             case 'AirQuality':
             case 'JCYAirQuality': // Z1 Air Quality Monitor
                 this.vacBot.handleAirQuality(payload);
@@ -653,46 +653,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     }
                     break;
                 }
-            // ====================
-            // FwBuryPoint messages
-            // ====================
-            case 'FwBuryPoint-bd_sysinfo':
-                this.vacBot.handleSysinfo(payload);
-                if (this.vacBot.sysinfo) {
-                    this.emit('Sysinfo', this.vacBot.sysinfo);
-                    break;
-                }
-            case 'FwBuryPoint-bd_air-quality':
-                this.vacBot.run('GetAirQuality');
-                break;
-            case 'FwBuryPoint-bd_task-return-normal-start':
-            case 'FwBuryPoint-bd_task-return-normal-stop':
-            case 'FwBuryPoint-bd_task-clean-move-start':
-            case 'FwBuryPoint-bd_task-clean-move-stop':
-            case 'FwBuryPoint-bd_task-clean-current-spot-start':
-            case 'FwBuryPoint-bd_task-clean-current-spot-stop':
-            case 'FwBuryPoint-bd_task-clean-specified-spot-start':
-            case 'FwBuryPoint-bd_task-clean-specified-spot-stop': {
-                const fwBuryPointEvent = abbreviatedCommand.substring(20);
-                this.vacBot.handleTask(fwBuryPointEvent, payload);
-                if (this.currentTask) {
-                    this.emit('TaskStarted', this.currentTask);
-                    break;
-                }
-            }
-            case 'FwBuryPoint-bd_dtofstart': // DToF-Laser-Sensor
-            case 'FwBuryPoint-bd_errorcode':
-            case 'FwBuryPoint-bd_relocation':
-            case 'FwBuryPoint-bd_setting':
-            case 'FwBuryPoint-bd_setting-evt': // Event -> Config stored...
-            case 'FwBuryPoint-bd_gyrostart':
-            case 'FwBuryPoint-bd_returnchargeinfo':
-            case 'FwBuryPoint-bd_basicinfo-evt':
-                break;
-            case 'FwBuryPoint-bd_cri04':
-                // Vermutung: es handelt sich um Signal(stärke)werte vom/zum externen Sensor
-                // Assumption: these are signal values (strength) from/to the external sensor
-                break;
             case 'AirbotAutoModel':
                 this.vacBot.handleAirbotAutoModel(payload);
                 if (this.vacBot.airbotAutoModel) {
@@ -760,6 +720,46 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'AudioCallState':
                 this.vacBot.handleAudioCallState(event);
+                break;
+            // ====================
+            // FwBuryPoint messages
+            // ====================
+            case 'FwBuryPoint-bd_sysinfo':
+                this.vacBot.handleSysinfo(payload);
+                if (this.vacBot.sysinfo) {
+                    this.emit('Sysinfo', this.vacBot.sysinfo);
+                    break;
+                }
+            case 'FwBuryPoint-bd_air-quality':
+                this.vacBot.run('GetAirQuality');
+                break;
+            case 'FwBuryPoint-bd_task-return-normal-start':
+            case 'FwBuryPoint-bd_task-return-normal-stop':
+            case 'FwBuryPoint-bd_task-clean-move-start':
+            case 'FwBuryPoint-bd_task-clean-move-stop':
+            case 'FwBuryPoint-bd_task-clean-current-spot-start':
+            case 'FwBuryPoint-bd_task-clean-current-spot-stop':
+            case 'FwBuryPoint-bd_task-clean-specified-spot-start':
+            case 'FwBuryPoint-bd_task-clean-specified-spot-stop': {
+                const fwBuryPointEvent = abbreviatedCommand.substring(20);
+                this.vacBot.handleTask(fwBuryPointEvent, payload);
+                if (this.currentTask) {
+                    this.emit('TaskStarted', this.currentTask);
+                    break;
+                }
+            }
+            case 'FwBuryPoint-bd_dtofstart': // DToF-Laser-Sensor
+            case 'FwBuryPoint-bd_errorcode':
+            case 'FwBuryPoint-bd_relocation':
+            case 'FwBuryPoint-bd_setting':
+            case 'FwBuryPoint-bd_setting-evt': // Event -> Config stored...
+            case 'FwBuryPoint-bd_gyrostart':
+            case 'FwBuryPoint-bd_returnchargeinfo':
+            case 'FwBuryPoint-bd_basicinfo-evt':
+                break;
+            case 'FwBuryPoint-bd_cri04':
+                // Vermutung: es handelt sich um Signal(stärke)werte vom/zum externen Sensor
+                // Assumption: these are signal values (strength) from/to the external sensor
                 break;
             default: {
                 if (command === 'onFwBuryPoint') {
