@@ -73,8 +73,8 @@ class VacBot_950type extends VacBot {
         this.aiBlockPlate = null;
         this.autonomousClean = null;
         this.bluetoothSpeaker = {
-            'enabled': null,
-            'timeout': null,
+            'enable': null,
+            'time': null,
             'name': null
         };
         this.childLock = null;
@@ -1300,8 +1300,8 @@ class VacBot_950type extends VacBot {
      */
     handleGetBlueSpeaker(payload) {
         this.bluetoothSpeaker = {
-            'enabled': payload['enable'],
-            'timeout': payload['time'],
+            'enable': payload['enable'],
+            'time': payload['time'],
             'name': payload['name']
         };
         tools.envLogResult(`bluetoothSpeaker: ${JSON.stringify(this.bluetoothSpeaker)}`);
