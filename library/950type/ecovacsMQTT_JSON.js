@@ -590,9 +590,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'BlueSpeaker':
                 this.vacBot.handleGetBlueSpeaker(payload);
-                if (this.vacBot.bluetoothSpeaker) {
-                    this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
-                }
+                this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
                 break;
             case 'ChildLock':
                 this.vacBot.handleGetChildLock(payload);
