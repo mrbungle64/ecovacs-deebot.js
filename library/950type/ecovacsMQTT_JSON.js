@@ -614,9 +614,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'AutonomousClean':
                 this.vacBot.handleGetAutonomousClean(payload);
-                if (this.vacBot.autonomousClean) {
-                    this.emit('AutonomousClean', this.vacBot.autonomousClean);
-                }
+                this.emit('AutonomousClean', this.vacBot.autonomousClean);
                 break;
             case 'VoiceAssistantState':
                 this.vacBot.handleVoiceAssistantState(payload);
