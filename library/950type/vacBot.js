@@ -1205,7 +1205,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'AiBlockPlate' response/message
      * @param {Object} payload
      */
-    handleGetAiBlockPlate(payload) {
+    handleAiBlockPlate(payload) {
         this.aiBlockPlate = payload['on'];
         tools.envLogResult(`aiBlockPlate: ${this.aiBlockPlate}`);
     }
@@ -1214,7 +1214,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'MonitorAirState' response/message
      * @param {Object} payload
      */
-    handleGetMonitorAirState(payload) {
+    handleMonitorAirState(payload) {
         this.monitorAirState = payload['on'];
         tools.envLogResult(`monitorAirState: ${this.monitorAirState}`);
     }
@@ -1223,7 +1223,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'AngleFollow' response/message
      * @param {Object} payload
      */
-    handleGetAngleFollow(payload) {
+    handleAngleFollow(payload) {
         this.angleFollow = payload['on'];
         tools.envLogResult(`angleFollow: ${this.angleFollow}`);
     }
@@ -1232,7 +1232,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'Mic' response/message
      * @param {Object} payload
      */
-    handleGetMic(payload) {
+    handleMic(payload) {
         this.mic = payload['on'];
         tools.envLogResult(`mic: ${this.mic}`);
     }
@@ -1241,7 +1241,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'VoiceSimple' response/message
      * @param {Object} payload
      */
-    handleGetVoiceSimple(payload) {
+    handleVoiceSimple(payload) {
         this.voiceSimple = payload['on'];
         tools.envLogResult(`voiceSimple: ${this.voiceSimple}`);
     }
@@ -1250,7 +1250,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'DrivingWheel' response/message
      * @param {Object} payload
      */
-    handleGetDrivingWheel(payload) {
+    handleDrivingWheel(payload) {
         this.drivingWheel = payload['on'];
         tools.envLogResult(`drivingWheel: ${this.drivingWheel}`);
     }
@@ -1259,7 +1259,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'ChildLock' response/message
      * @param {Object} payload
      */
-    handleGetChildLock(payload) {
+    handleChildLock(payload) {
         this.childLock = payload['on'];
         tools.envLogResult(`childLock: ${this.childLock}`);
     }
@@ -1289,7 +1289,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'AutonomousClean' response/message
      * @param {Object} payload
      */
-    handleGetAutonomousClean(payload) {
+    handleAutonomousClean(payload) {
         this.autonomousClean = payload['on'];
         tools.envLogResult(`autonomousClean: ${this.autonomousClean}`);
     }
@@ -1298,7 +1298,7 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'BlueSpeaker' response/message
      * @param {Object} payload
      */
-    handleGetBlueSpeaker(payload) {
+    handleBlueSpeaker(payload) {
         this.bluetoothSpeaker = {
             'enable': payload['enable'],
             'time': payload['time'],

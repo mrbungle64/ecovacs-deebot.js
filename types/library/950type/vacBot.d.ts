@@ -356,38 +356,38 @@ declare class VacBot_950type extends VacBot {
      * Handle the payload of the 'AiBlockPlate' response/message
      * @param {Object} payload
      */
-    handleGetAiBlockPlate(payload: any): void;
+    handleAiBlockPlate(payload: any): void;
     /**
      * Handle the payload of the 'MonitorAirState' response/message
      * @param {Object} payload
      */
-    handleGetMonitorAirState(payload: any): void;
+    handleMonitorAirState(payload: any): void;
     /**
      * Handle the payload of the 'AngleFollow' response/message
      * @param {Object} payload
      */
-    handleGetAngleFollow(payload: any): void;
+    handleAngleFollow(payload: any): void;
     /**
      * Handle the payload of the 'Mic' response/message
      * @param {Object} payload
      */
-    handleGetMic(payload: any): void;
+    handleMic(payload: any): void;
     /**
      * Handle the payload of the 'VoiceSimple' response/message
      * @param {Object} payload
      */
-    handleGetVoiceSimple(payload: any): void;
+    handleVoiceSimple(payload: any): void;
     voiceSimple: any;
     /**
      * Handle the payload of the 'DrivingWheel' response/message
      * @param {Object} payload
      */
-    handleGetDrivingWheel(payload: any): void;
+    handleDrivingWheel(payload: any): void;
     /**
      * Handle the payload of the 'ChildLock' response/message
      * @param {Object} payload
      */
-    handleGetChildLock(payload: any): void;
+    handleChildLock(payload: any): void;
     /**
      * Handle the payload of the 'VoiceAssistantState' response/message
      * @param {Object} payload
@@ -403,12 +403,12 @@ declare class VacBot_950type extends VacBot {
      * Handle the payload of the 'AutonomousClean' response/message
      * @param {Object} payload
      */
-    handleGetAutonomousClean(payload: any): void;
+    handleAutonomousClean(payload: any): void;
     /**
      * Handle the payload of the 'BlueSpeaker' response/message
      * @param {Object} payload
      */
-    handleGetBlueSpeaker(payload: any): void;
+    handleBlueSpeaker(payload: any): void;
     /**
      * Handle the payload of the 'AngleWakeup' response/message
      * @param {Object} payload

@@ -559,7 +559,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'AiBlockPlate':
-                this.vacBot.handleGetAiBlockPlate(payload);
+                this.vacBot.handleAiBlockPlate(payload);
                 this.emit('AiBlockPlate', this.vacBot.aiBlockPlate);
                 break;
             case 'AirbotAutoModel':
@@ -569,7 +569,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'AngleFollow':
-                this.vacBot.handleGetAngleFollow(payload);
+                this.vacBot.handleAngleFollow(payload);
                 this.emit('AngleFollow', this.vacBot.angleFollow);
                 break;
             case 'AngleWakeup':
@@ -589,19 +589,19 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'AutonomousClean':
-                this.vacBot.handleGetAutonomousClean(payload);
+                this.vacBot.handleAutonomousClean(payload);
                 this.emit('AutonomousClean', this.vacBot.autonomousClean);
                 break;
             case 'BlueSpeaker':
-                this.vacBot.handleGetBlueSpeaker(payload);
+                this.vacBot.handleBlueSpeaker(payload);
                 this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
                 break;
             case 'ChildLock':
-                this.vacBot.handleGetChildLock(payload);
+                this.vacBot.handleChildLock(payload);
                 this.emit('ChildLock', this.vacBot.childLock);
                 break;
             case 'DrivingWheel':
-                this.vacBot.handleGetDrivingWheel(payload);
+                this.vacBot.handleDrivingWheel(payload);
                 this.emit('DrivingWheel', this.vacBot.drivingWheel);
                 break;
             case 'Efficiency':
@@ -622,11 +622,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'Mic':
-                this.vacBot.handleGetMic(payload);
+                this.vacBot.handleMic(payload);
                 this.emit('Mic', this.vacBot.mic);
                 break;
             case 'MonitorAirState':
-                this.vacBot.handleGetMonitorAirState(payload);
+                this.vacBot.handleMonitorAirState(payload);
                 this.emit('MonitorAirState', this.vacBot.monitorAirState);
                 break;
             case 'ThreeModule':
@@ -642,7 +642,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'VoiceSimple':
-                this.vacBot.handleGetVoiceSimple(payload);
+                this.vacBot.handleVoiceSimple(payload);
                 this.emit('VoiceSimple', this.vacBot.voiceSimple);
                 break;
             case 'VoiceAssistantState':
