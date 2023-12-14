@@ -2017,13 +2017,14 @@ class VacBot_950type extends VacBot {
             // ==================================
             // Airbot Z1 / Z1 Air Quality Monitor
             // ==================================
-            case 'GetAirQuality'.toLowerCase():
-                // Airbot Z1
+            case 'GetAirQuality'.toLowerCase(): // Airbot Z1
                 this.sendCommand(new VacBotCommand.GetAirQuality());
                 break;
-            case 'GetJCYAirQuality'.toLowerCase():
-                // Z1 Air Quality Monitor
+            case 'GetJCYAirQuality'.toLowerCase(): // Z1 Air Quality Monitor
                 this.sendCommand(new VacBotCommand.GetJCYAirQuality());
+                break;
+            case 'GetThreeModuleStatus'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetThreeModuleStatus());
                 break;
             case 'GetThreeModule'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetThreeModule());
@@ -2048,9 +2049,6 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetUVCleaner(args[0]));
                 }
                 break;
-            case 'GetThreeModuleStatus'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetThreeModuleStatus());
-                break;
             case 'SetFanSpeed'.toLowerCase(): // GetFanSpeed => GetCleanSpeed
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetFanSpeed(args[0]));
@@ -2072,15 +2070,24 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetVoiceSimple(args[0]));
                 }
                 break;
+            case 'GetMonitorAirState'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMonitorAirState());
+                break;
             case 'SetMonitorAirState'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetMonitorAirState(args[0]));
                 }
                 break;
+            case 'GetAngleFollow'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAngleFollow());
+                break;
             case 'SetAngleFollow'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetAngleFollow(args[0]));
                 }
+                break;
+            case 'GetMic'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetMic());
                 break;
             case 'SetMic'.toLowerCase():
                 if (args.length >= 1) {
@@ -2123,9 +2130,6 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetHumanoidFollow'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetHumanoidFollow());
-                break;
-            case 'GetMonitorAirState'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetMonitorAirState());
                 break;
             case 'SinglePoint_V2'.toLowerCase():
                 if (args.length >= 1) {

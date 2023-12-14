@@ -1016,11 +1016,23 @@ class SetMonitorAirState extends VacBotCommand {
     }
 }
 
+class GetAngleFollow extends VacBotCommand {
+    constructor() {
+        super('getAngleFollow');
+    }
+}
+
 class SetAngleFollow extends VacBotCommand {
     constructor(on = 0) {
         super('setAngleFollow', {
             'on': on
         });
+    }
+}
+
+class GetMic extends VacBotCommand {
+    constructor() {
+        super('getMic');
     }
 }
 
@@ -1288,11 +1300,11 @@ module.exports.GetMapSpotAreaInfo = GetMapSpotAreaInfo;
 module.exports.GetMapSpotAreas = GetMapSpotAreas;
 module.exports.GetMapSpotAreas_V2 = GetMapSpotAreas_V2;
 module.exports.GetMapState = GetMapState;
+module.exports.GetMapTrace = GetMapTrace;
 module.exports.GetMapTrace_V2 = GetMapTrace_V2;
 module.exports.GetMapVirtualBoundaries = GetMapVirtualBoundaries;
 module.exports.GetMapVirtualBoundaries_V2 = GetMapVirtualBoundaries_V2;
 module.exports.GetMapVirtualBoundaryInfo = GetMapVirtualBoundaryInfo;
-module.exports.GetMapTrace = GetMapTrace;
 module.exports.GetMinorMap = GetMinorMap;
 module.exports.GetMultiMapState = GetMultiMapState;
 module.exports.GetNetInfo = GetNetInfo;
@@ -1301,14 +1313,14 @@ module.exports.GetRecognization = GetRecognization;
 module.exports.GetSchedule = GetSchedule;
 module.exports.GetSchedule_V2 = GetSchedule_V2;
 module.exports.GetSleepStatus = GetSleepStatus;
-module.exports.GetStationState = GetStationState;
 module.exports.GetStationInfo = GetStationInfo;
+module.exports.GetStationState = GetStationState;
 module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
+module.exports.GetVoiceAssistantState = GetVoiceAssistantState;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetWaterInfo = GetWaterInfo;
-module.exports.GetVoiceAssistantState = GetVoiceAssistantState;
 module.exports.HostedCleanMode = HostedCleanMode;
 module.exports.MapPoint_V2 = MapPoint_V2;
 module.exports.Move = Move;
@@ -1351,12 +1363,13 @@ module.exports.Washing = Washing;
 // Air Purifier (e.g. AIRBOT Z1)
 module.exports.Area_V2 = Area_V2;
 module.exports.GetAirQuality = GetAirQuality;
+module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
+module.exports.GetAngleFollow = GetAngleFollow;
 module.exports.GetAntiDrop = GetAntiDrop;
-module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetAtmoLight = GetAtmoLight;
 module.exports.GetAtmoVolume = GetAtmoVolume;
+module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetAutonomousClean = GetAutonomousClean;
-module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
 module.exports.GetBlock = GetBlock;
 module.exports.GetBlueSpeaker = GetBlueSpeaker;
 module.exports.GetBreakPoint = GetBreakPoint;
@@ -1366,6 +1379,7 @@ module.exports.GetHumanoidFollow = GetHumanoidFollow;
 module.exports.GetJCYAirQuality = GetJCYAirQuality;
 module.exports.GetListenMusic = GetListenMusic;
 module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
+module.exports.GetMic = GetMic;
 module.exports.GetMonitorAirState = GetMonitorAirState;
 module.exports.GetOta = GetOta;
 module.exports.GetRelocationState = GetRelocationState;

@@ -594,21 +594,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'ChildLock':
                 this.vacBot.handleGetChildLock(payload);
-                if (this.vacBot.childLock) {
-                    this.emit('ChildLock', this.vacBot.childLock);
-                }
+                this.emit('ChildLock', this.vacBot.childLock);
                 break;
             case 'AngleFollow':
                 this.vacBot.handleGetAngleFollow(payload);
-                if (this.vacBot.angleFollow) {
-                    this.emit('AngleFollow', this.vacBot.angleFollow);
-                }
+                this.emit('AngleFollow', this.vacBot.angleFollow);
                 break;
             case 'AngleWakeup':
                 this.vacBot.handleAngleWakeup(payload);
-                if (this.vacBot.angleWakeup) {
-                    this.emit('AngleWakeup', this.vacBot.angleWakeup);
-                }
+                this.emit('AngleWakeup', this.vacBot.angleWakeup);
                 break;
             case 'AutonomousClean':
                 this.vacBot.handleGetAutonomousClean(payload);
@@ -616,9 +610,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'VoiceAssistantState':
                 this.vacBot.handleVoiceAssistantState(payload);
-                if (this.vacBot.voiceAssistantState) {
-                    this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
-                }
+                this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
                 break;
             case 'Efficiency':
                 this.vacBot.handleEfficiency(payload);
