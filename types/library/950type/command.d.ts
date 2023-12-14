@@ -144,6 +144,9 @@ export class GetMapSpotAreas_V2 extends GetMapSet_V2 {
 export class GetMapState extends VacBotCommand {
     constructor();
 }
+export class GetMapTrace extends VacBotCommand {
+    constructor(traceStart?: number, pointCount?: number);
+}
 export class GetMapTrace_V2 extends VacBotCommand {
     constructor(type?: number);
 }
@@ -152,9 +155,6 @@ export class GetMapVirtualBoundaries extends GetMapSet {
 export class GetMapVirtualBoundaries_V2 extends GetMapSet_V2 {
 }
 export class GetMapVirtualBoundaryInfo extends GetMapSubSet {
-}
-export class GetMapTrace extends VacBotCommand {
-    constructor(traceStart?: number, pointCount?: number);
 }
 export class GetMinorMap extends VacBotCommand {
     constructor(mid: any, pieceIndex: any, type?: string);
@@ -180,16 +180,19 @@ export class GetSchedule_V2 extends VacBotCommand {
 export class GetSleepStatus extends VacBotCommand {
     constructor();
 }
-export class GetStationState extends VacBotCommand {
+export class GetStationInfo extends VacBotCommand {
     constructor();
 }
-export class GetStationInfo extends VacBotCommand {
+export class GetStationState extends VacBotCommand {
     constructor();
 }
 export class GetSweepMode extends VacBotCommand {
     constructor();
 }
 export class GetTrueDetect extends VacBotCommand {
+    constructor();
+}
+export class GetVoiceAssistantState extends VacBotCommand {
     constructor();
 }
 export class GetVolume extends VacBotCommand {
@@ -199,9 +202,6 @@ export class GetWashInterval extends VacBotCommand {
     constructor();
 }
 export class GetWaterInfo extends VacBotCommand {
-    constructor();
-}
-export class GetVoiceAssistantState extends VacBotCommand {
     constructor();
 }
 export class HostedCleanMode extends Clean_V2 {
@@ -328,10 +328,13 @@ export class Area_V2 extends Clean_V2 {
 export class GetAirQuality extends VacBotCommand {
     constructor();
 }
-export class GetAntiDrop extends VacBotCommand {
+export class GetAirbotAutoModel extends VacBotCommand {
     constructor();
 }
-export class GetAudioCallState extends VacBotCommand {
+export class GetAngleFollow extends VacBotCommand {
+    constructor();
+}
+export class GetAntiDrop extends VacBotCommand {
     constructor();
 }
 export class GetAtmoLight extends VacBotCommand {
@@ -340,13 +343,16 @@ export class GetAtmoLight extends VacBotCommand {
 export class GetAtmoVolume extends VacBotCommand {
     constructor();
 }
+export class GetAudioCallState extends VacBotCommand {
+    constructor();
+}
 export class GetAutonomousClean extends VacBotCommand {
     constructor();
 }
-export class GetAirbotAutoModel extends VacBotCommand {
+export class GetBlock extends VacBotCommand {
     constructor();
 }
-export class GetBlock extends VacBotCommand {
+export class GetBlueSpeaker extends VacBotCommand {
     constructor();
 }
 export class GetBreakPoint extends VacBotCommand {
@@ -370,6 +376,9 @@ export class GetListenMusic extends VacBotCommand {
 export class GetLiveLaunchPwdState extends VacBotCommand {
     constructor();
 }
+export class GetMic extends VacBotCommand {
+    constructor();
+}
 export class GetMonitorAirState extends VacBotCommand {
     constructor();
 }
@@ -380,6 +389,9 @@ export class GetRelocationState extends VacBotCommand {
     constructor();
 }
 export class GetScene extends VacBotCommand {
+    constructor();
+}
+export class GetThreeModule extends VacBotCommand {
     constructor();
 }
 export class GetThreeModuleStatus extends VacBotCommand {

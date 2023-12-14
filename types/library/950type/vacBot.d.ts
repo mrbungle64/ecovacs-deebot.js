@@ -46,8 +46,8 @@ declare class VacBot_950type extends VacBot {
     aiBlockPlate: any;
     autonomousClean: any;
     bluetoothSpeaker: {
-        enabled: any;
-        timeout: any;
+        enable: any;
+        time: any;
         name: any;
     };
     childLock: any;
@@ -68,6 +68,7 @@ declare class VacBot_950type extends VacBot {
         from: any;
         to: any;
     };
+    threeModule: any[];
     threeModuleStatus: any[];
     areaPoint: {
         mapId: any;
@@ -436,9 +437,16 @@ declare class VacBot_950type extends VacBot {
     handleAirbotAutoModel(payload: any): void;
     /**
      * Handle the payload of the 'ThreeModule' (UV, Humidifier, AirFreshener) response/message
+     * It contains the current level set for Air Freshening and Humidification
      * @param {Object} payload
      */
     handleThreeModule(payload: any): void;
+    /**
+     * Handle the payload of the 'ThreeModuleStatus' (UV, Humidifier, AirFreshener) response/message
+     * It contains the working status of these modules
+     * @param {Object} payload
+     */
+    handleThreeModuleStatus(payload: any): void;
     /**
      * Handle the payload of the 'AreaPoint' response/message
      * @param {Object} payload
