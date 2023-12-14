@@ -1364,15 +1364,17 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleAirbotAutoModel(payload) {
-        this.airbotAutoModel = {
-            'enable': payload['enable'],
-            'trigger': payload['trigger'],
-            'aq': {
-                'aqStart': payload['aq']['aqStart'],
-                'aqEnd': payload['aq']['aqEnd']
-            }
-        };
-        tools.envLogResult(`airbotAutoModel: ${JSON.stringify(this.airbotAutoModel)}`);
+        if (payload['aq'] && payload['aq']['aqStart'] && payload['aq']['aqEnd']) {
+            this.airbotAutoModel = {
+                'enable': payload['enable'],
+                'trigger': payload['trigger'],
+                'aq': {
+                    'aqStart': payload['aq']['aqStart'],
+                    'aqEnd': payload['aq']['aqEnd']
+                }
+            };
+            tools.envLogResult(`airbotAutoModel: ${JSON.stringify(this.airbotAutoModel)}`);
+        }
     }
 
     /**

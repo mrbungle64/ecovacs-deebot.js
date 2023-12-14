@@ -558,43 +558,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('AirQuality', this.vacBot.airQuality);
                 }
                 break;
-            case 'Mic':
-                this.vacBot.handleGetMic(payload);
-                if (this.vacBot.mic) {
-                    this.emit('Mic', this.vacBot.mic);
-                }
-                break;
-            case 'MonitorAirState':
-                this.vacBot.handleGetMonitorAirState(payload);
-                if (this.vacBot.monitorAirState) {
-                    this.emit('MonitorAirState', this.vacBot.monitorAirState);
-                }
-                break;
-            case 'DrivingWheel':
-                this.vacBot.handleGetDrivingWheel(payload);
-                if (this.vacBot.drivingWheel) {
-                    this.emit('DrivingWheel', this.vacBot.drivingWheel);
-                }
-                break;
-            case 'VoiceSimple':
-                this.vacBot.handleGetVoiceSimple(payload);
-                if (this.vacBot.voiceSimple) {
-                    this.emit('VoiceSimple', this.vacBot.voiceSimple);
-                }
-                break;
             case 'AiBlockPlate':
                 this.vacBot.handleGetAiBlockPlate(payload);
-                if (this.vacBot.aiBlockPlate) {
-                    this.emit('AiBlockPlate', this.vacBot.aiBlockPlate);
+                this.emit('AiBlockPlate', this.vacBot.aiBlockPlate);
+                break;
+            case 'AirbotAutoModel':
+                this.vacBot.handleAirbotAutoModel(payload);
+                if (this.vacBot.airbotAutoModel) {
+                    this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
                 }
-                break;
-            case 'BlueSpeaker':
-                this.vacBot.handleGetBlueSpeaker(payload);
-                this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
-                break;
-            case 'ChildLock':
-                this.vacBot.handleGetChildLock(payload);
-                this.emit('ChildLock', this.vacBot.childLock);
                 break;
             case 'AngleFollow':
                 this.vacBot.handleGetAngleFollow(payload);
@@ -603,20 +575,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'AngleWakeup':
                 this.vacBot.handleAngleWakeup(payload);
                 this.emit('AngleWakeup', this.vacBot.angleWakeup);
-                break;
-            case 'AutonomousClean':
-                this.vacBot.handleGetAutonomousClean(payload);
-                this.emit('AutonomousClean', this.vacBot.autonomousClean);
-                break;
-            case 'VoiceAssistantState':
-                this.vacBot.handleVoiceAssistantState(payload);
-                this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
-                break;
-            case 'Efficiency':
-                this.vacBot.handleEfficiency(payload);
-                if (this.vacBot.efficiency) {
-                    this.emit('Efficiency', this.vacBot.efficiency);
-                }
                 break;
             case 'AtmoLight':
                 this.vacBot.handleAtmoLight(payload);
@@ -630,6 +588,28 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('AtmoVolume', this.vacBot.atmoVolume);
                 }
                 break;
+            case 'AutonomousClean':
+                this.vacBot.handleGetAutonomousClean(payload);
+                this.emit('AutonomousClean', this.vacBot.autonomousClean);
+                break;
+            case 'BlueSpeaker':
+                this.vacBot.handleGetBlueSpeaker(payload);
+                this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
+                break;
+            case 'ChildLock':
+                this.vacBot.handleGetChildLock(payload);
+                this.emit('ChildLock', this.vacBot.childLock);
+                break;
+            case 'DrivingWheel':
+                this.vacBot.handleGetDrivingWheel(payload);
+                this.emit('DrivingWheel', this.vacBot.drivingWheel);
+                break;
+            case 'Efficiency':
+                this.vacBot.handleEfficiency(payload);
+                if (this.vacBot.efficiency) {
+                    this.emit('Efficiency', this.vacBot.efficiency);
+                }
+                break;
             case 'HumanoidFollow':
                 this.vacBot.handleHumanoidFollow(payload);
                 if ((this.vacBot.humanoidFollow_Yiko) || (this.vacBot.humanoidFollow_Video)) {
@@ -639,13 +619,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     if (this.vacBot.humanoidFollow_Video) {
                         this.emit('HumanoidFollowVideo', this.vacBot.humanoidFollow_Video);
                     }
-                    break;
                 }
-            case 'AirbotAutoModel':
-                this.vacBot.handleAirbotAutoModel(payload);
-                if (this.vacBot.airbotAutoModel) {
-                    this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
-                }
+                break;
+            case 'Mic':
+                this.vacBot.handleGetMic(payload);
+                this.emit('Mic', this.vacBot.mic);
+                break;
+            case 'MonitorAirState':
+                this.vacBot.handleGetMonitorAirState(payload);
+                this.emit('MonitorAirState', this.vacBot.monitorAirState);
                 break;
             case 'ThreeModule':
                 this.vacBot.handleThreeModule(payload);
@@ -659,6 +641,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emit('ThreeModuleStatus', this.vacBot.threeModuleStatus);
                 }
                 break;
+            case 'VoiceSimple':
+                this.vacBot.handleGetVoiceSimple(payload);
+                this.emit('VoiceSimple', this.vacBot.voiceSimple);
+                break;
+            case 'VoiceAssistantState':
+                this.vacBot.handleVoiceAssistantState(payload);
+                this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
+                break;
+
             case 'AreaPoint':
                 // Hindernisse, die beim Reinigen erkannt werden (AIVI)
                 // Obstacles detected during cleaning (AIVI)
@@ -709,6 +700,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'AudioCallState':
                 this.vacBot.handleAudioCallState(event);
                 break;
+
             // ====================
             // FwBuryPoint messages
             // ====================
