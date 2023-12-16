@@ -811,6 +811,22 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "type": "yeedi"
     },
+    "6r6dbt": {
+        "name": "yeedi cube",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "type": "yeedi"
+    },
     "zwvyi2": {
         "name": "yeedi mop station pro",
         "deviceClassLink": "vthpeg"
