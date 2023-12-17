@@ -264,7 +264,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "MapInfo_V2_Yeedi":
                 try {
-                    this.vacBot.handleMapInfoV2(payload);
+                    this.vacBot.handleMapInfoV2_Yeedi(payload);
                     this.emit("CurrentMapMID", this.vacBot.currentMapMID);
                     this.emit("CurrentMapName", this.vacBot.currentMapName);
                     this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
@@ -298,7 +298,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "MapInfo_V2":
-                tools.envLogWarn(`Unhandled MapInfo_V2`);
+                try {
+                    this.vacBot.handleMapInfoV2(payload);
+                } catch (e) {
+                    tools.envLogError(`error on handling MapInfo_V2: ${e.message}`);
+                }
                 break;
             case "MapSet": {
                 // Handle spotAreas, virtualWalls, noMopZones
@@ -548,6 +552,19 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
                 break;
 
+            case 'Ota':
+                this.vacBot.handleOverTheAirUpdate(payload);
+                this.emit('Ota', payload);
+                break;
+            case 'TimeZone':
+                this.vacBot.handleTimeZone(payload);
+                this.emit('TimeZone', payload);
+                break;
+            case 'WifiList':
+                this.vacBot.handleWiFiList(payload);
+                this.emit('WifiList', payload);
+                break;
+
             // ==================================
             // AIRBOT Z1 / Z1 Air Quality Monitor
             // ==================================
@@ -651,8 +668,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
 
             case 'AreaPoint':
-                // Hindernisse, die beim Reinigen erkannt werden (AIVI)
                 // Obstacles detected during cleaning (AIVI)
+                if (payload) {
+                    tools.envLogInfo(`Payload for 'AreaPoint' message: ${JSON.stringify(payload)}`);
+                }
                 break;
             case 'AirSpeed':
             case 'Humidity':
@@ -682,23 +701,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     });
                 }
                 break;
-            case 'WifiList':
-                this.vacBot.handleWiFiList(payload);
-                this.emit('WifiList', payload);
-                break;
-            case 'ListenMusic':
-                tools.envLogInfo(event);
-                break;
-            case 'Ota':
-                this.vacBot.handleOverTheAirUpdate(payload);
-                this.emit('Ota', payload);
-                break;
-            case 'TimeZone':
-                this.vacBot.handleTimeZone(payload);
-                this.emit('TimeZone', payload);
+            case 'AreaPoint':
+                this.vacBot.handleAreaPoint(payload);
                 break;
             case 'AudioCallState':
-                this.vacBot.handleAudioCallState(event);
+                this.vacBot.handleAudioCallState(payload);
                 break;
 
             // ====================
@@ -738,6 +745,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'FwBuryPoint-bd_basicinfo-evt':
                 break;
             case 'FwBuryPoint-bd_cri04':
+                // {"gid":"G1716202154868","index":"0000002865","ts":"1702804165007","cr":26,"rr":692}
                 // Vermutung: es handelt sich um Signal(stärke)werte vom/zum externen Sensor
                 // Assumption: these are signal values (strength) from/to the external sensor
                 break;

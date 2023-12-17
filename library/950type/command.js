@@ -1168,12 +1168,6 @@ class GetScene extends VacBotCommand {
     }
 }
 
-class GetListenMusic extends VacBotCommand {
-    constructor() {
-        super('getListenMusic');
-    }
-}
-
 class VideoOpened extends VacBotCommand {
     constructor() {
         super('videoOpened');
@@ -1377,7 +1371,6 @@ module.exports.GetChildLock = GetChildLock;
 module.exports.GetDrivingWheel = GetDrivingWheel;
 module.exports.GetHumanoidFollow = GetHumanoidFollow;
 module.exports.GetJCYAirQuality = GetJCYAirQuality;
-module.exports.GetListenMusic = GetListenMusic;
 module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
 module.exports.GetMic = GetMic;
 module.exports.GetMonitorAirState = GetMonitorAirState;

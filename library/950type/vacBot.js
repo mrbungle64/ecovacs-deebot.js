@@ -872,6 +872,24 @@ class VacBot_950type extends VacBot {
      */
     handleMapInfoV2(payload) {
         this.currentMapMID = payload['mid'];
+        tools.envLogNotice(`mid: ${this.currentMapMID}`);
+        tools.envLogNotice(`batid: ${payload['batid']}`);
+        tools.envLogNotice(`serial: ${payload['serial']}`);
+        tools.envLogNotice(`index: ${payload['index']}`);
+        tools.envLogNotice(`type: ${payload['type']}`);
+        tools.envLogNotice(`outlineVer: ${payload['outlineVer']}`);
+        tools.envLogNotice(`info: ${payload['info']}`);
+        tools.envLogNotice(`infoSize: ${payload['infoSize']}`);
+        tools.envLogNotice(`using: ${payload['using']}`);
+        tools.envLogNotice(`outlineCpmplete: ${payload['outlineCpmplete']}`); // The typo in 'Cpmplete' is intended
+    }
+
+    /**
+     * Handle the payload of the 'MapInfo_V2' response/message (Yeedi)
+     * @param {Object} payload
+     */
+    handleMapInfoV2_Yeedi(payload) {
+        this.currentMapMID = payload['mid'];
         this.currentMapName = 'standard';
         this.currentMapIndex = 0;
         this.maps = {'maps': []};
@@ -1424,8 +1442,8 @@ class VacBot_950type extends VacBot {
         tools.envLogResult(`Task: ${JSON.stringify(this.currentTask)}`);
     }
 
-    handleAudioCallState(event) {
-        tools.envLogWarn(`Unhandled AudioCallState: ${JSON.stringify(event)}`);
+    handleAudioCallState(payload) {
+        tools.envLogWarn(`Unhandled AudioCallState: ${JSON.stringify(payload)}`);
     }
 
     handleDModule(payload) {
@@ -1992,9 +2010,6 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetScene'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetScene());
-                break;
-            case 'GetListenMusic'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetListenMusic());
                 break;
             case 'VideoOpened'.toLowerCase():
                 this.sendCommand(new VacBotCommand.VideoOpened());
