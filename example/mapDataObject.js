@@ -37,11 +37,6 @@ api.connect(accountId, passwordHash).then(() => {
                     const mapSpotArea = mapData.mapSpotAreas[i];
                     mapSpotAreaName[mapSpotArea.mapSpotAreaID] = mapSpotArea.mapSpotAreaName;
                 }
-                initGetPosition();
-            });
-
-            vacbot.on('Error', (value) => {
-                api.logError('Error: ' + value);
             });
         });
 
@@ -65,14 +60,6 @@ api.connect(accountId, passwordHash).then(() => {
             api.logInfo("Gracefully shutting down from SIGINT (Ctrl+C)");
             disconnect();
         });
-
-        function initGetPosition() {
-            setInterval(() => {
-                if (vacbot.getProtocol() === 'XMPP') {
-                    vacbot.run('GetPosition');
-                }
-            }, 6000);
-        }
 
         function disconnect() {
             (async () => {

@@ -38,68 +38,6 @@ api.connect(accountId, passwordHash).then(() => {
 
             api.logInfo('vacbot ready');
 
-            vacbot.on('ChargeState', (state) => {
-                api.logEvent('ChargeState', state);
-            });
-            vacbot.on('CleanSpeed', (speed) => {
-                api.logEvent('CleanSpeed', speed);
-            });
-            vacbot.on('CleanReport', (state) => {
-                api.logEvent('CleanReport', state);
-            });
-            vacbot.on('BatteryInfo', (value) => {
-                let battery = Math.round(value);
-                api.logEvent('BatteryInfo', battery);
-            });
-            vacbot.on('LifeSpan_filter', (level) => {
-                api.logEvent('filter', Math.round(level));
-            });
-            vacbot.on('LifeSpan_main_brush', (level) => {
-                api.logEvent('main_brush', Math.round(level));
-            });
-            vacbot.on('LifeSpan_side_brush', (level) => {
-                api.logEvent('side_brush', Math.round(level));
-            });
-            vacbot.on('WaterLevel', (level) => {
-                api.logEvent('water level', level);
-            });
-            vacbot.on('WaterBoxInfo', (level) => {
-                api.logEvent('waterBoxInfo', level);
-            });
-            vacbot.on('DustCaseInfo', (value) => {
-                api.logEvent('DustCaseInfo', value);
-            });
-            vacbot.on('Error', (value) => {
-                api.logEvent('Error', value);
-            });
-            vacbot.on('DoNotDisturbEnabled', (value) => {
-                const doNotDisturb = (parseInt(value) === 1);
-                api.logEvent('DoNotDisturbEnabled', doNotDisturb);
-            });
-            vacbot.on('ContinuousCleaningEnabled', (value) => {
-                const continuousCleaning = (parseInt(value) === 1);
-                api.logEvent('ContinuousCleaningEnabled', continuousCleaning);
-            });
-            vacbot.on('Volume', (value) => {
-                api.logEvent('Volume', value);
-            });
-            vacbot.on('ChargePosition', (chargePosition) => {
-                api.logEvent('ChargePosition', chargePosition);
-            });
-            vacbot.on('DeebotPosition', (deebotPosition) => {
-                api.logEvent('DeebotPosition', deebotPosition);
-            });
-
-            vacbot.on('LastUsedAreaValues', (values) => {
-                api.logEvent('LastUsedAreaValues', values);
-            });
-            vacbot.on('CurrentSpotAreas', (values) => {
-                api.logEvent('CurrentSpotAreas', values);
-            });
-            vacbot.on('CurrentCustomAreaValues', (values) => {
-                api.logEvent('CurrentCustomAreaValues', values);
-            });
-
             vacbot.on('MapSpotAreas', (spotAreas) => {
                 api.logEvent('MapSpotAreas', spotAreas);
                 for (const i in spotAreas['mapSpotAreas']) {
@@ -145,24 +83,6 @@ api.connect(accountId, passwordHash).then(() => {
                 api.logEvent('CurrentMapIndex', value);
             });
             */
-
-            vacbot.on('CurrentMapMID', (mapID) => {
-                api.logEvent('CurrentMapMID', mapID);
-                vacbot.run('GetSpotAreas', mapID);
-            });
-            vacbot.on('DeebotPositionCurrentSpotAreaID', (spotAreaID) => {
-                api.logEvent('CurrentSpotAreaID', spotAreaID);
-            });
-            vacbot.on('CleanLog', (object) => {
-                api.logEvent('CleanLog', object);
-            });
-            vacbot.on('Schedule', (object) => {
-                api.logEvent('Schedule', object);
-            });
-
-            vacbot.on('messageReceived', (value) => {
-                api.logEvent('messageReceived', value);
-            });
         });
 
         vacbot.connect();

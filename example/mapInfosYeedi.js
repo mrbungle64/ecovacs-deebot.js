@@ -98,10 +98,6 @@ api.connect(accountId, passwordHash).then(() => {
                     }
                 }
             });
-
-            vacbot.on('Error', (value) => {
-                api.logError('Error: ' + value);
-            });
         });
 
         vacbot.connect();

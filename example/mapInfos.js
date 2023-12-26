@@ -80,10 +80,6 @@ api.connect(accountId, passwordHash).then(() => {
                     }
                 }
             });
-
-            vacbot.on('Error', (value) => {
-                api.logError('Error: ' + value);
-            });
         });
 
         vacbot.connect();
@@ -113,12 +109,6 @@ api.connect(accountId, passwordHash).then(() => {
                 vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
             }
-
-            setInterval(() => {
-                if (vacbot.getProtocol() === 'XMPP') {
-                    vacbot.run('GetPosition');
-                }
-            }, 6000);
         }
 
         function disconnect() {
