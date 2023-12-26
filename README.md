@@ -27,9 +27,10 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 The fully supported models are those that I own myself:
 
-* Deebot OZMO 920
+* Deebot OZMO 920/950
 * Deebot OZMO T8 AIVI
 * Deebot X1 Turbo
+* Airbot Z1
 
 ### Other supported models
 
@@ -42,7 +43,7 @@ There is of course no claim to full functionality.
 
 #### Ecovacs Deebot
 
-* Deebot OZMO 950/T5
+* Deebot OZMO T5
 * Deebot N8 series
 * Deebot U2 series
 * Deebot T8 series
@@ -61,16 +62,12 @@ There is of course no claim to full functionality.
 * yeedi vac 2 pro
 * yeedi mop station
 
-#### Ecovacs Airbot (experimental)
-
-* AIRBOT Z1
-
 #### Legacy models (soon to be discontinued)
 
 These models use XML for data transport and also different characteristics for commands and events than the current models.
 I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
-**Support for these models will therefore soon be discontinued**.
+**Support for these models will therefore be discontinued sooner or later**.
 
 * Deebot Slim 2
 * Deebot N79 series
@@ -98,6 +95,8 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 * Added some new models to the model dictionary (incl. GOAT, T20 OMNI)
 * Added shortcut commands for sweep mode
 * Some improvements for Airbot Z1 and Air Quality Monitor
+* Some clean-up and refactoring
+* Added new example app for output of incoming messages
 * Some further improvements and fixes
 * Updated dependencies
 

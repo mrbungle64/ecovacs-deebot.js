@@ -29,6 +29,22 @@ exports.SupportedDevices = {
         "yiko": true,
         "type": "X1"
     },
+    "sdp1y1": {
+        "name": "AIRBOT Z1",
+        "950type": true,
+        "950type_V2": true,
+        "clean_speed": true,
+        "spot_area": true,
+        "map_image_supported": false,
+        "yiko": true,
+        "type": "airbot"
+    },
+    "20anby": {
+        "name": "Z1 Air Quality Monitor",
+        "950type": true,
+        "950type_V2": true,
+        "type": "aqMonitor"
+    },
 };
 
 exports.KnownDevices = {
@@ -876,22 +892,6 @@ exports.KnownDevices = {
     "09m4bu": {
         "name": "K650",
         "deviceClassLink": "3ab24g"
-    },
-    "sdp1y1": {
-        "name": "AIRBOT Z1",
-        "950type": true,
-        "950type_V2": true,
-        "clean_speed": true,
-        "spot_area": true,
-        "map_image_supported": false,
-        "yiko": true,
-        "type": "airbot"
-    },
-    "20anby": {
-        "name": "Z1 Air Quality Monitor",
-        "950type": true,
-        "950type_V2": true,
-        "type": "aqMonitor"
     },
     "m1wkuw": {
         "name": "DEEBOT N10",
