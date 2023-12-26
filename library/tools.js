@@ -298,9 +298,9 @@ function envLogFwBuryPoint(message) {
     }
 }
 
-function envLogResult(message) {
+function envLogResult(name, message) {
     if (verbose(message)) {
-        console.log(chalk.bgGreen.white(' result ') + ' ' + message);
+        console.log(chalk.bgGreen.white(' result ') + ' ' + chalk.bgYellow.black(name) + ' ' + message);
     }
 }
 

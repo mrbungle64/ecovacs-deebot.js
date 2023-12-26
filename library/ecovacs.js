@@ -355,6 +355,11 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    emitMessage(name, payload) {
+        tools.envLogResult(name, JSON.stringify(payload));
+        this.emit(name, payload);
+    }
+
     /**
      * Set values for emitting an error
      * @param {string} code - the error code

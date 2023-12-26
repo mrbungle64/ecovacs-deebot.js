@@ -93,25 +93,21 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             tools.envLogMqtt(eventName);
             if (message['body'] && message['body']['data']) {
                 payload = message['body']['data'];
-                tools.envLogPayload(payload);
             } else if (message['body']) {
                 payload = message['body'];
-                tools.envLogPayload(payload);
             } else {
                 tools.envLogWarn('Unhandled MQTT message payload ...')
-                tools.envLogPayload(payload);
                 return;
             }
         } else if (type === "response") {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
             payload = message['body']['data'];
-            tools.envLogPayload(payload);
             if (message['header']) {
                 const header = message['header'];
                 if (this.vacBot.firmwareVersion !== header['fwVer']) {
                     this.vacBot.firmwareVersion = header['fwVer'];
-                    this.emit('HeaderInfo', {
+                    this.emitMessage('HeaderInfo', {
                         'fwVer': header['fwVer'],
                         'hwVer': header['hwVer']
                     });
@@ -119,7 +115,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             }
         } else if (type === "logResponse") {
             tools.envLogInfo(`got message with type 'logResponse'`);
-            tools.envLogPayload(message);
             resultCodeMessage = message['ret'];
         }
 
@@ -128,7 +123,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 try {
                     await this.handleMessagePayload(eventName, payload);
                 } catch (e) {
-                    this.emitError('-2', e.message);
+                    this.emitMessageError('-2', e.message);
                 }
             })();
         } else if (resultCode != 0) {
@@ -150,6 +145,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
      * @returns {Promise<void>}
      */
     async handleMessagePayload(command, payload) {
+        tools.logEvent(command, payload);
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
         abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
@@ -169,106 +165,106 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'Evt': {
                 this.vacBot.handleEvt(payload);
                 if (this.vacBot.evt.event) {
-                    this.emit("Evt", this.vacBot.evt);
+                    this.emitMessage("Evt", this.vacBot.evt);
                 }
                 break;
             }
             case "Stats":
                 this.vacBot.handleStats(payload);
                 if (this.vacBot.currentStats) {
-                    this.emit("CurrentStats", this.vacBot.currentStats);
+                    this.emitMessage("CurrentStats", this.vacBot.currentStats);
                     this.vacBot.currentStats = null;
                 }
                 break;
             case 'AirDring': // The typo in 'AirDring' is intended
                 this.bot.handleAirDryingState(payload);
                 if (this.bot.airDryingStatus) {
-                    this.emit('AirDryingState', this.bot.airDryingStatus);
+                    this.emitMessage('AirDryingState', this.bot.airDryingStatus);
                 }
                 break;
             case 'BorderSpin':
                 this.bot.handleBorderSpin(payload);
-                this.emit('BorderSpin', this.bot.borderSpin);
+                this.emitMessage('BorderSpin', this.bot.borderSpin);
                 break;
             case 'CustomAreaMode':
                 this.bot.handleCustomAreaMode(payload);
                 // SweepMode is taken from the CustomAreaMode message
                 // (not from the SweepMode message)
-                this.emit('SweepMode', this.bot.sweepMode);
+                this.emitMessage('SweepMode', this.bot.sweepMode);
                 break;
             case 'SweepMode':
                 this.bot.handleSweepMode(payload);
                 // MopOnlyMode is taken from the SweepMode message
-                this.emit('MopOnlyMode', this.bot.mopOnlyMode);
+                this.emitMessage('MopOnlyMode', this.bot.mopOnlyMode);
                 break;
             case 'AICleanItemState':
                 this.bot.handleAICleanItemState(payload);
                 if (this.bot.aiCleanItemState.items.length) {
-                    this.emit('AICleanItemState', this.bot.aiCleanItemState);
+                    this.emitMessage('AICleanItemState', this.bot.aiCleanItemState);
                 }
                 break;
             case "ChargeState":
                 this.vacBot.handleChargeState(payload);
                 if (this.vacBot.chargeStatus) {
-                    this.emit("ChargeState", this.vacBot.chargeStatus);
+                    this.emitMessage("ChargeState", this.vacBot.chargeStatus);
                 }
                 if (this.vacBot.chargeMode) {
-                    this.emit("ChargeMode", this.vacBot.chargeMode);
+                    this.emitMessage("ChargeMode", this.vacBot.chargeMode);
                 }
                 break;
             case "Battery":
                 this.vacBot.handleBattery(payload);
                 if (this.vacBot.batteryLevel) {
-                    this.emit("BatteryInfo", this.vacBot.batteryLevel);
-                    this.emit("BatteryIsLow", this.vacBot.batteryIsLow);
+                    this.emitMessage("BatteryInfo", this.vacBot.batteryLevel);
+                    this.emitMessage("BatteryIsLow", this.vacBot.batteryIsLow);
                 }
                 break;
             case "CleanInfo":
                 this.vacBot.handleCleanInfo(payload);
-                this.emit("CleanReport", this.vacBot.cleanReport);
+                this.emitMessage("CleanReport", this.vacBot.cleanReport);
                 this.emitMoppingSystemReport();
                 if (this.vacBot.chargeStatus) {
-                    this.emit("ChargeState", this.vacBot.chargeStatus);
+                    this.emitMessage("ChargeState", this.vacBot.chargeStatus);
                 }
                 if (this.vacBot.currentCustomAreaValues) {
-                    this.emit("LastUsedAreaValues", this.vacBot.currentCustomAreaValues);
+                    this.emitMessage("LastUsedAreaValues", this.vacBot.currentCustomAreaValues);
                 }
-                this.emit("CurrentCustomAreaValues", this.vacBot.currentCustomAreaValues);
-                this.emit("CurrentSpotAreas", this.vacBot.currentSpotAreas);
+                this.emitMessage("CurrentCustomAreaValues", this.vacBot.currentCustomAreaValues);
+                this.emitMessage("CurrentSpotAreas", this.vacBot.currentSpotAreas);
                 break;
             case "StationState":
                 this.vacBot.handleStationState(payload);
                 if (this.vacBot.stationState.type !== null) {
-                    this.emit("StationState", this.vacBot.stationState);
+                    this.emitMessage("StationState", this.vacBot.stationState);
                     const airDryingState = this.bot.stationState.isAirDrying ? 'airdrying': 'idle';
-                    this.emit('AirDryingState', airDryingState);
+                    this.emitMessage('AirDryingState', airDryingState);
                 }
                 break;
             case "StationInfo":
                 this.vacBot.handleStationInfo(payload);
-                this.emit('StationInfo', this.vacBot.stationInfo);
+                this.emitMessage('StationInfo', this.vacBot.stationInfo);
                 break;
             case "WashInterval":
                 this.vacBot.handleWashInterval(payload);
                 if (this.vacBot.washInterval !== null) {
-                    this.emit("WashInterval", this.vacBot.washInterval);
+                    this.emitMessage("WashInterval", this.vacBot.washInterval);
                 }
                 break;
             case "Speed":
                 this.vacBot.handleSpeed(payload);
-                this.emit("CleanSpeed", this.vacBot.cleanSpeed);
+                this.emitMessage("CleanSpeed", this.vacBot.cleanSpeed);
                 break;
             case "RelocationState":
                 this.vacBot.handleRelocationState(payload);
-                this.emit("RelocationState", this.vacBot.relocationState);
+                this.emitMessage("RelocationState", this.vacBot.relocationState);
                 break;
             case "MapInfo_V2_Yeedi":
                 try {
                     this.vacBot.handleMapInfoV2_Yeedi(payload);
-                    this.emit("CurrentMapMID", this.vacBot.currentMapMID);
-                    this.emit("CurrentMapName", this.vacBot.currentMapName);
-                    this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
-                    this.emit("Maps", this.vacBot.maps);
+                    this.emitMessage("CurrentMapMID", this.vacBot.currentMapMID);
+                    this.emitMessage("CurrentMapName", this.vacBot.currentMapName);
+                    this.emitMessage("CurrentMapIndex", this.vacBot.currentMapIndex);
+                    this.emitMessage("Maps", this.vacBot.maps);
                 } catch (e) {
                     tools.envLogError(`error on handling MapInfo_V2 (yeedi): ${e.message}`);
                 }
@@ -276,10 +272,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "CachedMapInfo":
                 try {
                     this.vacBot.handleCachedMapInfo(payload);
-                    this.emit("CurrentMapMID", this.vacBot.currentMapMID);
-                    this.emit("CurrentMapName", this.vacBot.currentMapName);
-                    this.emit("CurrentMapIndex", this.vacBot.currentMapIndex);
-                    this.emit("Maps", this.vacBot.maps);
+                    this.emitMessage("CurrentMapMID", this.vacBot.currentMapMID);
+                    this.emitMessage("CurrentMapName", this.vacBot.currentMapName);
+                    this.emitMessage("CurrentMapIndex", this.vacBot.currentMapIndex);
+                    this.emitMessage("Maps", this.vacBot.maps);
                 } catch (e) {
                     tools.envLogError(`error on handling CachedMapInfo: ${e.message}`);
                 }
@@ -290,9 +286,9 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 } else if (tools.isCanvasModuleAvailable()) {
                     let mapImage = await this.vacBot.handleMapImage(payload);
                     if (mapImage !== null) {
-                        this.emit("MapImageData", mapImage);
+                        this.emitMessage("MapImageData", mapImage);
                         if (this.vacBot.createMapImageOnly) {
-                            this.emit("MapImage", mapImage);
+                            this.emitMessage("MapImage", mapImage);
                         }
                     }
                 }
@@ -308,7 +304,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // Handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.vacBot.handleMapSet(payload);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
-                    this.emit(mapset["mapsetEvent"], mapset["mapsetData"]);
+                    this.emitMessage(mapset["mapsetEvent"], mapset["mapsetData"]);
                 }
                 break;
             }
@@ -321,7 +317,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 let mapsubset = await this.vacBot.handleMapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
                     // MapSpotAreaInfo, MapVirtualBoundaryInfo
-                    this.emit(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                    this.emitMessage(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
                 }
                 break;
             }
@@ -340,14 +336,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "LifeSpan":
                 this.vacBot.handleLifespan(payload);
                 if (this.vacBot.getModelType() === 'airbot') {
-                    this.emit("LifeSpan", this.vacBot.components);
+                    this.emitMessage("LifeSpan", this.vacBot.components);
                 } else {
                     if (!this.vacBot.emitFullLifeSpanEvent) {
                         for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
                             if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
                                 if (this.vacBot.components[component]) {
                                     if (this.vacBot.components[component] !== this.vacBot.lastComponentValues[component]) {
-                                        this.emit("LifeSpan_" + component, this.vacBot.components[component]);
+                                        this.emitMessage("LifeSpan_" + component, this.vacBot.components[component]);
                                         this.vacBot.lastComponentValues[component] = this.vacBot.components[component];
                                     }
                                 }
@@ -363,13 +359,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 if (this.vacBot.deebotPosition["changeFlag"]) {
                     if ((this.vacBot.deebotPosition["isInvalid"] === true) && ((this.vacBot.relocationState === 'ok') || (this.vacBot.relocationState === null))) {
                         this.vacBot.relocationState = 'required';
-                        this.emit("RelocationState", this.vacBot.relocationState);
+                        this.emitMessage("RelocationState", this.vacBot.relocationState);
                     } else if (this.vacBot.deebotPosition["x"] && this.vacBot.deebotPosition["y"]) {
-                        this.emit("DeebotPosition", this.vacBot.deebotPosition["x"] + "," + this.vacBot.deebotPosition["y"] + "," + this.vacBot.deebotPosition["a"]);
-                        this.emit("DeebotPositionIsInvalid", this.vacBot.deebotPosition["isInvalid"]);
-                        this.emit("DeebotPositionCurrentSpotAreaID", this.vacBot.deebotPosition["currentSpotAreaID"]);
-                        this.emit("DeebotPositionCurrentSpotAreaName", this.vacBot.deebotPosition["currentSpotAreaName"]);
-                        this.emit('Position', {
+                        this.emitMessage("DeebotPosition", this.vacBot.deebotPosition["x"] + "," + this.vacBot.deebotPosition["y"] + "," + this.vacBot.deebotPosition["a"]);
+                        this.emitMessage("DeebotPositionIsInvalid", this.vacBot.deebotPosition["isInvalid"]);
+                        this.emitMessage("DeebotPositionCurrentSpotAreaID", this.vacBot.deebotPosition["currentSpotAreaID"]);
+                        this.emitMessage("DeebotPositionCurrentSpotAreaName", this.vacBot.deebotPosition["currentSpotAreaName"]);
+                        this.emitMessage('Position', {
                             'coords': this.vacBot.deebotPosition['x'] + "," + this.vacBot.deebotPosition['y'] + "," + this.vacBot.deebotPosition['a'],
                             'x': this.vacBot.deebotPosition['x'],
                             'y': this.vacBot.deebotPosition['y'],
@@ -383,8 +379,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.vacBot.deebotPosition["changeFlag"] = false;
                 }
                 if (this.vacBot.chargePosition["changeFlag"]) {
-                    this.emit("ChargePosition", this.vacBot.chargePosition["x"] + "," + this.vacBot.chargePosition["y"] + "," + this.vacBot.chargePosition["a"]);
-                    this.emit('ChargingPosition', {
+                    this.emitMessage("ChargePosition", this.vacBot.chargePosition["x"] + "," + this.vacBot.chargePosition["y"] + "," + this.vacBot.chargePosition["a"]);
+                    this.emitMessage('ChargingPosition', {
                         'coords': this.vacBot.chargePosition['x'] + "," + this.vacBot.chargePosition['y'] + "," + this.vacBot.chargePosition['a'],
                         'x': this.vacBot.chargePosition['x'],
                         'y': this.vacBot.chargePosition['y'],
@@ -395,23 +391,23 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "WaterInfo":
                 this.vacBot.handleWaterInfo(payload);
-                this.emit("WaterLevel", this.vacBot.waterLevel);
-                this.emit("WaterBoxInfo", this.vacBot.waterboxInfo);
+                this.emitMessage("WaterLevel", this.vacBot.waterLevel);
+                this.emitMessage("WaterBoxInfo", this.vacBot.waterboxInfo);
                 if (this.vacBot.moppingType !== null) {
-                    this.emit("WaterBoxMoppingType", this.vacBot.moppingType);
+                    this.emitMessage("WaterBoxMoppingType", this.vacBot.moppingType);
                 }
                 if (this.vacBot.scrubbingType !== null) {
-                    this.emit("WaterBoxScrubbingType", this.vacBot.scrubbingType);
+                    this.emitMessage("WaterBoxScrubbingType", this.vacBot.scrubbingType);
                 }
                 this.emitMoppingSystemReport();
                 break;
             case "NetInfo":
                 this.vacBot.handleNetInfo(payload);
-                this.emit("NetInfoIP", this.vacBot.netInfoIP); // Deprecated
-                this.emit("NetInfoWifiSSID", this.vacBot.netInfoWifiSSID); // Deprecated
-                this.emit("NetInfoWifiSignal", this.vacBot.netInfoWifiSignal); // Deprecated
-                this.emit("NetInfoMAC", this.vacBot.netInfoMAC); // Deprecated
-                this.emit("NetworkInfo", {
+                this.emitMessage("NetInfoIP", this.vacBot.netInfoIP); // Deprecated
+                this.emitMessage("NetInfoWifiSSID", this.vacBot.netInfoWifiSSID); // Deprecated
+                this.emitMessage("NetInfoWifiSignal", this.vacBot.netInfoWifiSignal); // Deprecated
+                this.emitMessage("NetInfoMAC", this.vacBot.netInfoMAC); // Deprecated
+                this.emitMessage("NetworkInfo", {
                     'ip': this.vacBot.netInfoIP,
                     'mac': this.vacBot.netInfoMAC,
                     'wifiSSID': this.vacBot.netInfoWifiSSID,
@@ -420,85 +416,85 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'Sleep':
                 this.vacBot.handleSleepStatus(payload);
-                this.emit("SleepStatus", this.vacBot.sleepStatus);
+                this.emitMessage("SleepStatus", this.vacBot.sleepStatus);
                 break;
             case 'BreakPoint':
                 this.vacBot.handleBreakPoint(payload);
-                this.emit("ContinuousCleaningEnabled", this.vacBot.breakPoint);
+                this.emitMessage("ContinuousCleaningEnabled", this.vacBot.breakPoint);
                 break;
             case 'Block':
                 this.vacBot.handleBlock(payload);
-                this.emit("DoNotDisturbEnabled", this.vacBot.block);
+                this.emitMessage("DoNotDisturbEnabled", this.vacBot.block);
                 if (!!this.vacBot.block) {
-                    this.emit("DoNotDisturbBlockTime", this.vacBot.blockTime);
+                    this.emitMessage("DoNotDisturbBlockTime", this.vacBot.blockTime);
                 }
                 break;
             case 'AutoEmpty':
                 this.vacBot.handleAutoEmpty(payload);
-                this.emit("AutoEmpty", this.vacBot.autoEmpty);
+                this.emitMessage("AutoEmpty", this.vacBot.autoEmpty);
                 const autoEmptyStatus = {
                     'autoEmptyEnabled': (this.vacBot.autoEmpty === 1),
                     'stationStatus': this.vacBot.autoEmptyStatus,
                     'stationActive': (this.vacBot.autoEmptyStatus === 1),
                     'dustBagFull': (this.vacBot.autoEmptyStatus === 5)
                 };
-                this.emit("AutoEmptyStatus", autoEmptyStatus);
+                this.emitMessage("AutoEmptyStatus", autoEmptyStatus);
                 break;
             case 'Volume':
                 this.vacBot.handleVolume(payload);
-                this.emit("Volume", this.vacBot.volume);
+                this.emitMessage("Volume", this.vacBot.volume);
                 break;
             case 'AdvancedMode':
                 this.vacBot.handleAdvancedMode(payload);
-                this.emit("AdvancedMode", this.vacBot.advancedMode);
+                this.emitMessage("AdvancedMode", this.vacBot.advancedMode);
                 break;
             case 'TrueDetect':
                 this.vacBot.handleTrueDetect(payload);
-                this.emit("TrueDetect", this.vacBot.trueDetect);
+                this.emitMessage("TrueDetect", this.vacBot.trueDetect);
                 break;
             case 'Recognization':
                 this.vacBot.handleRecognization(payload);
-                this.emit('TrueDetect', this.vacBot.trueDetect);
+                this.emitMessage('TrueDetect', this.vacBot.trueDetect);
                 break;
             case 'CleanCount':
                 this.vacBot.handleCleanCount(payload);
-                this.emit("CleanCount", this.vacBot.cleanCount);
+                this.emitMessage("CleanCount", this.vacBot.cleanCount);
                 break;
             case 'DusterRemind':
                 this.vacBot.handleDusterRemind(payload);
-                this.emit("DusterRemind", this.vacBot.dusterRemind);
+                this.emitMessage("DusterRemind", this.vacBot.dusterRemind);
                 break;
             case 'CarpertPressure':
                 this.vacBot.handleCarpetPressure(payload);
-                this.emit("CarpetPressure", this.vacBot.carpetPressure);
+                this.emitMessage("CarpetPressure", this.vacBot.carpetPressure);
                 break;
             case 'CleanPreference':
                 this.vacBot.handleCleanPreference(payload);
-                this.emit("CleanPreference", this.vacBot.cleanPreference);
+                this.emitMessage("CleanPreference", this.vacBot.cleanPreference);
                 break;
             case 'MultiMapState':
                 this.vacBot.handleMultiMapState(payload);
-                this.emit("MultiMapState", this.vacBot.multiMapState);
+                this.emitMessage("MultiMapState", this.vacBot.multiMapState);
                 break;
             case 'LiveLaunchPwdState':
                 this.vacBot.handleLiveLaunchPwdState(payload);
-                this.emit("LiveLaunchPwdState", this.vacBot.liveLaunchPwdState);
+                this.emitMessage("LiveLaunchPwdState", this.vacBot.liveLaunchPwdState);
                 break;
             case "Error":
                 this.vacBot.handleResponseError(payload);
-                this.emit("Error", this.vacBot.errorDescription);
-                this.emit('ErrorCode', this.vacBot.errorCode);
-                this.emit('LastError', {
+                this.emitMessage("Error", this.vacBot.errorDescription);
+                this.emitMessage('ErrorCode', this.vacBot.errorCode);
+                this.emitMessage('LastError', {
                     'error': this.vacBot.errorDescription,
                     'code': this.vacBot.errorCode
                 });
                 break;
             case 'TotalStats':
                 this.vacBot.handleTotalStats(payload);
-                this.emit("CleanSum_totalSquareMeters", this.vacBot.cleanSum_totalSquareMeters); // Deprecated
-                this.emit("CleanSum_totalSeconds", this.vacBot.cleanSum_totalSeconds); // Deprecated
-                this.emit("CleanSum_totalNumber", this.vacBot.cleanSum_totalNumber); // Deprecated
-                this.emit('CleanSum', {
+                this.emitMessage("CleanSum_totalSquareMeters", this.vacBot.cleanSum_totalSquareMeters); // Deprecated
+                this.emitMessage("CleanSum_totalSeconds", this.vacBot.cleanSum_totalSeconds); // Deprecated
+                this.emitMessage("CleanSum_totalNumber", this.vacBot.cleanSum_totalNumber); // Deprecated
+                this.emitMessage('CleanSum', {
                     'totalSquareMeters': this.vacBot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.vacBot.cleanSum_totalSeconds,
                     'totalNumber': this.vacBot.cleanSum_totalNumber
@@ -512,13 +508,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         cleanLog.push(this.vacBot.cleanLog[i]);
                     }
                 }
-                this.emit("CleanLog", cleanLog);
-                this.emit("CleanLog_lastImageUrl", this.vacBot.cleanLog_lastImageUrl);
-                this.emit("CleanLog_lastImageTimestamp", this.vacBot.cleanLog_lastTimestamp); // Deprecated
-                this.emit("CleanLog_lastTimestamp", this.vacBot.cleanLog_lastTimestamp);
-                this.emit("CleanLog_lastSquareMeters", this.vacBot.cleanLog_lastSquareMeters);
-                this.emit("CleanLog_lastTotalTimeString", this.vacBot.cleanLog_lastTotalTimeString);
-                this.emit('LastCleanLogs', {
+                this.emitMessage("CleanLog", cleanLog);
+                this.emitMessage("CleanLog_lastImageUrl", this.vacBot.cleanLog_lastImageUrl);
+                this.emitMessage("CleanLog_lastImageTimestamp", this.vacBot.cleanLog_lastTimestamp); // Deprecated
+                this.emitMessage("CleanLog_lastTimestamp", this.vacBot.cleanLog_lastTimestamp);
+                this.emitMessage("CleanLog_lastSquareMeters", this.vacBot.cleanLog_lastSquareMeters);
+                this.emitMessage("CleanLog_lastTotalTimeString", this.vacBot.cleanLog_lastTotalTimeString);
+                this.emitMessage('LastCleanLogs', {
                     'timestamp': this.vacBot.cleanLog_lastTimestamp,
                     'squareMeters': this.vacBot.cleanLog_lastSquareMeters,
                     'totalTime': this.vacBot.cleanLog_lastTotalTime,
@@ -530,7 +526,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'Sched':
                 this.vacBot.handleSched(payload);
                 if (this.vacBot.schedule) {
-                    this.emit('Schedule', this.vacBot.schedule);
+                    this.emitMessage('Schedule', this.vacBot.schedule);
                 }
                 break;
             case 'AIMap':
@@ -544,8 +540,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'DModule': // Air Freshener module
                 this.vacBot.handleDModule(payload);
                 if(this.vacBot.dmodule.enabled) {
-                    this.emit("DModuleEnabled", this.vacBot.dmodule.enabled);
-                    this.emit("DModuleStatus", this.vacBot.dmodule.status);
+                    this.emitMessage("DModuleEnabled", this.vacBot.dmodule.enabled);
+                    this.emitMessage("DModuleStatus", this.vacBot.dmodule.status);
                 }
                 break;
             case 'AIMapAndMapSet':
@@ -554,15 +550,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
 
             case 'Ota':
                 this.vacBot.handleOverTheAirUpdate(payload);
-                this.emit('Ota', payload);
+                this.emitMessage('Ota', payload);
                 break;
             case 'TimeZone':
                 this.vacBot.handleTimeZone(payload);
-                this.emit('TimeZone', payload);
+                this.emitMessage('TimeZone', payload);
                 break;
             case 'WifiList':
                 this.vacBot.handleWiFiList(payload);
-                this.emit('WifiList', payload);
+                this.emitMessage('WifiList', payload);
                 break;
 
             // ==================================
@@ -572,99 +568,99 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'JCYAirQuality': // Z1 Air Quality Monitor
                 this.vacBot.handleAirQuality(payload);
                 if (this.vacBot.airQuality) {
-                    this.emit('AirQuality', this.vacBot.airQuality);
+                    this.emitMessage('AirQuality', this.vacBot.airQuality);
                 }
                 break;
             case 'AiBlockPlate':
                 this.vacBot.handleAiBlockPlate(payload);
-                this.emit('AiBlockPlate', this.vacBot.aiBlockPlate);
+                this.emitMessage('AiBlockPlate', this.vacBot.aiBlockPlate);
                 break;
             case 'AirbotAutoModel':
                 this.vacBot.handleAirbotAutoModel(payload);
                 if (this.vacBot.airbotAutoModel) {
-                    this.emit('AirbotAutoModel', this.vacBot.airbotAutoModel);
+                    this.emitMessage('AirbotAutoModel', this.vacBot.airbotAutoModel);
                 }
                 break;
             case 'AngleFollow':
                 this.vacBot.handleAngleFollow(payload);
-                this.emit('AngleFollow', this.vacBot.angleFollow);
+                this.emitMessage('AngleFollow', this.vacBot.angleFollow);
                 break;
             case 'AngleWakeup':
                 this.vacBot.handleAngleWakeup(payload);
-                this.emit('AngleWakeup', this.vacBot.angleWakeup);
+                this.emitMessage('AngleWakeup', this.vacBot.angleWakeup);
                 break;
             case 'AtmoLight':
                 this.vacBot.handleAtmoLight(payload);
                 if (this.vacBot.atmoLightIntensity) {
-                    this.emit('AtmoLight', this.vacBot.atmoLightIntensity);
+                    this.emitMessage('AtmoLight', this.vacBot.atmoLightIntensity);
                 }
                 break;
             case 'AtmoVolume':
                 this.vacBot.handleAtmoVolume(payload);
                 if (this.vacBot.atmoVolume) {
-                    this.emit('AtmoVolume', this.vacBot.atmoVolume);
+                    this.emitMessage('AtmoVolume', this.vacBot.atmoVolume);
                 }
                 break;
             case 'AutonomousClean':
                 this.vacBot.handleAutonomousClean(payload);
-                this.emit('AutonomousClean', this.vacBot.autonomousClean);
+                this.emitMessage('AutonomousClean', this.vacBot.autonomousClean);
                 break;
             case 'BlueSpeaker':
                 this.vacBot.handleBlueSpeaker(payload);
-                this.emit('BlueSpeaker', this.vacBot.bluetoothSpeaker);
+                this.emitMessage('BlueSpeaker', this.vacBot.bluetoothSpeaker);
                 break;
             case 'ChildLock':
                 this.vacBot.handleChildLock(payload);
-                this.emit('ChildLock', this.vacBot.childLock);
+                this.emitMessage('ChildLock', this.vacBot.childLock);
                 break;
             case 'DrivingWheel':
                 this.vacBot.handleDrivingWheel(payload);
-                this.emit('DrivingWheel', this.vacBot.drivingWheel);
+                this.emitMessage('DrivingWheel', this.vacBot.drivingWheel);
                 break;
             case 'Efficiency':
                 this.vacBot.handleEfficiency(payload);
                 if (this.vacBot.efficiency) {
-                    this.emit('Efficiency', this.vacBot.efficiency);
+                    this.emitMessage('Efficiency', this.vacBot.efficiency);
                 }
                 break;
             case 'HumanoidFollow':
                 this.vacBot.handleHumanoidFollow(payload);
                 if ((this.vacBot.humanoidFollow_Yiko) || (this.vacBot.humanoidFollow_Video)) {
                     if (this.vacBot.humanoidFollow_Yiko) {
-                        this.emit('HumanoidFollowYiko', this.vacBot.humanoidFollow_Yiko);
+                        this.emitMessage('HumanoidFollowYiko', this.vacBot.humanoidFollow_Yiko);
                     }
                     if (this.vacBot.humanoidFollow_Video) {
-                        this.emit('HumanoidFollowVideo', this.vacBot.humanoidFollow_Video);
+                        this.emitMessage('HumanoidFollowVideo', this.vacBot.humanoidFollow_Video);
                     }
                 }
                 break;
             case 'Mic':
                 this.vacBot.handleMic(payload);
-                this.emit('Mic', this.vacBot.mic);
+                this.emitMessage('Mic', this.vacBot.mic);
                 break;
             case 'MonitorAirState':
                 this.vacBot.handleMonitorAirState(payload);
-                this.emit('MonitorAirState', this.vacBot.monitorAirState);
+                this.emitMessage('MonitorAirState', this.vacBot.monitorAirState);
                 break;
             case 'ThreeModule':
                 this.vacBot.handleThreeModule(payload);
                 if (this.vacBot.threeModule) {
-                    this.emit('ThreeModule', this.vacBot.threeModule);
+                    this.emitMessage('ThreeModule', this.vacBot.threeModule);
                 }
                 break;
             case 'ThreeModuleStatus':
                 this.vacBot.handleThreeModuleStatus(payload);
                 if (this.vacBot.threeModuleStatus) {
-                    this.emit('ThreeModuleStatus', this.vacBot.threeModuleStatus);
+                    this.emitMessage('ThreeModuleStatus', this.vacBot.threeModuleStatus);
                 }
                 break;
             case 'VoiceSimple':
                 this.vacBot.handleVoiceSimple(payload);
-                this.emit('VoiceSimple', this.vacBot.voiceSimple);
+                this.emitMessage('VoiceSimple', this.vacBot.voiceSimple);
                 break;
             case 'VoiceAssistantState':
                 this.vacBot.handleVoiceAssistantState(payload);
-                this.emit('VoiceAssistantState', this.vacBot.voiceAssistantState);
+                this.emitMessage('VoiceAssistantState', this.vacBot.voiceAssistantState);
                 break;
 
             case 'AreaPoint':
@@ -683,17 +679,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'setVoice':
                 tools.envLogInfo(`[EcovacsMQTT_JSON] SETVOICE:`);
                 tools.envLogInfo(payload);
-                this.emit('SetVoice', payload);
+                this.emitMessage('SetVoice', payload);
                 break;
             case 'Voice':
                 if (payload && payload.downloads) {
                     payload.downloads.forEach((dlObject) => {
                         if (dlObject.status === "dl") {
                             tools.envLogInfo(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
-                            this.emit('VoiceDownloadProgress', dlObject);
+                            this.emitMessage('VoiceDownloadProgress', dlObject);
                         } else if (dlObject.status === "dld") {
                             tools.envLogInfo(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
-                            this.emit('VoiceDownloadComplete', dlObject);
+                            this.emitMessage('VoiceDownloadComplete', dlObject);
                         } else {
                             tools.envLogInfo(`[EcovacsMQTT_JSON] unknown download state`);
                             tools.envLogInfo(dlObject);
@@ -714,7 +710,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'FwBuryPoint-bd_sysinfo':
                 this.vacBot.handleSysinfo(payload);
                 if (this.vacBot.sysinfo) {
-                    this.emit('Sysinfo', this.vacBot.sysinfo);
+                    this.emitMessage('Sysinfo', this.vacBot.sysinfo);
                     break;
                 }
             case 'FwBuryPoint-bd_air-quality':
@@ -731,7 +727,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 const fwBuryPointEvent = abbreviatedCommand.substring(20);
                 this.vacBot.handleTask(fwBuryPointEvent, payload);
                 if (this.currentTask) {
-                    this.emit('TaskStarted', this.currentTask);
+                    this.emitMessage('TaskStarted', this.currentTask);
                     break;
                 }
             }
@@ -880,32 +876,32 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             // Info whether the dust case is installed
             if (fwBuryPoint.hasOwnProperty('dirtboxState')) {
                 const val = fwBuryPoint.dirtboxState;
-                this.emit('DustCaseInfo', val);
+                this.emitMessage('DustCaseInfo', val);
                 return true;
             }
             if (fwBuryPoint.hasOwnProperty('code')) {
                 if (fwBuryPoint.code === 110) { /* NoDustBox: Dust Bin Not installed */
                     const val = Number(!fwBuryPoint.state);
-                    this.emit('DustCaseInfo', val);
+                    this.emitMessage('DustCaseInfo', val);
                     return true;
                 }
             }
             if (fwBuryPoint.hasOwnProperty('multiMap')) {
                 // Info whether multi-map mode is enabled
                 const val = fwBuryPoint.multiMap;
-                this.emit('SettingInfoMultiMap', val);
+                this.emitMessage('SettingInfoMultiMap', val);
                 return true;
             }
             if (fwBuryPoint.hasOwnProperty('AI')) {
                 // Info whether AIVI is enabled
                 const val = fwBuryPoint.AI;
-                this.emit('SettingInfoAIVI', val);
+                this.emitMessage('SettingInfoAIVI', val);
                 return true;
             }
             if (fwBuryPoint.hasOwnProperty('aromamode')) {
                 // aromamode: 0 = disabled, 1 = enabled
                 const val = fwBuryPoint.aromamode;
-                this.emit('AromaMode', val);
+                this.emitMessage('AromaMode', val);
                 return true;
             }
             // ----------------------------------
@@ -938,7 +934,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             }
         } catch (e) {
             tools.envLogWarn(`error handling onFwBuryPoint payload: '${e.message}'`);
-            tools.envLogPayload(payload);
+            //tools.envLogPayload(payload);
         }
         return false;
     }
