@@ -418,6 +418,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the `AICleanItemState` response/message
+     * Particle Removal and Pet Poop Avoidance mode (e.g. X1)
      * @param {Object} payload
      */
     handleAICleanItemState(payload) {
@@ -436,7 +437,7 @@ class VacBot_950type extends VacBot {
     /**
      * Handle the payload of the `AirDring` (sic) response/message (air drying status)
      * Seems to work for yeedi only
-     * See StationState for Deebot X1 series
+     * See `StationState` for Deebot models
      * @param {Object} payload
      */
     handleAirDryingState(payload) {
@@ -464,6 +465,12 @@ class VacBot_950type extends VacBot {
         }
     }
 
+    /**
+     * Handle the payload of the `CustomAreaMode` response/message
+     * Sweep Mode is taken from the `CustomAreaMode` message
+     * not from the `SweepMode` message
+     * @param {Object} payload
+     */
     handleCustomAreaMode(payload) {
         if (payload.hasOwnProperty('sweepMode')) {
             this.sweepMode = payload['sweepMode'];
@@ -472,6 +479,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the `SweepMode` response/message
+     * "Mop-Only" is taken from the SweepMode message
      * @param {Object} payload
      */
     handleSweepMode(payload) {
@@ -1906,7 +1914,8 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetRelocationState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetRelocationState());
-                break;            case 'GetLiveLaunchPwdState'.toLowerCase():
+                break;
+            case 'GetLiveLaunchPwdState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetLiveLaunchPwdState());
                 break;
             case 'GetDrivingWheel'.toLowerCase():
