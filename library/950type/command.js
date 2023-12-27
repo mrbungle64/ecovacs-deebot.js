@@ -184,8 +184,9 @@ class HostedCleanMode extends Clean_V2 {
 }
 
 /**
- * Represents a 'Custom' cleaning mode
- * Used by newer models
+ * Sends the device to a specific position
+ * without cleaning ('go to position')
+ * Used by newer models (e.g. T9 and X1 series)
  * @extends Clean_V2
  */
 class MapPoint_V2 extends Clean_V2 {
@@ -288,7 +289,7 @@ class MoveForward extends Move {
 }
 
 /**
- * This command is used manually to relocate the position of a device
+ * This command is used to manually relocate the position of a device
  * Works for models like OZMO 920/950 and the T8 series
  * @extends VacBotCommand
  */
@@ -344,6 +345,9 @@ class GetBatteryState extends VacBotCommand {
 
 /**
  * Requests information about the consumable components
+ * You can specify the components or
+ * send an empty array to request information for all components
+ * (not sure if the empty array works for all models)
  * @extends VacBotCommand
  */
 class GetLifeSpan extends VacBotCommand {
@@ -355,6 +359,10 @@ class GetLifeSpan extends VacBotCommand {
     }
 }
 
+/**
+ * Resets the life span value for a specific component to 100%
+ * @extends VacBotCommand
+ */
 class ResetLifeSpan extends VacBotCommand {
     constructor(component) {
         super('resetLifeSpan', {
