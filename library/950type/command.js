@@ -5,23 +5,6 @@ const constants_type = require('./dictionary');
 const constants = require('../constants');
 
 /**
- * Mapping of map related types to their corresponding Ecovacs codes
- *
- * @type {Object<string, string>}
- *
- * @property {string} outline - The code for outline map info type (standard type)
- * @property {string} wifiHeatMap - The code for Wi-Fi heat map info type
- * @property {string} ai - The code for 'ai' info type
- * @property {string} workarea - The code for 'workarea' info type
- */
-const MAPINFOTYPE_TO_ECOVACS = {
-    'outline': 'ol',
-    'wifiHeatMap': 'st',
-    'ai': 'ai',
-    'workarea': 'wa'
-};
-
-/**
  * This class is essentially a template for creating a command for a bot,
  * which includes a command name, arguments (payload), and an API endpoint
  */
@@ -535,10 +518,23 @@ class GetMapTrace extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a command to get map image data
+ */
 class GetMapInfo extends VacBotCommand {
+    /**
+     * @param {string} mapID - The ID of the map
+     * @param {string} [mapType='outline'] - The type of the map. Default value is 'outline'
+     */
     constructor(mapID, mapType = 'outline') {
-        if (MAPINFOTYPE_TO_ECOVACS.hasOwnProperty(mapType)) {
-            mapType = MAPINFOTYPE_TO_ECOVACS[mapType];
+        const dictToEcovacs = {
+            'outline': 'ol',
+            'wifiHeatMap': 'st',
+            'ai': 'ai',
+            'workarea': 'wa'
+        };
+        if (dictToEcovacs.hasOwnProperty(mapType)) {
+            mapType = dictToEcovacs[mapType];
         }
         super('getMapInfo', {
             'mid': mapID,
