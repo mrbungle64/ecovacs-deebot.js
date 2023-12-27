@@ -105,37 +105,37 @@ class Clean_V2 extends VacBotCommand {
 }
 
 /**
- * Represents an 'Edge' cleaning mode
- * Used by models with Random navigation (e.g. U2 series)
+ * Represents a 'Custom' cleaning mode
+ * Used by models with mapping capabilities
  * @extends Clean
  */
-class Edge extends Clean {
-    constructor() {
-        super('edge', 'start');
-    }
-}
-
-/**
- * Represents a 'Spot' cleaning mode
- * Used by models with Random navigation (e.g. U2 series)
- * @extends Clean
- */
-class Spot extends Clean {
-    constructor() {
-        super('spot', 'start', {
-            'content': '0,0'
+class CustomArea extends Clean {
+    constructor(action = 'start', area = '', cleanings = 1) {
+        let cleaningAsNumber = Number(cleanings);
+        super('customArea', action, {
+            'content': area,
+            'count': cleaningAsNumber
         });
     }
 }
 
 /**
- * Represents a 'Hosted mode' cleaning mode
- * Used by newer models (e.g. X1 series)
+ * Represents a 'Custom' cleaning mode
+ * Similar to the `CustomArea` class but with a different payload structure
+ * Used by newer models
  * @extends Clean_V2
  */
-class HostedCleanMode extends Clean_V2 {
-    constructor() {
-        super('entrust', 'start');
+class CustomArea_V2 extends Clean_V2 {
+    constructor(area = '', cleanings = 1, donotClean = 0) {
+        let cleaningAsNumber = Number(cleanings);
+        super('customArea', 'start', {
+            'content': {
+                'total': 0,
+                'donotClean': donotClean,
+                'count': cleaningAsNumber,
+                'value': area
+            }
+        });
     }
 }
 
@@ -173,37 +173,13 @@ class SpotArea_V2 extends Clean_V2 {
 }
 
 /**
- * Represents a 'Custom' cleaning mode
- * Used by models with mapping capabilities
- * @extends Clean
- */
-class CustomArea extends Clean {
-    constructor(action = 'start', area = '', cleanings = 1) {
-        let cleaningAsNumber = Number(cleanings);
-        super('customArea', action, {
-            'content': area,
-            'count': cleaningAsNumber
-        });
-    }
-}
-
-/**
- * Represents a 'Custom' cleaning mode
- * Similar to the `CustomArea` class but with a different payload structure
- * Used by newer models
+ * Represents a 'Hosted mode' cleaning mode
+ * Used by newer models (e.g. X1 series)
  * @extends Clean_V2
  */
-class CustomArea_V2 extends Clean_V2 {
-    constructor(area = '', cleanings = 1, donotClean = 0) {
-        let cleaningAsNumber = Number(cleanings);
-        super('customArea', 'start', {
-            'content': {
-                'total': 0,
-                'donotClean': donotClean,
-                'count': cleaningAsNumber,
-                'value': area
-            }
-        });
+class HostedCleanMode extends Clean_V2 {
+    constructor() {
+        super('entrust', 'start');
     }
 }
 
@@ -274,6 +250,7 @@ class Charge extends VacBotCommand {
     }
 }
 
+
 /**
  * Represents a 'Move' command
  * The move commands often do not work properly on newer models
@@ -307,37 +284,6 @@ class MoveBackward extends Move {
 class MoveForward extends Move {
     constructor() {
         super('forward');
-    }
-}
-
-/**
- * Represents a 'Move Left' command
- * @extends Move
- */
-class MoveLeft extends Move {
-    constructor() {
-        super('left');
-    }
-}
-
-/**
- * Represents a 'Move Right' command
- * @extends Move
- */
-class MoveRight extends Move {
-    constructor() {
-        super('right');
-    }
-}
-
-/**
- * Represents a 'Move Turn around' command
- * @deprecated
- * @extends Move
- */
-class MoveTurnAround extends Move {
-    constructor() {
-        super('turn_around');
     }
 }
 
@@ -1429,6 +1375,67 @@ class GetMapTrace_V2 extends VacBotCommand {
         super('getMapTrace_V2', {
             'type': type
         });
+    }
+}
+
+// ===================
+// Deprecated commands
+// ===================
+
+/**
+ * Represents an 'Edge' cleaning mode
+ * Used by models with Random navigation (e.g. U2 series)
+ * @extends Clean
+ */
+class Edge extends Clean {
+    constructor() {
+        super('edge', 'start');
+    }
+}
+
+/**
+ * Represents a 'Spot' cleaning mode
+ * Used by models with Random navigation (e.g. U2 series)
+ * @extends Clean
+ */
+class Spot extends Clean {
+    constructor() {
+        super('spot', 'start', {
+            'content': '0,0'
+        });
+    }
+}
+
+/**
+ * Represents a 'Move Left' command
+ * @deprecated
+ * @extends Move
+ */
+class MoveLeft extends Move {
+    constructor() {
+        super('left');
+    }
+}
+
+/**
+ * Represents a 'Move Right' command
+ * @deprecated
+ * @extends Move
+ */
+class MoveRight extends Move {
+    constructor() {
+        super('right');
+    }
+}
+
+/**
+ * Represents a 'Move Turn around' command
+ * @deprecated
+ * @extends Move
+ */
+class MoveTurnAround extends Move {
+    constructor() {
+        super('turn_around');
     }
 }
 
