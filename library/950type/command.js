@@ -10,7 +10,7 @@ const constants = require('../constants');
  * @type {Object<string, string>}
  *
  * @property {string} outline - The code for outline map info type (standard type)
- * @property {string} wifiHeatMap - The code for wifi heat map info type
+ * @property {string} wifiHeatMap - The code for Wi-Fi heat map info type
  * @property {string} ai - The code for 'ai' info type
  * @property {string} workarea - The code for 'workarea' info type
  */
@@ -49,7 +49,8 @@ class VacBotCommand {
 }
 
 /**
- * It represents a basic clean mode
+ * It represents a basic clean mode,
+ * and it runs an auto clean command
  * @extends VacBotCommand
  */
 class Clean extends VacBotCommand {
@@ -290,7 +291,7 @@ class Move extends VacBotCommand {
 }
 
 /**
- * Represents a 'move backward' command
+ * Represents a 'Move Backward' command
  * @extends Move
  */
 class MoveBackward extends Move {
@@ -300,7 +301,7 @@ class MoveBackward extends Move {
 }
 
 /**
- * Represents a 'move backward' command
+ * Represents a 'Move Forward' command
  * @extends Move
  */
 class MoveForward extends Move {
@@ -310,7 +311,7 @@ class MoveForward extends Move {
 }
 
 /**
- * Represents a 'move backward' command
+ * Represents a 'Move Left' command
  * @extends Move
  */
 class MoveLeft extends Move {
@@ -320,7 +321,7 @@ class MoveLeft extends Move {
 }
 
 /**
- * Represents a 'move backward' command
+ * Represents a 'Move Right' command
  * @extends Move
  */
 class MoveRight extends Move {
@@ -330,7 +331,7 @@ class MoveRight extends Move {
 }
 
 /**
- * Represents a 'move backward' command
+ * Represents a 'Move Turn around' command
  * @deprecated
  * @extends Move
  */
@@ -353,32 +354,57 @@ class Relocate extends VacBotCommand {
     }
 }
 
+/**
+ * Requests various information about the cleaning status
+ * @extends VacBotCommand
+ */
 class GetCleanState extends VacBotCommand {
     constructor() {
         super('getCleanInfo');
     }
 }
 
+/**
+ * Requests various information about the cleaning status
+ * Similar to the `GetCleanState` class
+ * Used by newer models
+ * @extends VacBotCommand
+ */
 class GetCleanState_V2 extends VacBotCommand {
     constructor() {
         super('getCleanInfo_V2');
     }
 }
 
+/**
+ * Requests information about the charge status
+ * @extends VacBotCommand
+ */
 class GetChargeState extends VacBotCommand {
     constructor() {
         super('getChargeState');
     }
 }
 
+/**
+ * Requests information about the battery level
+ * @extends VacBotCommand
+ */
 class GetBatteryState extends VacBotCommand {
     constructor() {
         super('getBattery');
     }
 }
 
+/**
+ * Requests information about the consumable components
+ * @extends VacBotCommand
+ */
 class GetLifeSpan extends VacBotCommand {
-    constructor(componentsArray) {
+    /**
+     * @param {Array} componentsArray - An optional array of components.
+     */
+    constructor(componentsArray = []) {
         super('getLifeSpan', componentsArray);
     }
 }
@@ -391,6 +417,11 @@ class ResetLifeSpan extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the "Error" messages
+ * In most cases it doesn't respond (if there's no error)
+ * @extends VacBotCommand
+ */
 class GetError extends VacBotCommand {
     constructor() {
         super('getError');
@@ -398,7 +429,8 @@ class GetError extends VacBotCommand {
 }
 
 /**
- * Gets the "Suction Power"
+ * Requests the "Suction Power"
+ * @extends VacBotCommand
  */
 class GetCleanSpeed extends VacBotCommand {
     constructor() {
@@ -408,6 +440,7 @@ class GetCleanSpeed extends VacBotCommand {
 
 /**
  * Sets the "Suction Power"
+ * @extends VacBotCommand
  */
 class SetCleanSpeed extends VacBotCommand {
     constructor(level) {
@@ -426,6 +459,7 @@ class SetCleanSpeed extends VacBotCommand {
  * 2 = "standard"
  * 3 = "strong"
  * 4 = "smart"
+ * @extends VacBotCommand
  */
 class SetFanSpeed extends VacBotCommand {
     constructor(level) {
@@ -439,7 +473,8 @@ class SetFanSpeed extends VacBotCommand {
 }
 
 /**
- * Gets the "Water Flow Level"
+ * Requests the "Water Flow Level"
+ * @extends VacBotCommand
  */
 class GetWaterInfo extends VacBotCommand {
     constructor() {
@@ -447,8 +482,10 @@ class GetWaterInfo extends VacBotCommand {
     }
 }
 
- /**
- * Sets the "Water Flow Level" (and the "Scrubbing Pattern" for a few models)
+/**
+ * Sets the "Water Flow Level"
+ * (and the "Scrubbing Pattern" for a few models)
+ * @extends VacBotCommand
  */
 class SetWaterLevel extends VacBotCommand {
     constructor(level, sweepType = 0) {
@@ -468,6 +505,7 @@ class SetWaterLevel extends VacBotCommand {
 
 /**
  * Sets the `Mopping Mode` (e.g. X1 series)
+ * @extends VacBotCommand
  */
 class SetCustomAreaMode extends VacBotCommand {
     constructor(sweepMode = 0) {
@@ -477,12 +515,22 @@ class SetCustomAreaMode extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the position data of the device and the charging station
+ * @extends VacBotCommand
+ */
 class GetPosition extends VacBotCommand {
     constructor() {
         super('getPos', ['chargePos', 'deebotPos']);
     }
 }
 
+/**
+ * Sends a 'PlaySound' command with a sid
+ * You can find a (incomplete) list here:
+ * https://github.com/mrbungle64/ecovacs-deebot.js/wiki/playSound
+ * @extends VacBotCommand
+ */
 class PlaySound extends VacBotCommand {
     constructor(sid = 0) {
         let sidAsNumber = Number(sid);
@@ -492,6 +540,10 @@ class PlaySound extends VacBotCommand {
     }
 }
 
+/**
+ * Requests information about the connected network and Wi-Fi
+ * @extends VacBotCommand
+ */
 class GetNetInfo extends VacBotCommand {
     constructor() {
         super('getNetInfo');
