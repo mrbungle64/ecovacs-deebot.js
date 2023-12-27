@@ -15,10 +15,10 @@ const constants = require('../constants');
  * @property {string} workarea - The code for 'workarea' info type
  */
 const MAPINFOTYPE_TO_ECOVACS = {
-    "outline": "ol",
-    "wifiHeatMap": "st",
-    "ai": "ai",
-    "workarea": "wa"
+    'outline': 'ol',
+    'wifiHeatMap': 'st',
+    'ai': 'ai',
+    'workarea': 'wa'
 };
 
 /**
@@ -63,11 +63,11 @@ class Clean extends VacBotCommand {
      */
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
-            "act": constants_type.CLEAN_ACTION_TO_ECOVACS[action],
-            "count": 1,
-            "donotClean": 0,
-            "router": "plan",
-            "type": constants_type.CLEAN_MODE_TO_ECOVACS[mode]
+            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            'count': 1,
+            'donotClean': 0,
+            'router': 'plan',
+            'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode]
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
@@ -86,14 +86,14 @@ class Clean extends VacBotCommand {
 class Clean_V2 extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
-            "act": constants_type.CLEAN_ACTION_TO_ECOVACS[action],
-            "content": {
-                "count": 1,
-                "donotClean": "",
+            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            'content': {
+                'count': 1,
+                'donotClean': '',
                 'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode]
             },
-            "mode": "",
-            "router": "plan"
+            'mode': '',
+            'router': 'plan'
         };
         for (let key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
@@ -402,7 +402,7 @@ class GetBatteryState extends VacBotCommand {
  */
 class GetLifeSpan extends VacBotCommand {
     /**
-     * @param {Array} componentsArray - An optional array of components.
+     * @param {Array} componentsArray - An optional array of components
      */
     constructor(componentsArray = []) {
         super('getLifeSpan', componentsArray);
@@ -418,7 +418,7 @@ class ResetLifeSpan extends VacBotCommand {
 }
 
 /**
- * Requests the "Error" messages
+ * Requests the 'Error' messages
  * In most cases it doesn't respond (if there's no error)
  * @extends VacBotCommand
  */
@@ -429,7 +429,7 @@ class GetError extends VacBotCommand {
 }
 
 /**
- * Requests the "Suction Power"
+ * Requests the 'Suction Power'
  * @extends VacBotCommand
  */
 class GetCleanSpeed extends VacBotCommand {
@@ -439,7 +439,7 @@ class GetCleanSpeed extends VacBotCommand {
 }
 
 /**
- * Sets the "Suction Power"
+ * Sets the 'Suction Power'
  * @extends VacBotCommand
  */
 class SetCleanSpeed extends VacBotCommand {
@@ -454,11 +454,11 @@ class SetCleanSpeed extends VacBotCommand {
 }
 
 /**
- * Set the "Fan Speed" for Airbot Z1
- * 1 = "quiet"
- * 2 = "standard"
- * 3 = "strong"
- * 4 = "smart"
+ * Set the 'Fan Speed' for Airbot Z1
+ * 1 = 'quiet'
+ * 2 = 'standard'
+ * 3 = 'strong'
+ * 4 = 'smart'
  * @extends VacBotCommand
  */
 class SetFanSpeed extends VacBotCommand {
@@ -473,7 +473,7 @@ class SetFanSpeed extends VacBotCommand {
 }
 
 /**
- * Requests the "Water Flow Level"
+ * Requests the 'Water Flow Level'
  * @extends VacBotCommand
  */
 class GetWaterInfo extends VacBotCommand {
@@ -483,19 +483,19 @@ class GetWaterInfo extends VacBotCommand {
 }
 
 /**
- * Sets the "Water Flow Level"
- * (and the "Scrubbing Pattern" for a few models)
+ * Sets the 'Water Flow Level'
+ * (and the 'Scrubbing Pattern' for a few models)
  * @extends VacBotCommand
  */
 class SetWaterLevel extends VacBotCommand {
     constructor(level, sweepType = 0) {
-        // "Water Flow Level"
+        // 'Water Flow Level'
         const payload = {
             'amount': level
         };
         // Scrubbing Pattern (e.g. OZMO T8 AIVI)
-        // 1 = "Quick Scrubbing"
-        // 2 = "Deep Scrubbing"
+        // 1 = 'Quick Scrubbing'
+        // 2 = 'Deep Scrubbing'
         if ((sweepType === 1) || (sweepType === 2)) {
             Object.assign(payload, {'sweepType': sweepType});
         }
@@ -986,8 +986,8 @@ class Washing extends Clean_V2 {
 class Drying extends VacBotCommand {
     constructor(act) {
         super('stationAction', {
-            "act": act,
-            "type": 2
+            'act': act,
+            'type': 2
         });
     }
 }
@@ -1252,9 +1252,9 @@ class SetAutonomousClean extends VacBotCommand {
 class SetAtmoVolume extends VacBotCommand {
     constructor(volume = 0) {
         super('setAtmoVolume', {
-            "total": 16,
-            "type": "system",
-            "volume": volume
+            'total': 16,
+            'type': 'system',
+            'volume': volume
         });
     }
 }
@@ -1262,9 +1262,9 @@ class SetAtmoVolume extends VacBotCommand {
 class SetAirbotAutoModel extends VacBotCommand {
     constructor(on = 0, aqEnd = 2, aqStart = 3) {
         super('setAirbotAutoModel', {
-            "aq": {
-                "aqEnd": aqEnd,
-                "aqStart": aqStart
+            'aq': {
+                'aqEnd': aqEnd,
+                'aqStart': aqStart
             },
             'enable': on
         });
