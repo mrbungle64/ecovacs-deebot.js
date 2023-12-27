@@ -467,7 +467,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the `CustomAreaMode` response/message
-     * Sweep Mode is taken from the `CustomAreaMode` message
+     * `Mopping Mode`/`Cleaning efficiency` is taken from the `CustomAreaMode` message
      * not from the `SweepMode` message
      * @param {Object} payload
      */

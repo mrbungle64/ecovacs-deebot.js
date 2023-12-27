@@ -283,12 +283,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'CustomAreaMode':
-                // "Sweep mode"
+                // "Mopping Mode" / "Cleaning efficiency"
                 this.bot.handleCustomAreaMode(payload);
                 this.emitMessage('SweepMode', this.bot.sweepMode);
                 break;
             case 'DusterRemind':
-                // Cleaning Cloth Reminder
+                // "Cleaning Cloth Reminder"
                 this.vacBot.handleDusterRemind(payload);
                 this.emitMessage("DusterRemind", this.vacBot.dusterRemind);
                 break;
@@ -470,7 +470,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case "WaterInfo":
-                // Water Flow Level
+                // "Water Flow Level"
                 this.vacBot.handleWaterInfo(payload);
                 this.emitMessage("WaterLevel", this.vacBot.waterLevel);
                 this.emitMessage("WaterBoxInfo", this.vacBot.waterboxInfo);

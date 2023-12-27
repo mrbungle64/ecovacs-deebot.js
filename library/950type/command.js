@@ -4,6 +4,16 @@ const tools = require('../tools');
 const constants_type = require('./dictionary');
 const constants = require('../constants');
 
+/**
+ * Mapping of map related types to their corresponding Ecovacs codes
+ *
+ * @type {Object<string, string>}
+ *
+ * @property {string} outline - The code for outline map info type (standard type)
+ * @property {string} wifiHeatMap - The code for wifi heat map info type
+ * @property {string} ai - The code for 'ai' info type
+ * @property {string} workarea - The code for 'workarea' info type
+ */
 const MAPINFOTYPE_TO_ECOVACS = {
     "outline": "ol",
     "wifiHeatMap": "st",
@@ -11,7 +21,17 @@ const MAPINFOTYPE_TO_ECOVACS = {
     "workarea": "wa"
 };
 
+/**
+ * This class is essentially a template for creating a command for a bot,
+ * which includes a command name, arguments (payload), and an API endpoint
+ */
 class VacBotCommand {
+    /**
+     * @constructor
+     * @param {string} name - The name of the command
+     * @param {object} [payload={}] - The payload object of the command (optional)
+     * @param {string} [api=] - The hostname of the API endpoint (optional)
+     */
     constructor(name, payload = {}, api = constants.IOT_DEVMANAGER_PATH) {
         this.name = name;
         if (!payload.hasOwnProperty('id')) {
@@ -28,7 +48,18 @@ class VacBotCommand {
     }
 }
 
+/**
+ * It represents a basic clean mode
+ * @extends VacBotCommand
+ */
 class Clean extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {string} [mode='auto'] - The mode for cleaning. Default is 'auto'
+     * @param {string} [action='start'] - The action for cleaning. Default is 'start'
+     * @param {Object} [kwargs={}] - Additional arguments in the form of key-value pairs
+     * @return {void}
+     */
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
             "act": constants_type.CLEAN_ACTION_TO_ECOVACS[action],
@@ -46,6 +77,11 @@ class Clean extends VacBotCommand {
     }
 }
 
+/**
+ * Similar to the `Clean` class but with a different payload structure
+ * Used for most newer models than OZMO 920/950 (e.g. T8, T9, X1 series etc.)
+ * @extends VacBotCommand
+ */
 class Clean_V2 extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
@@ -67,12 +103,22 @@ class Clean_V2 extends VacBotCommand {
     }
 }
 
+/**
+ * Represents an 'Edge' cleaning mode
+ * Used by models with Random navigation (e.g. U2 series)
+ * @extends Clean
+ */
 class Edge extends Clean {
     constructor() {
         super('edge', 'start');
     }
 }
 
+/**
+ * Represents a 'Spot' cleaning mode
+ * Used by models with Random navigation (e.g. U2 series)
+ * @extends Clean
+ */
 class Spot extends Clean {
     constructor() {
         super('spot', 'start', {
@@ -81,13 +127,22 @@ class Spot extends Clean {
     }
 }
 
-// "Hosted mode" Ecovacs Deebot X1 series
+/**
+ * Represents a 'Hosted mode' cleaning mode
+ * Used by newer models (e.g. X1 series)
+ * @extends Clean_V2
+ */
 class HostedCleanMode extends Clean_V2 {
     constructor() {
         super('entrust', 'start');
     }
 }
 
+/**
+ * Represents a 'Area' cleaning mode
+ * Used by models with mapping capabilities
+ * @extends Clean
+ */
 class SpotArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
         let cleaningAsNumber = Number(cleanings);
@@ -98,6 +153,12 @@ class SpotArea extends Clean {
     }
 }
 
+/**
+ * Represents a 'Area' cleaning mode
+ * Similar to the `SpotArea` class but with a different payload structure
+ * Used by newer models
+ * @extends Clean_V2
+ */
 class SpotArea_V2 extends Clean_V2 {
     constructor(area = '', cleanings = 1) {
         let cleaningAsNumber = Number(cleanings);
@@ -110,6 +171,11 @@ class SpotArea_V2 extends Clean_V2 {
     }
 }
 
+/**
+ * Represents a 'Custom' cleaning mode
+ * Used by models with mapping capabilities
+ * @extends Clean
+ */
 class CustomArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
         let cleaningAsNumber = Number(cleanings);
@@ -120,6 +186,12 @@ class CustomArea extends Clean {
     }
 }
 
+/**
+ * Represents a 'Custom' cleaning mode
+ * Similar to the `CustomArea` class but with a different payload structure
+ * Used by newer models
+ * @extends Clean_V2
+ */
 class CustomArea_V2 extends Clean_V2 {
     constructor(area = '', cleanings = 1, donotClean = 0) {
         let cleaningAsNumber = Number(cleanings);
@@ -134,6 +206,11 @@ class CustomArea_V2 extends Clean_V2 {
     }
 }
 
+/**
+ * Represents a 'Custom' cleaning mode
+ * Used by newer models
+ * @extends Clean_V2
+ */
 class MapPoint_V2 extends Clean_V2 {
     constructor(area = '') {
         super('mapPoint', 'start', {
@@ -147,6 +224,10 @@ class MapPoint_V2 extends Clean_V2 {
     }
 }
 
+/**
+ * Represents the 'pause' function
+ * @extends VacBotCommand
+ */
 class Pause extends VacBotCommand {
     constructor() {
         super('clean', {
@@ -155,6 +236,10 @@ class Pause extends VacBotCommand {
     }
 }
 
+/**
+ * Represents the 'resume' function
+ * @extends VacBotCommand
+ */
 class Resume extends VacBotCommand {
     constructor() {
         super('clean', {
@@ -163,6 +248,10 @@ class Resume extends VacBotCommand {
     }
 }
 
+/**
+ * Represents the 'stop' function
+ * @extends VacBotCommand
+ */
 class Stop extends VacBotCommand {
     constructor() {
         super('clean', {
@@ -171,6 +260,10 @@ class Stop extends VacBotCommand {
     }
 }
 
+/**
+ * Represents the 'charge' function
+ * @extends VacBotCommand
+ */
 class Charge extends VacBotCommand {
     constructor() {
         super('charge', {
@@ -180,6 +273,11 @@ class Charge extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a 'Move' command
+ * The move commands often do not work properly on newer models
+ * @extends VacBotCommand
+ */
 class Move extends VacBotCommand {
     constructor(action) {
         if (constants_type.MOVE_ACTION.hasOwnProperty(action)) {
@@ -191,36 +289,62 @@ class Move extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a 'move backward' command
+ * @extends Move
+ */
 class MoveBackward extends Move {
     constructor() {
         super('backward');
     }
 }
 
+/**
+ * Represents a 'move backward' command
+ * @extends Move
+ */
 class MoveForward extends Move {
     constructor() {
         super('forward');
     }
 }
 
+/**
+ * Represents a 'move backward' command
+ * @extends Move
+ */
 class MoveLeft extends Move {
     constructor() {
         super('left');
     }
 }
 
+/**
+ * Represents a 'move backward' command
+ * @extends Move
+ */
 class MoveRight extends Move {
     constructor() {
         super('right');
     }
 }
 
+/**
+ * Represents a 'move backward' command
+ * @deprecated
+ * @extends Move
+ */
 class MoveTurnAround extends Move {
     constructor() {
         super('turn_around');
     }
 }
 
+/**
+ * This command is used manually to relocate the position of a device
+ * Works for models like OZMO 920/950 and the T8 series
+ * @extends VacBotCommand
+ */
 class Relocate extends VacBotCommand {
     constructor() {
         super('setRelocationState', {
@@ -267,12 +391,6 @@ class ResetLifeSpan extends VacBotCommand {
     }
 }
 
-class GetCleanSpeed extends VacBotCommand {
-    constructor() {
-        super('getSpeed');
-    }
-}
-
 class GetError extends VacBotCommand {
     constructor() {
         super('getError');
@@ -280,8 +398,16 @@ class GetError extends VacBotCommand {
 }
 
 /**
- * Set the fan speed for vacuum cleaners
- * @extends VacBotCommand
+ * Gets the "Suction Power"
+ */
+class GetCleanSpeed extends VacBotCommand {
+    constructor() {
+        super('getSpeed');
+    }
+}
+
+/**
+ * Sets the "Suction Power"
  */
 class SetCleanSpeed extends VacBotCommand {
     constructor(level) {
@@ -295,12 +421,11 @@ class SetCleanSpeed extends VacBotCommand {
 }
 
 /**
- * Set the fan speed for Airbot Z1
- * 1 = quiet
- * 2 = standard
- * 3 = strong
- * 4 = smart
- * @extends VacBotCommand
+ * Set the "Fan Speed" for Airbot Z1
+ * 1 = "quiet"
+ * 2 = "standard"
+ * 3 = "strong"
+ * 4 = "smart"
  */
 class SetFanSpeed extends VacBotCommand {
     constructor(level) {
@@ -313,11 +438,27 @@ class SetFanSpeed extends VacBotCommand {
     }
 }
 
+/**
+ * Gets the "Water Flow Level"
+ */
+class GetWaterInfo extends VacBotCommand {
+    constructor() {
+        super('getWaterInfo');
+    }
+}
+
+ /**
+ * Sets the "Water Flow Level" (and the "Scrubbing Pattern" for a few models)
+ */
 class SetWaterLevel extends VacBotCommand {
     constructor(level, sweepType = 0) {
+        // "Water Flow Level"
         const payload = {
             'amount': level
         };
+        // Scrubbing Pattern (e.g. OZMO T8 AIVI)
+        // 1 = "Quick Scrubbing"
+        // 2 = "Deep Scrubbing"
         if ((sweepType === 1) || (sweepType === 2)) {
             Object.assign(payload, {'sweepType': sweepType});
         }
@@ -325,20 +466,14 @@ class SetWaterLevel extends VacBotCommand {
     }
 }
 
-/*
-Sets the sweep mode for X1 series
+/**
+ * Sets the `Mopping Mode` (e.g. X1 series)
  */
 class SetCustomAreaMode extends VacBotCommand {
     constructor(sweepMode = 0) {
         super('setCustomAreaMode', {
             'sweepMode': sweepMode
         });
-    }
-}
-
-class GetWaterInfo extends VacBotCommand {
-    constructor() {
-        super('getWaterInfo');
     }
 }
 
@@ -1284,6 +1419,7 @@ module.exports.GetDoNotDisturb = GetDoNotDisturb;
 module.exports.GetDusterRemind = GetDusterRemind;
 module.exports.GetError = GetError;
 module.exports.GetLifeSpan = GetLifeSpan;
+module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
 module.exports.GetMajorMap = GetMajorMap;
 module.exports.GetMapInfo = GetMapInfo;
 module.exports.GetMapInfo_V2 = GetMapInfo_V2;
@@ -1371,7 +1507,6 @@ module.exports.GetChildLock = GetChildLock;
 module.exports.GetDrivingWheel = GetDrivingWheel;
 module.exports.GetHumanoidFollow = GetHumanoidFollow;
 module.exports.GetJCYAirQuality = GetJCYAirQuality;
-module.exports.GetLiveLaunchPwdState = GetLiveLaunchPwdState;
 module.exports.GetMic = GetMic;
 module.exports.GetMonitorAirState = GetMonitorAirState;
 module.exports.GetOta = GetOta;
