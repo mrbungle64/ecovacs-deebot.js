@@ -1017,6 +1017,20 @@ class SetSweepMode extends VacBotCommand {
     }
 }
 
+class GetWorkMode extends VacBotCommand {
+    constructor() {
+        super('getWorkMode');
+    }
+}
+
+class SetWorkMode extends VacBotCommand {
+    constructor(mode = 0) {
+        super('setWorkMode', {
+            'mode': mode
+        });
+    }
+}
+
 // Air Purifier (e.g. AIRBOT Z1)
 
 class GetAirQuality extends VacBotCommand {
@@ -1514,6 +1528,7 @@ module.exports.GetVoiceAssistantState = GetVoiceAssistantState;
 module.exports.GetVolume = GetVolume;
 module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetWaterInfo = GetWaterInfo;
+module.exports.GetWorkMode = GetWorkMode;
 module.exports.HostedCleanMode = HostedCleanMode;
 module.exports.MapPoint_V2 = MapPoint_V2;
 module.exports.Move = Move;
@@ -1547,6 +1562,7 @@ module.exports.SetVoiceAssistantState = SetVoiceAssistantState;
 module.exports.SetVolume = SetVolume;
 module.exports.SetWashInterval = SetWashInterval;
 module.exports.SetWaterLevel = SetWaterLevel;
+module.exports.SetWorkMode = SetWorkMode;
 module.exports.Spot = Spot;
 module.exports.SpotArea = SpotArea;
 module.exports.SpotArea_V2 = SpotArea_V2;

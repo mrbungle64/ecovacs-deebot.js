@@ -149,6 +149,7 @@ class VacBot_950type extends VacBot {
             sn: null,
             wkVer: null
         };
+        this.workMode = null;
         this.multiMapState = null;
         this.evt = {};
     }
@@ -463,6 +464,15 @@ class VacBot_950type extends VacBot {
         if (type) {
             this.borderSpin = enable;
         }
+    }
+
+    /**
+     * Handle the payload of the `WorkMode` response/message
+     * ('Work Mode', 'Cleaning Mode')
+     * @param {Object} payload
+     */
+    handleWorkMode(payload) {
+        this.workMode = payload['mode'];
     }
 
     /**
@@ -1875,6 +1885,20 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetBorderSpin'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetBorderSpin());
+                break;
+            case 'GetWorkMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetWorkMode());
+                break;
+            case 'SetWorkMode'.toLowerCase():
+                if (args.length >= 1) {
+                    let workMode = args[0];
+                    if (dictionary.WORKMODE_TO_ECOVACS(workMode)) {
+                        workMode = dictionary.WORKMODE_TO_ECOVACS(workMode);
+                    }
+                    if ((workMode >= 0) && (workMode <= 3)) {
+                        this.sendCommand(new VacBotCommand.SetWorkMode(workMode));
+                    }
+                }
                 break;
             case 'EnableBorderSpin'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetBorderSpin(1));

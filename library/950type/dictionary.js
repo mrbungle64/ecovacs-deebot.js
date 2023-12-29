@@ -51,18 +51,25 @@ exports.GOCHARGING_REASONS = {
     'none': 'none'
 };
 
+exports.WORKMODE_TO_ECOVACS = {
+    'vacuumAndMop': 0,  // Vacuum and mop
+    'vacuum': 1,        // Vacuum only
+    'mop': 2,           // Mop only
+    'mopAfterVacuum': 3 // Mop after vacuum
+};
+
 exports.CLEAN_SPEED_TO_ECOVACS = {
-    1: 1000,  //silent
-    2: 0,     //normal
-    3: 1,     //high
-    4: 2      //very high
+    1: 1000,  // Silent, Quiet
+    2: 0,     // Normal
+    3: 1,     // High, Max
+    4: 2      // Very High, Max Plus
 };
 
 exports.CLEAN_SPEED_FROM_ECOVACS = {
-    1000: 1, //silent
-    0: 2,    //normal
-    1: 3,    //high
-    2: 4     //very high
+    1000: 1,
+    0: 2,
+    1: 3,
+    2: 4
 };
 
 exports.CHARGE_MODE_FROM_ECOVACS = {

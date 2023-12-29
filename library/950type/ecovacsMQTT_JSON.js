@@ -482,6 +482,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 this.emitMoppingSystemReport();
                 break;
+            case "WorkMode":
+                // "Work Mode", "Cleaning Mode"
+                this.vacbot.handleWorkMode(payload);
+                this.emitMessage("WorkMode", this.vacBot.workMode);
+                break;
 
             // ========
             // Map info
