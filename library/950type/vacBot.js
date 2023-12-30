@@ -1034,6 +1034,7 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleMajorMap(payload) {
+        tools.envLogPayload(payload);
         let mapID = payload['mid'];
         if (isNaN(mapID)) {
             if (this.currentMapMID) {
@@ -1078,6 +1079,7 @@ class VacBot_950type extends VacBot {
      * @returns {Promise<null|{mapID: any, mapType: any, mapBase64PNG: string}>}
      */
     async handleMinorMap(payload) {
+        tools.envLogPayload(payload);
         let mapID = payload['mid'];
         if (isNaN(mapID)) {
             if (this.currentMapMID) {
@@ -1104,14 +1106,13 @@ class VacBot_950type extends VacBot {
     }
 
     async handleMapTrace(payload) {
-        tools.envLogInfo('handleMapTrace');
-        //tools.envLogPayload(payload);
+        tools.envLogPayload(payload);
         /*
-        const pointCount = payload[pointCount];
-        const tid = payload[tid];
-        const totalCount = payload[totalCount];
-        const traceStart = payload[traceStart];
-        const traceValue = payload[traceValue];*/
+        const totalCount = payload['totalCount'];
+        const traceStart = payload['traceStart'];
+        const traceValue = payload['traceValue'];
+        const pointCount = payload['pointCount'];
+        const tid = payload['tid'];*/
     }
 
     /**
@@ -1578,13 +1579,13 @@ class VacBot_950type extends VacBot {
                                 cleanLog.push(this.cleanLog[i]);
                             }
                         }
-                        this.ecovacs.emit('CleanLog', cleanLog);
-                        this.ecovacs.emit('CleanLog_lastImageUrl', this.cleanLog_lastImageUrl);
-                        this.ecovacs.emit('CleanLog_lastImageTimestamp', this.cleanLog_lastTimestamp); // Deprecated
-                        this.ecovacs.emit('CleanLog_lastTimestamp', this.cleanLog_lastTimestamp);
-                        this.ecovacs.emit('CleanLog_lastSquareMeters', this.cleanLog_lastSquareMeters);
-                        this.ecovacs.emit('CleanLog_lastTotalTimeString', this.cleanLog_lastTotalTimeString);
-                        this.ecovacs.emit('LastCleanLogs', {
+                        this.ecovacs.emitMessage('CleanLog', cleanLog);
+                        this.ecovacs.emitMessage('CleanLog_lastImageUrl', this.cleanLog_lastImageUrl);
+                        this.ecovacs.emitMessage('CleanLog_lastImageTimestamp', this.cleanLog_lastTimestamp); // Deprecated
+                        this.ecovacs.emitMessage('CleanLog_lastTimestamp', this.cleanLog_lastTimestamp);
+                        this.ecovacs.emitMessage('CleanLog_lastSquareMeters', this.cleanLog_lastSquareMeters);
+                        this.ecovacs.emitMessage('CleanLog_lastTotalTimeString', this.cleanLog_lastTotalTimeString);
+                        this.ecovacs.emitMessage('LastCleanLogs', {
                             'timestamp': this.cleanLog_lastTimestamp,
                             'squareMeters': this.cleanLog_lastSquareMeters,
                             'totalTime': this.cleanLog_lastTotalTime,

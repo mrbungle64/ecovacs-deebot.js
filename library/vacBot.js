@@ -573,6 +573,7 @@ class VacBot {
                 this.sendCommand(new this.vacBotCommand.GetBatteryState());
                 break;
             case "GetCleanState".toLowerCase():
+            case "GetCleanInfo".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetCleanState());
                 break;
             case "GetCleanSpeed".toLowerCase():
