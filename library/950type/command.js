@@ -88,8 +88,7 @@ class Clean_V2 extends VacBotCommand {
 }
 
 /**
- * Represents a 'Custom' cleaning mode
- * Used by models with mapping capabilities
+ * Represents a 'Custom' area cleaning mode
  * @extends Clean
  */
 class CustomArea extends Clean {
@@ -103,7 +102,7 @@ class CustomArea extends Clean {
 }
 
 /**
- * Represents a 'Custom' cleaning mode
+ * Represents a 'Custom' area cleaning mode
  * Similar to the `CustomArea` class but with a different payload structure
  * Used by newer models
  * @extends Clean_V2
@@ -123,8 +122,7 @@ class CustomArea_V2 extends Clean_V2 {
 }
 
 /**
- * Represents a 'Area' cleaning mode
- * Used by models with mapping capabilities
+ * Represents a (spot) 'Area' cleaning mode
  * @extends Clean
  */
 class SpotArea extends Clean {
@@ -138,7 +136,7 @@ class SpotArea extends Clean {
 }
 
 /**
- * Represents a 'Area' cleaning mode
+ * Represents a (spot) 'Area' cleaning mode
  * Similar to the `SpotArea` class but with a different payload structure
  * Used by newer models
  * @extends Clean_V2
@@ -156,7 +154,7 @@ class SpotArea_V2 extends Clean_V2 {
 }
 
 /**
- * Represents a 'Hosted mode' cleaning mode
+ * Represents a 'Hosted mode' cleaning
  * Used by newer models (e.g. X1 series)
  * @extends Clean_V2
  */
@@ -287,6 +285,7 @@ class Relocate extends VacBotCommand {
 /**
  * Requests various information about the cleaning status
  * @extends VacBotCommand
+ * TODO: Rename to `GetCleanInfo`
  */
 class GetCleanState extends VacBotCommand {
     constructor() {
@@ -299,6 +298,7 @@ class GetCleanState extends VacBotCommand {
  * Similar to the `GetCleanState` class
  * Used by newer models
  * @extends VacBotCommand
+ * TODO: Rename to `GetCleanInfo_V2`
  */
 class GetCleanState_V2 extends VacBotCommand {
     constructor() {
@@ -366,7 +366,7 @@ class GetError extends VacBotCommand {
 }
 
 /**
- * Requests the 'Suction Power'
+ * Requests the 'Suction Power' level
  * @extends VacBotCommand
  */
 class GetCleanSpeed extends VacBotCommand {
@@ -376,7 +376,7 @@ class GetCleanSpeed extends VacBotCommand {
 }
 
 /**
- * Sets the 'Suction Power'
+ * Sets the 'Suction Power' level
  * @extends VacBotCommand
  */
 class SetCleanSpeed extends VacBotCommand {
@@ -430,13 +430,23 @@ class SetWaterLevel extends VacBotCommand {
         const payload = {
             'amount': level
         };
-        // Scrubbing Pattern (e.g. OZMO T8 AIVI)
+        // 'Scrubbing Pattern' (e.g. OZMO T8 AIVI)
         // 1 = 'Quick Scrubbing'
         // 2 = 'Deep Scrubbing'
         if ((sweepType === 1) || (sweepType === 2)) {
             Object.assign(payload, {'sweepType': sweepType});
         }
         super('setWaterInfo', payload);
+    }
+}
+
+/**
+ * Requests the `Mopping Mode` (e.g. X1 series)
+ * @extends VacBotCommand
+ */
+class GetCustomAreaMode extends VacBotCommand {
+    constructor() {
+        super('getCustomAreaMode');
     }
 }
 
@@ -487,18 +497,32 @@ class GetNetInfo extends VacBotCommand {
     }
 }
 
+/**
+ * Request various information about the current/last cleaning
+ * @extends VacBotCommand
+ */
 class GetCleanSum extends VacBotCommand {
     constructor() {
         super('getTotalStats');
     }
 }
 
+/**
+ * Request map data via `getMajorMap` command
+ * TODO: Finish implementation of handling the response
+ * @extends VacBotCommand
+ */
 class GetMajorMap extends VacBotCommand {
     constructor() {
         super('getMajorMap');
     }
 }
 
+/**
+ * Request map image data via `getMinorMap` command
+ * TODO: Finish implementation of handling the response
+ * @extends VacBotCommand
+ */
 class GetMinorMap extends VacBotCommand {
     constructor(mid, pieceIndex, type = 'ol') {
         super('getMinorMap', {
@@ -509,6 +533,11 @@ class GetMinorMap extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a `getMapTrace` command
+ * TODO: Implementation of handling the response
+ * @extends VacBotCommand
+ */
 class GetMapTrace extends VacBotCommand {
     constructor(traceStart = 0, pointCount = 400) {
         super('getMapTrace', {
@@ -520,6 +549,7 @@ class GetMapTrace extends VacBotCommand {
 
 /**
  * Represents a command to get map image data
+ * @extends VacBotCommand
  */
 class GetMapInfo extends VacBotCommand {
     /**
@@ -543,16 +573,10 @@ class GetMapInfo extends VacBotCommand {
     }
 }
 
-// yeedi Mop Station
-class GetMapInfo_V2_Yeedi extends VacBotCommand {
-    constructor(mapType = '0') {
-        super('getMapInfo_V2', {
-            'type': mapType
-        });
-    }
-}
-
-// Ecovacs Deebot X1
+/**
+ * Represents a `getMapInfo_V2` command (e.g. Deebot X1)
+ * @extends VacBotCommand
+ */
 class GetMapInfo_V2 extends VacBotCommand {
     constructor(mapID, type = '0') {
         super('getMapInfo_V2', {
@@ -562,12 +586,32 @@ class GetMapInfo_V2 extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about the available maps
+ * @extends VacBotCommand
+ */
+class GetMapInfo_V2_Yeedi extends VacBotCommand {
+    constructor(mapType = '0') {
+        super('getMapInfo_V2', {
+            'type': mapType
+        });
+    }
+}
+
+/**
+ * Request information about the available maps
+ * @extends VacBotCommand
+ */
 class GetCachedMapInfo extends VacBotCommand {
     constructor() {
         super('getCachedMapInfo');
     }
 }
 
+/**
+ * Request information about areas and virtual walls
+ * @extends VacBotCommand
+ */
 class GetMapSet extends VacBotCommand {
     constructor(mapID, type = 'ar') {
         super('getMapSet', {
@@ -577,6 +621,11 @@ class GetMapSet extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about areas and virtual walls
+ * used by newer models
+ * @extends VacBotCommand
+ */
 class GetMapSet_V2 extends VacBotCommand {
     constructor(mapID, type = 'ar') {
         super('getMapSet_V2', {
@@ -586,7 +635,11 @@ class GetMapSet_V2 extends VacBotCommand {
     }
 }
 
-// Not yet used and untested
+/**
+ * Represents a command to merge rooms
+ * Not yet used and not yet tested
+ * @extends VacBotCommand
+ */
 class SetMapSet extends VacBotCommand {
     constructor(mapID, subsets, act = 'merge') {
         super('setMapSet', {
@@ -598,32 +651,53 @@ class SetMapSet extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about the (spot) areas
+ * @extends GetMapSet
+ */
 class GetMapSpotAreas extends GetMapSet {
     constructor(mapID) {
         super(mapID, 'ar');
     }
 }
 
+/**
+ * Request information * about the (spot) areas for newer models (e.g. X1 series)
+ * @extends GetMapSet_V2
+ */
 class GetMapSpotAreas_V2 extends GetMapSet_V2 {
     constructor(mapID) {
         super(mapID, 'ar');
     }
 }
 
+/**
+ * Request information about the virtual boundaries
+ * @extends GetMapSet
+ */
 class GetMapVirtualBoundaries extends GetMapSet {
     constructor(mapID, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapVirtualBoundaryType);
     }
 }
 
+/**
+ * Request information about the virtual boundaries for newer models (e.g. X1 series)
+ * @extends GetMapSet_V2
+ */
 class GetMapVirtualBoundaries_V2 extends GetMapSet_V2 {
     constructor(mapID, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapVirtualBoundaryType);
     }
 }
 
+/**
+ * Requests information of a map sub set
+ * Default type is `ar` = spot areas
+ * @extends VacBotCommand
+ */
 class GetMapSubSet extends VacBotCommand {
-    constructor(mapID, mapSubSetID, type = 'ar') { //default type is spotAreas
+    constructor(mapID, mapSubSetID, type = 'ar') {
         super('getMapSubSet', {
             'mid': mapID,
             'mssid': mapSubSetID,
@@ -632,8 +706,13 @@ class GetMapSubSet extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a command to delete a sub set
+ * Default type is `vw` = virtual wall
+ * @extends VacBotCommand
+ */
 class DeleteMapSubSet extends VacBotCommand {
-    constructor(mapID, mapSubSetID, type = 'vw') { //default type is delete virtualWall
+    constructor(mapID, mapSubSetID, type = 'vw') {
         super('setMapSubSet', {
             'act': 'del',
             'mid': mapID,
@@ -643,8 +722,13 @@ class DeleteMapSubSet extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a command to add a new sub set
+ * Default type is `vw` = virtual wall
+ * @extends VacBotCommand
+ */
 class AddMapSubSet extends VacBotCommand {
-    constructor(mapID, coordinates, mapSubSetType = 'vw') { //default type is virtualWall
+    constructor(mapID, coordinates, mapSubSetType = 'vw') {
         super('setMapSubSet', {
             'act': 'add',
             'mid': mapID,
@@ -654,48 +738,110 @@ class AddMapSubSet extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about a (spot) area
+ * @extends GetMapSubSet
+ */
 class GetMapSpotAreaInfo extends GetMapSubSet {
     constructor(mapID, mapSubSetID) {
         super(mapID, mapSubSetID, 'ar');
     }
 }
 
+/**
+ * Request information about a sub set
+ * Default type is `vw` = virtual wall
+ * @extends GetMapSubSet
+ */
 class GetMapVirtualBoundaryInfo extends GetMapSubSet {
-    constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
+    constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapSubSetID, mapVirtualBoundaryType);
     }
 }
 
+/**
+ * Represents a command to delete a sub set
+ * Default type is `vw` = virtual wall
+ * @extends DeleteMapSubSet
+ */
 class DeleteMapVirtualBoundary extends DeleteMapSubSet {
-    constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
+    constructor(mapID, mapSubSetID, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapSubSetID, mapVirtualBoundaryType);
     }
 }
 
+/**
+ * Represents a command to add a new sub set
+ * Default type is `vw` = virtual wall
+ * @extends AddMapSubSet
+ */
 class AddMapVirtualBoundary extends AddMapSubSet {
-    constructor(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType = 'vw') { //default type is virtualWall
+    constructor(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType = 'vw') {
         super(mapID, mapVirtualBoundaryCoordinates, mapVirtualBoundaryType);
     }
 }
 
+/**
+ * Request information about if a map is built
+ * @extends VacBotCommand
+ */
+class GetMapState extends VacBotCommand {
+    constructor() {
+        super('getMapState');
+    }
+}
+
+/**
+ * Request information about if more than 1 map is available
+ * @extends VacBotCommand
+ */
+class GetMultiMapState extends VacBotCommand {
+    constructor() {
+        super('getMultiMapState');
+    }
+}
+
+/**
+ * Request information about if the bot is
+ * in (energy saving) sleeping mode
+ * @extends VacBotCommand
+ */
 class GetSleepStatus extends VacBotCommand {
     constructor() {
         super('getSleep');
     }
 }
 
+/**
+ * Request an array of cleaning log information
+ * The `count` attribute seems to have no affect,
+ * but it has to be set anyway
+ * @extends VacBotCommand
+ */
 class GetCleanLogs extends VacBotCommand {
-    constructor(count = 3) {
-        super('GetCleanLogs', {'count': count}, constants.CLEANLOGS_PATH);
+    constructor(count = 0) {
+        super('GetCleanLogs',
+            {
+                'count': count
+            },
+            constants.CLEANLOGS_PATH);
     }
 }
 
+/**
+ * Request the volume value
+ * @extends VacBotCommand
+ */
 class GetVolume extends VacBotCommand {
     constructor() {
         super('getVolume');
     }
 }
 
+/**
+ * Set the volume value
+ * @extends VacBotCommand
+ */
 class SetVolume extends VacBotCommand {
     constructor(volume = 1) {
         super('setVolume', {
@@ -704,12 +850,22 @@ class SetVolume extends VacBotCommand {
     }
 }
 
+/**
+ * Request information if the 'Auto Empty' option is enabled
+ * Used by models with Auto Empty Station
+ * @extends VacBotCommand
+ */
 class GetAutoEmpty extends VacBotCommand {
     constructor() {
         super('getAutoEmpty');
     }
 }
 
+/**
+ * Sets the value if 'Auto Empty' option is enabled
+ * Used by models with Auto Empty Station
+ * @extends VacBotCommand
+ */
 class SetAutoEmpty extends VacBotCommand {
     constructor(enable = 0) {
         super('setAutoEmpty', {
@@ -718,6 +874,11 @@ class SetAutoEmpty extends VacBotCommand {
     }
 }
 
+/**
+ * Represents a command to empty the dust bin
+ * of the Auto Empty Station
+ * @extends VacBotCommand
+ */
 class EmptyDustBin extends VacBotCommand {
     constructor() {
         super('setAutoEmpty', {
@@ -778,6 +939,12 @@ class DisableDoNotDisturb extends VacBotCommand {
     }
 }
 
+class GetAdvancedMode extends VacBotCommand {
+    constructor() {
+        super('getAdvancedMode');
+    }
+}
+
 class SetAdvancedMode extends VacBotCommand {
     constructor(enable = 0) {
         super('setAdvancedMode', {
@@ -786,9 +953,9 @@ class SetAdvancedMode extends VacBotCommand {
     }
 }
 
-class GetAdvancedMode extends VacBotCommand {
+class GetTrueDetect extends VacBotCommand {
     constructor() {
-        super('getAdvancedMode');
+        super('getTrueDetect');
     }
 }
 
@@ -797,12 +964,6 @@ class SetTrueDetect extends VacBotCommand {
         super('setTrueDetect', {
             'enable': enable
         });
-    }
-}
-
-class GetTrueDetect extends VacBotCommand {
-    constructor() {
-        super('getTrueDetect');
     }
 }
 
@@ -849,6 +1010,12 @@ class SetCarpetPressure extends VacBotCommand {
     }
 }
 
+class GetCleanCount extends VacBotCommand {
+    constructor() {
+        super('getCleanCount');
+    }
+}
+
 class SetCleanCount extends VacBotCommand {
     constructor(count = 1) {
         super('setCleanCount', {
@@ -857,9 +1024,9 @@ class SetCleanCount extends VacBotCommand {
     }
 }
 
-class GetCleanCount extends VacBotCommand {
+class GetCleanPreference extends VacBotCommand {
     constructor() {
-        super('getCleanCount');
+        super('getCleanPreference');
     }
 }
 
@@ -868,12 +1035,6 @@ class SetCleanPreference extends VacBotCommand {
         super('setCleanPreference', {
             'enable': enable
         });
-    }
-}
-
-class GetCleanPreference extends VacBotCommand {
-    constructor() {
-        super('getCleanPreference');
     }
 }
 
@@ -957,19 +1118,6 @@ class SetRecognization extends VacBotCommand {
 }
 
 // TODO: Handle response data
-class GetMapState extends VacBotCommand {
-    constructor() {
-        super('getMapState');
-    }
-}
-
-class GetMultiMapState extends VacBotCommand {
-    constructor() {
-        super('getMultiMapState');
-    }
-}
-
-// TODO: Handle response data
 class GetAIMap extends VacBotCommand {
     constructor() {
         super('getAIMap', {
@@ -994,20 +1142,17 @@ class SetBorderSpin extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the sweep mode (e.g. X1 series)
+ */
 class GetSweepMode extends VacBotCommand {
     constructor() {
         super('getSweepMode');
     }
 }
 
-class GetCustomAreaMode extends VacBotCommand {
-    constructor() {
-        super('getCustomAreaMode');
-    }
-}
-
-/*
-Sets the sweep only mode for e.g. X1 series
+/**
+ * Sets the "Sweep Only" mode (e.g. X1 series)
  */
 class SetSweepMode extends VacBotCommand {
     constructor(type = 0) {
@@ -1017,12 +1162,18 @@ class SetSweepMode extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the "Cleaning Mode" (e.g. T20 series)
+ */
 class GetWorkMode extends VacBotCommand {
     constructor() {
         super('getWorkMode');
     }
 }
 
+/**
+ * Sets the "Cleaning Mode" (e.g. T20 series)
+ */
 class SetWorkMode extends VacBotCommand {
     constructor(mode = 0) {
         super('setWorkMode', {
@@ -1031,7 +1182,9 @@ class SetWorkMode extends VacBotCommand {
     }
 }
 
+// =============================
 // Air Purifier (e.g. AIRBOT Z1)
+// =============================
 
 class GetAirQuality extends VacBotCommand {
     constructor() {
@@ -1138,15 +1291,6 @@ class SetBlueSpeaker extends VacBotCommand {
             'enable': enable,
             'name': 'ECOVACS Z1',
             'resetTime': 1
-        });
-    }
-}
-
-class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapID, mapArray) {
-        super('setMapSet_V2', {
-            mid: mapID,
-            subsets: mapArray
         });
     }
 }
@@ -1396,13 +1540,23 @@ class GetMapTrace_V2 extends VacBotCommand {
     }
 }
 
+class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapID, mapArray) {
+        super('setMapSet_V2', {
+            mid: mapID,
+            subsets: mapArray
+        });
+    }
+}
+
 // ===================
 // Deprecated commands
 // ===================
 
 /**
- * Represents an 'Edge' cleaning mode
+ * 'Edge' cleaning mode
  * Used by models with Random navigation (e.g. U2 series)
+ * @deprecated
  * @extends Clean
  */
 class Edge extends Clean {
@@ -1412,8 +1566,9 @@ class Edge extends Clean {
 }
 
 /**
- * Represents a 'Spot' cleaning mode
+ * 'Spot' cleaning mode
  * Used by models with Random navigation (e.g. U2 series)
+ * @deprecated
  * @extends Clean
  */
 class Spot extends Clean {
@@ -1425,7 +1580,6 @@ class Spot extends Clean {
 }
 
 /**
- * Represents a 'Move Left' command
  * @deprecated
  * @extends Move
  */
@@ -1436,7 +1590,6 @@ class MoveLeft extends Move {
 }
 
 /**
- * Represents a 'Move Right' command
  * @deprecated
  * @extends Move
  */
@@ -1447,7 +1600,6 @@ class MoveRight extends Move {
 }
 
 /**
- * Represents a 'Move Turn around' command
  * @deprecated
  * @extends Move
  */
@@ -1469,7 +1621,6 @@ module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
 module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
 module.exports.Drying = Drying;
-module.exports.Edge = Edge;
 module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
 module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
@@ -1534,9 +1685,6 @@ module.exports.MapPoint_V2 = MapPoint_V2;
 module.exports.Move = Move;
 module.exports.MoveBackward = MoveBackward;
 module.exports.MoveForward = MoveForward;
-module.exports.MoveLeft = MoveLeft;
-module.exports.MoveRight = MoveRight;
-module.exports.MoveTurnAround = MoveTurnAround;
 module.exports.Pause = Pause;
 module.exports.PlaySound = PlaySound;
 module.exports.Relocate = Relocate;
@@ -1563,7 +1711,6 @@ module.exports.SetVolume = SetVolume;
 module.exports.SetWashInterval = SetWashInterval;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.SetWorkMode = SetWorkMode;
-module.exports.Spot = Spot;
 module.exports.SpotArea = SpotArea;
 module.exports.SpotArea_V2 = SpotArea_V2;
 module.exports.Stop = Stop;
@@ -1617,3 +1764,10 @@ module.exports.SetVoice = SetVoice;
 module.exports.SetVoiceSimple = SetVoiceSimple;
 module.exports.SinglePoint_V2 = SinglePoint_V2;
 module.exports.VideoOpened = VideoOpened;
+
+// Deprecated
+module.exports.Edge = Edge;
+module.exports.Spot = Spot;
+module.exports.MoveLeft = MoveLeft;
+module.exports.MoveRight = MoveRight;
+module.exports.MoveTurnAround = MoveTurnAround;
