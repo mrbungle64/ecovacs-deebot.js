@@ -118,7 +118,7 @@ export function envLogMqtt(message: any): void;
 export function envLogNotice(message: any): void;
 export function envLogPayload(message: any): void;
 export function envLogRaw(message: any): void;
-export function envLogResult(message: any): void;
+export function envLogResult(name: any, message: any): void;
 export function envLogSuccess(message: any): void;
 export function envLogWarn(message: any): void;
 export function logError(message: any): void;

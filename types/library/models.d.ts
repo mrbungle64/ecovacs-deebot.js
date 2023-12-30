@@ -27,6 +27,22 @@ export var SupportedDevices: {
         yiko: boolean;
         type: string;
     };
+    sdp1y1: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        clean_speed: boolean;
+        spot_area: boolean;
+        map_image_supported: boolean;
+        yiko: boolean;
+        type: string;
+    };
+    "20anby": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
 };
 export var KnownDevices: {
     "123": {
@@ -808,6 +824,22 @@ export var KnownDevices: {
         map_image_supported: boolean;
         type: string;
     };
+    "6r6dbt": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        auto_empty_station: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+        type: string;
+    };
     zwvyi2: {
         name: string;
         deviceClassLink: string;
@@ -857,22 +889,6 @@ export var KnownDevices: {
     "09m4bu": {
         name: string;
         deviceClassLink: string;
-    };
-    sdp1y1: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        clean_speed: boolean;
-        spot_area: boolean;
-        map_image_supported: boolean;
-        yiko: boolean;
-        type: string;
-    };
-    "20anby": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        type: string;
     };
     m1wkuw: {
         name: string;

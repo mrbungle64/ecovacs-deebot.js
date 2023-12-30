@@ -56,6 +56,12 @@ export namespace GOCHARGING_REASONS {
     const cleaningCloth: string;
     const none: string;
 }
+export namespace WORKMODE_TO_ECOVACS {
+    const vacuumAndMop: number;
+    const vacuum: number;
+    const mop: number;
+    const mopAfterVacuum: number;
+}
 export var CLEAN_SPEED_TO_ECOVACS: {
     1: number;
     2: number;
