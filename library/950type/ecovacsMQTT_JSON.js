@@ -123,7 +123,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 try {
                     await this.handleMessagePayload(eventName, payload);
                 } catch (e) {
-                    this.emitMessageError('-2', e.message);
+                    this.emitError('-2', e.message);
                 }
             })();
         } else if (resultCode != 0) {
