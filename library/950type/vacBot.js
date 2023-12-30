@@ -150,6 +150,7 @@ class VacBot_950type extends VacBot {
             wkVer: null
         };
         this.workMode = null;
+        this.mapState = null;
         this.multiMapState = null;
         this.evt = {};
     }
@@ -522,7 +523,15 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Handle the payload of the `Sleep` response/message (sleep status)
+     * Handle the payload of the `MapState` response/message
+     * @param {Object} payload
+     */
+    handleMapState(payload) {
+        this.mapState = payload['state'];
+    }
+
+    /**
+     * Handle the payload of the `MultiMapState` response/message
      * @param {Object} payload
      */
     handleMultiMapState(payload) {

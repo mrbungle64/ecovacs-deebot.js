@@ -337,11 +337,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleLiveLaunchPwdState(payload);
                 this.emitMessage("LiveLaunchPwdState", this.vacBot.liveLaunchPwdState);
                 break;
-            case 'MultiMapState':
-                // Status of the Multi Map functionality
-                this.vacBot.handleMultiMapState(payload);
-                this.emitMessage("MultiMapState", this.vacBot.multiMapState);
-                break;
             case "NetInfo":
                 // Various network/wifi information
                 this.vacBot.handleNetInfo(payload);
@@ -541,6 +536,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             }
+            case 'MapState':
+                this.vacBot.handleMapState(payload);
+                this.emitMessage("MapState", this.vacBot.mapState);
+                break;
+            case 'MultiMapState':
+                // Status of the Multi Map functionality
+                this.vacBot.handleMultiMapState(payload);
+                this.emitMessage("MultiMapState", this.vacBot.multiMapState);
+                break;
             case "MapSet_V2":
                 // TODO: handle subsets
                 tools.envLogWarn(`Unhandled MapSet_V2`);
@@ -572,7 +576,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             // =====
             case 'AIMap':
             case 'Clean'.toLowerCase():
-            case 'MapState':
                 if (payload) {
                     tools.envLogInfo(`payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
                 }
