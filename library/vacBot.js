@@ -632,17 +632,14 @@ class VacBot {
             case "GetDoNotDisturb".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetDoNotDisturb());
                 break;
-            case "DisableDoNotDisturb".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.DisableDoNotDisturb());
-                break;
             case "GetContinuousCleaning".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetContinuousCleaning());
                 break;
             case "EnableContinuousCleaning".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.EnableContinuousCleaning());
+                this.sendCommand(new this.vacBotCommand.SetContinuousCleaning(1));
                 break;
             case "DisableContinuousCleaning".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.DisableContinuousCleaning());
+                this.sendCommand(new this.vacBotCommand.SetContinuousCleaning(0));
                 break;
             case "Move".toLowerCase(): {
                 const command = args[0];

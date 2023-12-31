@@ -343,15 +343,9 @@ class GetContinuousCleaning extends GetOnOff {
     }
 }
 
-class EnableContinuousCleaning extends SetOnOff {
-    constructor() {
-        super('continuous_cleaning', 1);
-    }
-}
-
-class DisableContinuousCleaning extends SetOnOff {
-    constructor() {
-        super('continuous_cleaning', 0);
+class SetContinuousCleaning extends SetOnOff {
+    constructor(enable = 0) {
+        super('continuous_cleaning', enable);
     }
 }
 
@@ -361,15 +355,9 @@ class GetDoNotDisturb extends GetOnOff {
     }
 }
 
-class EnableDoNotDisturb extends SetOnOff {
-    constructor() {
-        super('do_not_disturb', 1);
-    }
-}
-
-class DisableDoNotDisturb extends SetOnOff {
-    constructor() {
-        super('do_not_disturb', 0);
+class SetDoNotDisturb extends SetOnOff {
+    constructor(enable = 0) {
+        super('do_not_disturb', enable);
     }
 }
 
@@ -419,11 +407,8 @@ module.exports.Generic = VacBotCommand;
 module.exports.Charge = Charge;
 module.exports.Clean = Clean;
 module.exports.CustomArea = CustomArea;
-module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
-module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
+module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.Edge = Edge;
-module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
-module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetChargerPos = GetChargerPos;
@@ -459,6 +444,7 @@ module.exports.RenameSpotArea = RenameSpotArea;
 module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.Resume = Resume;
 module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.SetContinuousCleaning = SetContinuousCleaning;
 module.exports.SetLifeSpan = SetLifeSpan;
 module.exports.SetOnOff = SetOnOff;
 module.exports.SetWaterLevel = SetWaterLevel;

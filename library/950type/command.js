@@ -893,28 +893,10 @@ class GetContinuousCleaning extends VacBotCommand {
     }
 }
 
-class EnableContinuousCleaning extends VacBotCommand {
-    constructor() {
+class SetContinuousCleaning extends VacBotCommand {
+    constructor(enable = 0) {
         super('setBreakPoint', {
-            'enable': 1
-        });
-    }
-}
-
-class DisableContinuousCleaning extends VacBotCommand {
-    constructor() {
-        super('setBreakPoint', {
-            'enable': 0
-        });
-    }
-}
-
-class SetDoNotDisturb extends VacBotCommand {
-    constructor(enable = 0, start = '22:00', end = '21:59') {
-        super('setBlock', {
-            'enable': enable,
-            'start': start,
-            'end': end
+            'enable': enable
         });
     }
 }
@@ -925,16 +907,12 @@ class GetDoNotDisturb extends VacBotCommand {
     }
 }
 
-class EnableDoNotDisturb extends SetDoNotDisturb {
-    constructor(start = '22:00', end = '21:59') {
-        super(1, start, end);
-    }
-}
-
-class DisableDoNotDisturb extends VacBotCommand {
-    constructor() {
+class SetDoNotDisturb extends VacBotCommand {
+    constructor(enable = 0, start = '22:00', end = '21:59') {
         super('setBlock', {
-            'enable': 0
+            'enable': enable,
+            'start': start,
+            'end': end
         });
     }
 }
@@ -1618,12 +1596,9 @@ module.exports.Clean_V2 = Clean_V2;
 module.exports.CustomArea = CustomArea;
 module.exports.CustomArea_V2 = CustomArea_V2;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
-module.exports.DisableContinuousCleaning = DisableContinuousCleaning;
-module.exports.DisableDoNotDisturb = DisableDoNotDisturb;
+module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.Drying = Drying;
 module.exports.EmptyDustBin = EmptyDustBin;
-module.exports.EnableContinuousCleaning = EnableContinuousCleaning;
-module.exports.EnableDoNotDisturb = EnableDoNotDisturb;
 module.exports.GetAICleanItemState = GetAICleanItemState;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
@@ -1698,6 +1673,7 @@ module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanCount = SetCleanCount;
 module.exports.SetCleanPreference = SetCleanPreference;
 module.exports.SetCleanSpeed = SetCleanSpeed;
+module.exports.SetContinuousCleaning = SetContinuousCleaning;
 module.exports.SetCustomAreaMode = SetCustomAreaMode;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;

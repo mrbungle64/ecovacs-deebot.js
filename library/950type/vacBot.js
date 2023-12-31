@@ -1556,10 +1556,14 @@ class VacBot_950type extends VacBot {
                 const start = args[0];
                 const end = args[1];
                 if ((start !== '') && (end !== '')) {
-                    this.sendCommand(new VacBotCommand.EnableDoNotDisturb(start, end));
+                    this.run('SetDoNotDisturb', 1, start, end);
                 } else {
-                    this.sendCommand(new VacBotCommand.EnableDoNotDisturb());
+                    this.run('SetDoNotDisturb', 1);
                 }
+                break;
+            }
+            case 'DisableDoNotDisturb'.toLowerCase(): {
+                this.run('SetDoNotDisturb', 0);
                 break;
             }
             case 'SetDoNotDisturb'.toLowerCase(): {
