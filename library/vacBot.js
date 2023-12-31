@@ -632,6 +632,7 @@ class VacBot {
             case "GetDoNotDisturb".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetDoNotDisturb());
                 break;
+            case 'GetBreakPoint'.toLowerCase():
             case "GetContinuousCleaning".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetContinuousCleaning());
                 break;

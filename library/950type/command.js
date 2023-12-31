@@ -1492,12 +1492,6 @@ class SetVoice extends VacBotCommand {
     }
 }
 
-class GetBreakPoint extends VacBotCommand {
-    constructor() {
-        super('getBreakPoint');
-    }
-}
-
 class GetRelocationState extends VacBotCommand {
     constructor() {
         super('getRelocationState');
@@ -1596,7 +1590,6 @@ module.exports.Clean_V2 = Clean_V2;
 module.exports.CustomArea = CustomArea;
 module.exports.CustomArea_V2 = CustomArea_V2;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
-module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.Drying = Drying;
 module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.GetAICleanItemState = GetAICleanItemState;
@@ -1676,6 +1669,7 @@ module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetContinuousCleaning = SetContinuousCleaning;
 module.exports.SetCustomAreaMode = SetCustomAreaMode;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
+module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetMapSet = SetMapSet;
 module.exports.SetMapSet_V2 = SetMapSet_V2;
@@ -1704,7 +1698,6 @@ module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetAutonomousClean = GetAutonomousClean;
 module.exports.GetBlock = GetBlock;
 module.exports.GetBlueSpeaker = GetBlueSpeaker;
-module.exports.GetBreakPoint = GetBreakPoint;
 module.exports.GetChildLock = GetChildLock;
 module.exports.GetDrivingWheel = GetDrivingWheel;
 module.exports.GetHumanoidFollow = GetHumanoidFollow;

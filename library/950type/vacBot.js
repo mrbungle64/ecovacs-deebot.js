@@ -1988,9 +1988,6 @@ class VacBot_950type extends VacBot {
             case 'GetVoiceLifeRemindState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetVoiceLifeRemindState());
                 break;
-            case 'GetBreakPoint'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetBreakPoint());
-                break;
             case 'GetAntiDrop'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAntiDrop());
                 break;
