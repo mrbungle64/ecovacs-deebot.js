@@ -232,7 +232,6 @@ class Charge extends VacBotCommand {
     }
 }
 
-
 /**
  * Represents a 'Move' command
  * The move commands often do not work properly on newer models
@@ -1236,6 +1235,28 @@ class SetBorderSpin extends VacBotCommand {
 }
 
 /**
+ * Requests information about the Firmware
+ * and 'Over The Air' updates (e.g. X1 series, Airbot Z1)
+ * (e.g. version, status, progress)
+ * @extends VacBotCommand
+ */
+class GetOta extends VacBotCommand {
+    constructor() {
+        super('getOta');
+    }
+}
+
+/**
+ * Requests information about the relocation status (e.g. X1 series, Airbot Z1)
+ * @extends VacBotCommand
+ */
+class GetRelocationState extends VacBotCommand {
+    constructor() {
+        super('getRelocationState');
+    }
+}
+
+/**
  * Requests the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
  * @extends VacBotCommand
  */
@@ -1253,6 +1274,28 @@ class SetSweepMode extends VacBotCommand {
     constructor(type = 0) {
         super('setSweepMode', {
             'type': type
+        });
+    }
+}
+
+/**
+ * Requests the value whether 'YIKO' is enabled (e.g. X1 series)
+ * @extends VacBotCommand
+ */
+class GetVoiceAssistantState extends VacBotCommand {
+    constructor() {
+        super('getVoiceAssistantState');
+    }
+}
+
+/**
+ * Sets the value to enable and disable 'YIKO' (e.g. X1 series)
+ * @extends VacBotCommand
+ */
+class SetVoiceAssistantState extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setVoiceAssistantState', {
+            'enable': enable
         });
     }
 }
@@ -1306,47 +1349,9 @@ class GetSchedule_V2 extends VacBotCommand {
 // Air Purifier (e.g. AIRBOT Z1)
 // =============================
 
-class GetAirQuality extends VacBotCommand {
+class Area_V2 extends Clean_V2 {
     constructor() {
-        super('getAirQuality');
-    }
-}
-
-class SetChildLock extends VacBotCommand {
-    constructor(on = 0) {
-        super('setChildLock', {
-            'on': on
-        });
-    }
-}
-
-class GetJCYAirQuality extends VacBotCommand {
-    constructor() {
-        super('getJCYAirQuality');
-    }
-}
-
-class GetAtmoLight extends VacBotCommand {
-    constructor() {
-        super('getAtmoLight');
-    }
-}
-
-class GetAtmoVolume extends VacBotCommand {
-    constructor() {
-        super('getAtmoVolume');
-    }
-}
-
-class GetAutonomousClean extends VacBotCommand {
-    constructor() {
-        super('getAutonomousClean');
-    }
-}
-
-class GetAirbotAutoModel extends VacBotCommand {
-    constructor() {
-        super('getAirbotAutoModel');
+        super('area', 'start');
     }
 }
 
@@ -1360,9 +1365,226 @@ class SinglePoint_V2 extends Clean_V2 {
     }
 }
 
-class Area_V2 extends Clean_V2 {
+class GetJCYAirQuality extends VacBotCommand {
     constructor() {
-        super('area', 'start');
+        super('getJCYAirQuality');
+    }
+}
+
+class GetAirQuality extends VacBotCommand {
+    constructor() {
+        super('getAirQuality');
+    }
+}
+
+class GetAirbotAutoModel extends VacBotCommand {
+    constructor() {
+        super('getAirbotAutoModel');
+    }
+}
+
+class SetAirbotAutoModel extends VacBotCommand {
+    constructor(on = 0, aqEnd = 2, aqStart = 3) {
+        super('setAirbotAutoModel', {
+            'aq': {
+                'aqEnd': aqEnd,
+                'aqStart': aqStart
+            },
+            'enable': on
+        });
+    }
+}
+
+class GetAngleFollow extends VacBotCommand {
+    constructor() {
+        super('getAngleFollow');
+    }
+}
+
+class SetAngleFollow extends VacBotCommand {
+    constructor(on = 0) {
+        super('setAngleFollow', {
+            'on': on
+        });
+    }
+}
+
+class GetAntiDrop extends VacBotCommand {
+    constructor() {
+        super('getAntiDrop');
+    }
+}
+
+class GetAtmoLight extends VacBotCommand {
+    constructor() {
+        super('getAtmoLight');
+    }
+}
+
+class SetAtmoLight extends VacBotCommand {
+    constructor(intensity = 0) {
+        super('setAtmoLight', {
+            'intensity': intensity,
+            'type': 'system',
+            'total': 4
+        });
+    }
+}
+
+class GetAtmoVolume extends VacBotCommand {
+    constructor() {
+        super('getAtmoVolume');
+    }
+}
+
+class SetAtmoVolume extends VacBotCommand {
+    constructor(volume = 0) {
+        super('setAtmoVolume', {
+            'total': 16,
+            'type': 'system',
+            'volume': volume
+        });
+    }
+}
+
+class GetAudioCallState extends VacBotCommand {
+    constructor() {
+        super('getAudioCallState');
+    }
+}
+
+class GetAutonomousClean extends VacBotCommand {
+    constructor() {
+        super('getAutonomousClean');
+    }
+}
+
+class SetAutonomousClean extends VacBotCommand {
+    constructor(on = 0) {
+        super('setAutonomousClean', {
+            'on': on
+        });
+    }
+}
+
+class GetBlock extends VacBotCommand {
+    constructor() {
+        super('getBlock');
+    }
+}
+
+class SetBlock extends VacBotCommand {
+    constructor(enable = 0, start = '00:00', end = '00:00') {
+        super('setBlock', {
+            'enable': enable,
+            'start': start,
+            'end': end
+        });
+    }
+}
+
+class GetBlueSpeaker extends VacBotCommand {
+    constructor() {
+        super('getBlueSpeaker');
+    }
+}
+
+class SetBlueSpeaker extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setBlueSpeaker', {
+            'enable': enable,
+            'name': 'ECOVACS Z1',
+            'resetTime': 1
+        });
+    }
+}
+
+class GetChildLock extends VacBotCommand {
+    constructor() {
+        super('getChildLock');
+    }
+}
+
+class SetChildLock extends VacBotCommand {
+    constructor(on = 0) {
+        super('setChildLock', {
+            'on': on
+        });
+    }
+}
+
+class GetDrivingWheel extends VacBotCommand {
+    constructor() {
+        super('getDrivingWheel');
+    }
+}
+
+class GetHumanoidFollow extends VacBotCommand {
+    constructor() {
+        super('getHumanoidFollow');
+    }
+}
+
+class GetLiveLaunchPwdState extends VacBotCommand {
+    constructor() {
+        super('getLiveLaunchPwdState');
+    }
+}
+
+class GetMapTrace_V2 extends VacBotCommand {
+    constructor(type = 0) {
+        super('getMapTrace_V2', {
+            'type': type
+        });
+    }
+}
+
+class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapID, mapArray) {
+        super('setMapSet_V2', {
+            mid: mapID,
+            subsets: mapArray
+        });
+    }
+}
+
+class GetMic extends VacBotCommand {
+    constructor() {
+        super('getMic');
+    }
+}
+
+class SetMic extends VacBotCommand {
+    constructor(on = 0) {
+        super('setMic', {
+            'on': on
+        });
+    }
+}
+
+class GetMonitorAirState extends VacBotCommand {
+    constructor() {
+        super('getMonitorAirState');
+    }
+}
+
+class SetMonitorAirState extends VacBotCommand {
+    constructor(on = 0) {
+        super('setMonitorAirState', {
+            'on': on
+        });
+    }
+}
+
+class GetScene extends VacBotCommand {
+    constructor() {
+        super('getScene');
+    }
+}
+
+class GetThreeModule extends VacBotCommand {
+    constructor() {
+        super('getThreeModule', []);
     }
 }
 
@@ -1397,155 +1619,9 @@ class SetUVCleaner extends SetThreeModule {
     }
 }
 
-class SetAtmoLight extends VacBotCommand {
-    constructor(intensity = 0) {
-        super('setAtmoLight', {
-            'intensity': intensity,
-            'type': 'system',
-            'total': 4
-        });
-    }
-}
-
-class GetBlueSpeaker extends VacBotCommand {
+class GetThreeModuleStatus extends VacBotCommand {
     constructor() {
-        super('getBlueSpeaker');
-    }
-}
-
-class SetBlueSpeaker extends VacBotCommand {
-    constructor(enable = 0) {
-        super('setBlueSpeaker', {
-            'enable': enable,
-            'name': 'ECOVACS Z1',
-            'resetTime': 1
-        });
-    }
-}
-
-class SetVoiceSimple extends VacBotCommand {
-    constructor(on = 0) {
-        super('setVoiceSimple', {
-            'on': on
-        });
-    }
-}
-
-class SetMonitorAirState extends VacBotCommand {
-    constructor(on = 0) {
-        super('setMonitorAirState', {
-            'on': on
-        });
-    }
-}
-
-class GetAngleFollow extends VacBotCommand {
-    constructor() {
-        super('getAngleFollow');
-    }
-}
-
-class SetAngleFollow extends VacBotCommand {
-    constructor(on = 0) {
-        super('setAngleFollow', {
-            'on': on
-        });
-    }
-}
-
-class GetMic extends VacBotCommand {
-    constructor() {
-        super('getMic');
-    }
-}
-
-class SetMic extends VacBotCommand {
-    constructor(on = 0) {
-        super('setMic', {
-            'on': on
-        });
-    }
-}
-
-class SetBlock extends VacBotCommand {
-    constructor(enable = 0, start = '00:00', end = '00:00') {
-        super('setBlock', {
-            'enable': enable,
-            'start': start,
-            'end': end
-        });
-    }
-}
-
-class SetAutonomousClean extends VacBotCommand {
-    constructor(on = 0) {
-        super('setAutonomousClean', {
-            'on': on
-        });
-    }
-}
-
-class SetAtmoVolume extends VacBotCommand {
-    constructor(volume = 0) {
-        super('setAtmoVolume', {
-            'total': 16,
-            'type': 'system',
-            'volume': volume
-        });
-    }
-}
-
-class SetAirbotAutoModel extends VacBotCommand {
-    constructor(on = 0, aqEnd = 2, aqStart = 3) {
-        super('setAirbotAutoModel', {
-            'aq': {
-                'aqEnd': aqEnd,
-                'aqStart': aqStart
-            },
-            'enable': on
-        });
-    }
-}
-
-class GetLiveLaunchPwdState extends VacBotCommand {
-    constructor() {
-        super('getLiveLaunchPwdState');
-    }
-}
-
-class GetHumanoidFollow extends VacBotCommand {
-    constructor() {
-        super('getHumanoidFollow');
-    }
-}
-
-class GetMonitorAirState extends VacBotCommand {
-    constructor() {
-        super('getMonitorAirState');
-    }
-}
-
-class GetVoiceSimple extends VacBotCommand {
-    constructor() {
-        super('getVoiceSimple');
-    }
-}
-
-class GetDrivingWheel extends VacBotCommand {
-    constructor() {
-        super('getDrivingWheel');
-    }
-}
-
-class GetChildLock extends VacBotCommand {
-    constructor() {
-        super('getChildLock');
-    }
-}
-
-class GetBlock extends VacBotCommand {
-    constructor() {
-        super('getBlock');
+        super('getThreeModuleStatus');
     }
 }
 
@@ -1561,71 +1637,9 @@ class GetTotalStats extends VacBotCommand {
     }
 }
 
-class GetWifiList extends VacBotCommand {
-    constructor() {
-        super('getWifiList');
-    }
-}
-
-class GetOta extends VacBotCommand {
-    constructor() {
-        super('getOta');
-    }
-}
-
-class GetThreeModule extends VacBotCommand {
-    constructor() {
-        super('getThreeModule', []);
-    }
-}
-
-class GetThreeModuleStatus extends VacBotCommand {
-    constructor() {
-        super('getThreeModuleStatus');
-    }
-}
-
-class GetScene extends VacBotCommand {
-    constructor() {
-        super('getScene');
-    }
-}
-
-class VideoOpened extends VacBotCommand {
-    constructor() {
-        super('videoOpened');
-    }
-}
-
-class GetAudioCallState extends VacBotCommand {
-    constructor() {
-        super('getAudioCallState');
-    }
-}
-
 class GetVoice extends VacBotCommand {
     constructor() {
         super('getVoice');
-    }
-}
-
-class GetVoiceLifeRemindState extends VacBotCommand {
-    constructor() {
-        super('getVoiceLifeRemindState');
-    }
-}
-
-class GetVoiceAssistantState extends VacBotCommand {
-    constructor() {
-        super('getVoiceAssistantState');
-    }
-}
-
-class SetVoiceAssistantState extends VacBotCommand {
-    constructor(enable = 0) {
-        super('setVoiceAssistantState', {
-            'enable': enable
-        });
     }
 }
 
@@ -1642,32 +1656,35 @@ class SetVoice extends VacBotCommand {
     }
 }
 
-class GetRelocationState extends VacBotCommand {
+class GetVoiceLifeRemindState extends VacBotCommand {
     constructor() {
-        super('getRelocationState');
+        super('getVoiceLifeRemindState');
     }
 }
 
-class GetAntiDrop extends VacBotCommand {
-    constructor() {
-        super('getAntiDrop');
-    }
-}
-
-class GetMapTrace_V2 extends VacBotCommand {
-    constructor(type = 0) {
-        super('getMapTrace_V2', {
-            'type': type
+class SetVoiceSimple extends VacBotCommand {
+    constructor(on = 0) {
+        super('setVoiceSimple', {
+            'on': on
         });
     }
 }
 
-class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapID, mapArray) {
-        super('setMapSet_V2', {
-            mid: mapID,
-            subsets: mapArray
-        });
+class GetVoiceSimple extends VacBotCommand {
+    constructor() {
+        super('getVoiceSimple');
+    }
+}
+
+class GetWifiList extends VacBotCommand {
+    constructor() {
+        super('getWifiList');
+    }
+}
+
+class VideoOpened extends VacBotCommand {
+    constructor() {
+        super('videoOpened');
     }
 }
 
