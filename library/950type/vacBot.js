@@ -49,6 +49,7 @@ class VacBot_950type extends VacBot {
             'hasPwd': null
         };
         this.volume = 0;
+        this.relocationStatus = {};
         this.relocationState = null;
         this.firmwareVersion = null;
         this.airDryingStatus = null;
@@ -601,6 +602,7 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleRelocationState(payload) {
+        this.relocationStatus = payload;
         this.relocationState = payload['state'];
     }
 

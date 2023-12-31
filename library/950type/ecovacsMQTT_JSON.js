@@ -396,6 +396,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "RelocationState":
                 // Relocation status
                 this.vacBot.handleRelocationState(payload);
+                this.emitMessage("RelocationStatus", this.vacBot.relocationStatus);
                 this.emitMessage("RelocationState", this.vacBot.relocationState);
                 break;
             case 'Sched':
