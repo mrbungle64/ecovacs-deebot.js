@@ -862,7 +862,7 @@ class GetAutoEmpty extends VacBotCommand {
 }
 
 /**
- * Sets the value if 'Auto Empty' option is enabled
+ * Sets the value whether the 'Auto Empty' option is enabled
  * Used by models with Auto Empty Station
  * @extends VacBotCommand
  */
@@ -944,7 +944,7 @@ class GetAdvancedMode extends VacBotCommand {
 }
 
 /**
- * Sets the value if 'Advanced Mode' option is enabled
+ * Sets the value whether the 'Advanced Mode' option is enabled
  * @extends VacBotCommand
  */
 class SetAdvancedMode extends VacBotCommand {
@@ -958,6 +958,33 @@ class SetAdvancedMode extends VacBotCommand {
 /**
  * Request information if (depending on model)
  * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (T8 and T9 series, e.g. T8 AIVI)
+ * @extends VacBotCommand
+ */
+class GetRecognization extends VacBotCommand {
+    constructor() {
+        super('getRecognization');
+    }
+}
+
+/**
+ * Request information if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (T8 and T9 series, e.g. T8 AIVI)
+ * @extends VacBotCommand
+ */
+class SetRecognization extends VacBotCommand {
+    constructor(state = 0) {
+        super('setRecognization', {
+            'state': state
+        });
+    }
+}
+
+/**
+ * Request information if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (newer models e.g. X1 series)
  * @extends VacBotCommand
  */
 class GetTrueDetect extends VacBotCommand {
@@ -967,8 +994,9 @@ class GetTrueDetect extends VacBotCommand {
 }
 
 /**
- * Sets the value if (depending on model)
+ * Sets the value whether the (depending on model)
  * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (newer models e.g. X1 series)
  * @extends VacBotCommand
  */
 class SetTrueDetect extends VacBotCommand {
@@ -990,7 +1018,7 @@ class GetDusterRemind extends VacBotCommand {
 }
 
 /**
- * Sets the value if 'Cleaning Cloth Reminder' is enabled
+ * Sets the value whether the 'Cleaning Cloth Reminder' is enabled
  * @extends VacBotCommand
  */
 class SetDusterRemind extends VacBotCommand {
@@ -1013,7 +1041,7 @@ class GetCarpetPressure extends VacBotCommand {
 }
 
 /**
- * Sets the value if 'Auto-Boost Suction' is enabled
+ * Sets the value whether the 'Auto-Boost Suction' is enabled
  * @extends VacBotCommand
  */
 class SetCarpetPressure extends VacBotCommand {
@@ -1057,7 +1085,7 @@ class GetCleanPreference extends VacBotCommand {
 }
 
 /**
- * Sets the value if 'Cleaning Preference' mode is enabled
+ * Sets the value whether the 'Cleaning Preference' mode is enabled
  * @extends VacBotCommand
  */
 class SetCleanPreference extends VacBotCommand {
@@ -1068,36 +1096,52 @@ class SetCleanPreference extends VacBotCommand {
     }
 }
 
+/**
+ * Receive information if the 'Strategic Particle Removal'
+ * and the 'Strategic Pet Poop Avoidance' mode is enabled (e.g. X1 series)
+ */
 class GetAICleanItemState extends VacBotCommand {
     constructor() {
         super('getAICleanItemState');
     }
 }
 
-class GetAirDrying extends VacBotCommand {
-    constructor() {
-        super('getAirDring');
-    }
-}
-
+/**
+ * Receive information about the station (e.g. X1 series)
+ * e.g. the state of 'Air Drying', 'Mopping Pads Cleaning' etc.
+ * @extends VacBotCommand
+ */
 class GetStationState extends VacBotCommand {
     constructor() {
         super('getStationState');
     }
 }
 
+/**
+ * Receive information about the station (e.g. X1 series)
+ * e.g. model, firmware etc.
+ * @extends VacBotCommand
+ */
 class GetStationInfo extends VacBotCommand {
     constructor() {
         super('getStationInfo');
     }
 }
 
+/**
+ * Receive the value of the 'Cleaning Interval' (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 class GetWashInterval extends VacBotCommand {
     constructor() {
         super('getWashInterval');
     }
 }
 
+/**
+ * Sets the 'Cleaning Interval' (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 class SetWashInterval extends VacBotCommand {
     constructor(interval = 10) {
         super('setWashInterval', {
@@ -1106,8 +1150,31 @@ class SetWashInterval extends VacBotCommand {
     }
 }
 
-// Air Drying
-// Yeedi Mop Station
+/**
+ * Start und Stop 'Mopping Pads Cleaning' (e.g. X1 series)
+ * @extends Clean_V2
+ */
+class Washing extends Clean_V2 {
+    constructor(action = 'stop') {
+        super('washing', action);
+    }
+}
+
+/**
+ * Receive the value if 'Air Drying' is active (Yeedi Mop Station)
+ * The typo in 'AirDring' is intended
+ * @extends VacBotCommand
+ */
+class GetAirDrying extends VacBotCommand {
+    constructor() {
+        super('getAirDring');
+    }
+}
+
+/**
+ * Start und Stop 'Air Drying' (Yeedi Mop Station)
+ * @extends VacBotCommand
+ */
 class SetAirDrying extends VacBotCommand {
     constructor(act = 'stop') {
         super('setAirDring', {
@@ -1116,14 +1183,12 @@ class SetAirDrying extends VacBotCommand {
     }
 }
 
-class Washing extends Clean_V2 {
-    constructor(action = 'stop') {
-        super('washing', action);
-    }
-}
-
-// Air Drying
-// Ecovacs Deebot X1 series
+/**
+ * Start und Stop 'Air Drying' (e.g. X1 series)
+ * 1 = start
+ * 4 = stop
+ * @extends VacBotCommand
+ */
 class Drying extends VacBotCommand {
     constructor(act) {
         super('stationAction', {
@@ -1133,21 +1198,11 @@ class Drying extends VacBotCommand {
     }
 }
 
-class GetRecognization extends VacBotCommand {
-    constructor() {
-        super('getRecognization');
-    }
-}
-
-class SetRecognization extends VacBotCommand {
-    constructor(state = 0) {
-        super('setRecognization', {
-            'state': state
-        });
-    }
-}
-
-// TODO: Handle response data
+/**
+ * Requests some information about the current map
+ * TODO: Handle response data
+ * @extends VacBotCommand
+ */
 class GetAIMap extends VacBotCommand {
     constructor() {
         super('getAIMap', {
@@ -1157,12 +1212,20 @@ class GetAIMap extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the value whether the 'Edge Deep Cleaning' option is enabled (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 class GetBorderSpin extends VacBotCommand {
     constructor() {
         super('getBorderSpin');
     }
 }
 
+/**
+ * Sets the value whether the 'Edge Deep Cleaning' option is enabled (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 class SetBorderSpin extends VacBotCommand {
     constructor(enable = 0) {
         super('setBorderSpin', {
@@ -1173,7 +1236,8 @@ class SetBorderSpin extends VacBotCommand {
 }
 
 /**
- * Requests the sweep mode (e.g. X1 series)
+ * Requests the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
+ * @extends VacBotCommand
  */
 class GetSweepMode extends VacBotCommand {
     constructor() {
@@ -1182,7 +1246,8 @@ class GetSweepMode extends VacBotCommand {
 }
 
 /**
- * Sets the "Sweep Only" mode (e.g. X1 series)
+ * Sets the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
+ * @extends VacBotCommand
  */
 class SetSweepMode extends VacBotCommand {
     constructor(type = 0) {
@@ -1193,7 +1258,8 @@ class SetSweepMode extends VacBotCommand {
 }
 
 /**
- * Requests the "Cleaning Mode" (e.g. T20 series)
+ * Requests the 'Cleaning Mode' (e.g. T20 series)
+ * @extends VacBotCommand
  */
 class GetWorkMode extends VacBotCommand {
     constructor() {
@@ -1202,7 +1268,8 @@ class GetWorkMode extends VacBotCommand {
 }
 
 /**
- * Sets the "Cleaning Mode" (e.g. T20 series)
+ * Sets the 'Cleaning Mode' (e.g. T20 series)
+ * @extends VacBotCommand
  */
 class SetWorkMode extends VacBotCommand {
     constructor(mode = 0) {
@@ -1212,12 +1279,21 @@ class SetWorkMode extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about the 'Scheduled Cleaning' tasks
+ * @extends VacBotCommand
+ */
 class GetSchedule extends VacBotCommand {
     constructor() {
         super('getSched');
     }
 }
 
+/**
+ * Request information about the 'Scheduled Cleaning' tasks
+ * Used by newer models
+ * @extends VacBotCommand
+ */
 class GetSchedule_V2 extends VacBotCommand {
     constructor() {
         super('getSched_V2', {
