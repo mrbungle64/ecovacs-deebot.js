@@ -887,12 +887,20 @@ class EmptyDustBin extends VacBotCommand {
     }
 }
 
+/**
+ * Request information if the 'Continuous Cleaning'/'Resumed clean' option is enabled
+ * @extends VacBotCommand
+ */
 class GetContinuousCleaning extends VacBotCommand {
     constructor() {
         super('getBreakPoint');
     }
 }
 
+/**
+ * Sets the value for 'Continuous Cleaning'/'Resumed clean' option
+ * @extends VacBotCommand
+ */
 class SetContinuousCleaning extends VacBotCommand {
     constructor(enable = 0) {
         super('setBreakPoint', {
@@ -901,12 +909,20 @@ class SetContinuousCleaning extends VacBotCommand {
     }
 }
 
+/**
+ * Request information if the 'Do Not Disturb' option is enabled
+ * @extends VacBotCommand
+ */
 class GetDoNotDisturb extends VacBotCommand {
     constructor() {
         super('getBlock');
     }
 }
 
+/**
+ * Sets the value for 'Do Not Disturb' option
+ * @extends VacBotCommand
+ */
 class SetDoNotDisturb extends VacBotCommand {
     constructor(enable = 0, start = '22:00', end = '21:59') {
         super('setBlock', {
@@ -917,12 +933,20 @@ class SetDoNotDisturb extends VacBotCommand {
     }
 }
 
+/**
+ * Request information if the 'Advanced Mode' option is enabled
+ * @extends VacBotCommand
+ */
 class GetAdvancedMode extends VacBotCommand {
     constructor() {
         super('getAdvancedMode');
     }
 }
 
+/**
+ * Sets the value if 'Advanced Mode' option is enabled
+ * @extends VacBotCommand
+ */
 class SetAdvancedMode extends VacBotCommand {
     constructor(enable = 0) {
         super('setAdvancedMode', {
@@ -931,12 +955,22 @@ class SetAdvancedMode extends VacBotCommand {
     }
 }
 
+/**
+ * Request information if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * @extends VacBotCommand
+ */
 class GetTrueDetect extends VacBotCommand {
     constructor() {
         super('getTrueDetect');
     }
 }
 
+/**
+ * Sets the value if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * @extends VacBotCommand
+ */
 class SetTrueDetect extends VacBotCommand {
     constructor(enable = 0) {
         super('setTrueDetect', {
@@ -945,26 +979,20 @@ class SetTrueDetect extends VacBotCommand {
     }
 }
 
-class GetSchedule extends VacBotCommand {
-    constructor() {
-        super('getSched');
-    }
-}
-
-class GetSchedule_V2 extends VacBotCommand {
-    constructor() {
-        super('getSched_V2', {
-            type: 1
-        });
-    }
-}
-
+/**
+ * Request information about if 'Cleaning Cloth Reminder' is enabled
+ * @extends VacBotCommand
+ */
 class GetDusterRemind extends VacBotCommand {
     constructor() {
         super('getDusterRemind');
     }
 }
 
+/**
+ * Sets the value if 'Cleaning Cloth Reminder' is enabled
+ * @extends VacBotCommand
+ */
 class SetDusterRemind extends VacBotCommand {
     constructor(enable = 0, period = 30) {
         super('setDusterRemind', {
@@ -974,12 +1002,20 @@ class SetDusterRemind extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about if 'Auto-Boost Suction' is enabled
+ * @extends VacBotCommand
+ */
 class GetCarpetPressure extends VacBotCommand {
     constructor() {
         super('getCarpertPressure');
     }
 }
 
+/**
+ * Sets the value if 'Auto-Boost Suction' is enabled
+ * @extends VacBotCommand
+ */
 class SetCarpetPressure extends VacBotCommand {
     constructor(enable = 0) {
         super('setCarpertPressure', {
@@ -988,12 +1024,20 @@ class SetCarpetPressure extends VacBotCommand {
     }
 }
 
+/**
+ * Request the number of cleaning repetitions ('Cleaning Times')
+ * @extends VacBotCommand
+ */
 class GetCleanCount extends VacBotCommand {
     constructor() {
         super('getCleanCount');
     }
 }
 
+/**
+ * Sets the number of cleaning repetitions ('Cleaning Times')
+ * @extends VacBotCommand
+ */
 class SetCleanCount extends VacBotCommand {
     constructor(count = 1) {
         super('setCleanCount', {
@@ -1002,12 +1046,20 @@ class SetCleanCount extends VacBotCommand {
     }
 }
 
+/**
+ * Request information if the 'Cleaning Preference' mode is enabled
+ * @extends VacBotCommand
+ */
 class GetCleanPreference extends VacBotCommand {
     constructor() {
         super('getCleanPreference');
     }
 }
 
+/**
+ * Sets the value if 'Cleaning Preference' mode is enabled
+ * @extends VacBotCommand
+ */
 class SetCleanPreference extends VacBotCommand {
     constructor(enable = 0) {
         super('setCleanPreference', {
@@ -1156,6 +1208,20 @@ class SetWorkMode extends VacBotCommand {
     constructor(mode = 0) {
         super('setWorkMode', {
             'mode': mode
+        });
+    }
+}
+
+class GetSchedule extends VacBotCommand {
+    constructor() {
+        super('getSched');
+    }
+}
+
+class GetSchedule_V2 extends VacBotCommand {
+    constructor() {
+        super('getSched_V2', {
+            type: 1
         });
     }
 }
