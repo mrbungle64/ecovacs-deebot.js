@@ -1962,6 +1962,9 @@ class VacBot_950type extends VacBot {
             case 'GetChildLock'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetChildLock());
                 break;
+            case 'SetChildLock'.toLowerCase():
+                this.sendCommand(new VacBotCommand.SetChildLock(args[0]));
+                break;
             case 'GetBlock'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetBlock());
                 break;

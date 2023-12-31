@@ -1312,6 +1312,14 @@ class GetAirQuality extends VacBotCommand {
     }
 }
 
+class SetChildLock extends VacBotCommand {
+    constructor(on = 0) {
+        super('setChildLock', {
+            'on': on
+        });
+    }
+}
+
 class GetJCYAirQuality extends VacBotCommand {
     constructor() {
         super('getJCYAirQuality');
@@ -1864,6 +1872,7 @@ module.exports.SetAtmoVolume = SetAtmoVolume;
 module.exports.SetAutonomousClean = SetAutonomousClean;
 module.exports.SetBlock = SetBlock;
 module.exports.SetBlueSpeaker = SetBlueSpeaker;
+module.exports.SetChildLock = SetChildLock;
 module.exports.SetFanSpeed = SetFanSpeed;
 module.exports.SetFreshenerLevel = SetFreshenerLevel;
 module.exports.SetHumidifierLevel = SetHumidifierLevel;
