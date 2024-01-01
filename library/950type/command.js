@@ -1349,12 +1349,33 @@ class GetSchedule_V2 extends VacBotCommand {
 // Air Purifier (e.g. AIRBOT Z1)
 // =============================
 
+/**
+ * Starts an 'Area' cleaning
+ * The areas have to be set via 'SetMapSet_V2' command
+ * @extends Clean_V2
+ */
 class Area_V2 extends Clean_V2 {
     constructor() {
         super('area', 'start');
     }
 }
 
+/**
+ * Set area (sub set) data for the given map
+ */
+class SetMapSet_V2 extends VacBotCommand {
+    constructor(mapID, mapArray) {
+        super('setMapSet_V2', {
+            mid: mapID,
+            subsets: mapArray
+        });
+    }
+}
+
+/**
+ * Starts an 'Spot' cleaning at the given position
+ * @extends Clean_V2
+ */
 class SinglePoint_V2 extends Clean_V2 {
     constructor(spotCoordinates = '') {
         super('singlePoint', 'start', {
@@ -1365,24 +1386,50 @@ class SinglePoint_V2 extends Clean_V2 {
     }
 }
 
+/**
+ * Air quality (Z1 Air Quality Monitor)
+ * @extends VacBotCommand
+ */
 class GetJCYAirQuality extends VacBotCommand {
     constructor() {
         super('getJCYAirQuality');
     }
 }
 
+/**
+ * Air quality (Airbot Z1)
+ * @extends VacBotCommand
+ */
 class GetAirQuality extends VacBotCommand {
     constructor() {
         super('getAirQuality');
     }
 }
 
+/**
+ * Requests an object with data
+ * for the 'Linked Purification' function
+ * (linked to Air Quality Monitor)
+ * @extends VacBotCommand
+ */
 class GetAirbotAutoModel extends VacBotCommand {
     constructor() {
         super('getAirbotAutoModel');
     }
 }
 
+/**
+ * Sends data whether the 'Linked Purification'
+ * (linked to Air Quality Monitor)
+ * is enabled and also the start and end value
+ * 1, 3, 4 = 'poor <> medium',
+ * 1, 2, 4 = 'poor <> Fair',
+ * 1, 1, 4 = 'poor <> Good',
+ * 1, 2, 3 = 'medium <> fair',
+ * 1, 1, 3 = 'medium <> good',
+ * 1, 1, 2 = 'fair <> good'
+ * @extends VacBotCommand
+ */
 class SetAirbotAutoModel extends VacBotCommand {
     constructor(on = 0, aqEnd = 2, aqStart = 3) {
         super('setAirbotAutoModel', {
@@ -1395,12 +1442,20 @@ class SetAirbotAutoModel extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the value whether the 'Face to Me' option is enabled
+ * @extends VacBotCommand
+ */
 class GetAngleFollow extends VacBotCommand {
     constructor() {
         super('getAngleFollow');
     }
 }
 
+/**
+ * Sets the value whether the 'Face to Me' option is enabled
+ * @extends VacBotCommand
+ */
 class SetAngleFollow extends VacBotCommand {
     constructor(on = 0) {
         super('setAngleFollow', {
@@ -1409,12 +1464,20 @@ class SetAngleFollow extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the intensity of the 'Real-time Air Quality Display'
+ * @extends VacBotCommand
+ */
 class GetAtmoLight extends VacBotCommand {
     constructor() {
         super('getAtmoLight');
     }
 }
 
+/**
+ * Sets the intensity of the 'Real-time Air Quality Display'
+ * @extends VacBotCommand
+ */
 class SetAtmoLight extends VacBotCommand {
     constructor(intensity = 0) {
         super('setAtmoLight', {
@@ -1425,12 +1488,20 @@ class SetAtmoLight extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the 'Volume' (0-16)
+ * @extends VacBotCommand
+ */
 class GetAtmoVolume extends VacBotCommand {
     constructor() {
         super('getAtmoVolume');
     }
 }
 
+/**
+ * Sets the 'Volume' (0-16)
+ * @extends VacBotCommand
+ */
 class SetAtmoVolume extends VacBotCommand {
     constructor(volume = 0) {
         super('setAtmoVolume', {
@@ -1523,15 +1594,6 @@ class GetMapTrace_V2 extends VacBotCommand {
     constructor(type = 0) {
         super('getMapTrace_V2', {
             'type': type
-        });
-    }
-}
-
-class SetMapSet_V2 extends VacBotCommand {
-    constructor(mapID, mapArray) {
-        super('setMapSet_V2', {
-            mid: mapID,
-            subsets: mapArray
         });
     }
 }

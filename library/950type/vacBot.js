@@ -1214,7 +1214,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'MonitorAirState' response/message
-     * "Real-time Air Quality Display"
+     * 'Real-time Air Quality Display'
      * @param {Object} payload
      */
     handleMonitorAirState(payload) {
@@ -1223,7 +1223,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'AngleFollow' response/message
-     * "Face to Me"
+     * 'Face to Me' option
      * @param {Object} payload
      */
     handleAngleFollow(payload) {
@@ -1664,14 +1664,14 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.SetVolume(args[0]));
                 }
                 break;
+            case 'GetAdvancedMode'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetAdvancedMode());
+                break;
             case 'EnableAdvancedMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetAdvancedMode(1));
                 break;
             case 'DisableAdvancedMode'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetAdvancedMode(0));
-                break;
-            case 'GetAdvancedMode'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetAdvancedMode());
                 break;
             case 'GetRecognization'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetRecognization());
