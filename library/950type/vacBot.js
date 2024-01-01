@@ -1192,7 +1192,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handles the air quality data received from the payload.
-     * "Indoor" Air Quality
+     * 'Indoor' Air Quality
      * @param {object} payload - The air quality data payload.
      */
     handleAirQuality(payload) {
@@ -1240,7 +1240,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'Mic' response/message
-     * "Microphone"
+     * 'Microphone'
      * @param {Object} payload
      */
     handleMic(payload) {
@@ -1249,7 +1249,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'VoiceSimple' response/message
-     * "Working Status Voice Report"
+     * 'Working Status Voice Report'
      * @param {Object} payload
      */
     handleVoiceSimple(payload) {
@@ -1266,7 +1266,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'ChildLock' response/message
-     * "Child Lock"
+     * 'Child Lock'
      * @param {Object} payload
      */
     handleChildLock(payload) {
@@ -1275,7 +1275,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'VoiceAssistantState' response/message
-     * "YIKO Voice Assistant"
+     * 'YIKO Voice Assistant'
      * @param {Object} payload
      */
     handleVoiceAssistantState(payload) {
@@ -1284,7 +1284,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'HumanoidFollow' response/message
-     * "Lab Features" => "Follow Me"
+     * 'Lab Features' => 'Follow Me'
      * @param {Object} payload
      */
     handleHumanoidFollow(payload) {
@@ -1296,7 +1296,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'AutonomousClean' response/message
-     * "Self-linked Purification"
+     * 'Self-linked Purification'
      * @param {Object} payload
      */
     handleAutonomousClean(payload) {
@@ -1305,7 +1305,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'AirbotAutoMode' response/message
-     * "Linked Purification" (linked to Air Quality Monitor)
+     * 'Linked Purification' (linked to Air Quality Monitor)
      * @param {Object} payload
      */
     handleAirbotAutoModel(payload) {
@@ -1323,7 +1323,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'BlueSpeaker' response/message
-     * "Bluetooth Speaker"
+     * 'Bluetooth Speaker'
      * @param {Object} payload
      */
     handleBlueSpeaker(payload) {
@@ -1345,7 +1345,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'AtmoLight' response/message
-     * "Light Brightness"
+     * 'Light Brightness'
      * @param {Object} payload
      */
     handleAtmoLight(payload) {
@@ -1354,7 +1354,7 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'AtmoVolume' response/message
-     * "Volume"
+     * 'Volume'
      * @param {Object} payload
      */
     handleAtmoVolume(payload) {
@@ -1681,7 +1681,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 break;
             case 'GetTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
                     this.sendCommand(new VacBotCommand.GetRecognization());
                 } else {
                     this.sendCommand(new VacBotCommand.GetTrueDetect());
@@ -1690,7 +1690,7 @@ class VacBot_950type extends VacBot {
             case 'EnableAIVI'.toLowerCase():
             case 'EnableAIVI3D'.toLowerCase():
             case 'EnableTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
                     this.sendCommand(new VacBotCommand.SetRecognization(1));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(1));
@@ -1699,7 +1699,7 @@ class VacBot_950type extends VacBot {
             case 'DisableAIVI'.toLowerCase():
             case 'DisableAIVI3D'.toLowerCase():
             case 'DisableTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
                     this.sendCommand(new VacBotCommand.SetRecognization(0));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(0));
@@ -1708,7 +1708,7 @@ class VacBot_950type extends VacBot {
             case 'SetAIVI'.toLowerCase():
             case 'SetAIVI3D'.toLowerCase():
             case 'SetTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === "Recognization") {
+                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
                     this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
@@ -1821,7 +1821,7 @@ class VacBot_950type extends VacBot {
             case 'GetStationInfo'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetStationInfo());
                 break;
-            case "GetSchedule_V2".toLowerCase():
+            case 'GetSchedule_V2'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetSchedule_V2());
                 break;
             case 'GetWashInterval'.toLowerCase():
