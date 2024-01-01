@@ -1671,12 +1671,6 @@ class GetTotalStats extends VacBotCommand {
     }
 }
 
-class GetVoice extends VacBotCommand {
-    constructor() {
-        super('getVoice');
-    }
-}
-
 class SetVoice extends VacBotCommand {
     constructor(enable = 0, md5sum = '', size = 0, type = '', url = '', vid = 'default') {
         super('setVoice', {
@@ -1902,7 +1896,6 @@ module.exports.GetThreeModule = GetThreeModule;
 module.exports.GetThreeModuleStatus = GetThreeModuleStatus;
 module.exports.GetTimeZone = GetTimeZone;
 module.exports.GetTotalStats = GetTotalStats;
-module.exports.GetVoice = GetVoice;
 module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
 module.exports.GetVoiceSimple = GetVoiceSimple;
 module.exports.GetWifiList = GetWifiList;
