@@ -1716,12 +1716,6 @@ class GetWifiList extends VacBotCommand {
     }
 }
 
-class VideoOpened extends VacBotCommand {
-    constructor() {
-        super('videoOpened');
-    }
-}
-
 // ===================
 // Deprecated commands
 // ===================
@@ -1929,7 +1923,6 @@ module.exports.SetUVCleaner = SetUVCleaner;
 module.exports.SetVoice = SetVoice;
 module.exports.SetVoiceSimple = SetVoiceSimple;
 module.exports.SinglePoint_V2 = SinglePoint_V2;
-module.exports.VideoOpened = VideoOpened;
 
 // Deprecated
 module.exports.Edge = Edge;

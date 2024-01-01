@@ -2010,9 +2010,6 @@ class VacBot_950type extends VacBot {
             case 'GetScene'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetScene());
                 break;
-            case 'VideoOpened'.toLowerCase():
-                this.sendCommand(new VacBotCommand.VideoOpened());
-                break;
             case 'SetVoice'.toLowerCase():
                 if (args.length >= 6) {
                     this.sendCommand(new VacBotCommand.SetVoice(args[0], args[1], args[2], args[3], args[4], args[5]));
