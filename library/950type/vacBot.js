@@ -2035,9 +2035,6 @@ class VacBot_950type extends VacBot {
             case 'GetVoiceLifeRemindState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetVoiceLifeRemindState());
                 break;
-            case 'GetAntiDrop'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetAntiDrop());
-                break;
             // ==================================
             // Airbot Z1 / Z1 Air Quality Monitor
             // ==================================

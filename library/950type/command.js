@@ -1409,12 +1409,6 @@ class SetAngleFollow extends VacBotCommand {
     }
 }
 
-class GetAntiDrop extends VacBotCommand {
-    constructor() {
-        super('getAntiDrop');
-    }
-}
-
 class GetAtmoLight extends VacBotCommand {
     constructor() {
         super('getAtmoLight');
@@ -1858,7 +1852,6 @@ module.exports.Area_V2 = Area_V2;
 module.exports.GetAirQuality = GetAirQuality;
 module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
 module.exports.GetAngleFollow = GetAngleFollow;
-module.exports.GetAntiDrop = GetAntiDrop;
 module.exports.GetAtmoLight = GetAtmoLight;
 module.exports.GetAtmoVolume = GetAtmoVolume;
 module.exports.GetAudioCallState = GetAudioCallState;
