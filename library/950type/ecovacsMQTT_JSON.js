@@ -547,8 +547,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMessage("MultiMapState", this.vacBot.multiMapState);
                 break;
             case "MapSet_V2":
-                // TODO: handle subsets
-                tools.envLogWarn(`Unhandled MapSet_V2`);
+                await this.vacBot.handleMapSet_V2(payload);
+                this.emitMessage("MapSet_V2", this.vacBot.mapSet_V2);
                 break;
             case "MapSubSet": {
                 // Handle spotAreas, virtualWalls, noMopZones

@@ -152,6 +152,7 @@ class VacBot_950type extends VacBot {
         };
         this.workMode = null;
         this.mapState = null;
+        this.mapSet_V2 = {};
         this.multiMapState = null;
         this.evt = {};
     }
@@ -994,6 +995,47 @@ class VacBot_950type extends VacBot {
 
         tools.envLogWarn(`unknown mapset type: ${JSON.stringify(payload['type'])}`);
         return {mapsubsetEvent: 'error'};
+    }
+
+    /**
+     * Handle the payload of the `MapSet_V2` response/message
+     * @param {Object} payload
+     */
+    async handleMapSet_V2(payload) {
+        let subsets = payload['subsets'];
+        if (typeof subsets === 'string') {
+            subsets = JSON.parse(await mapTemplate.mapPieceToIntArray(subsets));
+        }
+        const type = payload['type'];
+        let subsetData = [];
+        subsets.forEach((subset) => {
+            const mssid = subset[0];
+            const name = subset[1];
+            const subtype = subset[2];
+            const areaConnections = subset[3];
+            const index = subset[4];
+            const spotPosition = subset[5] + ',' + subset[6];
+            const cleanCount = subset[7].split('-')[0];
+            const cleanSpeed = subset[7].split('-')[1];
+            const waterLevel = subset[7].split('-')[2];
+            const singleSubsetData = {
+                'index': index,
+                'mssid': mssid,
+                'name': name,
+                'subtype': subtype,
+                'type': type,
+                'areaConnections': areaConnections.replace(/-/g, ','),
+                'cleanCount': Number(cleanCount),
+                'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[cleanSpeed],
+                'waterLevel': Number(waterLevel),
+                'spotPosition': spotPosition
+            };
+            subsetData.push(singleSubsetData);
+        });
+        this.mapSet_V2 = {
+            'mid': payload['mid'],
+            'subsets': subsetData
+        };
     }
 
     /**
