@@ -1431,10 +1431,6 @@ class VacBot_950type extends VacBot {
         }
     }
 
-    handleAudioCallState(payload) {
-        tools.envLogWarn(`Unhandled AudioCallState: ${JSON.stringify(payload)}`);
-    }
-
     handleDModule(payload) {
         this.dmodule = payload;
     }
@@ -2023,9 +2019,6 @@ class VacBot_950type extends VacBot {
                 break;
             case 'VideoOpened'.toLowerCase():
                 this.sendCommand(new VacBotCommand.VideoOpened());
-                break;
-            case 'GetAudioCallState'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetAudioCallState());
                 break;
             case 'SetVoice'.toLowerCase():
                 if (args.length >= 6) {

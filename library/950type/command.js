@@ -1441,12 +1441,6 @@ class SetAtmoVolume extends VacBotCommand {
     }
 }
 
-class GetAudioCallState extends VacBotCommand {
-    constructor() {
-        super('getAudioCallState');
-    }
-}
-
 class GetAutonomousClean extends VacBotCommand {
     constructor() {
         super('getAutonomousClean');
@@ -1854,7 +1848,6 @@ module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
 module.exports.GetAngleFollow = GetAngleFollow;
 module.exports.GetAtmoLight = GetAtmoLight;
 module.exports.GetAtmoVolume = GetAtmoVolume;
-module.exports.GetAudioCallState = GetAudioCallState;
 module.exports.GetAutonomousClean = GetAutonomousClean;
 module.exports.GetBlock = GetBlock;
 module.exports.GetBlueSpeaker = GetBlueSpeaker;
