@@ -1214,7 +1214,6 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'MonitorAirState' response/message
-     * 'Real-time Air Quality Display'
      * @param {Object} payload
      */
     handleMonitorAirState(payload) {

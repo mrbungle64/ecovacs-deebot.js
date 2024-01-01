@@ -1345,6 +1345,46 @@ class GetSchedule_V2 extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about the total stats
+ * total square meters ('area'), total seconds ('time'), total number ('count')
+ * @extends VacBotCommand
+ */
+class GetTotalStats extends VacBotCommand {
+    constructor() {
+        super('getTotalStats');
+    }
+}
+
+/**
+ * Sets data for the Voice Report (untested)
+ * @extends VacBotCommand
+ */
+class SetVoice extends VacBotCommand {
+    constructor(enable = 0, md5sum = '', size = 0, type = '', url = '', vid = 'default') {
+        super('setVoice', {
+            'enable': enable,
+            'md5': md5sum,
+            'size': '' + size,
+            'type': type,
+            'url': url,
+            'vid': vid
+        });
+    }
+}
+
+/**
+ * Request information about the Wi-Fi that is in use
+ * and also about the stored Wi-Fi settings
+ * (incl. Password in plain text!)
+ * @extends VacBotCommand
+ */
+class GetWifiList extends VacBotCommand {
+    constructor() {
+        super('getWifiList');
+    }
+}
+
 // =============================
 // Air Purifier (e.g. AIRBOT Z1)
 // =============================
@@ -1419,9 +1459,8 @@ class GetAirbotAutoModel extends VacBotCommand {
 }
 
 /**
- * Sends data whether the 'Linked Purification'
- * (linked to Air Quality Monitor)
- * is enabled and also the start and end value
+ * Sends the 'Linked Purification' (linked to Air Quality Monitor)
+ * enabled state and also the start and end value
  * 1, 3, 4 = 'poor <> medium',
  * 1, 2, 4 = 'poor <> Fair',
  * 1, 1, 4 = 'poor <> Good',
@@ -1443,7 +1482,7 @@ class SetAirbotAutoModel extends VacBotCommand {
 }
 
 /**
- * Requests the value whether the 'Face to Me' option is enabled
+ * Requests the enabled state of the 'Face to Me' option
  * @extends VacBotCommand
  */
 class GetAngleFollow extends VacBotCommand {
@@ -1453,7 +1492,7 @@ class GetAngleFollow extends VacBotCommand {
 }
 
 /**
- * Sets the value whether the 'Face to Me' option is enabled
+ * Sets the enabled state of the 'Face to Me' option
  * @extends VacBotCommand
  */
 class SetAngleFollow extends VacBotCommand {
@@ -1512,12 +1551,22 @@ class SetAtmoVolume extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the enabled state
+ * of the 'Self-linked Purification' function
+ * @extends VacBotCommand
+ */
 class GetAutonomousClean extends VacBotCommand {
     constructor() {
         super('getAutonomousClean');
     }
 }
 
+/**
+ * Sets the enabled state
+ * of the 'Self-linked Purification' function
+ * @extends VacBotCommand
+ */
 class SetAutonomousClean extends VacBotCommand {
     constructor(on = 0) {
         super('setAutonomousClean', {
@@ -1526,12 +1575,20 @@ class SetAutonomousClean extends VacBotCommand {
     }
 }
 
+/**
+ * Request the enabled state of the 'Bluetooth Speaker'
+ * @extends VacBotCommand
+ */
 class GetBlueSpeaker extends VacBotCommand {
     constructor() {
         super('getBlueSpeaker');
     }
 }
 
+/**
+ * Sets the enabled state of the 'Bluetooth Speaker'
+ * @extends VacBotCommand
+ */
 class SetBlueSpeaker extends VacBotCommand {
     constructor(enable = 0) {
         super('setBlueSpeaker', {
@@ -1542,12 +1599,20 @@ class SetBlueSpeaker extends VacBotCommand {
     }
 }
 
+/**
+ * Request the enabled state of the 'Child Lock' option
+ * @extends VacBotCommand
+ */
 class GetChildLock extends VacBotCommand {
     constructor() {
         super('getChildLock');
     }
 }
 
+/**
+ * Sets the enabled state of the 'Child Lock' option
+ * @extends VacBotCommand
+ */
 class SetChildLock extends VacBotCommand {
     constructor(on = 0) {
         super('setChildLock', {
@@ -1556,38 +1621,52 @@ class SetChildLock extends VacBotCommand {
     }
 }
 
+/**
+ * Request the enabled state for 'DrivingWheel'
+ * (No idea what function this refers to)
+ * @extends VacBotCommand
+ */
 class GetDrivingWheel extends VacBotCommand {
     constructor() {
         super('getDrivingWheel');
     }
 }
 
+/**
+ * Request the enabled state of the
+ * 'Lab Features' => 'Follow Me'
+ * @extends VacBotCommand
+ */
 class GetHumanoidFollow extends VacBotCommand {
     constructor() {
         super('getHumanoidFollow');
     }
 }
 
+/**
+ * Request Video Manager status info
+ * @extends VacBotCommand
+ */
 class GetLiveLaunchPwdState extends VacBotCommand {
     constructor() {
         super('getLiveLaunchPwdState');
     }
 }
 
-class GetMapTrace_V2 extends VacBotCommand {
-    constructor(type = 0) {
-        super('getMapTrace_V2', {
-            'type': type
-        });
-    }
-}
-
+/**
+ * Request the enabled state of the microphone
+ * @extends VacBotCommand
+ */
 class GetMic extends VacBotCommand {
     constructor() {
         super('getMic');
     }
 }
 
+/**
+ * Sets the enabled state of the microphone
+ * @extends VacBotCommand
+ */
 class SetMic extends VacBotCommand {
     constructor(on = 0) {
         super('setMic', {
@@ -1596,12 +1675,22 @@ class SetMic extends VacBotCommand {
     }
 }
 
+/**
+ * Request the enabled state of the 'MonitorAirState'
+ * TODO: improve documentation
+ * @extends VacBotCommand
+ */
 class GetMonitorAirState extends VacBotCommand {
     constructor() {
         super('getMonitorAirState');
     }
 }
 
+/**
+ * Sets the enabled state of the 'MonitorAirState'
+ * TODO: improve documentation
+ * @extends VacBotCommand
+ */
 class SetMonitorAirState extends VacBotCommand {
     constructor(on = 0) {
         super('setMonitorAirState', {
@@ -1610,18 +1699,31 @@ class SetMonitorAirState extends VacBotCommand {
     }
 }
 
+/**
+ * Request various information about the 'Purification Scenario'
+ * @extends VacBotCommand
+ */
 class GetScene extends VacBotCommand {
     constructor() {
         super('getScene');
     }
 }
 
+/**
+ * Request data for the 'Air freshener', 'Humidifier'
+ * and the 'UV Sanitizer' modules
+ * @extends VacBotCommand
+ */
 class GetThreeModule extends VacBotCommand {
     constructor() {
         super('getThreeModule', []);
     }
 }
 
+/**
+ * Represents a 'setThreeModule' command
+ * @extends VacBotCommand
+ */
 class SetThreeModule extends VacBotCommand {
     constructor(level = 0, type = '', enable = 0) {
         super('setThreeModule', {
@@ -1635,61 +1737,103 @@ class SetThreeModule extends VacBotCommand {
     }
 }
 
+/**
+ * Sets the 'Air Freshening' level of the 'Air freshener' module
+ *
+ * 1 = 'light'
+ * 2 = 'standard'
+ * 3 = 'strong'
+ *
+ * @extends SetThreeModule
+ * @constructor
+ * @param {number} [level=0] - The level
+ * @param {number} [enable=0] - The enable state
+ */
 class SetFreshenerLevel extends SetThreeModule {
     constructor(level = 0, enable = 0) {
         super(level, 'smell', enable);
     }
 }
 
+/**
+ * Sets the 'Humidification' level
+ * of the 'Humidifier' module
+ *
+ * 45 = 'lower humidity'
+ * 55 = 'cozy'
+ * 65 = 'higher humidity'
+ *
+ * @extends SetThreeModule
+ * @constructor
+ * @param {number} [level=0] - The level
+ * @param {number} [enable=0] - The enable state
+ */
 class SetHumidifierLevel extends SetThreeModule {
     constructor(level = 0, enable = 0) {
         super(level, 'humidify', enable);
     }
 }
 
+/**
+ * Sets the 'Sanitization' state
+ * of the 'UV Sanitizer' module
+ *
+ * @extends SetThreeModule
+ * @constructor
+ * @param {number} [enable=0] - The enable state
+ */
 class SetUVCleaner extends SetThreeModule {
     constructor(enable = 0) {
         super(0, 'uvLight', enable);
     }
 }
 
+/**
+ * Request status data for the 'Air freshener', 'Humidifier'
+ * and the 'UV Sanitizer' modules
+ * @extends VacBotCommand
+ */
 class GetThreeModuleStatus extends VacBotCommand {
     constructor() {
         super('getThreeModuleStatus');
     }
 }
 
+/**
+ * Request information about the 'Time Zone'
+ * @extends VacBotCommand
+ */
 class GetTimeZone extends VacBotCommand {
     constructor() {
         super('getTimeZone');
     }
 }
 
-class GetTotalStats extends VacBotCommand {
-    constructor() {
-        super('getTotalStats');
-    }
-}
-
-class SetVoice extends VacBotCommand {
-    constructor(enable = 0, md5sum = '', size = 0, type = '', url = '', vid = 'default') {
-        super('setVoice', {
-            'enable': enable,
-            'md5': md5sum,
-            'size': '' + size,
-            'type': type,
-            'url': url,
-            'vid': vid
-        });
-    }
-}
-
+/**
+ * Request enabled state for the 'VoiceLifeRemindState'
+ * (No idea what function this refers to)
+ * @extends VacBotCommand
+ */
 class GetVoiceLifeRemindState extends VacBotCommand {
     constructor() {
         super('getVoiceLifeRemindState');
     }
 }
 
+/**
+ * Request enabled state for the 'Working Status Voice Report'
+ * @extends VacBotCommand
+ */
+class GetVoiceSimple extends VacBotCommand {
+    constructor() {
+        super('getVoiceSimple');
+    }
+}
+
+/**
+ * Sets enabled state for the 'Working Status Voice Report'
+ * @extends VacBotCommand
+ */
 class SetVoiceSimple extends VacBotCommand {
     constructor(on = 0) {
         super('setVoiceSimple', {
@@ -1698,15 +1842,16 @@ class SetVoiceSimple extends VacBotCommand {
     }
 }
 
-class GetVoiceSimple extends VacBotCommand {
-    constructor() {
-        super('getVoiceSimple');
-    }
-}
-
-class GetWifiList extends VacBotCommand {
-    constructor() {
-        super('getWifiList');
+/**
+ * Represents a command to get the map trace
+ * TODO: Implement handling of the response
+ * @extends VacBotCommand
+ */
+class GetMapTrace_V2 extends VacBotCommand {
+    constructor(type = 0) {
+        super('getMapTrace_V2', {
+            'type': type
+        });
     }
 }
 
