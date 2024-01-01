@@ -745,9 +745,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case 'AreaPoint':
                 this.vacBot.handleAreaPoint(payload);
                 break;
-            case 'AudioCallState':
-                this.vacBot.handleAudioCallState(payload);
-                break;
 
             // ====================
             // FwBuryPoint messages
