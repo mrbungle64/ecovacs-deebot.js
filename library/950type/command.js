@@ -1526,22 +1526,6 @@ class SetAutonomousClean extends VacBotCommand {
     }
 }
 
-class GetBlock extends VacBotCommand {
-    constructor() {
-        super('getBlock');
-    }
-}
-
-class SetBlock extends VacBotCommand {
-    constructor(enable = 0, start = '00:00', end = '00:00') {
-        super('setBlock', {
-            'enable': enable,
-            'start': start,
-            'end': end
-        });
-    }
-}
-
 class GetBlueSpeaker extends VacBotCommand {
     constructor() {
         super('getBlueSpeaker');
@@ -1886,7 +1870,6 @@ module.exports.SetCleanSpeed = SetCleanSpeed;
 module.exports.SetContinuousCleaning = SetContinuousCleaning;
 module.exports.SetCustomAreaMode = SetCustomAreaMode;
 module.exports.SetDoNotDisturb = SetDoNotDisturb;
-module.exports.SetDoNotDisturb = SetDoNotDisturb;
 module.exports.SetDusterRemind = SetDusterRemind;
 module.exports.SetMapSet = SetMapSet;
 module.exports.SetMapSet_V2 = SetMapSet_V2;
@@ -1911,7 +1894,6 @@ module.exports.GetAngleFollow = GetAngleFollow;
 module.exports.GetAtmoLight = GetAtmoLight;
 module.exports.GetAtmoVolume = GetAtmoVolume;
 module.exports.GetAutonomousClean = GetAutonomousClean;
-module.exports.GetBlock = GetBlock;
 module.exports.GetBlueSpeaker = GetBlueSpeaker;
 module.exports.GetChildLock = GetChildLock;
 module.exports.GetDrivingWheel = GetDrivingWheel;
@@ -1935,7 +1917,6 @@ module.exports.SetAngleFollow = SetAngleFollow;
 module.exports.SetAtmoLight = SetAtmoLight;
 module.exports.SetAtmoVolume = SetAtmoVolume;
 module.exports.SetAutonomousClean = SetAutonomousClean;
-module.exports.SetBlock = SetBlock;
 module.exports.SetBlueSpeaker = SetBlueSpeaker;
 module.exports.SetChildLock = SetChildLock;
 module.exports.SetFanSpeed = SetFanSpeed;

@@ -1606,6 +1606,7 @@ class VacBot_950type extends VacBot {
                 this.run('SetDoNotDisturb', 0);
                 break;
             }
+            case 'SetBlock'.toLowerCase():
             case 'SetDoNotDisturb'.toLowerCase(): {
                 const enable = Number(!!args[0]);
                 const start = args[1];
@@ -1985,11 +1986,6 @@ class VacBot_950type extends VacBot {
             case 'DisableVoiceAssistant':
                 this.sendCommand(new VacBotCommand.SetVoiceAssistantState(0));
                 break;
-            case 'SetBlock'.toLowerCase():
-                if (args.length >= 3) {
-                    this.sendCommand(new VacBotCommand.SetBlock(args[0], args[1], args[2]));
-                }
-                break;
             case 'GetRelocationState'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetRelocationState());
                 break;
@@ -2004,9 +2000,6 @@ class VacBot_950type extends VacBot {
                 break;
             case 'SetChildLock'.toLowerCase():
                 this.sendCommand(new VacBotCommand.SetChildLock(args[0]));
-                break;
-            case 'GetBlock'.toLowerCase():
-                this.sendCommand(new VacBotCommand.GetBlock());
                 break;
             case 'GetTotalStats'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetTotalStats());
