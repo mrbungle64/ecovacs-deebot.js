@@ -31,80 +31,12 @@ class VacBot_950type extends VacBot {
     constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
         super(user, hostname, resource, secret, vacuum, continent, country, serverAddress, authDomain);
 
-        this.breakPoint = null;
-        this.block = null;
-        this.autoEmpty = null;
-        this.autoEmptyStatus = null;
         this.advancedMode = null;
-        this.trueDetect = null;
-        this.cleanCount = 1;
-        this.dusterRemind = {
-            'enabled': null,
-            'period': null
-        };
-        this.carpetPressure = null;
-        this.carpetInfo = null;
-        this.cleanPreference = null;
-        this.liveLaunchPwdState = {
-            'state': null,
-            'hasPwd': null
-        };
-        this.volume = 0;
-        this.relocationStatus = {};
-        this.relocationState = null;
-        this.firmwareVersion = null;
-        this.airDryingStatus = null;
-        this.mopOnlyMode = null;
-        this.sweepMode = null;
-        this.borderSpin = null;
-
-        // Air Purifier
-        this.airQuality = {
-            'particulateMatter25': null,
-            'pm_10': null,
-            'particulateMatter10': null,
-            'airQualityIndex': null,
-            'volatileOrganicCompounds': null,
-            'temperature': null,
-            'humidity': null
-        };
-
-        this.mic = null;
-        this.angleFollow = null;
         this.aiBlockPlate = null;
-        this.autonomousClean = null;
-        this.bluetoothSpeaker = {
-            'enable': null,
-            'time': null,
-            'name': null
-        };
-        this.childLock = null;
-        this.drivingWheel = null;
-        this.monitorAirState = null;
-        this.angleWakeup = null;
-        this.efficiency = null;
-        this.atmoLightIntensity = null;
-        this.atmoVolume = null;
-        this.humanoidFollow = {
-            'video': null,
-            'yiko': null
-        };
-        this.sysinfo = {
-            'load': null,
-            'uptime': null,
-            'signal': null,
-            'meminfo': null,
-            'pos': null
-        };
-        this.blockTime = {
-            'from': null,
-            'to': null
-        };
-        this.threeModule = [];
-        this.threeModuleStatus = [];
-        this.areaPoint = {
-            'mapId': null,
-            'locationPoints': null
+        this.aiCleanItemState = {
+            'items': [],
+            'particleRemoval': null,
+            'petPoopPrevention': null
         };
         this.airbotAutoModel = {
             'enable': null,
@@ -114,13 +46,77 @@ class VacBot_950type extends VacBot {
                 'aqEnd': null
             }
         };
+        this.airDryingStatus = null;
+        this.airQuality = {
+            'particulateMatter25': null,
+            'pm_10': null,
+            'particulateMatter10': null,
+            'airQualityIndex': null,
+            'volatileOrganicCompounds': null,
+            'temperature': null,
+            'humidity': null
+        };
+        this.angleFollow = null;
+        this.angleWakeup = null;
+        this.areaPoint = {
+            'mapId': null,
+            'locationPoints': null
+        };
+        this.atmoLightIntensity = null;
+        this.atmoVolume = null;
+        this.autoEmpty = null;
+        this.autoEmptyStatus = null;
+        this.autonomousClean = null;
+        this.avoidedObstacles = null;
+        this.block = null;
+        this.blockTime = {
+            'from': null,
+            'to': null
+        };
+        this.bluetoothSpeaker = {
+            'enable': null,
+            'time': null,
+            'name': null
+        };
+        this.borderSpin = null;
+        this.breakPoint = null;
+        this.carpetInfo = null;
+        this.carpetPressure = null;
         this.currentTask = {
             'type': null,
             'triggerType': null,
             'failed': null
         };
+        this.childLock = null;
+        this.cleanCount = 1;
+        this.cleanPreference = null;
+        this.dmodule = {
+            'enabled': null,
+            'status': null
+        };
+        this.drivingWheel = null;
+        this.dusterRemind = {
+            'enabled': null,
+            'period': null
+        };
+        this.efficiency = null;
+        this.evt = {};
+        this.firmwareVersion = null;
+        this.humanoidFollow = {
+            'video': null,
+            'yiko': null
+        };
+        this.liveLaunchPwdState = {
+            'state': null,
+            'hasPwd': null
+        };
+        this.mapSet_V2 = {};
+        this.mapState = null;
+        this.mic = null;
+        this.monitorAirState = null;
+        this.mopOnlyMode = null;
+        this.multiMapState = null;
         this.obstacleTypes = null;
-        this.avoidedObstacles = null;
         this.OTA = {
             'status': null,
             'result': null,
@@ -129,33 +125,34 @@ class VacBot_950type extends VacBot {
             'supportAuto': null,
             'ver': null
         };
-        this.timezone = null;
-        this.dmodule = {
-            'enabled': null,
-            'status': null
+        this.relocationState = null;
+        this.relocationStatus = {};
+        this.stationInfo = {
+            'state': null,
+            'name': null,
+            'model': null,
+            'sn': null,
+            'wkVer': null
         };
         this.stationState = {
             'type': null,
             'state': null
         };
+        this.sweepMode = null;
+        this.sysinfo = {
+            'load': null,
+            'uptime': null,
+            'signal': null,
+            'meminfo': null,
+            'pos': null
+        };
+        this.threeModule = [];
+        this.threeModuleStatus = [];
+        this.timezone = null;
+        this.trueDetect = null;
+        this.volume = 0;
         this.washInterval = null;
-        this.aiCleanItemState = {
-            items: [],
-            particleRemoval: null,
-            petPoopPrevention: null
-        };
-        this.stationInfo = {
-            state: null,
-            name: null,
-            model: null,
-            sn: null,
-            wkVer: null
-        };
         this.workMode = null;
-        this.mapState = null;
-        this.mapSet_V2 = {};
-        this.multiMapState = null;
-        this.evt = {};
     }
 
     /**
