@@ -248,6 +248,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleCarpetPressure(payload);
                 this.emitMessage("CarpetPressure", this.vacBot.carpetPressure);
                 break;
+            case 'CarpetInfo':
+                // "Carpet cleaning strategy"
+                this.vacBot.handleCarpetInfo(payload);
+                this.emitMessage("CarpetInfo", this.vacBot.carpetInfo);
+                break;
             case 'CleanPreference':
                 // "Cleaning Preference"
                 this.vacBot.handleCleanPreference(payload);

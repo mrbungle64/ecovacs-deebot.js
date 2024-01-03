@@ -43,6 +43,7 @@ class VacBot_950type extends VacBot {
             'period': null
         };
         this.carpetPressure = null;
+        this.carpetInfo = null;
         this.cleanPreference = null;
         this.liveLaunchPwdState = {
             'state': null,
@@ -696,10 +697,20 @@ class VacBot_950type extends VacBot {
 
     /**
      * Handle the payload of the 'CarpertPressure' (sic) response/message
+     * 'Auto-Boost Suction'
      * @param {Object} payload
      */
     handleCarpetPressure(payload) {
         this.carpetPressure = payload['enable'];
+    }
+
+    /**
+     * Handle the payload of the 'CarpetInfo' response/message
+     * 'Carpet cleaning strategy'
+     * @param {Object} payload
+     */
+    handleCarpetInfo(payload) {
+        this.carpetInfo = payload['mode'];
     }
 
     handleCleanPreference(payload) {
@@ -1745,6 +1756,14 @@ class VacBot_950type extends VacBot {
             case 'SetCarpetPressure'.toLowerCase():
                 if (args.length >= 1) {
                     this.sendCommand(new VacBotCommand.SetCarpetPressure(args[0]));
+                }
+                break;
+            case 'GetCarpetInfo'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetCarpetInfo());
+                break;
+            case 'SetCarpetInfo'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetCarpetInfo(args[0]));
                 }
                 break;
             case 'EnableCarpetPressure'.toLowerCase():

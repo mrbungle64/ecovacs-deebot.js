@@ -1052,6 +1052,34 @@ class SetCarpetPressure extends VacBotCommand {
 }
 
 /**
+ * Request the value of the 'Carpet cleaning strategy' option
+ * @extends VacBotCommand
+ */
+class GetCarpetInfo extends VacBotCommand {
+    constructor() {
+        super('getCarpetInfo');
+    }
+}
+
+/**
+ * Sets the value of the 'Carpet cleaning strategy' option
+ * (e.g. T20 series)
+ *
+ * 0 = 'Auto'
+ * 1 = 'Bypass'
+ * 2 = 'Include'
+ *
+ * @extends VacBotCommand
+ */
+class SetCarpetInfo extends VacBotCommand {
+    constructor(mode = 0) {
+        super('setCarpetInfo', {
+            'mode': mode
+        });
+    }
+}
+
+/**
  * Request the number of cleaning repetitions ('Cleaning Times')
  * @extends VacBotCommand
  */
@@ -1934,6 +1962,7 @@ module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetBorderSpin = GetBorderSpin;
 module.exports.GetCachedMapInfo = GetCachedMapInfo;
+module.exports.GetCarpetInfo = GetCarpetInfo;
 module.exports.GetCarpetPressure = GetCarpetPressure;
 module.exports.GetChargeState = GetChargeState;
 module.exports.GetCleanCount = GetCleanCount;
@@ -1996,6 +2025,7 @@ module.exports.SetAdvancedMode = SetAdvancedMode;
 module.exports.SetAirDrying = SetAirDrying;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetBorderSpin = SetBorderSpin;
+module.exports.SetCarpetInfo = SetCarpetInfo;
 module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanCount = SetCleanCount;
 module.exports.SetCleanPreference = SetCleanPreference;
