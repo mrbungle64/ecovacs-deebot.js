@@ -85,7 +85,8 @@ class VacBot_950type extends VacBot {
         this.currentTask = {
             'type': null,
             'triggerType': null,
-            'failed': null
+            'failed': null,
+            'stopReason': null
         };
         this.childLock = null;
         this.cleanCount = 1;
@@ -1296,8 +1297,8 @@ class VacBot_950type extends VacBot {
      */
     handleHumanoidFollow(payload) {
         this.humanoidFollow = {
-            'yiko': payload['yiko'],
-            'video': payload['video']
+            'video': payload['video'],
+            'yiko': payload['yiko']
         };
     }
 
@@ -1425,16 +1426,18 @@ class VacBot_950type extends VacBot {
     }
 
     handleTask(type, payload) {
+        const stopReason = this.currentTask.stopReason;
         this.currentTask = {
             'type': type,
             'triggerType': payload.hasOwnProperty('triggerType') ? payload['triggerType'] : 'none',
-            'failed': false
+            'failed': false,
+            'stopReason': stopReason
         };
         if (payload.hasOwnProperty('go_fail')) {
             this.currentTask.failed = true;
         }
         if (payload.hasOwnProperty('stopReason')) {
-            // why has it stopped?
+            this.currentTask.stopReason = payload['stopReason'];
         }
     }
 
