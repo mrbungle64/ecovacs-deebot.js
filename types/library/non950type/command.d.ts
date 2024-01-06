@@ -14,19 +14,7 @@ export class Clean extends VacBotCommand {
 export class CustomArea extends Clean {
     constructor(action?: string, area?: string, cleaningAsNumber?: number);
 }
-export class DisableContinuousCleaning extends SetOnOff {
-    constructor();
-}
-export class DisableDoNotDisturb extends SetOnOff {
-    constructor();
-}
 export class Edge extends Clean {
-    constructor();
-}
-export class EnableContinuousCleaning extends SetOnOff {
-    constructor();
-}
-export class EnableDoNotDisturb extends SetOnOff {
     constructor();
 }
 export class GetBatteryState extends VacBotCommand {
@@ -133,6 +121,12 @@ export class Resume extends Clean {
 }
 export class SetCleanSpeed extends VacBotCommand {
     constructor(level: any);
+}
+export class SetContinuousCleaning extends SetOnOff {
+    constructor(enable?: number);
+}
+export class SetDoNotDisturb extends SetOnOff {
+    constructor(enable?: number);
 }
 export class SetLifeSpan extends VacBotCommand {
     constructor(component: any, val?: number);

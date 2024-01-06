@@ -4,75 +4,12 @@ export = VacBot_950type;
  * e.g. Deebot OZMO 920/950, T8 series, T9 series (which are all MQTT based models)
  */
 declare class VacBot_950type extends VacBot {
-    breakPoint: any;
-    block: any;
-    autoEmpty: any;
-    autoEmptyStatus: any;
     advancedMode: any;
-    trueDetect: any;
-    cleanCount: number;
-    dusterRemind: {
-        enabled: any;
-        period: any;
-    };
-    carpetPressure: any;
-    cleanPreference: any;
-    liveLaunchPwdState: {
-        state: any;
-        hasPwd: any;
-    };
-    volume: number;
-    relocationState: any;
-    firmwareVersion: any;
-    airDryingStatus: string;
-    mopOnlyMode: boolean;
-    sweepMode: any;
-    borderSpin: any;
-    airQuality: {
-        particulateMatter25: any;
-        pm_10: any;
-        particulateMatter10: any;
-        airQualityIndex: any;
-        volatileOrganicCompounds: any;
-        temperature: any;
-        humidity: any;
-    };
-    mic: any;
-    angleFollow: any;
     aiBlockPlate: any;
-    autonomousClean: any;
-    bluetoothSpeaker: {
-        enable: any;
-        time: any;
-        name: any;
-    };
-    childLock: any;
-    drivingWheel: any;
-    monitorAirState: any;
-    angleWakeup: any;
-    efficiency: any;
-    atmoLightIntensity: any;
-    atmoVolume: any;
-    humanoidFollow: {
-        video: any;
-        yiko: any;
-    };
-    sysinfo: {
-        load: any;
-        uptime: any;
-        signal: any;
-        meminfo: any;
-        pos: any;
-    };
-    blockTime: {
-        from: any;
-        to: any;
-    };
-    threeModule: any[];
-    threeModuleStatus: any[];
-    areaPoint: {
-        mapId: any;
-        locationPoints: any;
+    aiCleanItemState: {
+        items: any[];
+        particleRemoval: any;
+        petPoopPrevention: any;
     };
     airbotAutoModel: {
         enable: any;
@@ -82,13 +19,78 @@ declare class VacBot_950type extends VacBot {
             aqEnd: any;
         };
     };
+    airDryingStatus: string;
+    airQuality: {
+        particulateMatter25: any;
+        pm_10: any;
+        particulateMatter10: any;
+        airQualityIndex: any;
+        volatileOrganicCompounds: any;
+        temperature: any;
+        humidity: any;
+    };
+    angleFollow: any;
+    angleWakeup: any;
+    areaPoint: {
+        mapId: any;
+        locationPoints: any;
+    };
+    atmoLightIntensity: any;
+    atmoVolume: any;
+    autoEmpty: any;
+    autoEmptyStatus: any;
+    autonomousClean: any;
+    avoidedObstacles: any;
+    block: any;
+    blockTime: {
+        from: any;
+        to: any;
+    };
+    bluetoothSpeaker: {
+        enable: any;
+        time: any;
+        name: any;
+    };
+    borderSpin: any;
+    breakPoint: any;
+    carpetInfo: any;
+    carpetPressure: any;
     currentTask: {
         type: any;
         triggerType: any;
         failed: any;
+        stopReason: any;
     };
+    childLock: any;
+    cleanCount: number;
+    cleanPreference: any;
+    dmodule: {
+        enabled: any;
+        status: any;
+    };
+    drivingWheel: any;
+    dusterRemind: {
+        enabled: any;
+        period: any;
+    };
+    efficiency: any;
+    evt: {};
+    firmwareVersion: any;
+    humanoidFollow: {
+        video: any;
+        yiko: any;
+    };
+    liveLaunchPwdState: {
+        state: any;
+        hasPwd: any;
+    };
+    mapSet_V2: {};
+    mapState: any;
+    mic: any;
+    monitorAirState: any;
+    mopOnlyMode: boolean;
+    multiMapState: any;
     obstacleTypes: any;
-    avoidedObstacles: any;
     OTA: {
         status: any;
         result: any;
@@ -97,21 +99,8 @@ declare class VacBot_950type extends VacBot {
         supportAuto: any;
         ver: any;
     };
-    timezone: string;
-    dmodule: {
-        enabled: any;
-        status: any;
-    };
-    stationState: {
-        type: any;
-        state: any;
-    };
-    washInterval: any;
-    aiCleanItemState: {
-        items: any[];
-        particleRemoval: any;
-        petPoopPrevention: any;
-    };
+    relocationState: any;
+    relocationStatus: {};
     stationInfo: {
         state: any;
         name: any;
@@ -119,10 +108,25 @@ declare class VacBot_950type extends VacBot {
         sn: any;
         wkVer: any;
     };
+    stationState: {
+        type: any;
+        state: any;
+    };
+    sweepMode: any;
+    sysinfo: {
+        load: any;
+        uptime: any;
+        signal: any;
+        meminfo: any;
+        pos: any;
+    };
+    threeModule: any[];
+    threeModuleStatus: any[];
+    timezone: string;
+    trueDetect: any;
+    volume: number;
+    washInterval: any;
     workMode: any;
-    mapState: any;
-    multiMapState: any;
-    evt: {};
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
@@ -294,9 +298,16 @@ declare class VacBot_950type extends VacBot {
     handleDusterRemind(payload: any): void;
     /**
      * Handle the payload of the 'CarpertPressure' (sic) response/message
+     * 'Auto-Boost Suction'
      * @param {Object} payload
      */
     handleCarpetPressure(payload: any): void;
+    /**
+     * Handle the payload of the 'CarpetInfo' response/message
+     * 'Carpet cleaning strategy'
+     * @param {Object} payload
+     */
+    handleCarpetInfo(payload: any): void;
     handleCleanPreference(payload: any): void;
     handleLiveLaunchPwdState(payload: any): void;
     handleWiFiList(payload: any): void;
@@ -345,6 +356,11 @@ declare class VacBot_950type extends VacBot {
      */
     handleMapSubset(payload: any): Promise<any>;
     /**
+     * Handle the payload of the `MapSet_V2` response/message
+     * @param {Object} payload
+     */
+    handleMapSet_V2(payload: any): Promise<void>;
+    /**
      * Handle the payload of the 'MapInfo' response/message
      * @param {Object} payload
      * @returns {Promise<Object>}
@@ -374,19 +390,18 @@ declare class VacBot_950type extends VacBot {
     handleResponseError(payload: any): void;
     /**
      * Handles the air quality data received from the payload.
-     * "Indoor" Air Quality
+     * 'Indoor' Air Quality
      * @param {object} payload - The air quality data payload.
      */
     handleAirQuality(payload: object): void;
     /**
      * Handle the payload of the 'MonitorAirState' response/message
-     * "Real-time Air Quality Display"
      * @param {Object} payload
      */
     handleMonitorAirState(payload: any): void;
     /**
      * Handle the payload of the 'AngleFollow' response/message
-     * "Face to Me"
+     * 'Face to Me' option
      * @param {Object} payload
      */
     handleAngleFollow(payload: any): void;
@@ -397,13 +412,13 @@ declare class VacBot_950type extends VacBot {
     handleAngleWakeup(payload: any): void;
     /**
      * Handle the payload of the 'Mic' response/message
-     * "Microphone"
+     * 'Microphone'
      * @param {Object} payload
      */
     handleMic(payload: any): void;
     /**
      * Handle the payload of the 'VoiceSimple' response/message
-     * "Working Status Voice Report"
+     * 'Working Status Voice Report'
      * @param {Object} payload
      */
     handleVoiceSimple(payload: any): void;
@@ -415,38 +430,38 @@ declare class VacBot_950type extends VacBot {
     handleDrivingWheel(payload: any): void;
     /**
      * Handle the payload of the 'ChildLock' response/message
-     * "Child Lock"
+     * 'Child Lock'
      * @param {Object} payload
      */
     handleChildLock(payload: any): void;
     /**
      * Handle the payload of the 'VoiceAssistantState' response/message
-     * "YIKO Voice Assistant"
+     * 'YIKO Voice Assistant'
      * @param {Object} payload
      */
     handleVoiceAssistantState(payload: any): void;
     voiceAssistantState: any;
     /**
      * Handle the payload of the 'HumanoidFollow' response/message
-     * "Lab Features" => "Follow Me"
+     * 'Lab Features' => 'Follow Me'
      * @param {Object} payload
      */
     handleHumanoidFollow(payload: any): void;
     /**
      * Handle the payload of the 'AutonomousClean' response/message
-     * "Self-linked Purification"
+     * 'Self-linked Purification'
      * @param {Object} payload
      */
     handleAutonomousClean(payload: any): void;
     /**
      * Handle the payload of the 'AirbotAutoMode' response/message
-     * "Linked Purification" (linked to Air Quality Monitor)
+     * 'Linked Purification' (linked to Air Quality Monitor)
      * @param {Object} payload
      */
     handleAirbotAutoModel(payload: any): void;
     /**
      * Handle the payload of the 'BlueSpeaker' response/message
-     * "Bluetooth Speaker"
+     * 'Bluetooth Speaker'
      * @param {Object} payload
      */
     handleBlueSpeaker(payload: any): void;
@@ -458,13 +473,13 @@ declare class VacBot_950type extends VacBot {
     handleEfficiency(payload: any): void;
     /**
      * Handle the payload of the 'AtmoLight' response/message
-     * "Light Brightness"
+     * 'Light Brightness'
      * @param {Object} payload
      */
     handleAtmoLight(payload: any): void;
     /**
      * Handle the payload of the 'AtmoVolume' response/message
-     * "Volume"
+     * 'Volume'
      * @param {Object} payload
      */
     handleAtmoVolume(payload: any): void;
@@ -496,7 +511,6 @@ declare class VacBot_950type extends VacBot {
      */
     handleSysinfo(payload: any): void;
     handleTask(type: any, payload: any): void;
-    handleAudioCallState(payload: any): void;
     handleDModule(payload: any): void;
 }
 import VacBot = require("../vacBot");

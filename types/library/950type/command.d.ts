@@ -75,30 +75,50 @@ export class CustomArea_V2 extends Clean_V2 {
  */
 export class DeleteMapVirtualBoundary extends DeleteMapSubSet {
 }
-export class DisableDoNotDisturb extends VacBotCommand {
-    constructor();
-}
+/**
+ * Start und Stop 'Air Drying' (e.g. X1 series)
+ * 1 = start
+ * 4 = stop
+ * @extends VacBotCommand
+ */
 export class Drying extends VacBotCommand {
     constructor(act: any);
 }
+/**
+ * Represents a command to empty the dust bin
+ * of the Auto Empty Station
+ * @extends VacBotCommand
+ */
 export class EmptyDustBin extends VacBotCommand {
     constructor();
 }
-export class SetContinuousCleaning extends VacBotCommand {
-    constructor(enable?: number);
-}
-export class EnableDoNotDisturb extends SetDoNotDisturb {
-    constructor(start?: string, end?: string);
-}
+/**
+ * Receive information if the 'Strategic Particle Removal'
+ * and the 'Strategic Pet Poop Avoidance' mode is enabled (e.g. X1 series)
+ */
 export class GetAICleanItemState extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests some information about the current map
+ * TODO: Handle response data
+ * @extends VacBotCommand
+ */
 export class GetAIMap extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information if the 'Advanced Mode' option is enabled
+ * @extends VacBotCommand
+ */
 export class GetAdvancedMode extends VacBotCommand {
     constructor();
 }
+/**
+ * Receive the value if 'Air Drying' is active (Yeedi Mop Station)
+ * The typo in 'AirDring' is intended
+ * @extends VacBotCommand
+ */
 export class GetAirDrying extends VacBotCommand {
     constructor();
 }
@@ -117,6 +137,10 @@ export class GetAutoEmpty extends VacBotCommand {
 export class GetBatteryState extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests the value whether the 'Edge Deep Cleaning' option is enabled (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class GetBorderSpin extends VacBotCommand {
     constructor();
 }
@@ -127,6 +151,17 @@ export class GetBorderSpin extends VacBotCommand {
 export class GetCachedMapInfo extends VacBotCommand {
     constructor();
 }
+/**
+ * Request the value of the 'Carpet cleaning strategy' option
+ * @extends VacBotCommand
+ */
+export class GetCarpetInfo extends VacBotCommand {
+    constructor();
+}
+/**
+ * Request information about if 'Auto-Boost Suction' is enabled
+ * @extends VacBotCommand
+ */
 export class GetCarpetPressure extends VacBotCommand {
     constructor();
 }
@@ -137,6 +172,10 @@ export class GetCarpetPressure extends VacBotCommand {
 export class GetChargeState extends VacBotCommand {
     constructor();
 }
+/**
+ * Request the number of cleaning repetitions ('Cleaning Times')
+ * @extends VacBotCommand
+ */
 export class GetCleanCount extends VacBotCommand {
     constructor();
 }
@@ -149,6 +188,10 @@ export class GetCleanCount extends VacBotCommand {
 export class GetCleanLogs extends VacBotCommand {
     constructor(count?: number);
 }
+/**
+ * Request information if the 'Cleaning Preference' mode is enabled
+ * @extends VacBotCommand
+ */
 export class GetCleanPreference extends VacBotCommand {
     constructor();
 }
@@ -184,6 +227,10 @@ export class GetCleanState_V2 extends VacBotCommand {
 export class GetCleanSum extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information if the 'Continuous Cleaning'/'Resumed clean' option is enabled
+ * @extends VacBotCommand
+ */
 export class GetContinuousCleaning extends VacBotCommand {
     constructor();
 }
@@ -194,9 +241,17 @@ export class GetContinuousCleaning extends VacBotCommand {
 export class GetCustomAreaMode extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information if the 'Do Not Disturb' option is enabled
+ * @extends VacBotCommand
+ */
 export class GetDoNotDisturb extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information about if 'Cleaning Cloth Reminder' is enabled
+ * @extends VacBotCommand
+ */
 export class GetDusterRemind extends VacBotCommand {
     constructor();
 }
@@ -221,6 +276,10 @@ export class GetLifeSpan extends VacBotCommand {
      */
     constructor(componentsArray?: any[]);
 }
+/**
+ * Request Video Manager status info
+ * @extends VacBotCommand
+ */
 export class GetLiveLaunchPwdState extends VacBotCommand {
     constructor();
 }
@@ -308,6 +367,11 @@ export class GetMapState extends VacBotCommand {
 export class GetMapTrace extends VacBotCommand {
     constructor(traceStart?: number, pointCount?: number);
 }
+/**
+ * Represents a command to get the map trace
+ * TODO: Implement handling of the response
+ * @extends VacBotCommand
+ */
 export class GetMapTrace_V2 extends VacBotCommand {
     constructor(type?: number);
 }
@@ -359,12 +423,27 @@ export class GetNetInfo extends VacBotCommand {
 export class GetPosition extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (T8 and T9 series, e.g. T8 AIVI)
+ * @extends VacBotCommand
+ */
 export class GetRecognization extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information about the 'Scheduled Cleaning' tasks
+ * @extends VacBotCommand
+ */
 export class GetSchedule extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information about the 'Scheduled Cleaning' tasks
+ * Used by newer models
+ * @extends VacBotCommand
+ */
 export class GetSchedule_V2 extends VacBotCommand {
     constructor();
 }
@@ -376,21 +455,42 @@ export class GetSchedule_V2 extends VacBotCommand {
 export class GetSleepStatus extends VacBotCommand {
     constructor();
 }
+/**
+ * Receive information about the station (e.g. X1 series)
+ * e.g. model, firmware etc.
+ * @extends VacBotCommand
+ */
 export class GetStationInfo extends VacBotCommand {
     constructor();
 }
+/**
+ * Receive information about the station (e.g. X1 series)
+ * e.g. the state of 'Air Drying', 'Mopping Pads Cleaning' etc.
+ * @extends VacBotCommand
+ */
 export class GetStationState extends VacBotCommand {
     constructor();
 }
 /**
- * Requests the sweep mode (e.g. X1 series)
+ * Requests the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
+ * @extends VacBotCommand
  */
 export class GetSweepMode extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (newer models e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class GetTrueDetect extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests the value whether 'YIKO' is enabled (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class GetVoiceAssistantState extends VacBotCommand {
     constructor();
 }
@@ -401,6 +501,10 @@ export class GetVoiceAssistantState extends VacBotCommand {
 export class GetVolume extends VacBotCommand {
     constructor();
 }
+/**
+ * Receive the value of the 'Cleaning Interval' (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class GetWashInterval extends VacBotCommand {
     constructor();
 }
@@ -412,7 +516,8 @@ export class GetWaterInfo extends VacBotCommand {
     constructor();
 }
 /**
- * Requests the "Cleaning Mode" (e.g. T20 series)
+ * Requests the 'Cleaning Mode' (e.g. T20 series)
+ * @extends VacBotCommand
  */
 export class GetWorkMode extends VacBotCommand {
     constructor();
@@ -494,29 +599,66 @@ export class ResetLifeSpan extends VacBotCommand {
 export class Resume extends VacBotCommand {
     constructor();
 }
+/**
+ * Sets the value whether the 'Advanced Mode' option is enabled
+ * @extends VacBotCommand
+ */
 export class SetAdvancedMode extends VacBotCommand {
     constructor(enable?: number);
 }
+/**
+ * Start und Stop 'Air Drying' (Yeedi Mop Station)
+ * @extends VacBotCommand
+ */
 export class SetAirDrying extends VacBotCommand {
     constructor(act?: string);
 }
 /**
- * Sets the value if 'Auto Empty' option is enabled
+ * Sets the value whether the 'Auto Empty' option is enabled
  * Used by models with Auto Empty Station
  * @extends VacBotCommand
  */
 export class SetAutoEmpty extends VacBotCommand {
     constructor(enable?: number);
 }
+/**
+ * Sets the value whether the 'Edge Deep Cleaning' option is enabled (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class SetBorderSpin extends VacBotCommand {
     constructor(enable?: number);
 }
+/**
+ * Sets the value of the 'Carpet cleaning strategy' option
+ * (e.g. T20 series)
+ *
+ * 0 = 'Auto'
+ * 1 = 'Bypass'
+ * 2 = 'Include'
+ *
+ * @extends VacBotCommand
+ */
+export class SetCarpetInfo extends VacBotCommand {
+    constructor(mode?: number);
+}
+/**
+ * Sets the value whether the 'Auto-Boost Suction' is enabled
+ * @extends VacBotCommand
+ */
 export class SetCarpetPressure extends VacBotCommand {
     constructor(enable?: number);
 }
+/**
+ * Sets the number of cleaning repetitions ('Cleaning Times')
+ * @extends VacBotCommand
+ */
 export class SetCleanCount extends VacBotCommand {
     constructor(count?: number);
 }
+/**
+ * Sets the value whether the 'Cleaning Preference' mode is enabled
+ * @extends VacBotCommand
+ */
 export class SetCleanPreference extends VacBotCommand {
     constructor(enable?: number);
 }
@@ -528,15 +670,30 @@ export class SetCleanSpeed extends VacBotCommand {
     constructor(level: any);
 }
 /**
+ * Sets the value for 'Continuous Cleaning'/'Resumed clean' option
+ * @extends VacBotCommand
+ */
+export class SetContinuousCleaning extends VacBotCommand {
+    constructor(enable?: number);
+}
+/**
  * Sets the `Mopping Mode` (e.g. X1 series)
  * @extends VacBotCommand
  */
 export class SetCustomAreaMode extends VacBotCommand {
     constructor(sweepMode?: number);
 }
+/**
+ * Sets the value for 'Do Not Disturb' option
+ * @extends VacBotCommand
+ */
 export class SetDoNotDisturb extends VacBotCommand {
     constructor(enable?: number, start?: string, end?: string);
 }
+/**
+ * Sets the value whether the 'Cleaning Cloth Reminder' is enabled
+ * @extends VacBotCommand
+ */
 export class SetDusterRemind extends VacBotCommand {
     constructor(enable?: number, period?: number);
 }
@@ -548,21 +705,41 @@ export class SetDusterRemind extends VacBotCommand {
 export class SetMapSet extends VacBotCommand {
     constructor(mapID: any, subsets: any, act?: string);
 }
+/**
+ * Set area (sub set) data for the given map
+ */
 export class SetMapSet_V2 extends VacBotCommand {
     constructor(mapID: any, mapArray: any);
 }
+/**
+ * Request information if (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (T8 and T9 series, e.g. T8 AIVI)
+ * @extends VacBotCommand
+ */
 export class SetRecognization extends VacBotCommand {
     constructor(state?: number);
 }
 /**
- * Sets the "Sweep Only" mode (e.g. X1 series)
+ * Sets the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
+ * @extends VacBotCommand
  */
 export class SetSweepMode extends VacBotCommand {
     constructor(type?: number);
 }
+/**
+ * Sets the value whether the (depending on model)
+ * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
+ * (newer models e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class SetTrueDetect extends VacBotCommand {
     constructor(enable?: number);
 }
+/**
+ * Sets the value to enable and disable 'YIKO' (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class SetVoiceAssistantState extends VacBotCommand {
     constructor(enable?: number);
 }
@@ -573,6 +750,10 @@ export class SetVoiceAssistantState extends VacBotCommand {
 export class SetVolume extends VacBotCommand {
     constructor(volume?: number);
 }
+/**
+ * Sets the 'Cleaning Interval' (e.g. X1 series)
+ * @extends VacBotCommand
+ */
 export class SetWashInterval extends VacBotCommand {
     constructor(interval?: number);
 }
@@ -585,7 +766,8 @@ export class SetWaterLevel extends VacBotCommand {
     constructor(level: any, sweepType?: number);
 }
 /**
- * Sets the "Cleaning Mode" (e.g. T20 series)
+ * Sets the 'Cleaning Mode' (e.g. T20 series)
+ * @extends VacBotCommand
  */
 export class SetWorkMode extends VacBotCommand {
     constructor(mode?: number);
@@ -613,116 +795,252 @@ export class SpotArea_V2 extends Clean_V2 {
 export class Stop extends VacBotCommand {
     constructor();
 }
+/**
+ * Start und Stop 'Mopping Pads Cleaning' (e.g. X1 series)
+ * @extends Clean_V2
+ */
 export class Washing extends Clean_V2 {
     constructor(action?: string);
 }
+/**
+ * Starts an 'Area' cleaning
+ * The areas have to be set via 'SetMapSet_V2' command
+ * @extends Clean_V2
+ */
 export class Area_V2 extends Clean_V2 {
     constructor();
 }
+/**
+ * Air quality (Airbot Z1)
+ * @extends VacBotCommand
+ */
 export class GetAirQuality extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests an object with data
+ * for the 'Linked Purification' function
+ * (linked to Air Quality Monitor)
+ * @extends VacBotCommand
+ */
 export class GetAirbotAutoModel extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests the enabled state of the 'Face to Me' option
+ * @extends VacBotCommand
+ */
 export class GetAngleFollow extends VacBotCommand {
     constructor();
 }
-export class GetAntiDrop extends VacBotCommand {
-    constructor();
-}
+/**
+ * Requests the intensity of the 'Real-time Air Quality Display'
+ * @extends VacBotCommand
+ */
 export class GetAtmoLight extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests the 'Volume' (0-16)
+ * @extends VacBotCommand
+ */
 export class GetAtmoVolume extends VacBotCommand {
     constructor();
 }
-export class GetAudioCallState extends VacBotCommand {
-    constructor();
-}
+/**
+ * Requests the enabled state
+ * of the 'Self-linked Purification' function
+ * @extends VacBotCommand
+ */
 export class GetAutonomousClean extends VacBotCommand {
     constructor();
 }
-export class GetBlock extends VacBotCommand {
-    constructor();
-}
+/**
+ * Request the enabled state of the 'Bluetooth Speaker'
+ * @extends VacBotCommand
+ */
 export class GetBlueSpeaker extends VacBotCommand {
     constructor();
 }
-export class GetBreakPoint extends VacBotCommand {
-    constructor();
-}
+/**
+ * Request the enabled state of the 'Child Lock' option
+ * @extends VacBotCommand
+ */
 export class GetChildLock extends VacBotCommand {
     constructor();
 }
+/**
+ * Request the enabled state for 'DrivingWheel'
+ * (No idea what function this refers to)
+ * @extends VacBotCommand
+ */
 export class GetDrivingWheel extends VacBotCommand {
     constructor();
 }
+/**
+ * Request the enabled state of the
+ * 'Lab Features' => 'Follow Me'
+ * @extends VacBotCommand
+ */
 export class GetHumanoidFollow extends VacBotCommand {
     constructor();
 }
+/**
+ * Air quality (Z1 Air Quality Monitor)
+ * @extends VacBotCommand
+ */
 export class GetJCYAirQuality extends VacBotCommand {
     constructor();
 }
+/**
+ * Request the enabled state of the microphone
+ * @extends VacBotCommand
+ */
 export class GetMic extends VacBotCommand {
     constructor();
 }
+/**
+ * Request the enabled state of the 'MonitorAirState'
+ * TODO: improve documentation
+ * @extends VacBotCommand
+ */
 export class GetMonitorAirState extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests information about the Firmware
+ * and 'Over The Air' updates (e.g. X1 series, Airbot Z1)
+ * (e.g. version, status, progress)
+ * @extends VacBotCommand
+ */
 export class GetOta extends VacBotCommand {
     constructor();
 }
+/**
+ * Requests information about the relocation status (e.g. X1 series, Airbot Z1)
+ * @extends VacBotCommand
+ */
 export class GetRelocationState extends VacBotCommand {
     constructor();
 }
+/**
+ * Request various information about the 'Purification Scenario'
+ * @extends VacBotCommand
+ */
 export class GetScene extends VacBotCommand {
     constructor();
 }
+/**
+ * Request data for the 'Air freshener', 'Humidifier'
+ * and the 'UV Sanitizer' modules
+ * @extends VacBotCommand
+ */
 export class GetThreeModule extends VacBotCommand {
     constructor();
 }
+/**
+ * Request status data for the 'Air freshener', 'Humidifier'
+ * and the 'UV Sanitizer' modules
+ * @extends VacBotCommand
+ */
 export class GetThreeModuleStatus extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information about the 'Time Zone'
+ * @extends VacBotCommand
+ */
 export class GetTimeZone extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information about the total stats
+ * total square meters ('area'), total seconds ('time'), total number ('count')
+ * @extends VacBotCommand
+ */
 export class GetTotalStats extends VacBotCommand {
     constructor();
 }
-export class GetVoice extends VacBotCommand {
-    constructor();
-}
+/**
+ * Request enabled state for the 'VoiceLifeRemindState'
+ * (No idea what function this refers to)
+ * @extends VacBotCommand
+ */
 export class GetVoiceLifeRemindState extends VacBotCommand {
     constructor();
 }
+/**
+ * Request enabled state for the 'Working Status Voice Report'
+ * @extends VacBotCommand
+ */
 export class GetVoiceSimple extends VacBotCommand {
     constructor();
 }
+/**
+ * Request information about the Wi-Fi that is in use
+ * and also about the stored Wi-Fi settings
+ * (incl. Password in plain text!)
+ * @extends VacBotCommand
+ */
 export class GetWifiList extends VacBotCommand {
     constructor();
 }
+/**
+ * Sends the 'Linked Purification' (linked to Air Quality Monitor)
+ * enabled state and also the start and end value
+ * 1, 3, 4 = 'poor <> medium',
+ * 1, 2, 4 = 'poor <> Fair',
+ * 1, 1, 4 = 'poor <> Good',
+ * 1, 2, 3 = 'medium <> fair',
+ * 1, 1, 3 = 'medium <> good',
+ * 1, 1, 2 = 'fair <> good'
+ * @extends VacBotCommand
+ */
 export class SetAirbotAutoModel extends VacBotCommand {
     constructor(on?: number, aqEnd?: number, aqStart?: number);
 }
+/**
+ * Sets the enabled state of the 'Face to Me' option
+ * @extends VacBotCommand
+ */
 export class SetAngleFollow extends VacBotCommand {
     constructor(on?: number);
 }
+/**
+ * Sets the intensity of the 'Real-time Air Quality Display'
+ * @extends VacBotCommand
+ */
 export class SetAtmoLight extends VacBotCommand {
     constructor(intensity?: number);
 }
+/**
+ * Sets the 'Volume' (0-16)
+ * @extends VacBotCommand
+ */
 export class SetAtmoVolume extends VacBotCommand {
     constructor(volume?: number);
 }
+/**
+ * Sets the enabled state
+ * of the 'Self-linked Purification' function
+ * @extends VacBotCommand
+ */
 export class SetAutonomousClean extends VacBotCommand {
     constructor(on?: number);
 }
-export class SetBlock extends VacBotCommand {
-    constructor(enable?: number, start?: string, end?: string);
-}
+/**
+ * Sets the enabled state of the 'Bluetooth Speaker'
+ * @extends VacBotCommand
+ */
 export class SetBlueSpeaker extends VacBotCommand {
     constructor(enable?: number);
+}
+/**
+ * Sets the enabled state of the 'Child Lock' option
+ * @extends VacBotCommand
+ */
+export class SetChildLock extends VacBotCommand {
+    constructor(on?: number);
 }
 /**
  * Set the 'Fan Speed' for Airbot Z1
@@ -735,35 +1053,90 @@ export class SetBlueSpeaker extends VacBotCommand {
 export class SetFanSpeed extends VacBotCommand {
     constructor(level: any);
 }
+/**
+ * Sets the 'Air Freshening' level of the 'Air freshener' module
+ *
+ * 1 = 'light'
+ * 2 = 'standard'
+ * 3 = 'strong'
+ *
+ * @extends SetThreeModule
+ * @constructor
+ * @param {number} [level=0] - The level
+ * @param {number} [enable=0] - The enable state
+ */
 export class SetFreshenerLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);
 }
+/**
+ * Sets the 'Humidification' level
+ * of the 'Humidifier' module
+ *
+ * 45 = 'lower humidity'
+ * 55 = 'cozy'
+ * 65 = 'higher humidity'
+ *
+ * @extends SetThreeModule
+ * @constructor
+ * @param {number} [level=0] - The level
+ * @param {number} [enable=0] - The enable state
+ */
 export class SetHumidifierLevel extends SetThreeModule {
     constructor(level?: number, enable?: number);
 }
+/**
+ * Sets the enabled state of the microphone
+ * @extends VacBotCommand
+ */
 export class SetMic extends VacBotCommand {
     constructor(on?: number);
 }
+/**
+ * Sets the enabled state of the 'MonitorAirState'
+ * TODO: improve documentation
+ * @extends VacBotCommand
+ */
 export class SetMonitorAirState extends VacBotCommand {
     constructor(on?: number);
 }
+/**
+ * Represents a 'setThreeModule' command
+ * @extends VacBotCommand
+ */
 export class SetThreeModule extends VacBotCommand {
     constructor(level?: number, type?: string, enable?: number);
 }
+/**
+ * Sets the 'Sanitization' state
+ * of the 'UV Sanitizer' module
+ *
+ * @extends SetThreeModule
+ * @constructor
+ * @param {number} [enable=0] - The enable state
+ */
 export class SetUVCleaner extends SetThreeModule {
     constructor(enable?: number);
 }
+/**
+ * Sets data for the Voice Report (untested)
+ * @extends VacBotCommand
+ */
 export class SetVoice extends VacBotCommand {
     constructor(enable?: number, md5sum?: string, size?: number, type?: string, url?: string, vid?: string);
 }
+/**
+ * Sets enabled state for the 'Working Status Voice Report'
+ * @extends VacBotCommand
+ */
 export class SetVoiceSimple extends VacBotCommand {
     constructor(on?: number);
 }
+/**
+ * Starts an 'Spot' cleaning at the given position
+ * @extends Clean_V2
+ */
 export class SinglePoint_V2 extends Clean_V2 {
     constructor(spotCoordinates?: string);
-}
-export class VideoOpened extends VacBotCommand {
-    constructor();
 }
 /**
  * 'Edge' cleaning mode
@@ -821,7 +1194,7 @@ declare class DeleteMapSubSet extends VacBotCommand {
     constructor(mapID: any, mapSubSetID: any, type?: string);
 }
 /**
- * Represents a `getMapSubSet` command
+ * Requests information of a map sub set
  * Default type is `ar` = spot areas
  * @extends VacBotCommand
  */
