@@ -1205,7 +1205,7 @@ class VacBot_950type extends VacBot {
      * @param {object} payload - The air quality data payload.
      */
     handleAirQuality(payload) {
-        if (!payload.pm25) {
+        if (!payload['pm25']) {
             // Handle 'onJCYAirQuality' event for Z1 AirQuality Monitor
             const keys = Object.keys(payload);
             payload = payload[keys[0]];

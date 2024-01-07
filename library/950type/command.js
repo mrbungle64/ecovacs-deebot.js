@@ -1967,6 +1967,7 @@ module.exports.GetAICleanItemState = GetAICleanItemState;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAirDrying = GetAirDrying;
+module.exports.GetAreaPoint = GetAreaPoint;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
 module.exports.GetBorderSpin = GetBorderSpin;
