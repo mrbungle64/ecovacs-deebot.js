@@ -2045,6 +2045,17 @@ class VacBot_950type extends VacBot {
             // ==================================
             // Airbot Z1 / Z1 Air Quality Monitor
             // ==================================
+            case 'BasicPurification'.toLowerCase():
+                this.sendCommand(new VacBotCommand.BasicPurification());
+                break;
+            case 'MobilePurification'.toLowerCase():
+                this.sendCommand(new VacBotCommand.MobilePurification());
+                break;
+            case 'SpotPurification'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SpotPurification(args[0]));
+                }
+                break;
             case 'GetAirQuality'.toLowerCase(): // Airbot Z1
                 this.sendCommand(new VacBotCommand.GetAirQuality());
                 break;

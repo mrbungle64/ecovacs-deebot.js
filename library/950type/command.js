@@ -282,6 +282,28 @@ class Relocate extends VacBotCommand {
     }
 }
 
+class BasicPurification extends VacBotCommand {
+    constructor() {
+        super('clean_V2', {
+            'act': 'start',
+            'content': {
+                'type': 'spot'
+            }
+        });
+    }
+}
+
+class MobilePurification extends VacBotCommand {
+    constructor() {
+        super('clean_V2', {
+            'act': 'start',
+            'content': {
+                'type': 'move'
+            }
+        });
+    }
+}
+
 /**
  * Requests various information about the cleaning status
  * @extends VacBotCommand
@@ -2061,6 +2083,7 @@ module.exports.Washing = Washing;
 
 // Air Purifier (e.g. AIRBOT Z1)
 module.exports.Area_V2 = Area_V2;
+module.exports.BasicPurification = BasicPurification;
 module.exports.GetAirQuality = GetAirQuality;
 module.exports.GetAirbotAutoModel = GetAirbotAutoModel;
 module.exports.GetAngleFollow = GetAngleFollow;
@@ -2084,6 +2107,7 @@ module.exports.GetTotalStats = GetTotalStats;
 module.exports.GetVoiceLifeRemindState = GetVoiceLifeRemindState;
 module.exports.GetVoiceSimple = GetVoiceSimple;
 module.exports.GetWifiList = GetWifiList;
+module.exports.MobilePurification = MobilePurification;
 module.exports.SetAirbotAutoModel = SetAirbotAutoModel;
 module.exports.SetAngleFollow = SetAngleFollow;
 module.exports.SetAtmoLight = SetAtmoLight;
@@ -2101,6 +2125,7 @@ module.exports.SetUVCleaner = SetUVCleaner;
 module.exports.SetVoice = SetVoice;
 module.exports.SetVoiceSimple = SetVoiceSimple;
 module.exports.SinglePoint_V2 = SinglePoint_V2;
+module.exports.SpotPurification = MapPoint_V2; // Wrapper
 
 // Deprecated
 module.exports.Edge = Edge;
