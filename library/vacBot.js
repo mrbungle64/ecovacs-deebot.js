@@ -558,7 +558,11 @@ class VacBot {
                 break;
             }
             case "Stop".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.Stop());
+                if (this.getModelType() === 'airbot') {
+                    this.sendCommand(new this.vacBotCommand.Stop('clean_V2'));
+                } else {
+                    this.sendCommand(new this.vacBotCommand.Stop());
+                }
                 break;
             case "Resume".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.Resume());

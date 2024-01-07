@@ -209,11 +209,12 @@ class Resume extends VacBotCommand {
 
 /**
  * Represents the 'stop' function
+ * For Airbot Z1 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
 class Stop extends VacBotCommand {
-    constructor() {
-        super('clean', {
+    constructor(command = 'clean') {
+        super(command, {
             'act': 'stop'
         });
     }
