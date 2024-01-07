@@ -2172,6 +2172,11 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
                 }
                 break;
+            case 'GetAreaPoint'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.GetAreaPoint(args[0]));
+                }
+                break;
             case 'GetEfficiency'.toLowerCase():
                 this.sendCommand(new VacBotCommand.Generic('getEfficiency'));
                 break;

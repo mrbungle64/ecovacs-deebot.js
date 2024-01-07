@@ -1884,6 +1884,14 @@ class GetMapTrace_V2 extends VacBotCommand {
     }
 }
 
+class GetAreaPoint extends VacBotCommand {
+    constructor(mid) {
+        super('getAreaPoint', {
+            'mid': mid
+        });
+    }
+}
+
 // ===================
 // Deprecated commands
 // ===================
