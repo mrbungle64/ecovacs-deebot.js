@@ -122,6 +122,9 @@ export class GetAdvancedMode extends VacBotCommand {
 export class GetAirDrying extends VacBotCommand {
     constructor();
 }
+export class GetAreaPoint extends VacBotCommand {
+    constructor(mid: any);
+}
 /**
  * Request information if the 'Auto Empty' option is enabled
  * Used by models with Auto Empty Station
@@ -790,10 +793,11 @@ export class SpotArea_V2 extends Clean_V2 {
 }
 /**
  * Represents the 'stop' function
+ * For Airbot Z1 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
 export class Stop extends VacBotCommand {
-    constructor();
+    constructor(command?: string);
 }
 /**
  * Start und Stop 'Mopping Pads Cleaning' (e.g. X1 series)
@@ -808,6 +812,9 @@ export class Washing extends Clean_V2 {
  * @extends Clean_V2
  */
 export class Area_V2 extends Clean_V2 {
+    constructor();
+}
+export class BasicPurification extends VacBotCommand {
     constructor();
 }
 /**
@@ -983,6 +990,9 @@ export class GetVoiceSimple extends VacBotCommand {
  * @extends VacBotCommand
  */
 export class GetWifiList extends VacBotCommand {
+    constructor();
+}
+export class MobilePurification extends VacBotCommand {
     constructor();
 }
 /**
@@ -1201,5 +1211,5 @@ declare class DeleteMapSubSet extends VacBotCommand {
 declare class GetMapSubSet extends VacBotCommand {
     constructor(mapID: any, mapSubSetID: any, type?: string);
 }
-export { VacBotCommand as Generic };
+export { VacBotCommand as Generic, MapPoint_V2 as SpotPurification };
 //# sourceMappingURL=command.d.ts.map
