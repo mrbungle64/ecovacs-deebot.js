@@ -652,7 +652,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             case 'AreaPoint':
-                this.vacbot.handleAreaPoint(payload);
+                this.vacBot.handleAreaPoint(payload);
                 this.emitMessage('AreaPoint', this.vacBot.areaPoint);
                 break;
             case 'AutonomousClean':
@@ -750,9 +750,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         }
                     });
                 }
-                break;
-            case 'AreaPoint':
-                this.vacBot.handleAreaPoint(payload);
                 break;
 
             // ====================
