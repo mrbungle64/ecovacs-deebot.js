@@ -1216,9 +1216,16 @@ class VacBot_950type extends VacBot {
             'airQualityIndex': payload['aq'],
             'volatileOrganicCompounds': payload['voc'],
             'temperature': payload['tem'],
-            'humidity': payload['hum'],
-            'pm_10': payload['pm_10']
+            'humidity': payload['hum']
         };
+        if (payload['pm_10'] !== undefined) {
+            // The Airbot Z1 has some outlier values
+            if ((payload['pm_10'] >= 0) && (payload['pm_10'] <= 999)) {
+                Object.assign(this.airQuality, {
+                    'pm_10': payload['pm_10']
+                });
+            }
+        }
         // The Z1 AirQuality Monitor also has another voc value
         if (payload['voc_num'] !== undefined) {
             Object.assign(this.airQuality, {
