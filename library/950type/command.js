@@ -1512,11 +1512,11 @@ class GetAirbotAutoModel extends VacBotCommand {
 /**
  * Sends the 'Linked Purification' (linked to Air Quality Monitor)
  * enabled state and also the start and end value
- * 1, 3, 4 = 'poor <> medium',
- * 1, 2, 4 = 'poor <> Fair',
- * 1, 1, 4 = 'poor <> Good',
- * 1, 2, 3 = 'medium <> fair',
- * 1, 1, 3 = 'medium <> good',
+ * 1, 3, 4 = 'very poor <> poor',
+ * 1, 2, 4 = 'very poor <> fair',
+ * 1, 1, 4 = 'very poor <> good',
+ * 1, 2, 3 = 'poor <> fair',
+ * 1, 1, 3 = 'poor <> good',
  * 1, 1, 2 = 'fair <> good'
  * @extends VacBotCommand
  */
