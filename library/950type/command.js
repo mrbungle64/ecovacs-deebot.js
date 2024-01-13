@@ -910,6 +910,20 @@ class EmptyDustBin extends VacBotCommand {
 }
 
 /**
+ * Empty dust bin (e.g. T20 series)
+ * `EmptyDustBinSA` = 'EmptyDustBinStationAction'
+ * @extends VacBotCommand
+ */
+class EmptyDustBinSA extends VacBotCommand {
+    constructor() {
+        super('stationAction', {
+            'act': 1,
+            'type': 1
+        });
+    }
+}
+
+/**
  * Request information if the 'Continuous Cleaning'/'Resumed clean' option is enabled
  * @extends VacBotCommand
  */
@@ -1207,6 +1221,32 @@ class SetWashInterval extends VacBotCommand {
 class Washing extends Clean_V2 {
     constructor(action = 'stop') {
         super('washing', action);
+    }
+}
+
+/**
+ * Request the value whether hot water
+ * is used for cleaning the mopping pads (e.g. T20 series)
+ * @extends VacBotCommand
+ */
+class GetWashInfo extends VacBotCommand {
+    constructor() {
+        super('getWashInfo');
+    }
+}
+
+/**
+ * Set the value whether hot water
+ * should be used for cleaning the mopping pads (e.g. T20 series)
+ * 0 = off
+ * 1 = on
+ * @extends VacBotCommand
+ */
+class SetWashInfo extends VacBotCommand {
+    constructor(mode = 0) {
+        super('setWashInfo', {
+            'mode': mode
+        });
     }
 }
 
@@ -1985,6 +2025,7 @@ module.exports.CustomArea_V2 = CustomArea_V2;
 module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.Drying = Drying;
 module.exports.EmptyDustBin = EmptyDustBin;
+module.exports.EmptyDustBinSA = EmptyDustBinSA;
 module.exports.GetAICleanItemState = GetAICleanItemState;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
@@ -2040,6 +2081,7 @@ module.exports.GetSweepMode = GetSweepMode;
 module.exports.GetTrueDetect = GetTrueDetect;
 module.exports.GetVoiceAssistantState = GetVoiceAssistantState;
 module.exports.GetVolume = GetVolume;
+module.exports.GetWashInfo = GetWashInfo;
 module.exports.GetWashInterval = GetWashInterval;
 module.exports.GetWaterInfo = GetWaterInfo;
 module.exports.GetWorkMode = GetWorkMode;
@@ -2073,6 +2115,7 @@ module.exports.SetSweepMode = SetSweepMode;
 module.exports.SetTrueDetect = SetTrueDetect;
 module.exports.SetVoiceAssistantState = SetVoiceAssistantState;
 module.exports.SetVolume = SetVolume;
+module.exports.SetWashInfo = SetWashInfo;
 module.exports.SetWashInterval = SetWashInterval;
 module.exports.SetWaterLevel = SetWaterLevel;
 module.exports.SetWorkMode = SetWorkMode;

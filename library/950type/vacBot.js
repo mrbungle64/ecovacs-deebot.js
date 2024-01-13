@@ -152,6 +152,7 @@ class VacBot_950type extends VacBot {
         this.timezone = null;
         this.trueDetect = null;
         this.volume = 0;
+        this.washInfo = null;
         this.washInterval = null;
         this.workMode = null;
     }
@@ -252,6 +253,17 @@ class VacBot_950type extends VacBot {
     handleWashInterval(payload) {
         if (payload.hasOwnProperty('interval')) {
             this.washInterval = payload['interval'];
+        }
+    }
+
+
+    /**
+     * Handle the payload of the `WashInfo` response/message
+     * @param {Object} payload
+     */
+    handleWashInfo(payload) {
+        if (payload.hasOwnProperty('mode')) {
+            this.washInfo = payload['mode'];
         }
     }
 
@@ -1739,7 +1751,11 @@ class VacBot_950type extends VacBot {
                 break;
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase():
-                this.sendCommand(new VacBotCommand.EmptyDustBin());
+                if (this.getModelType() === 'T20') {
+                    this.sendCommand(new VacBotCommand.EmptyDustBinSA());
+                } else {
+                    this.sendCommand(new VacBotCommand.EmptyDustBin());
+                }
                 break;
             case 'GetAutoEmpty'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetAutoEmpty());
@@ -1854,6 +1870,14 @@ class VacBot_950type extends VacBot {
                 break;
             case 'GetSchedule_V2'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetSchedule_V2());
+                break;
+            case 'GetWashInfo'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetWashInterval());
+                break;
+            case 'SetWashInfo'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetWashInfo(args[0]));
+                }
                 break;
             case 'GetWashInterval'.toLowerCase():
                 this.sendCommand(new VacBotCommand.GetWashInterval());
