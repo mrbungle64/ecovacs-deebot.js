@@ -129,6 +129,8 @@ class VacBot {
 
         this.schedule = [];
 
+        this.genericCommand = null;
+
         if (this.is950type()) {
             this.vacBotCommand = require('./950type/command');
         } else {
@@ -524,6 +526,7 @@ class VacBot {
         switch (command.toLowerCase()) {
             case "Generic".toLowerCase(): {
                 this.sendCommand(new this.vacBotCommand.Generic(args[0], args[1]));
+                this.genericCommand = args[0];
                 break;
             }
             case "Clean".toLowerCase(): {

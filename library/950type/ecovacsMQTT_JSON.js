@@ -149,6 +149,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
         abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);
+        if (this.vacBot.genericCommand) {
+            const genericCommandPrefix = this.getCommandPrefix(this.vacBot.genericCommand);
+            const abbreviatedGenericCommand = this.vacBot.genericCommand.substring(genericCommandPrefix.length);
+            if (abbreviatedGenericCommand.toLowerCase() === abbreviatedCommand.toLowerCase()) {
+                this.emit('genericCommandPayload', payload);
+                this.vacBot.genericCommand = null;
+            }
+        }
         // e.g. T8, T9, T10, N8, X1 series
         if (abbreviatedCommand.endsWith("_V2")) {
             abbreviatedCommand = this.handleV2commands(abbreviatedCommand);
