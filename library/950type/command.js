@@ -473,7 +473,7 @@ class GetCustomAreaMode extends VacBotCommand {
 }
 
 /**
- * Sets the `Mopping Mode` (e.g. X1 series)
+ * Sets the 'Mopping Mode'/'Efficiency' (e.g. X1 series)
  * @extends VacBotCommand
  */
 class SetCustomAreaMode extends VacBotCommand {

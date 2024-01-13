@@ -624,11 +624,28 @@ exports.KnownDevices = {
     },
     "e6ofmn": {
         "name": "DEEBOT X2",
-        "deviceClassLink": "8bja83"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "air_drying": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "hosted_mode": true,
+        "yiko": true,
+        "type": "X2"
     },
     "lf3bn4": {
         "name": "DEEBOT X2",
-        "deviceClassLink": "8bja83"
+        "deviceClassLink": "e6ofmn"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
@@ -907,7 +924,24 @@ exports.KnownDevices = {
     },
     "p1jij8": {
         "name": "DEEBOT T20 OMNI",
-        "deviceClassLink": "lx3j7m"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "air_drying": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "hosted_mode": true,
+        "yiko": true,
+        "type": "T20"
     },
     "626v6g": {
         "name": "DEEBOT TEO+",

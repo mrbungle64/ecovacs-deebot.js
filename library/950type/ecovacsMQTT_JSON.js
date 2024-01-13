@@ -318,7 +318,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "LifeSpan":
                 // Consumable components
                 this.vacBot.handleLifespan(payload);
-                if (this.vacBot.getModelType() === 'airbot') {
+                if (this.vacBot.isModelTypeAirbot()) {
                     this.emitMessage("LifeSpan", this.vacBot.components);
                 } else {
                     if (!this.vacBot.emitFullLifeSpanEvent) {

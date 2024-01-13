@@ -558,7 +558,7 @@ class VacBot {
                 break;
             }
             case "Stop".toLowerCase():
-                if (this.getModelType() === 'airbot') {
+                if (this.isModelTypeAirbot()) {
                     this.sendCommand(new this.vacBotCommand.Stop('clean_V2'));
                 } else {
                     this.sendCommand(new this.vacBotCommand.Stop());
@@ -833,6 +833,22 @@ class VacBot {
      */
     getModelType() {
         return tools.getModelType(this.deviceClass);
+    }
+
+    isModelTypeT9() {
+        return this.getModelType() === 'T9';
+    }
+
+    isModelTypeX1() {
+        return this.getModelType() === 'X1';
+    }
+
+    isModelTypeX2() {
+        return this.getModelType() === 'X2';
+    }
+
+    isModelTypeAirbot() {
+        return this.getModelType() === 'airbot';
     }
 
     /**

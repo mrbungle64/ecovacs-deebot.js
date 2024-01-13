@@ -250,6 +250,10 @@ class VacBot_950type extends VacBot {
         };
     }
 
+    /**
+     * Handle the payload of the `WashInterval` response/message
+     * @param {Object} payload
+     */
     handleWashInterval(payload) {
         if (payload.hasOwnProperty('interval')) {
             this.washInterval = payload['interval'];
@@ -393,7 +397,7 @@ class VacBot_950type extends VacBot {
     handleSpeed(payload) {
         const speed = payload['speed'];
         this.cleanSpeed = speed;
-        if (this.getModelType() !== 'airbot') {
+        if (!this.isModelTypeAirbot()) {
             this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         }
     }
@@ -1591,7 +1595,7 @@ class VacBot_950type extends VacBot {
                     this.emitFullLifeSpanEvent = true;
                     this.components = {};
                     this.lastComponentValues = {};
-                    if (this.getModelType() === 'airbot') {
+                    if (this.isModelTypeAirbot()) {
                         this.sendCommand(new VacBotCommand.GetLifeSpan([]));
                     } else {
                         const componentsArray = [];
@@ -1659,7 +1663,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetWaterInfo());
                 break;
             case 'GetCleanLogs'.toLowerCase():
-                if ((this.getModelType() === 'T9') || (this.getModelType() === 'X1')) {
+                if (this.isModelTypeT9() || this.isModelTypeX1() || this.isModelTypeX2()) {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
                         let cleanLog = [];
@@ -1835,7 +1839,7 @@ class VacBot_950type extends VacBot {
             case 'GoToPosition'.toLowerCase(): {
                 let area = args[0].toString();
                 if (area !== '') {
-                    if ((this.getModelType() === 'T9') || (this.getModelType() === 'X1')) {
+                    if (this.isModelTypeT9() || this.isModelTypeX1() || this.isModelTypeX2()) {
                         this.run('MapPoint_V2', area);
                     } else if (this.getModelType() === 'T8') {
                         area = area + ',' + area;
