@@ -2010,8 +2010,8 @@ class VacBot_950type extends VacBot {
             case 'SetWorkMode'.toLowerCase():
                 if (args.length >= 1) {
                     let workMode = args[0];
-                    if (dictionary.WORKMODE_TO_ECOVACS(workMode)) {
-                        workMode = dictionary.WORKMODE_TO_ECOVACS(workMode);
+                    if (dictionary.WORKMODE_TO_ECOVACS.hasOwnProperty(workMode)) {
+                        workMode = dictionary.WORKMODE_TO_ECOVACS[workMode];
                     }
                     if ((workMode >= 0) && (workMode <= 3)) {
                         this.sendCommand(new VacBotCommand.SetWorkMode(workMode));
