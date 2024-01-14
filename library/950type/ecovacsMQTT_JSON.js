@@ -496,7 +496,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case "WorkMode":
                 // "Work Mode", "Cleaning Mode"
-                this.vacbot.handleWorkMode(payload);
+                this.vacBot.handleWorkMode(payload);
                 this.emitMessage("WorkMode", this.vacBot.workMode);
                 break;
 
