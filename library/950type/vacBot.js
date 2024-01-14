@@ -280,7 +280,7 @@ class VacBot_950type extends VacBot {
         if (payload.hasOwnProperty('isLow')) {
             this.batteryIsLow = !!Number(payload['isLow']);
         } else {
-            this.batteryIsLow = (this.batteryLevel >= 15);
+            this.batteryIsLow = (this.batteryLevel <= 15);
         }
     }
 
