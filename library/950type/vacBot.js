@@ -487,6 +487,10 @@ class VacBot_950type extends VacBot {
     /**
      * Handle the payload of the `WorkMode` response/message
      * ('Work Mode', 'Cleaning Mode')
+     * vacuum and mop = 0
+     * vacuum only = 1
+     * mop only = 2
+     * mop after vacuum = 3
      * @param {Object} payload
      */
     handleWorkMode(payload) {
@@ -1663,7 +1667,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetWaterInfo());
                 break;
             case 'GetCleanLogs'.toLowerCase():
-                if (this.isModelTypeT9() || this.isModelTypeX1() || this.isModelTypeX2()) {
+                if (this.isModelTypeT9() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2()) {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
                         let cleanLog = [];
@@ -1839,7 +1843,7 @@ class VacBot_950type extends VacBot {
             case 'GoToPosition'.toLowerCase(): {
                 let area = args[0].toString();
                 if (area !== '') {
-                    if (this.isModelTypeT9() || this.isModelTypeX1() || this.isModelTypeX2()) {
+                    if (this.isModelTypeT9() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2()) {
                         this.run('MapPoint_V2', area);
                     } else if (this.getModelType() === 'T8') {
                         area = area + ',' + area;

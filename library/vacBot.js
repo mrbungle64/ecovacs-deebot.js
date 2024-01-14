@@ -842,6 +842,10 @@ class VacBot {
         return this.getModelType() === 'T9';
     }
 
+    isModelTypeT20() {
+        return this.getModelType() === 'T20';
+    }
+
     isModelTypeX1() {
         return this.getModelType() === 'X1';
     }

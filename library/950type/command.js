@@ -1403,6 +1403,10 @@ class GetWorkMode extends VacBotCommand {
 
 /**
  * Sets the 'Cleaning Mode' (e.g. T20 series)
+ * vacuum and mop = 0
+ * vacuum only = 1
+ * mop only = 2
+ * mop after vacuum = 3
  * @extends VacBotCommand
  */
 class SetWorkMode extends VacBotCommand {
