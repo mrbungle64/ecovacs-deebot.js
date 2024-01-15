@@ -943,6 +943,10 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "T20"
     },
+    "9ku8nu": {
+        "name": "DEEBOT T20e OMNI",
+        "deviceClassLink": "p1jij8"
+    },
     "626v6g": {
         "name": "DEEBOT TEO+",
         "deviceClassLink": "rss8xk"
@@ -951,10 +955,20 @@ exports.KnownDevices = {
         "name": "DEEBOT NEO+",
         "deviceClassLink": "rss8xk"
     },
+    "85nbtp": {
+        "name": "DEEBOT TEO OMNI",
+        "deviceClassLink": "rss8xk"
+    },
     "5xu9h3": {
         "name": "GOAT",
         "950type": true,
         "950type_V2": true,
         "type": "goat"
+    },
+    "99fqkn": {
+        "name": "Z1 Air Quality Monitor",
+        "950type": true,
+        "950type_V2": true,
+        "type": "aqMonitor"
     }
 };
