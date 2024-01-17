@@ -45,6 +45,8 @@ There is of course no claim to full functionality.
 
 * Deebot OZMO T5
 * Deebot N8 series
+* Deebot N9 series
+* Deebot N10 series
 * Deebot U2 series
 * Deebot T8 series
 * Deebot T9 series
@@ -94,7 +96,8 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 * Breaking change: Bump minimum required version of Node.js to 16.x
 * Added some new models to the model dictionary (incl. GOAT, T20 OMNI)
 * Added shortcut commands for sweep mode
-* Some improvements for Airbot Z1 and Air Quality Monitor
+* A lot of improvements for Airbot Z1 and Air Quality Monitor
+* and also some improvements for T20 series and X2 series
 * Some clean-up and refactoring
 * Added new example app for output of incoming messages
 * Some further improvements and fixes
