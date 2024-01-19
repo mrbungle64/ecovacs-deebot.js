@@ -33,27 +33,18 @@ body:
     attributes:
       label: With which model does the problem occur?
       options:
-        - Deebot 500
-        - Deebot 600/601/605
-        - Deebot OZMO 610
-        - Deebot 710/711/711s
-        - Deebot 900/901
-        - Deebot OZMO 900/905
         - Deebot OZMO 920
-        - Deebot OZMO 930
         - Deebot OZMO 950
-        - Deebot OZMO Slim 10/11
         - Deebot U2 series
-        - Deebot N3 MAX
-        - Deebot N7
         - Deebot N8 series
+        - Deebot N9 series
+        - Deebot N10 series
         - Deebot T8 series
         - Deebot T9 series
         - Deebot T10 series
+        - Deebot T20 series
         - Deebot X1 series
-        - Deebot Slim 2
-        - Deebot N79 series
-        - Deebot M88
+        - Deebot X2 series
         - Other model (Please fill out the fields at the bottom of the form)
   - type: dropdown
     id: installation_source
@@ -109,3 +100,12 @@ body:
         If you have any additional information for us, use the field below.
         Please note, you can attach screenshots or screen recordings here, by
         dragging and dropping files in the field below.
+  - type: input
+    id: otherDevice
+    validations:
+      required: false
+    attributes:
+      label: Which "other" models are you using?
+      placeholder: Deebot [OZMO] xxx
+      description: >
+        Only needed if the model is not listed above ("With which model does the problem occur?") or if you use more than one model with this adapter
