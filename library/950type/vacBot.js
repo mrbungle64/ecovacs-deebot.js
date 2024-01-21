@@ -1238,20 +1238,14 @@ class VacBot_950type extends VacBot {
             'temperature': payload['tem'],
             'humidity': payload['hum']
         };
-        if (payload['pm_10'] !== undefined) {
-            // The Airbot Z1 has some outlier values
-            if ((payload['pm_10'] >= 0) && (payload['pm_10'] <= 999)) {
-                Object.assign(this.airQuality, {
-                    'pm_10': payload['pm_10']
-                });
-            }
-        }
         // The Z1 AirQuality Monitor also has another voc value
         if (payload['voc_num'] !== undefined) {
             Object.assign(this.airQuality, {
                 'voc_num': payload['voc_num']
             });
         }
+        // Note: There's also has another pm10 value (pm_10)
+        // but it seems that there is no additional benefit
     }
 
     /**
