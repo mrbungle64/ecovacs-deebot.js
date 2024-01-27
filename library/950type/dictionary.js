@@ -17,7 +17,8 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'drying': 'drying',
     'washing': 'washing',
     'comeClean': 'comeClean',
-    'entrust': 'entrust'
+    'entrust': 'entrust',
+    'freeClean': 'freeClean'
 };
 
 exports.CLEAN_ACTION_TO_ECOVACS = {
@@ -42,7 +43,8 @@ exports.CLEAN_MODE_FROM_ECOVACS = {
     'drying': 'drying',
     'washing': 'washing',
     'comeClean': 'comeClean',
-    'entrust': 'entrust'
+    'entrust': 'entrust',
+    'freeClean': 'freeClean'
 };
 
 exports.GOCHARGING_REASONS = {
