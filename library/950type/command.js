@@ -631,6 +631,24 @@ class GetCachedMapInfo extends VacBotCommand {
 }
 
 /**
+ * Represents a command to back up and restore maps
+ *
+ * Possible values:
+ * - backup
+ * - restore
+ *
+ * Tested on Airbot Z1
+ * @extends VacBotCommand
+ */
+class SetCachedMapInfo extends VacBotCommand {
+    constructor(act) {
+        super('setCachedMapInfo', {
+            'act': act
+        });
+    }
+}
+
+/**
  * Request information about areas and virtual walls
  * @extends VacBotCommand
  */
@@ -2103,6 +2121,7 @@ module.exports.SetAdvancedMode = SetAdvancedMode;
 module.exports.SetAirDrying = SetAirDrying;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetBorderSpin = SetBorderSpin;
+module.exports.SetCachedMapInfo = SetCachedMapInfo;
 module.exports.SetCarpetInfo = SetCarpetInfo;
 module.exports.SetCarpetPressure = SetCarpetPressure;
 module.exports.SetCleanCount = SetCleanCount;

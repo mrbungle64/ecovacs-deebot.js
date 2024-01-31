@@ -1510,6 +1510,11 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.GetCachedMapInfo());
                 }
                 break;
+            case 'SetCachedMapInfo'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetCachedMapInfo(args[0]));
+                }
+                break;
             case 'GetSpotAreas'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
