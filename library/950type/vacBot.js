@@ -1508,9 +1508,21 @@ class VacBot_950type extends VacBot {
                     this.sendCommand(new VacBotCommand.GetCachedMapInfo());
                 }
                 break;
-            case 'SetCachedMapInfo'.toLowerCase():
-                if (args.length >= 1) {
-                    this.sendCommand(new VacBotCommand.SetCachedMapInfo(args[0]));
+            case 'BackupMap'.toLowerCase():
+                if (args.length === 0) { // Airbot Z1
+                    this.sendCommand(new VacBotCommand.SetCachedMapInfo('backup'));
+                } else if (args.length === 1) { // e.g. Deebot X1 series
+                    const mid = args[0];
+                    this.sendCommand(new VacBotCommand.SetCachedMapInfo('backup', mid));
+                }
+                break;
+            case 'RestoreMap'.toLowerCase():
+                if (args.length === 0) { // Airbot Z1
+                    this.sendCommand(new VacBotCommand.SetCachedMapInfo('restore'));
+                } else if (args.length === 2) { // e.g. Deebot X1 series
+                    const mid = args[0];
+                    const reMid = args[1]; // backupId
+                    this.sendCommand(new VacBotCommand.SetCachedMapInfo('restore', mid, reMid));
                 }
                 break;
             case 'GetSpotAreas'.toLowerCase(): {

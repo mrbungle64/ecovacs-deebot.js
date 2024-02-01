@@ -643,9 +643,9 @@ class GetCachedMapInfo extends VacBotCommand {
  * @extends VacBotCommand
  */
 class SetCachedMapInfo extends VacBotCommand {
-    constructor(act) {
+    constructor(act, mid = null, reMid = null) {
         super('setCachedMapInfo', {
-            'act': act
+            'act': act, mid, reMid
         });
     }
 }
