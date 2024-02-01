@@ -1420,10 +1420,7 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleAreaPoint(payload) {
-        this.areaPoint = {
-            'mapId': payload['mid'],
-            'locationPoints': payload['items']
-        };
+        this.areaPoint = payload;
     }
 
     /**
