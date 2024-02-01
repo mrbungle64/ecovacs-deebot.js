@@ -177,16 +177,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'AirDring': // The typo in 'AirDring' is intended
                 // Air drying status (yeedi models)
-                this.bot.handleAirDryingState(payload);
-                if (this.bot.airDryingStatus) {
-                    this.emitMessage('AirDryingState', this.bot.airDryingStatus);
+                this.vacBot.handleAirDryingState(payload);
+                if (this.vacBot.airDryingStatus) {
+                    this.emitMessage('AirDryingState', this.vacBot.airDryingStatus);
                 }
                 break;
             case 'AICleanItemState':s
                 // "Strategic Particle Removal" and "Strategic Pet Poop Avoidance" mode (e.g. X1)
-                this.bot.handleAICleanItemState(payload);
-                if (this.bot.aiCleanItemState.items.length) {
-                    this.emitMessage('AICleanItemState', this.bot.aiCleanItemState);
+                this.vacBot.handleAICleanItemState(payload);
+                if (this.vacBot.aiCleanItemState.items.length) {
+                    this.emitMessage('AICleanItemState', this.vacBot.aiCleanItemState);
                 }
                 break;
             case 'AutoEmpty':
@@ -219,8 +219,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'BorderSpin':
                 // "Edge Deep Cleaning" (e.g. X1)
-                this.bot.handleBorderSpin(payload);
-                this.emitMessage('BorderSpin', this.bot.borderSpin);
+                this.vacBot.handleBorderSpin(payload);
+                this.emitMessage('BorderSpin', this.vacBot.borderSpin);
                 break;
             case 'BreakPoint':
                 // "Continuous Cleaning Mode" / "Resumed Clean"
@@ -297,8 +297,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'CustomAreaMode':
                 // "Mopping Mode" / "Cleaning efficiency"
-                this.bot.handleCustomAreaMode(payload);
-                this.emitMessage('SweepMode', this.bot.sweepMode);
+                this.vacBot.handleCustomAreaMode(payload);
+                this.emitMessage('SweepMode', this.vacBot.sweepMode);
                 break;
             case 'DusterRemind':
                 // "Cleaning Cloth Reminder"
@@ -437,7 +437,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleStationState(payload);
                 if (this.vacBot.stationState.type !== null) {
                     this.emitMessage("StationState", this.vacBot.stationState);
-                    const airDryingState = this.bot.stationState.isAirDrying ? 'airdrying': 'idle';
+                    const airDryingState = this.vacBot.stationState.isAirDrying ? 'airdrying': 'idle';
                     this.emitMessage('AirDryingState', airDryingState);
                 }
                 break;
@@ -450,8 +450,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'SweepMode':
                 // "Mop-Only" mode
-                this.bot.handleSweepMode(payload);
-                this.emitMessage('MopOnlyMode', this.bot.mopOnlyMode);
+                this.vacBot.handleSweepMode(payload);
+                this.emitMessage('MopOnlyMode', this.vacBot.mopOnlyMode);
                 break;
             case 'TotalStats':
                 this.vacBot.handleTotalStats(payload);

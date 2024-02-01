@@ -631,11 +631,13 @@ class GetCachedMapInfo extends VacBotCommand {
 }
 
 /**
- * Represents a command to back up and restore maps
+ * Represents a command to back up, restore, modify or delete maps
  *
- * Possible values:
+ * Possible values for `act`:
  * - backup
  * - restore
+ * - mod
+ * - del
  *
  * Tested on Airbot Z1
  * @extends VacBotCommand

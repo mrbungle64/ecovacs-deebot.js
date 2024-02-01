@@ -1238,13 +1238,14 @@ class VacBot_950type extends VacBot {
             'temperature': payload['tem'],
             'humidity': payload['hum']
         };
-        // The Z1 AirQuality Monitor also has another voc value
+        // The Z1 AirQuality Monitor also has
+        // another 'voc' (Volatile Organic Compounds) value
         if (payload['voc_num'] !== undefined) {
             Object.assign(this.airQuality, {
                 'volatileOrganicCompounds_parts': payload['voc_num']
             });
         }
-        // Note: There's also has another pm10 value (pm_10)
+        // Note: There's also has another pm10 value ('pm_10')
         // but it seems that there is no additional benefit
     }
 
