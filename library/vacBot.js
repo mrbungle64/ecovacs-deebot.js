@@ -1021,11 +1021,35 @@ class VacBot {
     }
 
     /**
+     * Get the nickname of the vacuum
+     * @returns {string} the nickname
+     */
+    getName() {
+        return this.getNickname();
+    }
+
+    /**
+     * Get the nickname of the vacuum, if it exists, otherwise get the product name
+     * @returns {string} the nickname, if it has one, or the product name
+     */
+    getNickname() {
+        return this.vacuum['nick'] || this.getProductName();
+    }
+
+    /**
      * Get the product name of the device
      * @returns {string} the product name
      */
     getProductName() {
-        return this.vacuum['deviceName'];
+        return this.vacuum['deviceName'] || this.getModelName();
+    }
+
+    /**
+     * Get the model name of the device
+     * @returns {string} the model name
+     */
+    getModelName() {
+        return this.getDeviceProperty('name', 'unknown');
     }
 
     /**
@@ -1034,36 +1058,6 @@ class VacBot {
      */
     getProductImageURL() {
         return this.vacuum['icon'];
-    }
-
-    /**
-     * Get the model name of the device
-     * @returns {string} the model name
-     */
-    getModelName() {
-        return this.getDeviceProperty('name', '');
-    }
-
-    /**
-     * Get the nickname of the vacuum, if it exists, otherwise return an empty string
-     * @returns {string} the nickname
-     */
-    getName() {
-        if (this.getNickname()) {
-            return this.getNickname();
-        }
-        return '';
-    }
-
-    /**
-     * Get the nickname of the vacuum, if it exists, otherwise get the product name
-     * @returns {string} the nickname, if it has one, or the product name
-     */
-    getNickname() {
-        if (this.vacuum['nick']) {
-            return this.vacuum['nick'];
-        }
-        return this.getProductName();
     }
 
     /**
