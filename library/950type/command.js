@@ -1488,6 +1488,14 @@ class SetVoice extends VacBotCommand {
     }
 }
 
+class GetQuickCommand extends VacBotCommand {
+    constructor(type = '1,2') {
+        super('getQuickCommand', {
+            'type': type
+        });
+    }
+}
+
 /**
  * Request information about the Wi-Fi that is in use
  * and also about the stored Wi-Fi settings
@@ -2095,6 +2103,7 @@ module.exports.GetMinorMap = GetMinorMap;
 module.exports.GetMultiMapState = GetMultiMapState;
 module.exports.GetNetInfo = GetNetInfo;
 module.exports.GetPosition = GetPosition;
+module.exports.GetQuickCommand = GetQuickCommand;
 module.exports.GetRecognization = GetRecognization;
 module.exports.GetSchedule = GetSchedule;
 module.exports.GetSchedule_V2 = GetSchedule_V2;
