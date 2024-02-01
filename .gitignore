@@ -14,3 +14,4 @@ library/map/
 .vscode/*
 
 */settings.js
+*.code-workspace
