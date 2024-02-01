@@ -156,6 +156,8 @@ class SpotArea_V2 extends Clean_V2 {
 /**
  * Represents a 'Hosted mode' cleaning
  * Used by newer models (e.g. X1 series)
+ * With the X2 series it's not a separate mode anymore
+ * (There's an option for AI based cleaning)
  * @extends Clean_V2
  */
 class HostedCleanMode extends Clean_V2 {
