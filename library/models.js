@@ -647,6 +647,10 @@ exports.KnownDevices = {
         "name": "DEEBOT X2",
         "deviceClassLink": "e6ofmn"
     },
+    "e6rcnf": {
+        "name": "DEEBOT X2 COMBO",
+        "deviceClassLink": "e6ofmn"
+    },
     "ipzjy0": {
         "name": "DEEBOT U2",
         "950type": true,
@@ -947,6 +951,10 @@ exports.KnownDevices = {
         "name": "DEEBOT T20e OMNI",
         "deviceClassLink": "p1jij8"
     },
+    "py3qif": {
+        "name": "DEEBOT T20e OMNI",
+        "deviceClassLink": "p1jij8"
+    },
     "626v6g": {
         "name": "DEEBOT TEO+",
         "deviceClassLink": "rss8xk"
@@ -960,10 +968,14 @@ exports.KnownDevices = {
         "deviceClassLink": "rss8xk"
     },
     "5xu9h3": {
-        "name": "GOAT",
+        "name": "GOAT G1",
         "950type": true,
         "950type_V2": true,
         "type": "goat"
+    },
+    "itk04l": {
+        "name": "GOAT G1",
+        "deviceClassLink": "5xu9h3"
     },
     "99fqkn": {
         "name": "Z1 Air Quality Monitor",
