@@ -246,6 +246,45 @@ function isValidVirtualWallType(type) {
 }
 
 /**
+ * Converts the comma separated area value list to a format
+ * that the Deebot X2 requires for the freeClean cleaning type
+ *
+ * @param {string} areaValues - The area values string to be converted
+ * @returns {string} The converted area values string
+ */
+function convertAreaValuesForFreeCleanCmd(areaValues) {
+    areaValues = areaValues.replace(/ /g, ''); // Remove all spaces
+    areaValues = areaValues.replace(/,$/, ''); // Remove trailing comma
+    if (!areaValues.includes(';')) {
+        let areas = areaValues.split(',');
+        areaValues = '1,' + areas[0] + ';';
+        for (let i = 1; i < areas.length; i++) {
+            const value = areas[i];
+            if (value !== '') {
+                areaValues = areaValues + '1,' + value + ';';
+            }
+        }
+    }
+    return areaValues;
+}
+
+/**
+ * Checks if the area values are valid
+ * for the freeClean cleaning type (X2 series)
+ *
+ * @param {string} areaValues - The area values to be checked.
+ * @returns {boolean} - True if all area values are valid, false otherwise.
+ */
+function areaValuesAreValidForFreeCleanCmd(areaValues) {
+    // Regular expression that matches an integer, a comma and another integer
+    const regex = /^\d+,?\d+(;|$)/;
+    // Split the string into segments using semicolons
+    const segments = areaValues.split(';');
+    // Check whether each segment corresponds to the regular expression
+    return segments.every(segment => regex.test(segment));
+}
+
+/**
  * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
  * @param {Object} params - the parameters to be encoded
  * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
@@ -394,16 +433,18 @@ let envLog = function () {
     }
 };
 
+module.exports.areaValuesAreValidForFreeCleanCmd = areaValuesAreValidForFreeCleanCmd;
+module.exports.convertAreaValuesForFreeCleanCmd = convertAreaValuesForFreeCleanCmd;
 module.exports.createErrorDescription = createErrorDescription;
 module.exports.envLog = envLog;
 module.exports.formatString = formatString;
 module.exports.getAllKnownDevices = getAllKnownDevices;
+module.exports.getCmdForObstacleDetection = getCmdForObstacleDetection;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getModelType = getModelType;
 module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
-module.exports.getCmdForObstacleDetection = getCmdForObstacleDetection;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
 module.exports.is710series = is710series;
 module.exports.isAirPurifier = isAirPurifier;

@@ -1832,9 +1832,23 @@ class VacBot_950type extends VacBot {
             }
             case 'SpotArea_V2'.toLowerCase(): {
                 const area = args[0].toString();
-                const cleanings = args[1] || 0;
                 if (area !== '') {
-                    this.sendCommand(new VacBotCommand.SpotArea_V2(area, cleanings));
+                    if (this.isModelTypeX2()) {
+                        const areaValues = tools.convertAreaValuesForFreeCleanCmd(area);
+                        this.run('FreeClean', areaValues);
+                    } else {
+                        const cleanings = args[1] || 1;
+                        this.sendCommand(new VacBotCommand.SpotArea_V2(area, cleanings));
+                    }
+                }
+                break;
+            }
+            case 'FreeClean'.toLowerCase(): {
+                if (args.length >= 1) {
+                    const areaValues = args[0];
+                    if (tools.areaValuesAreValidForFreeCleanCmd(areaValues)) {
+                        this.sendCommand(new VacBotCommand.FreeClean(areaValues));
+                    }
                 }
                 break;
             }

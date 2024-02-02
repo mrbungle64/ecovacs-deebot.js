@@ -154,6 +154,22 @@ class SpotArea_V2 extends Clean_V2 {
 }
 
 /**
+ * Represents a (spot) 'Area' cleaning mode
+ * Similar to the `SpotArea` class but with a different payload structure
+ * Used by the X2 series
+ * @extends Clean_V2
+ */
+class FreeClean extends Clean_V2 {
+    constructor(areaValues = '') {
+        super('freeClean', 'start', {
+            'content': {
+                'value': areaValues
+            }
+        });
+    }
+}
+
+/**
  * Represents a 'Hosted mode' cleaning
  * Used by newer models (e.g. X1 series)
  * With the X2 series it's not a separate mode anymore
@@ -2060,6 +2076,7 @@ module.exports.DeleteMapVirtualBoundary = DeleteMapVirtualBoundary;
 module.exports.Drying = Drying;
 module.exports.EmptyDustBin = EmptyDustBin;
 module.exports.EmptyDustBinSA = EmptyDustBinSA;
+module.exports.FreeClean = FreeClean;
 module.exports.GetAICleanItemState = GetAICleanItemState;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
