@@ -85,20 +85,6 @@ function isN79series(deviceClass) {
     }
 }
 
-/**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device is an air purifier
- */
-function isAirPurifier(deviceClass) {
-    switch (deviceClass) {
-        case 'sdp1y1': // AIRBOT Z1
-        case '20anby': // Z1 Air Quality Monitor
-            return true;
-        default:
-            return false;
-    }
-}
-
 function getCmdForObstacleDetection(modelName) {
     if (modelName.includes('T8 AIVI')) {
         return "Recognization";
@@ -447,7 +433,6 @@ module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
 module.exports.is710series = is710series;
-module.exports.isAirPurifier = isAirPurifier;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
 module.exports.isKnownDevice = isKnownDevice;
 module.exports.isLegacyModel = isLegacyModel;

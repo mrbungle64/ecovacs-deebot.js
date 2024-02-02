@@ -1823,7 +1823,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetCleanState_V2());
                 break;
             case 'Clean_V2'.toLowerCase(): {
-                if (tools.isAirPurifier(this.deviceClass)) {
+                if (this.isModelTypeAirbot()) {
                     this.sendCommand(new VacBotCommand.Clean_V2('move'));
                 } else {
                     this.sendCommand(new VacBotCommand.Clean_V2());
