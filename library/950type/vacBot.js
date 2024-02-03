@@ -83,15 +83,16 @@ class VacBot_950type extends VacBot {
         this.breakPoint = null;
         this.carpetInfo = null;
         this.carpetPressure = null;
+        this.childLock = null;
+        this.cleanCount = 1;
+        this.cleanPreference = null;
         this.currentTask = {
             'type': null,
             'triggerType': null,
             'failed': null,
             'stopReason': null
         };
-        this.childLock = null;
-        this.cleanCount = 1;
-        this.cleanPreference = null;
+        this.customizedScenarioCleaning = [];
         this.dmodule = {
             'enabled': null,
             'status': null
@@ -834,6 +835,14 @@ class VacBot_950type extends VacBot {
                 this.schedule.push(object);
             }
         }
+    }
+
+    /**
+     * Handle the payload of the 'QuickCommand' response/message
+     * @param {Object} payload - The payload containing the customized scenario cleaning.
+     */
+    handleQuickCommand(payload) {
+        this.customizedScenarioCleaning = payload;
     }
 
     /**

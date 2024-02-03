@@ -1506,6 +1506,12 @@ class SetVoice extends VacBotCommand {
     }
 }
 
+/**
+ * Request information about the 
+ * 'Customized Scenario Cleaning' scenarios (T20, X2 series)
+ * 
+ * @extends VacBotCommand
+ */
 class GetQuickCommand extends VacBotCommand {
     constructor(type = '1,2') {
         super('getQuickCommand', {

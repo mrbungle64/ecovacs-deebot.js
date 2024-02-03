@@ -400,6 +400,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.vacBot.chargePosition["changeFlag"] = false;
                 }
                 break;
+            case 'QuickCommand':
+                // "Customized Scenario Cleaning" scenarios
+                this.vacBot.handleQuickCommand(payload);
+                this.emitMessage("CustomizedScenarioCleaning", this.vacBot.customizedScenarioCleaning);
+                break;
             case 'Recognization':
                 // True Detect / "AIVI 3D"
                 // e.g. "AIVI Smart Recognition"
