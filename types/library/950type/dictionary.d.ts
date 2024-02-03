@@ -13,6 +13,8 @@ export namespace CLEAN_MODE_TO_ECOVACS {
     const washing: string;
     const comeClean: string;
     const entrust: string;
+    const freeClean: string;
+    const qcClean: string;
 }
 export namespace CLEAN_ACTION_TO_ECOVACS {
     export const start: string;
@@ -50,6 +52,10 @@ export namespace CLEAN_MODE_FROM_ECOVACS {
     export { comeClean_1 as comeClean };
     const entrust_1: string;
     export { entrust_1 as entrust };
+    const freeClean_1: string;
+    export { freeClean_1 as freeClean };
+    const qcClean_1: string;
+    export { qcClean_1 as qcClean };
 }
 export namespace GOCHARGING_REASONS {
     const workComplete: string;

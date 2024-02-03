@@ -55,15 +55,16 @@ declare class VacBot_950type extends VacBot {
     breakPoint: any;
     carpetInfo: any;
     carpetPressure: any;
+    childLock: any;
+    cleanCount: number;
+    cleanPreference: any;
     currentTask: {
         type: any;
         triggerType: any;
         failed: any;
         stopReason: any;
     };
-    childLock: any;
-    cleanCount: number;
-    cleanPreference: any;
+    customizedScenarioCleaning: any[];
     dmodule: {
         enabled: any;
         status: any;
@@ -125,6 +126,7 @@ declare class VacBot_950type extends VacBot {
     timezone: string;
     trueDetect: any;
     volume: number;
+    washInfo: any;
     washInterval: any;
     workMode: any;
     /**
@@ -143,7 +145,16 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleStationInfo(payload: any): void;
+    /**
+     * Handle the payload of the `WashInterval` response/message
+     * @param {Object} payload
+     */
     handleWashInterval(payload: any): void;
+    /**
+     * Handle the payload of the `WashInfo` response/message
+     * @param {Object} payload
+     */
+    handleWashInfo(payload: any): void;
     /**
      * Handle the payload of the `Battery` response/message (battery level)
      * @param {Object} payload
@@ -204,6 +215,10 @@ declare class VacBot_950type extends VacBot {
     /**
      * Handle the payload of the `WorkMode` response/message
      * ('Work Mode', 'Cleaning Mode')
+     * vacuum and mop = 0
+     * vacuum only = 1
+     * mop only = 2
+     * mop after vacuum = 3
      * @param {Object} payload
      */
     handleWorkMode(payload: any): void;
@@ -323,6 +338,11 @@ declare class VacBot_950type extends VacBot {
      * @param {Object} payload
      */
     handleSched(payload: any): void;
+    /**
+     * Handle the payload of the 'QuickCommand' response/message
+     * @param {Object} payload - The payload containing the customized scenario cleaning.
+     */
+    handleQuickCommand(payload: any): void;
     /**
      * Handle the payload of the 'CachedMapInfo' response/message
      * @param {Object} payload

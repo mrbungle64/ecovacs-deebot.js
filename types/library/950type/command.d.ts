@@ -93,6 +93,23 @@ export class EmptyDustBin extends VacBotCommand {
     constructor();
 }
 /**
+ * Empty dust bin (e.g. T20 series)
+ * `EmptyDustBinSA` = 'EmptyDustBinStationAction'
+ * @extends VacBotCommand
+ */
+export class EmptyDustBinSA extends VacBotCommand {
+    constructor();
+}
+/**
+ * Represents a (spot) 'Area' cleaning mode
+ * Similar to the `SpotArea` class but with a different payload structure
+ * Used by the X2 series
+ * @extends Clean_V2
+ */
+export class FreeClean extends Clean_V2 {
+    constructor(areaValues?: string);
+}
+/**
  * Receive information if the 'Strategic Particle Removal'
  * and the 'Strategic Pet Poop Avoidance' mode is enabled (e.g. X1 series)
  */
@@ -427,6 +444,15 @@ export class GetPosition extends VacBotCommand {
     constructor();
 }
 /**
+ * Request information about the
+ * 'Customized Scenario Cleaning' scenarios (T20, X2 series)
+ *
+ * @extends VacBotCommand
+ */
+export class GetQuickCommand extends VacBotCommand {
+    constructor(type?: string);
+}
+/**
  * Request information if (depending on model)
  * 'True Detect' or 'AIVI 3D'/'AIVI Smart Recognition' is enabled
  * (T8 and T9 series, e.g. T8 AIVI)
@@ -505,6 +531,14 @@ export class GetVolume extends VacBotCommand {
     constructor();
 }
 /**
+ * Request the value whether hot water
+ * is used for cleaning the mopping pads (e.g. T20 series)
+ * @extends VacBotCommand
+ */
+export class GetWashInfo extends VacBotCommand {
+    constructor();
+}
+/**
  * Receive the value of the 'Cleaning Interval' (e.g. X1 series)
  * @extends VacBotCommand
  */
@@ -528,6 +562,8 @@ export class GetWorkMode extends VacBotCommand {
 /**
  * Represents a 'Hosted mode' cleaning
  * Used by newer models (e.g. X1 series)
+ * With the X2 series it's not a separate mode anymore
+ * (There's an option for AI based cleaning)
  * @extends Clean_V2
  */
 export class HostedCleanMode extends Clean_V2 {
@@ -632,6 +668,21 @@ export class SetBorderSpin extends VacBotCommand {
     constructor(enable?: number);
 }
 /**
+ * Represents a command to back up, restore, modify or delete maps
+ *
+ * Possible values for `act`:
+ * - backup
+ * - restore
+ * - mod
+ * - del
+ *
+ * Tested on Airbot Z1
+ * @extends VacBotCommand
+ */
+export class SetCachedMapInfo extends VacBotCommand {
+    constructor(act: any, mid?: any, reMid?: any);
+}
+/**
  * Sets the value of the 'Carpet cleaning strategy' option
  * (e.g. T20 series)
  *
@@ -680,7 +731,7 @@ export class SetContinuousCleaning extends VacBotCommand {
     constructor(enable?: number);
 }
 /**
- * Sets the `Mopping Mode` (e.g. X1 series)
+ * Sets the 'Mopping Mode'/'Efficiency' (e.g. X1 series)
  * @extends VacBotCommand
  */
 export class SetCustomAreaMode extends VacBotCommand {
@@ -754,6 +805,16 @@ export class SetVolume extends VacBotCommand {
     constructor(volume?: number);
 }
 /**
+ * Set the value whether hot water
+ * should be used for cleaning the mopping pads (e.g. T20 series)
+ * 0 = off
+ * 1 = on
+ * @extends VacBotCommand
+ */
+export class SetWashInfo extends VacBotCommand {
+    constructor(mode?: number);
+}
+/**
  * Sets the 'Cleaning Interval' (e.g. X1 series)
  * @extends VacBotCommand
  */
@@ -770,6 +831,10 @@ export class SetWaterLevel extends VacBotCommand {
 }
 /**
  * Sets the 'Cleaning Mode' (e.g. T20 series)
+ * vacuum and mop = 0
+ * vacuum only = 1
+ * mop only = 2
+ * mop after vacuum = 3
  * @extends VacBotCommand
  */
 export class SetWorkMode extends VacBotCommand {
@@ -998,11 +1063,11 @@ export class MobilePurification extends VacBotCommand {
 /**
  * Sends the 'Linked Purification' (linked to Air Quality Monitor)
  * enabled state and also the start and end value
- * 1, 3, 4 = 'poor <> medium',
- * 1, 2, 4 = 'poor <> Fair',
- * 1, 1, 4 = 'poor <> Good',
- * 1, 2, 3 = 'medium <> fair',
- * 1, 1, 3 = 'medium <> good',
+ * 1, 3, 4 = 'very poor <> poor',
+ * 1, 2, 4 = 'very poor <> fair',
+ * 1, 1, 4 = 'very poor <> good',
+ * 1, 2, 3 = 'poor <> fair',
+ * 1, 1, 3 = 'poor <> good',
  * 1, 1, 2 = 'fair <> good'
  * @extends VacBotCommand
  */

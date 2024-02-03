@@ -102,6 +102,7 @@ declare class VacBot {
     mapDataObjectQueue: any[];
     mapImageDataQueue: any[];
     schedule: any[];
+    genericCommand: any;
     vacBotCommand: typeof import("./950type/command") | typeof import("./non950type/command");
     protocolModule: typeof import("./950type/ecovacsMQTT_JSON") | typeof import("./non950type/ecovacsMQTT_XML") | typeof import("./non950type/ecovacsXMPP_XML");
     ecovacs: import("./950type/ecovacsMQTT_JSON") | import("./non950type/ecovacsMQTT_XML") | import("./non950type/ecovacsXMPP_XML");
@@ -303,6 +304,11 @@ declare class VacBot {
      * @returns {String}
      */
     getModelType(): string;
+    isModelTypeT9(): boolean;
+    isModelTypeT20(): boolean;
+    isModelTypeX1(): boolean;
+    isModelTypeX2(): boolean;
+    isModelTypeAirbot(): boolean;
     /**
      * Get the value of the given property for the device class
      * @param {string} property - The property to get
@@ -406,22 +412,7 @@ declare class VacBot {
      */
     isMapImageSupported(): boolean;
     /**
-     * Get the product name of the device
-     * @returns {string} the product name
-     */
-    getProductName(): string;
-    /**
-     * Get the product image URL of the image of the product
-     * @returns {string} the URL
-     */
-    getProductImageURL(): string;
-    /**
-     * Get the model name of the device
-     * @returns {string} the model name
-     */
-    getModelName(): string;
-    /**
-     * Get the nickname of the vacuum, if it exists, otherwise return an empty string
+     * Get the nickname of the vacuum
      * @returns {string} the nickname
      */
     getName(): string;
@@ -430,6 +421,21 @@ declare class VacBot {
      * @returns {string} the nickname, if it has one, or the product name
      */
     getNickname(): string;
+    /**
+     * Get the product name of the device
+     * @returns {string} the product name
+     */
+    getProductName(): string;
+    /**
+     * Get the model name of the device
+     * @returns {string} the model name
+     */
+    getModelName(): string;
+    /**
+     * Get the product image URL of the image of the product
+     * @returns {string} the URL
+     */
+    getProductImageURL(): string;
     /**
      * Send a command to the vacuum
      * @param {Object} command - a VacBotCommand object

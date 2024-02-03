@@ -1,4 +1,20 @@
 /**
+ * Checks if the area values are valid
+ * for the freeClean cleaning type (X2 series)
+ *
+ * @param {string} areaValues - The area values to be checked.
+ * @returns {boolean} - True if all area values are valid, false otherwise.
+ */
+export function areaValuesAreValidForFreeCleanCmd(areaValues: string): boolean;
+/**
+ * Converts the comma separated area value list to a format
+ * that the Deebot X2 requires for the freeClean cleaning type
+ *
+ * @param {string} areaValues - The area values string to be converted
+ * @returns {string} The converted area values string
+ */
+export function convertAreaValuesForFreeCleanCmd(areaValues: string): string;
+/**
  * Translates the Node.js error message for some network related error messages (e.g. `ENOTFOUND`)
  * @param {string} message - The error message received from the server
  * @param {string} [command=''] - The command
@@ -15,6 +31,7 @@ export function formatString(string: any, ...args: any[]): any;
  * @returns {Object} a dictionary of all known devices
  */
 export function getAllKnownDevices(): any;
+export function getCmdForObstacleDetection(modelName: any): "Recognization" | "TrueDetect";
 /**
  * Get the value of the given property for the device class
  * @param {string} deviceClass - The device class to get the property for
@@ -42,7 +59,6 @@ export function getReqID(): string;
  * @returns {Object} a dictionary of supported devices
  */
 export function getSupportedDevices(): any;
-export function getCmdForObstacleDetection(modelName: any): "Recognization" | "TrueDetect";
 /**
  * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
  * @param {number} totalSeconds - The total number of seconds to format
@@ -54,11 +70,6 @@ export function getTimeStringFormatted(totalSeconds: number): string;
  * @returns {boolean} a Boolean value whether the device a 710 series model
  */
 export function is710series(deviceClass: string): boolean;
-/**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device is an air purifier
- */
-export function isAirPurifier(deviceClass: string): boolean;
 /**
  * @returns {boolean} whether the canvas module is available
  */

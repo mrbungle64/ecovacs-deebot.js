@@ -621,9 +621,30 @@ export var KnownDevices: {
     };
     e6ofmn: {
         name: string;
-        deviceClassLink: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
+        unit_care_info: boolean;
+        round_mop_info: boolean;
+        air_drying: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        auto_empty_station: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+        hosted_mode: boolean;
+        yiko: boolean;
+        type: string;
     };
     lf3bn4: {
+        name: string;
+        deviceClassLink: string;
+    };
+    e6rcnf: {
         name: string;
         deviceClassLink: string;
     };
@@ -904,6 +925,31 @@ export var KnownDevices: {
     };
     p1jij8: {
         name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        main_brush: boolean;
+        side_brush: boolean;
+        filter: boolean;
+        unit_care_info: boolean;
+        round_mop_info: boolean;
+        air_drying: boolean;
+        spot_area: boolean;
+        custom_area: boolean;
+        mopping_system: boolean;
+        voice_report: boolean;
+        auto_empty_station: boolean;
+        clean_speed: boolean;
+        map_image_supported: boolean;
+        hosted_mode: boolean;
+        yiko: boolean;
+        type: string;
+    };
+    "9ku8nu": {
+        name: string;
+        deviceClassLink: string;
+    };
+    py3qif: {
+        name: string;
         deviceClassLink: string;
     };
     "626v6g": {
@@ -914,7 +960,21 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    "85nbtp": {
+        name: string;
+        deviceClassLink: string;
+    };
     "5xu9h3": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    itk04l: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "99fqkn": {
         name: string;
         "950type": boolean;
         "950type_V2": boolean;
