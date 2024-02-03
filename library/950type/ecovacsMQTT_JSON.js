@@ -237,11 +237,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     }
                 }
                 this.emitMessage("CleanLog", cleanLog);
-                this.emitMessage("CleanLog_lastImageUrl", this.vacBot.cleanLog_lastImageUrl);
-                this.emitMessage("CleanLog_lastImageTimestamp", this.vacBot.cleanLog_lastTimestamp); // Deprecated
-                this.emitMessage("CleanLog_lastTimestamp", this.vacBot.cleanLog_lastTimestamp);
-                this.emitMessage("CleanLog_lastSquareMeters", this.vacBot.cleanLog_lastSquareMeters);
-                this.emitMessage("CleanLog_lastTotalTimeString", this.vacBot.cleanLog_lastTotalTimeString);
                 this.emitMessage('LastCleanLogs', {
                     'timestamp': this.vacBot.cleanLog_lastTimestamp,
                     'squareMeters': this.vacBot.cleanLog_lastSquareMeters,
@@ -353,10 +348,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "NetInfo":
                 // Various network/wifi information
                 this.vacBot.handleNetInfo(payload);
-                this.emitMessage("NetInfoIP", this.vacBot.netInfoIP); // Deprecated
-                this.emitMessage("NetInfoWifiSSID", this.vacBot.netInfoWifiSSID); // Deprecated
-                this.emitMessage("NetInfoWifiSignal", this.vacBot.netInfoWifiSignal); // Deprecated
-                this.emitMessage("NetInfoMAC", this.vacBot.netInfoMAC); // Deprecated
                 this.emitMessage("NetworkInfo", {
                     'ip': this.vacBot.netInfoIP,
                     'mac': this.vacBot.netInfoMAC,
@@ -460,9 +451,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'TotalStats':
                 this.vacBot.handleTotalStats(payload);
-                this.emitMessage("CleanSum_totalSquareMeters", this.vacBot.cleanSum_totalSquareMeters); // Deprecated
-                this.emitMessage("CleanSum_totalSeconds", this.vacBot.cleanSum_totalSeconds); // Deprecated
-                this.emitMessage("CleanSum_totalNumber", this.vacBot.cleanSum_totalNumber); // Deprecated
                 this.emitMessage('CleanSum', {
                     'totalSquareMeters': this.vacBot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.vacBot.cleanSum_totalSeconds,

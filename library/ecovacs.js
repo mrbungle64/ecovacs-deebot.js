@@ -170,8 +170,6 @@ class Ecovacs extends EventEmitter {
             case 'NetInfo':
                 payload = event.attrs;
                 this.bot.handleNetInfo(payload);
-                this.emit('NetInfoIP', this.bot.netInfoIP); // Deprecated
-                this.emit('NetInfoWifiSSID', this.bot.netInfoWifiSSID); // Deprecated
                 this.emit('NetworkInfo', {
                     'ip': this.bot.netInfoIP,
                     'mac': null,
