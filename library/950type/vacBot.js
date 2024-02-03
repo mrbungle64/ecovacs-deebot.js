@@ -1136,7 +1136,7 @@ class VacBot_950type extends VacBot {
                 }
             }
             // TODO: Implement liveMapImage
-            this.sendCommand(new VacBotCommand.GetMapTrace());
+            // this.sendCommand(new VacBotCommand.GetMapTrace());
             // TODO: handle liveMapImage
             if (HANDLE_LIVE_MAP) {
                 const type = payload['type'];
