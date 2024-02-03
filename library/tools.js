@@ -264,6 +264,8 @@ function convertAreaValuesForFreeCleanCmd(areaValues) {
 function areaValuesAreValidForFreeCleanCmd(areaValues) {
     // Regular expression that matches an integer, a comma and another integer
     const regex = /^\d+,?\d+(;|$)/;
+    // Remove trailing semikolon
+    areaValues = areaValues.replace(/;$/, '');
     // Split the string into segments using semicolons
     const segments = areaValues.split(';');
     // Check whether each segment corresponds to the regular expression
