@@ -227,7 +227,7 @@ class Resume extends VacBotCommand {
 
 /**
  * Represents the 'stop' function
- * For Airbot Z1 you have to use the `clean_V2` command
+ * For Airbot Z1 and Deebot X2 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
 class Stop extends VacBotCommand {
@@ -1507,9 +1507,9 @@ class SetVoice extends VacBotCommand {
 }
 
 /**
- * Request information about the 
+ * Request information about the
  * 'Customized Scenario Cleaning' scenarios (T20, X2 series)
- * 
+ *
  * @extends VacBotCommand
  */
 class GetQuickCommand extends VacBotCommand {
