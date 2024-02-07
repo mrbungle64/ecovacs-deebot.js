@@ -85,16 +85,6 @@ function isN79series(deviceClass) {
     }
 }
 
-function getCmdForObstacleDetection(modelName) {
-    if (modelName.includes('T8 AIVI')) {
-        return "Recognization";
-    } else if (modelName.includes('T9 AIVI')) {
-        return "Recognization";
-    } else {
-        return "TrueDetect";
-    }
-}
-
 /**
  * Get all known devices, including the supported devices and the known devices
  * @returns {Object} a dictionary of all known devices
@@ -427,7 +417,6 @@ module.exports.createErrorDescription = createErrorDescription;
 module.exports.envLog = envLog;
 module.exports.formatString = formatString;
 module.exports.getAllKnownDevices = getAllKnownDevices;
-module.exports.getCmdForObstacleDetection = getCmdForObstacleDetection;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getModelType = getModelType;

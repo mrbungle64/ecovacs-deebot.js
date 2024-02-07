@@ -1480,6 +1480,14 @@ class VacBot_950type extends VacBot {
         this.dmodule = payload;
     }
 
+    getCmdForObstacleDetection() {
+        if ((this.getModelType() === 'T8') || (this.getModelType() === 'T9')) {
+            return "Recognization";
+        } else {
+            return "TrueDetect";
+        }
+    }
+
     /**
      * Run a specific command
      * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
@@ -1743,7 +1751,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 break;
             case 'GetTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
+                if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.sendCommand(new VacBotCommand.GetRecognization());
                 } else {
                     this.sendCommand(new VacBotCommand.GetTrueDetect());
@@ -1752,7 +1760,7 @@ class VacBot_950type extends VacBot {
             case 'EnableAIVI'.toLowerCase():
             case 'EnableAIVI3D'.toLowerCase():
             case 'EnableTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
+                if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.sendCommand(new VacBotCommand.SetRecognization(1));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(1));
@@ -1761,7 +1769,7 @@ class VacBot_950type extends VacBot {
             case 'DisableAIVI'.toLowerCase():
             case 'DisableAIVI3D'.toLowerCase():
             case 'DisableTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
+                if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.sendCommand(new VacBotCommand.SetRecognization(0));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(0));
@@ -1770,7 +1778,7 @@ class VacBot_950type extends VacBot {
             case 'SetAIVI'.toLowerCase():
             case 'SetAIVI3D'.toLowerCase():
             case 'SetTrueDetect'.toLowerCase():
-                if (tools.getCmdForObstacleDetection(this.getModelName()) === 'Recognization') {
+                if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 } else {
                     this.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
@@ -1778,7 +1786,7 @@ class VacBot_950type extends VacBot {
                 break;
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase():
-                if (this.getModelType() === 'T20') {
+                if (this.isModelTypeT20()) {
                     this.sendCommand(new VacBotCommand.EmptyDustBinSA());
                 } else {
                     this.sendCommand(new VacBotCommand.EmptyDustBin());
