@@ -182,7 +182,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emitMessage('AirDryingState', this.vacBot.airDryingStatus);
                 }
                 break;
-            case 'AICleanItemState':s
+            case 'AICleanItemState':
                 // "Strategic Particle Removal" and "Strategic Pet Poop Avoidance" mode (e.g. X1)
                 this.vacBot.handleAICleanItemState(payload);
                 if (this.vacBot.aiCleanItemState.items.length) {
@@ -363,8 +363,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                         this.vacBot.relocationState = 'required';
                         this.emitMessage("RelocationState", this.vacBot.relocationState);
                     } else if (this.vacBot.deebotPosition["x"] && this.vacBot.deebotPosition["y"]) {
-                        this.emitMessage("DeebotPosition", this.vacBot.deebotPosition["x"] + "," + this.vacBot.deebotPosition["y"] + "," + this.vacBot.deebotPosition["a"]);
-                        this.emitMessage("DeebotPositionIsInvalid", this.vacBot.deebotPosition["isInvalid"]);
                         this.emitMessage("DeebotPositionCurrentSpotAreaID", this.vacBot.deebotPosition["currentSpotAreaID"]);
                         this.emitMessage("DeebotPositionCurrentSpotAreaName", this.vacBot.deebotPosition["currentSpotAreaName"]);
                         this.emitMessage('Position', {
