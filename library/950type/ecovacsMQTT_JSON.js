@@ -189,7 +189,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emitMessage('AICleanItemState', this.vacBot.aiCleanItemState);
                 }
                 break;
-            case 'AutoEmpty':
+            case 'AutoEmpty': {
                 // "Auto empty" status (Auto-Empty Station)
                 this.vacBot.handleAutoEmpty(payload);
                 this.emitMessage("AutoEmpty", this.vacBot.autoEmpty);
@@ -201,6 +201,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 };
                 this.emitMessage("AutoEmptyStatus", autoEmptyStatus);
                 break;
+            }
             case "Battery":
                 // Battery status
                 this.vacBot.handleBattery(payload);
@@ -209,14 +210,16 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emitMessage("BatteryIsLow", this.vacBot.batteryIsLow);
                 }
                 break;
-            case 'Block':
+            case 'Block': {
                 // "Do Not Disturb" mode
                 this.vacBot.handleBlock(payload);
                 this.emitMessage("DoNotDisturbEnabled", this.vacBot.block);
-                if (!!this.vacBot.block) {
+                const doNotDisturbEnabled = Boolean(this.vacBot.block);
+                if (doNotDisturbEnabled) {
                     this.emitMessage("DoNotDisturbBlockTime", this.vacBot.blockTime);
                 }
                 break;
+            }
             case 'BorderSpin':
                 // "Edge Deep Cleaning" (e.g. X1)
                 this.vacBot.handleBorderSpin(payload);
@@ -576,8 +579,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // TODO: finish implementing MapTrace
                 break;
             case 'MinorMap':
-                let mapImage = this.vacBot.handleMinorMap(payload);
                 // TODO: finish implementing MinorMap and emit MapLiveImage
+                // let mapImage = this.vacBot.handleMinorMap(payload);
                 break;
 
             // =====
