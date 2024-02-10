@@ -203,11 +203,12 @@ class MapPoint_V2 extends Clean_V2 {
 
 /**
  * Represents the 'pause' function
+ * For Airbot Z1 and Deebot X2 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
 class Pause extends VacBotCommand {
-    constructor() {
-        super('clean', {
+    constructor(command = 'clean') {
+        super(command, {
             'act': 'pause'
         });
     }

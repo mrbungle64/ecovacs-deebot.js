@@ -556,8 +556,18 @@ class VacBot {
                 this.sendCommand(new this.vacBotCommand.Spot());
                 break;
             case "Pause".toLowerCase(): {
-                const mode = args[0] || 'auto';
-                this.sendCommand(new this.vacBotCommand.Pause(mode));
+                if (this.isModelTypeAirbot() || this.isModelTypeX2()) {
+                    // Airbot Z1 and Deebot X2 series
+                    const command = 'clean_V2';
+                    this.sendCommand(new this.vacBotCommand.Pause(command));
+                } else if (args[0] !== undefined) {
+                    // Legacy models
+                    const mode = args[0];
+                    this.sendCommand(new this.vacBotCommand.Pause(mode));
+                } else {
+                    // Standard
+                    this.sendCommand(new this.vacBotCommand.Pause());
+                }
                 break;
             }
             case "Stop".toLowerCase():
