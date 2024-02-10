@@ -312,7 +312,7 @@ class EcovacsMQTT extends Ecovacs {
                     resolve(true);
                 }
             });
-        })
+        });
     }
 }
 

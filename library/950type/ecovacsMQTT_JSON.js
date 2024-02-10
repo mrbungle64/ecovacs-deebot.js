@@ -96,7 +96,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             } else if (message['body']) {
                 payload = message['body'];
             } else {
-                tools.envLogWarn('Unhandled MQTT message payload ...')
+                tools.envLogWarn('Unhandled MQTT message payload ...');
                 return;
             }
         } else if (type === "response") {
@@ -465,7 +465,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             case 'WashInfo':
                 this.vacBot.handleWashInfo(payload);
-                this.emitMessage("WashInfo", this.vacBot.washInfo)
+                this.emitMessage("WashInfo", this.vacBot.washInfo);
+                break;
             case "WashInterval":
                 this.vacBot.handleWashInterval(payload);
                 if (this.vacBot.washInterval !== null) {
@@ -718,13 +719,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleVoiceAssistantState(payload);
                 this.emitMessage('VoiceAssistantState', this.vacBot.voiceAssistantState);
                 break;
-
-            case 'AreaPoint':
-                // Obstacles detected during cleaning (AIVI)
-                if (payload) {
-                    tools.envLogInfo(`Payload for 'AreaPoint' message: ${JSON.stringify(payload)}`);
-                }
-                break;
             case 'AirSpeed':
             case 'Humidity':
             case 'Temperature':
@@ -761,8 +755,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleSysinfo(payload);
                 if (this.vacBot.sysinfo) {
                     this.emitMessage('Sysinfo', this.vacBot.sysinfo);
-                    break;
                 }
+                break;
             case 'FwBuryPoint-bd_air-quality':
                 this.vacBot.run('GetAirQuality');
                 break;
@@ -778,8 +772,8 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.handleTask(fwBuryPointEvent, payload);
                 if (this.currentTask) {
                     this.emitMessage('TaskStarted', this.currentTask);
-                    break;
                 }
+                break;
             }
             case 'FwBuryPoint-bd_dtofstart': // DToF-Laser-Sensor
             case 'FwBuryPoint-bd_errorcode':
@@ -840,7 +834,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
         if (abbreviatedCommand === 'MapSet_V2') {
             // TODO: handle subsets
             return abbreviatedCommand;
-        };
+        }
         if (abbreviatedCommand === 'MapInfo_V2') {
             if (this.vacBot.authDomain === constants.AUTH_DOMAIN_YD) {
                 return 'MapInfo_V2_Yeedi';
