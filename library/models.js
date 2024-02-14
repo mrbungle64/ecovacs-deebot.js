@@ -651,6 +651,10 @@ exports.KnownDevices = {
         "name": "DEEBOT X2 COMBO",
         "deviceClassLink": "e6ofmn"
     },
+    "ip3mmy": {
+        "name": "DEEBOT X2 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
     "ipzjy0": {
         "name": "DEEBOT U2",
         "950type": true,

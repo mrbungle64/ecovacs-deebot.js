@@ -764,7 +764,7 @@ class VacBot {
 
     /**
      * Returns true if V2 commands are implemented (newer 950 type models)
-     * e.g. Deebot N8/T8/T9/X1 series
+     * e.g. Deebot T8, T9, T10, T20, X1, X2 series
      * If the model is not registered, it returns false
      * @returns {boolean}
      */
