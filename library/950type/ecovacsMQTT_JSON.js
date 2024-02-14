@@ -157,7 +157,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.vacBot.genericCommand = null;
             }
         }
-        // e.g. T8, T9, T10, N8, X1 series
+        // e.g. T8, T9, T10, T20, N8, X1, X2 series and Airbot Z1
         if (abbreviatedCommand.endsWith("_V2")) {
             abbreviatedCommand = this.handleV2commands(abbreviatedCommand);
         }
@@ -174,14 +174,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 // "Advanced Mode" (e.g. OZMO 920/950, T8 AIVI)
                 this.vacBot.handleAdvancedMode(payload);
                 this.emitMessage("AdvancedMode", this.vacBot.advancedMode);
-                break;
-            }
-            case 'AirDring': { // The typo in 'AirDring' is intended
-                // Air drying status (yeedi models)
-                this.vacBot.handleAirDryingState(payload);
-                if (this.vacBot.airDryingStatus) {
-                    this.emitMessage('AirDryingState', this.vacBot.airDryingStatus);
-                }
                 break;
             }
             case 'AICleanItemState': {
@@ -311,6 +303,14 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMessage('SweepMode', this.vacBot.sweepMode);
                 break;
             }
+            case 'DModule': { // Air Freshener module (T9 AIVI)
+                this.vacBot.handleDModule(payload);
+                if (this.vacBot.dmodule.enabled) {
+                    this.emitMessage("DModuleEnabled", this.vacBot.dmodule.enabled);
+                    this.emitMessage("DModuleStatus", this.vacBot.dmodule.status);
+                }
+                break;
+            }
             case 'DusterRemind': {
                 // "Cleaning Cloth Reminder"
                 this.vacBot.handleDusterRemind(payload);
@@ -374,6 +374,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     'wifiSSID': this.vacBot.netInfoWifiSSID,
                     'wifiSignal': this.vacBot.netInfoWifiSignal,
                 });
+                break;
+            }
+            case 'Ota': {
+                this.vacBot.handleOverTheAirUpdate(payload);
+                this.emitMessage('Ota', payload);
                 break;
             }
             case "Pos": {
@@ -452,11 +457,13 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             }
             case "StationInfo": {
+                // Various information about the cleaning station (e.g. X1 series)
                 this.vacBot.handleStationInfo(payload);
                 this.emitMessage('StationInfo', this.vacBot.stationInfo);
                 break;
             }
             case "StationState": {
+                // Various states of the cleaning station (e.g. X1 series)
                 this.vacBot.handleStationState(payload);
                 if (this.vacBot.stationState.type !== null) {
                     this.emitMessage("StationState", this.vacBot.stationState);
@@ -479,6 +486,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMessage('MopOnlyMode', this.vacBot.mopOnlyMode);
                 break;
             }
+            case 'TimeZone': {
+                // The configured time zone
+                this.vacBot.handleTimeZone(payload);
+                this.emitMessage('TimeZone', payload);
+                break;
+            }
             case 'TotalStats': {
                 this.vacBot.handleTotalStats(payload);
                 this.emitMessage('CleanSum', {
@@ -494,6 +507,7 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 break;
             }
             case 'Volume': {
+                // The set volume level
                 this.vacBot.handleVolume(payload);
                 this.emitMessage("Volume", this.vacBot.volume);
                 break;
@@ -524,13 +538,18 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMoppingSystemReport();
                 break;
             }
+            case 'WifiList': {
+                // Configured WiFi networks
+                this.vacBot.handleWiFiList(payload);
+                this.emitMessage('WifiList', payload);
+                break;
+            }
             case "WorkMode": {
                 // "Work Mode", "Cleaning Mode"
                 this.vacBot.handleWorkMode(payload);
                 this.emitMessage("WorkMode", this.vacBot.workMode);
                 break;
             }
-
             // ========
             // Map info
             // ========
@@ -568,18 +587,6 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             }
-            case "MapInfo_V2_Yeedi": {
-                try {
-                    this.vacBot.handleMapInfoV2_Yeedi(payload);
-                    this.emitMessage("CurrentMapMID", this.vacBot.currentMapMID);
-                    this.emitMessage("CurrentMapName", this.vacBot.currentMapName);
-                    this.emitMessage("CurrentMapIndex", this.vacBot.currentMapIndex);
-                    this.emitMessage("Maps", this.vacBot.maps);
-                } catch (e) {
-                    tools.envLogError(`error on handling MapInfo_V2 (yeedi): ${e.message}`);
-                }
-                break;
-            }
             case "MapSet": {
                 // Handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.vacBot.handleMapSet(payload);
@@ -613,58 +620,29 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             }
-            case 'MajorMap': {
-                this.vacBot.handleMajorMap(payload);
-                // TODO: finish implementing MajorMap
-                break;
-            }
-            case 'MapTrace': {
-                this.vacBot.handleMapTrace(payload);
-                // TODO: finish implementing MapTrace
-                break;
-            }
-            case 'MinorMap': {
-                // TODO: finish implementing MinorMap and emit MapLiveImage
-                // let mapImage = this.vacBot.handleMinorMap(payload);
-                break;
-            }
-
-            // =====
-            // Stuff
-            // =====
-            case 'AIMap':
-            case 'Clean'.toLowerCase(): {
-                if (payload) {
-                    tools.envLogInfo(`payload for ${abbreviatedCommand} message: ${JSON.stringify(payload)}`);
+            // =================
+            // yeedi models only
+            // =================
+            case 'AirDring': { // The typo in 'AirDring' is intended
+                // Air drying status
+                this.vacBot.handleAirDryingState(payload);
+                if (this.vacBot.airDryingStatus) {
+                    this.emitMessage('AirDryingState', this.vacBot.airDryingStatus);
                 }
                 break;
             }
-            // T9 AIVI
-            case 'DModule': { // Air Freshener module
-                this.vacBot.handleDModule(payload);
-                if (this.vacBot.dmodule.enabled) {
-                    this.emitMessage("DModuleEnabled", this.vacBot.dmodule.enabled);
-                    this.emitMessage("DModuleStatus", this.vacBot.dmodule.status);
+            case "MapInfo_V2_Yeedi": {
+                // "_Yeedi" was appended as suffix
+                // MapInfo_V2 for yeedi models differs from the Ecovacs variant
+                try {
+                    this.vacBot.handleMapInfoV2_Yeedi(payload);
+                    this.emitMessage("CurrentMapMID", this.vacBot.currentMapMID);
+                    this.emitMessage("CurrentMapName", this.vacBot.currentMapName);
+                    this.emitMessage("CurrentMapIndex", this.vacBot.currentMapIndex);
+                    this.emitMessage("Maps", this.vacBot.maps);
+                } catch (e) {
+                    tools.envLogError(`error on handling MapInfo_V2 (yeedi): ${e.message}`);
                 }
-                break;
-            }
-            case 'AIMapAndMapSet':
-                // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
-                break;
-
-            case 'Ota': {
-                this.vacBot.handleOverTheAirUpdate(payload);
-                this.emitMessage('Ota', payload);
-                break;
-            }
-            case 'TimeZone': {
-                this.vacBot.handleTimeZone(payload);
-                this.emitMessage('TimeZone', payload);
-                break;
-            }
-            case 'WifiList': {
-                this.vacBot.handleWiFiList(payload);
-                this.emitMessage('WifiList', payload);
                 break;
             }
             // ==================================
@@ -823,7 +801,33 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 }
                 break;
             }
-
+            // =========
+            // Unhandled
+            // =========
+            case 'AIMap': {
+                // TODO: handle `AIMap` message
+                break;
+            }
+            case 'AIMapAndMapSet': {
+                // TODO: handle `AIMapAndMapSet` message
+                // {"onAIMap":{"mid":"1839835603","totalCount":4},"onMapSet":{"mid":"1839835603","type":"svm","hasUnRead":0}}
+                break;
+            }
+            case 'MajorMap': {
+                this.vacBot.handleMajorMap(payload);
+                // TODO: finish implementing MajorMap
+                break;
+            }
+            case 'MapTrace': {
+                this.vacBot.handleMapTrace(payload);
+                // TODO: finish implementing MapTrace
+                break;
+            }
+            case 'MinorMap': {
+                // TODO: finish implementing MinorMap and emit MapLiveImage
+                // let mapImage = this.vacBot.handleMinorMap(payload);
+                break;
+            }
             // ====================
             // FwBuryPoint messages
             // ====================
