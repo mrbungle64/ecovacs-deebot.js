@@ -1886,7 +1886,7 @@ class VacBot_950type extends VacBot {
                 if (area !== '') {
                     if (this.isModelTypeT9() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2()) {
                         this.run('MapPoint_V2', area);
-                    } else if (this.getModelType() === 'T8') {
+                    } else if (this.isModelTypeN8() || this.isModelTypeT8()) {
                         area = area + ',' + area;
                         this.run('CustomArea_V2', area, 1, 1);
                     }

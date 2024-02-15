@@ -848,6 +848,14 @@ class VacBot {
         return tools.getModelType(this.deviceClass);
     }
 
+    isModelTypeN8() {
+        return this.getModelType() === 'N8';
+    }
+
+    isModelTypeT8() {
+        return this.getModelType() === 'T8';
+    }
+
     isModelTypeT9() {
         return this.getModelType() === 'T9';
     }
