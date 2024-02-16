@@ -860,6 +860,10 @@ class VacBot {
         return this.getModelType() === 'T9';
     }
 
+    isModelTypeT10() {
+        return this.getModelType() === 'T10';
+    }
+
     isModelTypeT20() {
         return this.getModelType() === 'T20';
     }
@@ -874,6 +878,14 @@ class VacBot {
 
     isModelTypeAirbot() {
         return this.getModelType() === 'airbot';
+    }
+
+    isModelTypeT8Based() {
+        return this.isModelTypeT8() || this.isModelTypeN8();
+    }
+
+    isModelTypeT9Based() {
+        return this.isModelTypeT9() || this.isModelTypeT10() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2();
     }
 
     /**

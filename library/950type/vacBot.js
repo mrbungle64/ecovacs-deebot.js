@@ -1694,7 +1694,7 @@ class VacBot_950type extends VacBot {
                 this.sendCommand(new VacBotCommand.GetWaterInfo());
                 break;
             case 'GetCleanLogs'.toLowerCase():
-                if (this.isModelTypeT9() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2()) {
+                if (this.isModelTypeT9Based()) {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
                         let cleanLog = [];
@@ -1884,9 +1884,9 @@ class VacBot_950type extends VacBot {
             case 'GoToPosition'.toLowerCase(): {
                 let area = args[0].toString();
                 if (area !== '') {
-                    if (this.isModelTypeT9() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2()) {
+                    if (this.isModelTypeT9Based()) {
                         this.run('MapPoint_V2', area);
-                    } else if (this.isModelTypeN8() || this.isModelTypeT8()) {
+                    } else if (this.isModelTypeT8Based()) {
                         area = area + ',' + area;
                         this.run('CustomArea_V2', area, 1, 1);
                     }

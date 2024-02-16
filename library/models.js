@@ -481,7 +481,7 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "hosted_mode": true,
         "yiko": true,
-        "type": "T9"
+        "type": "T10"
     },
     "rss8xk": {
         "name": "DEEBOT T10 PLUS",
@@ -502,7 +502,7 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "hosted_mode": true,
         "yiko": true,
-        "type": "T9"
+        "type": "T10"
     },
     "p95mgv": {
         "name": "DEEBOT T10 PLUS",
@@ -526,7 +526,7 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "hosted_mode": true,
         "yiko": true,
-        "type": "T9"
+        "type": "T10"
     },
     "lx3j7m": {
         "name": "DEEBOT T10 OMNI",
@@ -547,7 +547,7 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "hosted_mode": true,
         "yiko": true,
-        "type": "T9"
+        "type": "T10"
     },
     "3yqsch": {
         "name": "DEEBOT X1",
