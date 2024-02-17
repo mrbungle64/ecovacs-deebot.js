@@ -602,10 +602,11 @@ export class MoveForward extends Move {
 }
 /**
  * Represents the 'pause' function
+ * For Airbot Z1 and Deebot X2 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
 export class Pause extends VacBotCommand {
-    constructor();
+    constructor(command?: string);
 }
 /**
  * Sends a 'PlaySound' command with a sid
@@ -858,7 +859,7 @@ export class SpotArea_V2 extends Clean_V2 {
 }
 /**
  * Represents the 'stop' function
- * For Airbot Z1 you have to use the `clean_V2` command
+ * For Airbot Z1 and Deebot X2 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
 export class Stop extends VacBotCommand {

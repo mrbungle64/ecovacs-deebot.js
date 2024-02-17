@@ -648,6 +648,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    ip3mmy: {
+        name: string;
+        deviceClassLink: string;
+    };
     ipzjy0: {
         name: string;
         "950type": boolean;

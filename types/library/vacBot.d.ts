@@ -250,7 +250,7 @@ declare class VacBot {
     is950type(): boolean;
     /**
      * Returns true if V2 commands are implemented (newer 950 type models)
-     * e.g. Deebot N8/T8/T9/X1 series
+     * e.g. Deebot T8, T9, T10, T20, X1, X2 series
      * If the model is not registered, it returns false
      * @returns {boolean}
      */
@@ -304,11 +304,16 @@ declare class VacBot {
      * @returns {String}
      */
     getModelType(): string;
+    isModelTypeN8(): boolean;
+    isModelTypeT8(): boolean;
     isModelTypeT9(): boolean;
+    isModelTypeT10(): boolean;
     isModelTypeT20(): boolean;
     isModelTypeX1(): boolean;
     isModelTypeX2(): boolean;
     isModelTypeAirbot(): boolean;
+    isModelTypeT8Based(): boolean;
+    isModelTypeT9Based(): boolean;
     /**
      * Get the value of the given property for the device class
      * @param {string} property - The property to get

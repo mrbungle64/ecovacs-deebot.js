@@ -31,7 +31,6 @@ export function formatString(string: any, ...args: any[]): any;
  * @returns {Object} a dictionary of all known devices
  */
 export function getAllKnownDevices(): any;
-export function getCmdForObstacleDetection(modelName: any): "Recognization" | "TrueDetect";
 /**
  * Get the value of the given property for the device class
  * @param {string} deviceClass - The device class to get the property for

@@ -532,6 +532,7 @@ declare class VacBot_950type extends VacBot {
     handleSysinfo(payload: any): void;
     handleTask(type: any, payload: any): void;
     handleDModule(payload: any): void;
+    getCmdForObstacleDetection(): "Recognization" | "TrueDetect";
 }
 import VacBot = require("../vacBot");
 import mapTemplate = require("../mapTemplate");
