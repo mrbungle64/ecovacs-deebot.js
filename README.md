@@ -23,18 +23,18 @@ Information on how to use this library can be found [here](https://github.com/mr
 
 ## Models
 
-### Fully supported models
+### Supported models
 
-The fully supported models are those that I own myself:
+The following models I own myself, so they are very widely supported:
 
 * Deebot OZMO 920/950
 * Deebot OZMO T8 AIVI
 * Deebot X1 Turbo
 * Airbot Z1
 
-### Other supported models
+### Other models
 
-These models should work properly or at least partially.
+The following models should work properly or at least partially.
 They are either already known to work or are technically similar to these models.
 Nevertheless, the functionality may be partially limited.
 
@@ -43,11 +43,7 @@ There is of course no claim to full functionality.
 
 #### Ecovacs Deebot
 
-* Deebot OZMO T5
 * Deebot N8 series
-* Deebot N9 series
-* Deebot N10 series
-* Deebot U2 series
 * Deebot T8 series
 * Deebot T9 series
 * Deebot T10 series
@@ -69,7 +65,7 @@ There is of course no claim to full functionality.
 These models use XML for data transport and also different characteristics for commands and events than the current models.
 I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
-**Support for these models will therefore be discontinued sooner or later**.
+**Support for these models will therefore be discontinued sooner or later**
 
 * Deebot Slim 2
 * Deebot N79 series
@@ -83,12 +79,13 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 * Deebot OZMO 930
 * Deebot OZMO Slim 10/11
 
+**Note**: All these lists may not be fully complete
+
 ## Known issues
 
-* The generation of map images may not be stable on 32-bit systems (e.g. most Raspberry Pi systems)
-* The "Edge" command does not work with Deebot U2 (starts auto clean instead)
-* The "Move" commands do not work with Deebot OZMO T8 AIVI (and maybe also for some other models)
-* The generation of map image data does not work properly with the Deebot X1 series
+* The "move" function varies from model to model, so I won't implement it universally
+* The generation of map images is not stable on 32-bit systems
+* and it still does not work properly with the Deebot X1 series and other current models
 
 ## Changelog
 
