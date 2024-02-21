@@ -578,7 +578,11 @@ class VacBot {
                 }
                 break;
             case "Resume".toLowerCase():
-                this.sendCommand(new this.vacBotCommand.Resume());
+                if (this.isModelTypeAirbot() || this.isModelTypeX2()) {
+                    this.sendCommand(new this.vacBotCommand.Resume('clean_V2'));
+                } else {
+                    this.sendCommand(new this.vacBotCommand.Resume());
+                }
                 break;
             case "Charge".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.Charge());

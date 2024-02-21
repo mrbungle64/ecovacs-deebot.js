@@ -219,8 +219,8 @@ class Pause extends VacBotCommand {
  * @extends VacBotCommand
  */
 class Resume extends VacBotCommand {
-    constructor() {
-        super('clean', {
+    constructor(command = 'clean') {
+        super(command, {
             'act': 'resume'
         });
     }
