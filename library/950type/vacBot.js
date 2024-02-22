@@ -339,7 +339,7 @@ class VacBot_950type extends VacBot {
         // the handling should be extracted to a separate function
         const deebotPos = payload['deebotPos'];
         if (typeof deebotPos === 'object') {
-            // check if position changed or currentSpotAreaID unknown
+            // check if position changed or currentSpotAreaID is 'unknown'
             let changed = (
                 deebotPos['x'] !== this.deebotPosition.x ||
                 deebotPos['y'] !== this.deebotPosition.y ||
@@ -379,7 +379,6 @@ class VacBot_950type extends VacBot {
      * @param {Object} payload - The payload of the event.
      */
     handleEvt(payload) {
-        this.evt = {};
         const code = payload['code'];
         if (eventCodes.hasOwnProperty(code)) {
             tools.envLogWarn(`Evt code: '${eventCodes[code]}'`);
@@ -388,7 +387,12 @@ class VacBot_950type extends VacBot {
                 event: eventCodes[code]
             };
         } else {
-            tools.envLogWarn(`Unhandled Evt code: '${code}'`);
+            const eventMessage = `Unhandled Evt code: '${code}'`;
+            tools.envLogWarn(eventMessage);
+            this.evt = {
+                code: code,
+                event: eventMessage
+            };
         }
     }
 
@@ -1213,6 +1217,9 @@ class VacBot_950type extends VacBot {
      */
     handleResponseError(payload) {
         this.errorCode = payload['code'].toString();
+        if (this.errorCode === '') {
+            this.errorCode = '-3';
+        }
         // known errorCode from library
         if (errorCodes[this.errorCode]) {
             this.errorDescription = errorCodes[this.errorCode];
