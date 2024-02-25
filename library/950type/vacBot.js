@@ -1049,36 +1049,38 @@ class VacBot_950type extends VacBot {
         if (typeof subsets === 'string') {
             subsets = JSON.parse(await mapTemplate.mapPieceToIntArray(subsets));
         }
-        const type = payload['type'];
-        let subsetData = [];
-        subsets.forEach((subset) => {
-            const mssid = subset[0];
-            const name = subset[1];
-            const subtype = subset[2];
-            const areaConnections = subset[3];
-            const index = subset[4];
-            const spotPosition = subset[5] + ',' + subset[6];
-            const cleanCount = subset[7].split('-')[0];
-            const cleanSpeed = subset[7].split('-')[1];
-            const waterLevel = subset[7].split('-')[2];
-            const singleSubsetData = {
-                'index': index,
-                'mssid': mssid,
-                'name': name,
-                'subtype': subtype,
-                'type': type,
-                'areaConnections': areaConnections.replace(/-/g, ','),
-                'cleanCount': Number(cleanCount),
-                'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[cleanSpeed],
-                'waterLevel': Number(waterLevel),
-                'spotPosition': spotPosition
+        if ((subsets !== undefined) && Array.isArray(subsets)) {
+            const type = payload['type'];
+            let subsetData = [];
+            subsets.forEach((subset) => {
+                const mssid = subset[0];
+                const name = subset[1];
+                const subtype = subset[2];
+                const areaConnections = subset[3];
+                const index = subset[4];
+                const spotPosition = subset[5] + ',' + subset[6];
+                const cleanCount = subset[7].split('-')[0];
+                const cleanSpeed = subset[7].split('-')[1];
+                const waterLevel = subset[7].split('-')[2];
+                const singleSubsetData = {
+                    'index': index,
+                    'mssid': mssid,
+                    'name': name,
+                    'subtype': subtype,
+                    'type': type,
+                    'areaConnections': areaConnections.replace(/-/g, ','),
+                    'cleanCount': Number(cleanCount),
+                    'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[cleanSpeed],
+                    'waterLevel': Number(waterLevel),
+                    'spotPosition': spotPosition
+                };
+                subsetData.push(singleSubsetData);
+            });
+            this.mapSet_V2 = {
+                'mid': payload['mid'],
+                'subsets': subsetData
             };
-            subsetData.push(singleSubsetData);
-        });
-        this.mapSet_V2 = {
-            'mid': payload['mid'],
-            'subsets': subsetData
-        };
+        }
     }
 
     /**
