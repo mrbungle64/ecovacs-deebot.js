@@ -781,10 +781,11 @@ exports.KnownDevices = {
     "aaxesz": {
         "name": "yeedi vac 2 pro",
         "950type": true,
-        "950type_V2": false,
+        "950type_V2": true,
         "main_brush": true,
         "side_brush": true,
         "filter": true,
+        "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -792,8 +793,7 @@ exports.KnownDevices = {
         "auto_empty_station": true,
         "clean_speed": true,
         "map_image_supported": false,
-        "type": "yeedi",
-        "unit_care_info": true
+        "type": "yeedi"
     },
     "rwp09o": {
         "name": "yeedi Floor 3+",
