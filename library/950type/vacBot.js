@@ -98,6 +98,7 @@ class VacBot_950type extends VacBot {
             'status': null
         };
         this.drivingWheel = null;
+        this.dryingDuration = null;
         this.dusterRemind = {
             'enabled': null,
             'period': null
@@ -475,6 +476,12 @@ class VacBot_950type extends VacBot {
         }
         if (airDryingStatus) {
             this.airDryingStatus = airDryingStatus;
+        }
+    }
+
+    handleDryingDuration(payload) {
+        if (payload.hasOwnProperty('duration')) {
+            this.dryingDuration = payload['duration'];
         }
     }
 
@@ -1987,6 +1994,14 @@ class VacBot_950type extends VacBot {
                     if ((act === 1) || (act === 4)) {
                         this.sendCommand(new VacBotCommand.Drying(act));
                     }
+                }
+                break;
+            case 'GetDryingDuration'.toLowerCase():
+                this.sendCommand(new VacBotCommand.GetDryingDuration());
+                break;
+            case 'SetDryingDuration'.toLowerCase():
+                if (args.length >= 1) {
+                    this.sendCommand(new VacBotCommand.SetDryingDuration(args[0]));
                 }
                 break;
             case 'Washing'.toLowerCase():

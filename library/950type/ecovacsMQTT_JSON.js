@@ -303,6 +303,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMessage('SweepMode', this.vacBot.sweepMode);
                 break;
             }
+            case 'DryingDuration': {
+                this.vacBot.handleDryingDuration(payload);
+                this.emitMessage('DryingDuration', this.vacBot.dryingDuration);
+                break;
+            }
             case 'DModule': { // Air Freshener module (T9 AIVI)
                 this.vacBot.handleDModule(payload);
                 if (this.vacBot.dmodule.enabled) {

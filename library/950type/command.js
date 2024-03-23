@@ -1327,6 +1327,20 @@ class Drying extends VacBotCommand {
     }
 }
 
+class GetDryingDuration extends VacBotCommand {
+    constructor() {
+        super('getDryingDuration');
+    }
+}
+
+class SetDryingDuration extends VacBotCommand {
+    constructor(duration = 0) {
+        super('setDryingDuration', {
+            'duration': duration
+        });
+    }
+}
+
 /**
  * Requests some information about the current map
  * TODO: Handle response data
@@ -2088,6 +2102,7 @@ module.exports.GetAICleanItemState = GetAICleanItemState;
 module.exports.GetAIMap = GetAIMap;
 module.exports.GetAdvancedMode = GetAdvancedMode;
 module.exports.GetAirDrying = GetAirDrying;
+module.exports.GetDryingDuration = GetDryingDuration;
 module.exports.GetAreaPoint = GetAreaPoint;
 module.exports.GetAutoEmpty = GetAutoEmpty;
 module.exports.GetBatteryState = GetBatteryState;
@@ -2156,6 +2171,7 @@ module.exports.ResetLifeSpan = ResetLifeSpan;
 module.exports.Resume = Resume;
 module.exports.SetAdvancedMode = SetAdvancedMode;
 module.exports.SetAirDrying = SetAirDrying;
+module.exports.SetDryingDuration = SetDryingDuration;
 module.exports.SetAutoEmpty = SetAutoEmpty;
 module.exports.SetBorderSpin = SetBorderSpin;
 module.exports.SetCachedMapInfo = SetCachedMapInfo;
