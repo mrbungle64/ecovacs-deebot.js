@@ -305,15 +305,15 @@ exports.KnownDevices = {
         "deviceClassLink": "h18jkh"
     },
     "tpnwyu": {
-        "name": "DEEBOT OZMO T8 AIVI +",
+        "name": "DEEBOT T8 AIVI +",
         "deviceClassLink": "h18jkh"
     },
     "34vhpm": {
-        "name": "DEEBOT OZMO T8 AIVI +",
+        "name": "DEEBOT T8 AIVI +",
         "deviceClassLink": "h18jkh"
     },
     "w16crm": {
-        "name": "DEEBOT OZMO T8 AIVI +",
+        "name": "DEEBOT OZMO T8 AIVI+",
         "deviceClassLink": "h18jkh"
     },
     "wgxm70": {
@@ -675,6 +675,10 @@ exports.KnownDevices = {
         "name": "DEEBOT U2",
         "deviceClassLink": "ipzjy0"
     },
+    "ts2ofl": {
+        "name": "DEEBOT U2",
+        "deviceClassLink": "ipzjy0"
+    },
     "nq9yhl": {
         "name": "DEEBOT U2 PRO",
         "deviceClassLink": "ipzjy0"
@@ -684,10 +688,6 @@ exports.KnownDevices = {
         "deviceClassLink": "ipzjy0"
     },
     "7j1tu6": {
-        "name": "DEEBOT U2 PRO",
-        "deviceClassLink": "ipzjy0"
-    },
-    "ts2ofl": {
         "name": "DEEBOT U2 PRO",
         "deviceClassLink": "ipzjy0"
     },
