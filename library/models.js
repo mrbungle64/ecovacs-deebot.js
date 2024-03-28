@@ -959,6 +959,22 @@ exports.KnownDevices = {
         "name": "DEEBOT T20e OMNI",
         "deviceClassLink": "p1jij8"
     },
+    "z4lvk7": {
+        "name": "DEEBOT T30 OMNI",
+        "deviceClassLink": "p1jij8"
+    },
+    "4vhygi": {
+        "name": "DEEBOT T30 PRO OMNI",
+        "deviceClassLink": "p1jij8"
+    },
+    "3w7j5e": {
+        "name": "DEEBOT T30 PRO OMNI",
+        "deviceClassLink": "p1jij8"
+    },
+    "tlthqk": {
+        "name": "DEEBOT T30 PRO OMNI",
+        "deviceClassLink": "p1jij8"
+    },
     "626v6g": {
         "name": "DEEBOT TEO+",
         "deviceClassLink": "rss8xk"
