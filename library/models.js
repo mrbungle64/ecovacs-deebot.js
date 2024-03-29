@@ -795,10 +795,6 @@ exports.KnownDevices = {
         "map_image_supported": false,
         "type": "yeedi"
     },
-    "rwp09o": {
-        "name": "yeedi Floor 3+",
-        "deviceClassLink": "mnx7f4"
-    },
     "04z443": {
         "name": "yeedi vac max",
         "950type": true,
@@ -870,6 +866,10 @@ exports.KnownDevices = {
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
+        "deviceClassLink": "vthpeg"
+    },
+    "rwp09o": {
+        "name": "yeedi Floor 3+",
         "deviceClassLink": "vthpeg"
     },
     "t5e5o6": {
@@ -995,6 +995,18 @@ exports.KnownDevices = {
     },
     "itk04l": {
         "name": "GOAT G1",
+        "deviceClassLink": "5xu9h3"
+    },
+    "guzput": {
+        "name": "GOAT G1-800",
+        "deviceClassLink": "5xu9h3"
+    },
+    "77atlz": {
+        "name": "GOAT G1-800",
+        "deviceClassLink": "5xu9h3"
+    },
+    "s69g6z": {
+        "name": "GOAT G1-2000",
         "deviceClassLink": "5xu9h3"
     },
     "99fqkn": {
