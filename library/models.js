@@ -45,6 +45,12 @@ exports.SupportedDevices = {
         "950type_V2": true,
         "type": "aqMonitor"
     },
+    "99fqkn": {
+        "name": "Z1 Air Quality Monitor",
+        "950type": true,
+        "950type_V2": true,
+        "type": "aqMonitor"
+    }
 };
 
 exports.KnownDevices = {
@@ -655,6 +661,30 @@ exports.KnownDevices = {
         "name": "DEEBOT X2 PRO OMNI",
         "deviceClassLink": "e6ofmn"
     },
+    "lr4qcs": {
+        "name": "DEEBOT X5 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "o0a4ju": {
+        "name": "DEEBOT X5 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "e6yxdm": {
+        "name": "DEEBOT X5 OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "4jd37g": {
+        "name": "DEEBOT X5 OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "rvflzn": {
+        "name": "DEEBOT X5 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "w7k3yc": {
+        "name": "DEEBOT X5 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
     "ipzjy0": {
         "name": "DEEBOT U2",
         "950type": true,
@@ -930,6 +960,74 @@ exports.KnownDevices = {
         "name": "DEEBOT N10 MAX+",
         "deviceClassLink": "rss8xk"
     },
+    "yinacl": {
+        "name": "DEEBOT N20e PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "qhe2o2": {
+        "name": "DEEBOT N20 PRO PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "p0l0af": {
+        "name": "DEEBOT N20 PRO PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "aavvfb": {
+        "name": "DEEBOT N20 PRO",
+        "deviceClassLink": "h18jkh"
+    },
+    "buom7k": {
+        "name": "DEEBOT N20 PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "kr0277": {
+        "name": "DEEBOT N20",
+        "deviceClassLink": "h18jkh"
+    },
+    "edoodo": {
+        "name": "DEEBOT N20",
+        "deviceClassLink": "h18jkh"
+    },
+    "zgsvkq": {
+        "name": " DEEBOT N20e",
+        "deviceClassLink": "h18jkh"
+    },
+    "ruhc0q": {
+        "name": "DEEBOT N20e",
+        "deviceClassLink": "h18jkh"
+    },
+    "i35yb6": {
+        "name": "DEEBOT N20 PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "9kpees": {
+        "name": "DEEBOT N20 PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "gwtll7": {
+        "name": "DEEBOT N20 PRO PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "c8gerr": {
+        "name": "DEEBOT N20 PRO",
+        "deviceClassLink": "h18jkh"
+    },
+    "7piq03": {
+        "name": " DEEBOT N20e PLUS",
+        "deviceClassLink": "h18jkh"
+    },
+    "zwkcqc": {
+        "name": "DEEBOT N30 OMNI",
+        "deviceClassLink": "h18jkh"
+    },
+    "dlrbzq": {
+        "name": " DEEBOT N30 PRO OMNI",
+        "deviceClassLink": "h18jkh"
+    },
+    "87swps": {
+        "name": " DEEBOT N30 PRO OMNI",
+        "deviceClassLink": "h18jkh"
+    },
     "p1jij8": {
         "name": "DEEBOT T20 OMNI",
         "950type": true,
@@ -975,6 +1073,46 @@ exports.KnownDevices = {
         "name": "DEEBOT T30 PRO OMNI",
         "deviceClassLink": "p1jij8"
     },
+    "822x8d": {
+        "name": "DEEBOT T30 OMNI",
+        "deviceClassLink": "p1jij8"
+    },
+    "4bdkrs": {
+        "name": "DEEBOT T30S COMBO",
+        "deviceClassLink": "p1jij8"
+    },
+    "ue8kcc": {
+        "name": "DEEBOT T30S COMBO",
+        "deviceClassLink": "p1jij8"
+    },
+    "8tyt2y": {
+        "name": "DEEBOT T30S",
+        "deviceClassLink": "p1jij8"
+    },
+    "eqmf84": {
+        "name": "DEEBOT T30S",
+        "deviceClassLink": "p1jij8"
+    },
+    "9gqyaq": {
+        "name": "DEEBOT T30S COMBO",
+        "deviceClassLink": "p1jij8"
+    },
+    "kr9c86": {
+        "name": "DEEBOT T30S COMBO",
+        "deviceClassLink": "p1jij8"
+    },
+    "ee23uv": {
+        "name": "DEEBOT T30S COMBO COMPLETE",
+        "deviceClassLink": "p1jij8"
+    },
+    "xco2fc": {
+        "name": "DEEBOT T30S PRO",
+        "deviceClassLink": "p1jij8"
+    },
+    "cb69w5": {
+        "name": "DEEBOT T30S PRO",
+        "deviceClassLink": "p1jij8"
+    },
     "626v6g": {
         "name": "DEEBOT TEO+",
         "deviceClassLink": "rss8xk"
@@ -1009,10 +1147,12 @@ exports.KnownDevices = {
         "name": "GOAT G1-2000",
         "deviceClassLink": "5xu9h3"
     },
-    "99fqkn": {
-        "name": "Z1 Air Quality Monitor",
-        "950type": true,
-        "950type_V2": true,
-        "type": "aqMonitor"
-    }
+    "2ap5uq": {
+        "name": "GOAT GX-600",
+        "deviceClassLink": "5xu9h3"
+    },
+    "ao7fpw": {
+        "name": " GOAT GX-600",
+        "deviceClassLink": "5xu9h3"
+    },
 };
