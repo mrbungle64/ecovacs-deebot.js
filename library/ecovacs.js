@@ -1,11 +1,12 @@
 'use strict';
 
-const EventEmitter = require('events');
+const { EventEmitter2 } = require('eventemitter2');
+//const EventEmitter = require('events');
 const tools = require('./tools');
 const constants = require('./constants');
 const {errorCodes} = require('./errorCodes.json');
 
-class Ecovacs extends EventEmitter {
+class Ecovacs extends EventEmitter2 {
     /**
      * @param {Object} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
@@ -19,7 +20,7 @@ class Ecovacs extends EventEmitter {
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
     constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort) {
-        super();
+        super({ wildcard: true });
 
         this.bot = vacBot;
         this.dictionary = this.getEcovacsDictionary();
