@@ -469,9 +469,16 @@ class EcovacsAPI {
     let vacBotClass;
     const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
+    const is950Type_v2 = EcovacsAPI.isDeviceClass950v2type(vacuum['class'], defaultValue);
     if (is950Type) {
-      tools.envLogSuccess(`'950type' model identified`);
-      vacBotClass = require('./library/950type/vacBot');
+      if (is950Type_v2){
+        tools.envLogSuccess(`'950type_v2' model identified`);
+        vacBotClass = require('./library/950type_v2/vacBot');
+      }
+      else{
+        tools.envLogSuccess(`'950type' model identified`);
+        vacBotClass = require('./library/950type/vacBot');
+      }
     } else {
       tools.envLogWarn(`'non950type' model identified (deprecated)`);
       vacBotClass = require('./library/non950type/vacBot');
