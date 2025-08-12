@@ -537,6 +537,15 @@ class EcovacsAPI {
   }
 
   /**
+   * Returns true if the device class is 950_v2 type
+   * @param {string} deviceClass - The device class to check
+   * @returns {boolean} the value of the '950type_v2' property
+   */
+  static isDeviceClass950v2type(deviceClass) {
+    return tools.getDeviceProperty(deviceClass, '950type_V2', false);
+  }
+  
+  /**
    * Returns true if the device class is not 950 type
    * @param {string} deviceClass - The device class of the device
    * @returns {boolean} a boolean value.
