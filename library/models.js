@@ -269,6 +269,10 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "type": "950"
     },
+    "eazo2f": {
+        "name": "Deebot OZMO 920/950",
+        "deviceClassLink": "yna5xi"
+    },
     "9rft3c": {
         "name": "DEEBOT OZMO T5",
         "deviceClassLink": "yna5xi"
@@ -333,6 +337,30 @@ exports.KnownDevices = {
     "5089oy": {
         "name": "DEEBOT T8 AIVI",
         "deviceClassLink": "h18jkh"
+    },
+    "55uoqe": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "7n95dm": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "dqcneu": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "sa4tf7": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "uzel1r": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "z0gd1j": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
     },
     "a1nNMoAGAsH": {
         "name": "DEEBOT T8 MAX",
@@ -534,6 +562,10 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "T10"
     },
+    "yaj7uz": {
+        "name": "DEEBOT T10 TURBO",
+        "deviceClassLink": "9s1s80"
+    },
     "lx3j7m": {
         "name": "DEEBOT T10 OMNI",
         "950type": true,
@@ -594,6 +626,14 @@ exports.KnownDevices = {
         "hosted_mode": true,
         "yiko": true,
         "type": "X1"
+    },
+    "8onkgl": {
+        "name": "DEEBOT X1 Turbo",
+        "deviceClassLink": "2o4lnm"
+    },
+    "s523z1": {
+        "name": "DEEBOT X1 Turbo",
+        "deviceClassLink": "2o4lnm"
     },
     "1b23du": {
         "name": "DEEBOT X1 OMNI",
@@ -661,6 +701,10 @@ exports.KnownDevices = {
         "name": "DEEBOT X2 PRO OMNI",
         "deviceClassLink": "e6ofmn"
     },
+    "p7l7iu": {
+        "name": "Deebot X2 OMNI Height",
+        "deviceClassLink": "e6ofmn"
+    },
     "lr4qcs": {
         "name": "DEEBOT X5 PRO OMNI",
         "deviceClassLink": "e6ofmn"
@@ -683,6 +727,18 @@ exports.KnownDevices = {
     },
     "w7k3yc": {
         "name": "DEEBOT X5 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "4bx3w9": {
+        "name": "DEEBOT X8 OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "co3fyu": {
+        "name": "DEEBOT X8 OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "ilt3k8": {
+        "name": "DEEBOT X9 PRO OMNI",
         "deviceClassLink": "e6ofmn"
     },
     "ipzjy0": {
@@ -988,6 +1044,14 @@ exports.KnownDevices = {
         "name": "DEEBOT N20",
         "deviceClassLink": "h18jkh"
     },
+    "m17zko": {
+        "name": "Deebot N20",
+        "deviceClassLink": "h18jkh"
+    },
+    "p1wg05": {
+        "name": "Deebot N20",
+        "deviceClassLink": "h18jkh"
+    },
     "zgsvkq": {
         "name": " DEEBOT N20e",
         "deviceClassLink": "h18jkh"
@@ -1049,6 +1113,46 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "T20"
     },
+    "m4xnd8": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "ohjbzz": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "paeygf": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "poke1m": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "qdajz8": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "r0321c": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "ulzked": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "viq3mw": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "x9ugz3": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "yi396x": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8"
+    },
     "9ku8nu": {
         "name": "DEEBOT T20e OMNI",
         "deviceClassLink": "p1jij8"
@@ -1109,8 +1213,64 @@ exports.KnownDevices = {
         "name": "DEEBOT T30S PRO",
         "deviceClassLink": "p1jij8"
     },
+    "63cum9": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "7c26ui": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "8o3xke": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "bheggm": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "c8rj4y": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "cuoipb": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "czjwet": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "elrxgb": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "k1lgm7": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "qnkybo": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
+    "xztz07": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "p1jij8"
+    },
     "cb69w5": {
         "name": "DEEBOT T30S PRO",
+        "deviceClassLink": "p1jij8"
+    },
+    "02qwum": {
+        "name": "Deebot DEEBOT T80 OMNI",
+        "deviceClassLink": "p1jij8"
+    },
+    "9eamof": {
+        "name": "Deebot DEEBOT T80 OMNI",
+        "deviceClassLink": "p1jij8"
+    },
+    "k8qkc7": {
+        "name": "Deebot DEEBOT T80 OMNI",
         "deviceClassLink": "p1jij8"
     },
     "626v6g": {
@@ -1154,5 +1314,5 @@ exports.KnownDevices = {
     "ao7fpw": {
         "name": " GOAT GX-600",
         "deviceClassLink": "5xu9h3"
-    },
+    }
 };
