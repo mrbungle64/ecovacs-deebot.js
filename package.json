@@ -1,6 +1,6 @@
 {
   "name": "ecovacs-deebot",
-  "version": "0.9.6-beta.7",
+  "version": "0.9.6-beta.8",
   "description": "Library for running Ecovacs Deebot vacuum cleaner robots",
   "main": "index.js",
   "types": "./types/index.d.ts",
@@ -30,11 +30,11 @@
     "url": "https://github.com/mrbungle64/ecovacs-deebot.js"
   },
   "dependencies": {
-    "axios": "1.7.7",
-    "ltx": "3.0.0",
-    "mqtt": "5.8.1",
+    "axios": "1.8.4",
+    "ltx": "3.1.2",
+    "mqtt": "5.10.4",
     "simple-xmpp": "2.3.1",
-    "@xmldom/xmldom": "0.9.0-beta.11",
+    "@xmldom/xmldom": "0.9.8",
     "lzma": "2.3.2",
     "uniqid": "5.4.0",
     "chalk": "4.1.2"
@@ -43,14 +43,14 @@
     "canvas": "2.10.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "devDependencies": {
-    "@eslint/js": "^9.11.0",
-    "@types/node": "^20.16.5",
+    "@eslint/js": "^9.29.0",
+    "@types/node": "^20.19.11",
     "eslint": "^8.57.1",
-    "globals": "^15.9.0",
-    "mocha": "^10.7.3",
+    "globals": "^15.15.0",
+    "mocha": "^10.8.2",
     "node-machine-id": "^1.1.12",
     "nyc": "^17.1.0",
     "typescript": "~4.6.4",
