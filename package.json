@@ -27,7 +27,7 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrbungle64/ecovacs-deebot.js"
+    "url": "git+https://github.com/mrbungle64/ecovacs-deebot.js.git"
   },
   "dependencies": {
     "axios": "1.11.0",
