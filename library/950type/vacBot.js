@@ -1510,7 +1510,9 @@ class VacBot_950type extends VacBot {
      * @param args - zero or more arguments to perform the command
      */
     run(command, ...args) {
-        if ( super.run(command, ...args) == true) return true;
+        if ( super.run(command, ...args) === true) {
+            return true;
+        }
         switch (command.toLowerCase()) {
             case 'GetMapInfo'.toLowerCase():
             case 'GetMapImage'.toLowerCase(): {
