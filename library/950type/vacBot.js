@@ -1510,7 +1510,7 @@ class VacBot_950type extends VacBot {
      * @param args - zero or more arguments to perform the command
      */
     run(command, ...args) {
-        super.run(command, ...args);
+        if ( super.run(command, ...args) == true) return true;
         switch (command.toLowerCase()) {
             case 'GetMapInfo'.toLowerCase():
             case 'GetMapImage'.toLowerCase(): {
@@ -2298,7 +2298,10 @@ class VacBot_950type extends VacBot {
             case 'GetEfficiency'.toLowerCase():
                 this.sendCommand(new VacBotCommand.Generic('getEfficiency'));
                 break;
+            default:
+                return false;
         }
+        return true;
     }
 }
 
