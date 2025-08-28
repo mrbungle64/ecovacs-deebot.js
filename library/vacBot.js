@@ -685,7 +685,10 @@ class VacBot {
             case "MoveTurnAround".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.MoveTurnAround());
                 break;
+            default:
+                return false;
         }
+        return true;
     }
 
     /**
