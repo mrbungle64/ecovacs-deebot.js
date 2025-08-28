@@ -1,7 +1,6 @@
 'use strict';
 
 const VacBot = require('../950type/vacBot');
-const tools = require('../tools');
 
 /**
  * This class is relevant for 950_v2 type models
