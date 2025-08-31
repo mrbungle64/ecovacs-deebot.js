@@ -340,27 +340,27 @@ exports.KnownDevices = {
     },
     "55uoqe": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "x5d34r"
+        "deviceClassLink": "h18jkh"
     },
     "7n95dm": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "x5d34r"
+        "deviceClassLink": "h18jkh"
     },
     "dqcneu": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "x5d34r"
+        "deviceClassLink": "h18jkh"
     },
     "sa4tf7": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "x5d34r"
+        "deviceClassLink": "h18jkh"
     },
     "uzel1r": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "x5d34r"
+        "deviceClassLink": "h18jkh"
     },
     "z0gd1j": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "x5d34r"
+        "deviceClassLink": "h18jkh"
     },
     "a1nNMoAGAsH": {
         "name": "DEEBOT T8 MAX",
