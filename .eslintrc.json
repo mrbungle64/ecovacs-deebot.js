@@ -15,6 +15,7 @@
         ],
         "no-console": "off",
         "no-var": "error",
+        "no-unused-vars": "warn",
         "prefer-const": "off",
         "quotes": [
             "off",
