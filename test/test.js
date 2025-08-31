@@ -138,4 +138,19 @@ describe('API tools', function () {
       assert.notStrictEqual(i18n.getSpotAreaName('living room'), 'Wohnzimmer');
     });
   });
+
+  describe('getModelType', function () {
+    it('should return a valid type (not "unknown") for all models in models.js', function () {
+      const allDevices = tools.getAllKnownDevices();
+      const deviceClasses = Object.keys(allDevices);
+
+      assert.ok(deviceClasses.length > 0, 'There should be at least one device class');
+
+      deviceClasses.forEach(deviceClass => {
+        const modelType = tools.getModelType(deviceClass);
+        assert.notStrictEqual(modelType, 'unknown',
+          `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known model type, but got "unknown"`);
+      });
+    });
+  });
 });
