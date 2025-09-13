@@ -91,6 +91,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 
 ### 0.9.6 (beta)
 * Breaking change: Bumped minimum required version of Node.js to 20.x
+* (RonnyWinkler) Added auto V2 API handling
 * Added some new models to the model dictionary (incl. T20, T30, T80, X2 and X8 series)
 * Added shortcut commands for sweep mode
 * A lot of improvements for Airbot Z1 and Air Quality Monitor
