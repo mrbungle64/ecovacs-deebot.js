@@ -1804,7 +1804,7 @@ class VacBot_950type extends VacBot {
                 break;
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase():
-                if (this.isModelTypeT20()) {
+                if (this.isModelTypeT20() || this.isModelTypeX2()) {
                     this.sendCommand(new VacBotCommand.EmptyDustBinSA());
                 } else {
                     this.sendCommand(new VacBotCommand.EmptyDustBin());
