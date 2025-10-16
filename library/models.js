@@ -338,10 +338,6 @@ exports.KnownDevices = {
         "name": "DEEBOT T8 AIVI",
         "deviceClassLink": "h18jkh"
     },
-    "55uoqe": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "deviceClassLink": "h18jkh"
-    },
     "7n95dm": {
         "name": "DEEBOT OZMO T8 AIVI",
         "deviceClassLink": "h18jkh"
@@ -742,6 +738,10 @@ exports.KnownDevices = {
         "deviceClassLink": "e6ofmn"
     },
     "ilt3k8": {
+        "name": "DEEBOT X9 PRO OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
+    "lwmdoj": {
         "name": "DEEBOT X9 PRO OMNI",
         "deviceClassLink": "e6ofmn"
     },
@@ -1288,6 +1288,10 @@ exports.KnownDevices = {
     "85nbtp": {
         "name": "DEEBOT TEO OMNI",
         "deviceClassLink": "rss8xk"
+    },
+    "55uoqe": {
+        "name": "DEEBOT MINI",
+        "deviceClassLink": "e6ofmn"
     },
     "5xu9h3": {
         "name": "GOAT G1",
