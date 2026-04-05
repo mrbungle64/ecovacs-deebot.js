@@ -124,4 +124,4 @@ I am in no way affiliated with Ecovacs Robotics Co., Ltd. or yeedi Technology Li
 
 GNU GENERAL PUBLIC LICENSE
 
-Copyright (c) 2025 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2026 Sascha Hölzel <mrb1232@posteo.de>
