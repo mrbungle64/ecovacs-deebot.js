@@ -15,7 +15,7 @@ Library for running Ecovacs Deebot (and also some yeedi) vacuum cleaner robots
 
 Information on how to install this library can be found [here](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Installation).
 
-The minimum required version of Node.js is 16.x.
+The minimum required version of Node.js is 20.x.
 
 ## Usage
 
@@ -101,99 +101,7 @@ I also don't use my Slim 2, Deebot 901 and OZMO 930 anymore.
 * Some further improvements and fixes
 * Updated dependencies
 
-### 0.9.5
-* Added GoToPosition shortcut function (e.g. T8, T9 and X1 series)
-* Fix AirDryingStart and AirDryingStop commands
-
-### 0.9.4
-* Fix API call for countries with continent "WW"
-
-### 0.9.3
-* Switched to new endpoint for ecouser API
-* Added several commands and events for X1 series (and also maybe other models)
-  * e.g. HostedCleanMode, StationState, Washing, Drying, WashIntervalState, AICleanItemState
-* Several other improvements and optimizations
-  * e.g. added air freshener life span component and the Generic command
-
-### 0.9.2
-* Some improvements for auto empty station, dnd mode, cleaning logs, mopping modes
-* Handle cleaning incoming sequence and preference for each spot area
-* Improved disconnecting from the MQTT server
-* Improved logging (dev environment)
-* Some other improvements and fixes
-
-### 0.9.1
-* (bhuebschen) Added some commands for T9 series and yeedi mop station
-* (bhuebschen) Implemented cleaning log call for T9 based models
-* (bhuebschen) Added numerous commands for AIRBOT Z1 (Air Purifier)
-* Added MapPoint_V2 shortcut command for T9 based models
-* Added round mops to models dictionary
-
-### 0.9.0
-* Breaking change: Bump minimum required version of Node.js to 14.x
-* (apfelnutzer) Added handling for the air drying message (yeedi Mop Station)
-* Bugfix issue #219
-* Added some error codes
-* Bump dependencies (incl. fix for CVE-2022-39353)
-
-### 0.8.3
-* Added initial support for yeedi login
-* and also for a few models
-  * yeedi k650
-  * yeedi 2 hybrid
-  * yeedi vac hybrid
-  * yeedi mop station
-* Added CurrentStats event for XMPP devices
-* Added commands for air drying the wiper blades
-* Added 'donotClean' for CustomArea_V2 command
-* Bumped canvas to 2.9.3
-* Some minor improvements
-
-### 0.8.2
-* Added Deebot T10 series
-* Some minor improvements
-
-### 0.8.1
-* Handle FwBuryPoint messages (e.g. T8/T9 series, experimental)
-* Handle some additional events (e.g. T8/T9 series)
-* Added commands to enable/disable Clean Preference (e.g. T8/T9 series)
-* Some fixes and improvements
-* Updated dependencies
-
-### 0.8.0
-* (m8schmit) Added types for TypeScript
-* Lots of code documentation
-* Lots of code improvements
-* Added some new models to config
-* Added unit care to LifeSpan components
-* Added current spot area name to the events
-* Implemented getCleanCount/setCleanCount command
-* Add CurrentSpotAreas and CurrentCustomAreaValues events
-* Some fixes
-* Updated dependencies
-
-### 0.7.2
-* Bumped mqtt to 4.3.6
-* Stability improvements
-* A lot of code refactoring
-* Bumped several dependencies
-* Switched to axios
-
-### 0.7.1
-* Bumped mqtt to 4.3.4
-* Bumped xmldom to 0.8.0
-* Bumped follow-redirects to 1.14.7 (fix for CVE-2022-0155)
-
-### 0.7.0
-* Breaking change: Bumped required Node.js version to 12.x
-* Added some new models
-* Implement ContinuousCleaning and ContinuousCleaning commands (950 type models)
-* Start implementing V2 commands (e.g. T8 and T9 series)
-* Some minor changes and improvements
-* Fix for Deebot 710 series
-* Added Deebot X1 series
-
-### 0.0.2 - 0.6.8
+### 0.0.2 - 0.9.5
 * [Changelog archive](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Changelog-(archive))
 
 ## Thanks and credits
