@@ -23,11 +23,11 @@ To provide a stable exit point for legacy hardware while reducing technical debt
 
 | Level | Model Series | Protocol | Support Status |
 | :--- | :--- | :--- | :--- |
-| **🟢 Active** | OZMO 920/950, T8 AIVI, X1 Turbo, Airbot Z1 | MQTT/JSON | Owned by maintainer |
-| **🟡 Community** | T10, T20, T30, X2, X8 series | MQTT/JSON | "Best effort" via **community PRs** |
-| **🟡 Community** | yeedi models (MQTT/JSON only) | MQTT/JSON | "Best effort" via **community PRs** |
-| **🔴 Legacy** | Deebot 900/901, OZMO 610/900, etc. | MQTT/XML | Supported in **v0.9.x only** |
-| **🔴 Legacy** | Slim 2, OZMO 930 etc. | XMPP/XML | Supported in **v0.9.x only** |
+| 🟢 Active** | OZMO 920/950, T8 AIVI, X1 Turbo, Airbot Z1 | MQTT/JSON | Owned by maintainer |
+| 🟡 Community | T10, T20, T30, X2, X8 series etc. | MQTT/JSON | "Best effort" via community PRs |
+| 🟡 Community | yeedi models (MQTT/JSON only) | MQTT/JSON | "Best effort" via community PRs |
+| 🔴 Legacy | Deebot 900/901, OZMO 610/900, etc. | MQTT/XML | Supported in **v0.9.x only** |
+| 🔴 Legacy | Slim 2, OZMO 930 etc. | XMPP/XML | Supported in **v0.9.x only** |
 
 ### Note on New Models
 Support for new models is no longer added upon request. Due to high time constraints, **I will not implement new models based on logs alone.** Requests for new model support without an accompanying **Pull Request** may be closed without further notice. If you want to see a modern (MQTT/JSON) model supported, please contribute the necessary model definitions via PR.
