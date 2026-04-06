@@ -52,14 +52,15 @@ Support for new models is no longer added upon request. Due to high time constra
 ## Changelog (Current)
 
 ### 0.9.6 (In Progress / Final Legacy Support)
-* **Breaking Change:** Bumped minimum required version of Node.js to 20.x.
-* Added auto V2 API handling.
-* Added initial support for T20, T30, X2, and X8 series.
-* *This version is the final stable release for all XML-based models.*
+* **Breaking Change:** Bumped minimum required version of Node.js to 20.x
+* Added auto V2 API handling
+* Added initial support for T20, T30, X2, and X8 series
+* Bumped dependencies
+* *This version is the final release for all XML-based models*
 
 ### 1.0.0 (Planned)
-* Complete removal of the legacy XMPP/XML and MQTT/XML protocol stacks.
-* Major dependency cleanup and refactoring for pure MQTT/JSON communication.
+* Complete removal of the legacy XMPP/XML and MQTT/XML protocol stacks
+* Major dependency cleanup and refactoring for pure MQTT/JSON communication
 
 ---
 
