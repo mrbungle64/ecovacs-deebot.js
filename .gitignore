@@ -13,6 +13,5 @@ library/map/
 .vs/*
 .vscode/*
 
-*/settings.js
 *.code-workspace
 /qodana.yaml

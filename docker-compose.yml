@@ -9,5 +9,9 @@ services:
     stdin_open: true
     environment:
       - NODE_ENV=development
+      - ECOVACS_ACCOUNT_ID
+      - ECOVACS_PASSWORD
+      - ECOVACS_DEVICE_NUMBER
+      - ECOVACS_COUNTRY_CODE
     working_dir: /opt/app
     command: bash -c 'npm install && node example/app2'
