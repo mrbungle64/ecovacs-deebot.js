@@ -29,7 +29,7 @@ export class EcovacsMapSpotAreaInfo {
     mapSpotAreaName: any;
     mapSpotAreaConnections: any;
     mapSpotAreaBoundaries: any;
-    mapSpotAreaCanvas: import("canvas").Canvas;
+    mapSpotAreaCanvas: any;
     mapSpotAreaSubType: string;
     mapSpotAreaSequenceNumber: any;
     mapSpotAreaCleanSet: {};

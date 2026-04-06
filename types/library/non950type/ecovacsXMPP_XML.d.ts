@@ -1,8 +1,8 @@
 export = EcovacsXMPP_XML;
 declare class EcovacsXMPP_XML extends Ecovacs {
-    vacBot: any;
+    vacBot: Object;
     iqElementId: number;
-    pingInterval: NodeJS.Timeout;
+    pingInterval: NodeJS.Timeout | null;
     simpleXmpp: any;
     /**
      * Connect to the Ecovacs server
@@ -13,13 +13,13 @@ declare class EcovacsXMPP_XML extends Ecovacs {
      * @param {Object} command - the command object used to send
      * @returns {Promise<void>}
      */
-    sendCommand(command: any): Promise<void>;
+    sendCommand(command: Object): Promise<void>;
     /**
      * Create a specific XML element with the given command and return it
      * @param {Object} command - the command as XML to send to the device
      * @returns The specific XML for the command
      */
-    getCommandXml(command: any): any;
+    getCommandXml(command: Object): any;
     /**
      * @returns {string} the Jabber Identifier of the device
      */

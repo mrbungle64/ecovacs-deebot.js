@@ -16,15 +16,15 @@ declare class VacBot {
      * @param {string} [serverAddress=''] - the server address of the MQTT and XMPP server
      * @param {string} [authDomain=''] - the domain for authorization
      */
-    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: any, continent: string, country?: string, serverAddress?: string, authDomain?: string);
-    country: string;
+    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: Object, continent: string, country?: string, serverAddress?: string, authDomain?: string);
+    country: string | undefined;
     continent: string;
     did: any;
     res: any;
     resource: string;
     uid: string;
     user_access_token: string;
-    vacuum: any;
+    vacuum: Object;
     authDomain: string;
     is_ready: boolean;
     deviceClass: any;
@@ -58,18 +58,18 @@ declare class VacBot {
     scrubbingType: any;
     sleepStatus: any;
     deebotPosition: {
-        x: any;
-        y: any;
-        a: any;
+        x: null;
+        y: null;
+        a: null;
         isInvalid: boolean;
         currentSpotAreaID: string;
         currentSpotAreaName: string;
         changeFlag: boolean;
     };
     chargePosition: {
-        x: any;
-        y: any;
-        a: any;
+        x: null;
+        y: null;
+        a: null;
         changeFlag: boolean;
     };
     cleanSum_totalSquareMeters: any;
@@ -82,9 +82,9 @@ declare class VacBot {
     cleanLog_lastTotalTimeString: any;
     cleanLog_lastSquareMeters: any;
     currentStats: {
-        cleanedArea: any;
-        cleanedSeconds: any;
-        cleanType: any;
+        cleanedArea: null;
+        cleanedSeconds: null;
+        cleanType: null;
     };
     netInfoIP: any;
     netInfoWifiSSID: any;
@@ -98,7 +98,7 @@ declare class VacBot {
     createMapDataObject: boolean;
     createMapImage: boolean;
     createMapImageOnly: boolean;
-    mapDataObject: any[];
+    mapDataObject: any[] | null;
     mapDataObjectQueue: any[];
     mapImageDataQueue: any[];
     schedule: any[];
@@ -111,31 +111,31 @@ declare class VacBot {
      * @param {Object} mapsData
      * @returns {Promise<void>}
      */
-    handleMapsEvent(mapsData: any): Promise<void>;
+    handleMapsEvent(mapsData: Object): Promise<void>;
     /**
      * Handle object with spot area data to provide a full map data object
      * @param {Object} spotAreasObject
      * @returns {Promise<void>}
      */
-    handleMapSpotAreasEvent(spotAreasObject: any): Promise<void>;
+    handleMapSpotAreasEvent(spotAreasObject: Object): Promise<void>;
     /**
      * Handle object with spot area info data to provide a full map data object
      * @param {Object} spotAreaInfo
      * @returns {Promise<void>}
      */
-    handleMapSpotAreaInfo(spotAreaInfo: any): Promise<void>;
+    handleMapSpotAreaInfo(spotAreaInfo: Object): Promise<void>;
     /**
      * Handle object with virtual boundary data to provide a full map data object
      * @param {Object} virtualBoundaries
      * @returns {Promise<void>}
      */
-    handleMapVirtualBoundaries(virtualBoundaries: any): Promise<void>;
+    handleMapVirtualBoundaries(virtualBoundaries: Object): Promise<void>;
     /**
      * Handle object with virtual boundary info data to provide a full map data object
      * @param {Object} virtualBoundaryInfo
      * @returns {Promise<void>}
      */
-    handleMapVirtualBoundaryInfo(virtualBoundaryInfo: any): Promise<void>;
+    handleMapVirtualBoundaryInfo(virtualBoundaryInfo: Object): Promise<void>;
     handleZeroVirtualBoundariesForMap(mapID: any): void;
     handleMapDataReady(): void;
     /**
@@ -143,7 +143,7 @@ declare class VacBot {
      * @param {Object} mapImageData
      * @returns {Promise<void>}
      */
-    handleMapImageData(mapImageData: any): Promise<void>;
+    handleMapImageData(mapImageData: Object): Promise<void>;
     /**
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
@@ -205,7 +205,7 @@ declare class VacBot {
      * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
      * @param args - zero or more arguments to perform the command
      */
-    run(command: string, ...args: any[]): void;
+    run(command: string, ...args: any[]): boolean;
     /**
      * Get the name of the spot area that the bot is currently in
      * @param {string} currentSpotAreaID - the ID of the spot area that the player is currently in
@@ -445,7 +445,7 @@ declare class VacBot {
      * Send a command to the vacuum
      * @param {Object} command - a VacBotCommand object
      */
-    sendCommand(command: any): void;
+    sendCommand(command: Object): void;
     /**
      * Disconnect from MQTT server (fully async)
      */

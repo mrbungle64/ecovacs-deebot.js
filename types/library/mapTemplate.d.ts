@@ -17,15 +17,15 @@ export class EcovacsMapImage extends EcovacsMapImageBase {
 export function mapPieceToIntArray(pieceValue: any): Promise<any>;
 declare class EcovacsMapImageBase {
     constructor(mapID: any, mapType: any, mapTotalWidth: any, mapTotalHeight: any, mapPixel: any);
-    mapFloorCanvas: import("canvas").Canvas;
-    mapFloorContext: import("canvas").CanvasRenderingContext2D;
-    mapWallCanvas: import("canvas").Canvas;
-    mapWallContext: import("canvas").CanvasRenderingContext2D;
+    mapFloorCanvas: any;
+    mapFloorContext: any;
+    mapWallCanvas: any;
+    mapWallContext: any;
     cropBoundaries: {
-        minX: any;
-        minY: any;
-        maxX: any;
-        maxY: any;
+        minX: null;
+        minY: null;
+        maxX: null;
+        maxY: null;
     };
     mapID: any;
     mapType: any;
@@ -33,15 +33,15 @@ declare class EcovacsMapImageBase {
     mapTotalWidth: any;
     mapTotalHeight: any;
     mapPixel: any;
-    transferMapInfo: boolean;
+    transferMapInfo: boolean | null;
     initCanvas(): Promise<void>;
     drawMapPieceToCanvas(mapPieceCompressed: any, mapPieceStartX: any, mapPieceStartY: any, mapPieceWidth: any, mapPieceHeight: any): Promise<void>;
     getBase64PNG(deebotPosition: any, chargerPosition: any, currentMapMID: any, mapDataObject: any): Promise<{
         mapID: any;
         mapType: any;
-        mapBase64PNG: string;
-    }>;
-    mapBase64PNG: string;
+        mapBase64PNG: any;
+    } | null>;
+    mapBase64PNG: any;
 }
 export {};
 //# sourceMappingURL=mapTemplate.d.ts.map

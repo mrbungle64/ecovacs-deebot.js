@@ -11,7 +11,7 @@ declare class VacBotCommand {
      */
     constructor(name: string, payload?: object, api?: string);
     name: string;
-    args: any;
+    args: object;
     api: string;
     getId(): any;
 }
@@ -42,7 +42,7 @@ export class Clean extends VacBotCommand {
      * @param {Object} [kwargs={}] - Additional arguments in the form of key-value pairs
      * @return {void}
      */
-    constructor(mode?: string, action?: string, kwargs?: any);
+    constructor(mode?: string, action?: string, kwargs?: Object);
 }
 /**
  * Similar to the `Clean` class but with a different payload structure
@@ -137,6 +137,9 @@ export class GetAdvancedMode extends VacBotCommand {
  * @extends VacBotCommand
  */
 export class GetAirDrying extends VacBotCommand {
+    constructor();
+}
+export class GetDryingDuration extends VacBotCommand {
     constructor();
 }
 export class GetAreaPoint extends VacBotCommand {
@@ -637,7 +640,7 @@ export class ResetLifeSpan extends VacBotCommand {
  * @extends VacBotCommand
  */
 export class Resume extends VacBotCommand {
-    constructor();
+    constructor(command?: string);
 }
 /**
  * Sets the value whether the 'Advanced Mode' option is enabled
@@ -652,6 +655,9 @@ export class SetAdvancedMode extends VacBotCommand {
  */
 export class SetAirDrying extends VacBotCommand {
     constructor(act?: string);
+}
+export class SetDryingDuration extends VacBotCommand {
+    constructor(duration?: number);
 }
 /**
  * Sets the value whether the 'Auto Empty' option is enabled
@@ -681,7 +687,7 @@ export class SetBorderSpin extends VacBotCommand {
  * @extends VacBotCommand
  */
 export class SetCachedMapInfo extends VacBotCommand {
-    constructor(act: any, mid?: any, reMid?: any);
+    constructor(act: any, mid?: null, reMid?: null);
 }
 /**
  * Sets the value of the 'Carpet cleaning strategy' option

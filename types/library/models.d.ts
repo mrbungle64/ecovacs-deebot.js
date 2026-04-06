@@ -1,4 +1,4 @@
-export var SupportedDevices: {
+export const SupportedDevices: {
     vi829v: {
         name: string;
         deviceClassLink: string;
@@ -43,8 +43,14 @@ export var SupportedDevices: {
         "950type_V2": boolean;
         type: string;
     };
+    "99fqkn": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
 };
-export var KnownDevices: {
+export const KnownDevices: {
     "123": {
         name: string;
         "950type": boolean;
@@ -260,6 +266,10 @@ export var KnownDevices: {
         map_image_supported: boolean;
         type: string;
     };
+    eazo2f: {
+        name: string;
+        deviceClassLink: string;
+    };
     "9rft3c": {
         name: string;
         deviceClassLink: string;
@@ -322,6 +332,26 @@ export var KnownDevices: {
         deviceClassLink: string;
     };
     "5089oy": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "7n95dm": {
+        name: string;
+        deviceClassLink: string;
+    };
+    dqcneu: {
+        name: string;
+        deviceClassLink: string;
+    };
+    sa4tf7: {
+        name: string;
+        deviceClassLink: string;
+    };
+    uzel1r: {
+        name: string;
+        deviceClassLink: string;
+    };
+    z0gd1j: {
         name: string;
         deviceClassLink: string;
     };
@@ -525,6 +555,10 @@ export var KnownDevices: {
         yiko: boolean;
         type: string;
     };
+    yaj7uz: {
+        name: string;
+        deviceClassLink: string;
+    };
     lx3j7m: {
         name: string;
         "950type": boolean;
@@ -585,6 +619,14 @@ export var KnownDevices: {
         hosted_mode: boolean;
         yiko: boolean;
         type: string;
+    };
+    "8onkgl": {
+        name: string;
+        deviceClassLink: string;
+    };
+    s523z1: {
+        name: string;
+        deviceClassLink: string;
     };
     "1b23du": {
         name: string;
@@ -652,6 +694,54 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    p7l7iu: {
+        name: string;
+        deviceClassLink: string;
+    };
+    lr4qcs: {
+        name: string;
+        deviceClassLink: string;
+    };
+    o0a4ju: {
+        name: string;
+        deviceClassLink: string;
+    };
+    e6yxdm: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "4jd37g": {
+        name: string;
+        deviceClassLink: string;
+    };
+    rvflzn: {
+        name: string;
+        deviceClassLink: string;
+    };
+    w7k3yc: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "4bx3w9": {
+        name: string;
+        deviceClassLink: string;
+    };
+    co3fyu: {
+        name: string;
+        deviceClassLink: string;
+    };
+    n0vyif: {
+        name: string;
+        deviceClassLink: string;
+    };
+    ilt3k8: {
+        name: string;
+        deviceClassLink: string;
+    };
+    lwmdoj: {
+        name: string;
+        deviceClassLink: string;
+    };
     ipzjy0: {
         name: string;
         "950type": boolean;
@@ -672,6 +762,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    ts2ofl: {
+        name: string;
+        deviceClassLink: string;
+    };
     nq9yhl: {
         name: string;
         deviceClassLink: string;
@@ -681,10 +775,6 @@ export var KnownDevices: {
         deviceClassLink: string;
     };
     "7j1tu6": {
-        name: string;
-        deviceClassLink: string;
-    };
-    ts2ofl: {
         name: string;
         deviceClassLink: string;
     };
@@ -782,6 +872,7 @@ export var KnownDevices: {
         main_brush: boolean;
         side_brush: boolean;
         filter: boolean;
+        unit_care_info: boolean;
         spot_area: boolean;
         custom_area: boolean;
         mopping_system: boolean;
@@ -790,11 +881,6 @@ export var KnownDevices: {
         clean_speed: boolean;
         map_image_supported: boolean;
         type: string;
-        unit_care_info: boolean;
-    };
-    rwp09o: {
-        name: string;
-        deviceClassLink: string;
     };
     "04z443": {
         name: string;
@@ -869,6 +955,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    rwp09o: {
+        name: string;
+        deviceClassLink: string;
+    };
     t5e5o6: {
         name: string;
         deviceClassLink: string;
@@ -927,6 +1017,82 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    yinacl: {
+        name: string;
+        deviceClassLink: string;
+    };
+    qhe2o2: {
+        name: string;
+        deviceClassLink: string;
+    };
+    p0l0af: {
+        name: string;
+        deviceClassLink: string;
+    };
+    aavvfb: {
+        name: string;
+        deviceClassLink: string;
+    };
+    buom7k: {
+        name: string;
+        deviceClassLink: string;
+    };
+    kr0277: {
+        name: string;
+        deviceClassLink: string;
+    };
+    edoodo: {
+        name: string;
+        deviceClassLink: string;
+    };
+    m17zko: {
+        name: string;
+        deviceClassLink: string;
+    };
+    p1wg05: {
+        name: string;
+        deviceClassLink: string;
+    };
+    zgsvkq: {
+        name: string;
+        deviceClassLink: string;
+    };
+    ruhc0q: {
+        name: string;
+        deviceClassLink: string;
+    };
+    i35yb6: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "9kpees": {
+        name: string;
+        deviceClassLink: string;
+    };
+    gwtll7: {
+        name: string;
+        deviceClassLink: string;
+    };
+    c8gerr: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "7piq03": {
+        name: string;
+        deviceClassLink: string;
+    };
+    zwkcqc: {
+        name: string;
+        deviceClassLink: string;
+    };
+    dlrbzq: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "87swps": {
+        name: string;
+        deviceClassLink: string;
+    };
     p1jij8: {
         name: string;
         "950type": boolean;
@@ -948,11 +1114,163 @@ export var KnownDevices: {
         yiko: boolean;
         type: string;
     };
+    m4xnd8: {
+        name: string;
+        deviceClassLink: string;
+    };
+    ohjbzz: {
+        name: string;
+        deviceClassLink: string;
+    };
+    paeygf: {
+        name: string;
+        deviceClassLink: string;
+    };
+    poke1m: {
+        name: string;
+        deviceClassLink: string;
+    };
+    qdajz8: {
+        name: string;
+        deviceClassLink: string;
+    };
+    r0321c: {
+        name: string;
+        deviceClassLink: string;
+    };
+    ulzked: {
+        name: string;
+        deviceClassLink: string;
+    };
+    viq3mw: {
+        name: string;
+        deviceClassLink: string;
+    };
+    x9ugz3: {
+        name: string;
+        deviceClassLink: string;
+    };
+    yi396x: {
+        name: string;
+        deviceClassLink: string;
+    };
     "9ku8nu": {
         name: string;
         deviceClassLink: string;
     };
     py3qif: {
+        name: string;
+        deviceClassLink: string;
+    };
+    z4lvk7: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "4vhygi": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "3w7j5e": {
+        name: string;
+        deviceClassLink: string;
+    };
+    tlthqk: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "822x8d": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "4bdkrs": {
+        name: string;
+        deviceClassLink: string;
+    };
+    ue8kcc: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "8tyt2y": {
+        name: string;
+        deviceClassLink: string;
+    };
+    eqmf84: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "9gqyaq": {
+        name: string;
+        deviceClassLink: string;
+    };
+    kr9c86: {
+        name: string;
+        deviceClassLink: string;
+    };
+    ee23uv: {
+        name: string;
+        deviceClassLink: string;
+    };
+    xco2fc: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "63cum9": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "7c26ui": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "8o3xke": {
+        name: string;
+        deviceClassLink: string;
+    };
+    bheggm: {
+        name: string;
+        deviceClassLink: string;
+    };
+    c8rj4y: {
+        name: string;
+        deviceClassLink: string;
+    };
+    cuoipb: {
+        name: string;
+        deviceClassLink: string;
+    };
+    czjwet: {
+        name: string;
+        deviceClassLink: string;
+    };
+    elrxgb: {
+        name: string;
+        deviceClassLink: string;
+    };
+    k1lgm7: {
+        name: string;
+        deviceClassLink: string;
+    };
+    qnkybo: {
+        name: string;
+        deviceClassLink: string;
+    };
+    xztz07: {
+        name: string;
+        deviceClassLink: string;
+    };
+    cb69w5: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "02qwum": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "9eamof": {
+        name: string;
+        deviceClassLink: string;
+    };
+    k8qkc7: {
         name: string;
         deviceClassLink: string;
     };
@@ -968,6 +1286,10 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
+    "55uoqe": {
+        name: string;
+        deviceClassLink: string;
+    };
     "5xu9h3": {
         name: string;
         "950type": boolean;
@@ -978,11 +1300,25 @@ export var KnownDevices: {
         name: string;
         deviceClassLink: string;
     };
-    "99fqkn": {
+    guzput: {
         name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        type: string;
+        deviceClassLink: string;
+    };
+    "77atlz": {
+        name: string;
+        deviceClassLink: string;
+    };
+    s69g6z: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "2ap5uq": {
+        name: string;
+        deviceClassLink: string;
+    };
+    ao7fpw: {
+        name: string;
+        deviceClassLink: string;
     };
 };
 //# sourceMappingURL=models.d.ts.map

@@ -29,7 +29,13 @@ declare class EcovacsAPI {
      * @param [isMQTTProtocolUsed=true] - This value is used as default value if the deviceClass is not registered
      * @returns {boolean} the value of the '950type' property
      */
-    static isDeviceClass950type(deviceClass: string, isMQTTProtocolUsed?: boolean): boolean;
+    static isDeviceClass950type(deviceClass: string, isMQTTProtocolUsed?: boolean | undefined): boolean;
+    /**
+     * Returns true if the device class is 950_v2 type
+     * @param {string} deviceClass - The device class to check
+     * @returns {boolean} the value of the '950type_v2' property
+     */
+    static isDeviceClass950v2type(deviceClass: string): boolean;
     /**
      * Returns true if the device class is not 950 type
      * @param {string} deviceClass - The device class of the device
@@ -81,13 +87,13 @@ declare class EcovacsAPI {
      * @param {Object} params - an object with the data to retrieve the parameters
      * @returns {string} the parameters
      */
-    getUserLoginParams(params: any): string;
+    getUserLoginParams(params: Object): string;
     /**
      * Get the parameters for authentication
      * @param {Object} params - an object with the data to retrieve the parameters
      * @returns {string} the parameters
      */
-    getAuthParams(params: any): string;
+    getAuthParams(params: Object): string;
     /**
      * Used to generate the URL search parameters for the request
      * @param params - the basic set of parameters for the request
@@ -102,13 +108,13 @@ declare class EcovacsAPI {
      * Get the meta-object that will be used to make a request to the server
      * @returns {Object}
      */
-    getMetaObject(): any;
+    getMetaObject(): Object;
     /**
      * @param {string} loginPath - the login path
      * @param {Object} params - an object with the data to retrieve the parameters
      * @returns {Promise<Object>} an object including access token and user ID
      */
-    callUserAuthApi(loginPath: string, params: any): Promise<any>;
+    callUserAuthApi(loginPath: string, params: Object): Promise<Object>;
     /**
      * Returns the portal path for the given login path
      * @param {string} loginPath - the path for the login
@@ -121,12 +127,12 @@ declare class EcovacsAPI {
      * @param {Object} args - an object with the params for the POST request
      * @returns {Promise<Object>}
      */
-    callPortalApi(loginPath: string, func: string, args: any): Promise<any>;
+    callPortalApi(loginPath: string, func: string, args: Object): Promise<Object>;
     /**
      * It calls the API to login by access token
      * @returns {Promise<Object>} an object including user token and user ID
      */
-    callUserApiLoginByItToken(): Promise<any>;
+    callUserApiLoginByItToken(): Promise<Object>;
     /**
      * Get the login path for the current country
      * @returns {string} the login path is being returned.
@@ -135,17 +141,17 @@ declare class EcovacsAPI {
     /**
      * @returns {Promise<Object>} a dictionary of Ecovacs products
      */
-    getConfigProducts(): Promise<any>;
+    getConfigProducts(): Promise<Object>;
     /**
      * @param {string} api - the API path
      * @param {string} func - the API function to be called
      * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
      */
-    getDevices(api?: string, func?: string): Promise<any>;
+    getDevices(api?: string, func?: string): Promise<Object>;
     /**
      * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
      */
-    devices(): Promise<any>;
+    devices(): Promise<Object>;
     /**
      * Merge the data from the global device list (GetGlobalDeviceList)
      * with the data from the device list (GetDeviceList) of the users Ecovacs account
@@ -153,12 +159,12 @@ declare class EcovacsAPI {
      * @param {Object} globalDeviceList - the global device list returned by the API
      * @returns {Object} a dictionary of all known devices
      */
-    mergeDeviceLists(deviceList: any, globalDeviceList: any): any;
+    mergeDeviceLists(deviceList: Object, globalDeviceList: Object): Object;
     /**
      * Get all known devices
      * @returns {Object} a dictionary of all known devices
      */
-    getAllKnownDevices(): any;
+    getAllKnownDevices(): Object;
     /**
      * Get the name of the country from the countries object
      * @returns {string} the name of the country
@@ -174,7 +180,7 @@ declare class EcovacsAPI {
      * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
      * @returns {Object} a corresponding instance of the 'vacBot' class
      */
-    getVacBotObj(vacuum: any): any;
+    getVacBotObj(vacuum: Object): Object;
     /**
      * Get a corresponding instance of the `vacBot` class
      * @param {string} user - the user ID (retrieved from Ecovacs API)
@@ -185,7 +191,7 @@ declare class EcovacsAPI {
      * @param {string} [continent] - the continent
      * @returns {Object} a corresponding instance of the `VacBot` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: any, continent?: string): any;
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: Object, continent?: string): Object;
     /**
      * Get the version of the package
      * @returns {string} the version of the package
@@ -202,10 +208,10 @@ declare class EcovacsAPI {
     logEvent(event: any, value: any): void;
 }
 declare namespace EcovacsAPI {
-    const PUBLIC_KEY: string;
-    const REALM: string;
+    let PUBLIC_KEY: string;
+    let REALM: "ecouser.net";
 }
 /** @type {Object} */
-export const countries: any;
+export const countries: Object;
 export { EcovacsAPI as EcoVacsAPI };
 //# sourceMappingURL=index.d.ts.map

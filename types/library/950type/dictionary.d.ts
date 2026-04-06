@@ -1,119 +1,119 @@
 export namespace CLEAN_MODE_TO_ECOVACS {
-    const auto: string;
-    const edge: string;
-    const spot: string;
-    const spotArea: string;
-    const stop: string;
-    const customArea: string;
-    const mapPoint: string;
-    const singlePoint: string;
-    const area: string;
-    const move: string;
-    const drying: string;
-    const washing: string;
-    const comeClean: string;
-    const entrust: string;
-    const freeClean: string;
-    const qcClean: string;
+    let auto: string;
+    let edge: string;
+    let spot: string;
+    let spotArea: string;
+    let stop: string;
+    let customArea: string;
+    let mapPoint: string;
+    let singlePoint: string;
+    let area: string;
+    let move: string;
+    let drying: string;
+    let washing: string;
+    let comeClean: string;
+    let entrust: string;
+    let freeClean: string;
+    let qcClean: string;
 }
 export namespace CLEAN_ACTION_TO_ECOVACS {
-    export const start: string;
-    export const pause: string;
-    export const resume: string;
-    const stop_1: string;
+    export let start: string;
+    export let pause: string;
+    export let resume: string;
+    let stop_1: string;
     export { stop_1 as stop };
 }
 export namespace CLEAN_MODE_FROM_ECOVACS {
-    const auto_1: string;
+    let auto_1: string;
     export { auto_1 as auto };
-    const customArea_1: string;
+    let customArea_1: string;
     export { customArea_1 as customArea };
-    const spot_1: string;
+    let spot_1: string;
     export { spot_1 as spot };
-    const spotArea_1: string;
+    let spotArea_1: string;
     export { spotArea_1 as spotArea };
-    const stop_2: string;
+    let stop_2: string;
     export { stop_2 as stop };
-    const pause_1: string;
+    let pause_1: string;
     export { pause_1 as pause };
-    export const goCharging: string;
-    export const idle: string;
-    const move_1: string;
+    export let goCharging: string;
+    export let idle: string;
+    let move_1: string;
     export { move_1 as move };
-    const singlePoint_1: string;
+    let singlePoint_1: string;
     export { singlePoint_1 as singlePoint };
-    const area_1: string;
+    let area_1: string;
     export { area_1 as area };
-    const drying_1: string;
+    let drying_1: string;
     export { drying_1 as drying };
-    const washing_1: string;
+    let washing_1: string;
     export { washing_1 as washing };
-    const comeClean_1: string;
+    let comeClean_1: string;
     export { comeClean_1 as comeClean };
-    const entrust_1: string;
+    let entrust_1: string;
     export { entrust_1 as entrust };
-    const freeClean_1: string;
+    let freeClean_1: string;
     export { freeClean_1 as freeClean };
-    const qcClean_1: string;
+    let qcClean_1: string;
     export { qcClean_1 as qcClean };
 }
 export namespace GOCHARGING_REASONS {
-    const workComplete: string;
-    const cleaningCloth: string;
-    const none: string;
+    let workComplete: string;
+    let cleaningCloth: string;
+    let none: string;
 }
 export namespace WORKMODE_TO_ECOVACS {
-    const vacuumAndMop: number;
-    const vacuum: number;
-    const mop: number;
-    const mopAfterVacuum: number;
+    let vacuumAndMop: number;
+    let vacuum: number;
+    let mop: number;
+    let mopAfterVacuum: number;
 }
-export var CLEAN_SPEED_TO_ECOVACS: {
+export const CLEAN_SPEED_TO_ECOVACS: {
     1: number;
     2: number;
     3: number;
     4: number;
 };
-export var CLEAN_SPEED_FROM_ECOVACS: {
+export const CLEAN_SPEED_FROM_ECOVACS: {
     1000: number;
     0: number;
     1: number;
     2: number;
 };
 export namespace CHARGE_MODE_FROM_ECOVACS {
-    export const going: string;
-    export const slot_charging: string;
-    const idle_1: string;
+    export let going: string;
+    export let slot_charging: string;
+    let idle_1: string;
     export { idle_1 as idle };
 }
 export namespace COMPONENT_TO_ECOVACS {
-    const main_brush: string;
-    const side_brush: string;
-    const filter: string;
-    const unit_care: string;
-    const round_mop: string;
-    const air_freshener: string;
+    let main_brush: string;
+    let side_brush: string;
+    let filter: string;
+    let unit_care: string;
+    let round_mop: string;
+    let air_freshener: string;
 }
 export namespace COMPONENT_FROM_ECOVACS {
-    export const brush: string;
-    export const sideBrush: string;
-    export const heap: string;
-    export const unitCare: string;
-    export const roundMop: string;
-    export const dModule: string;
-    const filter_1: string;
+    export let brush: string;
+    export let sideBrush: string;
+    export let heap: string;
+    export let unitCare: string;
+    export let roundMop: string;
+    export let dModule: string;
+    let filter_1: string;
     export { filter_1 as filter };
-    export const uv: string;
-    export const humidify: string;
-    export const wbCare: string;
+    export let uv: string;
+    export let humidify: string;
+    export let wbCare: string;
 }
 export namespace MOVE_ACTION {
-    export const backward: string;
-    export const forward: string;
-    export const left: string;
-    export const right: string;
-    export const turn_around: string;
-    const stop_3: string;
+    export let backward: string;
+    export let forward: string;
+    export let left: string;
+    export let right: string;
+    export let turn_around: string;
+    let stop_3: string;
     export { stop_3 as stop };
 }
 //# sourceMappingURL=dictionary.d.ts.map

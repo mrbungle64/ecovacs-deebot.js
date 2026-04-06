@@ -30,7 +30,7 @@ export function formatString(string: any, ...args: any[]): any;
  * Get all known devices, including the supported devices and the known devices
  * @returns {Object} a dictionary of all known devices
  */
-export function getAllKnownDevices(): any;
+export function getAllKnownDevices(): Object;
 /**
  * Get the value of the given property for the device class
  * @param {string} deviceClass - The device class to get the property for
@@ -42,7 +42,7 @@ export function getDeviceProperty(deviceClass: string, property: string, default
 /**
  * @returns {Object} a dictionary of known devices
  */
-export function getKnownDevices(): any;
+export function getKnownDevices(): Object;
 /**
  * Returns the type of the model
  * @returns {String}
@@ -57,7 +57,7 @@ export function getReqID(): string;
 /**
  * @returns {Object} a dictionary of supported devices
  */
-export function getSupportedDevices(): any;
+export function getSupportedDevices(): Object;
 /**
  * Given a total number of seconds, return a string that is formatted as hours, minutes, and seconds
  * @param {number} totalSeconds - The total number of seconds to format
@@ -118,7 +118,7 @@ export function isValidVirtualWallType(type: string): boolean;
  * @param {Object} params - the parameters to be encoded
  * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
  */
-export function paramsToQueryList(params: any): string;
+export function paramsToQueryList(params: Object): string;
 export function envLogCommand(message: any): void;
 export function envLogError(message: any): void;
 export function envLogFwBuryPoint(message: any): void;
