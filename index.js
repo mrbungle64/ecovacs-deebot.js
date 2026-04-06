@@ -244,9 +244,9 @@ class EcovacsAPI {
     if (loginPath === constants.USER_GETAUTHCODE_PATH) {
       portalPath = constants.AUTH_GL_OPENAPI;
     }
-    portalPath = tools.formatString(portalPath, {domain: this.authDomain});
+    portalPath = tools.formatString(portalPath, { domain: this.authDomain });
     if (this.country === 'CN') {
-      portalPath = portalPath.replace('.com','.cn');
+      portalPath = portalPath.replace('.com', '.cn');
     }
     return portalPath;
   }
@@ -275,7 +275,7 @@ class EcovacsAPI {
     } else if ((this.country === 'WW') || (this.continent.toUpperCase() === 'WW')) {
       portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
     }
-    let portalUrl = tools.formatString(portalUrlFormat + "/" + loginPath, {continent: this.continent});
+    let portalUrl = tools.formatString(portalUrlFormat + "/" + loginPath, { continent: this.continent });
     let headers = {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(JSON.stringify(params))
@@ -287,8 +287,8 @@ class EcovacsAPI {
 
     const response = res.data;
     if ((response['result'] !== 'ok') && (response['ret'] !== 'ok') && (response['msg'] !== 'success')) {
-        tools.envLogError(`failure code '${response['errno']}' (${response['error']}) for call '${func}'`);
-        throw new Error(`Failure code ${response['errno']} (${response['error']}) for call ${func}`);
+      tools.envLogError(`failure code '${response['errno']}' (${response['error']}) for call '${func}'`);
+      throw new Error(`Failure code ${response['errno']} (${response['error']}) for call ${func}`);
     } else {
       tools.envLogPayload(response);
     }
@@ -401,8 +401,8 @@ class EcovacsAPI {
   mergeDeviceLists(deviceList, globalDeviceList) {
     // This is a workaround to keep compatibility
     // The device lists are not returned in the same order
-    for (let deviceNumber=0; deviceNumber<deviceList.length; deviceNumber++) {
-      for (let index=0; index<globalDeviceList.length; index++) {
+    for (let deviceNumber = 0; deviceNumber < deviceList.length; deviceNumber++) {
+      for (let index = 0; index < globalDeviceList.length; index++) {
         if (globalDeviceList[index].did === deviceList[deviceNumber].did) {
           deviceList[deviceNumber] = Object.assign(globalDeviceList[index]);
           deviceList[deviceNumber].deviceNumber = deviceNumber;
@@ -471,11 +471,11 @@ class EcovacsAPI {
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
     const is950Type_v2 = EcovacsAPI.isDeviceClass950v2type(vacuum['class'], defaultValue);
     if (is950Type) {
-      if (is950Type_v2){
+      if (is950Type_v2) {
         tools.envLogSuccess(`'950type_v2' model identified`);
         vacBotClass = require('./library/950type_v2/vacBot');
       }
-      else{
+      else {
         tools.envLogSuccess(`'950type' model identified`);
         vacBotClass = require('./library/950type/vacBot');
       }
@@ -544,7 +544,7 @@ class EcovacsAPI {
   static isDeviceClass950v2type(deviceClass) {
     return tools.getDeviceProperty(deviceClass, '950type_V2', false);
   }
-  
+
   /**
    * Returns true if the device class is not 950 type
    * @param {string} deviceClass - The device class of the device
@@ -570,7 +570,7 @@ class EcovacsAPI {
    * @returns {string} the MD5 hash of the text
    */
   static md5(text) {
-    return crypto.createHash('md5').update(text).digest("hex");
+    return crypto.createHash('md5').update(text || '').digest("hex");
   }
 
   /**
