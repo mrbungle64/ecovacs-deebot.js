@@ -34,7 +34,7 @@
     "ltx": "3.1.2",
     "mqtt": "5.15.1",
     "simple-xmpp": "2.3.1",
-    "@xmldom/xmldom": "0.9.9",
+    "@xmldom/xmldom": "0.9.10",
     "lzma": "2.3.2",
     "uniqid": "5.4.0",
     "chalk": "4.1.2"
