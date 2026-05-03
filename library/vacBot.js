@@ -1084,16 +1084,9 @@ class VacBot {
      * @param {Object} command - a VacBotCommand object
      */
     sendCommand(command) {
-        if (!this.is950type()) {
-            this.commandsSent[command.getId()] = command;
-            if ((command.name === 'PullMP') && (command.args)) {
-                this.mapPiecePacketsSent[command.getId()] = command.args.pid;
-            }
-        }
-        let actionPayload = this.useMqttProtocol() ? command : command.toXml();
         (async () => {
             try {
-                await this.ecovacs.sendCommand(actionPayload);
+                await this.ecovacs.sendCommand(command);
             } catch (e) {
                 tools.envLogError(`error sendCommand: ${e.message}`);
             }

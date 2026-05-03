@@ -51,206 +51,6 @@ export const SupportedDevices: {
     };
 };
 export const KnownDevices: {
-    "123": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-        type: string;
-    };
-    "126": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    "155": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "165": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "02uwxm": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    vsc5ia: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    emzppx: {
-        name: string;
-        deviceClassLink: string;
-    };
-    r8ead0: {
-        name: string;
-        deviceClassLink: string;
-    };
-    "9akc61": {
-        name: string;
-        deviceClassLink: string;
-    };
-    dl8fht: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    "16wdph": {
-        name: string;
-        deviceClassLink: string;
-    };
-    "159": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    "130": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        mopping_system: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    uv242z: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    jr3pqa: {
-        name: string;
-        deviceClassLink: string;
-    };
-    d0cnel: {
-        name: string;
-        deviceClassLink: string;
-    };
-    eyi9jv: {
-        name: string;
-        deviceClassLink: string;
-    };
-    ls1ok3: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-        type: string;
-    };
-    y79a7u: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    "2pv572": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        clean_speed: boolean;
-        type: string;
-    };
-    "115": {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        map_image_supported: boolean;
-        type: string;
-    };
-    gd4uut: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        type: string;
-    };
     yna5xi: {
         name: string;
         "950type": boolean;
@@ -831,23 +631,6 @@ export const KnownDevices: {
         map_image_supported: boolean;
         type: string;
     };
-    u5vcmk: {
-        name: string;
-        "950type": boolean;
-        "950type_V2": boolean;
-        main_brush: boolean;
-        side_brush: boolean;
-        filter: boolean;
-        unit_care_info: boolean;
-        spot_area: boolean;
-        custom_area: boolean;
-        mopping_system: boolean;
-        voice_report: boolean;
-        auto_empty_station: boolean;
-        clean_speed: boolean;
-        map_image_supported: boolean;
-        type: string;
-    };
     mnx7f4: {
         name: string;
         "950type": boolean;
@@ -1319,6 +1102,128 @@ export const KnownDevices: {
     ao7fpw: {
         name: string;
         deviceClassLink: string;
+    };
+};
+export const LegacyDevices: {
+    "123": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    "126": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    "155": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "165": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "02uwxm": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    vsc5ia: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    emzppx: {
+        name: string;
+        deviceClassLink: string;
+    };
+    r8ead0: {
+        name: string;
+        deviceClassLink: string;
+    };
+    "9akc61": {
+        name: string;
+        deviceClassLink: string;
+    };
+    dl8fht: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    "16wdph": {
+        name: string;
+        deviceClassLink: string;
+    };
+    "159": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    "130": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    uv242z: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    jr3pqa: {
+        name: string;
+        deviceClassLink: string;
+    };
+    d0cnel: {
+        name: string;
+        deviceClassLink: string;
+    };
+    eyi9jv: {
+        name: string;
+        deviceClassLink: string;
+    };
+    ls1ok3: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    y79a7u: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    "2pv572": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    "115": {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    gd4uut: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
+    };
+    u5vcmk: {
+        name: string;
+        "950type": boolean;
+        "950type_V2": boolean;
+        type: string;
     };
 };
 //# sourceMappingURL=models.d.ts.map

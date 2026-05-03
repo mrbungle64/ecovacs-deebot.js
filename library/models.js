@@ -1109,7 +1109,6 @@ exports.KnownDevices = {
 };
 
 exports.LegacyDevices = {
-
     "123": {
         "name": "DEEBOT Slim2 Series",
         "950type": false,
