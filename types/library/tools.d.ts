@@ -80,11 +80,6 @@ export function isKnownDevice(deviceClass: string): boolean;
  */
 export function isLegacyModel(deviceClass: any): boolean;
 /**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device a N79 series model
- */
-export function isN79series(deviceClass: string): boolean;
-/**
  * Returns true if the value is an object, false if it is not
  * @param {any} val - The value to check.
  * @returns {boolean} whether it is an object

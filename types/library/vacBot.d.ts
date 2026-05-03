@@ -267,11 +267,6 @@ declare class VacBot {
      */
     isNot950type_V2(): boolean;
     /**
-     * Returns true if the model is a N79 series model
-     * @returns {boolean}
-     */
-    isN79series(): boolean;
-    /**
      * Returns true if the model is a fully supported model
      * @returns {boolean}
      */

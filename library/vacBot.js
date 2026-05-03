@@ -606,16 +606,12 @@ class VacBot {
             case "GetSchedule".toLowerCase():
                 this.sendCommand(new this.vacBotCommand.GetSchedule());
                 break;
+            case "GetCleanSum".toLowerCase():
+                this.sendCommand(new this.vacBotCommand.GetCleanSum());
+                break;
             case "PlaySound".toLowerCase(): {
                 let sid = args[0] || 0;
                 this.sendCommand(new this.vacBotCommand.PlaySound(Number(sid)));
-                break;
-            }
-            case "GetCleanSum".toLowerCase(): {
-                if (!this.isN79series()) {
-                    // https://github.com/mrbungle64/ioBroker.ecovacs-deebot/issues/67
-                    this.sendCommand(new this.vacBotCommand.GetCleanSum());
-                }
                 break;
             }
             case "ResetLifeSpan".toLowerCase(): {
@@ -789,14 +785,6 @@ class VacBot {
      */
     isNot950type_V2() {
         return (!this.is950type_V2());
-    }
-
-    /**
-     * Returns true if the model is a N79 series model
-     * @returns {boolean}
-     */
-    isN79series() {
-        return tools.isN79series(this.deviceClass);
     }
 
     /**

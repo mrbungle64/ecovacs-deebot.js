@@ -63,21 +63,6 @@ function getReqID() {
 }
 
 /**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device a N79 series model
- */
-function isN79series(deviceClass) {
-    switch (deviceClass) {
-        case '126': // N79
-        case '155': // N79S/SE
-        case '165': // N79T/W
-            return true;
-        default:
-            return false;
-    }
-}
-
-/**
  * Get all known devices, including the supported devices and the known devices
  * @returns {Object} a dictionary of all known devices
  */
@@ -418,7 +403,6 @@ module.exports.getTimeStringFormatted = getTimeStringFormatted;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
 module.exports.isKnownDevice = isKnownDevice;
 module.exports.isLegacyModel = isLegacyModel;
-module.exports.isN79series = isN79series;
 module.exports.isObject = isObject;
 module.exports.isSupportedDevice = isSupportedDevice;
 module.exports.isValidJsonString = isValidJsonString;
