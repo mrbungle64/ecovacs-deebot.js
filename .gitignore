@@ -4,7 +4,6 @@ node_modules
 *.log
 test-results.xml
 .cache/
-/.nyc_output/
 launch.json
 app_BWE.js
 logs

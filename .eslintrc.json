@@ -1,8 +1,7 @@
 {
     "env": {
         "es6": true,
-        "node": true,
-        "mocha": true
+        "node": true
     },
     "extends": "eslint:recommended",
     "rules": {
@@ -32,6 +31,6 @@
         "no-prototype-builtins": "off"
     },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 2022
     }
 }

@@ -5,8 +5,9 @@
   "main": "index.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "test": "NODE_ENV=test mocha",
-    "test_windows": "SET NODE_ENV=test && mocha",
+    "test": "NODE_ENV=test node --test",
+    "test_windows": "SET NODE_ENV=test && node --test",
+    "test:coverage": "NODE_ENV=test node --test --test-coverage",
     "appTest": "NODE_ENV=dev node example/app2.js",
     "exportTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir types",
     "exportAndCheckTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --checkJs --outDir types"
@@ -31,10 +32,10 @@
   },
   "dependencies": {
     "axios": "1.16.0",
-    "mqtt": "5.15.1",
+    "chalk": "4.1.2",
     "lzma": "2.3.2",
-    "uniqid": "5.4.0",
-    "chalk": "4.1.2"
+    "mqtt": "5.15.1",
+    "uniqid": "5.4.0"
   },
   "optionalDependencies": {
     "canvas": "3.2.3"
@@ -47,9 +48,7 @@
     "@types/node": "^25.6.0",
     "eslint": "^8.57.1",
     "globals": "^15.15.0",
-    "mocha": "^10.8.2",
     "node-machine-id": "^1.1.12",
-    "nyc": "^17.1.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.6.0"
   }

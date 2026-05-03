@@ -1,5 +1,6 @@
 'use strict';
 
+const { describe, it } = require('node:test');
 const assert = require('assert');
 const axios = require('axios');
 
@@ -69,8 +70,8 @@ describe('API', function () {
     const fs = require('fs');
     const crypto = require('crypto');
 
-    it('should exist as a file', function (done) {
-      fs.stat("key.pem", done);
+    it('should exist as a file', async function () {
+      await fs.promises.stat("key.pem");
     });
 
     it('should be a valid key file', function () {
@@ -78,7 +79,7 @@ describe('API', function () {
         const encrypted = crypto.publicEncrypt({
           key: fs.readFileSync("key.pem", "utf8"),
           padding: crypto.constants.RSA_PKCS1_PADDING
-        }, new Buffer("unencrypted")).toString('base64');
+        }, Buffer.from("unencrypted")).toString('base64');
       });
     });
   });
