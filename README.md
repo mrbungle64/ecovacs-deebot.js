@@ -76,7 +76,11 @@ Support for new models is no longer added upon request. Due to high time constra
 * Enforced minimum Node.js version 20.x.
 * Added support for T20, T30, X2, and X8 series.
 
-### 0.0.2 - 0.9.5
+### 0.9.5 (Final Legacy stable)
+* Added GoToPosition shortcut function (e.g. T8, T9 and X1 series)
+* Fix AirDryingStart and AirDryingStop commands
+
+### 0.0.2 - 0.9.4
 * See [Changelog archive](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Changelog-(archive))
 
 ---
