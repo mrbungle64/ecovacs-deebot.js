@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   ecovacs:
-    image: node:latest
+    image: node:20-bookworm-slim
     volumes:
       - ./:/opt/app
     tty: true
