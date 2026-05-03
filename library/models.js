@@ -54,206 +54,6 @@ exports.SupportedDevices = {
 };
 
 exports.KnownDevices = {
-    "123": {
-        "name": "DEEBOT Slim2 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": false,
-        "side_brush": true,
-        "filter": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
-        "voice_report": false,
-        "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false,
-        "type": "legacy"
-    },
-    "126": {
-        "name": "DEEBOT N79",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "155": {
-        "name": "DEEBOT N79S/SE",
-        "deviceClassLink": "126"
-    },
-    "165": {
-        "name": "DEEBOT N79T/W",
-        "deviceClassLink": "126"
-    },
-    "02uwxm": {
-        "name": "DEEBOT OZMO Slim10 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": false,
-        "side_brush": true,
-        "filter": true,
-        "mopping_system": true,
-        "voice_report": false,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "vsc5ia": {
-        "name": "DEEBOT 500",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "emzppx": {
-        "name": "DEEBOT 501",
-        "deviceClassLink": "vsc5ia"
-    },
-    "r8ead0": {
-        "name": "DEEBOT 502",
-        "deviceClassLink": "vsc5ia"
-    },
-    "9akc61": {
-        "name": "DEEBOT 505",
-        "deviceClassLink": "vsc5ia"
-    },
-    "dl8fht": {
-        "name": "DEEBOT 600 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "16wdph": {
-        "name": "DEEBOT 661",
-        "deviceClassLink": "dl8fht"
-    },
-    "159": {
-        "name": "DEEBOT OZMO 601",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "130": {
-        "name": "DEEBOT OZMO 610 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "mopping_system": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "uv242z": {
-        "name": "DEEBOT 710",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "jr3pqa": {
-        "name": "DEEBOT 711",
-        "deviceClassLink": "uv242z"
-    },
-    "d0cnel": {
-        "name": "DEEBOT 711s",
-        "deviceClassLink": "uv242z"
-    },
-    "eyi9jv": {
-        "name": "DEEBOT 715",
-        "deviceClassLink": "uv242z"
-    },
-    "ls1ok3": {
-        "name": "DEEBOT 900 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "spot_area": true,
-        "custom_area": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "map_image_supported": true,
-        "type": "legacy"
-    },
-    "y79a7u": {
-        "name": "DEEBOT OZMO 900 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "2pv572": {
-        "name": "DEEBOT OZMO 905",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "clean_speed": true,
-        "type": "legacy"
-    },
-    "115": {
-        "name": "DEEBOT OZMO/PRO 930 Series",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "map_image_supported": true,
-        "type": "legacy"
-    },
-    "gd4uut": {
-        "name": "DEEBOT OZMO 960",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "type": "legacy"
-    },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
         "950type": true,
@@ -834,23 +634,6 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "type": "yeedi"
     },
-    "u5vcmk": {
-        "name": "yeedi vac",
-        "950type": false,
-        "950type_V2": false,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": false,
-        "voice_report": true,
-        "auto_empty_station": false,
-        "clean_speed": true,
-        "map_image_supported": false,
-        "type": "yeedi"
-    },
     "mnx7f4": {
         "name": "yeedi vac station",
         "950type": true,
@@ -1322,5 +1105,141 @@ exports.KnownDevices = {
     "ao7fpw": {
         "name": "GOAT GX-600",
         "deviceClassLink": "5xu9h3"
+    }
+};
+
+exports.LegacyDevices = {
+
+    "123": {
+        "name": "DEEBOT Slim2 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "126": {
+        "name": "DEEBOT N79",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "155": {
+        "name": "DEEBOT N79S/SE",
+        "deviceClassLink": "126"
+    },
+    "165": {
+        "name": "DEEBOT N79T/W",
+        "deviceClassLink": "126"
+    },
+    "02uwxm": {
+        "name": "DEEBOT OZMO Slim10 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "vsc5ia": {
+        "name": "DEEBOT 500",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "emzppx": {
+        "name": "DEEBOT 501",
+        "deviceClassLink": "vsc5ia"
+    },
+    "r8ead0": {
+        "name": "DEEBOT 502",
+        "deviceClassLink": "vsc5ia"
+    },
+    "9akc61": {
+        "name": "DEEBOT 505",
+        "deviceClassLink": "vsc5ia"
+    },
+    "dl8fht": {
+        "name": "DEEBOT 600 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "16wdph": {
+        "name": "DEEBOT 661",
+        "deviceClassLink": "dl8fht"
+    },
+    "159": {
+        "name": "DEEBOT OZMO 601",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "130": {
+        "name": "DEEBOT OZMO 610 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "uv242z": {
+        "name": "DEEBOT 710",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "130": {
+        "name": "DEEBOT OZMO 610 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "uv242z": {
+        "name": "DEEBOT 710",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "jr3pqa": {
+        "name": "DEEBOT 711",
+        "deviceClassLink": "uv242z"
+    },
+    "d0cnel": {
+        "name": "DEEBOT 711s",
+        "deviceClassLink": "uv242z"
+    },
+    "eyi9jv": {
+        "name": "DEEBOT 715",
+        "deviceClassLink": "uv242z"
+    },
+    "ls1ok3": {
+        "name": "DEEBOT 900 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "y79a7u": {
+        "name": "DEEBOT OZMO 900 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "2pv572": {
+        "name": "DEEBOT OZMO 905",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "115": {
+        "name": "DEEBOT OZMO/PRO 930 Series",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "gd4uut": {
+        "name": "DEEBOT OZMO 960",
+        "950type": false,
+        "950type_V2": false,
+        "type": "legacy"
+    },
+    "u5vcmk": {
+        "name": "yeedi vac",
+        "950type": false,
+        "950type_V2": false,
+        "type": "yeedi"
     }
 };

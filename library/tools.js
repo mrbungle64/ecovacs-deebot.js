@@ -70,6 +70,7 @@ function getAllKnownDevices() {
     let devices = {};
     Object.assign(devices, getSupportedDevices());
     Object.assign(devices, getKnownDevices());
+    Object.assign(devices, getLegacyDevices());
     return devices;
 }
 
@@ -88,6 +89,13 @@ function getKnownDevices() {
 }
 
 /**
+ * @returns {Object} a dictionary of known legacy (unsupported) devices
+ */
+function getLegacyDevices() {
+    return deebotModels.LegacyDevices;
+}
+
+/**
  * Check if the deviceClass belongs to a supported model
  * @param {string} deviceClass - The device class to check for
  * @returns {boolean} whether the deviceClass belongs to a supported model
@@ -103,8 +111,8 @@ function isSupportedDevice(deviceClass) {
  * @returns {boolean} whether the deviceClass belongs to a known model
  */
 function isKnownDevice(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getKnownDevices()));
-    return devices.hasOwnProperty(deviceClass) || isSupportedDevice(deviceClass);
+    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    return devices.hasOwnProperty(deviceClass);
 }
 
 /**
@@ -120,8 +128,8 @@ function isLegacyModel(deviceClass) {
  * @returns {String}
  */
 function getModelType(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getKnownDevices()));
-    if (devices.hasOwnProperty(deviceClass) || isSupportedDevice(deviceClass)) {
+    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    if (devices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'type', 'unknown');
     }
     return 'unknown';
