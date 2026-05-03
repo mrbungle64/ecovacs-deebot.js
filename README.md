@@ -10,12 +10,17 @@
 
 ---
 
-## 🗺️ The Roadmap
+## 🗺️ The Roadmap & Legacy "Clean Cut"
 
-To provide a stable exit point for legacy hardware while reducing technical debt, the following steps are planned:
+To reduce technical debt and ensure long-term maintainability, the following architectural cut is implemented:
 
-1.  **Finalizing v0.9.6:** The current beta will be completed and released as the final **Stable** version. This will be the **final version to support legacy protocols** (XMPP/XML and MQTT/XML).
-2.  **Transition to v1.0.0:** Following the 0.9.6 stable release, development will move to version 1.0.0. This major update will be **MQTT/JSON-only**. All legacy XML-based code and dependencies will be removed to improve performance and maintainability.
+### Phase 1: Final Legacy Milestone (v0.9.x)
+* **v0.9.5 (Stable):** Final stable release with verified support for legacy XML-based protocols.
+* **v0.9.6-beta.12 (Final Legacy Release):** Last development milestone to support legacy hardware (XMPP/XML and MQTT/XML).
+
+### Phase 2: Modernization (v1.0.0+)
+* **v1.0.0-alpha.x:** Development has shifted exclusively to the modern **MQTT/JSON** stack.
+* **Legacy Removal:** All legacy XML-based code and dependencies have been removed. This version only supports modern models.
 
 ---
 
@@ -23,13 +28,12 @@ To provide a stable exit point for legacy hardware while reducing technical debt
 
 | Level | Model Series | Protocol | Support Status |
 | :--- | :--- | :--- | :--- |
-| 🟢 Active | OZMO 920/950, T8 AIVI, X1 Turbo | MQTT/JSON | Owned by maintainer |
-| 🟡 Community | T10, T20, T30, X2, X8 series etc. | MQTT/JSON | "Best effort" via community PRs |
-| 🟡 Community | yeedi models (MQTT/JSON only) | MQTT/JSON | "Best effort" via community PRs |
-| 🔴 Legacy | Deebot 900/901 etc. | MQTT/XML | Supported in **v0.9.x only** |
-| 🔴 Legacy | Slim 2, OZMO 930 etc. | XMPP/XML | Supported in **v0.9.x only** |
+| 🟢 Active | OZMO 920/950, T8, T9, N8, X1 series | MQTT/JSON | Fully supported (Maintainer owned) |
+| 🟡 Community | T10, T20, T30, X2, X5, X8 series etc. | MQTT/JSON | "Best effort" via community PRs |
+| 🟡 Community | yeedi models (modern MQTT/JSON only) | MQTT/JSON | "Best effort" via community PRs |
+| 🔴 Legacy | Deebot 900, Slim 2, OZMO 930 etc. | XML-based | **Unsupported** (Use v0.9.x) |
 
-### Note on New Models
+### Important Note on New Models
 Support for new models is no longer added upon request. Due to high time constraints, **I will not implement new models based on logs alone.** Requests for new model support without an accompanying **Pull Request** may be closed without further notice. If you want to see a modern (MQTT/JSON) model supported, please contribute the necessary model definitions via PR.
 
 ---
@@ -43,13 +47,20 @@ Support for new models is no longer added upon request. Due to high time constra
 
 ---
 
-## Known Issues
-* The **"move"** function is model-specific and is not implemented drawing universal logic.
-* **Map image generation** is unstable on 32-bit systems and has limited functionality for newer series like X1 or X2.
+## ⚠️ Known Issues
+* **Map Image Generation:** Unstable on 32-bit systems and currently limited for newer series like X1, X2 or T30.
+* **Movement Control:** The "move" function is highly model-specific and not implemented with universal logic.
+* **Legacy Models:** If you own a model that requires the XML protocol, this version will throw an `Error`. Please stick to `v0.9.5` or `v0.9.6-beta.12`.
 
 ---
 
-## Changelog (Current)
+## Changelog
+
+### 1.0.0-alpha.0 (Current)
+* **Breaking Change:** Complete removal of the legacy XMPP/XML and MQTT/XML protocol stacks.
+* Refactoring for pure MQTT/JSON communication.
+* Enforced "fail-fast" for unsupported legacy models.
+
 
 ### 0.9.6 (In Progress / Final Legacy Support)
 * **Breaking Change:** Bumped minimum required version of Node.js to 20.x
@@ -57,10 +68,6 @@ Support for new models is no longer added upon request. Due to high time constra
 * Added initial support for T20, T30, X2, and X8 series
 * Bumped dependencies
 * *This version is the final release for all XML-based models*
-
-### 1.0.0 (Planned)
-* Complete removal of the legacy XMPP/XML and MQTT/XML protocol stacks
-* Major dependency cleanup and refactoring for pure MQTT/JSON communication
 
 ---
 
