@@ -64,14 +64,6 @@ function getReqID() {
 
 /**
  * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device a 710 series model
- */
-function is710series(deviceClass) {
-    return deviceClass === 'uv242z';
-}
-
-/**
- * @param {string} deviceClass - The device class of the device
  * @returns {boolean} a Boolean value whether the device a N79 series model
  */
 function isN79series(deviceClass) {
@@ -423,7 +415,6 @@ module.exports.getModelType = getModelType;
 module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
-module.exports.is710series = is710series;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
 module.exports.isKnownDevice = isKnownDevice;
 module.exports.isLegacyModel = isLegacyModel;

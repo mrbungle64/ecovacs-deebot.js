@@ -65,11 +65,6 @@ export function getSupportedDevices(): Object;
  */
 export function getTimeStringFormatted(totalSeconds: number): string;
 /**
- * @param {string} deviceClass - The device class of the device
- * @returns {boolean} a Boolean value whether the device a 710 series model
- */
-export function is710series(deviceClass: string): boolean;
-/**
  * @returns {boolean} whether the canvas module is available
  */
 export function isCanvasModuleAvailable(): boolean;

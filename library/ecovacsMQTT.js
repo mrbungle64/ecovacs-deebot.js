@@ -111,7 +111,7 @@ class EcovacsMQTT extends Ecovacs {
      * @param {Object} command - the command object
      * @param {Object} params
      */
-    getRequestUrl(command,params) {
+    getRequestUrl(command, params) {
         const apiPath = this.getApiPath(command);
         let portalUrlFormat = constants.PORTAL_ECOUSER_API;
         if (this.country === 'CN') {
@@ -119,7 +119,7 @@ class EcovacsMQTT extends Ecovacs {
         } else if ((this.country === 'WW') || (this.continent.toUpperCase() === 'WW')) {
             portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
         }
-        let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, {continent: this.continent});
+        let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, { continent: this.continent });
         if (this.bot.is950type()) {
             if (this.bot.authDomain === constants.AUTH_DOMAIN_YD) {
                 portalUrl = portalUrl + "?cv=1.94.76&t=a&av=1.3.0"; // yeedi
@@ -173,7 +173,7 @@ class EcovacsMQTT extends Ecovacs {
      * @param {Object} messagePayload - The message payload that was received
      * @abstract
      */
-    handleCommandResponse(command, messagePayload) {}
+    handleCommandResponse(command, messagePayload) { }
 
     /**
      * @param {string} topic - the topic of the message
@@ -181,7 +181,7 @@ class EcovacsMQTT extends Ecovacs {
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      * @abstract
      */
-    handleMessage(topic, message, type = "incoming") {}
+    handleMessage(topic, message, type = "incoming") { }
 
     /**
      * It sends a command to the Ecovacs API
@@ -221,8 +221,7 @@ class EcovacsMQTT extends Ecovacs {
                 // Error code 500 = wait for response timed out (see issue #19)
                 if (this.bot.errorCode === '500') {
                     this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
-                }
-                if ((this.bot.errorCode !== '500') || !tools.is710series(this.bot.deviceClass)) {
+                } else {
                     this.emitLastError();
                 }
                 tools.envLogInfo(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
