@@ -3,7 +3,7 @@
 const EventEmitter = require('events');
 const tools = require('./tools');
 const constants = require('./constants');
-const {errorCodes} = require('./errorCodes.json');
+const { errorCodes } = require('./errorCodes.json');
 
 class Ecovacs extends EventEmitter {
     /**
@@ -22,7 +22,7 @@ class Ecovacs extends EventEmitter {
         super();
 
         this.bot = vacBot;
-        this.dictionary = this.getEcovacsDictionary();
+        this.dictionary = require('./950type/dictionary');
         this.user = user;
         this.hostname = hostname;
         this.resource = resource;
@@ -61,7 +61,7 @@ class Ecovacs extends EventEmitter {
      * @returns {Promise<void>}
      */
     async handleMessagePayload(command, event) {
-        let abbreviatedCmd = command.replace(/^_+|_+$/g, '').replace('Get','').replace('Server', '');
+        let abbreviatedCmd = command.replace(/^_+|_+$/g, '').replace('Get', '').replace('Server', '');
         // Incoming MQTT messages
         if (abbreviatedCmd.startsWith('On') && (abbreviatedCmd !== 'OnOff')) {
             abbreviatedCmd = abbreviatedCmd.substring(2);
@@ -244,7 +244,7 @@ class Ecovacs extends EventEmitter {
                         this.emit('CurrentMapIndex', this.bot.currentMapIndex);
                         this.emit('Maps', this.bot.maps);
                     }
-                } catch(e) {
+                } catch (e) {
                     tools.envLogInfo(`[handleMessagePayload] Error on MapM: ${e.message}`);
                 }
                 break;
@@ -316,17 +316,6 @@ class Ecovacs extends EventEmitter {
     }
 
     /**
-     * @returns the dictionary of Ecovacs related constants
-     */
-    getEcovacsDictionary() {
-        if (this.bot.is950type()) {
-            return require('./950type/dictionary');
-        } else {
-            return require('./non950type/dictionary');
-        }
-    }
-
-    /**
      * Handle life span components to emit combined object
      */
     handleLifeSpanCombined() {
@@ -375,7 +364,7 @@ class Ecovacs extends EventEmitter {
      * @param {string} message - the error message
      * @param {string} [command=''] - the command
      */
-    emitNetworkError(message, command= '') {
+    emitNetworkError(message, command = '') {
         this.emitError('-1', tools.createErrorDescription(message, command));
     }
 
@@ -436,10 +425,10 @@ class Ecovacs extends EventEmitter {
                 };
                 if (this.bot.sleepStatus === 0) {
                     if (this.bot.moppingType !== null) {
-                        Object.assign(r['waterInfo'], {'moppingType': this.bot.moppingType});
+                        Object.assign(r['waterInfo'], { 'moppingType': this.bot.moppingType });
                     }
                     if (this.bot.scrubbingType !== null) {
-                        Object.assign(r['waterInfo'], {'scrubbingType': this.bot.scrubbingType});
+                        Object.assign(r['waterInfo'], { 'scrubbingType': this.bot.scrubbingType });
                     }
                 }
             }
@@ -450,7 +439,7 @@ class Ecovacs extends EventEmitter {
     /**
      * @abstract
      */
-    async disconnect() {}
+    async disconnect() { }
 }
 
 module.exports = Ecovacs;

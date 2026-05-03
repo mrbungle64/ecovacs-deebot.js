@@ -3,7 +3,7 @@
 const tools = require('./tools');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
-const {errorCodes} = require('./errorCodes.json');
+const { errorCodes } = require('./errorCodes.json');
 const constants = require("./constants");
 const crypto = require("crypto");
 const querystring = require("node:querystring");
@@ -12,7 +12,6 @@ const axios = require('axios').default;
 /**
  * @class VacBot
  * This class represents the vacuum bot
- * There are 2 classes which derive from this class (`VacBot_950type` and `VacBot_non950type`)
  */
 class VacBot {
     /**
@@ -131,19 +130,14 @@ class VacBot {
 
         this.genericCommand = null;
 
-        if (this.is950type()) {
-            this.vacBotCommand = require('./950type/command');
-        } else {
-            this.vacBotCommand = require('./non950type/command');
+        if (!this.is950type()) {
+            const msg = `'XML' based model identified (unsupported)`;
+            tools.envLogError(msg);
+            throw new Error(msg);
         }
 
-        if (this.is950type()) {
-            this.protocolModule = require('./950type/ecovacsMQTT_JSON');
-        } else if (this.useMqttProtocol()) {
-            this.protocolModule = require('./non950type/ecovacsMQTT_XML');
-        } else {
-            this.protocolModule = require('./non950type/ecovacsXMPP_XML');
-        }
+        this.vacBotCommand = require('./950type/command');
+        this.protocolModule = require('./950type/ecovacsMQTT_JSON');
 
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
@@ -226,7 +220,7 @@ class VacBot {
 
         this.on('MapDataReady', () => {
             if (this.createMapImage && tools.isCanvasModuleAvailable() && this.is950type()) {
-                for (let m=0; m < this.mapImageDataQueue.length; m++) {
+                for (let m = 0; m < this.mapImageDataQueue.length; m++) {
                     const mapID = this.mapImageDataQueue[m]['mapID'];
                     this.run('GetMapInfo', mapID, 'outline', false); // GetMapImage
                 }
@@ -308,7 +302,7 @@ class VacBot {
             'type': 'GetVirtualBoundaries',
             'mapID': mapID
         });
-        setTimeout(()=> {
+        setTimeout(() => {
             this.handleZeroVirtualBoundariesForMap(mapID);
         }, this.mapDataObject.length * 500);
     }
@@ -1145,9 +1139,9 @@ class VacBot {
             portalPath = constants.APP_ECOUSER_API;
         }
 
-        portalPath = tools.formatString(portalPath, {continent: this.continent});
+        portalPath = tools.formatString(portalPath, { continent: this.continent });
         if (this.country === 'CN') {
-            portalPath = portalPath.replace('.com','.cn');
+            portalPath = portalPath.replace('.com', '.cn');
         }
         portalPath = portalPath + '/dln/api/log/clean_result/list?';
 
@@ -1184,7 +1178,7 @@ class VacBot {
                 'userid': this.uid,
                 'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
                 'v': '2.3.7',
-                'country':  this.country,
+                'country': this.country,
                 'sign': sign,
                 'signType': 'sha256'
             }

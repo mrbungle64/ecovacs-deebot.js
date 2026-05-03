@@ -1,5 +1,5 @@
 export = Ecovacs;
-declare class Ecovacs extends EventEmitter<[never]> {
+declare class Ecovacs extends EventEmitter<any> {
     /**
      * @param {Object} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
@@ -14,7 +14,7 @@ declare class Ecovacs extends EventEmitter<[never]> {
      */
     constructor(vacBot: Object, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: Object, serverAddress: string, serverPort?: number);
     bot: Object;
-    dictionary: typeof import("./950type/dictionary") | typeof import("./non950type/dictionary");
+    dictionary: typeof import("./950type/dictionary");
     user: string;
     hostname: string;
     resource: string;
@@ -38,10 +38,6 @@ declare class Ecovacs extends EventEmitter<[never]> {
      * @returns {Promise<void>}
      */
     handleMessagePayload(command: string, event: Object): Promise<void>;
-    /**
-     * @returns the dictionary of Ecovacs related constants
-     */
-    getEcovacsDictionary(): typeof import("./950type/dictionary") | typeof import("./non950type/dictionary");
     /**
      * Handle life span components to emit combined object
      */
@@ -79,5 +75,5 @@ declare class Ecovacs extends EventEmitter<[never]> {
      */
     disconnect(): Promise<void>;
 }
-import EventEmitter = require("events");
+import EventEmitter = require("node:events");
 //# sourceMappingURL=ecovacs.d.ts.map

@@ -480,8 +480,9 @@ class EcovacsAPI {
         vacBotClass = require('./library/950type/vacBot');
       }
     } else {
-      tools.envLogWarn(`'non950type' model identified (deprecated)`);
-      vacBotClass = require('./library/non950type/vacBot');
+      const msg = `'XML' based model identified (unsupported)`;
+      tools.envLogError(msg);
+      throw new Error(msg);
     }
     return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
   }

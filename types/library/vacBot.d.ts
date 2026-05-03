@@ -2,7 +2,6 @@ export = VacBot;
 /**
  * @class VacBot
  * This class represents the vacuum bot
- * There are 2 classes which derive from this class (`VacBot_950type` and `VacBot_non950type`)
  */
 declare class VacBot {
     /**
@@ -103,9 +102,9 @@ declare class VacBot {
     mapImageDataQueue: any[];
     schedule: any[];
     genericCommand: any;
-    vacBotCommand: typeof import("./950type/command") | typeof import("./non950type/command");
-    protocolModule: typeof import("./950type/ecovacsMQTT_JSON") | typeof import("./non950type/ecovacsMQTT_XML") | typeof import("./non950type/ecovacsXMPP_XML");
-    ecovacs: import("./950type/ecovacsMQTT_JSON") | import("./non950type/ecovacsMQTT_XML") | import("./non950type/ecovacsXMPP_XML");
+    vacBotCommand: typeof import("./950type/command");
+    protocolModule: typeof import("./950type/ecovacsMQTT_JSON");
+    ecovacs: import("./950type/ecovacsMQTT_JSON");
     /**
      * Handle object with infos about the maps to provide a full map data object
      * @param {Object} mapsData
