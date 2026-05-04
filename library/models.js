@@ -1181,18 +1181,6 @@ exports.LegacyDevices = {
         "950type_V2": false,
         "type": "legacy"
     },
-    "130": {
-        "name": "DEEBOT OZMO 610 Series",
-        "950type": false,
-        "950type_V2": false,
-        "type": "legacy"
-    },
-    "uv242z": {
-        "name": "DEEBOT 710",
-        "950type": false,
-        "950type_V2": false,
-        "type": "legacy"
-    },
     "jr3pqa": {
         "name": "DEEBOT 711",
         "deviceClassLink": "uv242z"
