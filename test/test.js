@@ -15,26 +15,26 @@ describe('API', function () {
       const continents = [];
 
       await Promise.all(
-          Object.values(ecovacsDeebot.countries).map(async ({continent}) => {
-            if (continents.includes(continent)) {
-              return;
-            }
-            continents.push(continent);
+        Object.values(ecovacsDeebot.countries).map(async ({ continent }) => {
+          if (continents.includes(continent)) {
+            return;
+          }
+          continents.push(continent);
 
-            try {
-              let portalUrlFormat = constants.PORTAL_ECOUSER_API;
-              if (continent === 'WW') {
-                portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
-              }
-              const url = tools.formatString(portalUrlFormat, {"continent": continent});
-              await axios.get(url, {timeout: 5000});
-            } catch (err) {
-              if (err.code === 'ENOTFOUND') {
-                throw Error(err);
-              }
-              assert.strictEqual(err.response.status, 404);
+          try {
+            let portalUrlFormat = constants.PORTAL_ECOUSER_API;
+            if (continent === 'WW') {
+              portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
             }
-          })
+            const url = tools.formatString(portalUrlFormat, { "continent": continent });
+            await axios.get(url, { timeout: 5000 });
+          } catch (err) {
+            if (err.code === 'ENOTFOUND') {
+              throw Error(err);
+            }
+            assert.strictEqual(err.response.status, 404);
+          }
+        })
       );
     });
 
@@ -97,7 +97,7 @@ describe('API tools', function () {
       assert.strictEqual(tools.isObject(undefined), false);
       assert.strictEqual(tools.isObject(Symbol()), false);
       assert.strictEqual(tools.isObject({}), true);
-      assert.strictEqual(tools.isObject({key: "value"}), true);
+      assert.strictEqual(tools.isObject({ key: "value" }), true);
       assert.strictEqual(tools.isObject(JSON.parse('{"key": "value"}')), true);
       assert.strictEqual(tools.isObject(() => {
       }), true);
@@ -112,13 +112,13 @@ describe('API tools', function () {
     });
 
     it('should replace key identifiers with provided values', function () {
-      assert.strictEqual(tools.formatString("{first} {second}", {first: "Hello", second: "world"}), "Hello world");
-      assert.strictEqual(tools.formatString("{first} world", {first: "Hello"}), "Hello world");
+      assert.strictEqual(tools.formatString("{first} {second}", { first: "Hello", second: "world" }), "Hello world");
+      assert.strictEqual(tools.formatString("{first} world", { first: "Hello" }), "Hello world");
     });
 
     it('should not replace key identifiers when not provided as values', function () {
-      assert.strictEqual(tools.formatString("{first} {second}", {foo: "Hello", bar: "world"}), "{first} {second}");
-      assert.strictEqual(tools.formatString("{first} world", {foo: "Hello", bar: "world"}), "{first} world");
+      assert.strictEqual(tools.formatString("{first} {second}", { foo: "Hello", bar: "world" }), "{first} {second}");
+      assert.strictEqual(tools.formatString("{first} world", { foo: "Hello", bar: "world" }), "{first} world");
       assert.strictEqual(tools.formatString("{first} {second}", {}), "{first} {second}");
     });
   });
@@ -153,5 +153,51 @@ describe('API tools', function () {
           `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known model type, but got "unknown"`);
       });
     });
+
+    it('should return the correct type for specific example models', function () {
+      const examples = [
+        { class: 'yna5xi', expected: '950' },
+        { class: 'h18jkh', expected: 'T8' },
+        { class: 'ucn2xe', expected: 'T9' },
+        { class: 'n6cwdb', expected: 'N8' },
+        { class: 'jtmf04', expected: 'T10' },
+        { class: '2o4lnm', expected: 'X1' },
+        { class: 'e6ofmn', expected: 'X2' },
+        { class: 'ipzjy0', expected: 'U2' },
+        { class: 'h041es', expected: 'yeedi' },
+        { class: 'sdp1y1', expected: 'airbot' },
+        { class: '20anby', expected: 'aqMonitor' },
+        { class: '5xu9h3', expected: 'goat' },
+        { class: '123', expected: 'legacy' }
+      ];
+
+      examples.forEach(({ class: deviceClass, expected }) => {
+        const modelType = tools.getModelType(deviceClass);
+        assert.strictEqual(modelType, expected,
+          `Device class "${deviceClass}" should have model type "${expected}", but got "${modelType}"`);
+      });
+    });
+  });
+});
+
+describe('Tools Extended', function () {
+  it('getTimeStringFormatted should format correctly', function () {
+    assert.strictEqual(tools.getTimeStringFormatted(3661), '1h 01m 01s');
+    assert.strictEqual(tools.getTimeStringFormatted(0), '0h 00m 00s');
+  });
+
+  it('getReqID should return 8 digits', function () {
+    const id = tools.getReqID();
+    assert.match(id, /^\d{8}$/);
+  });
+
+  it('deviceClassLinks should be valid', function () {
+    const allDevices = tools.getAllKnownDevices();
+    for (const [id, data] of Object.entries(allDevices)) {
+      if (data.deviceClassLink) {
+        assert.ok(allDevices[data.deviceClassLink],
+          `Device ${id} links to non-existent ${data.deviceClassLink}`);
+      }
+    }
   });
 });
