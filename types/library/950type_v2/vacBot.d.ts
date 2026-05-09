@@ -6,5 +6,5 @@ export = VacBot_950v2type;
 declare class VacBot_950v2type extends VacBot {
     run(command: any, ...args: any[]): void;
 }
-import VacBot = require("../950type/vacBot");
+import VacBot = require("../vacBot");
 //# sourceMappingURL=vacBot.d.ts.map

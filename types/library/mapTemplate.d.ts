@@ -17,10 +17,10 @@ export class EcovacsMapImage extends EcovacsMapImageBase {
 export function mapPieceToIntArray(pieceValue: any): Promise<any>;
 declare class EcovacsMapImageBase {
     constructor(mapID: any, mapType: any, mapTotalWidth: any, mapTotalHeight: any, mapPixel: any);
-    mapFloorCanvas: any;
-    mapFloorContext: any;
-    mapWallCanvas: any;
-    mapWallContext: any;
+    mapFloorCanvas: import("canvas").Canvas | null;
+    mapFloorContext: import("canvas").CanvasRenderingContext2D | null;
+    mapWallCanvas: import("canvas").Canvas | null;
+    mapWallContext: import("canvas").CanvasRenderingContext2D | null;
     cropBoundaries: {
         minX: null;
         minY: null;
@@ -39,9 +39,9 @@ declare class EcovacsMapImageBase {
     getBase64PNG(deebotPosition: any, chargerPosition: any, currentMapMID: any, mapDataObject: any): Promise<{
         mapID: any;
         mapType: any;
-        mapBase64PNG: any;
+        mapBase64PNG: string;
     } | null>;
-    mapBase64PNG: any;
+    mapBase64PNG: string | undefined;
 }
 export {};
 //# sourceMappingURL=mapTemplate.d.ts.map
