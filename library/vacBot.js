@@ -527,7 +527,7 @@ class VacBot {
         const key = command;
         // Registry-based lookup for trivial commands
         const entry = COMMAND_REGISTRY[key];
-        if (entry) {
+        if (entry && !entry.specialLogic) {
             const cmdArgs = entry.fixedArgs || args;
             if (entry.minArgs && args.length < entry.minArgs) {
                 return false;
