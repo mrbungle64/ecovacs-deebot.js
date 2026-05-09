@@ -102,7 +102,7 @@ declare class VacBot {
     mapImageDataQueue: any[];
     schedule: any[];
     genericCommand: any;
-    vacBotCommand: typeof VacBotCommand;
+    vacBotCommand: typeof import("./commands/base").VacBotCommand;
     protocolModule: typeof import("./ecovacs");
     ecovacs: import("./ecovacs");
     /**
@@ -975,6 +975,5 @@ declare class VacBot {
     dmodule: any;
     getCmdForObstacleDetection(): "Recognization" | "TrueDetect";
 }
-import VacBotCommand = require("./950type/command");
 import mapTemplate = require("./mapTemplate");
 //# sourceMappingURL=vacBot.d.ts.map
