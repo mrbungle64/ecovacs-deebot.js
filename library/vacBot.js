@@ -13,6 +13,7 @@ const dictionary = require('./dictionary');
 const mapTools = require('./mapTools');
 const mapTemplate = require('./mapTemplate');
 const { eventCodes } = require('./eventCodes.json');
+const COMMAND_REGISTRY = require('./commandRegistry');
 
 const HANDLE_LIVE_MAP = false;
 /**
@@ -523,17 +524,26 @@ class VacBot {
      * @param args - zero or more arguments to perform the command
      */
     run(command, ...args) {
-        switch (command.toLowerCase()) {
-            case "Generic".toLowerCase(): {
+        const key = command;
+        // Registry-based lookup for trivial commands
+        const entry = COMMAND_REGISTRY[key];
+        if (entry) {
+            const cmdArgs = entry.fixedArgs || args;
+            if (entry.minArgs && args.length < entry.minArgs) {
+                return false;
+            }
+            this.ecovacs.sendCommand(new VacBotCommand[entry.cmd](...cmdArgs));
+            return true;
+        }
+
+        // Commands with special logic (model branching, validation, side-effects)
+        switch (key) {
+            case 'Generic': {
                 this.ecovacs.sendCommand(new this.vacBotCommand.Generic(args[0], args[1]));
                 this.genericCommand = args[0];
                 break;
             }
-            case "Clean".toLowerCase(): {
-                this.ecovacs.sendCommand(new this.vacBotCommand.Clean());
-                break;
-            }
-            case "SpotArea".toLowerCase(): {
+            case 'SpotArea': {
                 const area = args[1].toString();
                 const cleanings = args[2] || 1;
                 if (area !== '') {
@@ -541,7 +551,7 @@ class VacBot {
                 }
                 break;
             }
-            case "CustomArea".toLowerCase(): {
+            case 'CustomArea': {
                 const area = args[1].toString();
                 const cleanings = args[2] || 1;
                 if (area !== '') {
@@ -549,13 +559,7 @@ class VacBot {
                 }
                 break;
             }
-            case "Edge".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.Edge());
-                break;
-            case "Spot".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.Spot());
-                break;
-            case "Pause".toLowerCase(): {
+            case 'Pause': {
                 if (this.isModelTypeAirbot() || this.isModelTypeX2()) {
                     // Airbot Z1 and Deebot X2 series
                     const command = 'clean_V2';
@@ -570,64 +574,33 @@ class VacBot {
                 }
                 break;
             }
-            case "Stop".toLowerCase():
+            case 'Stop':
                 if (this.isModelTypeAirbot() || this.isModelTypeX2()) {
                     this.ecovacs.sendCommand(new this.vacBotCommand.Stop('clean_V2'));
                 } else {
                     this.ecovacs.sendCommand(new this.vacBotCommand.Stop());
                 }
                 break;
-            case "Resume".toLowerCase():
+            case 'Resume':
                 if (this.isModelTypeAirbot() || this.isModelTypeX2()) {
                     this.ecovacs.sendCommand(new this.vacBotCommand.Resume('clean_V2'));
                 } else {
                     this.ecovacs.sendCommand(new this.vacBotCommand.Resume());
                 }
                 break;
-            case "Charge".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.Charge());
-                break;
-            case "GetChargeState".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetChargeState());
-                break;
-            case "GetBatteryState".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetBatteryState());
-                break;
-            case "GetCleanState".toLowerCase():
-            case "GetCleanInfo".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetCleanState());
-                break;
-            case "GetCleanSpeed".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetCleanSpeed());
-                break;
-            case "GetNetInfo".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetNetInfo());
-                break;
-            case "GetSleepStatus".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetSleepStatus());
-                break;
-            case "GetPosition".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetPosition());
-                break;
-            case "GetSchedule".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetSchedule());
-                break;
-            case "GetCleanSum".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetCleanSum());
-                break;
-            case "PlaySound".toLowerCase(): {
+            case 'PlaySound': {
                 let sid = args[0] || 0;
                 this.ecovacs.sendCommand(new this.vacBotCommand.PlaySound(Number(sid)));
                 break;
             }
-            case "ResetLifeSpan".toLowerCase(): {
+            case 'ResetLifeSpan': {
                 const component = args[0];
                 if (component !== '') {
                     this.ecovacs.sendCommand(new this.vacBotCommand.ResetLifeSpan(component));
                 }
                 break;
             }
-            case "SetWaterLevel".toLowerCase(): {
+            case 'SetWaterLevel': {
                 const amount = Number(args[0]);
                 const sweepType = Number(args[1]);
                 if ((amount >= 1) && (amount <= 4)) {
@@ -639,50 +612,22 @@ class VacBot {
                 }
                 break;
             }
-            case "SetCleanSpeed".toLowerCase(): {
+            case 'SetCleanSpeed': {
                 const level = Number(args[0]);
                 if ((level >= 1) && (level <= 4)) {
                     this.ecovacs.sendCommand(new this.vacBotCommand.SetCleanSpeed(level));
                 }
                 break;
             }
-            case "GetDoNotDisturb".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetDoNotDisturb());
-                break;
-            case 'GetBreakPoint'.toLowerCase():
-            case "GetContinuousCleaning".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.GetContinuousCleaning());
-                break;
-            case "EnableContinuousCleaning".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.SetContinuousCleaning(1));
-                break;
-            case "DisableContinuousCleaning".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.SetContinuousCleaning(0));
-                break;
-            case "Move".toLowerCase(): {
+            case 'move': {
                 const command = args[0];
                 if (command !== '') {
                     this.ecovacs.sendCommand(new this.vacBotCommand.Move(command));
                 }
                 break;
             }
-            case "MoveBackward".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.MoveBackward());
-                break;
-            case "MoveForward".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.MoveForward());
-                break;
-            case "MoveLeft".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.MoveLeft());
-                break;
-            case "MoveRight".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.MoveRight());
-                break;
-            case "MoveTurnAround".toLowerCase():
-                this.ecovacs.sendCommand(new this.vacBotCommand.MoveTurnAround());
-                break;
-            case 'GetMapInfo'.toLowerCase():
-            case 'GetMapImage'.toLowerCase(): {
+            case 'GetMapInfo':
+            case 'getmapimage': {
                 const mapID = args[0].toString(); // mapID has to be a string
                 const mapType = args[1] || 'outline';
                 this.createMapDataObject = true;
@@ -693,8 +638,8 @@ class VacBot {
                 }
                 break;
             }
-            case 'GetMaps'.toLowerCase():
-            case 'GetCachedMapInfo'.toLowerCase():
+            case 'GetMaps':
+            case 'GetCachedMapInfo':
                 this.ecovacs.sendCommand(new VacBotCommand.GetMapState());
                 this.ecovacs.sendCommand(new VacBotCommand.GetMajorMap());
                 this.createMapImageOnly = false;
@@ -711,7 +656,7 @@ class VacBot {
                     this.ecovacs.sendCommand(new VacBotCommand.GetCachedMapInfo());
                 }
                 break;
-            case 'BackupMap'.toLowerCase():
+            case 'BackupMap':
                 if (args.length === 0) { // Airbot Z1
                     this.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup'));
                 } else if (args.length === 1) { // e.g. Deebot X1 series
@@ -719,7 +664,7 @@ class VacBot {
                     this.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup', mid));
                 }
                 break;
-            case 'RestoreMap'.toLowerCase():
+            case 'RestoreMap':
                 if (args.length === 0) { // Airbot Z1
                     this.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore'));
                 } else if (args.length === 2) { // e.g. Deebot X1 series
@@ -728,33 +673,33 @@ class VacBot {
                     this.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore', mid, reMid));
                 }
                 break;
-            case 'GetSpotAreas'.toLowerCase(): {
+            case 'GetSpotAreas': {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
                     this.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
                 }
                 break;
             }
-            case 'GetMapInfo_V2'.toLowerCase():
+            case 'GetMapInfo_V2':
                 if (args.length === 1) {
                     this.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0]));
                 } else if (args.length >= 2) {
                     this.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0], args[1]));
                 }
                 break;
-            case 'GetMapSet_V2'.toLowerCase():
+            case 'GetMapSet_V2':
                 if (args.length === 1) {
                     this.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]));
                 } else if (args.length >= 2) {
                     this.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]));
                 }
                 break;
-            case 'SetMapSet_V2'.toLowerCase():
+            case 'SetMapSet_V2':
                 if ((args.length >= 2) && (typeof args[1] === 'object')) {
                     this.ecovacs.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]));
                 }
                 break;
-            case 'GetSpotAreaInfo'.toLowerCase(): {
+            case 'GetSpotAreaInfo': {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 if ((Number(mapID) > 0) && (spotAreaID !== '') && (spotAreaID !== undefined)) {
@@ -762,7 +707,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'GetVirtualBoundaries'.toLowerCase(): {
+            case 'GetVirtualBoundaries': {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
                     if (typeof this.mapVirtualBoundariesResponses[mapID] === 'undefined') {
@@ -776,7 +721,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'GetVirtualBoundaryInfo'.toLowerCase(): {
+            case 'GetVirtualBoundaryInfo': {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
@@ -785,7 +730,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'AddVirtualBoundary'.toLowerCase(): {
+            case 'AddVirtualBoundary': {
                 const mapID = args[0]; // mapID is a string
                 const coordinates = args[1];
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
@@ -794,7 +739,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'DeleteVirtualBoundary'.toLowerCase(): {
+            case 'DeleteVirtualBoundary': {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = args[2];
@@ -803,10 +748,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'GetMajorMap'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetMajorMap());
-                break;
-            case 'GetLifeSpan'.toLowerCase(): {
+            case 'GetLifeSpan': {
                 if (!args.length) {
                     this.emitFullLifeSpanEvent = true;
                     this.components = {};
@@ -847,7 +789,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'EnableDoNotDisturb'.toLowerCase(): {
+            case 'EnableDoNotDisturb': {
                 const start = args[0];
                 const end = args[1];
                 if ((start !== '') && (end !== '')) {
@@ -857,12 +799,12 @@ class VacBot {
                 }
                 break;
             }
-            case 'DisableDoNotDisturb'.toLowerCase(): {
+            case 'DisableDoNotDisturb': {
                 this.run('SetDoNotDisturb', 0);
                 break;
             }
-            case 'SetBlock'.toLowerCase():
-            case 'SetDoNotDisturb'.toLowerCase(): {
+            case 'SetBlock':
+            case 'SetDoNotDisturb': {
                 const enable = Number(!!args[0]);
                 const start = args[1];
                 const end = args[2];
@@ -873,12 +815,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'GetWaterLevel'.toLowerCase():
-            case 'GetWaterBoxInfo'.toLowerCase():
-            case 'GetWaterInfo'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetWaterInfo());
-                break;
-            case 'GetCleanLogs'.toLowerCase():
+            case 'GetCleanLogs':
                 if (this.isModelTypeT9Based()) {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
@@ -888,125 +825,49 @@ class VacBot {
                     this.ecovacs.sendCommand(new VacBotCommand.GetCleanLogs());
                 }
                 break;
-            case 'GetError'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetError());
-                break;
-            case 'Relocate'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.Relocate());
-                break;
-            case 'GetVolume'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetVolume());
-                break;
-            case 'SetVolume'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetVolume(args[0]));
-                }
-                break;
-            case 'GetAdvancedMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAdvancedMode());
-                break;
-            case 'EnableAdvancedMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetAdvancedMode(1));
-                break;
-            case 'DisableAdvancedMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetAdvancedMode(0));
-                break;
-            case 'GetRecognization'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetRecognization());
-                break;
-            case 'SetRecognization'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetRecognization(args[0]));
-                break;
-            case 'GetTrueDetect'.toLowerCase():
+            case 'GetTrueDetect':
                 if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.ecovacs.sendCommand(new VacBotCommand.GetRecognization());
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.GetTrueDetect());
                 }
                 break;
-            case 'EnableAIVI'.toLowerCase():
-            case 'EnableAIVI3D'.toLowerCase():
-            case 'EnableTrueDetect'.toLowerCase():
+            case 'EnableAIVI':
+            case 'EnableAIVI3D':
+            case 'EnableTrueDetect':
                 if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.ecovacs.sendCommand(new VacBotCommand.SetRecognization(1));
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(1));
                 }
                 break;
-            case 'DisableAIVI'.toLowerCase():
-            case 'DisableAIVI3D'.toLowerCase():
-            case 'DisableTrueDetect'.toLowerCase():
+            case 'DisableAIVI':
+            case 'DisableAIVI3D':
+            case 'DisableTrueDetect':
                 if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.ecovacs.sendCommand(new VacBotCommand.SetRecognization(0));
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(0));
                 }
                 break;
-            case 'SetAIVI'.toLowerCase():
-            case 'SetAIVI3D'.toLowerCase():
-            case 'SetTrueDetect'.toLowerCase():
+            case 'SetAIVI':
+            case 'SetAIVI3D':
+            case 'SetTrueDetect':
                 if (this.getCmdForObstacleDetection() === 'Recognization') {
                     this.ecovacs.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
                 }
                 break;
-            case 'EmptyDustBin'.toLowerCase():
-            case 'EmptySuctionStation'.toLowerCase():
+            case 'EmptyDustBin':
+            case 'EmptySuctionStation':
                 if (this.isModelTypeT20() || this.isModelTypeX2()) {
                     this.ecovacs.sendCommand(new VacBotCommand.EmptyDustBinSA());
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.EmptyDustBin());
                 }
                 break;
-            case 'GetAutoEmpty'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAutoEmpty());
-                break;
-            case 'SetAutoEmpty'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetAutoEmpty(args[0]));
-                }
-                break;
-            case 'EnableAutoEmpty'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetAutoEmpty(1));
-                break;
-            case 'DisableAutoEmpty'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetAutoEmpty(0));
-                break;
-            case 'GetDusterRemind'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetDusterRemind());
-                break;
-            case 'SetDusterRemind'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetDusterRemind(args[0], args[1]));
-                }
-                break;
-            case 'GetCarpetPressure'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetCarpetPressure());
-                break;
-            case 'SetCarpetPressure'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetCarpetPressure(args[0]));
-                }
-                break;
-            case 'GetCarpetInfo'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetCarpetInfo());
-                break;
-            case 'SetCarpetInfo'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetCarpetInfo(args[0]));
-                }
-                break;
-            case 'EnableCarpetPressure'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetCarpetPressure(1));
-                break;
-            case 'DisableCarpetPressure'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetCarpetPressure(0));
-                break;
-            case 'GetCleanState_V2'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetCleanState_V2());
-                break;
-            case 'Clean_V2'.toLowerCase(): {
+            case 'Clean_V2': {
                 if (this.isModelTypeAirbot()) {
                     this.ecovacs.sendCommand(new VacBotCommand.Clean_V2('move'));
                 } else {
@@ -1014,7 +875,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'SpotArea_V2'.toLowerCase(): {
+            case 'SpotArea_V2': {
                 const area = args[0].toString();
                 if (area !== '') {
                     if (this.isModelTypeX2()) {
@@ -1027,7 +888,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'FreeClean'.toLowerCase(): {
+            case 'FreeClean': {
                 if (args.length >= 1) {
                     const areaValues = args[0];
                     if (tools.areaValuesAreValidForFreeCleanCmd(areaValues)) {
@@ -1036,7 +897,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'CustomArea_V2'.toLowerCase(): {
+            case 'CustomArea_V2': {
                 const area = args[0].toString();
                 const cleanings = args[1] || 1;
                 const doNotClean = args[2] || 0;
@@ -1045,10 +906,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'HostedCleanMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.HostedCleanMode());
-                break;
-            case 'GoToPosition'.toLowerCase(): {
+            case 'GoToPosition': {
                 let area = args[0].toString();
                 if (area !== '') {
                     if (this.isModelTypeT9Based()) {
@@ -1060,58 +918,38 @@ class VacBot {
                 }
                 break;
             }
-            case 'MapPoint_V2'.toLowerCase(): {
+            case 'MapPoint_V2': {
                 const area = args[0].toString();
                 if (area !== '') {
                     this.ecovacs.sendCommand(new VacBotCommand.MapPoint_V2(area));
                 }
                 break;
             }
-            case 'GetCleanCount'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetCleanCount());
-                break;
-            case 'SetCleanCount'.toLowerCase():
+            case 'SetWorkMode':
                 if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetCleanCount(args[0]));
+                    let workMode = args[0];
+                    if (dictionary.WORKMODE_TO_ECOVACS.hasOwnProperty(workMode)) {
+                        workMode = dictionary.WORKMODE_TO_ECOVACS[workMode];
+                    }
+                    if ((workMode >= 0) && (workMode <= 3)) {
+                        this.ecovacs.sendCommand(new VacBotCommand.SetWorkMode(workMode));
+                    }
                 }
                 break;
-            case 'GetCleanPreference'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetCleanPreference());
-                break;
-            case 'GetStationState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetStationState());
-                break;
-            case 'GetStationInfo'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetStationInfo());
-                break;
-            case 'GetSchedule_V2'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetSchedule_V2());
-                break;
-            case 'GetWashInfo'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetWashInterval());
-                break;
-            case 'SetWashInfo'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetWashInfo(args[0]));
-                }
-                break;
-            case 'GetWashInterval'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetWashInterval());
-                break;
-            case 'SetWashInterval'.toLowerCase():
+            case 'SetWashInterval':
                 if (args.length >= 1) {
                     const washInterval = Number(args[0]);
                     this.ecovacs.sendCommand(new VacBotCommand.SetWashInterval(washInterval));
                 }
                 break;
-            case 'GetAirDrying'.toLowerCase():
+            case 'GetAirDrying':
                 if (this.getModelType() === 'yeedi') {
                     this.ecovacs.sendCommand(new VacBotCommand.GetAirDrying());
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.GetStationState());
                 }
                 break;
-            case 'SetAirDrying'.toLowerCase():
+            case 'SetAirDrying':
                 if (args.length >= 1) {
                     if (this.getModelType() === 'yeedi') {
                         this.ecovacs.sendCommand(new VacBotCommand.SetAirDrying(args[0]));
@@ -1120,21 +958,21 @@ class VacBot {
                     }
                 }
                 break;
-            case 'AirDryingStart'.toLowerCase():
+            case 'AirDryingStart':
                 if (this.getModelType() === 'yeedi') {
                     this.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('start'));
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.Drying(1));
                 }
                 break;
-            case 'AirDryingStop'.toLowerCase():
+            case 'AirDryingStop':
                 if (this.getModelType() === 'yeedi') {
                     this.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('stop'));
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.Drying(4));
                 }
                 break;
-            case 'Drying'.toLowerCase():
+            case 'Drying':
                 if (args.length >= 1) {
                     let value = args[0];
                     let act = Number(value);
@@ -1147,306 +985,7 @@ class VacBot {
                     }
                 }
                 break;
-            case 'GetDryingDuration'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetDryingDuration());
-                break;
-            case 'SetDryingDuration'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetDryingDuration(args[0]));
-                }
-                break;
-            case 'Washing'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.Washing(args[0]));
-                }
-                break;
-            case 'WashingStart'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.Washing('start'));
-                break;
-            case 'WashingStop'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.Washing('stop'));
-                break;
-            case 'SetCleanPreference'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetCleanPreference(args[0]));
-                }
-                break;
-            case 'EnableCleanPreference'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetCleanPreference(1));
-                break;
-            case 'DisableCleanPreference'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetCleanPreference(0));
-                break;
-            case 'GetMapState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetMapState());
-                break;
-            case 'GetMultiMapState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetMultiMapState());
-                break;
-            case 'GetAICleanItemState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAICleanItemState());
-                break;
-            case 'GetAIMap'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAIMap());
-                break;
-            case 'GetMopOnlyMode'.toLowerCase():
-            case 'GetSweepOnlyMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetSweepMode());
-                break;
-            case 'EnableMopOnlyMode'.toLowerCase():
-            case 'EnableSweepOnlyMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetSweepMode(1));
-                break;
-            case 'DisableMopOnlyMode'.toLowerCase():
-            case 'DisableSweepOnlyMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetSweepMode(0));
-                break;
-            case 'SetMopOnlyMode'.toLowerCase():
-            case 'SetSweepOnlyMode'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetSweepMode(args[0]));
-                }
-                break;
-            case 'GetSweepMode'.toLowerCase():
-            case 'GetCustomAreaMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetCustomAreaMode());
-                break;
-            case 'SetSweepMode'.toLowerCase():
-            case 'SetCustomAreaMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetCustomAreaMode(args[0]));
-                break;
-            case 'GetBorderSpin'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetBorderSpin());
-                break;
-            case 'GetWorkMode'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetWorkMode());
-                break;
-            case 'SetWorkMode'.toLowerCase():
-                if (args.length >= 1) {
-                    let workMode = args[0];
-                    if (dictionary.WORKMODE_TO_ECOVACS.hasOwnProperty(workMode)) {
-                        workMode = dictionary.WORKMODE_TO_ECOVACS[workMode];
-                    }
-                    if ((workMode >= 0) && (workMode <= 3)) {
-                        this.ecovacs.sendCommand(new VacBotCommand.SetWorkMode(workMode));
-                    }
-                }
-                break;
-            case 'EnableBorderSpin'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetBorderSpin(1));
-                break;
-            case 'DisableBorderSpin'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetBorderSpin(0));
-                break;
-            case 'SetBorderSpin'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetBorderSpin(args[0]));
-                }
-                break;
-            case 'GetTimeZone'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetTimeZone());
-                break;
-            case 'GetOta'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetOta());
-                break;
-            case 'GetVoiceAssistantState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetVoiceAssistantState());
-                break;
-            case 'SetVoiceAssistantState'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetVoiceAssistantState(args[0]));
-                }
-                break;
-            case 'EnableVoiceAssistant':
-                this.ecovacs.sendCommand(new VacBotCommand.SetVoiceAssistantState(1));
-                break;
-            case 'DisableVoiceAssistant':
-                this.ecovacs.sendCommand(new VacBotCommand.SetVoiceAssistantState(0));
-                break;
-            case 'GetRelocationState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetRelocationState());
-                break;
-            case 'GetLiveLaunchPwdState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetLiveLaunchPwdState());
-                break;
-            case 'GetDrivingWheel'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetDrivingWheel());
-                break;
-            case 'GetChildLock'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetChildLock());
-                break;
-            case 'SetChildLock'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.SetChildLock(args[0]));
-                break;
-            case 'GetTotalStats'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetTotalStats());
-                break;
-            case 'GetWifiList'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetWifiList());
-                break;
-            case 'GetScene'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetScene());
-                break;
-            case 'SetVoice'.toLowerCase():
-                if (args.length >= 6) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetVoice(args[0], args[1], args[2], args[3], args[4], args[5]));
-                }
-                break;
-            case 'GetVoiceLifeRemindState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetVoiceLifeRemindState());
-                break;
-            case 'GetQuickCommand'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.GetQuickCommand(args[0]));
-                }
-                break;
-            // ==================================
-            // Airbot Z1 / Z1 Air Quality Monitor
-            // ==================================
-            case 'BasicPurification'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.BasicPurification());
-                break;
-            case 'MobilePurification'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.MobilePurification());
-                break;
-            case 'SpotPurification'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SpotPurification(args[0]));
-                }
-                break;
-            case 'GetAirQuality'.toLowerCase(): // Airbot Z1
-                this.ecovacs.sendCommand(new VacBotCommand.GetAirQuality());
-                break;
-            case 'GetJCYAirQuality'.toLowerCase(): // Z1 Air Quality Monitor
-                this.ecovacs.sendCommand(new VacBotCommand.GetJCYAirQuality());
-                break;
-            case 'GetThreeModuleStatus'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetThreeModuleStatus());
-                break;
-            case 'GetThreeModule'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetThreeModule());
-                break;
-            case 'SetThreeModule'.toLowerCase():
-                if (args.length >= 3) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetThreeModule(args[0], args[1], args[2]));
-                }
-                break;
-            case 'SetFreshenerLevel'.toLowerCase():
-                if (args.length >= 2) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetFreshenerLevel(args[0], args[1]));
-                }
-                break;
-            case 'SetHumidifierLevel'.toLowerCase():
-                if (args.length >= 2) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetHumidifierLevel(args[0], args[1]));
-                }
-                break;
-            case 'SetUVCleaner'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetUVCleaner(args[0]));
-                }
-                break;
-            case 'SetFanSpeed'.toLowerCase(): // GetFanSpeed => GetCleanSpeed
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetFanSpeed(args[0]));
-                }
-                break;
-            case 'GetBlueSpeaker'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetBlueSpeaker());
-                break;
-            case 'SetBlueSpeaker'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetBlueSpeaker(args[0]));
-                }
-                break;
-            case 'GetVoiceSimple'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetVoiceSimple());
-                break;
-            case 'SetVoiceSimple'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetVoiceSimple(args[0]));
-                }
-                break;
-            case 'GetMonitorAirState'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetMonitorAirState());
-                break;
-            case 'SetMonitorAirState'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetMonitorAirState(args[0]));
-                }
-                break;
-            case 'GetAngleFollow'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAngleFollow());
-                break;
-            case 'SetAngleFollow'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetAngleFollow(args[0]));
-                }
-                break;
-            case 'GetMic'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetMic());
-                break;
-            case 'SetMic'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetMic(args[0]));
-                }
-                break;
-            case 'GetAirbotAutoModel'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAirbotAutoModel());
-                break;
-            case 'SetAirbotAutoModel'.toLowerCase():
-                if (args.length >= 3) {
-                    // on, aqEnd, aqStart
-                    this.ecovacs.sendCommand(new VacBotCommand.SetAirbotAutoModel(args[0], args[1], args[2]));
-                }
-                break;
-            case 'GetAutonomousClean'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAutonomousClean());
-                break;
-            case 'SetAutonomousClean'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetAutonomousClean(args[0]));
-                }
-                break;
-            case 'GetAtmoVolume'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAtmoVolume());
-                break;
-            case 'SetAtmoVolume'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SetAtmoVolume(args[0]));
-                }
-                break;
-            case 'GetAtmoLight'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetAtmoLight());
-                break;
-            case 'SetAtmoLight'.toLowerCase():
-                if (args.length >= 1) {
-                    // intensity
-                    this.ecovacs.sendCommand(new VacBotCommand.SetAtmoLight(args[0]));
-                }
-                break;
-            case 'GetHumanoidFollow'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.GetHumanoidFollow());
-                break;
-            case 'SinglePoint_V2'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.SinglePoint_V2(args[0]));
-                }
-                break;
-            case 'Area_V2'.toLowerCase():
-                this.ecovacs.sendCommand(new VacBotCommand.Area_V2());
-                break;
-            case 'GetMapTrace_V2'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.GetMapTrace_V2(args[0]));
-                }
-                break;
-            case 'GetAreaPoint'.toLowerCase():
-                if (args.length >= 1) {
-                    this.ecovacs.sendCommand(new VacBotCommand.GetAreaPoint(args[0]));
-                }
-                break;
-            case 'GetEfficiency'.toLowerCase():
+            case 'GetEfficiency':
                 this.ecovacs.sendCommand(new VacBotCommand.Generic('getEfficiency'));
                 break;
             default:
