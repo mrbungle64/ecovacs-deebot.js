@@ -67,10 +67,8 @@ module.exports.getCommandPayload = function(command) {
 
 module.exports.getApiPath = function(command) {
     let api = constants.IOT_DEVMANAGER_PATH; // non 950 type models
-    if (command.name === 'GetCleanLogs') {
-        api = constants.CLEANLOGS_PATH; // Cleaning log for non 950 type models (MQTT/XML)
-    } else if (command.api) {
-        api = command.api; // 950 type models
+    if (command.api) {
+        api = command.api; // 950 type models or special paths (e.g. CleanLogs)
     }
     return api;
 };

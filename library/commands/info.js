@@ -590,6 +590,22 @@ class GetVoiceSimple extends VacBotCommand {
     }
 }
 
+/**
+ * Request an array of cleaning log information
+ * The `count` attribute seems to have no affect,
+ * but it has to be set anyway
+ * @extends VacBotCommand
+ */
+class GetCleanLogs extends VacBotCommand {
+    constructor(count = 0) {
+        super('GetCleanLogs',
+            {
+                'count': count
+            },
+            constants.CLEANLOGS_PATH);
+    }
+}
+
 module.exports = {
     GetBatteryState,
     GetLifeSpan,
@@ -645,4 +661,5 @@ module.exports = {
     GetTimeZone,
     GetVoiceLifeRemindState,
     GetVoiceSimple,
+    GetCleanLogs,
 };

@@ -882,25 +882,7 @@ class VacBot {
                 if (this.isModelTypeT9Based()) {
                     this.callCleanResultsLogsApi().then((logData) => {
                         this.handleCleanLogs(logData);
-                        let cleanLog = [];
-                        for (let i in this.cleanLog) {
-                            if (this.cleanLog.hasOwnProperty(i)) {
-                                cleanLog.push(this.cleanLog[i]);
-                            }
-                        }
-                        this.ecovacs.emitMessage('CleanLog', cleanLog);
-                        this.ecovacs.emitMessage('CleanLog_lastImageUrl', this.cleanLog_lastImageUrl);
-                        this.ecovacs.emitMessage('CleanLog_lastImageTimestamp', this.cleanLog_lastTimestamp); // Deprecated
-                        this.ecovacs.emitMessage('CleanLog_lastTimestamp', this.cleanLog_lastTimestamp);
-                        this.ecovacs.emitMessage('CleanLog_lastSquareMeters', this.cleanLog_lastSquareMeters);
-                        this.ecovacs.emitMessage('CleanLog_lastTotalTimeString', this.cleanLog_lastTotalTimeString);
-                        this.ecovacs.emitMessage('LastCleanLogs', {
-                            'timestamp': this.cleanLog_lastTimestamp,
-                            'squareMeters': this.cleanLog_lastSquareMeters,
-                            'totalTime': this.cleanLog_lastTotalTime,
-                            'totalTimeFormatted': this.cleanLog_lastTotalTimeString,
-                            'imageUrl': this.cleanLog_lastImageUrl
-                        });
+                        this.emitCleanLogEvents();
                     });
                 } else {
                     this.ecovacs.sendCommand(new VacBotCommand.GetCleanLogs());
@@ -2450,6 +2432,28 @@ class VacBot {
                 }
             }
         }
+    }
+
+    /**
+     * Emit all CleanLog-related events.
+     * Consolidates the emit logic for both code paths
+     * (MQTT response via `lg/log.do` and REST API via `dln/api/log/clean_result/list`)
+     */
+    emitCleanLogEvents() {
+        let cleanLog = [];
+        for (let i in this.cleanLog) {
+            if (this.cleanLog.hasOwnProperty(i)) {
+                cleanLog.push(this.cleanLog[i]);
+            }
+        }
+        this.ecovacs.emitMessage('CleanLog', cleanLog);
+        this.ecovacs.emitMessage('LastCleanLogs', {
+            'timestamp': this.cleanLog_lastTimestamp,
+            'squareMeters': this.cleanLog_lastSquareMeters,
+            'totalTime': this.cleanLog_lastTotalTime,
+            'totalTimeFormatted': this.cleanLog_lastTotalTimeString,
+            'imageUrl': this.cleanLog_lastImageUrl
+        });
     }
 
     /**

@@ -1,7 +1,6 @@
 'use strict';
 
 const tools = require('../tools');
-const constants = require('../constants');
 const constants_type = require('../dictionary');
 const { VacBotCommand } = require('./base');
 const { GetMapSet } = require('./map');
@@ -329,22 +328,6 @@ class GetMapSpotAreaInfo extends GetMapSubSet {
 }
 
 /**
- * Request an array of cleaning log information
- * The `count` attribute seems to have no affect,
- * but it has to be set anyway
- * @extends VacBotCommand
- */
-class GetCleanLogs extends VacBotCommand {
-    constructor(count = 0) {
-        super('GetCleanLogs',
-            {
-                'count': count
-            },
-            constants.CLEANLOGS_PATH);
-    }
-}
-
-/**
  * Request information if the 'Continuous Cleaning'/'Resumed clean' option is enabled
  * @extends VacBotCommand
  */
@@ -550,7 +533,6 @@ module.exports = {
     GetMapSpotAreas,
     GetMapSpotAreas_V2,
     GetMapSpotAreaInfo,
-    GetCleanLogs,
     GetContinuousCleaning,
     SetContinuousCleaning,
     GetCleanCount,

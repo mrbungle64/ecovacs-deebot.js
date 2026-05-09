@@ -359,7 +359,17 @@ class Ecovacs extends EventEmitter {
             if (messagePayload.hasOwnProperty('resp')) {
                 this.handleMessage(command.name, messagePayload['resp'], "response");
             } else if (command.api === constants.CLEANLOGS_PATH) {
-                this.handleMessage(command.name, messagePayload, "logResponse");
+                // CleanLogs uses a different API path and response format
+                tools.envLogInfo(`got CleanLogs response`);
+                if (messagePayload['ret'] === 'ok') {
+                    (async () => {
+                        try {
+                            await this.handleMessagePayload(command.name, messagePayload);
+                        } catch (e) {
+                            this.emitError('-2', e.message);
+                        }
+                    })();
+                }
             } else {
                 tools.envLogWarn(`handleCommandResponse invalid response`);
             }
@@ -404,9 +414,6 @@ class Ecovacs extends EventEmitter {
                     });
                 }
             }
-        } else if (type === "logResponse") {
-            tools.envLogInfo(`got message with type 'logResponse'`);
-            resultCodeMessage = message['ret'];
         }
 
         if ((payload !== undefined) && (resultCode === 0)) {
@@ -522,20 +529,7 @@ class Ecovacs extends EventEmitter {
             case 'CleanLogs': {
                 // "Cleaning Log"
                 this.bot.handleCleanLogs(payload);
-                let cleanLog = [];
-                for (let i in this.bot.cleanLog) {
-                    if (this.bot.cleanLog.hasOwnProperty(i)) {
-                        cleanLog.push(this.bot.cleanLog[i]);
-                    }
-                }
-                this.emitMessage("CleanLog", cleanLog);
-                this.emitMessage('LastCleanLogs', {
-                    'timestamp': this.bot.cleanLog_lastTimestamp,
-                    'squareMeters': this.bot.cleanLog_lastSquareMeters,
-                    'totalTime': this.bot.cleanLog_lastTotalTime,
-                    'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
-                    'imageUrl': this.bot.cleanLog_lastImageUrl
-                });
+                this.bot.emitCleanLogEvents();
                 break;
             }
             case 'CarpertPressure': { // The typo in 'Carpert' is intended
