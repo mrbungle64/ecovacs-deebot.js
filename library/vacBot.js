@@ -1,7 +1,7 @@
 'use strict';
 
 const tools = require('./tools');
-const VacBotCommand = require('./950type/command');
+const VacBotCommand = require('./command');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
 const { errorCodes } = require('./errorCodes.json');
@@ -142,7 +142,7 @@ class VacBot {
             throw new Error(msg);
         }
 
-        this.vacBotCommand = require('./950type/command');
+        this.vacBotCommand = require('./command');
         this.protocolModule = require('./ecovacs');
 
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);

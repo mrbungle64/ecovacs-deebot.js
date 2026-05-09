@@ -1,8 +1,8 @@
 'use strict';
 
-const tools = require('../tools');
-const constants_type = require('../dictionary');
-const constants = require('../constants');
+const tools = require('./tools');
+const constants_type = require('./dictionary');
+const constants = require('./constants');
 
 /**
  * This class is essentially a template for creating a command for a bot,
