@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 const tools = require('./tools');
 const constants = require('./constants');
 const { errorCodes } = require('./errorCodes.json');
+const axios = require("axios").default;
 
 class Ecovacs extends EventEmitter {
     /**
@@ -18,7 +19,7 @@ class Ecovacs extends EventEmitter {
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
      */
-    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort) {
+    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
         super();
 
         this.bot = vacBot;
@@ -37,6 +38,14 @@ class Ecovacs extends EventEmitter {
             this.serverAddress = serverAddress;
         }
         this.serverPort = serverPort;
+
+        this.mqtt = require('mqtt');
+        this.channel = '';
+        // MQTT is using domain without tld extension
+        const customDomain = hostname.split(".")[0];
+        this.username = user + '@' + customDomain;
+        // The payload type is either 'x' (XML) or 'j' (JSON)
+        this.payloadType = '';
     }
 
     /**
@@ -54,265 +63,268 @@ class Ecovacs extends EventEmitter {
     }
 
     /**
-     * Handles the message command and the payload
-     * and delegates the event object to the corresponding method
-     * @param {string} command - the incoming message command
-     * @param {Object} event - the event object received from the Ecovacs API
+     * Subscribe for "broadcast" messages to the MQTT channel
+     * @see https://deebot.readthedocs.io/advanced/protocols/mqtt/#mqtt
+     */
+    subscribe() {
+        tools.envLogHeader(`subscribe()`);
+        this.channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
+        tools.envLogInfo(`atr channel: '${this.channel}'`);
+        this.client.subscribe(this.channel, (error, granted) => {
+            if (!error) {
+                tools.envLogSuccess(`successfully subscribed to atr channel`);
+                this.emit('ready', 'Successfully subscribed to atr channel');
+            } else {
+                tools.envLogError(`subscribe error: ${error.toString()}`);
+            }
+        });
+    }
+
+    /**
+     * Connect to the MQTT server and listen to broadcast messages
+     */
+    connect() {
+        tools.envLogHeader(`connect()`);
+        let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
+        const clientId = this.username + '/' + this.resource;
+        tools.envLogInfo(`url: '${url}'`);
+        tools.envLogInfo(`username: '${this.username}'`);
+        tools.envLogInfo(`clientId: '${clientId}'`);
+        this.client = this.mqtt.connect(url, {
+            clientId: clientId,
+            username: this.username,
+            password: this.secret,
+            protocolVersion: 4,
+            keepalive: 120,
+            rejectUnauthorized: false
+        });
+
+        let ecovacsMQTT = this;
+
+        this.client.on('connect', function () {
+            tools.envLogSuccess(`MQTT client connected`);
+            ecovacsMQTT.subscribe();
+        });
+
+        this.client.on('message', (topic, message) => {
+            this.handleMessage(topic, message.toString(), "incoming");
+        });
+
+        this.client.on('offline', function () {
+            try {
+                ecovacsMQTT.emitNetworkError('MQTT server is offline or not reachable');
+            } catch (e) {
+                tools.envLogError(`MQTT server is offline or not reachable`);
+            }
+        });
+
+        this.client.on('disconnect', function (packet) {
+            try {
+                ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
+            } catch (e) {
+                tools.envLogWarn(`MQTT client received disconnect event`);
+            }
+        });
+
+        this.client.on('error', (error) => {
+            try {
+                ecovacsMQTT.emitNetworkError(`MQTT client error: ${error.message}`);
+            } catch (e) {
+                tools.envLogError(`MQTT client error: '${error.message}'`);
+            }
+        });
+
+        this.on("ready", (event) => {
+            tools.envLogSuccess(`MQTT client received ready event`);
+        });
+    }
+
+    /**
+     * @param {Object} command - the command object
+     * @param {Object} params
+     */
+    getRequestUrl(command, params) {
+        const apiPath = this.getApiPath(command);
+        let portalUrlFormat = constants.PORTAL_ECOUSER_API;
+        if (this.country === 'CN') {
+            portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
+        } else if ((this.country === 'WW') || (this.continent.toUpperCase() === 'WW')) {
+            portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
+        }
+        let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, { continent: this.continent });
+        if (this.bot.is950type()) {
+            if (this.bot.authDomain === constants.AUTH_DOMAIN_YD) {
+                portalUrl = portalUrl + "?cv=1.94.76&t=a&av=1.3.0"; // yeedi
+            } else {
+                portalUrl = portalUrl + "?cv=1.94.78&t=a&av=2.2.4"; // Ecovacs
+            }
+            if (apiPath === constants.IOT_DEVMANAGER_PATH) {
+                portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
+            }
+        }
+        return portalUrl;
+    }
+
+    getRequestHeaders(params) {
+        let headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(JSON.stringify(params))
+        };
+        if (this.bot.is950type()) {
+            Object.assign(headers, {
+                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'
+            });
+        }
+        return headers;
+    }
+
+    /**
+     * The function returns the request object
+     * @param {Object} command - the action to be performed
+     * @returns {Object} the command object used to be sent
+     */
+    getRequestObject(command) {
+        if (command.name === 'GetCleanLogs') {
+            return this.getCleanLogsCommandObject(command);
+        }
+        else {
+            const payload = this.getCommandPayload(command);
+            return this.getCommandRequestObject(command, payload);
+        }
+    }
+
+    /**
+     * @param {Object} command - the command object
+     * @returns {string|object} the specific payload for the request object
+     * @abstract
+     */
+    getCommandPayload(command) { return ''; }
+
+    /**
+     * @param {Object} command - the command that was sent to the Ecovacs API
+     * @param {Object} messagePayload - The message payload that was received
+     * @abstract
+     */
+    handleCommandResponse(command, messagePayload) { }
+
+    /**
+     * @param {string} topic - the topic of the message
+     * @param {Object|string} message - the message
+     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     * @abstract
+     */
+    handleMessage(topic, message, type = "incoming") { }
+
+    /**
+     * It sends a command to the Ecovacs API
+     * @param {Object} command - the command to send to the Ecovacs API
      * @returns {Promise<void>}
      */
-    async handleMessagePayload(command, event) {
-        let abbreviatedCmd = command.replace(/^_+|_+$/g, '').replace('Get', '').replace('Server', '');
-        // Incoming MQTT messages
-        if (abbreviatedCmd.startsWith('On') && (abbreviatedCmd !== 'OnOff')) {
-            abbreviatedCmd = abbreviatedCmd.substring(2);
-        }
-        this.emit('messageReceived', command + ' => ' + abbreviatedCmd);
-        let payload = event;
-        switch (abbreviatedCmd) {
-            case 'CleanSt':
-                this.bot.handleCleanSt(payload);
-                if (this.bot.currentStats) {
-                    this.emit('CurrentStats', this.bot.currentStats);
-                    this.bot.currentStats = null;
+    async sendCommand(command) {
+        tools.envLogCommand(command.name);
+        tools.envLogPayload(command.args);
+        try {
+            const params = this.getRequestObject(command);
+            const portalUrl = this.getRequestUrl(command, params);
+            const headers = this.getRequestHeaders(params);
+            let response;
+            try {
+                const res = await axios.post(portalUrl, params, {
+                    headers: headers
+                });
+                response = res.data;
+                tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
+            } catch (e) {
+                this.emitNetworkError(e.message, command.name);
+                throw e.message;
+            }
+
+            if ((response['result'] === 'ok') || (response['ret'] === 'ok')) {
+                if (this.bot.errorCode !== '0') {
+                    this.emitLastErrorByErrorCode('0');
                 }
-                break;
-            case 'ChargeState':
-                payload = event.children[0];
-                this.bot.handleChargeState(payload);
-                this.emit('ChargeState', this.bot.chargeStatus);
-                break;
-            case 'BatteryInfo':
-                payload = event.children[0];
-                this.bot.handleBatteryInfo(payload);
-                if (this.bot.batteryLevel !== undefined) {
-                    this.emit('BatteryInfo', this.bot.batteryLevel);
-                }
-                break;
-            case 'CleanState':
-            case 'CleanReport':
-                if (event.children && (event.children.length > 0)) {
-                    payload = event.children[0];
-                }
-                this.bot.handleCleanReport(payload);
-                this.emit('CleanReport', this.bot.cleanReport);
-                if (this.bot.currentCustomAreaValues) {
-                    this.emit('LastUsedAreaValues', this.bot.currentCustomAreaValues);
-                }
-                if (this.bot.currentStats) {
-                    this.emit('CurrentStats', this.bot.currentStats);
-                    this.bot.currentStats = null;
-                }
-                this.emit('CurrentSpotAreas', this.bot.currentSpotAreas);
-                this.emit('CurrentCustomAreaValues', this.bot.currentCustomAreaValues);
-                this.emitMoppingSystemReport();
-                break;
-            case 'CleanSpeed':
-                if (event.children && (event.children.length > 0)) {
-                    payload = event.children[0];
-                }
-                this.bot.handleCleanSpeed(payload);
-                this.emit('CleanSpeed', this.bot.cleanSpeed);
-                break;
-            case 'LifeSpan':
-                payload = event.attrs;
-                this.bot.handleLifespan(payload);
-                if (!this.bot.emitFullLifeSpanEvent) {
-                    const component = this.dictionary.COMPONENT_FROM_ECOVACS[payload.type];
-                    if (component) {
-                        if (this.bot.components[component]) {
-                            this.emit('LifeSpan_' + component, this.bot.components[component]);
-                            this.bot.lastComponentValues[component] = this.bot.components[component];
-                        }
-                    }
+                this.handleCommandResponse(command, response);
+            } else {
+                const errorCodeObj = {
+                    code: response['errno'],
+                    error: response['error']
+                };
+                this.bot.handleResponseError(errorCodeObj);
+                // Error code 500 = wait for response timed out (see issue #19)
+                if (this.bot.errorCode === '500') {
+                    this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
                 } else {
-                    this.handleLifeSpanCombined();
+                    this.emitLastError();
                 }
-                break;
-            case 'Pos':
-                // DeebotPosition
-                this.bot.handlePos(payload);
-                if (this.bot.deebotPosition['x'] && this.bot.deebotPosition['y']) {
-                    this.emit('DeebotPosition', this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a']);
-                    this.emit('DeebotPositionCurrentSpotAreaID', this.bot.deebotPosition['currentSpotAreaID']);
-                    this.emit('DeebotPositionCurrentSpotAreaName', this.bot.deebotPosition['currentSpotAreaName']);
-                    this.emit('Position', {
-                        'coords': this.bot.deebotPosition['x'] + ',' + this.bot.deebotPosition['y'] + ',' + this.bot.deebotPosition['a'],
-                        'x': this.bot.deebotPosition['x'],
-                        'y': this.bot.deebotPosition['y'],
-                        'a': this.bot.deebotPosition['a'],
-                        'invalid': 0,
-                        'spotAreaID': this.bot.deebotPosition['currentSpotAreaID'],
-                        'spotAreaName': this.bot.deebotPosition['currentSpotAreaName'],
-                        'distanceToChargingStation': this.bot.deebotPosition['distanceToChargingStation']
-                    });
-                }
-                break;
-            case 'ChargerPos':
-                this.bot.handleChargePos(payload);
-                this.emit('ChargePosition', this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a']);
-                this.emit('ChargingPosition', {
-                    'coords': this.bot.chargePosition['x'] + ',' + this.bot.chargePosition['y'] + ',' + this.bot.chargePosition['a'],
-                    'x': this.bot.chargePosition['x'],
-                    'y': this.bot.chargePosition['y'],
-                    'a': this.bot.chargePosition['a']
-                });
-                break;
-            case 'WaterPermeability':
-                this.bot.handleWaterPermeability(payload);
-                this.emit('WaterLevel', this.bot.waterLevel);
-                this.emitMoppingSystemReport();
-                break;
-            case 'WaterBoxInfo':
-                this.bot.handleWaterboxInfo(payload);
-                this.emit('WaterBoxInfo', this.bot.waterboxInfo);
-                this.emitMoppingSystemReport();
-                break;
-            case 'NetInfo':
-                payload = event.attrs;
-                this.bot.handleNetInfo(payload);
-                this.emit('NetworkInfo', {
-                    'ip': this.bot.netInfoIP,
-                    'mac': null,
-                    'wifiSSID': this.bot.netInfoWifiSSID,
-                    'wifiSignal': null,
-                });
-                break;
-            case 'SleepStatus':
-                this.bot.handleSleepStatus(payload);
-                this.emit('SleepStatus', this.bot.sleepStatus);
-                break;
-            case 'Error':
-                payload = event.attrs;
-                this.bot.handleResponseError(payload);
-                this.emit('Error', this.bot.errorDescription);
-                this.emit('ErrorCode', this.bot.errorCode);
-                this.emit('LastError', {
-                    'error': this.bot.errorDescription,
-                    'code': this.bot.errorCode
-                });
-                break;
-            case 'CleanSum':
-                this.bot.handleCleanSum(payload);
-                this.emit('CleanSum_totalSquareMeters', this.bot.cleanSum_totalSquareMeters); // Deprecated
-                this.emit('CleanSum_totalSeconds', this.bot.cleanSum_totalSeconds); // Deprecated
-                this.emit('CleanSum_totalNumber', this.bot.cleanSum_totalNumber); // Deprecated
-                this.emit('CleanSum', {
-                    'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
-                    'totalSeconds': this.bot.cleanSum_totalSeconds,
-                    'totalNumber': this.bot.cleanSum_totalNumber
-                });
-                break;
-            case 'Logs':
-            case 'CleanLogs':
-            case 'LogApiCleanLogs': {
-                this.bot.handleCleanLogs(payload);
-                let cleanLog = [];
-                for (let i in this.bot.cleanLog) {
-                    if (this.bot.cleanLog.hasOwnProperty(i)) {
-                        cleanLog.push(this.bot.cleanLog[i]);
-                        tools.envLogInfo(`[handleMessagePayload] Logs: ${JSON.stringify(this.bot.cleanLog[i])}`);
-                    }
-                }
-                if (cleanLog.length) {
-                    this.emit('CleanLog', cleanLog.reverse());
-                    this.emit('CleanLog_lastTimestamp', this.bot.cleanLog_lastTimestamp);
-                    this.emit('CleanLog_lastSquareMeters', this.bot.cleanLog_lastSquareMeters);
-                    this.emit('CleanLog_lastTotalTimeString', this.bot.cleanLog_lastTotalTimeString);
-                    this.emit('LastCleanLogs', {
-                        'timestamp': this.bot.cleanLog_lastTimestamp,
-                        'squareMeters': this.bot.cleanLog_lastSquareMeters,
-                        'totalTime': this.bot.cleanLog_lastTotalTime,
-                        'totalTimeFormatted': this.bot.cleanLog_lastTotalTimeString,
-                        'imageUrl': this.bot.cleanLog_lastImageUrl
-                    });
-                }
-                if (this.bot.cleanLog_lastImageUrl) {
-                    this.emit('CleanLog_lastImageUrl', this.bot.cleanLog_lastImageUrl);
-                    this.emit('CleanLog_lastImageTimestamp', this.bot.cleanLog_lastTimestamp); // Deprecated
-                }
-                break;
+                tools.envLogInfo(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
+                throw `Failure code ${response['errno']} (${response['error']})`;
             }
-            case 'MapM':
-                // Map Model
-                // - runs "GetMapSet" to request spot areas and virtual walls
-                // - and also runs indirectly "PullMP" to request map pieces of the map image
-                try {
-                    let mapinfo = this.bot.handleMapM(payload);
-                    if (mapinfo) {
-                        this.emit('CurrentMapName', this.bot.currentMapName);
-                        this.emit('CurrentMapMID', this.bot.currentMapMID);
-                        this.emit('CurrentMapIndex', this.bot.currentMapIndex);
-                        this.emit('Maps', this.bot.maps);
-                    }
-                } catch (e) {
-                    tools.envLogInfo(`[handleMessagePayload] Error on MapM: ${e.message}`);
-                }
-                break;
-            case 'PullMP':
-                // Map Pieces of the map image
-                try {
-                    const mapImage = await this.bot.handlePullMP(payload);
-                    if (mapImage) {
-                        this.emit('MapImageData', mapImage);
-                    }
-                } catch (e) {
-                    this.emitError('-2', `Error handling map image: ${e.message}`);
-                }
-                break;
-            case 'MapSet': {
-                // Spot Areas and virtual walls
-                // - runs "PullM" to request spot area and virtual wall data
-                let mapset = this.bot.handleMapSet(payload);
-                if (mapset['mapsetEvent'] !== 'error') {
-                    this.emit(mapset['mapsetEvent'], mapset['mapsetData']);
-                }
-                break;
-            }
-            case 'PullM': {
-                // Spot area and virtual wall data
-                let mapsubset = await this.bot.handlePullM(payload);
-                if (mapsubset && (mapsubset['mapsubsetEvent'] !== 'error')) {
-                    // MapSpotAreaInfo, MapVirtualBoundaryInfo
-                    this.emit(mapsubset['mapsubsetEvent'], mapsubset['mapsubsetData']);
-                }
-                break;
-            }
-            case 'DustCaseST':
-                this.bot.handleDustCaseST(payload);
-                this.emit('DustCaseInfo', this.bot.dustcaseInfo);
-                break;
-            case 'OnOff':
-                this.bot.handleOnOff(payload);
-                if (this.bot.doNotDisturbEnabled) {
-                    this.emit('DoNotDisturbEnabled', this.bot.doNotDisturbEnabled);
-                }
-                if (this.bot.continuousCleaningEnabled) {
-                    this.emit('ContinuousCleaningEnabled', this.bot.continuousCleaningEnabled);
-                }
-                if (this.bot.voiceReportDisabled) {
-                    this.emit('VoiceReportDisabled', this.bot.voiceReportDisabled);
-                }
-                break;
-            case 'Sched':
-                // Cleaning schedule
-                this.bot.handleSched(payload);
-                if (this.bot.schedule) {
-                    this.emit('Schedule', this.bot.schedule);
-                }
-                break;
-            case 'MapP':
-            case 'trace':
-            case 'CleanedPos':
-            case 'CleanedTrace':
-            case 'CleanedMapSet':
-            case 'CleanedMap':
-            case 'BigDataCleanInfoReport':
-                // TODO: implement these events
-                break;
-            default:
-                tools.envLogWarn(`unknown response type received: ${JSON.stringify(event)}`);
-                break;
+        } catch (e) {
+            tools.envLogError(`error sending command: ${e.toString()}`);
         }
+    }
+
+    /**
+     * This function is used to determine the API to use for the action
+     * @param {Object} command - the command object
+     * @returns {string} the API path that has to be called
+     */
+    getApiPath(command) {
+        let api = constants.IOT_DEVMANAGER_PATH; // non 950 type models
+        if (command.name === 'GetCleanLogs') {
+            api = constants.CLEANLOGS_PATH; // Cleaning log for non 950 type models (MQTT/XML)
+        } else if (command.api) {
+            api = command.api; // 950 type models
+        }
+        return api;
+    }
+
+    /**
+     * This function returns a standard request object for sending commands
+     * @param {Object} command - the command object
+     * @param {Object} payload - the payload object
+     * @returns {Object} the JSON object
+     */
+    getCommandRequestObject(command, payload) {
+        return {
+            'cmdName': command.name,
+            'payload': payload,
+            'payloadType': this.payloadType,
+            'auth': this.getAuthObject(),
+            'td': 'q',
+            'toId': this.vacuum['did'],
+            'toRes': this.vacuum['resource'],
+            'toType': this.vacuum['class']
+        };
+    }
+
+    /**
+     * Returns a request object for receiving clean logs
+     * @param {Object} command - the command object
+     * @returns {Object} the JSON object
+     */
+    getCleanLogsCommandObject(command) {
+        return {
+            'auth': this.getAuthObject(),
+            'did': this.vacuum['did'],
+            'country': this.country,
+            'td': command.name,
+            'resource': this.vacuum['resource']
+        };
+    }
+
+    /**
+     * Returns the `auth` object used for the command object
+     * @returns {Object} the JSON object
+     */
+    getAuthObject() {
+        return {
+            'realm': constants.REALM,
+            'resource': this.resource,
+            'token': this.secret,
+            'userid': this.user,
+            'with': 'users',
+        };
     }
 
     /**
@@ -437,9 +449,23 @@ class Ecovacs extends EventEmitter {
     }
 
     /**
-     * @abstract
+     * Disconnect the MQTT client
      */
-    async disconnect() { }
+    async disconnect() {
+        return new Promise((resolve, reject) => {
+            this.client.unsubscribe(this.channel, error => {
+                if (error) {
+                    tools.envLogError(`error unsubscribing from the atr channel: ${error.toString()}`);
+                    reject(false);
+                } else {
+                    tools.envLogSuccess(`successfully unsubscribed from the atr channel`);
+                    tools.envLogInfo(`now trying to close MQTT client connection ...`);
+                    this.client.end();
+                    resolve(true);
+                }
+            });
+        });
+    }
 }
 
 module.exports = Ecovacs;
