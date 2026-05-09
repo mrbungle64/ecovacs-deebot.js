@@ -1,7 +1,7 @@
 'use strict';
 
 const tools = require('../tools');
-const constants_type = require('./dictionary');
+const constants_type = require('../dictionary');
 const constants = require('../constants');
 
 /**
@@ -246,8 +246,8 @@ class Stop extends VacBotCommand {
 class Charge extends VacBotCommand {
     constructor() {
         super('charge', {
-                'act': 'go'
-            }
+            'act': 'go'
+        }
         );
     }
 }
@@ -475,7 +475,7 @@ class SetWaterLevel extends VacBotCommand {
         // 1 = 'Quick Scrubbing'
         // 2 = 'Deep Scrubbing'
         if ((sweepType === 1) || (sweepType === 2)) {
-            Object.assign(payload, {'sweepType': sweepType});
+            Object.assign(payload, { 'sweepType': sweepType });
         }
         super('setWaterInfo', payload);
     }

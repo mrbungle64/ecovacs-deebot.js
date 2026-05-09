@@ -104,7 +104,7 @@ class EcovacsMapSpotAreaInfo {
     }
 
     setCleanSet(cleanSet) {
-        const dictionary = require('./950type/dictionary');
+        const dictionary = require('./dictionary');
         const cleanSetArray = cleanSet.split(',');
         if (cleanSetArray.length === 3) {
             this.mapSpotAreaCleanSet = {
@@ -237,7 +237,7 @@ function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
     }
     let coordinateArray = coordinates.split(';');
 
-    const {createCanvas} = require('canvas');
+    const { createCanvas } = require('canvas');
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
     ctx.beginPath();

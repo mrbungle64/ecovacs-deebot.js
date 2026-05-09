@@ -23,7 +23,7 @@ class Ecovacs extends EventEmitter {
         super();
 
         this.bot = vacBot;
-        this.dictionary = require('./950type/dictionary');
+        this.dictionary = require('./dictionary');
         this.user = user;
         this.hostname = hostname;
         this.resource = resource;

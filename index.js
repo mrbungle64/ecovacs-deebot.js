@@ -477,7 +477,7 @@ class EcovacsAPI {
       }
       else {
         tools.envLogSuccess(`'950type' model identified`);
-        vacBotClass = require('./library/950type/vacBot');
+        vacBotClass = require('./library/vacBot');
       }
     } else {
       const msg = `'XML' based model identified (unsupported)`;
