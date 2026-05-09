@@ -137,7 +137,7 @@ class VacBot {
         }
 
         this.vacBotCommand = require('./950type/command');
-        this.protocolModule = require('./950type/ecovacsMQTT_JSON');
+        this.protocolModule = require('./ecovacs');
 
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
