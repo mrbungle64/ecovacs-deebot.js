@@ -5,6 +5,7 @@ const tools = require('./tools');
 const constants = require('./constants');
 const { errorCodes } = require('./errorCodes.json');
 const axios = require("axios").default;
+const commandObj = require('./command');
 
 class Ecovacs extends EventEmitter {
     /**
@@ -139,66 +140,7 @@ class Ecovacs extends EventEmitter {
         });
     }
 
-    /**
-     * @param {Object} command - the command object
-     * @param {Object} params
-     */
-    getRequestUrl(command, params) {
-        const apiPath = this.getApiPath(command);
-        let portalUrlFormat = constants.PORTAL_ECOUSER_API;
-        if (this.country === 'CN') {
-            portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
-        } else if ((this.country === 'WW') || (this.continent.toUpperCase() === 'WW')) {
-            portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
-        }
-        let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, { continent: this.continent });
-        if (this.bot.is950type()) {
-            if (this.bot.authDomain === constants.AUTH_DOMAIN_YD) {
-                portalUrl = portalUrl + "?cv=1.94.76&t=a&av=1.3.0"; // yeedi
-            } else {
-                portalUrl = portalUrl + "?cv=1.94.78&t=a&av=2.2.4"; // Ecovacs
-            }
-            if (apiPath === constants.IOT_DEVMANAGER_PATH) {
-                portalUrl = portalUrl + "&mid=" + params['toType'] + "&did=" + params['toId'] + "&td=" + params['td'] + "&u=" + params['auth']['userid'];
-            }
-        }
-        return portalUrl;
-    }
 
-    getRequestHeaders(params) {
-        let headers = {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(JSON.stringify(params))
-        };
-        if (this.bot.is950type()) {
-            Object.assign(headers, {
-                'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)'
-            });
-        }
-        return headers;
-    }
-
-    /**
-     * The function returns the request object
-     * @param {Object} command - the action to be performed
-     * @returns {Object} the command object used to be sent
-     */
-    getRequestObject(command) {
-        if (command.name === 'GetCleanLogs') {
-            return this.getCleanLogsCommandObject(command);
-        }
-        else {
-            const payload = this.getCommandPayload(command);
-            return this.getCommandRequestObject(command, payload);
-        }
-    }
-
-    /**
-     * @param {Object} command - the command object
-     * @returns {string|object} the specific payload for the request object
-     * @abstract
-     */
-    getCommandPayload(command) { return ''; }
 
     /**
      * @param {Object} command - the command that was sent to the Ecovacs API
@@ -224,9 +166,9 @@ class Ecovacs extends EventEmitter {
         tools.envLogCommand(command.name);
         tools.envLogPayload(command.args);
         try {
-            const params = this.getRequestObject(command);
-            const portalUrl = this.getRequestUrl(command, params);
-            const headers = this.getRequestHeaders(params);
+            const params = commandObj.getRequestObject(this, command);
+            const portalUrl = commandObj.getRequestUrl(this, command, params);
+            const headers = commandObj.getRequestHeaders(this, params);
             let response;
             try {
                 const res = await axios.post(portalUrl, params, {
@@ -264,68 +206,7 @@ class Ecovacs extends EventEmitter {
         }
     }
 
-    /**
-     * This function is used to determine the API to use for the action
-     * @param {Object} command - the command object
-     * @returns {string} the API path that has to be called
-     */
-    getApiPath(command) {
-        let api = constants.IOT_DEVMANAGER_PATH; // non 950 type models
-        if (command.name === 'GetCleanLogs') {
-            api = constants.CLEANLOGS_PATH; // Cleaning log for non 950 type models (MQTT/XML)
-        } else if (command.api) {
-            api = command.api; // 950 type models
-        }
-        return api;
-    }
 
-    /**
-     * This function returns a standard request object for sending commands
-     * @param {Object} command - the command object
-     * @param {Object} payload - the payload object
-     * @returns {Object} the JSON object
-     */
-    getCommandRequestObject(command, payload) {
-        return {
-            'cmdName': command.name,
-            'payload': payload,
-            'payloadType': this.payloadType,
-            'auth': this.getAuthObject(),
-            'td': 'q',
-            'toId': this.vacuum['did'],
-            'toRes': this.vacuum['resource'],
-            'toType': this.vacuum['class']
-        };
-    }
-
-    /**
-     * Returns a request object for receiving clean logs
-     * @param {Object} command - the command object
-     * @returns {Object} the JSON object
-     */
-    getCleanLogsCommandObject(command) {
-        return {
-            'auth': this.getAuthObject(),
-            'did': this.vacuum['did'],
-            'country': this.country,
-            'td': command.name,
-            'resource': this.vacuum['resource']
-        };
-    }
-
-    /**
-     * Returns the `auth` object used for the command object
-     * @returns {Object} the JSON object
-     */
-    getAuthObject() {
-        return {
-            'realm': constants.REALM,
-            'resource': this.resource,
-            'token': this.secret,
-            'userid': this.user,
-            'with': 'users',
-        };
-    }
 
     /**
      * Handle life span components to emit combined object
@@ -466,24 +347,7 @@ class Ecovacs extends EventEmitter {
             });
         });
     }
-    /**
-     * It creates an object for the request payload with header and body
-     * @param {Object} command - the command object
-     * @returns {Object} the request payload object
-     */
-    getCommandPayload(command) {
-        return {
-            'header': {
-                'pri': '1',
-                'ts': Math.floor(Date.now()),
-                'tzm': 480,
-                'ver': '0.0.50'
-            },
-            'body': {
-                'data': command.args
-            }
-        };
-    }
+
 
     /**
      * It handles the response from the Ecovacs API
