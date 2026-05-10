@@ -3,7 +3,7 @@
  * and it runs an auto clean command
  * @extends VacBotCommand
  */
-export class Clean {
+export class Clean extends VacBotCommand {
     /**
      * @constructor
      * @param {string} [mode='auto'] - The mode for cleaning. Default is 'auto'
@@ -18,7 +18,7 @@ export class Clean {
  * Used for most newer models than OZMO 920/950 (e.g. T8, T9, X1 series etc.)
  * @extends VacBotCommand
  */
-export class Clean_V2 {
+export class Clean_V2 extends VacBotCommand {
     constructor(mode?: string, action?: string, kwargs?: {});
 }
 /**
@@ -86,14 +86,14 @@ export class MapPoint_V2 extends Clean_V2 {
  * For Airbot Z1 and Deebot X2 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
-export class Pause {
+export class Pause extends VacBotCommand {
     constructor(command?: string);
 }
 /**
  * Represents the 'resume' function
  * @extends VacBotCommand
  */
-export class Resume {
+export class Resume extends VacBotCommand {
     constructor(command?: string);
 }
 /**
@@ -101,7 +101,7 @@ export class Resume {
  * For Airbot Z1 and Deebot X2 you have to use the `clean_V2` command
  * @extends VacBotCommand
  */
-export class Stop {
+export class Stop extends VacBotCommand {
     constructor(command?: string);
 }
 /**
@@ -109,7 +109,8 @@ export class Stop {
  * @extends VacBotCommand
  * TODO: Rename to `GetCleanInfo`
  */
-export class GetCleanState {
+export class GetCleanState extends VacBotCommand {
+    constructor();
 }
 /**
  * Requests various information about the cleaning status
@@ -118,39 +119,44 @@ export class GetCleanState {
  * @extends VacBotCommand
  * TODO: Rename to `GetCleanInfo_V2`
  */
-export class GetCleanState_V2 {
+export class GetCleanState_V2 extends VacBotCommand {
+    constructor();
 }
 /**
  * Requests the 'Suction Power' level
  * @extends VacBotCommand
  */
-export class GetCleanSpeed {
+export class GetCleanSpeed extends VacBotCommand {
+    constructor();
 }
 /**
  * Sets the 'Suction Power' level
  * @extends VacBotCommand
  */
-export class SetCleanSpeed {
+export class SetCleanSpeed extends VacBotCommand {
     constructor(level: any);
 }
 /**
  * Requests the `Mopping Mode` (e.g. X1 series)
  * @extends VacBotCommand
  */
-export class GetCustomAreaMode {
+export class GetCustomAreaMode extends VacBotCommand {
+    constructor();
 }
 /**
  * Sets the 'Mopping Mode'/'Efficiency' (e.g. X1 series)
  * @extends VacBotCommand
  */
-export class SetCustomAreaMode {
+export class SetCustomAreaMode extends VacBotCommand {
     constructor(sweepMode?: number);
 }
 /**
  * Request various information about the current/last cleaning
  * @extends VacBotCommand
+ * TODO: potential duplicate of GetTotalStats (info.js)
  */
-export class GetCleanSum {
+export class GetCleanSum extends VacBotCommand {
+    constructor();
 }
 /**
  * Request information about the (spot) areas
@@ -174,58 +180,53 @@ export class GetMapSpotAreaInfo extends GetMapSubSet {
     constructor(mapID: any, mapSubSetID: any);
 }
 /**
- * Request an array of cleaning log information
- * The `count` attribute seems to have no affect,
- * but it has to be set anyway
- * @extends VacBotCommand
- */
-export class GetCleanLogs {
-    constructor(count?: number);
-}
-/**
  * Request information if the 'Continuous Cleaning'/'Resumed clean' option is enabled
  * @extends VacBotCommand
  */
-export class GetContinuousCleaning {
+export class GetContinuousCleaning extends VacBotCommand {
+    constructor();
 }
 /**
  * Sets the value for 'Continuous Cleaning'/'Resumed clean' option
  * @extends VacBotCommand
  */
-export class SetContinuousCleaning {
+export class SetContinuousCleaning extends VacBotCommand {
     constructor(enable?: number);
 }
 /**
  * Request the number of cleaning repetitions ('Cleaning Times')
  * @extends VacBotCommand
  */
-export class GetCleanCount {
+export class GetCleanCount extends VacBotCommand {
+    constructor();
 }
 /**
  * Sets the number of cleaning repetitions ('Cleaning Times')
  * @extends VacBotCommand
  */
-export class SetCleanCount {
+export class SetCleanCount extends VacBotCommand {
     constructor(count?: number);
 }
 /**
  * Request information if the 'Cleaning Preference' mode is enabled
  * @extends VacBotCommand
  */
-export class GetCleanPreference {
+export class GetCleanPreference extends VacBotCommand {
+    constructor();
 }
 /**
  * Sets the value whether the 'Cleaning Preference' mode is enabled
  * @extends VacBotCommand
  */
-export class SetCleanPreference {
+export class SetCleanPreference extends VacBotCommand {
     constructor(enable?: number);
 }
 /**
  * Receive information if the 'Strategic Particle Removal'
  * and the 'Strategic Pet Poop Avoidance' mode is enabled (e.g. X1 series)
  */
-export class GetAICleanItemState {
+export class GetAICleanItemState extends VacBotCommand {
+    constructor();
 }
 /**
  * Start und Stop 'Mopping Pads Cleaning' (e.g. X1 series)
@@ -254,14 +255,15 @@ export class SinglePoint_V2 extends Clean_V2 {
  * of the 'Self-linked Purification' function
  * @extends VacBotCommand
  */
-export class GetAutonomousClean {
+export class GetAutonomousClean extends VacBotCommand {
+    constructor();
 }
 /**
  * Sets the enabled state
  * of the 'Self-linked Purification' function
  * @extends VacBotCommand
  */
-export class SetAutonomousClean {
+export class SetAutonomousClean extends VacBotCommand {
     constructor(on?: number);
 }
 /**
@@ -275,7 +277,7 @@ export class SetAutonomousClean {
 export class SetUVCleaner extends SetThreeModule {
     constructor(enable?: number);
 }
-export class GetAreaPoint {
+export class GetAreaPoint extends VacBotCommand {
     constructor(mid: any);
 }
 /**
@@ -296,6 +298,7 @@ export class Edge extends Clean {
 export class Spot extends Clean {
     constructor();
 }
+import { VacBotCommand } from "./base";
 import { GetMapSet } from "./map";
 import { GetMapSet_V2 } from "./map";
 import { GetMapSubSet } from "./map";

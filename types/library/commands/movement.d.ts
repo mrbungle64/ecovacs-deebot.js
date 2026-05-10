@@ -2,14 +2,15 @@
  * Represents the 'charge' function
  * @extends VacBotCommand
  */
-export class Charge {
+export class Charge extends VacBotCommand {
+    constructor();
 }
 /**
  * Represents a 'Move' command
  * The move commands often do not work properly on newer models
  * @extends VacBotCommand
  */
-export class Move {
+export class Move extends VacBotCommand {
     constructor(action: any);
 }
 /**
@@ -30,7 +31,8 @@ export class MoveForward extends Move {
  * Requests information about the charge status
  * @extends VacBotCommand
  */
-export class GetChargeState {
+export class GetChargeState extends VacBotCommand {
+    constructor();
 }
 /**
  * @deprecated
@@ -53,4 +55,5 @@ export class MoveRight extends Move {
 export class MoveTurnAround extends Move {
     constructor();
 }
+import { VacBotCommand } from "./base";
 //# sourceMappingURL=movement.d.ts.map
