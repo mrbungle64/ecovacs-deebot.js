@@ -520,6 +520,11 @@ class Ecovacs extends EventEmitter {
                 this.emitMessage('BorderSpin', this.bot.borderSpin);
                 break;
             }
+            case 'BorderSwitch': {
+                this.bot.handleBorderSwitch(payload);
+                this.emitMessage('BorderSwitch', this.bot.borderSwitch);
+                break;
+            }
             case 'BreakPoint': {
                 // "Continuous Cleaning Mode" / "Resumed Clean"
                 this.bot.handleBreakPoint(payload);
@@ -582,10 +587,24 @@ class Ecovacs extends EventEmitter {
                 }
                 break;
             }
+            case 'clearMap': {
+                this.bot.handleClearMap(payload);
+                break;
+            }
+            case 'CrossMapBorderWarning': {
+                this.bot.handleCrossMapBorderWarning(payload);
+                this.emitMessage('CrossMapBorderWarning', this.bot.crossMapBorderWarning);
+                break;
+            }
             case 'CustomAreaMode': {
                 // "Mopping Mode" / "Cleaning efficiency"
                 this.bot.handleCustomAreaMode(payload);
                 this.emitMessage('SweepMode', this.bot.sweepMode);
+                break;
+            }
+            case 'CutDirection': {
+                this.bot.handleCutDirection(payload);
+                this.emitMessage('CutDirection', this.bot.cutDirection);
                 break;
             }
             case 'DryingDuration': {
@@ -653,6 +672,11 @@ class Ecovacs extends EventEmitter {
                 // Video Manager status info
                 this.bot.handleLiveLaunchPwdState(payload);
                 this.emitMessage("LiveLaunchPwdState", this.bot.liveLaunchPwdState);
+                break;
+            }
+            case 'MoveupWarning': {
+                this.bot.handleMoveupWarning(payload);
+                this.emitMessage('MoveupWarning', this.bot.moveupWarning);
                 break;
             }
             case "NetInfo": {
@@ -726,6 +750,11 @@ class Ecovacs extends EventEmitter {
                 this.emitMessage("RelocationState", this.bot.relocationState);
                 break;
             }
+            case 'SafeProtect': {
+                this.bot.handleSafeProtect(payload);
+                this.emitMessage('SafeProtect', this.bot.safeProtect);
+                break;
+            }
             case 'Sched': {
                 // "Scheduling"
                 this.bot.handleSched(payload);
@@ -744,6 +773,10 @@ class Ecovacs extends EventEmitter {
                 // "Vacuum Power" / "Suction Power"
                 this.bot.handleSpeed(payload);
                 this.emitMessage("CleanSpeed", this.bot.cleanSpeed);
+                break;
+            }
+            case 'stationAction': {
+                this.bot.handleStationAction(payload);
                 break;
             }
             case "StationInfo": {
@@ -838,6 +871,11 @@ class Ecovacs extends EventEmitter {
                 // "Work Mode", "Cleaning Mode"
                 this.bot.handleWorkMode(payload);
                 this.emitMessage("WorkMode", this.bot.workMode);
+                break;
+            }
+            case 'WorkState': {
+                this.bot.handleWorkState(payload);
+                this.emitMessage('WorkState', this.bot.workState);
                 break;
             }
             // ========

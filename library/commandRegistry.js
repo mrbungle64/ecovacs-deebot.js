@@ -197,7 +197,7 @@ const COMMAND_REGISTRY = {
     // ==================
     // Movement
     // ==================
-    'move': { specialLogic: true },
+    'Move': { specialLogic: true },
     'MoveBackward': { cmd: 'MoveBackward' },
     'MoveForward': { cmd: 'MoveForward' },
     'MoveLeft': { cmd: 'MoveLeft' },

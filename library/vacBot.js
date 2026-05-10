@@ -133,6 +133,13 @@ class VacBot {
         this.mapDataObjectQueue = [];
         this.mapImageDataQueue = [];
 
+        this.borderSwitch = null;
+        this.crossMapBorderWarning = null;
+        this.cutDirection = null;
+        this.moveupWarning = null;
+        this.safeProtect = null;
+        this.workState = null;
+
         this.schedule = [];
 
         this.genericCommand = null;
@@ -1774,10 +1781,46 @@ class VacBot {
      * @param {Object} payload
      */
     handleNetInfo(payload) {
-        this.netInfoIP = payload['ip'];
-        this.netInfoWifiSSID = payload['ssid'];
-        this.netInfoWifiSignal = payload['rssi'];
-        this.netInfoMAC = payload['mac'];
+        this.netInfoIP = payload['ip'] || payload['wi'];
+        this.netInfoWifiSSID = payload['ssid'] || payload['s'];
+        this.netInfoWifiSignal = payload['rssi'] || payload['st'];
+        this.netInfoMAC = payload['mac'] || payload['wm'];
+    }
+
+    handleClearMap(payload) {
+        tools.envLogInfo(`ClearMap response: ${JSON.stringify(payload)}`);
+    }
+
+    handleBorderSwitch(payload) {
+        this.borderSwitch = payload['enable'];
+    }
+
+    handleCrossMapBorderWarning(payload) {
+        this.crossMapBorderWarning = payload['enable'];
+    }
+
+    handleCutDirection(payload) {
+        this.cutDirection = payload['angle'];
+    }
+
+    handleMoveupWarning(payload) {
+        this.moveupWarning = payload['enable'];
+    }
+
+    handleSafeProtect(payload) {
+        this.safeProtect = payload['enable'];
+    }
+
+    handleWorkState(payload) {
+        this.workState = {
+            robot: payload['robotState'] ? payload['robotState']['state'] : null,
+            station: payload['stationState'] ? payload['stationState']['state'] : null,
+            paused: Boolean(payload['paused'])
+        };
+    }
+
+    handleStationAction(payload) {
+        tools.envLogInfo(`StationAction response: ${JSON.stringify(payload)}`);
     }
 
     /**
