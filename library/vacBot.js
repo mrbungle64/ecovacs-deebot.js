@@ -7,6 +7,7 @@ const MapManager = require('./mapManager');
 const BotState = require('./botState');
 const CapabilityManager = require('./capabilityManager');
 const HistoryManager = require('./historyManager');
+const MaintenanceManager = require('./maintenanceManager');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
 const { errorCodes } = require('./errorCodes.json');
@@ -51,9 +52,6 @@ class VacBot {
         this.deviceClass = vacuum['class'];
         this.deviceModel = this.getProductName();
         this.deviceImageURL = this.getProductImageURL();
-        this.components = {};
-        this.lastComponentValues = {};
-        this.emitFullLifeSpanEvent = false;
 
         this.commandsSent = [];
         this.mapPiecePacketsSent = [];
@@ -77,12 +75,21 @@ class VacBot {
         this.mapManager = new MapManager(this);
         this.stateManager = new BotState(this);
         this.historyManager = new HistoryManager(this);
+        this.maintenanceManager = new MaintenanceManager(this);
 
         this.ecovacs.on('ready', () => {
             tools.envLogInfo(`[VacBot] Ready event!`);
             this.is_ready = true;
         });
     }
+
+    get components() { return this.maintenanceManager.components; }
+    get lastComponentValues() { return this.maintenanceManager.lastComponentValues; }
+    get emitFullLifeSpanEvent() { return this.maintenanceManager.emitFullLifeSpanEvent; }
+
+    set components(val) { this.maintenanceManager.components = val; }
+    set lastComponentValues(val) { this.maintenanceManager.lastComponentValues = val; }
+    set emitFullLifeSpanEvent(val) { this.maintenanceManager.emitFullLifeSpanEvent = val; }
 
     get errorCode() { return this.stateManager.errorCode; }
     get errorDescription() { return this.stateManager.errorDescription; }
@@ -893,7 +900,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleLifespan(payload) {
-        this.stateManager.handleLifespan(payload);
+        this.maintenanceManager.handleLifespan(payload);
     }
 
     /**
