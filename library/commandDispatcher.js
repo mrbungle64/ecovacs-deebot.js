@@ -60,20 +60,22 @@ class CommandDispatcher {
                 }
                 break;
             }
-            case 'Stop'.toLowerCase():
+            case 'Stop'.toLowerCase(): {
                 if (this.bot.isModelTypeAirbot() || this.bot.isModelTypeX2()) {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop('clean_V2'));
                 } else {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop());
                 }
                 break;
-            case 'Resume'.toLowerCase():
+            }
+            case 'Resume'.toLowerCase(): {
                 if (this.bot.isModelTypeAirbot() || this.bot.isModelTypeX2()) {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume('clean_V2'));
                 } else {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume());
                 }
                 break;
+            }
             case 'PlaySound'.toLowerCase(): {
                 let sid = args[0] || 0;
                 this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.PlaySound(Number(sid)));
@@ -125,7 +127,7 @@ class CommandDispatcher {
                 break;
             }
             case 'GetMaps'.toLowerCase():
-            case 'GetCachedMapInfo'.toLowerCase():
+            case 'GetCachedMapInfo'.toLowerCase(): {
                 this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapState());
                 this.bot.ecovacs.sendCommand(new VacBotCommand.GetMajorMap());
                 this.bot.createMapImageOnly = false;
@@ -142,7 +144,8 @@ class CommandDispatcher {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetCachedMapInfo());
                 }
                 break;
-            case 'BackupMap'.toLowerCase():
+            }
+            case 'BackupMap'.toLowerCase(): {
                 if (args.length === 0) { // Airbot Z1
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup'));
                 } else if (args.length === 1) { // e.g. Deebot X1 series
@@ -150,7 +153,8 @@ class CommandDispatcher {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup', mid));
                 }
                 break;
-            case 'RestoreMap'.toLowerCase():
+            }
+            case 'RestoreMap'.toLowerCase(): {
                 if (args.length === 0) { // Airbot Z1
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore'));
                 } else if (args.length === 2) { // e.g. Deebot X1 series
@@ -159,6 +163,7 @@ class CommandDispatcher {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore', mid, reMid));
                 }
                 break;
+            }
             case 'GetSpotAreas'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
@@ -166,25 +171,28 @@ class CommandDispatcher {
                 }
                 break;
             }
-            case 'GetMapInfo_V2'.toLowerCase():
+            case 'GetMapInfo_V2'.toLowerCase(): {
                 if (args.length === 1) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0]));
                 } else if (args.length >= 2) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0], args[1]));
                 }
                 break;
-            case 'GetMapSet_V2'.toLowerCase():
+            }
+            case 'GetMapSet_V2'.toLowerCase(): {
                 if (args.length === 1) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]));
                 } else if (args.length >= 2) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]));
                 }
                 break;
-            case 'SetMapSet_V2'.toLowerCase():
+            }
+            case 'SetMapSet_V2'.toLowerCase(): {
                 if ((args.length >= 2) && (typeof args[1] === 'object')) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]));
                 }
                 break;
+            }
             case 'GetSpotAreaInfo'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
@@ -301,7 +309,7 @@ class CommandDispatcher {
                 }
                 break;
             }
-            case 'GetCleanLogs'.toLowerCase():
+            case 'GetCleanLogs'.toLowerCase(): {
                 if (this.bot.isModelTypeT9Based()) {
                     this.bot.callCleanResultsLogsApi().then((logData) => {
                         this.bot.handleCleanLogs(logData);
@@ -311,48 +319,54 @@ class CommandDispatcher {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetCleanLogs());
                 }
                 break;
-            case 'GetTrueDetect'.toLowerCase():
+            }
+            case 'GetTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetRecognization());
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetTrueDetect());
                 }
                 break;
+            }
             case 'EnableAIVI'.toLowerCase():
             case 'EnableAIVI3D'.toLowerCase():
-            case 'EnableTrueDetect'.toLowerCase():
+            case 'EnableTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(1));
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(1));
                 }
                 break;
+            }
             case 'DisableAIVI'.toLowerCase():
             case 'DisableAIVI3D'.toLowerCase():
-            case 'DisableTrueDetect'.toLowerCase():
+            case 'DisableTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(0));
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(0));
                 }
                 break;
+            }
             case 'SetAIVI'.toLowerCase():
             case 'SetAIVI3D'.toLowerCase():
-            case 'SetTrueDetect'.toLowerCase():
+            case 'SetTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(args[0]));
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
                 }
                 break;
+            }
             case 'EmptyDustBin'.toLowerCase():
-            case 'EmptySuctionStation'.toLowerCase():
+            case 'EmptySuctionStation'.toLowerCase(): {
                 if (this.bot.isModelTypeT20() || this.bot.isModelTypeX2()) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBinSA());
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBin());
                 }
                 break;
+            }
             case 'Clean_V2'.toLowerCase(): {
                 if (this.bot.isModelTypeAirbot()) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2('move'));
@@ -489,8 +503,9 @@ class CommandDispatcher {
                 this.bot.ecovacs.sendCommand(new VacBotCommand.Generic('getEfficiency'));
                 break;
             }
-            default:
+            default: {
                 return false;
+            }
         }
         return true;
     }
