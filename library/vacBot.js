@@ -4,6 +4,7 @@ const tools = require('./tools');
 const VacBotCommand = require('./command');
 const CommandDispatcher = require('./commandDispatcher');
 const MapManager = require('./mapManager');
+const BotState = require('./botState');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
 const { errorCodes } = require('./errorCodes.json');
@@ -55,132 +56,8 @@ class VacBot {
         this.lastComponentValues = {};
         this.emitFullLifeSpanEvent = false;
 
-        this.errorCode = '0';
-        this.errorDescription = errorCodes[this.errorCode];
-
-        this.batteryLevel = null;
-        this.batteryIsLow = false;
-        this.cleanReport = null;
-        this.chargeStatus = null;
-        this.chargeMode = null;
-        this.cleanSpeed = null;
-        this.waterLevel = null;
-        this.waterboxInfo = null;
-        this.moppingType = null;
-        this.scrubbingType = null;
-        this.sleepStatus = null;
-
-        this.deebotPosition = {
-            x: null,
-            y: null,
-            a: null,
-            isInvalid: false,
-            currentSpotAreaID: 'unknown',
-            currentSpotAreaName: 'unknown',
-            changeFlag: false
-        };
-        this.chargePosition = {
-            x: null,
-            y: null,
-            a: null,
-            changeFlag: false
-        };
-
-        this.cleanSum_totalSquareMeters = null;
-        this.cleanSum_totalSeconds = null;
-        this.cleanSum_totalNumber = null;
-
-        this.cleanLog = [];
-        this.cleanLog_lastImageUrl = null;
-        this.cleanLog_lastTimestamp = null;
-        this.cleanLog_lastTotalTime = null;
-        this.cleanLog_lastTotalTimeString = null;
-        this.cleanLog_lastSquareMeters = null;
-
-        this.currentStats = {
-            'cleanedArea': null,
-            'cleanedSeconds': null,
-            'cleanType': null
-        };
-
-        this.netInfoIP = null;
-        this.netInfoWifiSSID = null;
-        this.netInfoWifiSignal = null;
-        this.netInfoMAC = null;
-
-        this.firmwareVersion = null;
-        this.timezone = null;
-        this.OTA = null;
-        this.sysinfo = null;
-
-        this.stationState = null;
-        this.stationInfo = null;
-        this.washInterval = null;
-        this.washInfo = null;
-
-        this.advancedMode = null;
-        this.autoEmpty = null;
-        this.autoEmptyStatus = null;
-        this.cleanCount = null;
-        this.cleanPreference = null;
-        this.workMode = null;
-        this.workState = null;
-        this.sweepMode = null;
-        this.mopOnlyMode = null;
-        this.borderSpin = null;
-        this.borderSwitch = null;
-        this.dusterRemind = null;
-        this.carpetPressure = null;
-        this.carpetInfo = null;
-        this.block = null;
-        this.blockTime = null;
-        this.breakPoint = null;
-        this.volume = null;
-        this.voiceSimple = null;
-        this.voiceAssistantState = null;
-
-        this.trueDetect = null;
-        this.avoidedObstacles = 0;
-        this.obstacleTypes = null;
-        this.aiCleanItemState = null;
-
-        this.crossMapBorderWarning = null;
-        this.cutDirection = null;
-        this.moveupWarning = null;
-        this.safeProtect = null;
-
-        this.evt = null;
-        this.currentTask = {
-            'type': 'none',
-            'triggerType': 'none',
-            'failed': false,
-            'stopReason': 'none'
-        };
-        this.liveLaunchPwdState = null;
-
-        this.airQuality = null;
-        this.aiBlockPlate = null;
-        this.airbotAutoModel = null;
-        this.angleFollow = null;
-        this.angleWakeup = null;
-        this.atmoLightIntensity = null;
-        this.atmoVolume = null;
-        this.areaPoint = null;
-        this.autonomousClean = null;
-        this.bluetoothSpeaker = null;
-        this.childLock = null;
-        this.humanoidFollow = null;
-        this.mic = null;
-        this.monitorAirState = null;
-        this.threeModule = null;
-        this.threeModuleStatus = null;
-        this.dmodule = null;
-        this.efficiency = null;
-
         this.commandsSent = [];
         this.mapPiecePacketsSent = [];
-
-        this.schedule = [];
 
         this.genericCommand = null;
 
@@ -197,12 +74,189 @@ class VacBot {
 
         this.dispatcher = new CommandDispatcher(this);
         this.mapManager = new MapManager(this);
+        this.stateManager = new BotState(this);
 
         this.ecovacs.on('ready', () => {
             tools.envLogInfo(`[VacBot] Ready event!`);
             this.is_ready = true;
         });
     }
+
+    get errorCode() { return this.stateManager.errorCode; }
+    get errorDescription() { return this.stateManager.errorDescription; }
+    get batteryLevel() { return this.stateManager.batteryLevel; }
+    get batteryIsLow() { return this.stateManager.batteryIsLow; }
+    get cleanReport() { return this.stateManager.cleanReport; }
+    get chargeStatus() { return this.stateManager.chargeStatus; }
+    get chargeMode() { return this.stateManager.chargeMode; }
+    get cleanSpeed() { return this.stateManager.cleanSpeed; }
+    get waterLevel() { return this.stateManager.waterLevel; }
+    get waterboxInfo() { return this.stateManager.waterboxInfo; }
+    get moppingType() { return this.stateManager.moppingType; }
+    get scrubbingType() { return this.stateManager.scrubbingType; }
+    get sleepStatus() { return this.stateManager.sleepStatus; }
+    get deebotPosition() { return this.stateManager.deebotPosition; }
+    get chargePosition() { return this.stateManager.chargePosition; }
+    get cleanSum_totalSquareMeters() { return this.stateManager.cleanSum_totalSquareMeters; }
+    get cleanSum_totalSeconds() { return this.stateManager.cleanSum_totalSeconds; }
+    get cleanSum_totalNumber() { return this.stateManager.cleanSum_totalNumber; }
+    get cleanLog() { return this.stateManager.cleanLog; }
+    get cleanLog_lastImageUrl() { return this.stateManager.cleanLog_lastImageUrl; }
+    get cleanLog_lastTimestamp() { return this.stateManager.cleanLog_lastTimestamp; }
+    get cleanLog_lastTotalTime() { return this.stateManager.cleanLog_lastTotalTime; }
+    get cleanLog_lastTotalTimeString() { return this.stateManager.cleanLog_lastTotalTimeString; }
+    get cleanLog_lastSquareMeters() { return this.stateManager.cleanLog_lastSquareMeters; }
+    get currentStats() { return this.stateManager.currentStats; }
+    get netInfoIP() { return this.stateManager.netInfoIP; }
+    get netInfoWifiSSID() { return this.stateManager.netInfoWifiSSID; }
+    get netInfoWifiSignal() { return this.stateManager.netInfoWifiSignal; }
+    get netInfoMAC() { return this.stateManager.netInfoMAC; }
+    get firmwareVersion() { return this.stateManager.firmwareVersion; }
+    get timezone() { return this.stateManager.timezone; }
+    get OTA() { return this.stateManager.OTA; }
+    get sysinfo() { return this.stateManager.sysinfo; }
+    get stationState() { return this.stateManager.stationState; }
+    get stationInfo() { return this.stateManager.stationInfo; }
+    get washInterval() { return this.stateManager.washInterval; }
+    get washInfo() { return this.stateManager.washInfo; }
+    get advancedMode() { return this.stateManager.advancedMode; }
+    get autoEmpty() { return this.stateManager.autoEmpty; }
+    get autoEmptyStatus() { return this.stateManager.autoEmptyStatus; }
+    get cleanCount() { return this.stateManager.cleanCount; }
+    get cleanPreference() { return this.stateManager.cleanPreference; }
+    get workMode() { return this.stateManager.workMode; }
+    get workState() { return this.stateManager.workState; }
+    get sweepMode() { return this.stateManager.sweepMode; }
+    get mopOnlyMode() { return this.stateManager.mopOnlyMode; }
+    get borderSpin() { return this.stateManager.borderSpin; }
+    get borderSwitch() { return this.stateManager.borderSwitch; }
+    get dusterRemind() { return this.stateManager.dusterRemind; }
+    get carpetPressure() { return this.stateManager.carpetPressure; }
+    get carpetInfo() { return this.stateManager.carpetInfo; }
+    get block() { return this.stateManager.block; }
+    get blockTime() { return this.stateManager.blockTime; }
+    get breakPoint() { return this.stateManager.breakPoint; }
+    get volume() { return this.stateManager.volume; }
+    get voiceSimple() { return this.stateManager.voiceSimple; }
+    get voiceAssistantState() { return this.stateManager.voiceAssistantState; }
+    get trueDetect() { return this.stateManager.trueDetect; }
+    get avoidedObstacles() { return this.stateManager.avoidedObstacles; }
+    get obstacleTypes() { return this.stateManager.obstacleTypes; }
+    get aiCleanItemState() { return this.stateManager.aiCleanItemState; }
+    get crossMapBorderWarning() { return this.stateManager.crossMapBorderWarning; }
+    get cutDirection() { return this.stateManager.cutDirection; }
+    get moveupWarning() { return this.stateManager.moveupWarning; }
+    get safeProtect() { return this.stateManager.safeProtect; }
+    get evt() { return this.stateManager.evt; }
+    get currentTask() { return this.stateManager.currentTask; }
+    get liveLaunchPwdState() { return this.stateManager.liveLaunchPwdState; }
+    get airQuality() { return this.stateManager.airQuality; }
+    get aiBlockPlate() { return this.stateManager.aiBlockPlate; }
+    get airbotAutoModel() { return this.stateManager.airbotAutoModel; }
+    get angleFollow() { return this.stateManager.angleFollow; }
+    get angleWakeup() { return this.stateManager.angleWakeup; }
+    get atmoLightIntensity() { return this.stateManager.atmoLightIntensity; }
+    get atmoVolume() { return this.stateManager.atmoVolume; }
+    get areaPoint() { return this.stateManager.areaPoint; }
+    get autonomousClean() { return this.stateManager.autonomousClean; }
+    get bluetoothSpeaker() { return this.stateManager.bluetoothSpeaker; }
+    get childLock() { return this.stateManager.childLock; }
+    get humanoidFollow() { return this.stateManager.humanoidFollow; }
+    get mic() { return this.stateManager.mic; }
+    get monitorAirState() { return this.stateManager.monitorAirState; }
+    get threeModule() { return this.stateManager.threeModule; }
+    get threeModuleStatus() { return this.stateManager.threeModuleStatus; }
+    get dmodule() { return this.stateManager.dmodule; }
+    get efficiency() { return this.stateManager.efficiency; }
+    get schedule() { return this.stateManager.schedule; }
+
+    set errorCode(val) { this.stateManager.errorCode = val; }
+    set errorDescription(val) { this.stateManager.errorDescription = val; }
+    set batteryLevel(val) { this.stateManager.batteryLevel = val; }
+    set batteryIsLow(val) { this.stateManager.batteryIsLow = val; }
+    set cleanReport(val) { this.stateManager.cleanReport = val; }
+    set chargeStatus(val) { this.stateManager.chargeStatus = val; }
+    set chargeMode(val) { this.stateManager.chargeMode = val; }
+    set cleanSpeed(val) { this.stateManager.cleanSpeed = val; }
+    set waterLevel(val) { this.stateManager.waterLevel = val; }
+    set waterboxInfo(val) { this.stateManager.waterboxInfo = val; }
+    set moppingType(val) { this.stateManager.moppingType = val; }
+    set scrubbingType(val) { this.stateManager.scrubbingType = val; }
+    set sleepStatus(val) { this.stateManager.sleepStatus = val; }
+    set deebotPosition(val) { this.stateManager.deebotPosition = val; }
+    set chargePosition(val) { this.stateManager.chargePosition = val; }
+    set cleanSum_totalSquareMeters(val) { this.stateManager.cleanSum_totalSquareMeters = val; }
+    set cleanSum_totalSeconds(val) { this.stateManager.cleanSum_totalSeconds = val; }
+    set cleanSum_totalNumber(val) { this.stateManager.cleanSum_totalNumber = val; }
+    set cleanLog(val) { this.stateManager.cleanLog = val; }
+    set cleanLog_lastImageUrl(val) { this.stateManager.cleanLog_lastImageUrl = val; }
+    set cleanLog_lastTimestamp(val) { this.stateManager.cleanLog_lastTimestamp = val; }
+    set cleanLog_lastTotalTime(val) { this.stateManager.cleanLog_lastTotalTime = val; }
+    set cleanLog_lastTotalTimeString(val) { this.stateManager.cleanLog_lastTotalTimeString = val; }
+    set cleanLog_lastSquareMeters(val) { this.stateManager.cleanLog_lastSquareMeters = val; }
+    set currentStats(val) { this.stateManager.currentStats = val; }
+    set netInfoIP(val) { this.stateManager.netInfoIP = val; }
+    set netInfoWifiSSID(val) { this.stateManager.netInfoWifiSSID = val; }
+    set netInfoWifiSignal(val) { this.stateManager.netInfoWifiSignal = val; }
+    set netInfoMAC(val) { this.stateManager.netInfoMAC = val; }
+    set firmwareVersion(val) { this.stateManager.firmwareVersion = val; }
+    set timezone(val) { this.stateManager.timezone = val; }
+    set OTA(val) { this.stateManager.OTA = val; }
+    set sysinfo(val) { this.stateManager.sysinfo = val; }
+    set stationState(val) { this.stateManager.stationState = val; }
+    set stationInfo(val) { this.stateManager.stationInfo = val; }
+    set washInterval(val) { this.stateManager.washInterval = val; }
+    set washInfo(val) { this.stateManager.washInfo = val; }
+    set advancedMode(val) { this.stateManager.advancedMode = val; }
+    set autoEmpty(val) { this.stateManager.autoEmpty = val; }
+    set autoEmptyStatus(val) { this.stateManager.autoEmptyStatus = val; }
+    set cleanCount(val) { this.stateManager.cleanCount = val; }
+    set cleanPreference(val) { this.stateManager.cleanPreference = val; }
+    set workMode(val) { this.stateManager.workMode = val; }
+    set workState(val) { this.stateManager.workState = val; }
+    set sweepMode(val) { this.stateManager.sweepMode = val; }
+    set mopOnlyMode(val) { this.stateManager.mopOnlyMode = val; }
+    set borderSpin(val) { this.stateManager.borderSpin = val; }
+    set borderSwitch(val) { this.stateManager.borderSwitch = val; }
+    set dusterRemind(val) { this.stateManager.dusterRemind = val; }
+    set carpetPressure(val) { this.stateManager.carpetPressure = val; }
+    set carpetInfo(val) { this.stateManager.carpetInfo = val; }
+    set block(val) { this.stateManager.block = val; }
+    set blockTime(val) { this.stateManager.blockTime = val; }
+    set breakPoint(val) { this.stateManager.breakPoint = val; }
+    set volume(val) { this.stateManager.volume = val; }
+    set voiceSimple(val) { this.stateManager.voiceSimple = val; }
+    set voiceAssistantState(val) { this.stateManager.voiceAssistantState = val; }
+    set trueDetect(val) { this.stateManager.trueDetect = val; }
+    set avoidedObstacles(val) { this.stateManager.avoidedObstacles = val; }
+    set obstacleTypes(val) { this.stateManager.obstacleTypes = val; }
+    set aiCleanItemState(val) { this.stateManager.aiCleanItemState = val; }
+    set crossMapBorderWarning(val) { this.stateManager.crossMapBorderWarning = val; }
+    set cutDirection(val) { this.stateManager.cutDirection = val; }
+    set moveupWarning(val) { this.stateManager.moveupWarning = val; }
+    set safeProtect(val) { this.stateManager.safeProtect = val; }
+    set evt(val) { this.stateManager.evt = val; }
+    set currentTask(val) { this.stateManager.currentTask = val; }
+    set liveLaunchPwdState(val) { this.stateManager.liveLaunchPwdState = val; }
+    set airQuality(val) { this.stateManager.airQuality = val; }
+    set aiBlockPlate(val) { this.stateManager.aiBlockPlate = val; }
+    set airbotAutoModel(val) { this.stateManager.airbotAutoModel = val; }
+    set angleFollow(val) { this.stateManager.angleFollow = val; }
+    set angleWakeup(val) { this.stateManager.angleWakeup = val; }
+    set atmoLightIntensity(val) { this.stateManager.atmoLightIntensity = val; }
+    set atmoVolume(val) { this.stateManager.atmoVolume = val; }
+    set areaPoint(val) { this.stateManager.areaPoint = val; }
+    set autonomousClean(val) { this.stateManager.autonomousClean = val; }
+    set bluetoothSpeaker(val) { this.stateManager.bluetoothSpeaker = val; }
+    set childLock(val) { this.stateManager.childLock = val; }
+    set humanoidFollow(val) { this.stateManager.humanoidFollow = val; }
+    set mic(val) { this.stateManager.mic = val; }
+    set monitorAirState(val) { this.stateManager.monitorAirState = val; }
+    set threeModule(val) { this.stateManager.threeModule = val; }
+    set threeModuleStatus(val) { this.stateManager.threeModuleStatus = val; }
+    set dmodule(val) { this.stateManager.dmodule = val; }
+    set efficiency(val) { this.stateManager.efficiency = val; }
+    set schedule(val) { this.stateManager.schedule = val; }
 
     get maps() { return this.mapManager.maps; }
     get mapImages() { return this.mapManager.mapImages; }
@@ -876,55 +930,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleCleanInfo(payload) {
-        this.currentSpotAreas = '';
-        this.currentCustomAreaValues = '';
-        if (payload['state'] === 'clean') {
-            let type = payload['cleanState']['type'];
-            const content = payload['cleanState']['content'];
-            if (typeof content === 'object') {
-                type = content['type'];
-            }
-            if (payload['cleanState']['motionState'] === 'working') {
-                this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[type];
-            } else {
-                this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['cleanState']['motionState']];
-            }
-            if ((type === 'spotArea') || (type === 'customArea')) {
-                let areaValues;
-                if (typeof content === `object`) {
-                    areaValues = content['value'];
-                } else {
-                    areaValues = content;
-                }
-                if (type === 'customArea') {
-                    if (typeof content === 'object') {
-                        const doNotClean = content['donotClean'];
-                        if ((doNotClean === 1) || (areaValues.split(',').length === 2)) {
-                            // Controlled via Video Manager
-                            this.cleanReport = 'setLocation';
-                        }
-                    }
-                    this.currentCustomAreaValues = areaValues;
-                } else if (type === 'spotArea') {
-                    this.currentSpotAreas = areaValues;
-                }
-            }
-        } else if (payload['trigger'] === 'alert') {
-            this.cleanReport = 'alert';
-        } else {
-            this.cleanReport = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
-            if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'returning') {
-                // set charge state on returning to dock
-                const chargeStatus = dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']];
-                if (chargeStatus) {
-                    this.chargeStatus = chargeStatus;
-                }
-            } else if (dictionary.CLEAN_MODE_FROM_ECOVACS[payload['state']] === 'idle') {
-                // when clean state = idle the bot can be charging on the dock or the return to dock has been canceled
-                // if this is not run, the status when canceling the return stays on 'returning'
-                this.run('GetChargeState');
-            }
-        }
+        this.stateManager.handleCleanInfo(payload);
     }
 
     /**
@@ -932,21 +938,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleStationState(payload) {
-        let type = 0;
-        let state = 0;
-        if (payload.hasOwnProperty('content')) {
-            type = payload['content']['type'];
-        }
-        if (payload.hasOwnProperty('state')) {
-            state = payload['state'];
-        }
-        this.stationState = {
-            'type': type,
-            'state': state,
-            'isAirDrying': Boolean((type === 2) && state),
-            'isSelfCleaning': Boolean((type === 3) && state),
-            'isActive': Boolean(state)
-        };
+        this.stateManager.handleStationState(payload);
     }
 
     /**
@@ -954,13 +946,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleStationInfo(payload) {
-        this.stationInfo = {
-            state: payload.state,
-            name: payload.name,
-            model: payload.model,
-            sn: payload.sn,
-            wkVer: payload.wkVer
-        };
+        this.stateManager.handleStationInfo(payload);
     }
 
     /**
@@ -968,9 +954,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleWashInterval(payload) {
-        if (payload.hasOwnProperty('interval')) {
-            this.washInterval = payload['interval'];
-        }
+        this.stateManager.handleWashInterval(payload);
     }
 
 
@@ -979,9 +963,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleWashInfo(payload) {
-        if (payload.hasOwnProperty('mode')) {
-            this.washInfo = payload['mode'];
-        }
+        this.stateManager.handleWashInfo(payload);
     }
 
     /**
@@ -989,12 +971,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleBattery(payload) {
-        this.batteryLevel = payload['value'];
-        if (payload.hasOwnProperty('isLow')) {
-            this.batteryIsLow = !!Number(payload['isLow']);
-        } else {
-            this.batteryIsLow = (this.batteryLevel <= 15);
-        }
+        this.stateManager.handleBattery(payload);
     }
 
     /**
@@ -1003,22 +980,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleLifespan(payload) {
-        for (let index in payload) {
-            if (payload[index]) {
-                const type = payload[index][`type`];
-                let component = type;
-                if (dictionary.COMPONENT_FROM_ECOVACS[type]) {
-                    component = dictionary.COMPONENT_FROM_ECOVACS[type];
-                } else {
-                    tools.envLogWarn(`unknown life span component type: ${type}`);
-                    this.ecovacs.emit('Debug', `Unknown life span component type: ${type}`);
-                }
-                const left = payload[index]['left'];
-                const total = payload[index]['total'];
-                const lifespan = parseInt(left) / parseInt(total) * 100;
-                this.components[component] = Number(lifespan.toFixed(2));
-            }
-        }
+        this.stateManager.handleLifespan(payload);
     }
 
     /**
@@ -1027,62 +989,7 @@ class VacBot {
      * @param {Object} payload
      */
     handlePos(payload) {
-        // is only available in some DeebotPosition messages (e.g. on start cleaning)
-        // there can be more than one charging station only handles first charging station
-        const chargePos = payload['chargePos'];
-        if (chargePos) {
-            // check if position changed
-            let changed = (
-                chargePos[0]['x'] !== this.chargePosition.x ||
-                chargePos[0]['y'] !== this.chargePosition.y ||
-                chargePos[0]['a'] !== this.chargePosition.a
-            );
-            if (changed) {
-                this.chargePosition = {
-                    x: chargePos[0]['x'],
-                    y: chargePos[0]['y'],
-                    a: chargePos[0]['a'],
-                    changeFlag: true
-                };
-            }
-        }
-        // as deebotPos and chargePos can also appear in other messages (CleanReport)
-        // the handling should be extracted to a separate function
-        const deebotPos = payload['deebotPos'];
-        if (typeof deebotPos === 'object') {
-            // check if position changed or currentSpotAreaID is 'unknown'
-            let changed = (
-                deebotPos['x'] !== this.deebotPosition.x ||
-                deebotPos['y'] !== this.deebotPosition.y ||
-                deebotPos['a'] !== this.deebotPosition.a ||
-                deebotPos['invalid'] !== this.deebotPosition.isInvalid ||
-                this.deebotPosition.currentSpotAreaID === 'unknown'
-            );
-            if (changed) {
-                const posX = Number(deebotPos['x']);
-                const posY = Number(deebotPos['y']);
-                let currentSpotAreaID = mapTools.getCurrentSpotAreaID(
-                    posX, posY, this.mapSpotAreaInfos[this.currentMapMID]
-                );
-                let isInvalid = Number(deebotPos['invalid']) === 1;
-                let distanceToChargingStation = null;
-                if (this.chargePosition) {
-                    const pos = deebotPos['x'] + ',' + deebotPos['y'];
-                    const chargePos = this.chargePosition.x + ',' + this.chargePosition.y;
-                    distanceToChargingStation = mapTools.getDistanceToChargingStation(pos, chargePos);
-                }
-                this.deebotPosition = {
-                    x: deebotPos['x'],
-                    y: deebotPos['y'],
-                    a: deebotPos['a'],
-                    isInvalid: isInvalid,
-                    currentSpotAreaID: currentSpotAreaID,
-                    currentSpotAreaName: this.getSpotAreaName(currentSpotAreaID),
-                    changeFlag: true,
-                    distanceToChargingStation: distanceToChargingStation
-                };
-            }
-        }
+        this.stateManager.handlePos(payload);
     }
 
     /**
@@ -1090,21 +997,7 @@ class VacBot {
      * @param {Object} payload - The payload of the event.
      */
     handleEvt(payload) {
-        const code = payload['code'];
-        if (eventCodes.hasOwnProperty(code)) {
-            tools.envLogWarn(`Evt code: '${eventCodes[code]}'`);
-            this.evt = {
-                code: code,
-                event: eventCodes[code]
-            };
-        } else {
-            const eventMessage = `Unhandled Evt code: '${code}'`;
-            tools.envLogWarn(eventMessage);
-            this.evt = {
-                code: code,
-                event: eventMessage
-            };
-        }
+        this.stateManager.handleEvt(payload);
     }
 
     /**
@@ -1112,11 +1005,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleSpeed(payload) {
-        const speed = payload['speed'];
-        this.cleanSpeed = speed;
-        if (!this.isModelTypeAirbot()) {
-            this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
-        }
+        this.stateManager.handleSpeed(payload);
     }
 
     /**
@@ -1125,10 +1014,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleNetInfo(payload) {
-        this.netInfoIP = payload['ip'] || payload['wi'];
-        this.netInfoWifiSSID = payload['ssid'] || payload['s'];
-        this.netInfoWifiSignal = payload['rssi'] || payload['st'];
-        this.netInfoMAC = payload['mac'] || payload['wm'];
+        this.stateManager.handleNetInfo(payload);
     }
 
     handleClearMap(payload) {
@@ -1136,31 +1022,27 @@ class VacBot {
     }
 
     handleBorderSwitch(payload) {
-        this.borderSwitch = payload['enable'];
+        this.stateManager.handleBorderSwitch(payload);
     }
 
     handleCrossMapBorderWarning(payload) {
-        this.crossMapBorderWarning = payload['enable'];
+        this.stateManager.handleCrossMapBorderWarning(payload);
     }
 
     handleCutDirection(payload) {
-        this.cutDirection = payload['angle'];
+        this.stateManager.handleCutDirection(payload);
     }
 
     handleMoveupWarning(payload) {
-        this.moveupWarning = payload['enable'];
+        this.stateManager.handleMoveupWarning(payload);
     }
 
     handleSafeProtect(payload) {
-        this.safeProtect = payload['enable'];
+        this.stateManager.handleSafeProtect(payload);
     }
 
     handleWorkState(payload) {
-        this.workState = {
-            robot: payload['robotState'] ? payload['robotState']['state'] : null,
-            station: payload['stationState'] ? payload['stationState']['state'] : null,
-            paused: Boolean(payload['paused'])
-        };
+        this.stateManager.handleWorkState(payload);
     }
 
     handleStationAction(payload) {
@@ -1173,19 +1055,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleWaterInfo(payload) {
-        this.waterLevel = payload['amount'];
-        this.waterboxInfo = payload['enable'];
-        if (payload.hasOwnProperty('type')) {
-            // 1 = Regular
-            // 2 = OZMO Pro
-            this.moppingType = payload['type'];
-        }
-        if (payload.hasOwnProperty('sweepType')) {
-            // Scrubbing pattern
-            // 1 = Quick scrubbing
-            // 2 = Deep scrubbing
-            this.scrubbingType = payload['sweepType'];
-        }
+        this.stateManager.handleWaterInfo(payload);
     }
 
     /**
@@ -1194,16 +1064,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAICleanItemState(payload) {
-        if (payload.hasOwnProperty('items')) {
-            const items = payload.items;
-            const particleRemoval = Boolean(items[0].state);
-            const petPoopPrevention = Boolean(items[2].state);
-            this.aiCleanItemState = {
-                items: items,
-                particleRemoval: particleRemoval,
-                petPoopPrevention: petPoopPrevention
-            };
-        }
+        this.stateManager.handleAICleanItemState(payload);
     }
 
     /**
@@ -1213,22 +1074,11 @@ class VacBot {
      * @param {Object} payload
      */
     handleAirDryingState(payload) {
-        let airDryingStatus = null;
-        const status = parseInt(payload['status']);
-        if (status === 1) {
-            airDryingStatus = 'airdrying';
-        } else if (status === 2) {
-            airDryingStatus = 'idle';
-        }
-        if (airDryingStatus) {
-            this.airDryingStatus = airDryingStatus;
-        }
+        this.stateManager.handleAirDryingState(payload);
     }
 
     handleDryingDuration(payload) {
-        if (payload.hasOwnProperty('duration')) {
-            this.dryingDuration = payload['duration'];
-        }
+        this.stateManager.handleDryingDuration(payload);
     }
 
     /**
@@ -1236,11 +1086,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleBorderSpin(payload) {
-        const enable = payload['enable'];
-        const type = payload['type']; // The value of type seems to be always 1
-        if (type) {
-            this.borderSpin = enable;
-        }
+        this.stateManager.handleBorderSpin(payload);
     }
 
     /**
@@ -1253,7 +1099,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleWorkMode(payload) {
-        this.workMode = payload['mode'];
+        this.stateManager.handleWorkMode(payload);
     }
 
     /**
@@ -1263,9 +1109,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleCustomAreaMode(payload) {
-        if (payload.hasOwnProperty('sweepMode')) {
-            this.sweepMode = payload['sweepMode'];
-        }
+        this.stateManager.handleCustomAreaMode(payload);
     }
 
     /**
@@ -1274,9 +1118,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleSweepMode(payload) {
-        if (payload.hasOwnProperty('type')) {
-            this.mopOnlyMode = Boolean(payload['type']);
-        }
+        this.stateManager.handleSweepMode(payload);
     }
 
     /**
@@ -1284,14 +1126,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleChargeState(payload) {
-        this.chargeStatus = 'idle';
-        if (parseInt(payload['isCharging']) === 1) {
-            this.chargeStatus = 'charging';
-        }
-        this.chargeMode = 'slot';
-        if (payload.hasOwnProperty('mode')) {
-            this.chargeMode = payload['mode'];
-        }
+        this.stateManager.handleChargeState(payload);
     }
 
     /**
@@ -1299,7 +1134,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleSleepStatus(payload) {
-        this.sleepStatus = payload['enable'];
+        this.stateManager.handleSleepStatus(payload);
     }
 
     /**
@@ -1323,47 +1158,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleCleanLogs(payload) {
-        let logs = [];
-        this.cleanLog = [];
-        if (payload.hasOwnProperty('logs')) {
-            logs = payload['logs'];
-        } else if (payload.hasOwnProperty('log')) {
-            logs = payload['log'];
-        } else if (payload.hasOwnProperty('data')) {
-            logs = payload['data'];
-        }
-
-        for (let logIndex in logs) {
-            if (logs.hasOwnProperty(logIndex)) {
-                const logEntry = logs[logIndex];
-                if (!this.cleanLog[logEntry['id']]) { //log not yet existing
-                    let squareMeters = parseInt(logEntry['area']);
-                    let timestamp = Number(logEntry['ts']);
-                    let date = new Date(timestamp * 1000);
-                    let len = parseInt(logEntry['last']);
-                    let totalTimeString = tools.getTimeStringFormatted(len);
-                    let imageUrl = logEntry['imageUrl'];
-                    if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
-                        this.cleanLog_lastImageUrl = imageUrl;
-                        this.cleanLog_lastTimestamp = timestamp;
-                        this.cleanLog_lastSquareMeters = squareMeters;
-                        this.cleanLog_lastTotalTime = len;
-                        this.cleanLog_lastTotalTimeString = totalTimeString;
-                    }
-                    this.cleanLog[logEntry['id']] = {
-                        'squareMeters': squareMeters,
-                        'timestamp': timestamp,
-                        'date': date,
-                        'lastTime': len,
-                        'totalTime': len,
-                        'totalTimeFormatted': totalTimeString,
-                        'imageUrl': imageUrl,
-                        'type': logEntry['type'],
-                        'stopReason': logEntry['stopReason']
-                    };
-                }
-            }
-        }
+        this.stateManager.handleCleanLogs(payload);
     }
 
     /**
@@ -1372,20 +1167,7 @@ class VacBot {
      * (MQTT response via `lg/log.do` and REST API via `dln/api/log/clean_result/list`)
      */
     emitCleanLogEvents() {
-        let cleanLog = [];
-        for (let i in this.cleanLog) {
-            if (this.cleanLog.hasOwnProperty(i)) {
-                cleanLog.push(this.cleanLog[i]);
-            }
-        }
-        this.ecovacs.emitMessage('CleanLog', cleanLog);
-        this.ecovacs.emitMessage('LastCleanLogs', {
-            'timestamp': this.cleanLog_lastTimestamp,
-            'squareMeters': this.cleanLog_lastSquareMeters,
-            'totalTime': this.cleanLog_lastTotalTime,
-            'totalTimeFormatted': this.cleanLog_lastTotalTimeString,
-            'imageUrl': this.cleanLog_lastImageUrl
-        });
+        this.stateManager.emitCleanLogEvents();
     }
 
     /**
@@ -1393,9 +1175,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleTotalStats(payload) {
-        this.cleanSum_totalSquareMeters = parseInt(payload['area']);
-        this.cleanSum_totalSeconds = parseInt(payload['time']);
-        this.cleanSum_totalNumber = parseInt(payload['count']);
+        this.stateManager.handleTotalStats(payload);
     }
 
     /**
@@ -1403,8 +1183,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleRelocationState(payload) {
-        this.relocationStatus = payload;
-        this.relocationState = payload['state'];
+        this.stateManager.handleRelocationState(payload);
     }
 
     /**
@@ -1412,7 +1191,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleVolume(payload) {
-        this.volume = payload['volume'];
+        this.stateManager.handleVolume(payload);
     }
 
     /**
@@ -1420,7 +1199,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleBreakPoint(payload) {
-        this.breakPoint = payload['enable'];
+        this.stateManager.handleBreakPoint(payload);
     }
 
     /**
@@ -1428,13 +1207,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleBlock(payload) {
-        this.block = payload['enable'];
-        if (payload.hasOwnProperty('start')) {
-            this.blockTime = {
-                'from': payload['start'],
-                'to': payload['end']
-            };
-        }
+        this.stateManager.handleBlock(payload);
     }
 
     /**
@@ -1442,14 +1215,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAutoEmpty(payload) {
-        this.autoEmpty = payload['enable'];
-        if (payload.hasOwnProperty('status')) {
-            // 0 disabled
-            // 1 enabled
-            // 2 dust bag not full
-            // 5 dust bag need to be changed
-            this.autoEmptyStatus = payload['status'];
-        }
+        this.stateManager.handleAutoEmpty(payload);
     }
 
     /**
@@ -1457,7 +1223,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAdvancedMode(payload) {
-        this.advancedMode = payload['enable'];
+        this.stateManager.handleAdvancedMode(payload);
     }
 
     /**
@@ -1465,14 +1231,11 @@ class VacBot {
      * @param {Object} payload
      */
     handleTrueDetect(payload) {
-        this.trueDetect = payload['enable'];
+        this.stateManager.handleTrueDetect(payload);
     }
 
     handleRecognization(payload) {
-        this.trueDetect = payload['state'];
-        if (payload) {
-            tools.envLogInfo(`payload for Recognization message: ${JSON.stringify(payload)}`);
-        }
+        this.stateManager.handleRecognization(payload);
     }
 
     /**
@@ -1480,7 +1243,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleCleanCount(payload) {
-        this.cleanCount = payload['count'];
+        this.stateManager.handleCleanCount(payload);
     }
 
     /**
@@ -1488,10 +1251,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleDusterRemind(payload) {
-        this.dusterRemind = {
-            enabled: payload['enable'],
-            period: payload['period']
-        };
+        this.stateManager.handleDusterRemind(payload);
     }
 
     /**
@@ -1500,7 +1260,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleCarpetPressure(payload) {
-        this.carpetPressure = payload['enable'];
+        this.stateManager.handleCarpetPressure(payload);
     }
 
     /**
@@ -1509,37 +1269,27 @@ class VacBot {
      * @param {Object} payload
      */
     handleCarpetInfo(payload) {
-        this.carpetInfo = payload['mode'];
+        this.stateManager.handleCarpetInfo(payload);
     }
 
     handleCleanPreference(payload) {
-        this.cleanPreference = payload['enable'];
+        this.stateManager.handleCleanPreference(payload);
     }
 
     handleLiveLaunchPwdState(payload) {
-        this.liveLaunchPwdState = {
-            state: payload.state,
-            hasPwd: payload.hasPwd
-        };
+        this.stateManager.handleLiveLaunchPwdState(payload);
     }
 
     handleWiFiList(payload) {
-        if (payload.list) {
-            tools.envLogInfo('Configured networks:');
-            payload.list.forEach((network) => {
-                tools.envLogInfo('- ' + network);
-            });
-        }
-        tools.envLogInfo(`mac address: ${payload.mac}`);
+        this.stateManager.handleWiFiList(payload);
     }
 
     handleOverTheAirUpdate(payload) {
-        this.OTA = payload;
-        tools.envLogInfo(`ota status: ${JSON.stringify(payload)}`);
+        this.stateManager.handleOverTheAirUpdate(payload);
     }
 
     handleTimeZone(payload) {
-        this.timezone = 'GMT' + (payload.tzm > 0 ? '+' : '-') + (payload.tzm / 60) + ':00';
+        this.stateManager.handleTimeZone(payload);
     }
 
     /**
@@ -1547,23 +1297,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleStats(payload) {
-        this.currentStats = {
-            'cleanedArea': payload['area'],
-            'cleanedSeconds': payload['time'],
-            'cleanType': payload['type']
-        };
-        if (payload.hasOwnProperty('avoidCount')) {
-            if (this.avoidedObstacles !== payload['avoidCount']) {
-                tools.envLogNotice('whoops ... there might be something in the way');
-            }
-            this.avoidedObstacles = payload['avoidCount'];
-        }
-        if (payload.hasOwnProperty('aiopen') && Number(payload['aiopen']) === 1) {
-            if (JSON.stringify(this.obstacleTypes) !== JSON.stringify(payload['aitypes'])) {
-                tools.envLogNotice('whoops ... there might be something new blocking my way');
-            }
-            this.obstacleTypes = payload['aitypes'];
-        }
+        this.stateManager.handleStats(payload);
     }
 
     /**
@@ -1571,49 +1305,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleSched(payload) {
-        this.schedule = [];
-        for (let c = 0; c < payload.length; c++) {
-            const resultData = payload[c];
-            if (resultData.repeat !== undefined) {
-                let cleanCtl = {
-                    'type': 'auto'
-                };
-                if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
-                    const json = JSON.parse(resultData.content.jsonStr);
-                    Object.assign(cleanCtl, {
-                        'type': json.type
-                    });
-                    if (cleanCtl.type === 'spotArea') {
-                        Object.assign(cleanCtl, {
-                            'spotAreas': json.content
-                        });
-                    }
-                }
-                const onlyOnce = Number(resultData.repeat) === 0;
-                const weekdays = resultData.repeat.split('');
-                const weekdaysObj = {
-                    'Mon': Boolean(Number(weekdays[1])),
-                    'Tue': Boolean(Number(weekdays[2])),
-                    'Wed': Boolean(Number(weekdays[3])),
-                    'Thu': Boolean(Number(weekdays[4])),
-                    'Fri': Boolean(Number(weekdays[5])),
-                    'Sat': Boolean(Number(weekdays[6])),
-                    'Sun': Boolean(Number(weekdays[0]))
-                };
-                const object = {
-                    'sid': resultData.sid,
-                    'cleanCmd': cleanCtl,
-                    'content': resultData.content,
-                    'enabled': Boolean(Number(resultData.enable)),
-                    'onlyOnce': onlyOnce,
-                    'weekdays': weekdaysObj,
-                    'hour': resultData.hour,
-                    'minute': resultData.minute,
-                    'mapID': resultData.mid
-                };
-                this.schedule.push(object);
-            }
-        }
+        this.stateManager.handleSched(payload);
     }
 
     /**
@@ -1621,13 +1313,9 @@ class VacBot {
      * @param {Object} payload - The payload containing the customized scenario cleaning.
      */
     handleQuickCommand(payload) {
-        this.customizedScenarioCleaning = payload;
+        this.stateManager.handleQuickCommand(payload);
     }
 
-    /**
-     * Handle the payload of the 'CachedMapInfo' response/message
-     * @param {Object} payload
-     */
     handleCachedMapInfo(payload) {
         return this.mapManager.handleCachedMapInfo(payload);
     }
@@ -1673,24 +1361,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleResponseError(payload) {
-        this.errorCode = payload['code'].toString();
-        if (this.errorCode === '') {
-            this.errorCode = '-3';
-        }
-        // known errorCode from library
-        if (errorCodes[this.errorCode]) {
-            this.errorDescription = errorCodes[this.errorCode];
-            // Request error
-            if (this.errorCode === '1') {
-                this.errorDescription = this.errorDescription + ': ' + payload.error;
-            }
-        } else {
-            this.errorDescription = `unknown errorCode: ${this.errorCode}`;
-        }
-        if (this.errorCode !== '0') {
-            tools.envLogWarn(`errorCode: ${this.errorCode}`);
-            tools.envLogWarn(`errorDescription: ${this.errorDescription}`);
-        }
+        this.stateManager.handleResponseError(payload);
     }
 
     /**
@@ -1699,28 +1370,7 @@ class VacBot {
      * @param {object} payload - The air quality data payload.
      */
     handleAirQuality(payload) {
-        if (!payload['pm25']) {
-            // Handle 'onJCYAirQuality' event for Z1 AirQuality Monitor
-            const keys = Object.keys(payload);
-            payload = payload[keys[0]];
-        }
-        this.airQuality = {
-            'particulateMatter25': payload['pm25'],
-            'particulateMatter10': payload['pm10'],
-            'airQualityIndex': payload['aq'],
-            'volatileOrganicCompounds': payload['voc'],
-            'temperature': payload['tem'],
-            'humidity': payload['hum']
-        };
-        // The Z1 AirQuality Monitor also has
-        // another 'voc' (Volatile Organic Compounds) value
-        if (payload['voc_num'] !== undefined) {
-            Object.assign(this.airQuality, {
-                'volatileOrganicCompounds_parts': payload['voc_num']
-            });
-        }
-        // Note: There's also has another pm10 value ('pm_10')
-        // but it seems that there is no additional benefit
+        this.stateManager.handleAirQuality(payload);
     }
 
     /**
@@ -1728,7 +1378,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleMonitorAirState(payload) {
-        this.monitorAirState = payload['on'];
+        this.stateManager.handleMonitorAirState(payload);
     }
 
     /**
@@ -1737,7 +1387,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAngleFollow(payload) {
-        this.angleFollow = payload['on'];
+        this.stateManager.handleAngleFollow(payload);
     }
 
     /**
@@ -1745,7 +1395,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAngleWakeup(payload) {
-        this.angleWakeup = payload['on'];
+        this.stateManager.handleAngleWakeup(payload);
     }
 
     /**
@@ -1754,7 +1404,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleMic(payload) {
-        this.mic = payload['on'];
+        this.stateManager.handleMic(payload);
     }
 
     /**
@@ -1763,7 +1413,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleVoiceSimple(payload) {
-        this.voiceSimple = payload['on'];
+        this.stateManager.handleVoiceSimple(payload);
     }
 
     /**
@@ -1771,7 +1421,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleDrivingWheel(payload) {
-        this.drivingWheel = payload['on'];
+        this.stateManager.handleDrivingWheel(payload);
     }
 
     /**
@@ -1780,7 +1430,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleChildLock(payload) {
-        this.childLock = payload['on'];
+        this.stateManager.handleChildLock(payload);
     }
 
     /**
@@ -1789,7 +1439,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleVoiceAssistantState(payload) {
-        this.voiceAssistantState = payload['enable'];
+        this.stateManager.handleVoiceAssistantState(payload);
     }
 
     /**
@@ -1798,10 +1448,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleHumanoidFollow(payload) {
-        this.humanoidFollow = {
-            'video': payload['video'],
-            'yiko': payload['yiko']
-        };
+        this.stateManager.handleHumanoidFollow(payload);
     }
 
     /**
@@ -1810,7 +1457,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAutonomousClean(payload) {
-        this.autonomousClean = payload['on'];
+        this.stateManager.handleAutonomousClean(payload);
     }
 
     /**
@@ -1819,16 +1466,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAirbotAutoModel(payload) {
-        if (payload['aq'] && payload['aq']['aqStart'] && payload['aq']['aqEnd']) {
-            this.airbotAutoModel = {
-                'enable': payload['enable'],
-                'trigger': payload['trigger'],
-                'aq': {
-                    'aqStart': payload['aq']['aqStart'],
-                    'aqEnd': payload['aq']['aqEnd']
-                }
-            };
-        }
+        this.stateManager.handleAirbotAutoModel(payload);
     }
 
     /**
@@ -1837,11 +1475,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleBlueSpeaker(payload) {
-        this.bluetoothSpeaker = {
-            'enable': payload['enable'],
-            'time': payload['time'],
-            'name': payload['name']
-        };
+        this.stateManager.handleBlueSpeaker(payload);
     }
 
     /**
@@ -1850,7 +1484,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleEfficiency(payload) {
-        this.efficiency = payload['efficiency'];
+        this.stateManager.handleEfficiency(payload);
     }
 
     /**
@@ -1859,7 +1493,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAtmoLight(payload) {
-        this.atmoLightIntensity = payload['intensity'];
+        this.stateManager.handleAtmoLight(payload);
     }
 
     /**
@@ -1868,7 +1502,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAtmoVolume(payload) {
-        this.atmoVolume = payload['volume'];
+        this.stateManager.handleAtmoVolume(payload);
     }
 
     /**
@@ -1877,7 +1511,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleThreeModule(payload) {
-        this.threeModule = payload;
+        this.stateManager.handleThreeModule(payload);
     }
 
     /**
@@ -1886,7 +1520,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleThreeModuleStatus(payload) {
-        this.threeModuleStatus = payload;
+        this.stateManager.handleThreeModuleStatus(payload);
     }
 
     /**
@@ -1894,7 +1528,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAreaPoint(payload) {
-        this.areaPoint = payload;
+        this.stateManager.handleAreaPoint(payload);
     }
 
     /**
@@ -1902,7 +1536,7 @@ class VacBot {
      * @param {Object} payload
      */
     handleAiBlockPlate(payload) {
-        this.aiBlockPlate = payload['on'];
+        this.stateManager.handleAiBlockPlate(payload);
     }
 
     /**
@@ -1910,54 +1544,20 @@ class VacBot {
      * @param {Object} payload
      */
     handleSysinfo(payload) {
-        try {
-            let event = payload[0];
-            this.sysinfo = {
-                'load': event['uptime'].substring(event['uptime'].indexOf('average') + 9),
-                'uptime': event['uptime'].substring(event['uptime'].indexOf('up') + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).indexOf('users')).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).indexOf('users')).lastIndexOf(',')),
-                'signal': event['signal'],
-                'meminfo': event['meminfo'],
-                'pos': event['pos']
-            };
-        } catch (e) {
-            tools.envLogWarn(`error handling System information: ${e.toString()}`);
-        }
+        this.stateManager.handleSysinfo(payload);
     }
 
     handleTask(type, payload) {
-        const stopReason = this.currentTask.stopReason;
-        this.currentTask = {
-            'type': type,
-            'triggerType': payload.hasOwnProperty('triggerType') ? payload['triggerType'] : 'none',
-            'failed': false,
-            'stopReason': stopReason
-        };
-        if (payload.hasOwnProperty('go_fail')) {
-            this.currentTask.failed = true;
-        }
-        if (payload.hasOwnProperty('stopReason')) {
-            this.currentTask.stopReason = payload['stopReason'];
-        }
+        this.stateManager.handleTask(type, payload);
     }
 
     handleDModule(payload) {
-        this.dmodule = payload;
+        this.stateManager.handleDModule(payload);
     }
 
     getCmdForObstacleDetection() {
-        if ((this.getModelType() === 'T8') || (this.getModelType() === 'T9')) {
-            return "Recognization";
-        } else {
-            return "TrueDetect";
-        }
+        return this.stateManager.getCmdForObstacleDetection();
     }
-
-    /**
-     * Run a specific command
-     * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
-     * @param args - zero or more arguments to perform the command
-     */
-
 }
 
 module.exports = VacBot;
