@@ -1,13 +1,13 @@
 'use strict';
 
-const tools = require('./tools');
-const map = require('./mapInfo');
-const mapTools = require('./mapTools');
-const mapTemplate = require('./mapTemplate');
-const dictionary = require('./dictionary');
-const { errorCodes } = require('./errorCodes.json');
-const { eventCodes } = require('./eventCodes.json');
-const constants = require("./constants");
+const tools = require('../tools');
+const map = require('../mapInfo');
+const mapTools = require('../mapTools');
+const mapTemplate = require('../mapTemplate');
+const dictionary = require('../dictionary');
+const { errorCodes } = require('../errorCodes.json');
+const { eventCodes } = require('../eventCodes.json');
+const constants = require("../constants");
 
 /**
  * @class BotState

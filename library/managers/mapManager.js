@@ -1,10 +1,10 @@
 'use strict';
 
-const tools = require('./tools');
-const map = require('./mapInfo');
-const mapTemplate = require('./mapTemplate');
-const dictionary = require('./dictionary');
-const VacBotCommand = require('./command');
+const tools = require('../tools');
+const map = require('../mapInfo');
+const mapTemplate = require('../mapTemplate');
+const dictionary = require('../dictionary');
+const VacBotCommand = require('../command');
 
 /**
  * @class MapManager

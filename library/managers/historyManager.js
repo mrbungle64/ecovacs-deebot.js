@@ -3,8 +3,8 @@
 const crypto = require("crypto");
 const querystring = require("node:querystring");
 const axios = require('axios').default;
-const tools = require('./tools');
-const constants = require("./constants");
+const tools = require('../tools');
+const constants = require("../constants");
 
 /**
  * @class HistoryManager

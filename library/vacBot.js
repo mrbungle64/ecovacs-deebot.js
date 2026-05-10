@@ -2,12 +2,12 @@
 
 const tools = require('./tools');
 const VacBotCommand = require('./command');
-const CommandDispatcher = require('./commandDispatcher');
-const MapManager = require('./mapManager');
-const BotState = require('./botState');
-const CapabilityManager = require('./capabilityManager');
-const HistoryManager = require('./historyManager');
-const MaintenanceManager = require('./maintenanceManager');
+const CommandDispatcher = require('./managers/commandDispatcher');
+const MapManager = require('./managers/mapManager');
+const BotState = require('./managers/botState');
+const CapabilityManager = require('./managers/capabilityManager');
+const HistoryManager = require('./managers/historyManager');
+const MaintenanceManager = require('./managers/maintenanceManager');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
 const { errorCodes } = require('./errorCodes.json');

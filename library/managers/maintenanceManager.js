@@ -1,7 +1,7 @@
 'use strict';
 
-const tools = require('./tools');
-const dictionary = require('./dictionary');
+const tools = require('../tools');
+const dictionary = require('../dictionary');
 
 /**
  * @class MaintenanceManager

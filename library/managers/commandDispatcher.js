@@ -1,8 +1,8 @@
 'use strict';
 
-const VacBotCommand = require('./command');
-const tools = require('./tools');
-const dictionary = require('./dictionary');
+const VacBotCommand = require('../command');
+const tools = require('../tools');
+const dictionary = require('../dictionary');
 
 /**
  * @class CommandDispatcher

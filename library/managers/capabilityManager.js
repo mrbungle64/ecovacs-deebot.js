@@ -1,6 +1,6 @@
 'use strict';
 
-const tools = require('./tools');
+const tools = require('../tools');
 
 /**
  * @class CapabilityManager
