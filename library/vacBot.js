@@ -6,13 +6,11 @@ const CommandDispatcher = require('./commandDispatcher');
 const MapManager = require('./mapManager');
 const BotState = require('./botState');
 const CapabilityManager = require('./capabilityManager');
+const HistoryManager = require('./historyManager');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
 const { errorCodes } = require('./errorCodes.json');
 const constants = require("./constants");
-const crypto = require("crypto");
-const querystring = require("node:querystring");
-const axios = require('axios').default;
 const dictionary = require('./dictionary');
 const mapTools = require('./mapTools');
 const mapTemplate = require('./mapTemplate');
@@ -62,6 +60,8 @@ class VacBot {
 
         this.genericCommand = null;
 
+        this.capabilityManager = new CapabilityManager(this);
+
         if (!this.is950type()) {
             const msg = `'XML' based model identified (unsupported)`;
             tools.envLogError(msg);
@@ -73,10 +73,10 @@ class VacBot {
 
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
-        this.capabilityManager = new CapabilityManager(this);
         this.dispatcher = new CommandDispatcher(this);
         this.mapManager = new MapManager(this);
         this.stateManager = new BotState(this);
+        this.historyManager = new HistoryManager(this);
 
         this.ecovacs.on('ready', () => {
             tools.envLogInfo(`[VacBot] Ready event!`);
@@ -827,104 +827,15 @@ class VacBot {
     }
 
     async callCleanResultsLogsApi() {
-        let portalPath = constants.APP_ECOUSER_API;
-        if (this.country === 'CN') {
-            portalPath = constants.APP_ECOUSER_API;
-        }
-
-        portalPath = tools.formatString(portalPath, { continent: this.continent });
-        if (this.country === 'CN') {
-            portalPath = portalPath.replace('.com', '.cn');
-        }
-        portalPath = portalPath + '/dln/api/log/clean_result/list?';
-
-        let auth = {
-            "realm": constants.REALM,
-            "with": "users",
-            "userid": this.uid,
-            "token": this.user_access_token,
-            "resource": this.resource
-        };
-
-        let ts = Date.now();
-        let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
-
-        let queryParams = {
-            'auth': JSON.stringify(auth),
-            'channel': 'google_play',
-            'did': this.did,
-            'et1': ts,
-            'defaultLang': 'EN',
-            'logType': 'clean',
-            'reqid': '##REQID##',
-            'res': this.res,
-            'size': 20,
-            'version': 'v2'
-        };
-
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + this.user_access_token,
-                'token': this.user_access_token,
-                'appid': 'ecovacs',
-                'plat': 'android',
-                'userid': this.uid,
-                'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
-                'v': '2.3.7',
-                'country': this.country,
-                'sign': sign,
-                'signType': 'sha256'
-            }
-        };
-
-        let searchParams = querystring.encode(queryParams);
-        tools.envLogInfo(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
-        try {
-            const res = await axios.get(portalPath + searchParams, config);
-            return res.data;
-        } catch (err) {
-            tools.envLogInfo(`[EcoVacsAPI] callLogsApi error: ${err}`);
-            throw err;
-        }
+        return await this.historyManager.callCleanResultsLogsApi();
     }
 
     getCryptoHashStringForSecuredContent() {
-        const ts = Date.now();
-        return constants.APP_ID + constants.APP_SK + ts.toString();
+        return this.historyManager.getCryptoHashStringForSecuredContent();
     }
 
     async downloadSecuredContent(url, targetFilename) {
-        let sign = crypto.createHash('sha256').update(this.getCryptoHashStringForSecuredContent()).digest("hex");
-
-        let headers = {
-            'Authorization': 'Bearer ' + this.user_access_token,
-            'token': this.user_access_token,
-            'appid': 'ecovacs',
-            'plat': 'android',
-            'userid': this.uid,
-            'user-agent': 'EcovacsHome/2.3.7 (Linux; U; Android 5.1.1; A5010 Build/LMY48Z)',
-            'v': '2.3.7',
-            'country': this.country,
-            'sign': sign,
-            'signType': 'sha256'
-        };
-
-        try {
-            const res = await axios.get(url, {
-                headers,
-                responseType: 'arraybuffer'
-            });
-            const result = res.data;
-            const fs = require('fs');
-            fs.writeFile(targetFilename, result, err => {
-                if (err) {
-                    tools.envLogInfo(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
-                }
-            });
-        } catch (err) {
-            tools.envLogInfo(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
-            throw err;
-        }
+        return await this.historyManager.downloadSecuredContent(url, targetFilename);
     }
     /**
      * Handle the payload of the `CleanInfo` response/message
