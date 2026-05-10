@@ -408,21 +408,6 @@ class SetSafeProtect extends VacBotCommand {
 }
 
 /**
- * Sets the 'Water Flow Level' and other water related information
- * @extends VacBotCommand
- * TODO: potential duplicate of SetWaterLevel
- */
-class SetWaterInfo extends VacBotCommand {
-    constructor(amount, customAmount, sweepType) {
-        super('setWaterInfo', {
-            'amount': amount,
-            'customAmount': customAmount,
-            'sweepType': sweepType
-        });
-    }
-}
-
-/**
  * Represents a command to trigger a station action
  * @extends VacBotCommand
  * TODO: potential duplicate of EmptyDustBinSA / Drying (info.js)

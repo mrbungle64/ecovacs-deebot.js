@@ -619,7 +619,7 @@ class VacBot {
                 }
                 break;
             }
-            case 'move': {
+            case 'Move': {
                 const command = args[0];
                 if (command !== '') {
                     this.ecovacs.sendCommand(new this.vacBotCommand.Move(command));
@@ -627,7 +627,7 @@ class VacBot {
                 break;
             }
             case 'GetMapInfo':
-            case 'getmapimage': {
+            case 'GetMapImage': {
                 const mapID = args[0].toString(); // mapID has to be a string
                 const mapType = args[1] || 'outline';
                 this.createMapDataObject = true;
@@ -940,6 +940,12 @@ class VacBot {
                 if (args.length >= 1) {
                     const washInterval = Number(args[0]);
                     this.ecovacs.sendCommand(new VacBotCommand.SetWashInterval(washInterval));
+                }
+                break;
+            case 'SetWashInfo':
+                if (args.length >= 1) {
+                    const mode = Number(args[0]);
+                    this.ecovacs.sendCommand(new VacBotCommand.SetWashInfo(mode));
                 }
                 break;
             case 'GetAirDrying':
