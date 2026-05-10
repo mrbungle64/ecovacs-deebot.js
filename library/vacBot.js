@@ -118,10 +118,78 @@ class VacBot {
         this.netInfoWifiSignal = null;
         this.netInfoMAC = null;
 
-        // OnOff
-        this.doNotDisturbEnabled = null;
-        this.continuousCleaningEnabled = null;
-        this.voiceReportDisabled = null;
+        this.firmwareVersion = null;
+        this.timezone = null;
+        this.OTA = null;
+        this.sysinfo = null;
+
+        this.stationState = null;
+        this.stationInfo = null;
+        this.washInterval = null;
+        this.washInfo = null;
+
+        this.advancedMode = null;
+        this.autoEmpty = null;
+        this.autoEmptyStatus = null;
+        this.cleanCount = null;
+        this.cleanPreference = null;
+        this.workMode = null;
+        this.workState = null;
+        this.sweepMode = null;
+        this.mopOnlyMode = null;
+        this.borderSpin = null;
+        this.borderSwitch = null;
+        this.dusterRemind = null;
+        this.carpetPressure = null;
+        this.carpetInfo = null;
+        this.block = null;
+        this.blockTime = null;
+        this.breakPoint = null;
+        this.volume = null;
+        this.voiceSimple = null;
+        this.voiceAssistantState = null;
+
+        this.trueDetect = null;
+        this.avoidedObstacles = 0;
+        this.obstacleTypes = null;
+        this.aiCleanItemState = null;
+
+        this.mapState = null;
+        this.multiMapState = null;
+        this.mapSet_V2 = null;
+        this.liveMapImage = null;
+        this.crossMapBorderWarning = null;
+        this.cutDirection = null;
+        this.moveupWarning = null;
+        this.safeProtect = null;
+
+        this.evt = null;
+        this.currentTask = {
+            'type': 'none',
+            'triggerType': 'none',
+            'failed': false,
+            'stopReason': 'none'
+        };
+        this.liveLaunchPwdState = null;
+
+        this.airQuality = null;
+        this.aiBlockPlate = null;
+        this.airbotAutoModel = null;
+        this.angleFollow = null;
+        this.angleWakeup = null;
+        this.atmoLightIntensity = null;
+        this.atmoVolume = null;
+        this.areaPoint = null;
+        this.autonomousClean = null;
+        this.bluetoothSpeaker = null;
+        this.childLock = null;
+        this.humanoidFollow = null;
+        this.mic = null;
+        this.monitorAirState = null;
+        this.threeModule = null;
+        this.threeModuleStatus = null;
+        this.dmodule = null;
+        this.efficiency = null;
 
         this.commandsSent = [];
         this.mapPiecePacketsSent = [];
@@ -132,13 +200,6 @@ class VacBot {
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
         this.mapImageDataQueue = [];
-
-        this.borderSwitch = null;
-        this.crossMapBorderWarning = null;
-        this.cutDirection = null;
-        this.moveupWarning = null;
-        this.safeProtect = null;
-        this.workState = null;
 
         this.schedule = [];
 
