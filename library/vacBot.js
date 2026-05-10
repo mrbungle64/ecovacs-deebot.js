@@ -19,6 +19,41 @@ const { eventCodes } = require('./eventCodes.json');
 const COMMAND_REGISTRY = require('./commandRegistry');
 
 const HANDLE_LIVE_MAP = false;
+
+const PROXY_MAPPINGS = {
+    maintenanceManager: [
+        'components', 'lastComponentValues', 'emitFullLifeSpanEvent'
+    ],
+    stateManager: [
+        'errorCode', 'errorDescription', 'batteryLevel', 'batteryIsLow', 'cleanReport',
+        'chargeStatus', 'chargeMode', 'cleanSpeed', 'waterLevel', 'waterboxInfo',
+        'moppingType', 'scrubbingType', 'sleepStatus', 'deebotPosition', 'chargePosition',
+        'cleanSum_totalSquareMeters', 'cleanSum_totalSeconds', 'cleanSum_totalNumber',
+        'cleanLog', 'cleanLog_lastImageUrl', 'cleanLog_lastTimestamp', 'cleanLog_lastTotalTime',
+        'cleanLog_lastTotalTimeString', 'cleanLog_lastSquareMeters', 'currentStats',
+        'netInfoIP', 'netInfoWifiSSID', 'netInfoWifiSignal', 'netInfoMAC', 'firmwareVersion',
+        'timezone', 'OTA', 'sysinfo', 'stationState', 'stationInfo', 'washInterval',
+        'washInfo', 'advancedMode', 'autoEmpty', 'autoEmptyStatus', 'cleanCount',
+        'cleanPreference', 'workMode', 'workState', 'sweepMode', 'mopOnlyMode',
+        'borderSpin', 'borderSwitch', 'dusterRemind', 'carpetPressure', 'carpetInfo',
+        'block', 'blockTime', 'breakPoint', 'volume', 'voiceSimple', 'voiceAssistantState',
+        'trueDetect', 'avoidedObstacles', 'obstacleTypes', 'aiCleanItemState',
+        'crossMapBorderWarning', 'cutDirection', 'moveupWarning', 'safeProtect', 'evt',
+        'currentTask', 'liveLaunchPwdState', 'airQuality', 'aiBlockPlate', 'airbotAutoModel',
+        'angleFollow', 'angleWakeup', 'atmoLightIntensity', 'atmoVolume', 'areaPoint',
+        'autonomousClean', 'bluetoothSpeaker', 'childLock', 'humanoidFollow', 'mic',
+        'monitorAirState', 'threeModule', 'threeModuleStatus', 'dmodule', 'efficiency',
+        'schedule'
+    ],
+    mapManager: [
+        'maps', 'mapImages', 'mapVirtualBoundaries', 'mapVirtualBoundariesResponses',
+        'mapSpotAreaInfos', 'mapVirtualBoundaryInfos', 'currentMapName', 'currentMapMID',
+        'currentMapIndex', 'currentCustomAreaValues', 'currentSpotAreas', 'createMapDataObject',
+        'createMapImage', 'createMapImageOnly', 'mapDataObject', 'mapDataObjectQueue',
+        'mapImageDataQueue', 'mapState', 'multiMapState', 'mapSet_V2', 'liveMapImage'
+    ]
+};
+
 /**
  * @class VacBot
  * This class represents the vacuum bot
@@ -1251,40 +1286,6 @@ class VacBot {
         return this.stateManager.getCmdForObstacleDetection();
     }
 }
-
-const PROXY_MAPPINGS = {
-    maintenanceManager: [
-        'components', 'lastComponentValues', 'emitFullLifeSpanEvent'
-    ],
-    stateManager: [
-        'errorCode', 'errorDescription', 'batteryLevel', 'batteryIsLow', 'cleanReport',
-        'chargeStatus', 'chargeMode', 'cleanSpeed', 'waterLevel', 'waterboxInfo',
-        'moppingType', 'scrubbingType', 'sleepStatus', 'deebotPosition', 'chargePosition',
-        'cleanSum_totalSquareMeters', 'cleanSum_totalSeconds', 'cleanSum_totalNumber',
-        'cleanLog', 'cleanLog_lastImageUrl', 'cleanLog_lastTimestamp', 'cleanLog_lastTotalTime',
-        'cleanLog_lastTotalTimeString', 'cleanLog_lastSquareMeters', 'currentStats',
-        'netInfoIP', 'netInfoWifiSSID', 'netInfoWifiSignal', 'netInfoMAC', 'firmwareVersion',
-        'timezone', 'OTA', 'sysinfo', 'stationState', 'stationInfo', 'washInterval',
-        'washInfo', 'advancedMode', 'autoEmpty', 'autoEmptyStatus', 'cleanCount',
-        'cleanPreference', 'workMode', 'workState', 'sweepMode', 'mopOnlyMode',
-        'borderSpin', 'borderSwitch', 'dusterRemind', 'carpetPressure', 'carpetInfo',
-        'block', 'blockTime', 'breakPoint', 'volume', 'voiceSimple', 'voiceAssistantState',
-        'trueDetect', 'avoidedObstacles', 'obstacleTypes', 'aiCleanItemState',
-        'crossMapBorderWarning', 'cutDirection', 'moveupWarning', 'safeProtect', 'evt',
-        'currentTask', 'liveLaunchPwdState', 'airQuality', 'aiBlockPlate', 'airbotAutoModel',
-        'angleFollow', 'angleWakeup', 'atmoLightIntensity', 'atmoVolume', 'areaPoint',
-        'autonomousClean', 'bluetoothSpeaker', 'childLock', 'humanoidFollow', 'mic',
-        'monitorAirState', 'threeModule', 'threeModuleStatus', 'dmodule', 'efficiency',
-        'schedule'
-    ],
-    mapManager: [
-        'maps', 'mapImages', 'mapVirtualBoundaries', 'mapVirtualBoundariesResponses',
-        'mapSpotAreaInfos', 'mapVirtualBoundaryInfos', 'currentMapName', 'currentMapMID',
-        'currentMapIndex', 'currentCustomAreaValues', 'currentSpotAreas', 'createMapDataObject',
-        'createMapImage', 'createMapImageOnly', 'mapDataObject', 'mapDataObjectQueue',
-        'mapImageDataQueue', 'mapState', 'multiMapState', 'mapSet_V2', 'liveMapImage'
-    ]
-};
 
 for (const [manager, props] of Object.entries(PROXY_MAPPINGS)) {
     for (const prop of props) {
