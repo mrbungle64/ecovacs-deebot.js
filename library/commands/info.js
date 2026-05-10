@@ -98,6 +98,7 @@ class GetAutoEmpty extends VacBotCommand {
  * Represents a command to empty the dust bin
  * of the Auto Empty Station
  * @extends VacBotCommand
+ * TODO: potential duplicate of SetAutoEmpty (settings.js)
  */
 class EmptyDustBin extends VacBotCommand {
     constructor() {
@@ -111,6 +112,7 @@ class EmptyDustBin extends VacBotCommand {
  * Empty dust bin (e.g. T20 series)
  * `EmptyDustBinSA` = 'EmptyDustBinStationAction'
  * @extends VacBotCommand
+ * TODO: potential duplicate of StationAction (settings.js)
  */
 class EmptyDustBinSA extends VacBotCommand {
     constructor() {
@@ -379,6 +381,7 @@ class GetSchedule_V2 extends VacBotCommand {
  * Request information about the total stats
  * total square meters ('area'), total seconds ('time'), total number ('count')
  * @extends VacBotCommand
+ * TODO: potential duplicate of GetCleanSum (clean.js)
  */
 class GetTotalStats extends VacBotCommand {
     constructor() {

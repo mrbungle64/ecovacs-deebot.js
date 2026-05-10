@@ -5,6 +5,10 @@ const constants = require('../constants');
 const constants_type = require('../dictionary');
 const { VacBotCommand } = require('./base');
 
+/**
+ * @extends VacBotCommand
+ * TODO: potential duplicate of Clean_V2 (clean.js)
+ */
 class BasicPurification extends VacBotCommand {
     constructor() {
         super('clean_V2', {
@@ -16,6 +20,10 @@ class BasicPurification extends VacBotCommand {
     }
 }
 
+/**
+ * @extends VacBotCommand
+ * TODO: potential duplicate of Clean_V2 (clean.js)
+ */
 class MobilePurification extends VacBotCommand {
     constructor() {
         super('clean_V2', {

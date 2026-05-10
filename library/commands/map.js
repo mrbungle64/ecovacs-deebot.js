@@ -366,6 +366,7 @@ class SetMajorMap extends VacBotCommand {
 /**
  * Represents a command to set the relocation state
  * @extends VacBotCommand
+ * TODO: potential duplicate of Relocate
  */
 class SetRelocationState extends VacBotCommand {
     constructor() {

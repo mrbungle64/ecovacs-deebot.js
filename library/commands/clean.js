@@ -290,6 +290,7 @@ class SetCustomAreaMode extends VacBotCommand {
 /**
  * Request various information about the current/last cleaning
  * @extends VacBotCommand
+ * TODO: potential duplicate of GetTotalStats (info.js)
  */
 class GetCleanSum extends VacBotCommand {
     constructor() {
