@@ -281,6 +281,16 @@ class GetBorderSpin extends VacBotCommand {
 }
 
 /**
+ * Requests the value whether the 'Border Switch' is enabled
+ * @extends VacBotCommand
+ */
+class GetBorderSwitch extends VacBotCommand {
+    constructor() {
+        super('getBorderSwitch');
+    }
+}
+
+/**
  * Requests information about the Firmware
  * and 'Over The Air' updates (e.g. X1 series, Airbot Z1)
  * (e.g. version, status, progress)
@@ -333,6 +343,16 @@ class GetWorkMode extends VacBotCommand {
 }
 
 /**
+ * Request information about the work status
+ * @extends VacBotCommand
+ */
+class GetWorkState extends VacBotCommand {
+    constructor() {
+        super('getWorkState');
+    }
+}
+
+/**
  * Request information about the 'Scheduled Cleaning' tasks
  * @extends VacBotCommand
  */
@@ -363,6 +383,16 @@ class GetSchedule_V2 extends VacBotCommand {
 class GetTotalStats extends VacBotCommand {
     constructor() {
         super('getTotalStats');
+    }
+}
+
+/**
+ * Request information about the stats
+ * @extends VacBotCommand
+ */
+class GetStats extends VacBotCommand {
+    constructor() {
+        super('getStats');
     }
 }
 
@@ -591,6 +621,66 @@ class GetVoiceSimple extends VacBotCommand {
 }
 
 /**
+ * Request information if the 'Cross Map Border Warning' is enabled
+ * @extends VacBotCommand
+ */
+class GetCrossMapBorderWarning extends VacBotCommand {
+    constructor() {
+        super('getCrossMapBorderWarning');
+    }
+}
+
+/**
+ * Request information about the 'Cut Direction'
+ * @extends VacBotCommand
+ */
+class GetCutDirection extends VacBotCommand {
+    constructor() {
+        super('getCutDirection');
+    }
+}
+
+/**
+ * Request information about the 'Fan Speed'
+ * @extends VacBotCommand
+ */
+class GetFanSpeed extends VacBotCommand {
+    constructor() {
+        super('getSpeed');
+    }
+}
+
+/**
+ * Request information if the 'Move Up Warning' is enabled
+ * @extends VacBotCommand
+ */
+class GetMoveUpWarning extends VacBotCommand {
+    constructor() {
+        super('getMoveupWarning');
+    }
+}
+
+/**
+ * Requests information about the connected network and Wi-Fi (Legacy)
+ * @extends VacBotCommand
+ */
+class GetNetInfoLegacy extends VacBotCommand {
+    constructor() {
+        super('GetNetInfo');
+    }
+}
+
+/**
+ * Request information if the 'Safe Protect' option is enabled
+ * @extends VacBotCommand
+ */
+class GetSafeProtect extends VacBotCommand {
+    constructor() {
+        super('getSafeProtect');
+    }
+}
+
+/**
  * Request an array of cleaning log information
  * The `count` attribute seems to have no affect,
  * but it has to be set anyway
@@ -632,14 +722,17 @@ module.exports = {
     Drying,
     GetDryingDuration,
     GetBorderSpin,
+    GetBorderSwitch,
     GetOta,
     GetRelocationState,
     GetSweepMode,
     GetVoiceAssistantState,
     GetWorkMode,
+    GetWorkState,
     GetSchedule,
     GetSchedule_V2,
     GetTotalStats,
+    GetStats,
     GetQuickCommand,
     GetWifiList,
     GetJCYAirQuality,
@@ -661,5 +754,11 @@ module.exports = {
     GetTimeZone,
     GetVoiceLifeRemindState,
     GetVoiceSimple,
+    GetCrossMapBorderWarning,
+    GetCutDirection,
+    GetFanSpeed,
+    GetMoveUpWarning,
+    GetNetInfoLegacy,
+    GetSafeProtect,
     GetCleanLogs,
 };

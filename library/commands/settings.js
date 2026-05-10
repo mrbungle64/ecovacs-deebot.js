@@ -58,6 +58,20 @@ class SetWaterLevel extends VacBotCommand {
 }
 
 /**
+ * Sets the 'Water Flow Level' and other water related information
+ * @extends VacBotCommand
+ */
+class SetWaterInfo extends VacBotCommand {
+    constructor(amount, customAmount, sweepType) {
+        super('setWaterInfo', {
+            'amount': amount,
+            'customAmount': customAmount,
+            'sweepType': sweepType
+        });
+    }
+}
+
+/**
  * Sends a 'PlaySound' command with a sid
  * You can find a (incomplete) list here:
  * https://github.com/mrbungle64/ecovacs-deebot.js/wiki/playSound
@@ -255,6 +269,18 @@ class SetBorderSpin extends VacBotCommand {
 }
 
 /**
+ * Sets the value whether the 'Border Switch' is enabled
+ * @extends VacBotCommand
+ */
+class SetBorderSwitch extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setBorderSwitch', {
+            'enable': enable
+        });
+    }
+}
+
+/**
  * Sets the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
  * @extends VacBotCommand
  */
@@ -290,6 +316,117 @@ class SetWorkMode extends VacBotCommand {
     constructor(mode = 0) {
         super('setWorkMode', {
             'mode': mode
+        });
+    }
+}
+
+/**
+ * Sets the value whether the 'Cross Map Border Warning' is enabled
+ * @extends VacBotCommand
+ */
+class SetCrossMapBorderWarning extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setCrossMapBorderWarning', {
+            'enable': enable
+        });
+    }
+}
+
+/**
+ * Sets the 'Cut Direction'
+ * @extends VacBotCommand
+ */
+class SetCutDirection extends VacBotCommand {
+    constructor(angle) {
+        super('setCutDirection', {
+            'angle': angle
+        });
+    }
+}
+
+/**
+ * Sets the 'Efficiency Mode'
+ * @extends VacBotCommand
+ */
+class SetEfficiencyMode extends VacBotCommand {
+    constructor(efficiency) {
+        super('setEfficiency', {
+            'efficiency': efficiency
+        });
+    }
+}
+
+/**
+ * Sets the value whether the 'Move Up Warning' is enabled
+ * @extends VacBotCommand
+ */
+class SetMoveUpWarning extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setMoveupWarning', {
+            'enable': enable
+        });
+    }
+}
+
+/**
+ * Sets the value whether the 'Multi-map' state is enabled
+ * @extends VacBotCommand
+ */
+class SetMultimapState extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setMultiMapState', {
+            'enable': enable
+        });
+    }
+}
+
+/**
+ * Sets the value for 'Over The Air' updates
+ * @extends VacBotCommand
+ */
+class SetOta extends VacBotCommand {
+    constructor(autoSwitch = 0) {
+        super('setOta', {
+            'autoSwitch': autoSwitch
+        });
+    }
+}
+
+/**
+ * Sets the value whether the 'Safe Protect' option is enabled
+ * @extends VacBotCommand
+ */
+class SetSafeProtect extends VacBotCommand {
+    constructor(enable = 0) {
+        super('setSafeProtect', {
+            'enable': enable
+        });
+    }
+}
+
+/**
+ * Sets the 'Water Flow Level' and other water related information
+ * @extends VacBotCommand
+ */
+class SetWaterInfo extends VacBotCommand {
+    constructor(amount, customAmount, sweepType) {
+        super('setWaterInfo', {
+            'amount': amount,
+            'customAmount': customAmount,
+            'sweepType': sweepType
+        });
+    }
+}
+
+/**
+ * Represents a command to trigger a station action
+ * @extends VacBotCommand
+ */
+class StationAction extends VacBotCommand {
+    constructor(action, act = 1) {
+        super('stationAction', {
+            'act': act,
+            'type': action
         });
     }
 }
@@ -510,9 +647,19 @@ module.exports = {
     SetAirDrying,
     SetDryingDuration,
     SetBorderSpin,
+    SetBorderSwitch,
     SetSweepMode,
     SetVoiceAssistantState,
     SetWorkMode,
+    SetCrossMapBorderWarning,
+    SetCutDirection,
+    SetEfficiencyMode,
+    SetMoveUpWarning,
+    SetMultimapState,
+    SetOta,
+    SetSafeProtect,
+    SetWaterInfo,
+    StationAction,
     SetVoice,
     SetAirbotAutoModel,
     SetAngleFollow,

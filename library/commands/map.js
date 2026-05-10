@@ -177,6 +177,18 @@ class GetMapSet_V2 extends VacBotCommand {
 }
 
 /**
+ * Represents a command to clear a map
+ * @extends VacBotCommand
+ */
+class ClearMap extends VacBotCommand {
+    constructor() {
+        super('clearMap', {
+            'type': 'all'
+        });
+    }
+}
+
+/**
  * Represents a command to merge rooms
  * Not yet used and not yet tested
  * @extends VacBotCommand
@@ -218,11 +230,12 @@ class GetMapVirtualBoundaries_V2 extends GetMapSet_V2 {
  * @extends VacBotCommand
  */
 class GetMapSubSet extends VacBotCommand {
-    constructor(mapID, mapSubSetID, type = 'ar') {
+    constructor(mapID, mapSubSetID, type = 'ar', msid = null) {
         super('getMapSubSet', {
             'mid': mapID,
             'mssid': mapSubSetID,
-            'type': type
+            'type': type,
+            'msid': msid
         });
     }
 }
@@ -339,6 +352,30 @@ class SetMapSet_V2 extends VacBotCommand {
 }
 
 /**
+ * Represents a command to set the major map
+ * @extends VacBotCommand
+ */
+class SetMajorMap extends VacBotCommand {
+    constructor(mapID) {
+        super('setMajorMap', {
+            'mid': mapID
+        });
+    }
+}
+
+/**
+ * Represents a command to set the relocation state
+ * @extends VacBotCommand
+ */
+class SetRelocationState extends VacBotCommand {
+    constructor() {
+        super('setRelocationState', {
+            'mode': 'manu'
+        });
+    }
+}
+
+/**
  * Represents a command to get the map trace
  * TODO: Implement handling of the response
  * @extends VacBotCommand
@@ -364,6 +401,7 @@ module.exports = {
     SetCachedMapInfo,
     GetMapSet,
     GetMapSet_V2,
+    ClearMap,
     SetMapSet,
     GetMapVirtualBoundaries,
     GetMapVirtualBoundaries_V2,
@@ -377,5 +415,7 @@ module.exports = {
     GetMultiMapState,
     GetAIMap,
     SetMapSet_V2,
+    SetMajorMap,
+    SetRelocationState,
     GetMapTrace_V2,
 };
