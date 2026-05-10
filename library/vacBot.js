@@ -83,234 +83,6 @@ class VacBot {
         });
     }
 
-    get components() { return this.maintenanceManager.components; }
-    get lastComponentValues() { return this.maintenanceManager.lastComponentValues; }
-    get emitFullLifeSpanEvent() { return this.maintenanceManager.emitFullLifeSpanEvent; }
-
-    set components(val) { this.maintenanceManager.components = val; }
-    set lastComponentValues(val) { this.maintenanceManager.lastComponentValues = val; }
-    set emitFullLifeSpanEvent(val) { this.maintenanceManager.emitFullLifeSpanEvent = val; }
-
-    get errorCode() { return this.stateManager.errorCode; }
-    get errorDescription() { return this.stateManager.errorDescription; }
-    get batteryLevel() { return this.stateManager.batteryLevel; }
-    get batteryIsLow() { return this.stateManager.batteryIsLow; }
-    get cleanReport() { return this.stateManager.cleanReport; }
-    get chargeStatus() { return this.stateManager.chargeStatus; }
-    get chargeMode() { return this.stateManager.chargeMode; }
-    get cleanSpeed() { return this.stateManager.cleanSpeed; }
-    get waterLevel() { return this.stateManager.waterLevel; }
-    get waterboxInfo() { return this.stateManager.waterboxInfo; }
-    get moppingType() { return this.stateManager.moppingType; }
-    get scrubbingType() { return this.stateManager.scrubbingType; }
-    get sleepStatus() { return this.stateManager.sleepStatus; }
-    get deebotPosition() { return this.stateManager.deebotPosition; }
-    get chargePosition() { return this.stateManager.chargePosition; }
-    get cleanSum_totalSquareMeters() { return this.stateManager.cleanSum_totalSquareMeters; }
-    get cleanSum_totalSeconds() { return this.stateManager.cleanSum_totalSeconds; }
-    get cleanSum_totalNumber() { return this.stateManager.cleanSum_totalNumber; }
-    get cleanLog() { return this.stateManager.cleanLog; }
-    get cleanLog_lastImageUrl() { return this.stateManager.cleanLog_lastImageUrl; }
-    get cleanLog_lastTimestamp() { return this.stateManager.cleanLog_lastTimestamp; }
-    get cleanLog_lastTotalTime() { return this.stateManager.cleanLog_lastTotalTime; }
-    get cleanLog_lastTotalTimeString() { return this.stateManager.cleanLog_lastTotalTimeString; }
-    get cleanLog_lastSquareMeters() { return this.stateManager.cleanLog_lastSquareMeters; }
-    get currentStats() { return this.stateManager.currentStats; }
-    get netInfoIP() { return this.stateManager.netInfoIP; }
-    get netInfoWifiSSID() { return this.stateManager.netInfoWifiSSID; }
-    get netInfoWifiSignal() { return this.stateManager.netInfoWifiSignal; }
-    get netInfoMAC() { return this.stateManager.netInfoMAC; }
-    get firmwareVersion() { return this.stateManager.firmwareVersion; }
-    get timezone() { return this.stateManager.timezone; }
-    get OTA() { return this.stateManager.OTA; }
-    get sysinfo() { return this.stateManager.sysinfo; }
-    get stationState() { return this.stateManager.stationState; }
-    get stationInfo() { return this.stateManager.stationInfo; }
-    get washInterval() { return this.stateManager.washInterval; }
-    get washInfo() { return this.stateManager.washInfo; }
-    get advancedMode() { return this.stateManager.advancedMode; }
-    get autoEmpty() { return this.stateManager.autoEmpty; }
-    get autoEmptyStatus() { return this.stateManager.autoEmptyStatus; }
-    get cleanCount() { return this.stateManager.cleanCount; }
-    get cleanPreference() { return this.stateManager.cleanPreference; }
-    get workMode() { return this.stateManager.workMode; }
-    get workState() { return this.stateManager.workState; }
-    get sweepMode() { return this.stateManager.sweepMode; }
-    get mopOnlyMode() { return this.stateManager.mopOnlyMode; }
-    get borderSpin() { return this.stateManager.borderSpin; }
-    get borderSwitch() { return this.stateManager.borderSwitch; }
-    get dusterRemind() { return this.stateManager.dusterRemind; }
-    get carpetPressure() { return this.stateManager.carpetPressure; }
-    get carpetInfo() { return this.stateManager.carpetInfo; }
-    get block() { return this.stateManager.block; }
-    get blockTime() { return this.stateManager.blockTime; }
-    get breakPoint() { return this.stateManager.breakPoint; }
-    get volume() { return this.stateManager.volume; }
-    get voiceSimple() { return this.stateManager.voiceSimple; }
-    get voiceAssistantState() { return this.stateManager.voiceAssistantState; }
-    get trueDetect() { return this.stateManager.trueDetect; }
-    get avoidedObstacles() { return this.stateManager.avoidedObstacles; }
-    get obstacleTypes() { return this.stateManager.obstacleTypes; }
-    get aiCleanItemState() { return this.stateManager.aiCleanItemState; }
-    get crossMapBorderWarning() { return this.stateManager.crossMapBorderWarning; }
-    get cutDirection() { return this.stateManager.cutDirection; }
-    get moveupWarning() { return this.stateManager.moveupWarning; }
-    get safeProtect() { return this.stateManager.safeProtect; }
-    get evt() { return this.stateManager.evt; }
-    get currentTask() { return this.stateManager.currentTask; }
-    get liveLaunchPwdState() { return this.stateManager.liveLaunchPwdState; }
-    get airQuality() { return this.stateManager.airQuality; }
-    get aiBlockPlate() { return this.stateManager.aiBlockPlate; }
-    get airbotAutoModel() { return this.stateManager.airbotAutoModel; }
-    get angleFollow() { return this.stateManager.angleFollow; }
-    get angleWakeup() { return this.stateManager.angleWakeup; }
-    get atmoLightIntensity() { return this.stateManager.atmoLightIntensity; }
-    get atmoVolume() { return this.stateManager.atmoVolume; }
-    get areaPoint() { return this.stateManager.areaPoint; }
-    get autonomousClean() { return this.stateManager.autonomousClean; }
-    get bluetoothSpeaker() { return this.stateManager.bluetoothSpeaker; }
-    get childLock() { return this.stateManager.childLock; }
-    get humanoidFollow() { return this.stateManager.humanoidFollow; }
-    get mic() { return this.stateManager.mic; }
-    get monitorAirState() { return this.stateManager.monitorAirState; }
-    get threeModule() { return this.stateManager.threeModule; }
-    get threeModuleStatus() { return this.stateManager.threeModuleStatus; }
-    get dmodule() { return this.stateManager.dmodule; }
-    get efficiency() { return this.stateManager.efficiency; }
-    get schedule() { return this.stateManager.schedule; }
-
-    set errorCode(val) { this.stateManager.errorCode = val; }
-    set errorDescription(val) { this.stateManager.errorDescription = val; }
-    set batteryLevel(val) { this.stateManager.batteryLevel = val; }
-    set batteryIsLow(val) { this.stateManager.batteryIsLow = val; }
-    set cleanReport(val) { this.stateManager.cleanReport = val; }
-    set chargeStatus(val) { this.stateManager.chargeStatus = val; }
-    set chargeMode(val) { this.stateManager.chargeMode = val; }
-    set cleanSpeed(val) { this.stateManager.cleanSpeed = val; }
-    set waterLevel(val) { this.stateManager.waterLevel = val; }
-    set waterboxInfo(val) { this.stateManager.waterboxInfo = val; }
-    set moppingType(val) { this.stateManager.moppingType = val; }
-    set scrubbingType(val) { this.stateManager.scrubbingType = val; }
-    set sleepStatus(val) { this.stateManager.sleepStatus = val; }
-    set deebotPosition(val) { this.stateManager.deebotPosition = val; }
-    set chargePosition(val) { this.stateManager.chargePosition = val; }
-    set cleanSum_totalSquareMeters(val) { this.stateManager.cleanSum_totalSquareMeters = val; }
-    set cleanSum_totalSeconds(val) { this.stateManager.cleanSum_totalSeconds = val; }
-    set cleanSum_totalNumber(val) { this.stateManager.cleanSum_totalNumber = val; }
-    set cleanLog(val) { this.stateManager.cleanLog = val; }
-    set cleanLog_lastImageUrl(val) { this.stateManager.cleanLog_lastImageUrl = val; }
-    set cleanLog_lastTimestamp(val) { this.stateManager.cleanLog_lastTimestamp = val; }
-    set cleanLog_lastTotalTime(val) { this.stateManager.cleanLog_lastTotalTime = val; }
-    set cleanLog_lastTotalTimeString(val) { this.stateManager.cleanLog_lastTotalTimeString = val; }
-    set cleanLog_lastSquareMeters(val) { this.stateManager.cleanLog_lastSquareMeters = val; }
-    set currentStats(val) { this.stateManager.currentStats = val; }
-    set netInfoIP(val) { this.stateManager.netInfoIP = val; }
-    set netInfoWifiSSID(val) { this.stateManager.netInfoWifiSSID = val; }
-    set netInfoWifiSignal(val) { this.stateManager.netInfoWifiSignal = val; }
-    set netInfoMAC(val) { this.stateManager.netInfoMAC = val; }
-    set firmwareVersion(val) { this.stateManager.firmwareVersion = val; }
-    set timezone(val) { this.stateManager.timezone = val; }
-    set OTA(val) { this.stateManager.OTA = val; }
-    set sysinfo(val) { this.stateManager.sysinfo = val; }
-    set stationState(val) { this.stateManager.stationState = val; }
-    set stationInfo(val) { this.stateManager.stationInfo = val; }
-    set washInterval(val) { this.stateManager.washInterval = val; }
-    set washInfo(val) { this.stateManager.washInfo = val; }
-    set advancedMode(val) { this.stateManager.advancedMode = val; }
-    set autoEmpty(val) { this.stateManager.autoEmpty = val; }
-    set autoEmptyStatus(val) { this.stateManager.autoEmptyStatus = val; }
-    set cleanCount(val) { this.stateManager.cleanCount = val; }
-    set cleanPreference(val) { this.stateManager.cleanPreference = val; }
-    set workMode(val) { this.stateManager.workMode = val; }
-    set workState(val) { this.stateManager.workState = val; }
-    set sweepMode(val) { this.stateManager.sweepMode = val; }
-    set mopOnlyMode(val) { this.stateManager.mopOnlyMode = val; }
-    set borderSpin(val) { this.stateManager.borderSpin = val; }
-    set borderSwitch(val) { this.stateManager.borderSwitch = val; }
-    set dusterRemind(val) { this.stateManager.dusterRemind = val; }
-    set carpetPressure(val) { this.stateManager.carpetPressure = val; }
-    set carpetInfo(val) { this.stateManager.carpetInfo = val; }
-    set block(val) { this.stateManager.block = val; }
-    set blockTime(val) { this.stateManager.blockTime = val; }
-    set breakPoint(val) { this.stateManager.breakPoint = val; }
-    set volume(val) { this.stateManager.volume = val; }
-    set voiceSimple(val) { this.stateManager.voiceSimple = val; }
-    set voiceAssistantState(val) { this.stateManager.voiceAssistantState = val; }
-    set trueDetect(val) { this.stateManager.trueDetect = val; }
-    set avoidedObstacles(val) { this.stateManager.avoidedObstacles = val; }
-    set obstacleTypes(val) { this.stateManager.obstacleTypes = val; }
-    set aiCleanItemState(val) { this.stateManager.aiCleanItemState = val; }
-    set crossMapBorderWarning(val) { this.stateManager.crossMapBorderWarning = val; }
-    set cutDirection(val) { this.stateManager.cutDirection = val; }
-    set moveupWarning(val) { this.stateManager.moveupWarning = val; }
-    set safeProtect(val) { this.stateManager.safeProtect = val; }
-    set evt(val) { this.stateManager.evt = val; }
-    set currentTask(val) { this.stateManager.currentTask = val; }
-    set liveLaunchPwdState(val) { this.stateManager.liveLaunchPwdState = val; }
-    set airQuality(val) { this.stateManager.airQuality = val; }
-    set aiBlockPlate(val) { this.stateManager.aiBlockPlate = val; }
-    set airbotAutoModel(val) { this.stateManager.airbotAutoModel = val; }
-    set angleFollow(val) { this.stateManager.angleFollow = val; }
-    set angleWakeup(val) { this.stateManager.angleWakeup = val; }
-    set atmoLightIntensity(val) { this.stateManager.atmoLightIntensity = val; }
-    set atmoVolume(val) { this.stateManager.atmoVolume = val; }
-    set areaPoint(val) { this.stateManager.areaPoint = val; }
-    set autonomousClean(val) { this.stateManager.autonomousClean = val; }
-    set bluetoothSpeaker(val) { this.stateManager.bluetoothSpeaker = val; }
-    set childLock(val) { this.stateManager.childLock = val; }
-    set humanoidFollow(val) { this.stateManager.humanoidFollow = val; }
-    set mic(val) { this.stateManager.mic = val; }
-    set monitorAirState(val) { this.stateManager.monitorAirState = val; }
-    set threeModule(val) { this.stateManager.threeModule = val; }
-    set threeModuleStatus(val) { this.stateManager.threeModuleStatus = val; }
-    set dmodule(val) { this.stateManager.dmodule = val; }
-    set efficiency(val) { this.stateManager.efficiency = val; }
-    set schedule(val) { this.stateManager.schedule = val; }
-
-    get maps() { return this.mapManager.maps; }
-    get mapImages() { return this.mapManager.mapImages; }
-    get mapVirtualBoundaries() { return this.mapManager.mapVirtualBoundaries; }
-    get mapVirtualBoundariesResponses() { return this.mapManager.mapVirtualBoundariesResponses; }
-    get mapSpotAreaInfos() { return this.mapManager.mapSpotAreaInfos; }
-    get mapVirtualBoundaryInfos() { return this.mapManager.mapVirtualBoundaryInfos; }
-    get currentMapName() { return this.mapManager.currentMapName; }
-    get currentMapMID() { return this.mapManager.currentMapMID; }
-    get currentMapIndex() { return this.mapManager.currentMapIndex; }
-    get currentCustomAreaValues() { return this.mapManager.currentCustomAreaValues; }
-    get currentSpotAreas() { return this.mapManager.currentSpotAreas; }
-    get createMapDataObject() { return this.mapManager.createMapDataObject; }
-    get createMapImage() { return this.mapManager.createMapImage; }
-    get createMapImageOnly() { return this.mapManager.createMapImageOnly; }
-    get mapDataObject() { return this.mapManager.mapDataObject; }
-    get mapDataObjectQueue() { return this.mapManager.mapDataObjectQueue; }
-    get mapImageDataQueue() { return this.mapManager.mapImageDataQueue; }
-    get mapState() { return this.mapManager.mapState; }
-    get multiMapState() { return this.mapManager.multiMapState; }
-    get mapSet_V2() { return this.mapManager.mapSet_V2; }
-    get liveMapImage() { return this.mapManager.liveMapImage; }
-
-    set maps(val) { this.mapManager.maps = val; }
-    set mapImages(val) { this.mapManager.mapImages = val; }
-    set mapVirtualBoundaries(val) { this.mapManager.mapVirtualBoundaries = val; }
-    set mapVirtualBoundariesResponses(val) { this.mapManager.mapVirtualBoundariesResponses = val; }
-    set mapSpotAreaInfos(val) { this.mapManager.mapSpotAreaInfos = val; }
-    set mapVirtualBoundaryInfos(val) { this.mapManager.mapVirtualBoundaryInfos = val; }
-    set currentMapName(val) { this.mapManager.currentMapName = val; }
-    set currentMapMID(val) { this.mapManager.currentMapMID = val; }
-    set currentMapIndex(val) { this.mapManager.currentMapIndex = val; }
-    set currentCustomAreaValues(val) { this.mapManager.currentCustomAreaValues = val; }
-    set currentSpotAreas(val) { this.mapManager.currentSpotAreas = val; }
-    set createMapDataObject(val) { this.mapManager.createMapDataObject = val; }
-    set createMapImage(val) { this.mapManager.createMapImage = val; }
-    set createMapImageOnly(val) { this.mapManager.createMapImageOnly = val; }
-    set mapDataObject(val) { this.mapManager.mapDataObject = val; }
-    set mapDataObjectQueue(val) { this.mapManager.mapDataObjectQueue = val; }
-    set mapImageDataQueue(val) { this.mapManager.mapImageDataQueue = val; }
-    set mapState(val) { this.mapManager.mapState = val; }
-    set multiMapState(val) { this.mapManager.multiMapState = val; }
-    set mapSet_V2(val) { this.mapManager.mapSet_V2 = val; }
-    set liveMapImage(val) { this.mapManager.liveMapImage = val; }
-
     /**
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
@@ -1477,6 +1249,57 @@ class VacBot {
 
     getCmdForObstacleDetection() {
         return this.stateManager.getCmdForObstacleDetection();
+    }
+}
+
+const PROXY_MAPPINGS = {
+    maintenanceManager: [
+        'components', 'lastComponentValues', 'emitFullLifeSpanEvent'
+    ],
+    stateManager: [
+        'errorCode', 'errorDescription', 'batteryLevel', 'batteryIsLow', 'cleanReport',
+        'chargeStatus', 'chargeMode', 'cleanSpeed', 'waterLevel', 'waterboxInfo',
+        'moppingType', 'scrubbingType', 'sleepStatus', 'deebotPosition', 'chargePosition',
+        'cleanSum_totalSquareMeters', 'cleanSum_totalSeconds', 'cleanSum_totalNumber',
+        'cleanLog', 'cleanLog_lastImageUrl', 'cleanLog_lastTimestamp', 'cleanLog_lastTotalTime',
+        'cleanLog_lastTotalTimeString', 'cleanLog_lastSquareMeters', 'currentStats',
+        'netInfoIP', 'netInfoWifiSSID', 'netInfoWifiSignal', 'netInfoMAC', 'firmwareVersion',
+        'timezone', 'OTA', 'sysinfo', 'stationState', 'stationInfo', 'washInterval',
+        'washInfo', 'advancedMode', 'autoEmpty', 'autoEmptyStatus', 'cleanCount',
+        'cleanPreference', 'workMode', 'workState', 'sweepMode', 'mopOnlyMode',
+        'borderSpin', 'borderSwitch', 'dusterRemind', 'carpetPressure', 'carpetInfo',
+        'block', 'blockTime', 'breakPoint', 'volume', 'voiceSimple', 'voiceAssistantState',
+        'trueDetect', 'avoidedObstacles', 'obstacleTypes', 'aiCleanItemState',
+        'crossMapBorderWarning', 'cutDirection', 'moveupWarning', 'safeProtect', 'evt',
+        'currentTask', 'liveLaunchPwdState', 'airQuality', 'aiBlockPlate', 'airbotAutoModel',
+        'angleFollow', 'angleWakeup', 'atmoLightIntensity', 'atmoVolume', 'areaPoint',
+        'autonomousClean', 'bluetoothSpeaker', 'childLock', 'humanoidFollow', 'mic',
+        'monitorAirState', 'threeModule', 'threeModuleStatus', 'dmodule', 'efficiency',
+        'schedule'
+    ],
+    mapManager: [
+        'maps', 'mapImages', 'mapVirtualBoundaries', 'mapVirtualBoundariesResponses',
+        'mapSpotAreaInfos', 'mapVirtualBoundaryInfos', 'currentMapName', 'currentMapMID',
+        'currentMapIndex', 'currentCustomAreaValues', 'currentSpotAreas', 'createMapDataObject',
+        'createMapImage', 'createMapImageOnly', 'mapDataObject', 'mapDataObjectQueue',
+        'mapImageDataQueue', 'mapState', 'multiMapState', 'mapSet_V2', 'liveMapImage'
+    ]
+};
+
+for (const [manager, props] of Object.entries(PROXY_MAPPINGS)) {
+    for (const prop of props) {
+        Object.defineProperty(VacBot.prototype, prop, {
+            get() {
+                return this[manager] ? this[manager][prop] : undefined;
+            },
+            set(val) {
+                if (this[manager]) {
+                    this[manager][prop] = val;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
     }
 }
 
