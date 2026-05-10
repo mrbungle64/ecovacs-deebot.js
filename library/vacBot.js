@@ -5,6 +5,7 @@ const VacBotCommand = require('./command');
 const CommandDispatcher = require('./commandDispatcher');
 const MapManager = require('./mapManager');
 const BotState = require('./botState');
+const CapabilityManager = require('./capabilityManager');
 const i18n = require('./i18n');
 const map = require('./mapInfo');
 const { errorCodes } = require('./errorCodes.json');
@@ -72,6 +73,7 @@ class VacBot {
 
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
 
+        this.capabilityManager = new CapabilityManager(this);
         this.dispatcher = new CommandDispatcher(this);
         this.mapManager = new MapManager(this);
         this.stateManager = new BotState(this);
@@ -558,47 +560,47 @@ class VacBot {
      * @returns {String}
      */
     getModelType() {
-        return tools.getModelType(this.deviceClass);
+        return this.capabilityManager.getModelType();
     }
 
     isModelTypeN8() {
-        return this.getModelType() === 'N8';
+        return this.capabilityManager.isModelTypeN8();
     }
 
     isModelTypeT8() {
-        return this.getModelType() === 'T8';
+        return this.capabilityManager.isModelTypeT8();
     }
 
     isModelTypeT9() {
-        return this.getModelType() === 'T9';
+        return this.capabilityManager.isModelTypeT9();
     }
 
     isModelTypeT10() {
-        return this.getModelType() === 'T10';
+        return this.capabilityManager.isModelTypeT10();
     }
 
     isModelTypeT20() {
-        return this.getModelType() === 'T20';
+        return this.capabilityManager.isModelTypeT20();
     }
 
     isModelTypeX1() {
-        return this.getModelType() === 'X1';
+        return this.capabilityManager.isModelTypeX1();
     }
 
     isModelTypeX2() {
-        return this.getModelType() === 'X2';
+        return this.capabilityManager.isModelTypeX2();
     }
 
     isModelTypeAirbot() {
-        return this.getModelType() === 'airbot';
+        return this.capabilityManager.isModelTypeAirbot();
     }
 
     isModelTypeT8Based() {
-        return this.isModelTypeT8() || this.isModelTypeN8();
+        return this.capabilityManager.isModelTypeT8Based();
     }
 
     isModelTypeT9Based() {
-        return this.isModelTypeT9() || this.isModelTypeT10() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2();
+        return this.capabilityManager.isModelTypeT9Based();
     }
 
     /**
@@ -608,7 +610,7 @@ class VacBot {
      * @returns {any} The value of the property
      */
     getDeviceProperty(property, defaultValue = false) {
-        return tools.getDeviceProperty(this.deviceClass, property, defaultValue);
+        return this.capabilityManager.getDeviceProperty(property, defaultValue);
     }
 
     /**
@@ -616,7 +618,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasFilter() {
-        return this.getDeviceProperty('filter');
+        return this.capabilityManager.hasFilter();
     }
 
     /**
@@ -624,7 +626,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasMainBrush() {
-        return this.getDeviceProperty('main_brush');
+        return this.capabilityManager.hasMainBrush();
     }
 
     /**
@@ -632,7 +634,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasSideBrush() {
-        return this.getDeviceProperty('side_brush');
+        return this.capabilityManager.hasSideBrush();
     }
 
     /**
@@ -640,7 +642,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasUnitCareInfo() {
-        return this.getDeviceProperty('unit_care_info');
+        return this.capabilityManager.hasUnitCareInfo();
     }
 
     /**
@@ -648,7 +650,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasRoundMopInfo() {
-        return this.getDeviceProperty('round_mop_info');
+        return this.capabilityManager.hasRoundMopInfo();
     }
 
     /**
@@ -656,7 +658,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasAirFreshenerInfo() {
-        return this.getDeviceProperty('air_freshener_info');
+        return this.capabilityManager.hasAirFreshenerInfo();
     }
 
     /**
@@ -665,7 +667,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasEdgeCleaningMode() {
-        return (!this.hasSpotAreaCleaningMode());
+        return this.capabilityManager.hasEdgeCleaningMode();
     }
 
     /**
@@ -674,14 +676,14 @@ class VacBot {
      * @returns {boolean}
      */
     hasSpotCleaningMode() {
-        return (!this.hasSpotAreaCleaningMode());
+        return this.capabilityManager.hasSpotCleaningMode();
     }
 
     /**
      * @deprecated - please use `hasSpotAreaCleaningMode()` instead
      */
     hasSpotAreas() {
-        return this.hasSpotAreaCleaningMode();
+        return this.capabilityManager.hasSpotAreas();
     }
 
     /**
@@ -689,14 +691,14 @@ class VacBot {
      * @returns {boolean}
      */
     hasSpotAreaCleaningMode() {
-        return this.getDeviceProperty('spot_area');
+        return this.capabilityManager.hasSpotAreaCleaningMode();
     }
 
     /**
      * @deprecated - please use `hasCustomAreaCleaningMode()` instead
      */
     hasCustomAreas() {
-        return this.hasCustomAreaCleaningMode();
+        return this.capabilityManager.hasCustomAreas();
     }
 
     /**
@@ -704,7 +706,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasCustomAreaCleaningMode() {
-        return this.getDeviceProperty('custom_area');
+        return this.capabilityManager.hasCustomAreaCleaningMode();
     }
 
     /**
@@ -712,7 +714,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasMappingCapabilities() {
-        return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode();
+        return this.capabilityManager.hasMappingCapabilities();
     }
 
     /**
@@ -720,7 +722,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasMoppingSystem() {
-        return this.getDeviceProperty('mopping_system');
+        return this.capabilityManager.hasMoppingSystem();
     }
 
     /**
@@ -728,7 +730,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasAirDrying() {
-        return this.getDeviceProperty('air_drying');
+        return this.capabilityManager.hasAirDrying();
     }
 
     /**
@@ -736,7 +738,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasVacuumPowerAdjustment() {
-        return this.getDeviceProperty('clean_speed');
+        return this.capabilityManager.hasVacuumPowerAdjustment();
     }
 
     /**
@@ -744,7 +746,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasVoiceReports() {
-        return this.getDeviceProperty('voice_report');
+        return this.capabilityManager.hasVoiceReports();
     }
 
     /**
@@ -752,7 +754,7 @@ class VacBot {
      * @returns {boolean}
      */
     hasAutoEmptyStation() {
-        return this.getDeviceProperty('auto_empty_station');
+        return this.capabilityManager.hasAutoEmptyStation();
     }
 
     /**
@@ -760,7 +762,7 @@ class VacBot {
      * @returns {boolean}
      */
     isMapImageSupported() {
-        return this.getDeviceProperty('map_image_supported');
+        return this.capabilityManager.isMapImageSupported();
     }
 
     /**
