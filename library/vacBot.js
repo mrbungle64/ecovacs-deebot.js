@@ -226,7 +226,7 @@ class VacBot {
             if (entry.minArgs && args.length < entry.minArgs) {
                 return false;
             }
-            this.ecovacs.sendCommand(new VacBotCommand[entry.cmd](...cmdArgs));
+            this.ecovacs.sendCommand(new VacBotCommand[entry.className](...cmdArgs));
             return true;
         }
 
