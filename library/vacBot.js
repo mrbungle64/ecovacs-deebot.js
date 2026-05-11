@@ -210,7 +210,15 @@ class VacBot {
      * @param args - zero or more arguments to perform the command
      */
     run(command, ...args) {
-        const key = command;
+        let cmdToRun = command;
+        if (this.is950type_V2() && !command.endsWith('_V2')) {
+            const command_v2 = command + '_V2';
+            if (COMMAND_REGISTRY[command_v2]) {
+                cmdToRun = command_v2;
+            }
+        }
+
+        const key = cmdToRun;
         // Registry-based lookup for trivial commands
         const entry = COMMAND_REGISTRY[key];
         if (entry && !entry.specialLogic) {
