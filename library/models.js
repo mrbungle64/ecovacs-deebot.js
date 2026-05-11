@@ -18,6 +18,7 @@ exports.SupportedDevices = {
         "filter": true,
         "unit_care_info": true,
         "round_mop_info": true,
+        "auto_empty_station": false,
         "air_drying": true,
         "spot_area": true,
         "custom_area": true,
@@ -64,9 +65,12 @@ exports.KnownDevices = {
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
+        "round_mop_info": false,
+        "auto_empty_station": false,
         "voice_report": true,
         "clean_speed": true,
         "map_image_supported": true,
+        "yiko": false,
         "type": "950"
     },
     "eazo2f": {
@@ -96,6 +100,7 @@ exports.KnownDevices = {
         "auto_empty_station": true,
         "clean_speed": true,
         "map_image_supported": true,
+        "yiko": false,
         "type": "T8"
     },
     "fqxoiu": {
