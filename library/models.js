@@ -1116,122 +1116,94 @@ exports.KnownDevices = {
 exports.LegacyDevices = {
     "123": {
         "name": "DEEBOT Slim2 Series",
-        "950type": false,
-        "950type_V2": false,
+        "type": "legacy"
+    },
+    "02uwxm": {
+        "name": "DEEBOT OZMO Slim10 Series",
         "type": "legacy"
     },
     "126": {
         "name": "DEEBOT N79",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "155": {
         "name": "DEEBOT N79S/SE",
-        "deviceClassLink": "126"
+        "type": "legacy"
     },
     "165": {
         "name": "DEEBOT N79T/W",
-        "deviceClassLink": "126"
-    },
-    "02uwxm": {
-        "name": "DEEBOT OZMO Slim10 Series",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "vsc5ia": {
         "name": "DEEBOT 500",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "emzppx": {
         "name": "DEEBOT 501",
-        "deviceClassLink": "vsc5ia"
+        "type": "legacy"
     },
     "r8ead0": {
         "name": "DEEBOT 502",
-        "deviceClassLink": "vsc5ia"
+        "type": "legacy"
     },
     "9akc61": {
         "name": "DEEBOT 505",
-        "deviceClassLink": "vsc5ia"
+        "type": "legacy"
     },
     "dl8fht": {
         "name": "DEEBOT 600 Series",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "16wdph": {
         "name": "DEEBOT 661",
-        "deviceClassLink": "dl8fht"
+        "type": "legacy"
     },
     "159": {
         "name": "DEEBOT OZMO 601",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "130": {
         "name": "DEEBOT OZMO 610 Series",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "uv242z": {
         "name": "DEEBOT 710",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "jr3pqa": {
         "name": "DEEBOT 711",
-        "deviceClassLink": "uv242z"
+        "type": "legacy"
     },
     "d0cnel": {
         "name": "DEEBOT 711s",
-        "deviceClassLink": "uv242z"
+        "type": "legacy"
     },
     "eyi9jv": {
         "name": "DEEBOT 715",
-        "deviceClassLink": "uv242z"
+        "type": "legacy"
     },
     "ls1ok3": {
         "name": "DEEBOT 900 Series",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
-        "950type": false,
-        "950type_V2": false,
         "type": "legacy"
     },
     "u5vcmk": {
         "name": "yeedi vac",
-        "950type": false,
-        "950type_V2": false,
         "type": "yeedi"
     }
 };
