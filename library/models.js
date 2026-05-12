@@ -29,7 +29,10 @@ exports.SupportedDevices = {
         "hosted_mode": true,
         "yiko": true,
         "type": "X1"
-    },
+    }
+};
+
+exports.AirPurifiers = {
     "sdp1y1": {
         "name": "AIRBOT Z1",
         "950type": true,
