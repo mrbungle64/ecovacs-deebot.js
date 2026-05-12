@@ -856,6 +856,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": true,
         "yiko": false,
+        "type": "T8"
     },
     "kr0277": {
         "name": "DEEBOT N20",
@@ -1153,6 +1154,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": true,
         "yiko": false,
+        "type": "T8"
     },
     "0jv4ti": {
         "name": "DEEBOT X9 PRO OMNI",
