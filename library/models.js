@@ -1,6 +1,6 @@
 // noinspection SpellCheckingInspection
 
-exports.SupportedDevices = {
+exports.SupportedDeebotModels = {
     "vi829v": {
         "name": "DEEBOT OZMO 920",
         "deviceClassLink": "yna5xi" // DEEBOT OZMO 950 Series
@@ -32,7 +32,7 @@ exports.SupportedDevices = {
     }
 };
 
-exports.AirPurifiers = {
+exports.SupportedAirPurifierModels = {
     "sdp1y1": {
         "name": "AIRBOT Z1",
         "950type": true,
@@ -57,7 +57,7 @@ exports.AirPurifiers = {
     }
 };
 
-exports.KnownDevices = {
+exports.KnownDeebotModels = {
     "55uoqe": {
         "name": "DEEBOT MINI",
         "950type": true,
@@ -1141,7 +1141,7 @@ exports.KnownDevices = {
     }
 };
 
-exports.YeediDevices = {
+exports.KnownYeediModels = {
     "3ab24g": {
         "name": "yeedi K650",
         "950type": true,
@@ -1326,7 +1326,7 @@ exports.YeediDevices = {
     }
 };
 
-exports.LawnMower = {
+exports.KnownLawnMowerModels = {
     "5xu9h3": {
         "name": "GOAT G1",
         "950type": true,

@@ -79,8 +79,8 @@ function getAllKnownDevices() {
  */
 function getSupportedDevices() {
     let devices = {};
-    Object.assign(devices, deebotModels.SupportedDevices);
-    Object.assign(devices, deebotModels.AirPurifiers);
+    Object.assign(devices, deebotModels.SupportedDeebotModels);
+    Object.assign(devices, deebotModels.SupportedAirPurifierModels);
     return devices;
 }
 
@@ -89,9 +89,9 @@ function getSupportedDevices() {
  */
 function getKnownDevices() {
     let devices = {};
-    Object.assign(devices, deebotModels.KnownDevices);
-    Object.assign(devices, deebotModels.YeediDevices);
-    Object.assign(devices, deebotModels.LawnMower);
+    Object.assign(devices, deebotModels.KnownDeebotModels);
+    Object.assign(devices, deebotModels.KnownYeediModels);
+    Object.assign(devices, deebotModels.KnownLawnMowerModels);
     return devices;
 }
 
