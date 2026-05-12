@@ -87,6 +87,7 @@ function getSupportedDevices() {
 function getKnownDevices() {
     let devices = {};
     Object.assign(devices, deebotModels.KnownDevices);
+    Object.assign(devices, deebotModels.YeediDevices);
     Object.assign(devices, deebotModels.LawnMower);
     return devices;
 }

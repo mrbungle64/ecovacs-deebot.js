@@ -94,9 +94,11 @@ exports.KnownDevices = {
         "type": "T10"
     },
     "rss8xk": {
+        "name": "DEEBOT T10 PLUS",
         "deviceClassLink": "jtmf04" // DEEBOT T10
     },
     "lx3j7m": {
+        "name": "DEEBOT T10 PLUS",
         "deviceClassLink": "jtmf04" // DEEBOT T10
     },
     "p95mgv": {
@@ -1133,7 +1135,10 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "yiko": true,
         "type": "T20"
-    },
+    }
+};
+
+exports.YeediDevices = {
     "3ab24g": {
         "name": "yeedi K650",
         "950type": true,
@@ -1315,7 +1320,7 @@ exports.KnownDevices = {
         "clean_speed": true,
         "map_image_supported": false,
         "type": "yeedi"
-    },
+    }
 };
 
 exports.LawnMower = {
