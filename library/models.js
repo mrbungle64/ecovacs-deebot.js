@@ -530,25 +530,40 @@ exports.KnownDevices = {
         "name": "DEEBOT X5 PRO OMNI",
         "deviceClassLink": "e6ofmn" // DEEBOT X2
     },
-    "4bx3w9": {
-        "name": "DEEBOT X8 OMNI",
-        "deviceClassLink": "e6ofmn" // DEEBOT X2
-    },
     "co3fyu": {
         "name": "DEEBOT X8 OMNI",
-        "deviceClassLink": "e6ofmn" // DEEBOT X2
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": false,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "X2"
+    },
+    "4bx3w9": {
+        "name": "DEEBOT X8 OMNI",
+        "deviceClassLink": "co3fyu" // DEEBOT X8 OMNI
     },
     "n0vyif": {
         "name": "DEEBOT X8 PRO OMNI",
-        "deviceClassLink": "e6ofmn" // DEEBOT X2
+        "deviceClassLink": "co3fyu" // DEEBOT X8 OMNI
     },
     "ilt3k8": {
         "name": "DEEBOT X9 PRO OMNI",
-        "deviceClassLink": "e6ofmn" // DEEBOT X2
+        "deviceClassLink": "co3fyu" // DEEBOT X8 OMNI
     },
     "lwmdoj": {
         "name": "DEEBOT X9 PRO OMNI",
-        "deviceClassLink": "e6ofmn" // DEEBOT X2
+        "deviceClassLink": "co3fyu" // DEEBOT X8 OMNI
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
@@ -826,7 +841,21 @@ exports.KnownDevices = {
     },
     "buom7k": {
         "name": "DEEBOT N20 PLUS",
-        "deviceClassLink": "h18jkh" // DEEBOT OZMO T8
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": false,
     },
     "kr0277": {
         "name": "DEEBOT N20",
@@ -854,11 +883,11 @@ exports.KnownDevices = {
     },
     "i35yb6": {
         "name": "DEEBOT N20 PLUS",
-        "deviceClassLink": "h18jkh" // DEEBOT OZMO T8
+        "deviceClassLink": "buom7k" // DEEBOT N20 PLUS
     },
     "9kpees": {
         "name": "DEEBOT N20 PLUS",
-        "deviceClassLink": "h18jkh" // DEEBOT OZMO T8
+        "deviceClassLink": "buom7k" // DEEBOT N20 PLUS
     },
     "gwtll7": {
         "name": "DEEBOT N20 PRO PLUS",
@@ -1109,7 +1138,21 @@ exports.KnownDevices = {
     },
     "55uoqe": {
         "name": "DEEBOT MINI",
-        "deviceClassLink": "e6ofmn" // DEEBOT X2
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": false,
     },
     "0jv4ti": {
         "name": "DEEBOT X9 PRO OMNI",
