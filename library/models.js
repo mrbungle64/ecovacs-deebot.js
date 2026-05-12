@@ -1,5 +1,6 @@
 // noinspection SpellCheckingInspection
 
+// Modern and actively supported Deebot models
 exports.SupportedDeebotModels = {
     "vi829v": {
         "name": "DEEBOT OZMO 920",
@@ -32,6 +33,7 @@ exports.SupportedDeebotModels = {
     }
 };
 
+// Supported air purifier models (e.g. AIRBOT Z1)
 exports.SupportedAirPurifierModels = {
     "sdp1y1": {
         "name": "AIRBOT Z1",
@@ -57,6 +59,7 @@ exports.SupportedAirPurifierModels = {
     }
 };
 
+// Known Deebot models (bulk of T/N/X series)
 exports.KnownDeebotModels = {
     "55uoqe": {
         "name": "DEEBOT MINI",
@@ -1141,6 +1144,7 @@ exports.KnownDeebotModels = {
     }
 };
 
+// Known models of the Yeedi brand
 exports.KnownYeediModels = {
     "3ab24g": {
         "name": "yeedi K650",
@@ -1326,6 +1330,7 @@ exports.KnownYeediModels = {
     }
 };
 
+// Known lawn mower models (e.g. GOAT G1)
 exports.KnownLawnMowerModels = {
     "5xu9h3": {
         "name": "GOAT G1",
@@ -1423,6 +1428,7 @@ exports.KnownLawnMowerModels = {
     }
 };
 
+// Legacy, XML-based devices (unsupported)
 exports.LegacyDevices = {
     "123": {
         "name": "DEEBOT Slim2 Series",
