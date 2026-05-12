@@ -1396,6 +1396,9 @@ exports.KnownDevices = {
         "yiko": false,
         "type": "T9"
     },
+};
+
+exports.LawnMower = {
     "5xu9h3": {
         "name": "GOAT G1",
         "950type": true,
@@ -1432,69 +1435,63 @@ exports.KnownDevices = {
     },
     "2i0fns": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "2px96q": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "300lc5": {
         "name": "DEEBOT GOAT O500 Panorama",
-        "950type": true,
-        "950type_V2": true,
-        "type": "goat",
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "51rcxt": {
         "name": "GOAT A3000 LiDAR Pro",
-        "950type": true,
-        "950type_V2": true,
-        "type": "goat",
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "6cibhb": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "6n9pcz": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "9bts2s": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "cr0e4u": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "o4kvvk": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "qhq6i0": {
         "name": "DEEBOT GOAT G1",
-        "deviceClassLink": "5xu9h3", // GOAT G1
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "aadham": {
         "name": "GOAT A3000 LiDAR Pro",
-        "deviceClassLink": "51rcxt", // GOAT A3000 LiDAR Pro
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "e4gqia": {
         "name": "GOAT A3000 LiDAR Pro",
-        "deviceClassLink": "51rcxt", // GOAT A3000 LiDAR Pro
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "neiwny": {
         "name": "DEEBOT GOAT A1600 RTK",
-        "deviceClassLink": "xmp9ds", // DEEBOT GOAT A1600 RTK
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "wwswjm": {
         "name": "GOAT A3000 LiDAR Pro",
-        "deviceClassLink": "51rcxt", // GOAT A3000 LiDAR Pro
+        "deviceClassLink": "5xu9h3" // GOAT G1
     },
     "xmp9ds": {
         "name": "DEEBOT GOAT A1600 RTK",
-        "950type": true,
-        "950type_V2": true,
-        "type": "goat",
+        "deviceClassLink": "5xu9h3" // GOAT G1
     }
 };
 

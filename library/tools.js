@@ -85,7 +85,10 @@ function getSupportedDevices() {
  * @returns {Object} a dictionary of known devices
  */
 function getKnownDevices() {
-    return deebotModels.KnownDevices;
+    let devices = {};
+    Object.assign(devices, deebotModels.KnownDevices);
+    Object.assign(devices, deebotModels.LawnMower);
+    return devices;
 }
 
 /**
