@@ -975,95 +975,125 @@ exports.KnownDevices = {
     },
     "4bdkrs": {
         "name": "DEEBOT T30S COMBO",
-        "deviceClassLink": "p1jij8"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "T20"
     },
     "ue8kcc": {
         "name": "DEEBOT T30S COMBO",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "8tyt2y": {
         "name": "DEEBOT T30S",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "eqmf84": {
         "name": "DEEBOT T30S",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "9gqyaq": {
         "name": "DEEBOT T30S COMBO",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "kr9c86": {
         "name": "DEEBOT T30S COMBO",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "ee23uv": {
         "name": "DEEBOT T30S COMBO COMPLETE",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "xco2fc": {
         "name": "DEEBOT T30S PRO",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "63cum9": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "7c26ui": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "8o3xke": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "bheggm": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "c8rj4y": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "cuoipb": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "czjwet": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "elrxgb": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "k1lgm7": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "qnkybo": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "xztz07": {
         "name": "DEEBOT T30S Pro Omni",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "cb69w5": {
         "name": "DEEBOT T30S PRO",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "4bdkrs"
     },
     "02qwum": {
         "name": "DEEBOT T80 OMNI",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "9eamof"
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
-        "deviceClassLink": "p1jij8"
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "T20"
     },
     "k8qkc7": {
         "name": "DEEBOT T80 OMNI",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "9eamof"
     },
     "626v6g": {
         "name": "DEEBOT TEO+",
@@ -1080,6 +1110,248 @@ exports.KnownDevices = {
     "55uoqe": {
         "name": "DEEBOT MINI",
         "deviceClassLink": "e6ofmn"
+    },
+    "0jv4ti": {
+        "name": "DEEBOT X9 PRO OMNI",
+        "deviceClassLink": "ilt3k8",
+    },
+    "2kuxj0": {
+        "name": "DEEBOT T50 OMNI",
+        "deviceClassLink": "fd60kt",
+    },
+    "36hdj8": {
+        "name": "Deebot T30C Gen2",
+        "deviceClassLink": "viq3mw",
+    },
+    "3gwbbm": {
+        "name": "Deebot N20",
+        "deviceClassLink": "kr0277",
+    },
+    "53qyvr": {
+        "name": "Deebot N20",
+        "deviceClassLink": "kr0277",
+    },
+    "62asng": {
+        "name": "DEEBOT X9 PRO OMNI",
+        "deviceClassLink": "ilt3k8",
+    },
+    "6q3rfp": {
+        "name": "Deebot T30C Gen2",
+        "deviceClassLink": "viq3mw",
+    },
+    "8n0t5d": {
+        "name": "Deebot T30S Pro Omni",
+        "deviceClassLink": "xco2fc",
+    },
+    "a2ywac": {
+        "name": "DEEBOT N50 PRO OMNI",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "T20"
+    },
+    "aasdks": {
+        "name": "DEEBOT T80 OMNI",
+        "deviceClassLink": "9eamof",
+    },
+    "aqdd5p": {
+        "name": "OZMO 905",
+        "deviceClassLink": "2pv572",
+    },
+    "cgm9ex": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8",
+    },
+    "dzuvdj": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8",
+    },
+    "eom321": {
+        "name": "DEEBOT X8 PRO OMNI",
+        "deviceClassLink": "n0vyif",
+    },
+    "fd60kt": {
+        "name": "DEEBOT T50 OMNI",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "T20"
+    },
+    "gcu5tt": {
+        "name": "DEEBOT X8 PRO OMNI",
+        "deviceClassLink": "n0vyif",
+    },
+    "hu94nh": {
+        "name": "DEEBOT T80 OMNI",
+        "deviceClassLink": "9eamof",
+    },
+    "huhcip": {
+        "name": "DEEBOT X9 PRO OMNI",
+        "deviceClassLink": "ilt3k8",
+    },
+    "kdnfi5": {
+        "name": "DEEBOT T80 OMNI",
+        "deviceClassLink": "9eamof",
+    },
+    "kl54s5": {
+        "name": "Deebot T30C Gen2",
+        "deviceClassLink": "viq3mw",
+    },
+    "m2nkyq": {
+        "name": "DEEBOT X9 PRO OMNI",
+        "deviceClassLink": "ilt3k8",
+    },
+    "mezar1": {
+        "name": "DEEBOT T50 OMNI",
+        "deviceClassLink": "fd60kt",
+    },
+    "mxse7w": {
+        "name": "DEEBOT X5 PRO OMNI",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "X2"
+    },
+    "npu3pt": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r",
+    },
+    "nxeux7": {
+        "name": "DEEBOT T50 OMNI",
+        "deviceClassLink": "fd60kt",
+    },
+    "q6pew4": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r",
+    },
+    "qg1d6t": {
+        "name": "DEEBOT T50 OMNI",
+        "deviceClassLink": "fd60kt",
+    },
+    "rzwv5p": {
+        "name": "T80S Omni",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": false,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": false,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": false,
+        "type": "T20"
+    },
+    "ss87ia": {
+        "name": "DEEBOT N50 PRO OMNI",
+        "deviceClassLink": "a2ywac",
+    },
+    "t6kipw": {
+        "name": "Yeedi Floor 3 Station",
+        "deviceClassLink": "kd0una",
+    },
+    "twunby": {
+        "name": "DEEBOT T90 PRO OMNI",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": true,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": true,
+        "type": "T20"
+    },
+    "u3bsxq": {
+        "name": "Yeedi Floor 3 Station",
+        "deviceClassLink": "kd0una",
+    },
+    "uuu4n6": {
+        "name": "Deebot T20 Omni",
+        "deviceClassLink": "p1jij8",
+    },
+    "va8ygm": {
+        "name": "Deebot N20",
+        "deviceClassLink": "kr0277",
+    },
+    "w7y3cb": {
+        "name": "DEEBOT T80 OMNI",
+        "deviceClassLink": "9eamof",
+    },
+    "xw7zp9": {
+        "name": "Deebot N20",
+        "deviceClassLink": "kr0277",
+    },
+    "y72606": {
+        "name": "DEEBOT X8 PRO OMNI",
+        "deviceClassLink": "n0vyif",
+    },
+    "zg6qbz": {
+        "name": "DEEBOT NEO 3.0 OMNI",
+        "950type": true,
+        "950type_V2": true,
+        "main_brush": true,
+        "side_brush": true,
+        "filter": true,
+        "unit_care_info": true,
+        "round_mop_info": false,
+        "spot_area": true,
+        "custom_area": true,
+        "mopping_system": true,
+        "voice_report": true,
+        "auto_empty_station": false,
+        "clean_speed": true,
+        "map_image_supported": true,
+        "yiko": false,
+        "type": "T9"
     },
     "5xu9h3": {
         "name": "GOAT G1",
@@ -1110,6 +1382,76 @@ exports.KnownDevices = {
     "ao7fpw": {
         "name": "GOAT GX-600",
         "deviceClassLink": "5xu9h3"
+    },
+    "0jbd6s": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3"
+    },
+    "2i0fns": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "2px96q": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "300lc5": {
+        "name": "DEEBOT GOAT O500 Panorama",
+        "950type": true,
+        "950type_V2": true,
+        "type": "goat",
+    },
+    "51rcxt": {
+        "name": "GOAT A3000 LiDAR Pro",
+        "950type": true,
+        "950type_V2": true,
+        "type": "goat",
+    },
+    "6cibhb": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "6n9pcz": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "9bts2s": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "cr0e4u": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "o4kvvk": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "qhq6i0": {
+        "name": "DEEBOT GOAT G1",
+        "deviceClassLink": "5xu9h3",
+    },
+    "aadham": {
+        "name": "GOAT A3000 LiDAR Pro",
+        "deviceClassLink": "51rcxt",
+    },
+    "e4gqia": {
+        "name": "GOAT A3000 LiDAR Pro",
+        "deviceClassLink": "51rcxt",
+    },
+    "neiwny": {
+        "name": "DEEBOT GOAT A1600 RTK",
+        "deviceClassLink": "xmp9ds",
+    },
+    "wwswjm": {
+        "name": "GOAT A3000 LiDAR Pro",
+        "deviceClassLink": "51rcxt",
+    },
+    "xmp9ds": {
+        "name": "DEEBOT GOAT A1600 RTK",
+        "950type": true,
+        "950type_V2": true,
+        "type": "goat",
     }
 };
 
