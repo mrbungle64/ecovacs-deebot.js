@@ -167,7 +167,7 @@ describe('API tools', function () {
         { class: 'h041es', expected: 'yeedi' },
         { class: 'sdp1y1', expected: 'airbot' },
         { class: '20anby', expected: 'aqMonitor' },
-        { class: '5xu9h3', expected: 'goat' },
+        { class: '5xu9h3', expected: 'lawnMower' },
         { class: '123', expected: 'legacy' }
       ];
 

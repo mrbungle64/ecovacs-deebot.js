@@ -64,6 +64,10 @@ class CapabilityManager {
         return this.getModelType() === 'airbot';
     }
 
+    isModelTypeLawnMower() {
+        return this.getModelType() === 'lawnMower';
+    }
+
     isModelTypeT8Based() {
         return this.isModelTypeT8() || this.isModelTypeN8();
     }
@@ -77,7 +81,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasFilter() {
-        return this.getDeviceProperty('filter');
+        return true;
     }
 
     /**
@@ -85,7 +89,10 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasMainBrush() {
-        return this.getDeviceProperty('main_brush');
+        if (this.isModelTypeAirbot() || this.isModelTypeLawnMower()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -93,7 +100,10 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasSideBrush() {
-        return this.getDeviceProperty('side_brush');
+        if (this.isModelTypeAirbot() || this.isModelTypeLawnMower()) {
+            return false;
+        }
+        return true;
     }
 
     /**
