@@ -467,15 +467,14 @@ class EcovacsAPI {
       tools.envLogWarn(`got value '${continent}' for continent (deprecated)`);
     }
     let vacBotClass;
-    const defaultValue = EcovacsAPI.isMQTTProtocolUsed(vacuum['company']);
-    const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class'], defaultValue);
-    const is950Type_v2 = EcovacsAPI.isDeviceClass950v2type(vacuum['class'], defaultValue);
+    const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class']);
+    const is950Type_v2 = EcovacsAPI.isDeviceClass950v2type(vacuum['class']);
     if (is950Type) {
       if (is950Type_v2) {
-        tools.envLogSuccess(`'950type_v2' model identified`);
+        tools.envLogSuccess(`'MQTT/JSON V2' model identified`);
       }
       else {
-        tools.envLogSuccess(`'950type' model identified`);
+        tools.envLogSuccess(`'MQTT/JSON' model identified`);
       }
       vacBotClass = require('./library/vacBot');
     } else {
@@ -527,13 +526,12 @@ class EcovacsAPI {
   }
 
   /**
-   * Returns true if the device class is 950 type
+   * Returns true if the device class is not a legacy model (i.e. is 950 type or newer)
    * @param {string} deviceClass - The device class to check
-   * @param [isMQTTProtocolUsed=true] - This value is used as default value if the deviceClass is not registered
-   * @returns {boolean} the value of the '950type' property
+   * @returns {boolean} true if not legacy
    */
-  static isDeviceClass950type(deviceClass, isMQTTProtocolUsed = true) {
-    return tools.getDeviceProperty(deviceClass, '950type', isMQTTProtocolUsed);
+  static isDeviceClass950type(deviceClass) {
+    return tools.getDeviceProperty(deviceClass, 'type', 'legacy') !== 'legacy';
   }
 
   /**
@@ -542,7 +540,7 @@ class EcovacsAPI {
    * @returns {boolean} the value of the '950type_v2' property
    */
   static isDeviceClass950v2type(deviceClass) {
-    return tools.getDeviceProperty(deviceClass, '950type_V2', false);
+    return tools.getDeviceProperty(deviceClass, '950type_v2', false);
   }
 
   /**

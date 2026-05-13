@@ -12,8 +12,7 @@ exports.SupportedDeebotModels = {
     },
     "2o4lnm": {
         "name": "DEEBOT X1 TURBO",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "auto_empty_station": false,
@@ -34,8 +33,7 @@ exports.SupportedDeebotModels = {
 exports.SupportedAirPurifierModels = {
     "sdp1y1": {
         "name": "AIRBOT Z1",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "clean_speed": true,
         "spot_area": true,
         "map_image_supported": false,
@@ -44,14 +42,12 @@ exports.SupportedAirPurifierModels = {
     },
     "20anby": {
         "name": "Z1 Air Quality Monitor",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "type": "aqMonitor"
     },
     "99fqkn": {
         "name": "Z1 Air Quality Monitor",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "type": "aqMonitor"
     }
 };
@@ -60,8 +56,7 @@ exports.SupportedAirPurifierModels = {
 exports.KnownDeebotModels = {
     "55uoqe": {
         "name": "DEEBOT MINI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "spot_area": true,
@@ -76,8 +71,7 @@ exports.KnownDeebotModels = {
     },
     "jtmf04": {
         "name": "DEEBOT T10",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "spot_area": true,
@@ -232,8 +226,7 @@ exports.KnownDeebotModels = {
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
@@ -298,8 +291,7 @@ exports.KnownDeebotModels = {
     },
     "zg6qbz": {
         "name": "DEEBOT NEO 3.0 OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": false,
         "spot_area": true,
@@ -322,8 +314,7 @@ exports.KnownDeebotModels = {
     },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -341,8 +332,7 @@ exports.KnownDeebotModels = {
     },
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
@@ -404,8 +394,7 @@ exports.KnownDeebotModels = {
     },
     "p1jij8": {
         "name": "DEEBOT T20 OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "air_drying": true,
@@ -522,8 +511,7 @@ exports.KnownDeebotModels = {
     },
     "4bdkrs": {
         "name": "DEEBOT T30S COMBO",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": false,
         "spot_area": true,
@@ -614,8 +602,7 @@ exports.KnownDeebotModels = {
     },
     "fd60kt": {
         "name": "DEEBOT T50 OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "spot_area": true,
@@ -678,8 +665,7 @@ exports.KnownDeebotModels = {
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": false,
         "spot_area": true,
@@ -714,8 +700,7 @@ exports.KnownDeebotModels = {
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "air_freshener_info": true,
         "spot_area": true,
@@ -733,8 +718,7 @@ exports.KnownDeebotModels = {
     },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
@@ -771,8 +755,7 @@ exports.KnownDeebotModels = {
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "mopping_system": true,
         "voice_report": true,
         "clean_speed": true,
@@ -836,8 +819,7 @@ exports.KnownDeebotModels = {
     },
     "3yqsch": {
         "name": "DEEBOT X1",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "spot_area": true,
@@ -852,8 +834,7 @@ exports.KnownDeebotModels = {
     },
     "8bja83": {
         "name": "DEEBOT X1 Omni",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "air_drying": true,
@@ -878,8 +859,7 @@ exports.KnownDeebotModels = {
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": false,
         "air_freshener_info": true,
@@ -908,8 +888,7 @@ exports.KnownDeebotModels = {
     },
     "e6ofmn": {
         "name": "DEEBOT X2",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "air_drying": true,
@@ -966,8 +945,7 @@ exports.KnownDeebotModels = {
     },
     "mxse7w": {
         "name": "DEEBOT X5 PRO OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": false,
         "spot_area": true,
@@ -982,8 +960,7 @@ exports.KnownDeebotModels = {
     },
     "co3fyu": {
         "name": "DEEBOT X8 OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": false,
         "spot_area": true,
@@ -1046,8 +1023,7 @@ exports.KnownDeebotModels = {
     },
     "rzwv5p": {
         "name": "DEEBOT T80S Omni",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": false,
         "round_mop_info": false,
         "spot_area": true,
@@ -1062,8 +1038,7 @@ exports.KnownDeebotModels = {
     },
     "twunby": {
         "name": "DEEBOT T90 PRO OMNI",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "spot_area": true,
@@ -1082,8 +1057,7 @@ exports.KnownDeebotModels = {
 exports.KnownYeediModels = {
     "3ab24g": {
         "name": "yeedi K650",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "unit_care_info": false,
         "spot_area": false,
         "custom_area": false,
@@ -1100,8 +1074,7 @@ exports.KnownYeediModels = {
     },
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
@@ -1114,8 +1087,7 @@ exports.KnownYeediModels = {
     },
     "6r6dbt": {
         "name": "yeedi cube",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "spot_area": true,
         "custom_area": true,
         "mopping_system": true,
@@ -1147,8 +1119,7 @@ exports.KnownYeediModels = {
     },
     "vthpeg": {
         "name": "yeedi mop station",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
         "spot_area": true,
@@ -1167,8 +1138,7 @@ exports.KnownYeediModels = {
     },
     "9t30w8": {
         "name": "yeedi vac 2",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
@@ -1181,8 +1151,7 @@ exports.KnownYeediModels = {
     },
     "aaxesz": {
         "name": "yeedi vac 2 pro",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
@@ -1195,8 +1164,7 @@ exports.KnownYeediModels = {
     },
     "h041es": {
         "name": "yeedi vac hybrid",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "unit_care_info": true,
         "spot_area": true,
         "custom_area": true,
@@ -1209,8 +1177,7 @@ exports.KnownYeediModels = {
     },
     "04z443": {
         "name": "yeedi vac max",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
@@ -1223,8 +1190,7 @@ exports.KnownYeediModels = {
     },
     "mnx7f4": {
         "name": "yeedi vac station",
-        "950type": true,
-        "950type_V2": false,
+        "V2": false,
         "unit_care_info": false,
         "spot_area": true,
         "custom_area": true,
@@ -1241,8 +1207,7 @@ exports.KnownYeediModels = {
 exports.KnownLawnMowerModels = {
     "5xu9h3": {
         "name": "GOAT G1",
-        "950type": true,
-        "950type_V2": true,
+        "V2": true,
         "type": "lawnMower"
     },
     "itk04l": {

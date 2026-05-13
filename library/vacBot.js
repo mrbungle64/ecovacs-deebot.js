@@ -293,18 +293,12 @@ class VacBot {
     }
 
     /**
-     * Returns true if the model is 950 type (MQTT/JSON)
+     * Returns true if the model is not a legacy model (i.e. is 950 type or newer)
      * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
-     * If the model is not registered,
-     * it returns the default value (= is MQTT model)
      * @returns {boolean}
      */
     is950type() {
-        if (this.is950type_V2()) {
-            return true;
-        }
-        const defaultValue = this.useMqttProtocol();
-        return this.getDeviceProperty('950type', defaultValue);
+        return !this.isLegacyModel();
     }
 
     /**
@@ -314,7 +308,7 @@ class VacBot {
      * @returns {boolean}
      */
     is950type_V2() {
-        return this.getDeviceProperty('950type_V2', false);
+        return this.getDeviceProperty('V2', false);
     }
 
     /**
@@ -385,6 +379,10 @@ class VacBot {
         return this.capabilityManager.getModelType();
     }
 
+    isModelTypeLegacy() {
+        return this.capabilityManager.isModelTypeLegacy();
+    }
+
     isModelTypeN8() {
         return this.capabilityManager.isModelTypeN8();
     }
@@ -415,6 +413,10 @@ class VacBot {
 
     isModelTypeAirbot() {
         return this.capabilityManager.isModelTypeAirbot();
+    }
+
+    isModelTypeLawnMower() {
+        return this.capabilityManager.isModelTypeLawnMower();
     }
 
     isModelTypeT8Based() {

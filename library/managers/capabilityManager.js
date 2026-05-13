@@ -32,6 +32,10 @@ class CapabilityManager {
         return tools.getModelType(this.bot.deviceClass);
     }
 
+    isModelTypeLegacy() {
+        return this.getModelType() === 'legacy';
+    }
+
     isModelTypeN8() {
         return this.getModelType() === 'N8';
     }
