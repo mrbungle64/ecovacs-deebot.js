@@ -68,6 +68,10 @@ class CapabilityManager {
         return this.getModelType() === 'airbot';
     }
 
+    isModelTypeAqMonitor() {
+        return this.getModelType() === 'aqMonitor';
+    }
+
     isModelTypeLawnMower() {
         return this.getModelType() === 'lawnMower';
     }
@@ -85,6 +89,9 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasFilter() {
+        if (this.isModelTypeAqMonitor()) {
+            return false;
+        }
         return true;
     }
 
@@ -93,7 +100,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasMainBrush() {
-        if (this.isModelTypeAirbot() || this.isModelTypeLawnMower()) {
+        if (this.isModelTypeAirbot() || this.isModelTypeAqMonitor() || this.isModelTypeLawnMower()) {
             return false;
         }
         return true;
@@ -104,7 +111,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasSideBrush() {
-        if (this.isModelTypeAirbot() || this.isModelTypeLawnMower()) {
+        if (this.isModelTypeAirbot() || this.isModelTypeAqMonitor() || this.isModelTypeLawnMower()) {
             return false;
         }
         return true;
