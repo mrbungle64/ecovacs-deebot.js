@@ -860,45 +860,19 @@ exports.KnownDeebotModels = {
 
 // Known models of the Yeedi brand
 exports.KnownYeediModels = {
-    "3ab24g": {
-        "name": "yeedi K650",
-        "V2": false,
-        "unit_care_info": false,
-        "spot_area": false,
-        "custom_area": false,
-        "mopping_system": true,
-        "voice_report": false,
-        "auto_empty_station": false,
-        "clean_speed": false,
-        "map_image_supported": false,
-        "type": "yeedi"
-    },
-    "09m4bu": {
-        "name": "yeedi K650",
-        "type": "yeedi"
-    },
+
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
         "V2": false,
         "unit_care_info": false,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": false,
-        "clean_speed": true,
         "map_image_supported": true,
         "type": "yeedi"
     },
     "6r6dbt": {
         "name": "yeedi cube",
         "V2": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": true,
         "map_image_supported": true,
         "type": "yeedi"
     },
@@ -927,13 +901,8 @@ exports.KnownYeediModels = {
         "V2": true,
         "unit_care_info": true,
         "round_mop_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
         "air_drying": true,
-        "voice_report": true,
         "auto_empty_station": false,
-        "clean_speed": true,
         "map_image_supported": true,
         "type": "yeedi"
     },
@@ -945,12 +914,7 @@ exports.KnownYeediModels = {
         "name": "yeedi vac 2",
         "V2": false,
         "unit_care_info": false,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": true,
         "map_image_supported": true,
         "type": "yeedi"
     },
@@ -958,12 +922,7 @@ exports.KnownYeediModels = {
         "name": "yeedi vac 2 pro",
         "V2": true,
         "unit_care_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": true,
         "map_image_supported": false,
         "type": "yeedi"
     },
@@ -971,12 +930,7 @@ exports.KnownYeediModels = {
         "name": "yeedi vac hybrid",
         "V2": false,
         "unit_care_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": true,
         "map_image_supported": true,
         "type": "yeedi"
     },
@@ -984,12 +938,7 @@ exports.KnownYeediModels = {
         "name": "yeedi vac max",
         "V2": false,
         "unit_care_info": false,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": true,
         "map_image_supported": true,
         "type": "yeedi"
     },
@@ -997,12 +946,7 @@ exports.KnownYeediModels = {
         "name": "yeedi vac station",
         "V2": false,
         "unit_care_info": false,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
         "auto_empty_station": true,
-        "clean_speed": true,
         "map_image_supported": false,
         "type": "yeedi"
     }
@@ -1106,6 +1050,14 @@ exports.KnownLawnMowerModels = {
 
 // Legacy, XML-based devices (unsupported)
 exports.LegacyDevices = {
+    "3ab24g": {
+        "name": "yeedi K650",
+        "type": "legacy",
+    },
+    "09m4bu": {
+        "name": "yeedi K650",
+        "type": "legacy"
+    },
     "123": {
         "name": "DEEBOT Slim2 Series",
         "type": "legacy"

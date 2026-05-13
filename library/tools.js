@@ -174,8 +174,10 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
 
         if (deviceType) {
             const deviceTypeProperties = getAllKnownModelTypes()[deviceType];
-            if (deviceTypeProperties && deviceTypeProperties.hasOwnProperty(property)) {
-                return deviceTypeProperties[property];
+            if (deviceTypeProperties && Array.isArray(deviceTypeProperties)) {
+                if (deviceTypeProperties.includes(property)) {
+                    return true;
+                }
             }
         }
         if (device.hasOwnProperty(property)) {
