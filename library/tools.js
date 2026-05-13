@@ -1,6 +1,7 @@
 'use strict';
 
 const deebotModels = require('./models');
+const modelTypes = require('./modelTypes');
 const chalk = require('chalk');
 
 function formatString(string) {
@@ -72,6 +73,12 @@ function getAllKnownDevices() {
     Object.assign(devices, getKnownDevices());
     Object.assign(devices, getLegacyDevices());
     return devices;
+}
+
+function getAllKnownModelTypes() {
+    let types = {};
+    Object.assign(types, modelTypes.ModelTypes);
+    return types;
 }
 
 /**
@@ -153,8 +160,23 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
         let device = devices[deviceClass];
-        if ((!device.hasOwnProperty(property)) && (device.hasOwnProperty('deviceClassLink'))) {
+        if (device.hasOwnProperty('deviceClassLink') && devices[device.deviceClassLink]) {
             device = devices[device.deviceClassLink];
+        }
+
+        let deviceType = device.type;
+        if (!deviceType && device.deviceClassLink) {
+            const linkedDevice = devices[device.deviceClassLink];
+            if (linkedDevice) {
+                deviceType = linkedDevice.type;
+            }
+        }
+
+        if (deviceType) {
+            const deviceTypeProperties = getAllKnownModelTypes()[deviceType];
+            if (deviceTypeProperties && deviceTypeProperties.hasOwnProperty(property)) {
+                return deviceTypeProperties[property];
+            }
         }
         if (device.hasOwnProperty(property)) {
             return device[property];
