@@ -830,7 +830,6 @@ exports.KnownDeebotModels = {
     "3yqsch": {
         "name": "DEEBOT X1",
         "capabilities": ["base", "mapBase", "moppingBase"],
-        "round_mop_info": true,
         "type": "X1"
     },
     "8onkgl": {
@@ -845,7 +844,8 @@ exports.KnownDeebotModels = {
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
-        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"]
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
+        "type": "X1"
     },
     "8bja83": {
         "name": "DEEBOT X1 Omni",
