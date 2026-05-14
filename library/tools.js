@@ -157,6 +157,7 @@ function getModelType(deviceClass) {
  * @returns {any} The value of the property for the device class
  */
 function getDeviceProperty(deviceClass, property, defaultValue = false) {
+    let value = defaultValue;
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
         let device = devices[deviceClass];
@@ -165,26 +166,19 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
         }
 
         let deviceType = device.type;
-        if (!deviceType && device.deviceClassLink) {
-            const linkedDevice = devices[device.deviceClassLink];
-            if (linkedDevice) {
-                deviceType = linkedDevice.type;
-            }
-        }
-
         if (deviceType) {
             const deviceTypeProperties = getAllKnownModelTypes()[deviceType];
             if (deviceTypeProperties && Array.isArray(deviceTypeProperties)) {
                 if (deviceTypeProperties.includes(property)) {
-                    return true;
+                    value = true;
                 }
             }
         }
         if (device.hasOwnProperty(property)) {
-            return device[property];
+            value = device[property];
         }
     }
-    return defaultValue;
+    return value;
 }
 
 /**
