@@ -1156,10 +1156,6 @@ exports.KnownDeebotModels = {
         "round_mop_info": true,
         "type": "X2"
     },
-    "aqdd5p": {
-        "name": "DEEBOT OZMO 905",
-        "type": "legacy",
-    },
     "rzwv5p": {
         "name": "DEEBOT T80S Omni",
         "air_drying": true,
@@ -1196,22 +1192,37 @@ exports.KnownYeediModels = {
     },
     "t5e5o6": {
         "name": "yeedi Floor 3 Station",
+        "round_mop_info": true,
+        "air_drying": true,
+        "auto_empty_station": false,
         "type": "yeedi"
     },
     "kd0una": {
         "name": "yeedi Floor 3 Station",
+        "round_mop_info": true,
+        "air_drying": true,
+        "auto_empty_station": false,
         "type": "yeedi"
     },
     "t6kipw": {
         "name": "Yeedi Floor 3 Station",
+        "round_mop_info": true,
+        "air_drying": true,
+        "auto_empty_station": false,
         "type": "yeedi"
     },
     "u3bsxq": {
         "name": "Yeedi Floor 3 Station",
+        "round_mop_info": true,
+        "air_drying": true,
+        "auto_empty_station": false,
         "type": "yeedi"
     },
     "rwp09o": {
         "name": "yeedi Floor 3+",
+        "round_mop_info": true,
+        "air_drying": true,
+        "auto_empty_station": false,
         "type": "yeedi"
     },
     "vthpeg": {
@@ -1225,6 +1236,11 @@ exports.KnownYeediModels = {
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
+        "V2": true,
+        "unit_care_info": true,
+        "round_mop_info": true,
+        "air_drying": true,
+        "auto_empty_station": false,
         "type": "yeedi"
     },
     "9t30w8": {
@@ -1444,6 +1460,10 @@ exports.LegacyDevices = {
     "2pv572": {
         "name": "DEEBOT OZMO 905",
         "type": "legacy"
+    },
+    "aqdd5p": {
+        "name": "DEEBOT OZMO 905",
+        "type": "legacy",
     },
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
