@@ -21,6 +21,7 @@ declare class CapabilityManager {
      * @returns {String}
      */
     getModelType(): string;
+    isModelTypeLegacy(): boolean;
     isModelTypeN8(): boolean;
     isModelTypeT8(): boolean;
     isModelTypeT9(): boolean;
@@ -29,6 +30,8 @@ declare class CapabilityManager {
     isModelTypeX1(): boolean;
     isModelTypeX2(): boolean;
     isModelTypeAirbot(): boolean;
+    isModelTypeAqMonitor(): boolean;
+    isModelTypeLawnMower(): boolean;
     isModelTypeT8Based(): boolean;
     isModelTypeT9Based(): boolean;
     /**

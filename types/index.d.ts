@@ -24,12 +24,11 @@ declare class EcovacsAPI {
      */
     static isMQTTProtocolUsed(company: string): boolean;
     /**
-     * Returns true if the device class is 950 type
+     * Returns true if the device class is not a legacy model (i.e. is 950 type or newer)
      * @param {string} deviceClass - The device class to check
-     * @param [isMQTTProtocolUsed=true] - This value is used as default value if the deviceClass is not registered
-     * @returns {boolean} the value of the '950type' property
+     * @returns {boolean} true if not legacy
      */
-    static isDeviceClass950type(deviceClass: string, isMQTTProtocolUsed?: boolean | undefined): boolean;
+    static isDeviceClass950type(deviceClass: string): boolean;
     /**
      * Returns true if the device class is 950_v2 type
      * @param {string} deviceClass - The device class to check

@@ -221,10 +221,8 @@ declare class VacBot {
      */
     getProtocol(): string;
     /**
-     * Returns true if the model is 950 type (MQTT/JSON)
+     * Returns true if the model is not a legacy model (i.e. is 950 type or newer)
      * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
-     * If the model is not registered,
-     * it returns the default value (= is MQTT model)
      * @returns {boolean}
      */
     is950type(): boolean;
@@ -279,6 +277,7 @@ declare class VacBot {
      * @returns {String}
      */
     getModelType(): string;
+    isModelTypeLegacy(): boolean;
     isModelTypeN8(): boolean;
     isModelTypeT8(): boolean;
     isModelTypeT9(): boolean;
@@ -287,6 +286,7 @@ declare class VacBot {
     isModelTypeX1(): boolean;
     isModelTypeX2(): boolean;
     isModelTypeAirbot(): boolean;
+    isModelTypeLawnMower(): boolean;
     isModelTypeT8Based(): boolean;
     isModelTypeT9Based(): boolean;
     /**
