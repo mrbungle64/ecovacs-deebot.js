@@ -4,7 +4,7 @@ exports.CapabilityTypes = {
         side_brush: true,
         filter: true,
         voice_report: true,
-        clean_speed: true
+        clean_speed: ["QUIET", "NORMAL", "MAX"]
     },
     "mapBase": {
         spot_area: true,

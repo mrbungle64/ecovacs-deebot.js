@@ -9,11 +9,13 @@ exports.SupportedDeebotModels = {
     },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "2o4lnm": {
         "name": "DEEBOT X1 TURBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "X1"
     }
@@ -39,121 +41,145 @@ exports.SupportedAirPurifierModels = {
 exports.KnownDeebotModels = {
     "eazo2f": {
         "name": "DEEBOT OZMO 920/950",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "9rft3c": {
         "name": "DEEBOT OZMO T5",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "55uoqe": {
         "name": "DEEBOT MINI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "mini"
     },
     "jtmf04": {
         "name": "DEEBOT T10",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "rss8xk": {
         "name": "DEEBOT T10 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "lx3j7m": {
         "name": "DEEBOT T10 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "p95mgv": {
         "name": "DEEBOT T10 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "9s1s80": {
         "name": "DEEBOT T10 TURBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "T10"
     },
     "yaj7uz": {
         "name": "DEEBOT T10 TURBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "T10"
     },
     "m1wkuw": {
         "name": "DEEBOT N10",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "clojes": {
         "name": "DEEBOT N10 MAX+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "umwv6z": {
         "name": "DEEBOT N10 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "kr0277": {
         "name": "DEEBOT N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "edoodo": {
         "name": "DEEBOT N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "m17zko": {
         "name": "DEEBOT N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "p1wg05": {
         "name": "DEEBOT N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "3gwbbm": {
         "name": "Deebot N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "53qyvr": {
         "name": "Deebot N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "va8ygm": {
         "name": "Deebot N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "xw7zp9": {
         "name": "Deebot N20",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "buom7k": {
         "name": "DEEBOT N20 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "i35yb6": {
         "name": "DEEBOT N20 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "9kpees": {
         "name": "DEEBOT N20 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
@@ -169,36 +195,43 @@ exports.KnownDeebotModels = {
     },
     "qhe2o2": {
         "name": "DEEBOT N20 PRO PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "p0l0af": {
         "name": "DEEBOT N20 PRO PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "gwtll7": {
         "name": "DEEBOT N20 PRO PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "zgsvkq": {
         "name": "DEEBOT N20e",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "ruhc0q": {
         "name": "DEEBOT N20e",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "yinacl": {
         "name": "DEEBOT N20e PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "7piq03": {
         "name": "DEEBOT N20e PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
@@ -209,91 +242,109 @@ exports.KnownDeebotModels = {
     },
     "zwkcqc": {
         "name": "DEEBOT N30 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "dlrbzq": {
         "name": "DEEBOT N30 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "87swps": {
         "name": "DEEBOT N30 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "a2ywac": {
         "name": "DEEBOT N50 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "ss87ia": {
         "name": "DEEBOT N50 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "r5zxjr": {
         "name": "DEEBOT N7",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "r5y7re": {
         "name": "DEEBOT N8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "ty84oi": {
         "name": "DEEBOT N8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "36xnxf": {
         "name": "DEEBOT N8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "7zya6u": {
         "name": "DEEBOT N8 BLACK",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "snxbvc": {
         "name": "DEEBOT N8 PRO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "yu362x": {
         "name": "DEEBOT N8 PRO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "s1f8g7": {
         "name": "DEEBOT N8 PRO CARE",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "85as7h": {
         "name": "DEEBOT N8 PRO+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "ifbw08": {
         "name": "DEEBOT N8 PRO+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "7bryc5": {
         "name": "DEEBOT N8+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "b2jqs4": {
         "name": "DEEBOT N8+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
@@ -309,356 +360,427 @@ exports.KnownDeebotModels = {
     },
     "zg6qbz": {
         "name": "DEEBOT NEO 3.0 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "zjavof": {
         "name": "DEEBOT NEO+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "b742vd": {
         "name": "DEEBOT OZMO T8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "7n95dm": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "dqcneu": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "sa4tf7": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "uzel1r": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "z0gd1j": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "npu3pt": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8",
     },
     "q6pew4": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8",
     },
     "w16crm": {
         "name": "DEEBOT OZMO T8 AIVI+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "0bdtzz": {
         "name": "DEEBOT OZMO T8 PURE",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "55aiho": {
         "name": "DEEBOT OZMO T8+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "p1jij8": {
         "name": "DEEBOT T20 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "m4xnd8": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "ohjbzz": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "paeygf": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "poke1m": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "qdajz8": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "r0321c": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "ulzked": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "viq3mw": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "x9ugz3": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "yi396x": {
         "name": "DEEBOT T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "cgm9ex": {
         "name": "Deebot T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "dzuvdj": {
         "name": "Deebot T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "uuu4n6": {
         "name": "Deebot T20 Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "9ku8nu": {
         "name": "DEEBOT T20e OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "py3qif": {
         "name": "DEEBOT T20e OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "z4lvk7": {
         "name": "DEEBOT T30 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "822x8d": {
         "name": "DEEBOT T30 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "4vhygi": {
         "name": "DEEBOT T30 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "3w7j5e": {
         "name": "DEEBOT T30 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "tlthqk": {
         "name": "DEEBOT T30 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "36hdj8": {
         "name": "Deebot T30C Gen2",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "6q3rfp": {
         "name": "Deebot T30C Gen2",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "kl54s5": {
         "name": "Deebot T30C Gen2",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "8tyt2y": {
         "name": "DEEBOT T30S",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "eqmf84": {
         "name": "DEEBOT T30S",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "4bdkrs": {
         "name": "DEEBOT T30S COMBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "ue8kcc": {
         "name": "DEEBOT T30S COMBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "9gqyaq": {
         "name": "DEEBOT T30S COMBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "kr9c86": {
         "name": "DEEBOT T30S COMBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "ee23uv": {
         "name": "DEEBOT T30S COMBO COMPLETE",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "xco2fc": {
         "name": "DEEBOT T30S PRO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "cb69w5": {
         "name": "DEEBOT T30S PRO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "63cum9": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "7c26ui": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "8o3xke": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "bheggm": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "c8rj4y": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "cuoipb": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "czjwet": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "elrxgb": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "k1lgm7": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "qnkybo": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "xztz07": {
         "name": "DEEBOT T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "8n0t5d": {
         "name": "Deebot T30S Pro Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "2kuxj0": {
         "name": "DEEBOT T50 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "fd60kt": {
         "name": "DEEBOT T50 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "mezar1": {
         "name": "DEEBOT T50 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "nxeux7": {
         "name": "DEEBOT T50 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "qg1d6t": {
         "name": "DEEBOT T50 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "wgxm70": {
         "name": "DEEBOT T8",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "bs40nz": {
         "name": "DEEBOT T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "5089oy": {
         "name": "DEEBOT T8 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "tpnwyu": {
         "name": "DEEBOT T8 AIVI +",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "34vhpm": {
         "name": "DEEBOT T8 AIVI +",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "vdehg6": {
         "name": "DEEBOT T8 AIVI +",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
@@ -669,61 +791,73 @@ exports.KnownDeebotModels = {
     },
     "no61kx": {
         "name": "DEEBOT T8 POWER",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "02qwum": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "k8qkc7": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "aasdks": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "hu94nh": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "kdnfi5": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "w7y3cb": {
         "name": "DEEBOT T80 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "ipohi5": {
         "name": "DEEBOT T9",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "659yh8": {
         "name": "DEEBOT T9 AIVI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
@@ -734,26 +868,31 @@ exports.KnownDeebotModels = {
     },
     "lhbd50": {
         "name": "DEEBOT T9+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T9"
     },
     "um2ywg": {
         "name": "DEEBOT T9+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T9"
     },
     "85nbtp": {
         "name": "DEEBOT TEO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "626v6g": {
         "name": "DEEBOT TEO+",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
@@ -834,16 +973,19 @@ exports.KnownDeebotModels = {
     },
     "8onkgl": {
         "name": "DEEBOT X1 Turbo",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "X1"
     },
     "s523z1": {
         "name": "DEEBOT X1 Turbo",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "X1"
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "X1"
     },
@@ -854,36 +996,43 @@ exports.KnownDeebotModels = {
     },
     "1b23du": {
         "name": "DEEBOT X1 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X1"
     },
     "1vxt52": {
         "name": "DEEBOT X1 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X1"
     },
     "bro5wu": {
         "name": "DEEBOT X1e OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X1"
     },
     "e6ofmn": {
         "name": "DEEBOT X2",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "X2"
     },
     "lf3bn4": {
         "name": "DEEBOT X2",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "X2"
     },
     "e6rcnf": {
         "name": "DEEBOT X2 COMBO",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "X2"
     },
     "p7l7iu": {
         "name": "DEEBOT X2 OMNI Height",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
@@ -894,106 +1043,127 @@ exports.KnownDeebotModels = {
     },
     "e6yxdm": {
         "name": "DEEBOT X5 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "4jd37g": {
         "name": "DEEBOT X5 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "lr4qcs": {
         "name": "DEEBOT X5 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "o0a4ju": {
         "name": "DEEBOT X5 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "rvflzn": {
         "name": "DEEBOT X5 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "w7k3yc": {
         "name": "DEEBOT X5 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "mxse7w": {
         "name": "DEEBOT X5 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "co3fyu": {
         "name": "DEEBOT X8 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "4bx3w9": {
         "name": "DEEBOT X8 OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "n0vyif": {
         "name": "DEEBOT X8 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "eom321": {
         "name": "DEEBOT X8 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "gcu5tt": {
         "name": "DEEBOT X8 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "y72606": {
         "name": "DEEBOT X8 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "ilt3k8": {
         "name": "DEEBOT X9 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "lwmdoj": {
         "name": "DEEBOT X9 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "0jv4ti": {
         "name": "DEEBOT X9 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "62asng": {
         "name": "DEEBOT X9 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "huhcip": {
         "name": "DEEBOT X9 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "m2nkyq": {
         "name": "DEEBOT X9 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "rzwv5p": {
         "name": "DEEBOT T80S Omni",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "twunby": {
         "name": "DEEBOT T90 PRO OMNI",
+        "clean_speed": ["QUIET", "NORMAL", "MAX", "MAX_PLUS"],
         "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     }
@@ -1001,7 +1171,6 @@ exports.KnownDeebotModels = {
 
 // Known models of the Yeedi brand
 exports.KnownYeediModels = {
-
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
         "capabilities": ["base", "mapBase", "moppingBase"],
@@ -1209,22 +1378,27 @@ exports.LegacyDevices = {
     },
     "vsc5ia": {
         "name": "DEEBOT 500",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "emzppx": {
         "name": "DEEBOT 501",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "r8ead0": {
         "name": "DEEBOT 502",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "9akc61": {
         "name": "DEEBOT 505",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "dl8fht": {
         "name": "DEEBOT 600 Series",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "16wdph": {
@@ -1257,18 +1431,22 @@ exports.LegacyDevices = {
     },
     "ls1ok3": {
         "name": "DEEBOT 900 Series",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "aqdd5p": {
         "name": "DEEBOT OZMO 905",
+        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy",
     },
     "115": {
