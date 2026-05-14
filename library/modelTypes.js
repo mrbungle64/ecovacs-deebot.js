@@ -2,17 +2,51 @@
 
 exports.ModelTypes = {
   "950": {
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true
+    "V2": false
   },
   "U2": {
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true
+    "V2": false
+  },
+  "mini": {
+    "V2": true,
+    "unit_care_info": true,
+    "round_mop_info": true
+  },
+  "T8": {
+    "V2": true,
+    "unit_care_info": true
+  },
+  "T9": {
+    "V2": true,
+    "air_freshener_info": true,
+    "unit_care_info": true
+  },
+  "T10": {
+    "V2": true,
+    "unit_care_info": true,
+    "hosted_mode": true,
+    "yiko": true
+  },
+  "N8": {
+    "V2": true
+  },
+  "T20": {
+    "V2": true,
+    "unit_care_info": true,
+    "hosted_mode": true,
+    "yiko": true
+  },
+  "X1": {
+    "V2": true,
+    "unit_care_info": true,
+    "hosted_mode": true,
+    "yiko": true
+  },
+  "X2": {
+    "V2": true,
+    "unit_care_info": true,
+    "hosted_mode": true,
+    "yiko": true
   },
   "airbot": {
     "V2": true,
@@ -22,93 +56,6 @@ exports.ModelTypes = {
   },
   "aqMonitor": {
     "V2": true
-  },
-  "mini": {
-    "V2": true,
-    "unit_care_info": true,
-    "round_mop_info": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true
-  },
-  "T8": {
-    "V2": true,
-    "unit_care_info": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "auto_empty_station": true,
-    "clean_speed": true,
-    "map_image_supported": true
-  },
-  "T9": {
-    "V2": true,
-    "unit_care_info": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true
-  },
-  "T10": {
-    "V2": true,
-    "unit_care_info": true,
-    "round_mop_info": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true,
-    "hosted_mode": true,
-    "yiko": true
-  },
-  "N8": {
-    "V2": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true
-  },
-  "T20": {
-    "V2": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true
-  },
-  "X1": {
-    "V2": true,
-    "unit_care_info": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "clean_speed": true,
-    "map_image_supported": true,
-    "hosted_mode": true,
-    "yiko": true
-  },
-  "X2": {
-    "V2": true,
-    "unit_care_info": true,
-    "spot_area": true,
-    "custom_area": true,
-    "mopping_system": true,
-    "voice_report": true,
-    "auto_empty_station": true,
-    "clean_speed": true,
-    "map_image_supported": true,
-    "yiko": true
   },
   "lawnMower": {
     "V2": true

@@ -4,17 +4,17 @@
 exports.SupportedDeebotModels = {
     "vi829v": {
         "name": "DEEBOT OZMO 920",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "2o4lnm": {
         "name": "DEEBOT X1 TURBO",
-        "round_mop_info": true,
-        "auto_empty_station": false,
-        "air_drying": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "X1"
     }
 };
@@ -39,1139 +39,962 @@ exports.SupportedAirPurifierModels = {
 exports.KnownDeebotModels = {
     "eazo2f": {
         "name": "DEEBOT OZMO 920/950",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "9rft3c": {
         "name": "DEEBOT OZMO T5",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "55uoqe": {
         "name": "DEEBOT MINI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "mini"
     },
     "jtmf04": {
         "name": "DEEBOT T10",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "rss8xk": {
         "name": "DEEBOT T10 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "lx3j7m": {
         "name": "DEEBOT T10 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "p95mgv": {
         "name": "DEEBOT T10 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "9s1s80": {
         "name": "DEEBOT T10 TURBO",
-        "air_drying": true,
-        "auto_empty_station": false,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "T10"
     },
     "yaj7uz": {
         "name": "DEEBOT T10 TURBO",
-        "air_drying": true,
-        "auto_empty_station": false,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
         "type": "T10"
     },
     "m1wkuw": {
         "name": "DEEBOT N10",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "clojes": {
         "name": "DEEBOT N10 MAX+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "umwv6z": {
         "name": "DEEBOT N10 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "kr0277": {
         "name": "DEEBOT N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "edoodo": {
         "name": "DEEBOT N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "m17zko": {
         "name": "DEEBOT N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "p1wg05": {
         "name": "DEEBOT N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "3gwbbm": {
         "name": "Deebot N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "53qyvr": {
         "name": "Deebot N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "va8ygm": {
         "name": "Deebot N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "xw7zp9": {
         "name": "Deebot N20",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "buom7k": {
         "name": "DEEBOT N20 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "i35yb6": {
         "name": "DEEBOT N20 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "9kpees": {
         "name": "DEEBOT N20 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "aavvfb": {
         "name": "DEEBOT N20 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "c8gerr": {
         "name": "DEEBOT N20 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "qhe2o2": {
         "name": "DEEBOT N20 PRO PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "p0l0af": {
         "name": "DEEBOT N20 PRO PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "gwtll7": {
         "name": "DEEBOT N20 PRO PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "zgsvkq": {
         "name": "DEEBOT N20e",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "ruhc0q": {
         "name": "DEEBOT N20e",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T10"
     },
     "yinacl": {
         "name": "DEEBOT N20e PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "7piq03": {
         "name": "DEEBOT N20e PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "jffnlf": {
         "name": "DEEBOT N3 MAX",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "950"
     },
     "zwkcqc": {
         "name": "DEEBOT N30 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "dlrbzq": {
         "name": "DEEBOT N30 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "87swps": {
         "name": "DEEBOT N30 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "a2ywac": {
         "name": "DEEBOT N50 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "ss87ia": {
         "name": "DEEBOT N50 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "r5zxjr": {
         "name": "DEEBOT N7",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "r5y7re": {
         "name": "DEEBOT N8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "ty84oi": {
         "name": "DEEBOT N8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "36xnxf": {
         "name": "DEEBOT N8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "7zya6u": {
         "name": "DEEBOT N8 BLACK",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "snxbvc": {
         "name": "DEEBOT N8 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "yu362x": {
         "name": "DEEBOT N8 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "s1f8g7": {
         "name": "DEEBOT N8 PRO CARE",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "N8"
     },
     "85as7h": {
         "name": "DEEBOT N8 PRO+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "ifbw08": {
         "name": "DEEBOT N8 PRO+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "7bryc5": {
         "name": "DEEBOT N8+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "b2jqs4": {
         "name": "DEEBOT N8+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "a7lhb1": {
         "name": "DEEBOT N9+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "c2of2s": {
         "name": "DEEBOT N9+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "N8"
     },
     "zg6qbz": {
         "name": "DEEBOT NEO 3.0 OMNI",
-        "air_drying": true,
-        "round_mop_info": true,
-        "auto_empty_station": true,
-        "yiko": false,
-        "type": "T9"
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
+        "type": "T10"
     },
     "zjavof": {
         "name": "DEEBOT NEO+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "b742vd": {
         "name": "DEEBOT OZMO T8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "7n95dm": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "dqcneu": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "sa4tf7": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "uzel1r": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "z0gd1j": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "npu3pt": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8",
     },
     "q6pew4": {
         "name": "DEEBOT OZMO T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8",
     },
     "w16crm": {
         "name": "DEEBOT OZMO T8 AIVI+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "0bdtzz": {
         "name": "DEEBOT OZMO T8 PURE",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "55aiho": {
         "name": "DEEBOT OZMO T8+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "p1jij8": {
         "name": "DEEBOT T20 OMNI",
-        "unit_care_info": true,
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": true,
-        "hosted_mode": true,
-        "yiko": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "m4xnd8": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "ohjbzz": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "paeygf": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "poke1m": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "qdajz8": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "r0321c": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "ulzked": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "viq3mw": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "x9ugz3": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "yi396x": {
         "name": "DEEBOT T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "cgm9ex": {
         "name": "Deebot T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "dzuvdj": {
         "name": "Deebot T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "uuu4n6": {
         "name": "Deebot T20 Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "9ku8nu": {
         "name": "DEEBOT T20e OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "py3qif": {
         "name": "DEEBOT T20e OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "z4lvk7": {
         "name": "DEEBOT T30 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "822x8d": {
         "name": "DEEBOT T30 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "4vhygi": {
         "name": "DEEBOT T30 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "3w7j5e": {
         "name": "DEEBOT T30 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "tlthqk": {
         "name": "DEEBOT T30 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "36hdj8": {
         "name": "Deebot T30C Gen2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "6q3rfp": {
         "name": "Deebot T30C Gen2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "kl54s5": {
         "name": "Deebot T30C Gen2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "8tyt2y": {
         "name": "DEEBOT T30S",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "eqmf84": {
         "name": "DEEBOT T30S",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "4bdkrs": {
         "name": "DEEBOT T30S COMBO",
-        "unit_care_info": true,
-        "round_mop_info": false,
-        "auto_empty_station": true,
-        "yiko": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "ue8kcc": {
         "name": "DEEBOT T30S COMBO",
+        "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "9gqyaq": {
         "name": "DEEBOT T30S COMBO",
+        "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "kr9c86": {
         "name": "DEEBOT T30S COMBO",
+        "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "ee23uv": {
         "name": "DEEBOT T30S COMBO COMPLETE",
+        "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "T20"
     },
     "xco2fc": {
         "name": "DEEBOT T30S PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "cb69w5": {
         "name": "DEEBOT T30S PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T20"
     },
     "63cum9": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "7c26ui": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "8o3xke": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "bheggm": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "c8rj4y": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "cuoipb": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "czjwet": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "elrxgb": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "k1lgm7": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "qnkybo": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "xztz07": {
         "name": "DEEBOT T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "8n0t5d": {
         "name": "Deebot T30S Pro Omni",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "2kuxj0": {
         "name": "DEEBOT T50 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "fd60kt": {
         "name": "DEEBOT T50 OMNI",
-        "air_drying": true,
-        "unit_care_info": true,
-        "round_mop_info": true,
-        "auto_empty_station": true,
-        "yiko": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "mezar1": {
         "name": "DEEBOT T50 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "nxeux7": {
         "name": "DEEBOT T50 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "qg1d6t": {
         "name": "DEEBOT T50 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "wgxm70": {
         "name": "DEEBOT T8",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "bs40nz": {
         "name": "DEEBOT T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "5089oy": {
         "name": "DEEBOT T8 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "tpnwyu": {
         "name": "DEEBOT T8 AIVI +",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "34vhpm": {
         "name": "DEEBOT T8 AIVI +",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "vdehg6": {
         "name": "DEEBOT T8 AIVI +",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T8"
     },
     "a1nNMoAGAsH": {
         "name": "DEEBOT T8 MAX",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "no61kx": {
         "name": "DEEBOT T8 POWER",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T8"
     },
     "02qwum": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "unit_care_info": true,
-        "round_mop_info": true,
-        "auto_empty_station": true,
-        "yiko": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "k8qkc7": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "aasdks": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "hu94nh": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "kdnfi5": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "w7y3cb": {
         "name": "DEEBOT T80 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20",
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
-        "air_freshener_info": true,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "ipohi5": {
         "name": "DEEBOT T9",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "659yh8": {
         "name": "DEEBOT T9 AIVI",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "T9"
     },
     "kw9ayx": {
         "name": "DEEBOT T9 AIVI Plus",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T9"
     },
     "lhbd50": {
         "name": "DEEBOT T9+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T9"
     },
     "um2ywg": {
         "name": "DEEBOT T9+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T9"
     },
     "85nbtp": {
         "name": "DEEBOT TEO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T10"
     },
     "626v6g": {
         "name": "DEEBOT TEO+",
-        "air_drying": false,
-        "round_mop_info": false,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"],
         "type": "T10"
     },
     "ipzjy0": {
         "name": "DEEBOT U2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "rvo6ev": {
         "name": "DEEBOT U2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "wlqdkp": {
         "name": "DEEBOT U2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "ts2ofl": {
         "name": "DEEBOT U2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "1zqysa": {
         "name": "DEEBOT U2 POWER",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "chmi0g": {
         "name": "DEEBOT U2 POWER",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "nq9yhl": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "y2qy3m": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "7j1tu6": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "c0lwyn": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "d4v1pm": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "u6eqoa": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "12baap": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "u4h1uk": {
         "name": "DEEBOT U2 PRO",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "zjna8m": {
         "name": "DEEBOT U2 SE",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "U2"
     },
     "3yqsch": {
         "name": "DEEBOT X1",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "round_mop_info": true,
         "type": "X1"
     },
     "8onkgl": {
         "name": "DEEBOT X1 Turbo",
-        "air_drying": true,
-        "auto_empty_station": false,
-        "round_mop_info": true,
-        "deviceClassLink": "2o4lnm" // DEEBOT X1 Turbo
+        "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
+        "type": "X1"
     },
     "s523z1": {
         "name": "DEEBOT X1 Turbo",
-        "air_drying": true,
-        "auto_empty_station": false,
-        "round_mop_info": true,
-        "deviceClassLink": "2o4lnm" // DEEBOT X1 Turbo
+        "capabilities": ["base", "mapBase", "moppingBase", "TURBO"],
+        "type": "X1"
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
-        "air_drying": false,
-        "round_mop_info": false,
-        "air_freshener_info": true,
-        "auto_empty_station": true,
-        "type": "X1"
+        "capabilities": ["base", "mapBase", "moppingBase", "PLUS"]
     },
     "8bja83": {
         "name": "DEEBOT X1 Omni",
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X1"
     },
     "1b23du": {
         "name": "DEEBOT X1 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
-        "deviceClassLink": "8bja83" // DEEBOT X1 OMNI
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
+        "type": "X1"
     },
     "1vxt52": {
         "name": "DEEBOT X1 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
-        "deviceClassLink": "8bja83" // DEEBOT X1 OMNI
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
+        "type": "X1"
     },
     "bro5wu": {
         "name": "DEEBOT X1e OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
-        "deviceClassLink": "8bja83" // DEEBOT X1 OMNI
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
+        "type": "X1"
     },
     "e6ofmn": {
         "name": "DEEBOT X2",
-        "round_mop_info": true,
-        "air_drying": true,
-        "mopping_system": true,
-        "hosted_mode": true,
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "X2"
     },
     "lf3bn4": {
         "name": "DEEBOT X2",
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "X2"
     },
     "e6rcnf": {
         "name": "DEEBOT X2 COMBO",
+        "capabilities": ["base", "mapBase", "moppingBase", "COMBO"],
         "type": "X2"
     },
     "p7l7iu": {
         "name": "DEEBOT X2 OMNI Height",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "ip3mmy": {
         "name": "DEEBOT X2 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "e6yxdm": {
         "name": "DEEBOT X5 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "4jd37g": {
         "name": "DEEBOT X5 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "lr4qcs": {
         "name": "DEEBOT X5 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "o0a4ju": {
         "name": "DEEBOT X5 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "rvflzn": {
         "name": "DEEBOT X5 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "w7k3yc": {
         "name": "DEEBOT X5 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "mxse7w": {
         "name": "DEEBOT X5 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
-        "mopping_system": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "co3fyu": {
         "name": "DEEBOT X8 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
-        "mopping_system": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "4bx3w9": {
         "name": "DEEBOT X8 OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "n0vyif": {
         "name": "DEEBOT X8 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "eom321": {
         "name": "DEEBOT X8 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "gcu5tt": {
         "name": "DEEBOT X8 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "y72606": {
         "name": "DEEBOT X8 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "ilt3k8": {
         "name": "DEEBOT X9 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "lwmdoj": {
         "name": "DEEBOT X9 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "0jv4ti": {
         "name": "DEEBOT X9 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "62asng": {
         "name": "DEEBOT X9 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "huhcip": {
         "name": "DEEBOT X9 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "m2nkyq": {
         "name": "DEEBOT X9 PRO OMNI",
-        "air_drying": true,
-        "auto_empty_station": true,
-        "round_mop_info": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "X2"
     },
     "rzwv5p": {
         "name": "DEEBOT T80S Omni",
-        "air_drying": true,
-        "unit_care_info": false,
-        "round_mop_info": true,
-        "auto_empty_station": true,
-        "yiko": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     },
     "twunby": {
         "name": "DEEBOT T90 PRO OMNI",
-        "air_drying": true,
-        "unit_care_info": true,
-        "round_mop_info": true,
-        "auto_empty_station": true,
-        "yiko": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "OMNI"],
         "type": "T20"
     }
 };

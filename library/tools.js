@@ -2,6 +2,7 @@
 
 const deebotModels = require('./models');
 const modelTypes = require('./modelTypes');
+const capabilityTypes = require('./capabilityTypes');
 const chalk = require('chalk');
 
 function formatString(string) {
@@ -172,6 +173,16 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
                 value = true;
             }
         }
+        
+        if (device.capabilities && Array.isArray(device.capabilities)) {
+            for (const capability of device.capabilities) {
+                const capProps = capabilityTypes.CapabilityTypes[capability];
+                if (capProps && capProps.hasOwnProperty(property)) {
+                    value = capProps[property];
+                }
+            }
+        }
+
         if (device.hasOwnProperty(property)) {
             value = device[property];
         }
