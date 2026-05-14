@@ -63,7 +63,6 @@ exports.ModelTypes = {
   "yeedi": {
     "spot_area": true,
     "custom_area": true,
-    "mopping_system": true,
     "voice_report": true,
     "clean_speed": true,
     "map_image_supported": true

@@ -12,7 +12,7 @@ exports.CapabilityTypes = {
         map_image_supported: true
     },
     "moppingBase": {
-        mopping_system: true
+        water_amount: ["LOW", "MEDIUM", "HIGH"]
     },
     "stationBase": {
         auto_empty_station: true
@@ -27,28 +27,32 @@ exports.CapabilityTypes = {
         round_mop_info: true
     },
     "OZMO": {
-        mopping_system: true
+        water_amount: ["LOW", "MEDIUM", "HIGH"]
     },
     "COMBO": {
         unit_care_info: true,
+        water_amount: ["LOW", "MEDIUM", "HIGH"],
         round_mop_info: true,
         air_drying: true,
         auto_empty_station: true
     },
     "OMNI": {
         unit_care_info: true,
+        water_amount: ["LOW", "MEDIUM", "HIGH"],
         round_mop_info: true,
         air_drying: true,
         auto_empty_station: true
     },
     "TURBO": {
         unit_care_info: true,
+        water_amount: ["LOW", "MEDIUM", "HIGH"],
         round_mop_info: true,
         air_drying: true,
         auto_empty_station: false
     },
     "PLUS": {
         unit_care_info: true,
+        water_amount: ["LOW", "MEDIUM", "HIGH"],
         round_mop_info: false,
         air_drying: false,
         auto_empty_station: true

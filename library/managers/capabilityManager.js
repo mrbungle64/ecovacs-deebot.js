@@ -193,7 +193,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasMoppingSystem() {
-        return this.getDeviceProperty('mopping_system');
+        return this.getDeviceProperty('water_amount') !== undefined;
     }
 
     /**
