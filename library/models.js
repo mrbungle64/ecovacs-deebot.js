@@ -51,7 +51,7 @@ exports.KnownDeebotModels = {
     },
     "55uoqe": {
         "name": "DEEBOT MINI",
-        "type": "T8"
+        "type": "mini"
     },
     "jtmf04": {
         "name": "DEEBOT T10",

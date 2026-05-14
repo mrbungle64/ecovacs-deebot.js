@@ -23,6 +23,17 @@ exports.ModelTypes = {
   "aqMonitor": [
     "V2"
   ],
+  "mini": [
+    "V2",
+    "unit_care_info",
+    "round_mop_info",
+    "spot_area",
+    "custom_area",
+    "mopping_system",
+    "voice_report",
+    "clean_speed",
+    "map_image_supported"
+  ],
   "T8": [
     "V2",
     "unit_care_info",
