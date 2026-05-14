@@ -3,12 +3,13 @@
 /**
  * Data-driven command registry for trivial command mappings.
  *
- * Each key is the **lowercased** command name used in `vacBot.run()`.
+ * Keys in `COMMAND_REGISTRY` are the command names. The exported object
+ * includes both original and lowercased keys for lookup.
  * Values:
  *   - `className` {string}   Name of the VacBotCommand class to instantiate
  *   - `minArgs`   {number}   Minimum number of args required (optional, default 0)
  *   - `fixedArgs` {Array}    Fixed arguments to pass instead of user args (optional)
- *   - `aliases`   {string[]} Additional lowercased command names that map to the same entry
+ *   - `aliases`   {string[]} Additional command names that map to the same entry
  *
  * Commands with model-specific branching, validation logic, or side-effects
  * are NOT included here — they remain in the switch-case in vacBot.run().
