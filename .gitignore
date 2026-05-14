@@ -14,3 +14,5 @@ library/map/
 
 *.code-workspace
 /qodana.yaml
+
+docs/
