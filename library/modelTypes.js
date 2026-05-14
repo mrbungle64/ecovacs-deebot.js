@@ -34,6 +34,16 @@ exports.ModelTypes = {
     "clean_speed",
     "map_image_supported"
   ],
+  "T9": [
+    "V2",
+    "unit_care_info",
+    "spot_area",
+    "custom_area",
+    "mopping_system",
+    "voice_report",
+    "clean_speed",
+    "map_image_supported"
+  ],
   "T10": [
     "V2",
     "unit_care_info",
@@ -49,16 +59,6 @@ exports.ModelTypes = {
   ],
   "N8": [
     "V2",
-    "spot_area",
-    "custom_area",
-    "mopping_system",
-    "voice_report",
-    "clean_speed",
-    "map_image_supported"
-  ],
-  "T9": [
-    "V2",
-    "unit_care_info",
     "spot_area",
     "custom_area",
     "mopping_system",
@@ -92,6 +92,7 @@ exports.ModelTypes = {
     "unit_care_info",
     "spot_area",
     "custom_area",
+    "mopping_system",
     "voice_report",
     "auto_empty_station",
     "clean_speed",
