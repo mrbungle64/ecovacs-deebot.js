@@ -863,17 +863,13 @@ exports.KnownYeediModels = {
 
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
-        "V2": false,
-        "unit_care_info": false,
         "auto_empty_station": false,
-        "map_image_supported": true,
         "type": "yeedi"
     },
     "6r6dbt": {
         "name": "yeedi cube",
         "V2": true,
         "auto_empty_station": true,
-        "map_image_supported": true,
         "type": "yeedi"
     },
     "t5e5o6": {
@@ -903,7 +899,6 @@ exports.KnownYeediModels = {
         "round_mop_info": true,
         "air_drying": true,
         "auto_empty_station": false,
-        "map_image_supported": true,
         "type": "yeedi"
     },
     "zwvyi2": {
@@ -912,10 +907,7 @@ exports.KnownYeediModels = {
     },
     "9t30w8": {
         "name": "yeedi vac 2",
-        "V2": false,
-        "unit_care_info": false,
         "auto_empty_station": true,
-        "map_image_supported": true,
         "type": "yeedi"
     },
     "aaxesz": {
@@ -928,24 +920,17 @@ exports.KnownYeediModels = {
     },
     "h041es": {
         "name": "yeedi vac hybrid",
-        "V2": false,
         "unit_care_info": true,
         "auto_empty_station": true,
-        "map_image_supported": true,
         "type": "yeedi"
     },
     "04z443": {
         "name": "yeedi vac max",
-        "V2": false,
-        "unit_care_info": false,
         "auto_empty_station": true,
-        "map_image_supported": true,
         "type": "yeedi"
     },
     "mnx7f4": {
         "name": "yeedi vac station",
-        "V2": false,
-        "unit_care_info": false,
         "auto_empty_station": true,
         "map_image_supported": false,
         "type": "yeedi"

@@ -106,7 +106,8 @@ exports.ModelTypes = {
     "custom_area",
     "mopping_system",
     "voice_report",
-    "clean_speed"
+    "clean_speed",
+    "map_image_supported"
   ],
   "legacy": []
 };
