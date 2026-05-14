@@ -89,10 +89,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasFilter() {
-        if (this.isModelTypeAqMonitor()) {
-            return false;
-        }
-        return true;
+        return this.getDeviceProperty('filter');
     }
 
     /**
@@ -100,10 +97,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasMainBrush() {
-        if (this.isModelTypeAirbot() || this.isModelTypeAqMonitor() || this.isModelTypeLawnMower()) {
-            return false;
-        }
-        return true;
+        return this.getDeviceProperty('main_brush');
     }
 
     /**
@@ -111,10 +105,7 @@ class CapabilityManager {
      * @returns {boolean}
      */
     hasSideBrush() {
-        if (this.isModelTypeAirbot() || this.isModelTypeAqMonitor() || this.isModelTypeLawnMower()) {
-            return false;
-        }
-        return true;
+        return this.getDeviceProperty('side_brush');
     }
 
     /**

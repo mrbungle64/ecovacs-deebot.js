@@ -1,5 +1,8 @@
 exports.CapabilityTypes = {
     "base": {
+        main_brush: true,
+        side_brush: true,
+        filter: true,
         voice_report: true,
         clean_speed: true
     },
@@ -10,6 +13,18 @@ exports.CapabilityTypes = {
     },
     "moppingBase": {
         mopping_system: true
+    },
+    "stationBase": {
+        auto_empty_station: true
+    },
+    "stationMoppingBase": {
+        air_drying: true,
+        round_mop_info: true
+    },
+    "stationFull": {
+        auto_empty_station: true,
+        air_drying: true,
+        round_mop_info: true
     },
     "OZMO": {
         mopping_system: true

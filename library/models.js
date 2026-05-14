@@ -1004,96 +1004,79 @@ exports.KnownYeediModels = {
 
     "p5nx9u": {
         "name": "yeedi 2 hybrid",
-        "auto_empty_station": false,
+        "capabilities": ["base", "mapBase", "moppingBase"],
         "type": "yeedi"
     },
     "6r6dbt": {
         "name": "yeedi cube",
-        "V2": true,
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationBase"],
         "type": "yeedi"
     },
     "t5e5o6": {
         "name": "yeedi Floor 3 Station",
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "type": "yeedi"
     },
     "kd0una": {
         "name": "yeedi Floor 3 Station",
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "type": "yeedi"
     },
     "t6kipw": {
         "name": "Yeedi Floor 3 Station",
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "type": "yeedi"
     },
     "u3bsxq": {
         "name": "Yeedi Floor 3 Station",
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "type": "yeedi"
     },
     "rwp09o": {
         "name": "yeedi Floor 3+",
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "type": "yeedi"
     },
     "vthpeg": {
         "name": "yeedi mop station",
         "V2": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "unit_care_info": true,
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
         "type": "yeedi"
     },
     "zwvyi2": {
         "name": "yeedi mop station pro",
         "V2": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationMoppingBase"],
         "unit_care_info": true,
-        "round_mop_info": true,
-        "air_drying": true,
-        "auto_empty_station": false,
         "type": "yeedi"
     },
     "9t30w8": {
         "name": "yeedi vac 2",
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationBase"],
         "type": "yeedi"
     },
     "aaxesz": {
         "name": "yeedi vac 2 pro",
         "V2": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationBase"],
         "unit_care_info": true,
-        "auto_empty_station": true,
-        "map_image_supported": false,
         "type": "yeedi"
     },
     "h041es": {
         "name": "yeedi vac hybrid",
+        "capabilities": ["base", "mapBase", "moppingBase", "stationBase"],
         "unit_care_info": true,
-        "auto_empty_station": true,
         "type": "yeedi"
     },
     "04z443": {
         "name": "yeedi vac max",
-        "auto_empty_station": true,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationBase"],
         "type": "yeedi"
     },
     "mnx7f4": {
         "name": "yeedi vac station",
-        "auto_empty_station": true,
-        "map_image_supported": false,
+        "capabilities": ["base", "mapBase", "moppingBase", "stationBase"],
         "type": "yeedi"
     }
 };
