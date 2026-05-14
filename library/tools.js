@@ -168,10 +168,8 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
         let deviceType = device.type;
         if (deviceType) {
             const deviceTypeProperties = getAllKnownModelTypes()[deviceType];
-            if (deviceTypeProperties && Array.isArray(deviceTypeProperties)) {
-                if (deviceTypeProperties.includes(property)) {
-                    value = true;
-                }
+            if (deviceTypeProperties && deviceTypeProperties[property] === true) {
+                value = true;
             }
         }
         if (device.hasOwnProperty(property)) {
