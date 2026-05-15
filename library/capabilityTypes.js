@@ -26,6 +26,9 @@ exports.CapabilityTypes = {
     "stationBase": {
         auto_empty_station: true
     },
+    "stationBaseOptional": {
+        auto_empty_station_optional: true
+    },
     "stationMoppingBase": {
         air_drying: true,
         round_mop_info: true

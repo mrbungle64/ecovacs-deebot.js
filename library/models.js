@@ -9,7 +9,7 @@ exports.SupportedDeebotModels = {
     },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "2o4lnm": {
@@ -59,7 +59,7 @@ exports.KnownDeebotModels = {
     },
     "jtmf04": {
         "name": "DEEBOT T10",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "rss8xk": {
@@ -89,7 +89,7 @@ exports.KnownDeebotModels = {
     },
     "m1wkuw": {
         "name": "DEEBOT N10",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "clojes": {
@@ -104,42 +104,42 @@ exports.KnownDeebotModels = {
     },
     "kr0277": {
         "name": "DEEBOT N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "edoodo": {
         "name": "DEEBOT N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "m17zko": {
         "name": "DEEBOT N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "p1wg05": {
         "name": "DEEBOT N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "3gwbbm": {
         "name": "Deebot N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "53qyvr": {
         "name": "Deebot N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "va8ygm": {
         "name": "Deebot N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "xw7zp9": {
         "name": "Deebot N20",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "buom7k": {
@@ -159,12 +159,12 @@ exports.KnownDeebotModels = {
     },
     "aavvfb": {
         "name": "DEEBOT N20 PRO",
-        "capabilities": ["base", "mapBase", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "c8gerr": {
         "name": "DEEBOT N20 PRO",
-        "capabilities": ["base", "mapBase", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "qhe2o2": {
@@ -184,12 +184,12 @@ exports.KnownDeebotModels = {
     },
     "zgsvkq": {
         "name": "DEEBOT N20e",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "ruhc0q": {
         "name": "DEEBOT N20e",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "yinacl": {
@@ -239,42 +239,42 @@ exports.KnownDeebotModels = {
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "r5y7re": {
         "name": "DEEBOT N8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "ty84oi": {
         "name": "DEEBOT N8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "36xnxf": {
         "name": "DEEBOT N8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "7zya6u": {
         "name": "DEEBOT N8 BLACK",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "snxbvc": {
         "name": "DEEBOT N8 PRO",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "yu362x": {
         "name": "DEEBOT N8 PRO",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "s1f8g7": {
         "name": "DEEBOT N8 PRO CARE",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "N8"
     },
     "85as7h": {
@@ -319,47 +319,47 @@ exports.KnownDeebotModels = {
     },
     "h18jkh": {
         "name": "DEEBOT OZMO T8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "b742vd": {
         "name": "DEEBOT OZMO T8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "7n95dm": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "dqcneu": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "sa4tf7": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "uzel1r": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "z0gd1j": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
     },
     "npu3pt": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8",
     },
     "q6pew4": {
         "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8",
     },
     "w16crm": {
@@ -489,17 +489,17 @@ exports.KnownDeebotModels = {
     },
     "36hdj8": {
         "name": "Deebot T30C Gen2",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "6q3rfp": {
         "name": "Deebot T30C Gen2",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "kl54s5": {
         "name": "Deebot T30C Gen2",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "8tyt2y": {
@@ -634,17 +634,17 @@ exports.KnownDeebotModels = {
     },
     "wgxm70": {
         "name": "DEEBOT T8",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T8"
     },
     "bs40nz": {
         "name": "DEEBOT T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T8"
     },
     "5089oy": {
         "name": "DEEBOT T8 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T8"
     },
     "tpnwyu": {
@@ -709,22 +709,22 @@ exports.KnownDeebotModels = {
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T9"
     },
     "ipohi5": {
         "name": "DEEBOT T9",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T9"
     },
     "8kwdb4": {
         "name": "DEEBOT T9 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T9"
     },
     "659yh8": {
         "name": "DEEBOT T9 AIVI",
-        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "capabilities": ["base", "mapBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T9"
     },
     "kw9ayx": {
