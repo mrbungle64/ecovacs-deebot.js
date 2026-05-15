@@ -11,6 +11,12 @@ exports.CapabilityTypes = {
         custom_area: true,
         map_image_supported: true
     },
+    "suctionMax": {
+        clean_speed: ["QUIET", "NORMAL", "MAX"]
+    },
+    "suctionMaxPlus": {
+        clean_speed: ["QUIET", "NORMAL", "MAX", "MAX_PLUS"]
+    },
     "moppingHigh": {
         water_amount: ["LOW", "MEDIUM", "HIGH"]
     },
