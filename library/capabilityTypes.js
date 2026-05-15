@@ -1,12 +1,10 @@
 exports.CapabilityTypes = {
-    "base": {
+    "vacuumBase": {
         main_brush: true,
         side_brush: true,
         filter: true,
         voice_report: true,
-        clean_speed: ["QUIET", "NORMAL", "MAX"]
-    },
-    "mapBase": {
+        clean_speed: ["QUIET", "NORMAL", "MAX"],
         spot_area: true,
         custom_area: true,
         map_image_supported: true
