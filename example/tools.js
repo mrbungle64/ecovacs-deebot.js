@@ -34,6 +34,7 @@ function dumpSomeVacbotData(vacbot, api) {
     console.log(`- Mopping system: ${vacbot.hasMoppingSystem()}`);
     console.log(`- Voice reports: ${vacbot.hasVoiceReports()}`);
     console.log(`- Auto empty station: ${vacbot.hasAutoEmptyStation()}`);
+    console.log(`- Optional auto empty station: ${vacbot.hasAutoEmptyStationOptional()}`);
     console.log(`- Canvas module available: ${api.getCanvasModuleIsAvailable()}`);
     console.log(`- Using country: ${api.getCountryName()}`);
     console.log(`- Using continent code: ${api.getContinent()}`);

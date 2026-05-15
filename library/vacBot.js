@@ -582,6 +582,14 @@ class VacBot {
     }
 
     /**
+     * Returns true if the model has an optional auto empty station
+     * @returns {boolean}
+     */
+    hasAutoEmptyStationOptional() {
+        return this.capabilityManager.hasAutoEmptyStationOptional();
+    }
+
+    /**
      * Returns true if the model supports map images
      * @returns {boolean}
      */

@@ -229,6 +229,14 @@ class CapabilityManager {
     }
 
     /**
+     * Returns true if the model has an optional auto empty station
+     * @returns {boolean}
+     */
+    hasAutoEmptyStationOptional() {
+        return this.getDeviceProperty('auto_empty_station_optional');
+    }
+
+    /**
      * Returns true if the model supports map images
      * @returns {boolean}
      */
