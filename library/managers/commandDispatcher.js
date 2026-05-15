@@ -251,15 +251,9 @@ class CommandDispatcher {
                         this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan([]));
                     } else {
                         const componentsArray = [];
-                        if (this.bot.hasFilter()) {
-                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['filter']);
-                        }
-                        if (this.bot.hasSideBrush()) {
-                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['side_brush']);
-                        }
-                        if (this.bot.hasMainBrush()) {
-                            componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
-                        }
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['filter']);
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['side_brush']);
+                        componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['main_brush']);
                         if (this.bot.hasUnitCareInfo()) {
                             componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['unit_care']);
                         }
