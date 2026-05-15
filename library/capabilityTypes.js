@@ -11,8 +11,11 @@ exports.CapabilityTypes = {
         custom_area: true,
         map_image_supported: true
     },
-    "moppingBase": {
+    "moppingHigh": {
         water_amount: ["LOW", "MEDIUM", "HIGH"]
+    },
+    "moppingUltraHigh": {
+        water_amount: ["LOW", "MEDIUM", "HIGH", "ULTRAHIGH"]
     },
     "stationBase": {
         auto_empty_station: true
