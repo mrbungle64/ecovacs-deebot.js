@@ -1041,6 +1041,7 @@ exports.KnownYeediModels = {
         "V2": true,
         "capabilities": ["base", "mapBase", "moppingHigh", "stationMoppingBase"],
         "unit_care_info": true,
+        "round_mop_info": true,
         "type": "yeedi"
     },
     "zwvyi2": {
@@ -1048,6 +1049,7 @@ exports.KnownYeediModels = {
         "V2": true,
         "capabilities": ["base", "mapBase", "moppingHigh", "stationMoppingBase"],
         "unit_care_info": true,
+        "round_mop_info": true,
         "type": "yeedi"
     },
     "9t30w8": {
