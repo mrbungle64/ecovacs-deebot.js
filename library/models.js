@@ -1210,27 +1210,22 @@ exports.LegacyDevices = {
     },
     "vsc5ia": {
         "name": "DEEBOT 500",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "emzppx": {
         "name": "DEEBOT 501",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "r8ead0": {
         "name": "DEEBOT 502",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "9akc61": {
         "name": "DEEBOT 505",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "dl8fht": {
         "name": "DEEBOT 600 Series",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "16wdph": {
@@ -1263,22 +1258,18 @@ exports.LegacyDevices = {
     },
     "ls1ok3": {
         "name": "DEEBOT 900 Series",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "y79a7u": {
         "name": "DEEBOT OZMO 900 Series",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "2pv572": {
         "name": "DEEBOT OZMO 905",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy"
     },
     "aqdd5p": {
         "name": "DEEBOT OZMO 905",
-        "clean_speed": ["NORMAL", "MAX"],
         "type": "legacy",
     },
     "115": {
