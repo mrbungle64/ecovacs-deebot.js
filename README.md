@@ -68,13 +68,15 @@ Support for new models is no longer added upon request. Due to high time constra
 ## Changelog
 
 ### 1.0.0-alpha.x
-* **Breaking Change:** Complete removal of legacy XMPP/XML and MQTT/XML protocol stacks.
-* Refactoring for pure MQTT/JSON communication.
+* **Breaking Change:** Complete removal of legacy XMPP/XML and MQTT/XML protocol stacks
+* Refactoring for pure MQTT/JSON communication
+* **New Feature:** Added `deviceType` property and `getDeviceType()` method (Vacuum Cleaner, Air Purifier, etc.)
+* **Refactoring:** Centralized model identification and properties documentation in `library/MODELS.md`
 
 ### 0.9.6 (Final Legacy Support)
-* **Final milestone** for all XML-based models.
-* Enforced minimum Node.js version 20.x.
-* Added support for T20, T30, X2, and X8 series.
+* **Final milestone** for all XML-based models
+* Enforced minimum Node.js version 20.x
+* Added support for T20, T30, X2, and X8 series
 
 ### 0.9.5 (Final Legacy stable)
 * Added GoToPosition shortcut function (e.g. T8, T9 and X1 series)
