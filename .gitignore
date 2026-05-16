@@ -15,4 +15,5 @@ library/map/
 *.code-workspace
 /qodana.yaml
 
-docs/
+.clinerules
+AGENTS.md

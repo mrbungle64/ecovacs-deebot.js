@@ -26,3 +26,6 @@ package-lock.json
 example/myInfo.js
 
 library/map/
+
+.clinerules
+AGENTS.md
