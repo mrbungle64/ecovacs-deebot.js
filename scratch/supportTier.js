@@ -10,6 +10,13 @@ const allModels = [
     { group: 'LegacyDevices', models: LegacyDevices }
 ];
 
+const allModelsRegistry = Object.assign({}, SupportedDeebotModels, SupportedAirPurifierModels, KnownDeebotModels, KnownYeediModels, KnownLawnMowerModels, LegacyDevices);
+
+const activeDeviceClasses = new Set([
+    ...Object.keys(SupportedDeebotModels),
+    ...Object.keys(SupportedAirPurifierModels)
+]);
+
 const supportedNames = [
     ...Object.values(SupportedDeebotModels).map(m => m.name),
     ...Object.values(SupportedAirPurifierModels).map(m => m.name)
@@ -19,12 +26,22 @@ function getSupportTier(model, group) {
     if (group === 'LegacyDevices' || model.type === 'legacy') {
         return '🔴 Legacy';
     }
-    if (group === 'SupportedDeebotModels' || group === 'SupportedAirPurifierModels') {
+
+    // Resolve model to get linked properties
+    let resolvedModel = { ...model };
+    if (resolvedModel.deviceClassLink && allModelsRegistry[resolvedModel.deviceClassLink]) {
+        resolvedModel = { ...allModelsRegistry[resolvedModel.deviceClassLink], ...resolvedModel };
+    }
+
+    // Is in a supported group OR links to a device in a supported group
+    if (group === 'SupportedDeebotModels' ||
+        group === 'SupportedAirPurifierModels' ||
+        activeDeviceClasses.has(model.deviceClassLink)) {
         return '🟢 Active';
     }
 
     const isActive = supportedNames.some(supportedName => {
-        return model.name.includes(supportedName);
+        return resolvedModel.name.includes(supportedName);
     });
 
     if (isActive) {
@@ -44,9 +61,14 @@ for (const { group, models } of allModels) {
         if (processedClasses.has(deviceClass)) continue;
         processedClasses.add(deviceClass);
 
-        const deviceType = ModelTypes[model.type]?.deviceType || 'Unknown';
+        let resolvedModel = { ...model };
+        if (resolvedModel.deviceClassLink && allModelsRegistry[resolvedModel.deviceClassLink]) {
+            resolvedModel = { ...allModelsRegistry[resolvedModel.deviceClassLink], ...resolvedModel };
+        }
+
+        const deviceType = ModelTypes[resolvedModel.type]?.deviceType || 'Unknown';
         const tier = getSupportTier(model, group);
 
-        console.log(`| ${deviceClass} | ${model.name} | ${deviceType} | ${model.type} | ${tier} |`);
+        console.log(`| ${deviceClass} | ${resolvedModel.name} | ${deviceType} | ${resolvedModel.type} | ${tier} |`);
     }
 }
