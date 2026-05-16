@@ -1,4 +1,7 @@
-// noinspection SpellCheckingInspection
+// Pre-refactoring baseline fixture data.
+// These objects represent the device property schema BEFORE the capability-based refactoring.
+// Do NOT update these values to match the current production schema –
+// they serve as the frozen baseline for regression tests in regression.test.js.
 
 exports.SupportedDevices = {
     "vi829v": {

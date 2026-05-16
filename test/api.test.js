@@ -2,6 +2,8 @@
 
 const { describe, it } = require('node:test');
 const assert = require('assert');
+const fs = require('fs');
+const crypto = require('crypto');
 const axios = require('axios');
 
 const ecovacsDeebot = require('../index.js');
@@ -46,37 +48,34 @@ describe('API', function () {
     it('should store the country provided', function () {
       const country = "nl";
       const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", country, "eu");
-      assert.ok(api.country);
+      assert.ok(api.country, 'country should be set');
       assert.strictEqual(api.country, country.toUpperCase());
     });
 
     it('should store the continent provided', function () {
       const continent = "eu";
       const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
-      assert.ok(api.continent);
+      assert.ok(api.continent, 'continent should be set');
       assert.strictEqual(api.continent, continent);
     });
 
     it('should provide a version number', function () {
       const continent = "eu";
       const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
-      assert.ok(api.getVersion());
-      assert.ok(ecovacsDeebot.EcoVacsAPI.version());
+      assert.ok(api.getVersion(), 'getVersion() should return a value');
+      assert.ok(ecovacsDeebot.EcoVacsAPI.version(), 'EcoVacsAPI.version() should return a value');
       assert.strictEqual(api.getVersion(), ecovacsDeebot.EcoVacsAPI.version());
     });
   });
 
   describe('rsa key file', function () {
-    const fs = require('fs');
-    const crypto = require('crypto');
-
     it('should exist as a file', async function () {
       await fs.promises.stat("key.pem");
     });
 
     it('should be a valid key file', function () {
       assert.doesNotThrow(() => {
-        const encrypted = crypto.publicEncrypt({
+        crypto.publicEncrypt({
           key: fs.readFileSync("key.pem", "utf8"),
           padding: crypto.constants.RSA_PKCS1_PADDING
         }, Buffer.from("unencrypted")).toString('base64');
@@ -220,23 +219,31 @@ describe('API tools', function () {
 });
 
 describe('Tools Extended', function () {
-  it('getTimeStringFormatted should format correctly', function () {
-    assert.strictEqual(tools.getTimeStringFormatted(3661), '1h 01m 01s');
-    assert.strictEqual(tools.getTimeStringFormatted(0), '0h 00m 00s');
+  describe('#getTimeStringFormatted', function () {
+    it('should format seconds into h m s notation', function () {
+      assert.strictEqual(tools.getTimeStringFormatted(3661), '1h 01m 01s');
+      assert.strictEqual(tools.getTimeStringFormatted(0), '0h 00m 00s');
+    });
   });
 
-  it('getReqID should return 8 digits', function () {
-    const id = tools.getReqID();
-    assert.match(id, /^\d{8}$/);
+  describe('#getReqID', function () {
+    it('should return 8 digits', function () {
+      const id = tools.getReqID();
+      assert.match(id, /^\d{8}$/);
+    });
   });
 
-  it('deviceClassLinks should be valid', function () {
-    const allDevices = tools.getAllKnownDevices();
-    for (const [id, data] of Object.entries(allDevices)) {
-      if (data.deviceClassLink) {
-        assert.ok(allDevices[data.deviceClassLink],
-          `Device ${id} links to non-existent ${data.deviceClassLink}`);
+  describe('#deviceClassLinks', function () {
+    it('should all reference existing device classes', function () {
+      const allDevices = tools.getAllKnownDevices();
+      for (const [id, data] of Object.entries(allDevices)) {
+        if (data.deviceClassLink) {
+          assert.ok(
+            allDevices[data.deviceClassLink],
+            `Device ${id} links to non-existent ${data.deviceClassLink}`
+          );
+        }
       }
-    }
+    });
   });
 });

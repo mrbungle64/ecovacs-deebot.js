@@ -3,7 +3,7 @@
 const { describe, it } = require('node:test');
 const assert = require('assert');
 const VacBot = require('../library/vacBot');
-const { SupportedDevices, KnownDevices } = require('./modelsTest');
+const { SupportedDevices, KnownDevices } = require('./fixtures/models.fixture');
 
 function createMockBot(deviceClass) {
     const vacuum = {
@@ -28,7 +28,12 @@ function createMockBot(deviceClass) {
 }
 
 describe('Regression Tests (Baseline v1)', function () {
-    const allBaselineDevices = Object.assign({}, SupportedDevices, KnownDevices);
+    // Detect accidental key overlaps between fixture datasets before merging.
+    const overlap = Object.keys(SupportedDevices).filter(k => k in KnownDevices);
+    if (overlap.length > 0) {
+        throw new Error(`Duplicate device class keys found in fixtures: ${overlap.join(', ')}`);
+    }
+    const allBaselineDevices = { ...SupportedDevices, ...KnownDevices };
 
     const hardAssertionProps = [
         '950type',
@@ -72,10 +77,14 @@ describe('Regression Tests (Baseline v1)', function () {
             if (baseline.hasOwnProperty('type')) {
                 let expectedType = baseline['type'];
 
+                // Baseline uses pre-refactoring type name 'goat';
+                // production code now returns 'lawnMower' after the type renaming – map accordingly.
                 if (actualType === 'lawnMower' && expectedType === 'goat') {
                     expectedType = 'lawnMower';
                 }
 
+                // Legacy models: the refactored code normalises all XML-based models to 'legacy',
+                // regardless of the specific type name stored in the pre-refactoring baseline.
                 if (actualType === 'legacy') {
                     expectedType = 'legacy';
                 }
