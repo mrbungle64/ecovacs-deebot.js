@@ -96,7 +96,6 @@ exports.ModelTypes = {
     "spot_area": true,
     "custom_area": true,
     "voice_report": true,
-    "clean_speed": true,
     "map_image_supported": true
   },
   // Legacy models (XML based).

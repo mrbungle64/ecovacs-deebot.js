@@ -22,12 +22,6 @@ exports.CLEAN_MODE_TO_ECOVACS = {
     'qcClean': 'qcClean'
 };
 
-exports.CLEAN_ACTION_TO_ECOVACS = {
-    'start': 'start',
-    'pause': 'pause',
-    'resume': 'resume',
-    'stop': 'stop'
-};
 
 exports.CLEAN_MODE_FROM_ECOVACS = {
     'auto': 'auto',
@@ -62,6 +56,11 @@ exports.WORKMODE_TO_ECOVACS = {
     'mopAfterVacuum': 3 // Mop after vacuum
 };
 
+// Ecovacs uses a very inconsistent and non-sequential numbering scheme for suction power (clean speed) in their API.
+// Historically, earlier devices likely only had "Normal" (0), and later introduced "Max" (1) and "Max Plus" (2).
+// When "Silent/Quiet" was added below "Normal", they couldn't easily shift the scale, so it was awkwardly assigned the value 1000.
+// This mapping translates these arbitrary Ecovacs API values into a logical, sequential order (1, 2, 3, 4) 
+// so that integrations can easily work with a linear scale.
 exports.CLEAN_SPEED_TO_ECOVACS = {
     1: 1000,  // Silent, Quiet
     2: 0,     // Normal

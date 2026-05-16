@@ -23,7 +23,7 @@ class Clean extends VacBotCommand {
      */
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
-            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            'act': action,
             'count': 1,
             'donotClean': 0,
             'router': 'plan',
@@ -46,7 +46,7 @@ class Clean extends VacBotCommand {
 class Clean_V2 extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
         let payload = {
-            'act': constants_type.CLEAN_ACTION_TO_ECOVACS[action],
+            'act': action,
             'content': {
                 'count': 1,
                 'donotClean': '',
