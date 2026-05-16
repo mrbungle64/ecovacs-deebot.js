@@ -57,7 +57,7 @@ exports.SupportedDeebotModels = {
     },
     "w16crm": {
         "name": "DEEBOT OZMO T8 AIVI+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "OZMO", "PLUS", "moppingUltraHigh"],
         "type": "T8"
     },
     "2o4lnm": {
@@ -110,7 +110,7 @@ exports.KnownDeebotModels = {
     },
     "rss8xk": {
         "name": "DEEBOT T10 PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "air_freshener_info": true,
         "type": "T10"
     },
@@ -122,7 +122,7 @@ exports.KnownDeebotModels = {
     },
     "p95mgv": {
         "name": "DEEBOT T10 PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "9s1s80": {
@@ -142,12 +142,12 @@ exports.KnownDeebotModels = {
     },
     "clojes": {
         "name": "DEEBOT N10 MAX+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "umwv6z": {
         "name": "DEEBOT N10 PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "kr0277": {
@@ -242,12 +242,12 @@ exports.KnownDeebotModels = {
     },
     "yinacl": {
         "name": "DEEBOT N20e PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "7piq03": {
         "name": "DEEBOT N20e PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "jffnlf": {
@@ -327,22 +327,22 @@ exports.KnownDeebotModels = {
     },
     "85as7h": {
         "name": "DEEBOT N8 PRO+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "N8"
     },
     "ifbw08": {
         "name": "DEEBOT N8 PRO+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "N8"
     },
     "7bryc5": {
         "name": "DEEBOT N8+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "N8"
     },
     "b2jqs4": {
         "name": "DEEBOT N8+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "N8"
     },
     "a7lhb1": {
@@ -362,7 +362,7 @@ exports.KnownDeebotModels = {
     },
     "zjavof": {
         "name": "DEEBOT NEO+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "h18jkh": {
@@ -382,12 +382,12 @@ exports.KnownDeebotModels = {
     },
     "fqxoiu": {
         "name": "DEEBOT OZMO T8+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "OZMO", "PLUS", "moppingUltraHigh"],
         "type": "T8"
     },
     "55aiho": {
         "name": "DEEBOT OZMO T8+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "OZMO", "PLUS", "moppingUltraHigh"],
         "type": "T8"
     },
     "p1jij8": {
@@ -432,7 +432,7 @@ exports.KnownDeebotModels = {
     },
     "viq3mw": {
         "name": "DEEBOT T20 OMNI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "x9ugz3": {
@@ -448,17 +448,17 @@ exports.KnownDeebotModels = {
     "cgm9ex": {
         "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "dzuvdj": {
         "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "uuu4n6": {
         "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "9ku8nu": {
         "name": "DEEBOT T20e OMNI",
@@ -618,7 +618,7 @@ exports.KnownDeebotModels = {
     "2kuxj0": {
         "name": "DEEBOT T50 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "fd60kt": {
         "name": "DEEBOT T50 OMNI",
@@ -628,17 +628,17 @@ exports.KnownDeebotModels = {
     "mezar1": {
         "name": "DEEBOT T50 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "nxeux7": {
         "name": "DEEBOT T50 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "qg1d6t": {
         "name": "DEEBOT T50 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "wgxm70": {
         "name": "DEEBOT T8",
@@ -657,17 +657,17 @@ exports.KnownDeebotModels = {
     },
     "tpnwyu": {
         "name": "DEEBOT T8 AIVI +",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T8"
     },
     "34vhpm": {
         "name": "DEEBOT T8 AIVI +",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T8"
     },
     "vdehg6": {
         "name": "DEEBOT T8 AIVI +",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T8"
     },
     "a1nNMoAGAsH": {
@@ -698,22 +698,22 @@ exports.KnownDeebotModels = {
     "aasdks": {
         "name": "DEEBOT T80 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "hu94nh": {
         "name": "DEEBOT T80 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "kdnfi5": {
         "name": "DEEBOT T80 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "w7y3cb": {
         "name": "DEEBOT T80 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
-        "type": "T20",
+        "type": "T20"
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
@@ -742,12 +742,12 @@ exports.KnownDeebotModels = {
     },
     "lhbd50": {
         "name": "DEEBOT T9+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T9"
     },
     "um2ywg": {
         "name": "DEEBOT T9+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T9"
     },
     "85nbtp": {
@@ -757,7 +757,7 @@ exports.KnownDeebotModels = {
     },
     "626v6g": {
         "name": "DEEBOT TEO+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T10"
     },
     "ipzjy0": {
@@ -842,13 +842,13 @@ exports.KnownDeebotModels = {
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS"],
         "air_freshener_info": true,
         "type": "X1"
     },
     "8bja83": {
         "name": "DEEBOT X1 OMNI",
-        "capabilities": ["vacuumBase", "OMNI"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "X1"
     },
     "1b23du": {
@@ -1179,7 +1179,7 @@ exports.KnownLawnMowerModels = {
 exports.LegacyDevices = {
     "3ab24g": {
         "name": "yeedi K650",
-        "type": "legacy",
+        "type": "legacy"
     },
     "09m4bu": {
         "name": "yeedi K650",
@@ -1271,7 +1271,7 @@ exports.LegacyDevices = {
     },
     "aqdd5p": {
         "name": "DEEBOT OZMO 905",
-        "type": "legacy",
+        "type": "legacy"
     },
     "115": {
         "name": "DEEBOT OZMO/PRO 930 Series",
