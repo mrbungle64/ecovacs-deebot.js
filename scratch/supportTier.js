@@ -12,42 +12,13 @@ const allModels = [
 
 const allModelsRegistry = Object.assign({}, SupportedDeebotModels, SupportedAirPurifierModels, KnownDeebotModels, KnownYeediModels, KnownLawnMowerModels, LegacyDevices);
 
-const activeDeviceClasses = new Set([
-    ...Object.keys(SupportedDeebotModels),
-    ...Object.keys(SupportedAirPurifierModels)
-]);
-
-const supportedNames = [
-    ...Object.values(SupportedDeebotModels).map(m => m.name),
-    ...Object.values(SupportedAirPurifierModels).map(m => m.name)
-];
-
 function getSupportTier(model, group) {
     if (group === 'LegacyDevices' || model.type === 'legacy') {
         return '🔴 Legacy';
     }
-
-    // Resolve model to get linked properties
-    let resolvedModel = { ...model };
-    if (resolvedModel.deviceClassLink && allModelsRegistry[resolvedModel.deviceClassLink]) {
-        resolvedModel = { ...allModelsRegistry[resolvedModel.deviceClassLink], ...resolvedModel };
-    }
-
-    // Is in a supported group OR links to a device in a supported group
-    if (group === 'SupportedDeebotModels' ||
-        group === 'SupportedAirPurifierModels' ||
-        activeDeviceClasses.has(model.deviceClassLink)) {
+    if (group === 'SupportedDeebotModels' || group === 'SupportedAirPurifierModels') {
         return '🟢 Active';
     }
-
-    const isActive = supportedNames.some(supportedName => {
-        return resolvedModel.name.includes(supportedName);
-    });
-
-    if (isActive) {
-        return '🟢 Active';
-    }
-
     return '🟡 Community';
 }
 
