@@ -3,7 +3,7 @@
 const { describe, it } = require('node:test');
 const assert = require('assert');
 const VacBot = require('../library/vacBot');
-const { SupportedDevices, KnownDevices } = require('./models_pre_v1');
+const { SupportedDevices, KnownDevices } = require('./modelsTest');
 
 function createMockBot(deviceClass) {
     const vacuum = {
