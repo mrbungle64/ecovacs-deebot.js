@@ -31,6 +31,13 @@ class CapabilityManager {
     getModelType() {
         return tools.getModelType(this.bot.deviceClass);
     }
+    /**
+     * Returns the device type
+     * @returns {String}
+     */
+    getDeviceType() {
+        return tools.getDeviceType(this.bot.deviceClass);
+    }
 
     isModelTypeLegacy() {
         return this.getModelType() === 'legacy';

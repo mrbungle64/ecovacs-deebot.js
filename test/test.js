@@ -178,6 +178,45 @@ describe('API tools', function () {
       });
     });
   });
+
+  describe('getDeviceType', function () {
+    it('should return a valid device type (not "unknown") for all models in models.js', function () {
+      const allDevices = tools.getAllKnownDevices();
+      const deviceClasses = Object.keys(allDevices);
+
+      assert.ok(deviceClasses.length > 0, 'There should be at least one device class');
+
+      deviceClasses.forEach(deviceClass => {
+        const deviceType = tools.getDeviceType(deviceClass);
+        assert.notStrictEqual(deviceType, 'unknown',
+          `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known device type, but got "unknown"`);
+      });
+    });
+
+    it('should return the correct device type for specific example models', function () {
+      const examples = [
+        { class: 'yna5xi', expected: 'Vacuum Cleaner' },
+        { class: 'h18jkh', expected: 'Vacuum Cleaner' },
+        { class: 'ucn2xe', expected: 'Vacuum Cleaner' },
+        { class: 'n6cwdb', expected: 'Vacuum Cleaner' },
+        { class: 'jtmf04', expected: 'Vacuum Cleaner' },
+        { class: '2o4lnm', expected: 'Vacuum Cleaner' },
+        { class: 'e6ofmn', expected: 'Vacuum Cleaner' },
+        { class: 'ipzjy0', expected: 'Vacuum Cleaner' },
+        { class: 'h041es', expected: 'Vacuum Cleaner' },
+        { class: 'sdp1y1', expected: 'Air Purifier' },
+        { class: '20anby', expected: 'Air Quality Monitor' },
+        { class: '5xu9h3', expected: 'Lawn Mower' },
+        { class: '123', expected: 'Vacuum Cleaner' }
+      ];
+
+      examples.forEach(({ class: deviceClass, expected }) => {
+        const deviceType = tools.getDeviceType(deviceClass);
+        assert.strictEqual(deviceType, expected,
+          `Device class "${deviceClass}" should have device type "${expected}", but got "${deviceType}"`);
+      });
+    });
+  });
 });
 
 describe('Tools Extended', function () {

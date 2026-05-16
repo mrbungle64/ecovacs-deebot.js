@@ -379,6 +379,14 @@ class VacBot {
         return this.capabilityManager.getModelType();
     }
 
+    /**
+     * Returns the device type
+     * @returns {String}
+     */
+    getDeviceType() {
+        return this.capabilityManager.getDeviceType();
+    }
+
     isModelTypeLegacy() {
         return this.capabilityManager.isModelTypeLegacy();
     }

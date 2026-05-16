@@ -19,6 +19,7 @@ function getSettingsFile() {
 function dumpSomeVacbotData(vacbot, api) {
     console.log(`- Name: ${vacbot.getName()}`);
     console.log(`- Model: ${vacbot.deviceModel}`);
+    console.log(`- Device type: ${vacbot.getDeviceType()}`);
     console.log(`- Image url: ${vacbot.deviceImageURL}`);
     console.log(`- Is fully supported model: ${vacbot.isSupportedDevice()}`);
     console.log(`- Is a at least partly supported model: ${vacbot.isKnownDevice()}`);

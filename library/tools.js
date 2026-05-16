@@ -151,6 +151,18 @@ function getModelType(deviceClass) {
 }
 
 /**
+ * Returns the device type
+ * @returns {String}
+ */
+function getDeviceType(deviceClass) {
+    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    if (devices.hasOwnProperty(deviceClass)) {
+        return getDeviceProperty(deviceClass, 'deviceType', 'unknown');
+    }
+    return 'unknown';
+}
+
+/**
  * Get the value of the given property for the device class
  * @param {string} deviceClass - The device class to get the property for
  * @param {string} property - The property to get
@@ -169,11 +181,11 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
         let deviceType = device.type;
         if (deviceType) {
             const deviceTypeProperties = getAllKnownModelTypes()[deviceType];
-            if (deviceTypeProperties && deviceTypeProperties[property] === true) {
-                value = true;
+            if (deviceTypeProperties && deviceTypeProperties.hasOwnProperty(property)) {
+                value = deviceTypeProperties[property];
             }
         }
-        
+
         if (device.capabilities && Array.isArray(device.capabilities)) {
             for (const capability of device.capabilities) {
                 const capProps = capabilityTypes.CapabilityTypes[capability];
@@ -439,6 +451,7 @@ module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getModelType = getModelType;
+module.exports.getDeviceType = getDeviceType;
 module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
