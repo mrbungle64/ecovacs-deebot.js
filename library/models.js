@@ -13,16 +13,66 @@ exports.SupportedDeebotModels = {
         "capabilities": ["vacuumBase", "moppingUltraHigh", "OZMO"],
         "type": "950"
     },
+    "eazo2f": {
+        "name": "DEEBOT OZMO 920/950",
+        "deviceClassLink": "vi829v"
+    },
+    "yna5xi": {
+        "name": "DEEBOT OZMO 950 Series",
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
+        "type": "950"
+    },
     "x5d34r": {
         "name": "DEEBOT OZMO T8 AIVI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
+        "type": "T8"
+    },
+    "7n95dm": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "dqcneu": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "sa4tf7": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "uzel1r": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r",
+    },
+    "z0gd1j": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "npu3pt": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "q6pew4": {
+        "name": "DEEBOT OZMO T8 AIVI",
+        "deviceClassLink": "x5d34r"
+    },
+    "w16crm": {
+        "name": "DEEBOT OZMO T8 AIVI+",
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "PLUS"],
         "type": "T8"
     },
     "2o4lnm": {
         "name": "DEEBOT X1 TURBO",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "TURBO"],
         "type": "X1"
-    }
+    },
+    "8onkgl": {
+        "name": "DEEBOT X1 TURBO",
+        "deviceClassLink": "2o4lnm"
+    },
+    "s523z1": {
+        "name": "DEEBOT X1 TURBO",
+        "deviceClassLink": "2o4lnm"
+    },
 };
 
 // Supported air purifier models (e.g. AIRBOT Z1)
@@ -43,16 +93,6 @@ exports.SupportedAirPurifierModels = {
 
 // Known DEEBOT models (bulk of T/N/X series)
 exports.KnownDeebotModels = {
-    "eazo2f": {
-        "name": "DEEBOT OZMO 920/950",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
-        "type": "950"
-    },
-    "yna5xi": {
-        "name": "DEEBOT OZMO 950 Series",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
-        "type": "950"
-    },
     "9rft3c": {
         "name": "DEEBOT OZMO T5",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO"],
@@ -331,46 +371,6 @@ exports.KnownDeebotModels = {
     "b742vd": {
         "name": "DEEBOT OZMO T8",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8"
-    },
-    "7n95dm": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8"
-    },
-    "dqcneu": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8"
-    },
-    "sa4tf7": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8"
-    },
-    "uzel1r": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8"
-    },
-    "z0gd1j": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8"
-    },
-    "npu3pt": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8",
-    },
-    "q6pew4": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
-        "type": "T8",
-    },
-    "w16crm": {
-        "name": "DEEBOT OZMO T8 AIVI+",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "PLUS"],
         "type": "T8"
     },
     "0bdtzz": {
@@ -836,16 +836,6 @@ exports.KnownDeebotModels = {
     "3yqsch": {
         "name": "DEEBOT X1",
         "capabilities": ["vacuumBase", "moppingHigh"],
-        "type": "X1"
-    },
-    "8onkgl": {
-        "name": "DEEBOT X1 TURBO",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "TURBO"],
-        "type": "X1"
-    },
-    "s523z1": {
-        "name": "DEEBOT X1 TURBO",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "TURBO"],
         "type": "X1"
     },
     "n4gstt": {
