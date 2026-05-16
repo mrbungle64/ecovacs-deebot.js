@@ -1184,6 +1184,10 @@ exports.LegacyDevices = {
         "name": "yeedi K650",
         "type": "legacy"
     },
+    "u5vcmk": {
+        "name": "yeedi vac",
+        "type": "legacy"
+    },
     "123": {
         "name": "DEEBOT Slim2 Series",
         "type": "legacy"
@@ -1275,9 +1279,5 @@ exports.LegacyDevices = {
     "gd4uut": {
         "name": "DEEBOT OZMO 960",
         "type": "legacy"
-    },
-    "u5vcmk": {
-        "name": "yeedi vac",
-        "type": "yeedi"
     }
 };
