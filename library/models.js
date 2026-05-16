@@ -394,67 +394,67 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "m4xnd8": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "ohjbzz": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "paeygf": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "poke1m": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "qdajz8": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "r0321c": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "ulzked": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "viq3mw": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "x9ugz3": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "yi396x": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "cgm9ex": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20",
     },
     "dzuvdj": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20",
     },
     "uuu4n6": {
-        "name": "DEEBOT T20 Omni",
+        "name": "DEEBOT T20 OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20",
     },
@@ -554,62 +554,62 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "63cum9": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "7c26ui": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "8o3xke": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "bheggm": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "c8rj4y": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "cuoipb": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "czjwet": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "elrxgb": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "k1lgm7": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "qnkybo": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "xztz07": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "8n0t5d": {
-        "name": "DEEBOT T30S Pro Omni",
+        "name": "DEEBOT T30S PRO OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
@@ -839,12 +839,12 @@ exports.KnownDeebotModels = {
         "type": "X1"
     },
     "8onkgl": {
-        "name": "DEEBOT X1 Turbo",
+        "name": "DEEBOT X1 TURBO",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "TURBO"],
         "type": "X1"
     },
     "s523z1": {
-        "name": "DEEBOT X1 Turbo",
+        "name": "DEEBOT X1 TURBO",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "TURBO"],
         "type": "X1"
     },
@@ -854,7 +854,7 @@ exports.KnownDeebotModels = {
         "type": "X1"
     },
     "8bja83": {
-        "name": "DEEBOT X1 Omni",
+        "name": "DEEBOT X1 OMNI",
         "capabilities": ["vacuumBase", "OMNI"],
         "type": "X1"
     },
@@ -994,7 +994,7 @@ exports.KnownDeebotModels = {
         "type": "X2"
     },
     "rzwv5p": {
-        "name": "DEEBOT T80S Omni",
+        "name": "DEEBOT T80S OMNI",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
@@ -1135,7 +1135,7 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "51rcxt": {
-        "name": "GOAT A3000 LiDAR Pro",
+        "name": "GOAT A3000 LiDAR PRO",
         "type": "lawnMower"
     },
     "6cibhb": {
@@ -1163,11 +1163,11 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "aadham": {
-        "name": "GOAT A3000 LiDAR Pro",
+        "name": "GOAT A3000 LiDAR PRO",
         "type": "lawnMower"
     },
     "e4gqia": {
-        "name": "GOAT A3000 LiDAR Pro",
+        "name": "GOAT A3000 LiDAR PRO",
         "type": "lawnMower"
     },
     "neiwny": {
@@ -1175,7 +1175,7 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "wwswjm": {
-        "name": "GOAT A3000 LiDAR Pro",
+        "name": "GOAT A3000 LiDAR PRO",
         "type": "lawnMower"
     },
     "xmp9ds": {
