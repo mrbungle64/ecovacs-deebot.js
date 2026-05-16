@@ -17,6 +17,9 @@ This document describes the strategy and properties used for identifying and con
 
 The following properties can be defined in `modelTypes.js` or `capabilityTypes.js` to configure the supported features of a device:
 
+### General
+*   **`deviceType`** (string): The general category of the device (e.g., `Vacuum Cleaner`, `Air Purifier`, `Air Quality Monitor`, `Lawn Mower`).
+
 ### Protocol
 *   **`V2`** (boolean): Indicates the use of "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) instead of legacy commands.
 
