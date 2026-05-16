@@ -1,5 +1,11 @@
 // noinspection SpellCheckingInspection
 
+/**
+ * @file This file contains specific model configurations.
+ * For a detailed explanation of properties and model identification strategy,
+ * please refer to the `MODELS.md` file in this directory.
+ */
+
 // Modern and actively supported Deebot models
 exports.SupportedDeebotModels = {
     "vi829v": {

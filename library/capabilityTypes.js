@@ -1,3 +1,9 @@
+/**
+ * @file This file defines groups of capabilities that can be applied to models.
+ * For a detailed explanation of properties and model identification strategy,
+ * please refer to the `MODELS.md` file in this directory.
+ */
+
 exports.CapabilityTypes = {
     "vacuumBase": {
         main_brush: true,
