@@ -6,7 +6,7 @@
  * please refer to the `MODELS.md` file in this directory.
  */
 
-// Modern and actively supported Deebot models
+// Modern and actively supported DEEBOT models
 exports.SupportedDeebotModels = {
     "vi829v": {
         "name": "DEEBOT OZMO 920",
@@ -41,7 +41,7 @@ exports.SupportedAirPurifierModels = {
     }
 };
 
-// Known Deebot models (bulk of T/N/X series)
+// Known DEEBOT models (bulk of T/N/X series)
 exports.KnownDeebotModels = {
     "eazo2f": {
         "name": "DEEBOT OZMO 920/950",
@@ -129,22 +129,22 @@ exports.KnownDeebotModels = {
         "type": "T10"
     },
     "3gwbbm": {
-        "name": "Deebot N20",
+        "name": "DEEBOT N20",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "53qyvr": {
-        "name": "Deebot N20",
+        "name": "DEEBOT N20",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "va8ygm": {
-        "name": "Deebot N20",
+        "name": "DEEBOT N20",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
     "xw7zp9": {
-        "name": "Deebot N20",
+        "name": "DEEBOT N20",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBaseOptional"],
         "type": "T10"
     },
@@ -444,17 +444,17 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "cgm9ex": {
-        "name": "Deebot T20 Omni",
+        "name": "DEEBOT T20 Omni",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20",
     },
     "dzuvdj": {
-        "name": "Deebot T20 Omni",
+        "name": "DEEBOT T20 Omni",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20",
     },
     "uuu4n6": {
-        "name": "Deebot T20 Omni",
+        "name": "DEEBOT T20 Omni",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20",
     },
@@ -494,17 +494,17 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "36hdj8": {
-        "name": "Deebot T30C Gen2",
+        "name": "DEEBOT T30C Gen2",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "6q3rfp": {
-        "name": "Deebot T30C Gen2",
+        "name": "DEEBOT T30C Gen2",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "kl54s5": {
-        "name": "Deebot T30C Gen2",
+        "name": "DEEBOT T30C Gen2",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
@@ -609,7 +609,7 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "8n0t5d": {
-        "name": "Deebot T30S Pro Omni",
+        "name": "DEEBOT T30S Pro Omni",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
