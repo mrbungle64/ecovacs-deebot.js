@@ -20,7 +20,8 @@ exports.ModelTypes = {
     "deviceType": "Vacuum Cleaner",
     "V2": true,
     "unit_care_info": true,
-    "round_mop_info": true
+    "round_mop_info": true,
+    "hosted_mode": true
   },
   // T8 series (TrueMapping devices with LiDAR).
   "T8": {
@@ -41,6 +42,7 @@ exports.ModelTypes = {
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true,
+    "hosted_mode": true,
     "yiko": true
   },
   // N8 series (TrueMapping devices).
@@ -54,6 +56,7 @@ exports.ModelTypes = {
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true,
+    "hosted_mode": true,
     "yiko": true
   },
   // X1 series (Flagship TrueMapping devices).
@@ -62,6 +65,7 @@ exports.ModelTypes = {
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true,
+    "hosted_mode": true,
     "yiko": true
   },
   // X2 series (Flagship TrueMapping devices).
@@ -70,6 +74,7 @@ exports.ModelTypes = {
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true,
+    "hosted_mode": true,
     "yiko": true
   },
   // AIRBOT series (air purifiers). Focuses on air quality without floor cleaning.
@@ -95,8 +100,7 @@ exports.ModelTypes = {
     "deviceType": "Vacuum Cleaner",
     "spot_area": true,
     "custom_area": true,
-    "voice_report": true,
-    "map_image_supported": true
+    "voice_report": true
   },
   // Legacy models (XML based).
   "legacy": {

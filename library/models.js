@@ -111,11 +111,13 @@ exports.KnownDeebotModels = {
     "rss8xk": {
         "name": "DEEBOT T10 PLUS",
         "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "air_freshener_info": true,
         "type": "T10"
     },
+
     "lx3j7m": {
-        "name": "DEEBOT T10 PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "PLUS"],
+        "name": "DEEBOT T10 OMNI",
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T10"
     },
     "p95mgv": {
@@ -285,7 +287,7 @@ exports.KnownDeebotModels = {
     },
     "n6cwdb": {
         "name": "DEEBOT N8",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingUltraHigh"],
         "type": "N8"
     },
     "r5y7re": {
@@ -840,7 +842,8 @@ exports.KnownDeebotModels = {
     },
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
-        "capabilities": ["vacuumBase", "suctionMaxPlus", "PLUS"],
+        "capabilities": ["vacuumBase", "suctionMaxPlus", "moppingHigh", "PLUS"],
+        "air_freshener_info": true,
         "type": "X1"
     },
     "8bja83": {
@@ -1037,7 +1040,6 @@ exports.KnownYeediModels = {
         "V2": true,
         "capabilities": ["vacuumBase", "moppingHigh", "stationMoppingBase"],
         "unit_care_info": true,
-        "round_mop_info": true,
         "type": "yeedi"
     },
     "zwvyi2": {
@@ -1045,7 +1047,6 @@ exports.KnownYeediModels = {
         "V2": true,
         "capabilities": ["vacuumBase", "moppingHigh", "stationMoppingBase"],
         "unit_care_info": true,
-        "round_mop_info": true,
         "type": "yeedi"
     },
     "9t30w8": {
@@ -1056,7 +1057,7 @@ exports.KnownYeediModels = {
     "aaxesz": {
         "name": "yeedi vac 2 pro",
         "V2": true,
-        "capabilities": ["vacuumBase", "moppingHigh", "stationBase"],
+        "capabilities": ["vacuumBase", "moppingHigh"],
         "unit_care_info": true,
         "type": "yeedi"
     },

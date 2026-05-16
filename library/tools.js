@@ -198,6 +198,34 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
         if (device.hasOwnProperty(property)) {
             value = device[property];
         }
+
+        // Backward compatibility
+        if (property === 'mopping_system') {
+            if (value === defaultValue) {
+                const waterAmount = getDeviceProperty(deviceClass, 'water_amount', 'NOT_FOUND');
+                if (waterAmount !== 'NOT_FOUND') {
+                    value = true;
+                }
+            }
+        } else if (property === '950type_V2') {
+            if (value === defaultValue) {
+                const v2 = getDeviceProperty(deviceClass, 'V2', 'NOT_FOUND');
+                if (v2 !== 'NOT_FOUND') {
+                    value = v2;
+                }
+            }
+        } else if (property === '950type') {
+            if (value === defaultValue) {
+                value = !isLegacyModel(deviceClass);
+            }
+        } else if (property === 'auto_empty_station') {
+            if (value === defaultValue) {
+                const opt = getDeviceProperty(deviceClass, 'auto_empty_station_optional', 'NOT_FOUND');
+                if (opt !== 'NOT_FOUND') {
+                    value = opt;
+                }
+            }
+        }
     }
     return value;
 }

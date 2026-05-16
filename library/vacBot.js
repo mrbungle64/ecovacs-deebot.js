@@ -85,6 +85,8 @@ class VacBot {
         this.is_ready = false;
 
         this.deviceClass = vacuum['class'];
+        this.capabilityManager = new CapabilityManager(this);
+
         this.deviceModel = this.getProductName();
         this.deviceImageURL = this.getProductImageURL();
 
@@ -93,10 +95,8 @@ class VacBot {
 
         this.genericCommand = null;
 
-        this.capabilityManager = new CapabilityManager(this);
-
         if (!this.is950type()) {
-            const msg = `'XML' based model identified (unsupported)`;
+            const msg = '\'XML\' based model identified (unsupported)';
             tools.envLogError(msg);
             throw new Error(msg);
         }
