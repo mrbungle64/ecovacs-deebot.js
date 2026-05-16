@@ -277,6 +277,11 @@ declare class VacBot {
      * @returns {String}
      */
     getModelType(): string;
+    /**
+     * Returns the device type
+     * @returns {String}
+     */
+    getDeviceType(): string;
     isModelTypeLegacy(): boolean;
     isModelTypeN8(): boolean;
     isModelTypeT8(): boolean;
@@ -386,6 +391,11 @@ declare class VacBot {
      * @returns {boolean}
      */
     hasAutoEmptyStation(): boolean;
+    /**
+     * Returns true if the model has an optional auto empty station
+     * @returns {boolean}
+     */
+    hasAutoEmptyStationOptional(): boolean;
     /**
      * Returns true if the model supports map images
      * @returns {boolean}

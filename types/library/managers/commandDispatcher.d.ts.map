@@ -1,1 +1,1 @@
-{"version":3,"file":"commandDispatcher.d.ts","sourceRoot":"","sources":["../../../library/managers/commandDispatcher.js"],"names":[],"mappings":";AAMA;;;GAGG;AACH;IACI;;OAEG;IACH,iBAFW,MAAM,EAIhB;IADG,YAAc;IAGlB;;;;;OAKG;IACH,cAJW,MAAM,mBAEJ,OAAO,CAwenB;CACJ"}
+{"version":3,"file":"commandDispatcher.d.ts","sourceRoot":"","sources":["../../../library/managers/commandDispatcher.js"],"names":[],"mappings":";AAMA;;;GAGG;AACH;IACI;;OAEG;IACH,iBAFW,MAAM,EAIhB;IADG,YAAc;IAGlB;;;;;OAKG;IACH,cAJW,MAAM,mBAEJ,OAAO,CAkenB;CACJ"}

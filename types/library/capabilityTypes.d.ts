@@ -1,21 +1,34 @@
 export namespace CapabilityTypes {
-    namespace base {
+    namespace vacuumBase {
         let main_brush: boolean;
         let side_brush: boolean;
         let filter: boolean;
         let voice_report: boolean;
         let clean_speed: string[];
-    }
-    namespace mapBase {
         let spot_area: boolean;
         let custom_area: boolean;
         let map_image_supported: boolean;
     }
-    namespace moppingBase {
+    namespace suctionMax {
+        let clean_speed_1: string[];
+        export { clean_speed_1 as clean_speed };
+    }
+    namespace suctionMaxPlus {
+        let clean_speed_2: string[];
+        export { clean_speed_2 as clean_speed };
+    }
+    namespace moppingHigh {
         let water_amount: string[];
+    }
+    namespace moppingUltraHigh {
+        let water_amount_1: string[];
+        export { water_amount_1 as water_amount };
     }
     namespace stationBase {
         let auto_empty_station: boolean;
+    }
+    namespace stationBaseOptional {
+        let auto_empty_station_optional: boolean;
     }
     namespace stationMoppingBase {
         let air_drying: boolean;
@@ -30,13 +43,13 @@ export namespace CapabilityTypes {
         export { round_mop_info_1 as round_mop_info };
     }
     namespace OZMO {
-        let water_amount_1: string[];
-        export { water_amount_1 as water_amount };
+        let water_amount_2: string[];
+        export { water_amount_2 as water_amount };
     }
     namespace COMBO {
         export let unit_care_info: boolean;
-        let water_amount_2: string[];
-        export { water_amount_2 as water_amount };
+        let water_amount_3: string[];
+        export { water_amount_3 as water_amount };
         let round_mop_info_2: boolean;
         export { round_mop_info_2 as round_mop_info };
         let air_drying_2: boolean;
@@ -47,8 +60,8 @@ export namespace CapabilityTypes {
     namespace OMNI {
         let unit_care_info_1: boolean;
         export { unit_care_info_1 as unit_care_info };
-        let water_amount_3: string[];
-        export { water_amount_3 as water_amount };
+        let water_amount_4: string[];
+        export { water_amount_4 as water_amount };
         let round_mop_info_3: boolean;
         export { round_mop_info_3 as round_mop_info };
         let air_drying_3: boolean;
@@ -59,8 +72,8 @@ export namespace CapabilityTypes {
     namespace TURBO {
         let unit_care_info_2: boolean;
         export { unit_care_info_2 as unit_care_info };
-        let water_amount_4: string[];
-        export { water_amount_4 as water_amount };
+        let water_amount_5: string[];
+        export { water_amount_5 as water_amount };
         let round_mop_info_4: boolean;
         export { round_mop_info_4 as round_mop_info };
         let air_drying_4: boolean;
@@ -71,8 +84,8 @@ export namespace CapabilityTypes {
     namespace PLUS {
         let unit_care_info_3: boolean;
         export { unit_care_info_3 as unit_care_info };
-        let water_amount_5: string[];
-        export { water_amount_5 as water_amount };
+        let water_amount_6: string[];
+        export { water_amount_6 as water_amount };
         let round_mop_info_5: boolean;
         export { round_mop_info_5 as round_mop_info };
         let air_drying_5: boolean;

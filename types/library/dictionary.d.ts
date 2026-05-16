@@ -16,13 +16,6 @@ export namespace CLEAN_MODE_TO_ECOVACS {
     let freeClean: string;
     let qcClean: string;
 }
-export namespace CLEAN_ACTION_TO_ECOVACS {
-    export let start: string;
-    export let pause: string;
-    export let resume: string;
-    let stop_1: string;
-    export { stop_1 as stop };
-}
 export namespace CLEAN_MODE_FROM_ECOVACS {
     let auto_1: string;
     export { auto_1 as auto };
@@ -32,10 +25,9 @@ export namespace CLEAN_MODE_FROM_ECOVACS {
     export { spot_1 as spot };
     let spotArea_1: string;
     export { spotArea_1 as spotArea };
-    let stop_2: string;
-    export { stop_2 as stop };
-    let pause_1: string;
-    export { pause_1 as pause };
+    let stop_1: string;
+    export { stop_1 as stop };
+    export let pause: string;
     export let goCharging: string;
     export let idle: string;
     let move_1: string;
@@ -113,7 +105,7 @@ export namespace MOVE_ACTION {
     export let left: string;
     export let right: string;
     export let turn_around: string;
-    let stop_3: string;
-    export { stop_3 as stop };
+    let stop_2: string;
+    export { stop_2 as stop };
 }
 //# sourceMappingURL=dictionary.d.ts.map

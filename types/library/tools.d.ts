@@ -49,6 +49,11 @@ export function getKnownDevices(): Object;
  */
 export function getModelType(deviceClass: any): string;
 /**
+ * Returns the device type
+ * @returns {String}
+ */
+export function getDeviceType(deviceClass: any): string;
+/**
  * Generate a somewhat random string for request id with 8 chars.
  * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
  * @returns {string} the generated ID

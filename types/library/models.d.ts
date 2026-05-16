@@ -1,20 +1,16 @@
 export const SupportedDeebotModels: {
     vi829v: {
         name: string;
-        water_amount: string[];
         capabilities: string[];
         type: string;
     };
     x5d34r: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "2o4lnm": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -36,158 +32,121 @@ export const SupportedAirPurifierModels: {
 export const KnownDeebotModels: {
     eazo2f: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     yna5xi: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "9rft3c": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "55uoqe": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     jtmf04: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     rss8xk: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     lx3j7m: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     p95mgv: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "9s1s80": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     yaj7uz: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     m1wkuw: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     clojes: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     umwv6z: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     kr0277: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     edoodo: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     m17zko: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     p1wg05: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "3gwbbm": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "53qyvr": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     va8ygm: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     xw7zp9: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     buom7k: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     i35yb6: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "9kpees": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -203,45 +162,36 @@ export const KnownDeebotModels: {
     };
     qhe2o2: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     p0l0af: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     gwtll7: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     zgsvkq: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ruhc0q: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     yinacl: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "7piq03": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -252,125 +202,91 @@ export const KnownDeebotModels: {
     };
     zwkcqc: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     dlrbzq: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "87swps": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     a2ywac: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ss87ia: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     r5zxjr: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     n6cwdb: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     r5y7re: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ty84oi: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "36xnxf": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "7zya6u": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     snxbvc: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     yu362x: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     s1f8g7: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "85as7h": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ifbw08: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "7bryc5": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     b2jqs4: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -386,475 +302,356 @@ export const KnownDeebotModels: {
     };
     zg6qbz: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     zjavof: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     h18jkh: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     b742vd: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "7n95dm": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     dqcneu: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     sa4tf7: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     uzel1r: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     z0gd1j: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     npu3pt: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     q6pew4: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     w16crm: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "0bdtzz": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     fqxoiu: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "55aiho": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     p1jij8: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     m4xnd8: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ohjbzz: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     paeygf: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     poke1m: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     qdajz8: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     r0321c: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ulzked: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     viq3mw: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     x9ugz3: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     yi396x: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     cgm9ex: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     dzuvdj: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     uuu4n6: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "9ku8nu": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     py3qif: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     z4lvk7: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "822x8d": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "4vhygi": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "3w7j5e": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     tlthqk: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "36hdj8": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "6q3rfp": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     kl54s5: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "8tyt2y": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     eqmf84: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "4bdkrs": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ue8kcc: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "9gqyaq": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     kr9c86: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ee23uv: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     xco2fc: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     cb69w5: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "63cum9": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "7c26ui": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "8o3xke": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     bheggm: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     c8rj4y: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     cuoipb: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     czjwet: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     elrxgb: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     k1lgm7: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     qnkybo: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     xztz07: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "8n0t5d": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "2kuxj0": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     fd60kt: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     mezar1: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     nxeux7: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     qg1d6t: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     wgxm70: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     bs40nz: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "5089oy": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     tpnwyu: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "34vhpm": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     vdehg6: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -865,78 +662,61 @@ export const KnownDeebotModels: {
     };
     no61kx: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "02qwum": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "9eamof": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     k8qkc7: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     aasdks: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     hu94nh: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     kdnfi5: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     w7y3cb: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ucn2xe: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ipohi5: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "8kwdb4": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "659yh8": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -947,36 +727,26 @@ export const KnownDeebotModels: {
     };
     lhbd50: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     um2ywg: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "85nbtp": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "626v6g": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ipzjy0: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -1057,19 +827,16 @@ export const KnownDeebotModels: {
     };
     "8onkgl": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     s523z1: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     n4gstt: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -1080,43 +847,36 @@ export const KnownDeebotModels: {
     };
     "1b23du": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "1vxt52": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     bro5wu: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     e6ofmn: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     lf3bn4: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     e6rcnf: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     p7l7iu: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -1127,134 +887,106 @@ export const KnownDeebotModels: {
     };
     e6yxdm: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "4jd37g": {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     lr4qcs: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     o0a4ju: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     rvflzn: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     w7k3yc: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     mxse7w: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     co3fyu: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "4bx3w9": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     n0vyif: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     eom321: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     gcu5tt: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     y72606: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     ilt3k8: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     lwmdoj: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "0jv4ti": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     "62asng": {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     huhcip: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     m2nkyq: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     rzwv5p: {
         name: string;
-        water_amount: string[];
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
     twunby: {
         name: string;
-        clean_speed: string[];
         capabilities: string[];
         type: string;
     };
@@ -1272,31 +1004,26 @@ export const KnownYeediModels: {
     };
     t5e5o6: {
         name: string;
-        water_amount: string[];
         capabilities: string[];
         type: string;
     };
     kd0una: {
         name: string;
-        water_amount: string[];
         capabilities: string[];
         type: string;
     };
     t6kipw: {
         name: string;
-        water_amount: string[];
         capabilities: string[];
         type: string;
     };
     u3bsxq: {
         name: string;
-        water_amount: string[];
         capabilities: string[];
         type: string;
     };
     rwp09o: {
         name: string;
-        water_amount: string[];
         capabilities: string[];
         type: string;
     };
@@ -1305,6 +1032,7 @@ export const KnownYeediModels: {
         V2: boolean;
         capabilities: string[];
         unit_care_info: boolean;
+        round_mop_info: boolean;
         type: string;
     };
     zwvyi2: {
@@ -1312,6 +1040,7 @@ export const KnownYeediModels: {
         V2: boolean;
         capabilities: string[];
         unit_care_info: boolean;
+        round_mop_info: boolean;
         type: string;
     };
     "9t30w8": {
@@ -1468,27 +1197,22 @@ export const LegacyDevices: {
     };
     vsc5ia: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     emzppx: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     r8ead0: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     "9akc61": {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     dl8fht: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     "16wdph": {
@@ -1521,22 +1245,18 @@ export const LegacyDevices: {
     };
     ls1ok3: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     y79a7u: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     "2pv572": {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     aqdd5p: {
         name: string;
-        clean_speed: string[];
         type: string;
     };
     "115": {
