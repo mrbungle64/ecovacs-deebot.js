@@ -76,7 +76,7 @@ exports.ModelTypes = {
     "unit_care_info": true
   },
 
-  // T10, N10, N20, N30, N50 series.
+  // T10 series.
   //
   // Note: T10, T20, X1 and X2 share identical modelType properties because they all run
   // on the same modern V2 JSON/MQTT platform.
@@ -136,7 +136,7 @@ exports.ModelTypes = {
     "yiko": true
   },
 
-  // Air quality monitors (e.g. AIRBOT PURE AIR). Passive monitoring devices without
+  // Air quality monitors (e.g. Z1 Air Quality Monitor). Passive monitoring devices without
   // motors or navigation. V2 protocol for data reporting only.
   "aqMonitor": {
     "deviceType": "Air Quality Monitor",
