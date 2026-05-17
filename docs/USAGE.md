@@ -149,7 +149,7 @@ main();
 ### `vacbot.on("EventName", callback)`
 * Listens to live state changes pushed from the vacuum. The primary event mappings are:
   * `BatteryInfo` (Percentage integer)
-  * `CleanReport` (String status, e.g., `clean`, `pause`, `stop`)
+  * `CleanReport` (String status, e.g., `auto`, `pause`, `stop`)
   * `ChargeState` (String status, e.g., `returning`, `charging`, `completed`)
   * `WaterLevel` (Mopping water level integer, `1-4`)
   * `CleanSpeed` (Suction speed level integer, `1-4`)
