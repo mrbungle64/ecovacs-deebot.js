@@ -201,9 +201,6 @@ const COMMAND_REGISTRY = {
     'Move': { specialLogic: true },
     'MoveBackward': { className: 'MoveBackward' },
     'MoveForward': { className: 'MoveForward' },
-    'MoveLeft': { className: 'MoveLeft' },
-    'MoveRight': { className: 'MoveRight' },
-    'MoveTurnAround': { className: 'MoveTurnAround' },
 
     // ==================
     // Water

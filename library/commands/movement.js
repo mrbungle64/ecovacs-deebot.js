@@ -68,39 +68,10 @@ class GetChargeState extends VacBotCommand {
  * @deprecated
  * @extends Move
  */
-class MoveLeft extends Move {
-    constructor() {
-        super('left');
-    }
-}
-
-/**
- * @deprecated
- * @extends Move
- */
-class MoveRight extends Move {
-    constructor() {
-        super('right');
-    }
-}
-
-/**
- * @deprecated
- * @extends Move
- */
-class MoveTurnAround extends Move {
-    constructor() {
-        super('turn_around');
-    }
-}
-
 module.exports = {
     Charge,
     Move,
     MoveBackward,
     MoveForward,
     GetChargeState,
-    MoveLeft,
-    MoveRight,
-    MoveTurnAround,
 };

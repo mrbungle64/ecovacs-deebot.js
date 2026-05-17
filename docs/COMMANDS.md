@@ -315,9 +315,6 @@ vacbot.run("GetMapSet_V2");
 // executing an alternate command first before repeating the same directional movement.
 vacbot.run("MoveForward");
 vacbot.run("MoveBackward");
-vacbot.run("MoveLeft");
-vacbot.run("MoveRight");
-vacbot.run("MoveTurnAround");
 ```
 
 ---
@@ -510,9 +507,6 @@ A complete structured reference of all registered command strings matching the `
 * Move
 * MoveBackward
 * MoveForward
-* MoveLeft
-* MoveRight
-* MoveTurnAround
 
 ### Water
 * GetWaterBoxInfo
