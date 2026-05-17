@@ -51,8 +51,9 @@ Support for new models is no longer added upon request. Due to high time constra
 
 ## Installation & usage
 
-* [Installation Guide](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Installation)
-* [Usage Instructions](https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Usage)
+* [Installation Guide](docs/INSTALLATION.md)
+* [Usage Instructions](docs/USAGE.md)
+* [Command Reference](docs/COMMANDS.md)
 
 **Requirement:** Node.js >= 20.x
 
