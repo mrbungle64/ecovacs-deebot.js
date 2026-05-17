@@ -3,7 +3,7 @@
 /**
  * @file This file contains specific model configurations.
  * For a detailed explanation of properties and model identification strategy,
- * please refer to the `MODELS.md` file in this directory.
+ * please refer to the `docs/MODELS.md` file.
  */
 
 // Modern and actively supported DEEBOT models

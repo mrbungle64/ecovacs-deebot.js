@@ -1,7 +1,7 @@
 /**
  * @file This file contains base types for Deebot models.
  * For a detailed explanation of properties and model identification strategy,
- * please refer to the `MODELS.md` file in this directory.
+ * please refer to the `docs/MODELS.md` file.
  *
  * ## Purpose
  * Each type defines the *default* properties shared by an entire generation or platform.

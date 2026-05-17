@@ -44,6 +44,11 @@ The decision to end support for XML-based models is a technical necessity:
 | 🟡 Community | yeedi models (modern MQTT/JSON only) | MQTT/JSON | "Best effort" via community PRs |
 | 🔴 Legacy | Deebot 900, Slim 2, OZMO 930 etc. | XML-based | **Unsupported** (Use v0.9.x) |
 
+For a full list of all known device classes, their respective support tiers, and details on how device capabilities are resolved, please refer to the following documentation:
+
+* [Support Tiers](docs/SUPPORT_TIER.md)
+* [Models & Capability Resolution](docs/MODELS.md)
+
 ### Important note on new models
 Support for new models is no longer added upon request. Due to high time constraints, **I will not implement new models based on logs alone**. Requests for new model support without an accompanying **Pull Request** may be closed without further notice.
 
@@ -54,6 +59,7 @@ Support for new models is no longer added upon request. Due to high time constra
 * [Installation Guide](docs/INSTALLATION.md)
 * [Usage Instructions](docs/USAGE.md)
 * [Command Reference](docs/COMMANDS.md)
+* [Capability Architecture](docs/CAPABILITIES.md)
 
 **Requirement:** Node.js >= 20.x
 

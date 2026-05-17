@@ -1,108 +1,73 @@
-# Device Models and Capability Resolution
+# Models and Capabilities
 
-The `ecovacs-deebot.js` library uses a multi-layered configuration system to determine the features and commands supported by a specific robot model. 
+This document describes the strategy and properties used for identifying and configuring Ecovacs Deebot models within the library. The configuration is split across three main files:
 
-This system is distributed across three main files:
-1.  **`library/models.js`** (The main dictionary mapping `deviceClass` IDs to robots)
-2.  **`library/modelTypes.js`** (Generation/Platform defaults)
-3.  **`library/capabilityTypes.js`** (Reusable feature bundles)
+*   **`models.js`**: Contains the specific Deebot models mapped by their 6-character device class (e.g., `vi829v`). Each model maps to a `type` and an array of `capabilities`.
+*   **`modelTypes.js`**: Defines the base architectures or generations (e.g., `T20`, `950`). Types provide the foundation and common flags for all models sharing that architecture.
+*   **`capabilityTypes.js`**: Defines reusable capability groups (e.g., `vacuumBase`, `OMNI`, `PLUS`). These apply specific features (like auto-empty stations or mopping types) to models independent of their base `type`.
 
----
+## Property Resolution Order
 
-## 1. Structure of `models.js`
+When the library checks a device's capabilities (e.g., via `CapabilityManager`), properties are merged using a strict cascading strategy. **Later steps override earlier ones**:
 
-The `models.js` file is the central database of all robots known to the library. Every Ecovacs and yeedi device reports a 6-character alphanumeric `deviceClass` string (e.g., `"vi829v"`, `"x5d34r"`). 
+1.  **ModelType Defaults:** Base properties defined for the model's `type` in `modelTypes.js` (lowest priority).
+2.  **Capabilities Array:** Reusable groups from `capabilityTypes.js`, applied from left to right in the order they appear in the model's `capabilities` array (e.g., `["PLUS", "moppingUltraHigh"]` means `moppingUltraHigh` wins over `PLUS`).
+3.  **Direct Model Properties:** Any property explicitly set on the individual model object in `models.js` (highest priority).
 
-The file is organized into several export dictionaries:
-- `SupportedDeebotModels`: Modern DEEBOT models.
-- `SupportedAirPurifierModels`: AIRBOT models.
-- `KnownDeebotModels`: Bulk list of standard DEEBOTs (T, N, X series).
-- `KnownYeediModels`: Models under the yeedi sub-brand.
-- `KnownLawnMowerModels`: GOAT series lawn mowers.
-- `LegacyDevices`: Older, unsupported XML/XMPP models (pre-2019).
+## Model Identification Strategy
 
-### Anatomy of a Model Entry
+*   **Device Class ID**: Models are uniquely identified by their device class (a 6-character ID). This ID determines the device's base model type and its specific capabilities.
+*   **Base Architecture vs. Specific Names**: Specific marketing names (e.g., "DEEBOT T20 OMNI") usually don't require entirely separate model types if they share the same base architecture. Instead, they refer to a common base type (like `T20`).
+*   **Variants via Capabilities**: Product variants such as "OMNI", "PLUS", or "TURBO" are handled using capability arrays in `models.js` rather than creating separate types. For instance, the OMNI capability will set the appropriate flags for a station with auto-empty, mop washing, and hot air drying features.
+*   **Protocol Versions**: The `V2` flag indicates the use of modern "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) rather than legacy commands (which are still used by the `950` generation).
 
-A typical entry looks like this:
+## Key Capability Groups
 
-```javascript
-"x5d34r": {
-    "name": "DEEBOT OZMO T8 AIVI",
-    "type": "T8",
-    "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"]
-}
-```
+These are some of the reusable bundles defined in `capabilityTypes.js`:
 
-Or, using a `deviceClassLink` to alias an identical hardware variant:
+| Capability | Features Included |
+| :--- | :--- |
+| `vacuumBase` | Main/side brushes, filter, voice reports. |
+| `navigationBase` | Spot area (rooms), custom areas, map images. |
+| `suctionMaxPlus` | Adds the high-power `MAX_PLUS` mode (4 levels total). |
+| `moppingUltraHigh` | Adds the `ULTRAHIGH` water level. |
+| `OMNI` | All-in-One station: auto-empty, mop washing, air drying, rotating pads. |
+| `PLUS` | Pure dustbin suction station (no mop maintenance). |
+| `TURBO` | Rotating mop system + drying dock, but NO auto-empty station. |
 
-```javascript
-"7n95dm": {
-    "name": "DEEBOT OZMO T8 AIVI",
-    "deviceClassLink": "x5d34r"
-}
-```
+## Possible Properties
 
-### Direct Model Properties
+The following properties can be defined in `modelTypes.js` or `capabilityTypes.js` to configure the supported features of a device:
 
-Any property explicitly set inside a model entry in `models.js` has the **highest priority**. For example, if a specific variant of a T10 model lacks the air freshener, setting `"air_freshener_info": false` directly in its `models.js` entry will override any defaults from its `type` or `capabilities`.
+### General
+*   **`deviceType`** (string): The general category of the device (e.g., `Vacuum Cleaner`, `Air Purifier`, `Air Quality Monitor`, `Lawn Mower`).
 
----
+### Protocol
+*   **`V2`** (boolean): Indicates the use of "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) instead of legacy commands.
 
-## 2. Relationship to `modelTypes.js`
+### Navigation
+*   **`map_image_supported`** (boolean): Whether map image rendering and map interactions are supported.
 
-The `"type"` property in a `models.js` entry (e.g., `"type": "T8"`) links the robot to a base hardware platform defined in `modelTypes.js`.
+### Cleaning Capabilities
+*   **`clean_speed`** (boolean or array): Adjustable cleaning/suction speed. Array specifies exact levels (e.g., `["QUIET", "NORMAL", "MAX"]`).
+*   **`water_amount`** (array): Adjustable water flow levels for mopping (e.g., `["LOW", "MEDIUM", "HIGH", "ULTRAHIGH"]`).
+*   **`spot_area`** (boolean): Spot area (room) cleaning support.
+*   **`custom_area`** (boolean): Custom area (zone) cleaning support.
 
-**Purpose of `modelTypes.js`:**
-It defines the *default* baseline properties shared by an entire generation of robots.
+### Hardware and Accessories
+*   **`main_brush`** (boolean): Has a main brush.
+*   **`side_brush`** (boolean): Has side brushes.
+*   **`filter`** (boolean): Has a filter.
+*   **`unit_care_info`** (boolean): Reports accessory life and maintenance info (brushes, filters).
+*   **`round_mop_info`** (boolean): Provides information about rotating mops (e.g., OZMO Turbo).
+*   **`air_freshener_info`** (boolean): Air freshener module status (e.g., T9).
 
-For example, looking at the `T8` type in `modelTypes.js`:
-```javascript
-"T8": {
-  "deviceType": "Vacuum Cleaner",
-  "V2": true,
-  "unit_care_info": true
-}
-```
-By simply declaring `"type": "T8"` in `models.js`, the robot automatically inherits these three properties. It establishes that this is a Vacuum Cleaner using the modern V2 JSON/MQTT protocol and supports consumable life-span tracking.
+### Station Capabilities
+*   **`auto_empty_station`** (boolean): Device has an auto-empty station.
+*   **`auto_empty_station_optional`** (boolean): Device optionally supports an auto-empty station (sold separately).
+*   **`air_drying`** (boolean): Station supports hot air drying for mops.
 
----
-
-## 3. Relationship to `capabilityTypes.js`
-
-The `"capabilities"` array in a `models.js` entry links to reusable feature bundles defined in `capabilityTypes.js`.
-
-**Purpose of `capabilityTypes.js`:**
-It groups related properties that frequently appear together (like "OMNI station features" or "basic navigation").
-
-For example, the `"OMNI"` capability bundle includes:
-```javascript
-"OMNI": {
-    unit_care_info: true,
-    water_amount: ["LOW", "MEDIUM", "HIGH"],
-    round_mop_info: true,
-    air_drying: true,
-    auto_empty_station: true
-}
-```
-
-### The Capabilities Array (Order Matters!)
-
-When the library reads the `"capabilities"` array, it applies the bundles **from left to right**. 
-
-If a robot has `capabilities: ["vacuumBase", "suctionMaxPlus", "PLUS"]`:
-1. It gets basic vacuum properties from `vacuumBase`.
-2. It gets 4-speed suction from `suctionMaxPlus`.
-3. It gets auto-empty station properties from `PLUS`.
-
-**Important:** Later entries in the array *override* earlier ones. 
-If `vacuumBase` sets `clean_speed` to 3 levels, and `suctionMaxPlus` follows it in the array, `suctionMaxPlus` wins and sets `clean_speed` to 4 levels. 
-
----
-
-## 4. Summary: The Resolution Order
-
-When the `CapabilityManager` asks "Does this robot support X?", it checks in this exact order (where later steps override earlier ones):
-
-1.  **`modelTypes.js` defaults** (Lowest priority)
-2.  **`capabilityTypes.js` bundles** (Resolved left-to-right from the model's `capabilities` array)
-3.  **`models.js` direct properties** (Highest priority)
+### Advanced Features
+*   **`voice_report`** (boolean): Voice reporting/announcement support.
+*   **`housekeeper_mode`** (boolean): AI-based dynamic cleaning strategy (AI Smart Hosting) that automatically adjusts cleaning parameters.
+*   **`yiko`** (boolean): YIKO voice assistant support.
