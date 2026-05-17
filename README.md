@@ -59,7 +59,6 @@ Support for new models is no longer added upon request. Due to high time constra
 * [Installation Guide](docs/INSTALLATION.md)
 * [Usage Instructions](docs/USAGE.md)
 * [Command Reference](docs/COMMANDS.md)
-* [Capability Architecture](docs/CAPABILITIES.md)
 
 **Requirement:** Node.js >= 20.x
 

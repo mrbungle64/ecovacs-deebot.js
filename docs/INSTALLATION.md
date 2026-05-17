@@ -46,14 +46,14 @@ If you wish to use the full map functionality (retrieving outlines, WiFi heatmap
 >
 > If your platform does not have a prebuilt binary (e.g., certain Alpine Linux Docker containers, older ARM setups, or custom builds), you must install the native pre-requisite libraries below.
 
-### 🔴 Debian / Ubuntu-based Linux Systems
+### Debian / Ubuntu-based Linux Systems
 Before installing, run the following commands to install the required system libraries:
 ```bash
 sudo apt-get update
 sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 ```
 
-### 🟢 Alpine Linux (e.g. Node-RED / Home Assistant Docker Containers)
+### Alpine Linux (e.g. Node-RED / Home Assistant Docker Containers)
 To build canvas inside Alpine Linux containers, execute:
 ```bash
 apk add --no-cache build-base g++ cairo-dev jpeg-dev pango-dev giflib-dev
