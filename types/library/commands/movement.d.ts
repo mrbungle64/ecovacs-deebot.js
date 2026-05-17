@@ -34,26 +34,5 @@ export class MoveForward extends Move {
 export class GetChargeState extends VacBotCommand {
     constructor();
 }
-/**
- * @deprecated
- * @extends Move
- */
-export class MoveLeft extends Move {
-    constructor();
-}
-/**
- * @deprecated
- * @extends Move
- */
-export class MoveRight extends Move {
-    constructor();
-}
-/**
- * @deprecated
- * @extends Move
- */
-export class MoveTurnAround extends Move {
-    constructor();
-}
 import { VacBotCommand } from "./base";
 //# sourceMappingURL=movement.d.ts.map

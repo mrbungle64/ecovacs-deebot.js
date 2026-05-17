@@ -5,6 +5,8 @@ export namespace CapabilityTypes {
         let filter: boolean;
         let voice_report: boolean;
         let clean_speed: string[];
+    }
+    namespace navigationBase {
         let spot_area: boolean;
         let custom_area: boolean;
         let map_image_supported: boolean;
@@ -34,13 +36,17 @@ export namespace CapabilityTypes {
         let air_drying: boolean;
         let round_mop_info: boolean;
     }
+    namespace rollerMop {
+        let round_mop_info_1: boolean;
+        export { round_mop_info_1 as round_mop_info };
+    }
     namespace stationFull {
         let auto_empty_station_1: boolean;
         export { auto_empty_station_1 as auto_empty_station };
         let air_drying_1: boolean;
         export { air_drying_1 as air_drying };
-        let round_mop_info_1: boolean;
-        export { round_mop_info_1 as round_mop_info };
+        let round_mop_info_2: boolean;
+        export { round_mop_info_2 as round_mop_info };
     }
     namespace OZMO {
         let water_amount_2: string[];
@@ -50,20 +56,21 @@ export namespace CapabilityTypes {
         export let unit_care_info: boolean;
         let water_amount_3: string[];
         export { water_amount_3 as water_amount };
-        let round_mop_info_2: boolean;
-        export { round_mop_info_2 as round_mop_info };
+        let round_mop_info_3: boolean;
+        export { round_mop_info_3 as round_mop_info };
         let air_drying_2: boolean;
         export { air_drying_2 as air_drying };
         let auto_empty_station_2: boolean;
         export { auto_empty_station_2 as auto_empty_station };
+        export let handheld_subsystem: boolean;
     }
     namespace OMNI {
         let unit_care_info_1: boolean;
         export { unit_care_info_1 as unit_care_info };
         let water_amount_4: string[];
         export { water_amount_4 as water_amount };
-        let round_mop_info_3: boolean;
-        export { round_mop_info_3 as round_mop_info };
+        let round_mop_info_4: boolean;
+        export { round_mop_info_4 as round_mop_info };
         let air_drying_3: boolean;
         export { air_drying_3 as air_drying };
         let auto_empty_station_3: boolean;
@@ -74,8 +81,8 @@ export namespace CapabilityTypes {
         export { unit_care_info_2 as unit_care_info };
         let water_amount_5: string[];
         export { water_amount_5 as water_amount };
-        let round_mop_info_4: boolean;
-        export { round_mop_info_4 as round_mop_info };
+        let round_mop_info_5: boolean;
+        export { round_mop_info_5 as round_mop_info };
         let air_drying_4: boolean;
         export { air_drying_4 as air_drying };
         let auto_empty_station_4: boolean;
@@ -86,8 +93,8 @@ export namespace CapabilityTypes {
         export { unit_care_info_3 as unit_care_info };
         let water_amount_6: string[];
         export { water_amount_6 as water_amount };
-        let round_mop_info_5: boolean;
-        export { round_mop_info_5 as round_mop_info };
+        let round_mop_info_6: boolean;
+        export { round_mop_info_6 as round_mop_info };
         let air_drying_5: boolean;
         export { air_drying_5 as air_drying };
         let auto_empty_station_5: boolean;

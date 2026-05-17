@@ -27,12 +27,12 @@ declare class VacBot {
     authDomain: string;
     is_ready: boolean;
     deviceClass: any;
+    capabilityManager: CapabilityManager;
     deviceModel: string;
     deviceImageURL: string;
     commandsSent: any[];
     mapPiecePacketsSent: any[];
     genericCommand: any;
-    capabilityManager: CapabilityManager;
     vacBotCommand: {
         new (name: string, payload?: object, api?: string): import("./commands/base").VacBotCommand;
         getRequestUrl: (ecovacs: any, command: any, params: any) => any;

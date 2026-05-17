@@ -76,7 +76,6 @@ export const ModelTypes: {
         spot_area: boolean;
         custom_area: boolean;
         voice_report: boolean;
-        map_image_supported: boolean;
     };
     legacy: {
         deviceType: string;

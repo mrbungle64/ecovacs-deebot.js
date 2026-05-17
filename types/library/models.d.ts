@@ -4,7 +4,49 @@ export const SupportedDeebotModels: {
         capabilities: string[];
         type: string;
     };
+    eazo2f: {
+        name: string;
+        deviceClassLink: string;
+    };
+    yna5xi: {
+        name: string;
+        capabilities: string[];
+        type: string;
+    };
     x5d34r: {
+        name: string;
+        capabilities: string[];
+        type: string;
+    };
+    "7n95dm": {
+        name: string;
+        deviceClassLink: string;
+    };
+    dqcneu: {
+        name: string;
+        deviceClassLink: string;
+    };
+    sa4tf7: {
+        name: string;
+        deviceClassLink: string;
+    };
+    uzel1r: {
+        name: string;
+        deviceClassLink: string;
+    };
+    z0gd1j: {
+        name: string;
+        deviceClassLink: string;
+    };
+    npu3pt: {
+        name: string;
+        deviceClassLink: string;
+    };
+    q6pew4: {
+        name: string;
+        deviceClassLink: string;
+    };
+    w16crm: {
         name: string;
         capabilities: string[];
         type: string;
@@ -13,6 +55,14 @@ export const SupportedDeebotModels: {
         name: string;
         capabilities: string[];
         type: string;
+    };
+    "8onkgl": {
+        name: string;
+        deviceClassLink: string;
+    };
+    s523z1: {
+        name: string;
+        deviceClassLink: string;
     };
 };
 export const SupportedAirPurifierModels: {
@@ -30,16 +80,6 @@ export const SupportedAirPurifierModels: {
     };
 };
 export const KnownDeebotModels: {
-    eazo2f: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    yna5xi: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
     "9rft3c": {
         name: string;
         capabilities: string[];
@@ -58,6 +98,7 @@ export const KnownDeebotModels: {
     rss8xk: {
         name: string;
         capabilities: string[];
+        air_freshener_info: boolean;
         type: string;
     };
     lx3j7m: {
@@ -316,46 +357,6 @@ export const KnownDeebotModels: {
         type: string;
     };
     b742vd: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    "7n95dm": {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    dqcneu: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    sa4tf7: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    uzel1r: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    z0gd1j: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    npu3pt: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    q6pew4: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    w16crm: {
         name: string;
         capabilities: string[];
         type: string;
@@ -825,19 +826,10 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    "8onkgl": {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
-    s523z1: {
-        name: string;
-        capabilities: string[];
-        type: string;
-    };
     n4gstt: {
         name: string;
         capabilities: string[];
+        air_freshener_info: boolean;
         type: string;
     };
     "8bja83": {
@@ -1032,7 +1024,6 @@ export const KnownYeediModels: {
         V2: boolean;
         capabilities: string[];
         unit_care_info: boolean;
-        round_mop_info: boolean;
         type: string;
     };
     zwvyi2: {
@@ -1040,7 +1031,6 @@ export const KnownYeediModels: {
         V2: boolean;
         capabilities: string[];
         unit_care_info: boolean;
-        round_mop_info: boolean;
         type: string;
     };
     "9t30w8": {
@@ -1175,6 +1165,10 @@ export const LegacyDevices: {
         name: string;
         type: string;
     };
+    u5vcmk: {
+        name: string;
+        type: string;
+    };
     "123": {
         name: string;
         type: string;
@@ -1264,10 +1258,6 @@ export const LegacyDevices: {
         type: string;
     };
     gd4uut: {
-        name: string;
-        type: string;
-    };
-    u5vcmk: {
         name: string;
         type: string;
     };
