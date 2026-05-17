@@ -40,8 +40,8 @@ The decision to end support for XML-based models is a technical necessity:
 | Level | Model series | Protocol | Support status |
 | :--- | :--- | :--- | :--- |
 | 🟢 Active | OZMO 920/950, T8, X1 series | MQTT/JSON | Fully supported (Maintainer owned) |
-| 🟡 Community | T10, T20, T30, X2, X5, X8 series etc. | MQTT/JSON | "Best effort" via community PRs |
-| 🟡 Community | yeedi models (modern MQTT/JSON only) | MQTT/JSON | "Best effort" via community PRs |
+| 🟡 Community | T10, T20, T30, X2 series etc. | MQTT/JSON | "Best effort" via community PRs |
+| 🟡 Community | yeedi models (MQTT/JSON only) | MQTT/JSON | "Best effort" via community PRs |
 | 🔴 Legacy | Deebot 900, Slim 2, OZMO 930 etc. | XML-based | **Unsupported** (Use v0.9.x) |
 
 For a full list of all known device classes, their respective support tiers, and details on how device capabilities are resolved, please refer to the following documentation:
