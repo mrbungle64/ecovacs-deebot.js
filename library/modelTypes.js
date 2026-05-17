@@ -44,8 +44,10 @@ exports.ModelTypes = {
     "V2": false
   },
 
-  // U-series (e.g. U2, U2 Pro). Entry-level models on the 950 protocol generation.
-  // V2: false → uses original (V1) JSON/MQTT commands, same as the 950 type.
+  // U-series (e.g. U2, U2 Pro). Entry-level random/basic navigation models.
+  // V2: false → uses original (V1) JSON/MQTT commands.
+  // U2 devices do not provide a persistent app-generated room map; concrete
+  // U2 model entries therefore do not include navigationBase.
   "U2": {
     "deviceType": "Vacuum Cleaner",
     "V2": false
@@ -151,10 +153,11 @@ exports.ModelTypes = {
     "V2": true
   },
 
-  // Yeedi brand models (e.g. yeedi vac, yeedi 2 hybrid, yeedi cube). Yeedi is an Ecovacs
-  // sub-brand; models are often derived from Ecovacs platforms but may use different API
-  // subsets. V2 is intentionally not set as a type default here because yeedi models vary
-  // widely in their protocol support – individual models set V2 explicitly if needed.
+  // Yeedi brand models listed in models.js (e.g. yeedi vac, yeedi 2 hybrid, yeedi cube).
+  // Yeedi is an Ecovacs sub-brand; models are often derived from Ecovacs platforms 
+  // but may use different API subsets.
+  // V2 is intentionally not set as a type default here because KnownYeediModels contains
+  // both entries with explicit V2:true and entries without an explicit V2 override.
   "yeedi": {
     "deviceType": "Vacuum Cleaner",
     "spot_area": true,

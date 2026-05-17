@@ -15,15 +15,19 @@
  */
 
 exports.CapabilityTypes = {
-    // Base capability for all modern vacuum/mop robots (LiDAR-mapped, V2 protocol).
-    // Includes the standard brush set, filter, voice reporting, 3-speed suction,
-    // room/zone cleaning, and map image display.
+    // Base capability for vacuum/mop robots.
+    // Includes the standard brush set, filter, voice reporting, and 3-speed suction.
     "vacuumBase": {
         main_brush: true,
         side_brush: true,
         filter: true,
         voice_report: true,
-        clean_speed: ["QUIET", "NORMAL", "MAX"],
+        clean_speed: ["QUIET", "NORMAL", "MAX"]
+    },
+    // Persistent map navigation with room/zone cleaning and map image display.
+    // Keep this separate from vacuumBase because random/basic-navigation models
+    // can vacuum and mop without supporting map-based operations.
+    "navigationBase": {
         spot_area: true,
         custom_area: true,
         map_image_supported: true
@@ -70,6 +74,11 @@ exports.CapabilityTypes = {
         air_drying: true,
         round_mop_info: true
     },
+    // OZMO Roller models use a mop roller rather than rotating round pads.
+    // This must be placed after "OMNI" for roller-based OMNI models.
+    "rollerMop": {
+        round_mop_info: false
+    },
     // Reserved: combined station with auto-empty + mop drying, but without the full OMNI feature set
     // (e.g. no unit_care_info or water_amount override).
     // NOTE: Currently not assigned to any model in models.js. Do not remove
@@ -103,16 +112,16 @@ exports.CapabilityTypes = {
     },
     // OMNI: All-in-One station combining four automated maintenance functions:
     //   1. Auto-Empty   – suction of dustbin contents into a station bag or bagless cyclone.
-    //   2. Mop Washing  – automatic cleaning of rotating mop pads with water.
+    //   2. Mop Washing  – automatic cleaning of the mop system with water.
     //   3. Hot-Air Drying – drying mop pads with warm air (~63 °C) to prevent bacteria/odour.
     //   4. Water Refill – automatic refill of the robot's internal water tank (model-dependent).
-    // round_mop_info signals that the robot uses rotating dual-mop pads (OZMO Turbo system),
-    // which is required for automated mop washing at the station.
+    // round_mop_info signals that the robot uses rotating dual-mop pads (OZMO Turbo system).
+    // Roller-based OMNI models must override this with "rollerMop".
     // Introduced with the X1 OMNI; hot-water mop washing (55 °C) added from T20 OMNI onwards.
     "OMNI": {
         unit_care_info: true,
         water_amount: ["LOW", "MEDIUM", "HIGH"],
-        round_mop_info: true,   // Rotating dual mop pads (OZMO Turbo) required for mop washing.
+        round_mop_info: true,   // Rotating dual mop pads (OZMO Turbo); roller models override this.
         air_drying: true,       // Station dries mop pads with hot air after washing.
         auto_empty_station: true
     },
