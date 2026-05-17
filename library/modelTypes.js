@@ -125,7 +125,7 @@ exports.ModelTypes = {
     "yiko": true              // YIKO voice assistant (native Ecovacs AI voice control).
   },
 
-  // AIRBOT series (air purifiers, e.g. AIRBOT Z1, AIRBOT OMNI). Focuses on air quality
+  // AIRBOT series (air purifiers, e.g. AIRBOT Z1). Focuses on air quality
   // monitoring and purification; no floor cleaning. Uses V2 protocol for API communication.
   // spot_area/custom_area refer to the purifier's patrol zones, not vacuum cleaning areas.
   "airbot": {

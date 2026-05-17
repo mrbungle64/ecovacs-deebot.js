@@ -1110,19 +1110,19 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "0jbd6s": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "2i0fns": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "2px96q": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "300lc5": {
-        "name": "DEEBOT GOAT O500 Panorama",
+        "name": "GOAT O500 Panorama",
         "type": "lawnMower"
     },
     "51rcxt": {
@@ -1130,27 +1130,27 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "6cibhb": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "6n9pcz": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "9bts2s": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "cr0e4u": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "o4kvvk": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "qhq6i0": {
-        "name": "DEEBOT GOAT G1",
+        "name": "GOAT G1",
         "type": "lawnMower"
     },
     "aadham": {
@@ -1162,7 +1162,7 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "neiwny": {
-        "name": "DEEBOT GOAT A1600 RTK",
+        "name": "GOAT A1600 RTK",
         "type": "lawnMower"
     },
     "wwswjm": {
@@ -1170,7 +1170,7 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "xmp9ds": {
-        "name": "DEEBOT GOAT A1600 RTK",
+        "name": "GOAT A1600 RTK",
         "type": "lawnMower"
     }
 };
