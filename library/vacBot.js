@@ -43,7 +43,7 @@ const PROXY_MAPPINGS = {
         'angleFollow', 'angleWakeup', 'atmoLightIntensity', 'atmoVolume', 'areaPoint',
         'autonomousClean', 'bluetoothSpeaker', 'childLock', 'humanoidFollow', 'mic',
         'monitorAirState', 'threeModule', 'threeModuleStatus', 'dmodule', 'efficiency',
-        'schedule'
+        'schedule', 'dryingDuration', 'airDryingStatus'
     ],
     mapManager: [
         'maps', 'mapImages', 'mapVirtualBoundaries', 'mapVirtualBoundariesResponses',
