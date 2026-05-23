@@ -184,7 +184,6 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.run('GetCleanLogs');
 
             if (vacbot.hasMappingCapabilities()) {
-                vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
                 const createMapDataObject = true; // default = false
                 const createMapImage = false; // default = createMapDataObject && vacbot.isMapImageSupported();

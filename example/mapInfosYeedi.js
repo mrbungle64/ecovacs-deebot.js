@@ -124,7 +124,6 @@ api.connect(accountId, passwordHash).then(() => {
 
         function initGetPosition() {
             if (vacbot.hasMappingCapabilities()) {
-                vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
             }
         }

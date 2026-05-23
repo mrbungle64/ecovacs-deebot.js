@@ -46,7 +46,6 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.run('GetBatteryState');
 
             if (vacbot.hasMappingCapabilities()) {
-                vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
             }
 

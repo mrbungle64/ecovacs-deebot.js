@@ -65,7 +65,6 @@ vacbot.run("GetSleepStatus");  // Retrieve sleep/standby mode status
 
 ```js
 vacbot.run("GetPosition");     // Retrieve current coordinates of the vacuum
-vacbot.run("GetChargerPos");   // Retrieve coordinates of the charging station
 vacbot.run("Relocate");        // Instruct the robot to perform active relocation/re-localization
 ```
 

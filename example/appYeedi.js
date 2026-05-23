@@ -98,7 +98,6 @@ api.connect(accountId, passwordHash).then(() => {
             vacbot.run('GetCleanLogs');
 
             if (vacbot.hasMappingCapabilities()) {
-                vacbot.run('GetChargerPos');
                 vacbot.run('GetPosition');
                 vacbot.run('GetMaps');
             }
