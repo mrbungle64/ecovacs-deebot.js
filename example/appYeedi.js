@@ -106,7 +106,7 @@ api.connect(accountId, passwordHash).then(() => {
         setInterval(() => {
             vacbot.run('GetSleepStatus');
             if (vacbot.hasMoppingSystem()) {
-                vacbot.run('GetWaterLevel');
+                vacbot.run('GetWaterInfo');
             }
             if (vacbot.hasVacuumPowerAdjustment()) {
                 vacbot.run('GetCleanSpeed');

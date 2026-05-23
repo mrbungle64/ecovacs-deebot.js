@@ -85,7 +85,7 @@ vacbot.run("SetCleanSpeed", 2);
 These control the water box and advanced mopping capabilities.
 
 ```js
-vacbot.run("GetWaterLevel");   // Retrieve water flow level
+vacbot.run("GetWaterInfo");   // Retrieve water flow level
 // Adjust water level. Range: 1-4 (1=Low, 2=Medium, 3=High, 4=Ultrahigh)
 vacbot.run("SetWaterLevel", 2); 
 vacbot.run("GetWaterBoxInfo");  // Indicates if the water/mopping plate is physically installed
@@ -510,7 +510,6 @@ A complete structured reference of all registered command strings matching the `
 ### Water
 * GetWaterBoxInfo
 * GetWaterInfo
-* GetWaterLevel
 * SetWaterInfo
 * SetWaterLevel
 
