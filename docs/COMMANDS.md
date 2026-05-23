@@ -85,10 +85,9 @@ vacbot.run("SetCleanSpeed", 2);
 These control the water box and advanced mopping capabilities.
 
 ```js
-vacbot.run("GetWaterInfo");   // Retrieve water flow level
+vacbot.run("GetWaterInfo");   // Retrieve water flow level and water box/mopping plate status
 // Adjust water level. Range: 1-4 (1=Low, 2=Medium, 3=High, 4=Ultrahigh)
 vacbot.run("SetWaterLevel", 2); 
-vacbot.run("GetWaterBoxInfo");  // Indicates if the water/mopping plate is physically installed
 
 // Mop border spinning (for devices with rotating mopping pads, e.g. T20, X1, X2, T30)
 vacbot.run("GetBorderSpin");    // Get border spin status
@@ -508,7 +507,6 @@ A complete structured reference of all registered command strings matching the `
 * MoveForward
 
 ### Water
-* GetWaterBoxInfo
 * GetWaterInfo
 * SetWaterInfo
 * SetWaterLevel

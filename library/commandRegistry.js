@@ -205,9 +205,9 @@ const COMMAND_REGISTRY = {
     // ==================
     // Water
     // ==================
-    'GetWaterBoxInfo': { className: 'GetWaterInfo' },
     'GetWaterInfo': { className: 'GetWaterInfo' },
-    'GetWaterLevel': { className: 'GetWaterInfo' },
+    'GetWaterBoxInfo': { className: 'GetWaterInfo' }, // deprecated
+    'GetWaterLevel': { className: 'GetWaterInfo' }, // deprecated
     'SetWaterInfo': { className: 'SetWaterInfo', minArgs: 3 },
     'SetWaterLevel': { specialLogic: true },
 
