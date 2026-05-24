@@ -25,62 +25,83 @@ class CapabilityManager {
     }
 
     /**
+     * Returns the platform/architecture type of the model
+     * (e.g. '950', 'T8', 'T20', 'airbot').
+     * @returns {string}
+     */
+    getPlatformType() {
+        return tools.getPlatformType(this.bot.deviceClass);
+    }
+
+    /**
+     * Returns the human-readable product category of the device
+     * (e.g. 'Vacuum Cleaner', 'Air Purifier', 'Lawn Mower').
+     * @returns {string}
+     */
+    getDeviceCategory() {
+        return tools.getDeviceCategory(this.bot.deviceClass);
+    }
+
+    /**
+     * @deprecated use getPlatformType()
      * Returns the type of the model
-     * @returns {String}
+     * @returns {string}
      */
     getModelType() {
-        return tools.getModelType(this.bot.deviceClass);
+        return this.getPlatformType();
     }
+
     /**
+     * @deprecated use getDeviceCategory()
      * Returns the device type
-     * @returns {String}
+     * @returns {string}
      */
     getDeviceType() {
-        return tools.getDeviceType(this.bot.deviceClass);
+        return this.getDeviceCategory();
     }
 
     isModelTypeLegacy() {
-        return this.getModelType() === 'legacy';
+        return this.getPlatformType() === 'legacy';
     }
 
     isModelTypeN8() {
-        return this.getModelType() === 'N8';
+        return this.getPlatformType() === 'N8';
     }
 
     isModelTypeT8() {
-        return this.getModelType() === 'T8';
+        return this.getPlatformType() === 'T8';
     }
 
     isModelTypeT9() {
-        return this.getModelType() === 'T9';
+        return this.getPlatformType() === 'T9';
     }
 
     isModelTypeT10() {
-        return this.getModelType() === 'T10';
+        return this.getPlatformType() === 'T10';
     }
 
     isModelTypeT20() {
-        return this.getModelType() === 'T20';
+        return this.getPlatformType() === 'T20';
     }
 
     isModelTypeX1() {
-        return this.getModelType() === 'X1';
+        return this.getPlatformType() === 'X1';
     }
 
     isModelTypeX2() {
-        return this.getModelType() === 'X2';
+        return this.getPlatformType() === 'X2';
     }
 
     isModelTypeAirbot() {
-        return this.getModelType() === 'airbot';
+        return this.getPlatformType() === 'airbot';
     }
 
     isModelTypeAqMonitor() {
-        return this.getModelType() === 'aqMonitor';
+        return this.getPlatformType() === 'aqMonitor';
     }
 
     isModelTypeLawnMower() {
-        return this.getModelType() === 'lawnMower';
+        return this.getPlatformType() === 'lawnMower';
     }
 
     isModelTypeT8Based() {

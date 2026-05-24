@@ -372,19 +372,39 @@ class VacBot {
     }
 
     /**
-     * Returns the type of the model
-     * @returns {String}
+     * Returns the platform/architecture type of the model
+     * (e.g. '950', 'T8', 'T20', 'airbot').
+     * @returns {string}
      */
-    getModelType() {
-        return this.capabilityManager.getModelType();
+    getPlatformType() {
+        return this.capabilityManager.getPlatformType();
     }
 
     /**
+     * Returns the human-readable product category of the device
+     * (e.g. 'Vacuum Cleaner', 'Air Purifier', 'Lawn Mower').
+     * @returns {string}
+     */
+    getDeviceCategory() {
+        return this.capabilityManager.getDeviceCategory();
+    }
+
+    /**
+     * @deprecated use getPlatformType()
+     * Returns the type of the model
+     * @returns {string}
+     */
+    getModelType() {
+        return this.getPlatformType();
+    }
+
+    /**
+     * @deprecated use getDeviceCategory()
      * Returns the device type
-     * @returns {String}
+     * @returns {string}
      */
     getDeviceType() {
-        return this.capabilityManager.getDeviceType();
+        return this.getDeviceCategory();
     }
 
     isModelTypeLegacy() {

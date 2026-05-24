@@ -135,14 +135,16 @@ function isKnownDevice(deviceClass) {
  * @returns {boolean}
  */
 function isLegacyModel(deviceClass) {
-    return getModelType(deviceClass) === 'legacy';
+    return getPlatformType(deviceClass) === 'legacy';
 }
 
 /**
- * Returns the type of the model
- * @returns {String}
+ * Returns the platform/architecture type of the model (e.g. '950', 'T8', 'T20', 'airbot').
+ * This is the technical architecture key, not the product category.
+ * @param {string} deviceClass
+ * @returns {string}
  */
-function getModelType(deviceClass) {
+function getPlatformType(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'type', 'unknown');
@@ -151,15 +153,36 @@ function getModelType(deviceClass) {
 }
 
 /**
- * Returns the device type
- * @returns {String}
+ * Returns the human-readable product category of the device
+ * (e.g. 'Vacuum Cleaner', 'Air Purifier', 'Lawn Mower').
+ * @param {string} deviceClass
+ * @returns {string}
  */
-function getDeviceType(deviceClass) {
+function getDeviceCategory(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
-        return getDeviceProperty(deviceClass, 'deviceType', 'unknown');
+        return getDeviceProperty(deviceClass, 'deviceCategory',
+            getDeviceProperty(deviceClass, 'deviceType', 'unknown'));
     }
     return 'unknown';
+}
+
+/**
+ * @deprecated use getPlatformType()
+ * Returns the type of the model
+ * @returns {string}
+ */
+function getModelType(deviceClass) {
+    return getPlatformType(deviceClass);
+}
+
+/**
+ * @deprecated use getDeviceCategory()
+ * Returns the device type
+ * @returns {string}
+ */
+function getDeviceType(deviceClass) {
+    return getDeviceCategory(deviceClass);
 }
 
 /**
@@ -178,11 +201,11 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
             device = devices[device.deviceClassLink];
         }
 
-        let deviceType = device.type;
-        if (deviceType) {
-            const deviceTypeProperties = getAllKnownModelTypes()[deviceType];
-            if (deviceTypeProperties && deviceTypeProperties.hasOwnProperty(property)) {
-                value = deviceTypeProperties[property];
+        let platformType = device.type;
+        if (platformType) {
+            const platformTypeProperties = getAllKnownModelTypes()[platformType];
+            if (platformTypeProperties && platformTypeProperties.hasOwnProperty(property)) {
+                value = platformTypeProperties[property];
             }
         }
 
@@ -478,8 +501,10 @@ module.exports.formatString = formatString;
 module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getKnownDevices = getKnownDevices;
-module.exports.getModelType = getModelType;
-module.exports.getDeviceType = getDeviceType;
+module.exports.getPlatformType = getPlatformType;
+module.exports.getDeviceCategory = getDeviceCategory;
+module.exports.getModelType = getModelType;     // @deprecated – use getPlatformType
+module.exports.getDeviceType = getDeviceType;   // @deprecated – use getDeviceCategory
 module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;

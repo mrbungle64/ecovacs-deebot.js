@@ -21,13 +21,21 @@ When the library checks a device's capabilities (e.g., via `CapabilityManager`),
 *   **Variants via Capabilities**: Product variants such as "OMNI", "PLUS", or "TURBO" are handled using capability arrays in `models.js` rather than creating separate types. For instance, the OMNI capability will set the appropriate flags for a station with auto-empty, mop washing, and hot air drying features.
 *   **Protocol Versions**: The `V2` flag indicates the use of modern "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) rather than legacy commands (which are still used by the `950` generation).
 
-## `getModelType()` API
+## `getPlatformType()` API
 
-The `getModelType()` method is available on the `VacBot` instance and returns the model's base architecture type as a string. This value corresponds directly to the key used for the model's entry in `modelTypes.js` (via the `type` property set in `models.js`).
+The `getPlatformType()` method is available on the `VacBot` instance and returns the model's
+base architecture type as a string. This value corresponds directly to the key used for the
+model's entry in `modelTypes.js` (via the `type` property set in `models.js`).
+
+> **`getModelType()` is deprecated** — it is kept as a backward-compatible wrapper that calls
+> `getPlatformType()` internally. Prefer `getPlatformType()` in new code.
 
 ```javascript
-const modelType = vacbot.getModelType();
+const platformType = vacbot.getPlatformType();
 // e.g. 'T20', 'X2', 'legacy', 'unknown'
+
+// Still works, but deprecated:
+const modelType = vacbot.getModelType();
 ```
 
 ### Possible Return Values
@@ -53,21 +61,37 @@ const modelType = vacbot.getModelType();
 
 ### Related Helper Methods
 
-The `VacBot` instance also exposes convenience boolean methods built on top of `getModelType()`:
+The `VacBot` instance exposes convenience boolean methods built on top of `getPlatformType()`:
 
 | Method | Equivalent check |
 | :--- | :--- |
-| `isLegacyModel()` | `getModelType() === 'legacy'` |
-| `isModelTypeLegacy()` | `getModelType() === 'legacy'` |
-| `isModelTypeN8()` | `getModelType() === 'N8'` |
-| `isModelTypeT8()` | `getModelType() === 'T8'` |
-| `isModelTypeT9()` | `getModelType() === 'T9'` |
-| `isModelTypeT10()` | `getModelType() === 'T10'` |
-| `isModelTypeT20()` | `getModelType() === 'T20'` |
-| `isModelTypeX1()` | `getModelType() === 'X1'` |
-| `isModelTypeX2()` | `getModelType() === 'X2'` |
-| `isModelTypeAirbot()` | `getModelType() === 'airbot'` |
-| `isModelTypeLawnMower()` | `getModelType() === 'lawnMower'` |
+| `isLegacyModel()` | `getPlatformType() === 'legacy'` |
+| `isModelTypeLegacy()` | `getPlatformType() === 'legacy'` |
+| `isModelTypeN8()` | `getPlatformType() === 'N8'` |
+| `isModelTypeT8()` | `getPlatformType() === 'T8'` |
+| `isModelTypeT9()` | `getPlatformType() === 'T9'` |
+| `isModelTypeT10()` | `getPlatformType() === 'T10'` |
+| `isModelTypeT20()` | `getPlatformType() === 'T20'` |
+| `isModelTypeX1()` | `getPlatformType() === 'X1'` |
+| `isModelTypeX2()` | `getPlatformType() === 'X2'` |
+| `isModelTypeAirbot()` | `getPlatformType() === 'airbot'` |
+| `isModelTypeLawnMower()` | `getPlatformType() === 'lawnMower'` |
+
+## `getDeviceCategory()` API
+
+The `getDeviceCategory()` method returns the human-readable product category of the device.
+This is completely separate from the platform/architecture type returned by `getPlatformType()`.
+
+> **`getDeviceType()` is deprecated** — kept as a backward-compatible wrapper that calls
+> `getDeviceCategory()` internally.
+
+```javascript
+const category = vacbot.getDeviceCategory();
+// e.g. 'Vacuum Cleaner', 'Air Purifier', 'Air Quality Monitor', 'Lawn Mower'
+
+// Still works, but deprecated:
+const deviceType = vacbot.getDeviceType();
+```
 
 ## Key Capability Groups
 
@@ -88,7 +112,8 @@ These are some of the reusable bundles defined in `capabilityTypes.js`:
 The following properties can be defined in `modelTypes.js` or `capabilityTypes.js` to configure the supported features of a device:
 
 ### General
-*   **`deviceType`** (string): The general category of the device (e.g., `Vacuum Cleaner`, `Air Purifier`, `Air Quality Monitor`, `Lawn Mower`).
+*   **`deviceCategory`** (string): The general category of the device (e.g., `Vacuum Cleaner`, `Air Purifier`, `Air Quality Monitor`, `Lawn Mower`). **Primary property.**
+*   **`deviceType`** (string): *@deprecated* — alias for `deviceCategory`, kept for backward compatibility.
 
 ### Protocol
 *   **`V2`** (boolean): Indicates the use of "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) instead of legacy commands.
