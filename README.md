@@ -74,9 +74,9 @@ Support for new models is no longer added upon request. Due to high time constra
 ## Changelog
 
 ### 1.0.0-alpha.x
-* **Breaking Change:** Complete removal of legacy XMPP/XML and MQTT/XML protocol stacks
-* Refactoring for pure MQTT/JSON communication
-* **New Feature:** Added `deviceType` property and `getDeviceType()` method (Vacuum Cleaner, Air Purifier, etc.)
+* **Breaking Changes:**
+    * Complete removal of legacy XMPP/XML and MQTT/XML protocol stacks
+    * Refactoring for pure MQTT/JSON communication
 * **Refactoring:** Centralized model identification and properties documentation in `library/MODELS.md`
 
 ### 0.9.6 (Final Legacy Support)

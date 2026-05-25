@@ -793,6 +793,7 @@ class VacBot {
     async downloadSecuredContent(url, targetFilename) {
         return await this.historyManager.downloadSecuredContent(url, targetFilename);
     }
+
     /**
      * Handle the payload of the `CleanInfo` response/message
      * (e.g. charge status, clean status and the last area values)
