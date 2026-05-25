@@ -28,31 +28,19 @@ declare class CapabilityManager {
      * @returns {string}
      */
     getDeviceCategory(): string;
-    /**
-     * @deprecated use getPlatformType()
-     * Returns the type of the model
-     * @returns {string}
-     */
-    getModelType(): string;
-    /**
-     * @deprecated use getDeviceCategory()
-     * Returns the device type
-     * @returns {string}
-     */
-    getDeviceType(): string;
-    isModelTypeLegacy(): boolean;
-    isModelTypeN8(): boolean;
-    isModelTypeT8(): boolean;
-    isModelTypeT9(): boolean;
-    isModelTypeT10(): boolean;
-    isModelTypeT20(): boolean;
-    isModelTypeX1(): boolean;
-    isModelTypeX2(): boolean;
-    isModelTypeAirbot(): boolean;
-    isModelTypeAqMonitor(): boolean;
-    isModelTypeLawnMower(): boolean;
-    isModelTypeT8Based(): boolean;
-    isModelTypeT9Based(): boolean;
+    isPlatformTypeLegacy(): boolean;
+    isPlatformTypeN8(): boolean;
+    isPlatformTypeT8(): boolean;
+    isPlatformTypeT9(): boolean;
+    isPlatformTypeT10(): boolean;
+    isPlatformTypeT20(): boolean;
+    isPlatformTypeX1(): boolean;
+    isPlatformTypeX2(): boolean;
+    isPlatformTypeAirbot(): boolean;
+    isPlatformTypeAqMonitor(): boolean;
+    isPlatformTypeLawnMower(): boolean;
+    isPlatformTypeT8Based(): boolean;
+    isPlatformTypeT9Based(): boolean;
     /**
      * Returns true if the model has a filter
      * @returns {boolean}

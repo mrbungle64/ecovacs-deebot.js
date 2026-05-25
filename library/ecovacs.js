@@ -648,7 +648,7 @@ class Ecovacs extends EventEmitter {
             case "LifeSpan": {
                 // Consumable components
                 this.bot.handleLifespan(payload);
-                if (this.bot.isModelTypeAirbot()) {
+                if (this.bot.isPlatformTypeAirbot()) {
                     this.emitMessage("LifeSpan", this.bot.components);
                 } else {
                     if (!this.bot.emitFullLifeSpanEvent) {

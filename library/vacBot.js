@@ -407,53 +407,149 @@ class VacBot {
         return this.getDeviceCategory();
     }
 
+    isPlatformTypeLegacy() {
+        return this.capabilityManager.isPlatformTypeLegacy();
+    }
+
+    isPlatformTypeN8() {
+        return this.capabilityManager.isPlatformTypeN8();
+    }
+
+    isPlatformTypeT8() {
+        return this.capabilityManager.isPlatformTypeT8();
+    }
+
+    isPlatformTypeT9() {
+        return this.capabilityManager.isPlatformTypeT9();
+    }
+
+    isPlatformTypeT10() {
+        return this.capabilityManager.isPlatformTypeT10();
+    }
+
+    isPlatformTypeT20() {
+        return this.capabilityManager.isPlatformTypeT20();
+    }
+
+    isPlatformTypeX1() {
+        return this.capabilityManager.isPlatformTypeX1();
+    }
+
+    isPlatformTypeX2() {
+        return this.capabilityManager.isPlatformTypeX2();
+    }
+
+    isPlatformTypeAirbot() {
+        return this.capabilityManager.isPlatformTypeAirbot();
+    }
+
+    isPlatformTypeAqMonitor() {
+        return this.capabilityManager.isPlatformTypeAqMonitor();
+    }
+
+    isPlatformTypeLawnMower() {
+        return this.capabilityManager.isPlatformTypeLawnMower();
+    }
+
+    isPlatformTypeT8Based() {
+        return this.capabilityManager.isPlatformTypeT8Based();
+    }
+
+    isPlatformTypeT9Based() {
+        return this.capabilityManager.isPlatformTypeT9Based();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeLegacy()
+     */
     isModelTypeLegacy() {
-        return this.capabilityManager.isModelTypeLegacy();
+        return this.isPlatformTypeLegacy();
     }
 
+    /**
+     * @deprecated use isPlatformTypeN8()
+     */
     isModelTypeN8() {
-        return this.capabilityManager.isModelTypeN8();
+        return this.isPlatformTypeN8();
     }
 
+    /**
+     * @deprecated use isPlatformTypeT8()
+     */
     isModelTypeT8() {
-        return this.capabilityManager.isModelTypeT8();
+        return this.isPlatformTypeT8();
     }
 
+    /**
+     * @deprecated use isPlatformTypeT9()
+     */
     isModelTypeT9() {
-        return this.capabilityManager.isModelTypeT9();
+        return this.isPlatformTypeT9();
     }
 
+    /**
+     * @deprecated use isPlatformTypeT10()
+     */
     isModelTypeT10() {
-        return this.capabilityManager.isModelTypeT10();
+        return this.isPlatformTypeT10();
     }
 
+    /**
+     * @deprecated use isPlatformTypeT20()
+     */
     isModelTypeT20() {
-        return this.capabilityManager.isModelTypeT20();
+        return this.isPlatformTypeT20();
     }
 
+    /**
+     * @deprecated use isPlatformTypeX1()
+     */
     isModelTypeX1() {
-        return this.capabilityManager.isModelTypeX1();
+        return this.isPlatformTypeX1();
     }
 
+    /**
+     * @deprecated use isPlatformTypeX2()
+     */
     isModelTypeX2() {
-        return this.capabilityManager.isModelTypeX2();
+        return this.isPlatformTypeX2();
     }
 
+    /**
+     * @deprecated use isPlatformTypeAirbot()
+     */
     isModelTypeAirbot() {
-        return this.capabilityManager.isModelTypeAirbot();
+        return this.isPlatformTypeAirbot();
     }
 
+    /**
+     * @deprecated use isPlatformTypeAqMonitor()
+     */
+    isModelTypeAqMonitor() {
+        return this.isPlatformTypeAqMonitor();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeLawnMower()
+     */
     isModelTypeLawnMower() {
-        return this.capabilityManager.isModelTypeLawnMower();
+        return this.isPlatformTypeLawnMower();
     }
 
+    /**
+     * @deprecated use isPlatformTypeT8Based()
+     */
     isModelTypeT8Based() {
-        return this.capabilityManager.isModelTypeT8Based();
+        return this.isPlatformTypeT8Based();
     }
 
+    /**
+     * @deprecated use isPlatformTypeT9Based()
+     */
     isModelTypeT9Based() {
-        return this.capabilityManager.isModelTypeT9Based();
+        return this.isPlatformTypeT9Based();
     }
+
 
     /**
      * Get the value of the given property for the device class

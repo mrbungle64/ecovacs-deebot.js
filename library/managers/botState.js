@@ -367,7 +367,7 @@ class BotState {
     handleSpeed(payload) {
         const speed = payload['speed'];
         this.cleanSpeed = speed;
-        if (!this.bot.isModelTypeAirbot()) {
+        if (!this.bot.isPlatformTypeAirbot()) {
             this.cleanSpeed = dictionary.CLEAN_SPEED_FROM_ECOVACS[speed];
         }
     }
@@ -1130,7 +1130,7 @@ class BotState {
     }
 
     getCmdForObstacleDetection() {
-        if ((this.bot.getModelType() === 'T8') || (this.bot.getModelType() === 'T9')) {
+        if ((this.bot.getPlatformType() === 'T8') || (this.bot.getPlatformType() === 'T9')) {
             return "Recognization";
         } else {
             return "TrueDetect";

@@ -139,6 +139,45 @@ describe('API tools', function () {
     });
   });
 
+  describe('getPlatformType', function () {
+    it('should return a valid type (not "unknown") for all models in models.js', function () {
+      const allDevices = tools.getAllKnownDevices();
+      const deviceClasses = Object.keys(allDevices);
+
+      assert.ok(deviceClasses.length > 0, 'There should be at least one device class');
+
+      deviceClasses.forEach(deviceClass => {
+        const platformType = tools.getPlatformType(deviceClass);
+        assert.notStrictEqual(platformType, 'unknown',
+          `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known platform type, but got "unknown"`);
+      });
+    });
+
+    it('should return the correct type for specific example models', function () {
+      const examples = [
+        { class: 'yna5xi', expected: '950' },
+        { class: 'h18jkh', expected: 'T8' },
+        { class: 'ucn2xe', expected: 'T9' },
+        { class: 'n6cwdb', expected: 'N8' },
+        { class: 'jtmf04', expected: 'T10' },
+        { class: '2o4lnm', expected: 'X1' },
+        { class: 'e6ofmn', expected: 'X2' },
+        { class: 'ipzjy0', expected: 'U2' },
+        { class: 'h041es', expected: 'yeedi' },
+        { class: 'sdp1y1', expected: 'airbot' },
+        { class: '20anby', expected: 'aqMonitor' },
+        { class: '5xu9h3', expected: 'lawnMower' },
+        { class: '123', expected: 'legacy' }
+      ];
+
+      examples.forEach(({ class: deviceClass, expected }) => {
+        const platformType = tools.getPlatformType(deviceClass);
+        assert.strictEqual(platformType, expected,
+          `Device class "${deviceClass}" should have platform type "${expected}", but got "${platformType}"`);
+      });
+    });
+  });
+
   describe('getModelType', function () {
     it('should return a valid type (not "unknown") for all models in models.js', function () {
       const allDevices = tools.getAllKnownDevices();

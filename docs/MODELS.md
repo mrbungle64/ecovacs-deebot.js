@@ -65,17 +65,20 @@ The `VacBot` instance exposes convenience boolean methods built on top of `getPl
 
 | Method | Equivalent check |
 | :--- | :--- |
-| `isLegacyModel()` | `getPlatformType() === 'legacy'` |
-| `isModelTypeLegacy()` | `getPlatformType() === 'legacy'` |
-| `isModelTypeN8()` | `getPlatformType() === 'N8'` |
-| `isModelTypeT8()` | `getPlatformType() === 'T8'` |
-| `isModelTypeT9()` | `getPlatformType() === 'T9'` |
-| `isModelTypeT10()` | `getPlatformType() === 'T10'` |
-| `isModelTypeT20()` | `getPlatformType() === 'T20'` |
-| `isModelTypeX1()` | `getPlatformType() === 'X1'` |
-| `isModelTypeX2()` | `getPlatformType() === 'X2'` |
-| `isModelTypeAirbot()` | `getPlatformType() === 'airbot'` |
-| `isModelTypeLawnMower()` | `getPlatformType() === 'lawnMower'` |
+| `isPlatformTypeLegacy()` | `getPlatformType() === 'legacy'` |
+| `isPlatformTypeN8()` | `getPlatformType() === 'N8'` |
+| `isPlatformTypeT8()` | `getPlatformType() === 'T8'` |
+| `isPlatformTypeT9()` | `getPlatformType() === 'T9'` |
+| `isPlatformTypeT10()` | `getPlatformType() === 'T10'` |
+| `isPlatformTypeT20()` | `getPlatformType() === 'T20'` |
+| `isPlatformTypeX1()` | `getPlatformType() === 'X1'` |
+| `isPlatformTypeX2()` | `getPlatformType() === 'X2'` |
+| `isPlatformTypeAirbot()` | `getPlatformType() === 'airbot'` |
+| `isPlatformTypeAqMonitor()` | `getPlatformType() === 'aqMonitor'` |
+| `isPlatformTypeLawnMower()` | `getPlatformType() === 'lawnMower'` |
+
+> [!NOTE]
+> All legacy `isModelType*()` methods (e.g. `isModelTypeT8()`) are deprecated but remain fully supported as backward-compatibility wrappers.
 
 ## `getDeviceCategory()` API
 

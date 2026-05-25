@@ -46,7 +46,7 @@ class CommandDispatcher {
                 break;
             }
             case 'Pause'.toLowerCase(): {
-                if (this.bot.isModelTypeAirbot() || this.bot.isModelTypeX2()) {
+                if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
                     // Airbot Z1 and Deebot X2 series
                     const command = 'clean_V2';
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause(command));
@@ -61,7 +61,7 @@ class CommandDispatcher {
                 break;
             }
             case 'Stop'.toLowerCase(): {
-                if (this.bot.isModelTypeAirbot() || this.bot.isModelTypeX2()) {
+                if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop('clean_V2'));
                 } else {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop());
@@ -69,7 +69,7 @@ class CommandDispatcher {
                 break;
             }
             case 'Resume'.toLowerCase(): {
-                if (this.bot.isModelTypeAirbot() || this.bot.isModelTypeX2()) {
+                if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume('clean_V2'));
                 } else {
                     this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume());
@@ -247,7 +247,7 @@ class CommandDispatcher {
                     this.bot.emitFullLifeSpanEvent = true;
                     this.bot.components = {};
                     this.bot.lastComponentValues = {};
-                    if (this.bot.isModelTypeAirbot()) {
+                    if (this.bot.isPlatformTypeAirbot()) {
                         this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan([]));
                     } else {
                         const componentsArray = [];
@@ -304,7 +304,7 @@ class CommandDispatcher {
                 break;
             }
             case 'GetCleanLogs'.toLowerCase(): {
-                if (this.bot.isModelTypeT9Based()) {
+                if (this.bot.isPlatformTypeT9Based()) {
                     this.bot.callCleanResultsLogsApi().then((logData) => {
                         this.bot.handleCleanLogs(logData);
                         this.bot.emitCleanLogEvents();
@@ -354,7 +354,7 @@ class CommandDispatcher {
             }
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase(): {
-                if (this.bot.isModelTypeT20() || this.bot.isModelTypeX2()) {
+                if (this.bot.isPlatformTypeT20() || this.bot.isPlatformTypeX2()) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBinSA());
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBin());
@@ -362,7 +362,7 @@ class CommandDispatcher {
                 break;
             }
             case 'Clean_V2'.toLowerCase(): {
-                if (this.bot.isModelTypeAirbot()) {
+                if (this.bot.isPlatformTypeAirbot()) {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2('move'));
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2());
@@ -372,7 +372,7 @@ class CommandDispatcher {
             case 'SpotArea_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
-                    if (this.bot.isModelTypeX2()) {
+                    if (this.bot.isPlatformTypeX2()) {
                         const areaValues = tools.convertAreaValuesForFreeCleanCmd(area);
                         this.bot.run('FreeClean', areaValues);
                     } else {
@@ -403,9 +403,9 @@ class CommandDispatcher {
             case 'GoToPosition'.toLowerCase(): {
                 let area = args[0].toString();
                 if (area !== '') {
-                    if (this.bot.isModelTypeT9Based()) {
+                    if (this.bot.isPlatformTypeT9Based()) {
                         this.bot.run('MapPoint_V2', area);
-                    } else if (this.bot.isModelTypeT8Based()) {
+                    } else if (this.bot.isPlatformTypeT8Based()) {
                         area = area + ',' + area;
                         this.bot.run('CustomArea_V2', area, 1, 1);
                     }
@@ -446,7 +446,7 @@ class CommandDispatcher {
                 break;
             }
             case 'GetAirDrying'.toLowerCase(): {
-                if (this.bot.getModelType() === 'yeedi') {
+                if (this.bot.getPlatformType() === 'yeedi') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetAirDrying());
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.GetStationState());
@@ -455,7 +455,7 @@ class CommandDispatcher {
             }
             case 'SetAirDrying'.toLowerCase(): {
                 if (args.length >= 1) {
-                    if (this.bot.getModelType() === 'yeedi') {
+                    if (this.bot.getPlatformType() === 'yeedi') {
                         this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying(args[0]));
                     } else {
                         this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(args[0]));
@@ -464,7 +464,7 @@ class CommandDispatcher {
                 break;
             }
             case 'AirDryingStart'.toLowerCase(): {
-                if (this.bot.getModelType() === 'yeedi') {
+                if (this.bot.getPlatformType() === 'yeedi') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('start'));
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(1));
@@ -472,7 +472,7 @@ class CommandDispatcher {
                 break;
             }
             case 'AirDryingStop'.toLowerCase(): {
-                if (this.bot.getModelType() === 'yeedi') {
+                if (this.bot.getPlatformType() === 'yeedi') {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('stop'));
                 } else {
                     this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(4));

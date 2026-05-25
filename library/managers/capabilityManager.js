@@ -42,75 +42,61 @@ class CapabilityManager {
         return tools.getDeviceCategory(this.bot.deviceClass);
     }
 
-    /**
-     * @deprecated use getPlatformType()
-     * Returns the type of the model
-     * @returns {string}
-     */
-    getModelType() {
-        return this.getPlatformType();
-    }
 
-    /**
-     * @deprecated use getDeviceCategory()
-     * Returns the device type
-     * @returns {string}
-     */
-    getDeviceType() {
-        return this.getDeviceCategory();
-    }
 
-    isModelTypeLegacy() {
+    isPlatformTypeLegacy() {
         return this.getPlatformType() === 'legacy';
     }
 
-    isModelTypeN8() {
+    isPlatformTypeN8() {
         return this.getPlatformType() === 'N8';
     }
 
-    isModelTypeT8() {
+    isPlatformTypeT8() {
         return this.getPlatformType() === 'T8';
     }
 
-    isModelTypeT9() {
+    isPlatformTypeT9() {
         return this.getPlatformType() === 'T9';
     }
 
-    isModelTypeT10() {
+    isPlatformTypeT10() {
         return this.getPlatformType() === 'T10';
     }
 
-    isModelTypeT20() {
+    isPlatformTypeT20() {
         return this.getPlatformType() === 'T20';
     }
 
-    isModelTypeX1() {
+    isPlatformTypeX1() {
         return this.getPlatformType() === 'X1';
     }
 
-    isModelTypeX2() {
+    isPlatformTypeX2() {
         return this.getPlatformType() === 'X2';
     }
 
-    isModelTypeAirbot() {
+    isPlatformTypeAirbot() {
         return this.getPlatformType() === 'airbot';
     }
 
-    isModelTypeAqMonitor() {
+    isPlatformTypeAqMonitor() {
         return this.getPlatformType() === 'aqMonitor';
     }
 
-    isModelTypeLawnMower() {
+    isPlatformTypeLawnMower() {
         return this.getPlatformType() === 'lawnMower';
     }
 
-    isModelTypeT8Based() {
-        return this.isModelTypeT8() || this.isModelTypeN8();
+    isPlatformTypeT8Based() {
+        return this.isPlatformTypeT8() || this.isPlatformTypeN8();
     }
 
-    isModelTypeT9Based() {
-        return this.isModelTypeT9() || this.isModelTypeT10() || this.isModelTypeT20() || this.isModelTypeX1() || this.isModelTypeX2();
+    isPlatformTypeT9Based() {
+        return this.isPlatformTypeT9() || this.isPlatformTypeT10() || this.isPlatformTypeT20() || this.isPlatformTypeX1() || this.isPlatformTypeX2();
     }
+
+
 
     /**
      * Returns true if the model has a filter

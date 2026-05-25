@@ -18,6 +18,7 @@ function createMockBot(deviceClass) {
             const tools = require('../library/tools');
             return {
                 isLegacyModel: () => tools.isLegacyModel(deviceClass),
+                getPlatformType: () => tools.getPlatformType(deviceClass),
                 getModelType: () => tools.getModelType(deviceClass),
                 is950type: () => !tools.isLegacyModel(deviceClass),
                 getDeviceProperty: (prop) => tools.getDeviceProperty(deviceClass, prop)
@@ -54,7 +55,10 @@ describe('Regression Tests (Baseline v1)', function () {
         it(`Device ${deviceClass} (${baseline.name}) should behave consistently`, function () {
             const bot = createMockBot(deviceClass);
             const isLegacy = bot.isLegacyModel();
+            const platformType = bot.getPlatformType();
             const actualType = bot.getModelType();
+
+            assert.strictEqual(actualType, platformType, `getModelType() should be equivalent to getPlatformType() for ${deviceClass}`);
 
             // Requirement: "950type": false must now be 'legacy' models
             if (baseline['950type'] === false) {

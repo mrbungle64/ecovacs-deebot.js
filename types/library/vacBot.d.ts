@@ -296,17 +296,70 @@ declare class VacBot {
      * @returns {string}
      */
     getDeviceType(): string;
+    isPlatformTypeLegacy(): boolean;
+    isPlatformTypeN8(): boolean;
+    isPlatformTypeT8(): boolean;
+    isPlatformTypeT9(): boolean;
+    isPlatformTypeT10(): boolean;
+    isPlatformTypeT20(): boolean;
+    isPlatformTypeX1(): boolean;
+    isPlatformTypeX2(): boolean;
+    isPlatformTypeAirbot(): boolean;
+    isPlatformTypeAqMonitor(): boolean;
+    isPlatformTypeLawnMower(): boolean;
+    isPlatformTypeT8Based(): boolean;
+    isPlatformTypeT9Based(): boolean;
+    /**
+     * @deprecated use isPlatformTypeLegacy()
+     */
     isModelTypeLegacy(): boolean;
+    /**
+     * @deprecated use isPlatformTypeN8()
+     */
     isModelTypeN8(): boolean;
+    /**
+     * @deprecated use isPlatformTypeT8()
+     */
     isModelTypeT8(): boolean;
+    /**
+     * @deprecated use isPlatformTypeT9()
+     */
     isModelTypeT9(): boolean;
+    /**
+     * @deprecated use isPlatformTypeT10()
+     */
     isModelTypeT10(): boolean;
+    /**
+     * @deprecated use isPlatformTypeT20()
+     */
     isModelTypeT20(): boolean;
+    /**
+     * @deprecated use isPlatformTypeX1()
+     */
     isModelTypeX1(): boolean;
+    /**
+     * @deprecated use isPlatformTypeX2()
+     */
     isModelTypeX2(): boolean;
+    /**
+     * @deprecated use isPlatformTypeAirbot()
+     */
     isModelTypeAirbot(): boolean;
+    /**
+     * @deprecated use isPlatformTypeAqMonitor()
+     */
+    isModelTypeAqMonitor(): boolean;
+    /**
+     * @deprecated use isPlatformTypeLawnMower()
+     */
     isModelTypeLawnMower(): boolean;
+    /**
+     * @deprecated use isPlatformTypeT8Based()
+     */
     isModelTypeT8Based(): boolean;
+    /**
+     * @deprecated use isPlatformTypeT9Based()
+     */
     isModelTypeT9Based(): boolean;
     /**
      * Get the value of the given property for the device class
