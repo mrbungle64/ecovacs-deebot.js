@@ -17,13 +17,27 @@ declare class CapabilityManager {
      */
     getDeviceProperty(property: string, defaultValue?: any): any;
     /**
+     * Returns the platform/architecture type of the model
+     * (e.g. '950', 'T8', 'T20', 'airbot').
+     * @returns {string}
+     */
+    getPlatformType(): string;
+    /**
+     * Returns the human-readable product category of the device
+     * (e.g. 'Vacuum Cleaner', 'Air Purifier', 'Lawn Mower').
+     * @returns {string}
+     */
+    getDeviceCategory(): string;
+    /**
+     * @deprecated use getPlatformType()
      * Returns the type of the model
-     * @returns {String}
+     * @returns {string}
      */
     getModelType(): string;
     /**
+     * @deprecated use getDeviceCategory()
      * Returns the device type
-     * @returns {String}
+     * @returns {string}
      */
     getDeviceType(): string;
     isModelTypeLegacy(): boolean;

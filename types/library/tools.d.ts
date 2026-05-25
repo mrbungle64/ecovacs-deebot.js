@@ -44,13 +44,29 @@ export function getDeviceProperty(deviceClass: string, property: string, default
  */
 export function getKnownDevices(): Object;
 /**
+ * Returns the platform/architecture type of the model (e.g. '950', 'T8', 'T20', 'airbot').
+ * This is the technical architecture key, not the product category.
+ * @param {string} deviceClass
+ * @returns {string}
+ */
+export function getPlatformType(deviceClass: string): string;
+/**
+ * Returns the human-readable product category of the device
+ * (e.g. 'Vacuum Cleaner', 'Air Purifier', 'Lawn Mower').
+ * @param {string} deviceClass
+ * @returns {string}
+ */
+export function getDeviceCategory(deviceClass: string): string;
+/**
+ * @deprecated use getPlatformType()
  * Returns the type of the model
- * @returns {String}
+ * @returns {string}
  */
 export function getModelType(deviceClass: any): string;
 /**
+ * @deprecated use getDeviceCategory()
  * Returns the device type
- * @returns {String}
+ * @returns {string}
  */
 export function getDeviceType(deviceClass: any): string;
 /**
