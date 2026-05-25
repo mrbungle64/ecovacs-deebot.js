@@ -16,7 +16,6 @@
  *
  * ## Key Properties
  * - `deviceCategory`   Human-readable product category (e.g. "Vacuum Cleaner", "Lawn Mower").
- * - `deviceType`       @deprecated — alias for `deviceCategory`, kept for backward compatibility.
  * - `V2`              true = model uses V2 JSON/MQTT commands (e.g. getMapInfo_V2, clean_V2).
  *                     false = model uses original JSON/MQTT commands.
  * - `unit_care_info`  true = model supports retrieval of "unit care" life-span data
@@ -42,7 +41,6 @@ exports.ModelTypes = {
   // (replacing legacy XMPP/XML). V2: false → uses original (V1) JSON/MQTT commands.
   "950": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": false
   },
 
@@ -52,14 +50,12 @@ exports.ModelTypes = {
   // U2 model entries therefore do not include navigationBase.
   "U2": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": false
   },
 
   // MINI series. Currently only used by the DEEBOT MINI (55uoqe).
   "mini": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "unit_care_info": true,
     "round_mop_info": true
@@ -69,7 +65,6 @@ exports.ModelTypes = {
   // Introduced the V2 commands.
   "T8": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "unit_care_info": true
   },
@@ -78,7 +73,6 @@ exports.ModelTypes = {
   // Note: air_freshener_info also appears on select T10/X1 variants (individual models).
   "T9": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "air_freshener_info": true,
     "unit_care_info": true
@@ -92,7 +86,6 @@ exports.ModelTypes = {
   // model's capabilities array in models.js, not here.
   "T10": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true, // AI Smart Hosting: dynamic room-by-room cleaning strategy.
@@ -102,14 +95,12 @@ exports.ModelTypes = {
   // N8 series.
   "N8": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true
   },
 
   // T20 series. Also used for T30, T50, T80 series. See note on T10.
   "T20": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true, // AI Smart Hosting: dynamic room-by-room cleaning strategy.
@@ -119,7 +110,6 @@ exports.ModelTypes = {
   // X1 series. See note on T10.
   "X1": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true, // AI Smart Hosting: dynamic room-by-room cleaning strategy.
@@ -131,7 +121,6 @@ exports.ModelTypes = {
   // (robot + handheld vacuum sharing one station). See note on T10: shares identical properties.
   "X2": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "V2": true,
     "unit_care_info": true,
     "housekeeper_mode": true, // AI Smart Hosting: dynamic room-by-room cleaning strategy.
@@ -143,7 +132,6 @@ exports.ModelTypes = {
   // spot_area/custom_area refer to the purifier's patrol zones, not vacuum cleaning areas.
   "airbot": {
     "deviceCategory": "Air Purifier",
-    "deviceType": "Air Purifier",     // @deprecated – use deviceCategory
     "V2": true,
     "clean_speed": true,
     "spot_area": true,
@@ -154,7 +142,6 @@ exports.ModelTypes = {
   // motors or navigation. V2 protocol for data reporting only.
   "aqMonitor": {
     "deviceCategory": "Air Quality Monitor",
-    "deviceType": "Air Quality Monitor", // @deprecated – use deviceCategory
     "V2": true
   },
 
@@ -163,7 +150,6 @@ exports.ModelTypes = {
   // V2 protocol; mowing-specific commands differ from vacuum command set.
   "lawnMower": {
     "deviceCategory": "Lawn Mower",
-    "deviceType": "Lawn Mower",       // @deprecated – use deviceCategory
     "V2": true
   },
 
@@ -174,7 +160,6 @@ exports.ModelTypes = {
   // both entries with explicit V2:true and entries without an explicit V2 override.
   "yeedi": {
     "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner",   // @deprecated – use deviceCategory
     "spot_area": true,
     "custom_area": true,
     "voice_report": true
@@ -184,7 +169,6 @@ exports.ModelTypes = {
   // the JSON/MQTT transition (roughly pre-2019). They have no LiDAR map, no V2 commands,
   // and very limited remote control capabilities via this library.
   "legacy": {
-    "deviceCategory": "Vacuum Cleaner",
-    "deviceType": "Vacuum Cleaner"    // @deprecated – use deviceCategory
+    "deviceCategory": "Vacuum Cleaner"
   }
 };

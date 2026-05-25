@@ -161,8 +161,7 @@ function getPlatformType(deviceClass) {
 function getDeviceCategory(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
-        return getDeviceProperty(deviceClass, 'deviceCategory',
-            getDeviceProperty(deviceClass, 'deviceType', 'unknown'));
+        return getDeviceProperty(deviceClass, 'deviceCategory', 'unknown');
     }
     return 'unknown';
 }

@@ -178,21 +178,21 @@ describe('API tools', function () {
     });
   });
 
-  describe('getDeviceType', function () {
-    it('should return a valid device type (not "unknown") for all models in models.js', function () {
+  describe('getDeviceCategory', function () {
+    it('should return a valid device category (not "unknown") for all models in models.js', function () {
       const allDevices = tools.getAllKnownDevices();
       const deviceClasses = Object.keys(allDevices);
 
       assert.ok(deviceClasses.length > 0, 'There should be at least one device class');
 
       deviceClasses.forEach(deviceClass => {
-        const deviceType = tools.getDeviceType(deviceClass);
-        assert.notStrictEqual(deviceType, 'unknown',
-          `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known device type, but got "unknown"`);
+        const deviceCategory = tools.getDeviceCategory(deviceClass);
+        assert.notStrictEqual(deviceCategory, 'unknown',
+          `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known device category, but got "unknown"`);
       });
     });
 
-    it('should return the correct device type for specific example models', function () {
+    it('should return the correct device category for specific example models', function () {
       const examples = [
         { class: 'yna5xi', expected: 'Vacuum Cleaner' },
         { class: 'h18jkh', expected: 'Vacuum Cleaner' },
@@ -210,9 +210,9 @@ describe('API tools', function () {
       ];
 
       examples.forEach(({ class: deviceClass, expected }) => {
-        const deviceType = tools.getDeviceType(deviceClass);
-        assert.strictEqual(deviceType, expected,
-          `Device class "${deviceClass}" should have device type "${expected}", but got "${deviceType}"`);
+        const deviceCategory = tools.getDeviceCategory(deviceClass);
+        assert.strictEqual(deviceCategory, expected,
+          `Device class "${deviceClass}" should have device category "${expected}", but got "${deviceCategory}"`);
       });
     });
   });

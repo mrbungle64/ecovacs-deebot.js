@@ -37,9 +37,9 @@ for (const { group, models } of allModels) {
             resolvedModel = { ...allModelsRegistry[resolvedModel.deviceClassLink], ...resolvedModel };
         }
 
-        const deviceType = ModelTypes[resolvedModel.type]?.deviceType || 'Unknown';
+        const deviceCategory = ModelTypes[resolvedModel.type]?.deviceCategory || 'Unknown';
         const tier = getSupportTier(model, group);
 
-        console.log(`| ${deviceClass} | ${resolvedModel.name} | ${deviceType} | ${resolvedModel.type} | ${tier} |`);
+        console.log(`| ${deviceClass} | ${resolvedModel.name} | ${deviceCategory} | ${resolvedModel.type} | ${tier} |`);
     }
 }

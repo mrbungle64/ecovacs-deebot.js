@@ -82,15 +82,9 @@ The `VacBot` instance exposes convenience boolean methods built on top of `getPl
 The `getDeviceCategory()` method returns the human-readable product category of the device.
 This is completely separate from the platform/architecture type returned by `getPlatformType()`.
 
-> **`getDeviceType()` is deprecated** — kept as a backward-compatible wrapper that calls
-> `getDeviceCategory()` internally.
-
 ```javascript
 const category = vacbot.getDeviceCategory();
 // e.g. 'Vacuum Cleaner', 'Air Purifier', 'Air Quality Monitor', 'Lawn Mower'
-
-// Still works, but deprecated:
-const deviceType = vacbot.getDeviceType();
 ```
 
 ## Key Capability Groups
@@ -112,8 +106,7 @@ These are some of the reusable bundles defined in `capabilityTypes.js`:
 The following properties can be defined in `modelTypes.js` or `capabilityTypes.js` to configure the supported features of a device:
 
 ### General
-*   **`deviceCategory`** (string): The general category of the device (e.g., `Vacuum Cleaner`, `Air Purifier`, `Air Quality Monitor`, `Lawn Mower`). **Primary property.**
-*   **`deviceType`** (string): *@deprecated* — alias for `deviceCategory`, kept for backward compatibility.
+*   **`deviceCategory`** (string): The general category of the device (e.g., `Vacuum Cleaner`, `Air Purifier`, `Air Quality Monitor`, `Lawn Mower`).
 
 ### Protocol
 *   **`V2`** (boolean): Indicates the use of "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) instead of legacy commands.
