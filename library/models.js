@@ -92,6 +92,7 @@ exports.SupportedAirPurifierModels = {
 };
 
 // Known DEEBOT models (bulk of T/N/X series)
+// Not owned by the maintainer. These are community contributed or based on datasheets.
 exports.KnownDeebotModels = {
     "9rft3c": {
         "name": "DEEBOT OZMO T5",
@@ -114,7 +115,6 @@ exports.KnownDeebotModels = {
         "air_freshener_info": true,
         "type": "T10"
     },
-
     "lx3j7m": {
         "name": "DEEBOT T10 OMNI",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],

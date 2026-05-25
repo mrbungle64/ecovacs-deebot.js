@@ -165,9 +165,9 @@ exports.ModelTypes = {
     "voice_report": true
   },
 
-  // Legacy models (pre-950 generation, XMPP/XML protocol). These are robots sold before
-  // the JSON/MQTT transition (roughly pre-2019). They have no LiDAR map, no V2 commands,
-  // and very limited remote control capabilities via this library.
+  // Legacy models (pre-950 generation, XMPP/XML protocol).
+  // These are robots sold before the JSON/MQTT transition (roughly pre-2019).
+  // The models are kept only for identification purposes.
   "legacy": {
     "deviceCategory": "Vacuum Cleaner"
   }
