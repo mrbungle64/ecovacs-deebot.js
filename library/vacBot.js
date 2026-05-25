@@ -208,8 +208,19 @@ class VacBot {
      * Run a specific command
      * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
      * @param args - zero or more arguments to perform the command
+     * @param {Object} [_options={}] - internal options forwarded to sendCommand (e.g. { returnPromise, timeoutMs })
+     * @returns {Promise<any>|boolean}
      */
     run(command, ...args) {
+        // Extract internal options object if appended by runAsync()
+        let _options = {};
+        if (args.length > 0 &&
+            args[args.length - 1] !== null &&
+            typeof args[args.length - 1] === 'object' &&
+            args[args.length - 1].__isRunOptions === true) {
+            _options = args.pop();
+        }
+
         let cmdToRun = command;
         if (this.is950type_V2() && !command.endsWith('_V2')) {
             const command_v2 = command + '_V2';
@@ -226,13 +237,34 @@ class VacBot {
             if (entry.minArgs && args.length < entry.minArgs) {
                 return false;
             }
-            this.ecovacs.sendCommand(new VacBotCommand[entry.className](...cmdArgs));
-            return true;
+            return this.ecovacs.sendCommand(new VacBotCommand[entry.className](...cmdArgs), _options);
         }
 
         // Delegate special logic
         return this.dispatcher.dispatch(key.toLowerCase(), ...args);
     }
+
+    /**
+     * Run a command and return a Promise that resolves with the response payload.
+     * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
+     * Falls back to the first matching event if no `expectedEvent` is defined.
+     *
+     * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
+     *
+     * @param {string} command - The command name (same as used in `run()`)
+     * @param args - zero or more arguments to perform the command
+     * @param {Object} [options={}]
+     * @param {number} [options.timeoutMs=10000] - timeout in ms
+     * @returns {Promise<any>}
+     * @example
+     * const battery = await bot.runAsync('GetBatteryState');
+     * // => { value: 87, isLow: false } (raw payload, or parseResponse() result if implemented)
+     */
+    runAsync(command, ...args) {
+        const options = { returnPromise: true, timeoutMs: 10000, __isRunOptions: true };
+        return this.run(command, ...args, options);
+    }
+
 
     /**
      * Get the name of the spot area that the bot is currently in

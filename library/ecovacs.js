@@ -6,6 +6,7 @@ const constants = require('./constants');
 const { errorCodes } = require('./errorCodes.json');
 const axios = require("axios").default;
 const commandObj = require('./command');
+const PendingCommandRegistry = require('./managers/pendingCommandRegistry');
 
 class Ecovacs extends EventEmitter {
     /**
@@ -47,6 +48,8 @@ class Ecovacs extends EventEmitter {
         this.username = user + '@' + customDomain;
         // The payload type is either 'x' (XML) or 'j' (JSON)
         this.payloadType = 'j';
+
+        this.pendingCommands = new PendingCommandRegistry();
     }
 
     /**
@@ -158,13 +161,40 @@ class Ecovacs extends EventEmitter {
     handleMessage(topic, message, type = "incoming") { }
 
     /**
-     * It sends a command to the Ecovacs API
+     * It sends a command to the Ecovacs API.
+     * Optionally returns a Promise that resolves with the response payload
+     * when the command's expected event fires.
      * @param {Object} command - the command to send to the Ecovacs API
-     * @returns {Promise<void>}
+     * @param {Object} [options={}]
+     * @param {boolean} [options.returnPromise=false] - if true, returns a Promise
+     * @param {number}  [options.timeoutMs=10000] - timeout in ms before the Promise rejects
+     * @returns {Promise<any>|void}
      */
-    async sendCommand(command) {
+    async sendCommand(command, options = {}) {
         tools.envLogCommand(command.name);
         tools.envLogPayload(command.args);
+
+        let commandPromise = null;
+        let rejectPromise = null;
+
+        if (options.returnPromise) {
+            const COMMAND_REGISTRY = require('./commandRegistry');
+            const entry = COMMAND_REGISTRY[command.name];
+            const expectedEvent = (entry && entry.expectedEvent) || null;
+
+            commandPromise = new Promise((resolve, reject) => {
+                rejectPromise = reject;
+                this.pendingCommands.register(
+                    command.getId(),
+                    command.name,
+                    expectedEvent,
+                    resolve,
+                    reject,
+                    options.timeoutMs || 10000
+                );
+            });
+        }
+
         try {
             const params = commandObj.getRequestObject(this, command);
             const portalUrl = commandObj.getRequestUrl(this, command, params);
@@ -178,6 +208,7 @@ class Ecovacs extends EventEmitter {
                 tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
             } catch (e) {
                 this.emitNetworkError(e.message, command.name);
+                if (rejectPromise) rejectPromise(e);
                 throw e.message;
             }
 
@@ -199,11 +230,15 @@ class Ecovacs extends EventEmitter {
                     this.emitLastError();
                 }
                 tools.envLogInfo(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
-                throw `Failure code ${response['errno']} (${response['error']})`;
+                const err = new Error(`Failure code ${response['errno']} (${response['error']})`);
+                if (rejectPromise) rejectPromise(err);
+                throw err.message;
             }
         } catch (e) {
             tools.envLogError(`error sending command: ${e.toString()}`);
         }
+
+        return commandPromise;
     }
 
 
@@ -238,6 +273,10 @@ class Ecovacs extends EventEmitter {
     emitMessage(name, payload) {
         tools.envLogResult(name, JSON.stringify(payload));
         this.emit(name, payload);
+        // Resolve any pending Promise that is waiting for this event
+        if (this.pendingCommands.size > 0) {
+            this.pendingCommands.resolveByEvent(name, payload);
+        }
     }
 
     /**
@@ -333,6 +372,7 @@ class Ecovacs extends EventEmitter {
      * Disconnect the MQTT client
      */
     async disconnect() {
+        this.pendingCommands.rejectAll(new Error('Connection closed'));
         return new Promise((resolve, reject) => {
             this.client.unsubscribe(this.channel, error => {
                 if (error) {

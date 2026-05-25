@@ -28,6 +28,17 @@ class VacBotCommand {
     getId() {
         return this.args.id;
     }
+
+    /**
+     * Parse the raw protocol response payload into a normalized result object.
+     * Override this method in subclasses to provide command-specific parsing.
+     * The default implementation returns the payload as-is.
+     * @param {Object} payload - The raw `body.data` from the device response
+     * @returns {any} normalized result
+     */
+    parseResponse(payload) {
+        return payload;
+    }
 }
 
 module.exports = {

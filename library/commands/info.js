@@ -13,6 +13,18 @@ class GetBatteryState extends VacBotCommand {
     constructor() {
         super('getBattery');
     }
+
+    /**
+     * @param {{ value: number, isLow?: number }} payload
+     * @returns {{ level: number, isLow: boolean }}
+     */
+    parseResponse(payload) {
+        const level = payload['value'];
+        const isLow = payload.hasOwnProperty('isLow')
+            ? !!Number(payload['isLow'])
+            : level <= 15;
+        return { level, isLow };
+    }
 }
 
 /**

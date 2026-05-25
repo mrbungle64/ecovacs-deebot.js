@@ -1,0 +1,115 @@
+'use strict';
+
+const DEFAULT_TIMEOUT_MS = 10000;
+
+/**
+ * @class PendingCommandRegistry
+ * Tracks pending VacBot commands and their associated Promises.
+ *
+ * When a command is sent with `returnPromise: true`, it is registered here
+ * with its request ID, expected event name, and Promise callbacks.
+ * Once the expected event fires via `emitMessage()`, the Promise is resolved.
+ *
+ * Two matching strategies are supported:
+ *  - ID-based: uses the `id` from the response header/body when available
+ *  - Event-based: matches the oldest pending entry by `expectedEvent` name (MQTT fallback)
+ */
+class PendingCommandRegistry {
+    constructor() {
+        /**
+         * @type {Map<string, {
+         *   resolve: Function,
+         *   reject: Function,
+         *   timer: NodeJS.Timeout,
+         *   commandName: string,
+         *   expectedEvent: string|null
+         * }>}
+         */
+        this._pending = new Map();
+    }
+
+    /**
+     * Register a new pending command.
+     * @param {string} requestId - The command's request ID (command.args.id)
+     * @param {string} commandName - The raw protocol command name (e.g. 'getBattery')
+     * @param {string|null} expectedEvent - The EventEmitter event name to wait for (e.g. 'BatteryInfo')
+     * @param {Function} resolve - Promise resolve callback
+     * @param {Function} reject - Promise reject callback
+     * @param {number} [timeoutMs=10000] - Timeout in milliseconds before the Promise rejects
+     */
+    register(requestId, commandName, expectedEvent, resolve, reject, timeoutMs = DEFAULT_TIMEOUT_MS) {
+        const timer = setTimeout(() => {
+            if (this._pending.has(requestId)) {
+                this._pending.delete(requestId);
+                reject(new Error(`Command '${commandName}' timed out after ${timeoutMs}ms`));
+            }
+        }, timeoutMs);
+
+        this._pending.set(requestId, {
+            resolve,
+            reject,
+            timer,
+            commandName,
+            expectedEvent
+        });
+    }
+
+    /**
+     * Resolve a pending command by its request ID.
+     * Used when an ID can be extracted from the response.
+     * @param {string} requestId
+     * @param {any} result - The parsed response to resolve the Promise with
+     * @returns {boolean} true if a matching pending entry was found and resolved
+     */
+    resolveById(requestId, result) {
+        const entry = this._pending.get(requestId);
+        if (entry) {
+            clearTimeout(entry.timer);
+            this._pending.delete(requestId);
+            entry.resolve(result);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Resolve the oldest pending command that matches the given event name.
+     * Used as a fallback when ID-based matching is not possible (e.g. MQTT broadcasts).
+     * @param {string} eventName - The event name that just fired (e.g. 'BatteryInfo')
+     * @param {any} result - The payload to resolve the Promise with
+     * @returns {boolean} true if a matching pending entry was found and resolved
+     */
+    resolveByEvent(eventName, result) {
+        for (const [requestId, entry] of this._pending.entries()) {
+            if (entry.expectedEvent === eventName) {
+                clearTimeout(entry.timer);
+                this._pending.delete(requestId);
+                entry.resolve(result);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Reject all pending commands.
+     * Should be called on disconnect to avoid hanging Promises.
+     * @param {Error} error
+     */
+    rejectAll(error) {
+        for (const [, entry] of this._pending.entries()) {
+            clearTimeout(entry.timer);
+            entry.reject(error);
+        }
+        this._pending.clear();
+    }
+
+    /**
+     * @returns {number} number of currently pending commands
+     */
+    get size() {
+        return this._pending.size;
+    }
+}
+
+module.exports = PendingCommandRegistry;
