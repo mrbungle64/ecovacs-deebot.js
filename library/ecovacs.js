@@ -188,6 +188,7 @@ class Ecovacs extends EventEmitter {
                     command.getId(),
                     command.name,
                     expectedEvent,
+                    command,
                     resolve,
                     reject,
                     options.timeoutMs || 10000

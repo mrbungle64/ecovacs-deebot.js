@@ -46,8 +46,8 @@ const COMMAND_REGISTRY = {
     // ==================
     'DisableContinuousCleaning': { className: 'SetContinuousCleaning', fixedArgs: [0] },
     'EnableContinuousCleaning': { className: 'SetContinuousCleaning', fixedArgs: [1] },
-    'GetBreakpoint': { className: 'GetContinuousCleaning' },
-    'GetContinuousCleaning': { className: 'GetContinuousCleaning' },
+    'GetBreakpoint': { className: 'GetContinuousCleaning', expectedEvent: 'ContinuousCleaningEnabled' },
+    'GetContinuousCleaning': { className: 'GetContinuousCleaning', expectedEvent: 'ContinuousCleaningEnabled' },
     'SetContinuousCleaning': { className: 'SetContinuousCleaning', minArgs: 1 },
 
     // ==================

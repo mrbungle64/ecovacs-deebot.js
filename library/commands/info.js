@@ -72,6 +72,19 @@ class GetNetInfo extends VacBotCommand {
     constructor() {
         super('getNetInfo');
     }
+
+    /**
+     * @param {{ ip?: string, wi?: string, ssid?: string, s?: string, rssi?: number, st?: number, mac?: string, wm?: string }} payload
+     * @returns {{ ip: string, wifiSSID: string, wifiSignal: number, mac: string }}
+     */
+    parseResponse(payload) {
+        return {
+            ip: payload['ip'] || payload['wi'],
+            wifiSSID: payload['ssid'] || payload['s'],
+            wifiSignal: payload['rssi'] || payload['st'],
+            mac: payload['mac'] || payload['wm']
+        };
+    }
 }
 
 /**
@@ -83,6 +96,11 @@ class GetSleepStatus extends VacBotCommand {
     constructor() {
         super('getSleep');
     }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
+    }
 }
 
 /**
@@ -92,6 +110,11 @@ class GetSleepStatus extends VacBotCommand {
 class GetVolume extends VacBotCommand {
     constructor() {
         super('getVolume');
+    }
+
+    /** @param {{ volume: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['volume'];
     }
 }
 
@@ -103,6 +126,18 @@ class GetVolume extends VacBotCommand {
 class GetAutoEmpty extends VacBotCommand {
     constructor() {
         super('getAutoEmpty');
+    }
+
+    /**
+     * @param {{ enable: number, status?: number }} payload
+     * @returns {{ enabled: boolean, status?: number }}
+     */
+    parseResponse(payload) {
+        const result = { enabled: Boolean(payload['enable']) };
+        if (payload.hasOwnProperty('status')) {
+            result.status = payload['status'];
+        }
+        return result;
     }
 }
 
@@ -143,6 +178,18 @@ class GetDoNotDisturb extends VacBotCommand {
     constructor() {
         super('getBlock');
     }
+
+    /**
+     * @param {{ enable: number, start?: string, end?: string }} payload
+     * @returns {{ enabled: boolean, blockTime?: { from: string, to: string } }}
+     */
+    parseResponse(payload) {
+        const result = { enabled: Boolean(payload['enable']) };
+        if (payload.hasOwnProperty('start')) {
+            result.blockTime = { from: payload['start'], to: payload['end'] };
+        }
+        return result;
+    }
 }
 
 /**
@@ -152,6 +199,11 @@ class GetDoNotDisturb extends VacBotCommand {
 class GetAdvancedMode extends VacBotCommand {
     constructor() {
         super('getAdvancedMode');
+    }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
     }
 }
 
@@ -190,12 +242,17 @@ class GetDusterRemind extends VacBotCommand {
 }
 
 /**
- * Request information about if 'Auto-Boost Suction' is enabled
+ * Request the value whether the 'Auto-Boost Suction' is enabled
  * @extends VacBotCommand
  */
 class GetCarpetPressure extends VacBotCommand {
     constructor() {
         super('getCarpertPressure');
+    }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
     }
 }
 
@@ -206,6 +263,11 @@ class GetCarpetPressure extends VacBotCommand {
 class GetCarpetInfo extends VacBotCommand {
     constructor() {
         super('getCarpetInfo');
+    }
+
+    /** @param {{ mode: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['mode'];
     }
 }
 
@@ -238,6 +300,11 @@ class GetStationInfo extends VacBotCommand {
 class GetWashInterval extends VacBotCommand {
     constructor() {
         super('getWashInterval');
+    }
+
+    /** @param {{ interval: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['interval'];
     }
 }
 
@@ -292,6 +359,11 @@ class GetBorderSpin extends VacBotCommand {
     constructor() {
         super('getBorderSpin');
     }
+
+    /** @param {{ enable: number, type: number }} payload @returns {boolean|null} */
+    parseResponse(payload) {
+        return payload['type'] ? Boolean(payload['enable']) : null;
+    }
 }
 
 /**
@@ -301,6 +373,11 @@ class GetBorderSpin extends VacBotCommand {
 class GetBorderSwitch extends VacBotCommand {
     constructor() {
         super('getBorderSwitch');
+    }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
     }
 }
 
@@ -344,6 +421,11 @@ class GetVoiceAssistantState extends VacBotCommand {
     constructor() {
         super('getVoiceAssistantState');
     }
+
+    /** @param {{ enable?: number, state?: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable'] ?? payload['state']);
+    }
 }
 
 /**
@@ -374,6 +456,11 @@ class GetSchedule extends VacBotCommand {
     constructor() {
         super('getSched');
     }
+
+    /** @param {Object} payload @returns {Array} */
+    parseResponse(payload) {
+        return payload['schedules'] || payload['list'] || [];
+    }
 }
 
 /**
@@ -399,6 +486,18 @@ class GetTotalStats extends VacBotCommand {
     constructor() {
         super('getTotalStats');
     }
+
+    /**
+     * @param {{ area: number, time: number, count: number }} payload
+     * @returns {{ totalSquareMeters: number, totalSeconds: number, totalNumber: number }}
+     */
+    parseResponse(payload) {
+        return {
+            totalSquareMeters: parseInt(payload['area']),
+            totalSeconds: parseInt(payload['time']),
+            totalNumber: parseInt(payload['count'])
+        };
+    }
 }
 
 /**
@@ -408,6 +507,18 @@ class GetTotalStats extends VacBotCommand {
 class GetStats extends VacBotCommand {
     constructor() {
         super('getStats');
+    }
+
+    /**
+     * @param {{ area: number, time: number, type: string }} payload
+     * @returns {{ cleanedArea: number, cleanedSeconds: number, cleanType: string }}
+     */
+    parseResponse(payload) {
+        return {
+            cleanedArea: payload['area'],
+            cleanedSeconds: payload['time'],
+            cleanType: payload['type']
+        };
     }
 }
 

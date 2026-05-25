@@ -33,11 +33,12 @@ class PendingCommandRegistry {
      * @param {string} requestId - The command's request ID (command.args.id)
      * @param {string} commandName - The raw protocol command name (e.g. 'getBattery')
      * @param {string|null} expectedEvent - The EventEmitter event name to wait for (e.g. 'BatteryInfo')
+     * @param {Object} commandInstance - The VacBotCommand instance (used to call parseResponse())
      * @param {Function} resolve - Promise resolve callback
      * @param {Function} reject - Promise reject callback
      * @param {number} [timeoutMs=10000] - Timeout in milliseconds before the Promise rejects
      */
-    register(requestId, commandName, expectedEvent, resolve, reject, timeoutMs = DEFAULT_TIMEOUT_MS) {
+    register(requestId, commandName, expectedEvent, commandInstance, resolve, reject, timeoutMs = DEFAULT_TIMEOUT_MS) {
         const timer = setTimeout(() => {
             if (this._pending.has(requestId)) {
                 this._pending.delete(requestId);
@@ -50,7 +51,8 @@ class PendingCommandRegistry {
             reject,
             timer,
             commandName,
-            expectedEvent
+            expectedEvent,
+            commandInstance
         });
     }
 
@@ -58,14 +60,17 @@ class PendingCommandRegistry {
      * Resolve a pending command by its request ID.
      * Used when an ID can be extracted from the response.
      * @param {string} requestId
-     * @param {any} result - The parsed response to resolve the Promise with
+     * @param {any} rawPayload - The raw response body data
      * @returns {boolean} true if a matching pending entry was found and resolved
      */
-    resolveById(requestId, result) {
+    resolveById(requestId, rawPayload) {
         const entry = this._pending.get(requestId);
         if (entry) {
             clearTimeout(entry.timer);
             this._pending.delete(requestId);
+            const result = (entry.commandInstance && typeof entry.commandInstance.parseResponse === 'function')
+                ? entry.commandInstance.parseResponse(rawPayload)
+                : rawPayload;
             entry.resolve(result);
             return true;
         }
@@ -75,15 +80,20 @@ class PendingCommandRegistry {
     /**
      * Resolve the oldest pending command that matches the given event name.
      * Used as a fallback when ID-based matching is not possible (e.g. MQTT broadcasts).
+     * Calls `commandInstance.parseResponse(rawPayload)` to normalize the result
+     * before resolving the Promise. Falls back to the raw payload if not overridden.
      * @param {string} eventName - The event name that just fired (e.g. 'BatteryInfo')
-     * @param {any} result - The payload to resolve the Promise with
+     * @param {any} rawPayload - The raw payload from emitMessage()
      * @returns {boolean} true if a matching pending entry was found and resolved
      */
-    resolveByEvent(eventName, result) {
+    resolveByEvent(eventName, rawPayload) {
         for (const [requestId, entry] of this._pending.entries()) {
             if (entry.expectedEvent === eventName) {
                 clearTimeout(entry.timer);
                 this._pending.delete(requestId);
+                const result = (entry.commandInstance && typeof entry.commandInstance.parseResponse === 'function')
+                    ? entry.commandInstance.parseResponse(rawPayload)
+                    : rawPayload;
                 entry.resolve(result);
                 return true;
             }
