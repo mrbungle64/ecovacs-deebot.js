@@ -604,6 +604,28 @@ class GetJCYAirQuality extends VacBotCommand {
     constructor() {
         super('getJCYAirQuality');
     }
+
+    /**
+     * Same structure as GetAirQuality — normalized into the same shape.
+     * @param {Object} payload
+     * @returns {{ particulateMatter25: number, particulateMatter10: number, airQualityIndex: number, volatileOrganicCompounds: number, temperature: number, humidity: number }}
+     */
+    parseResponse(payload) {
+        const keys = Object.keys(payload);
+        const data = payload['pm25'] ? payload : payload[keys[0]];
+        const result = {
+            particulateMatter25: data['pm25'],
+            particulateMatter10: data['pm10'],
+            airQualityIndex: data['aq'],
+            volatileOrganicCompounds: data['voc'],
+            temperature: data['tem'],
+            humidity: data['hum']
+        };
+        if (data['voc_num'] !== undefined) {
+            result.volatileOrganicCompounds_parts = data['voc_num'];
+        }
+        return result;
+    }
 }
 
 /**
@@ -613,6 +635,27 @@ class GetJCYAirQuality extends VacBotCommand {
 class GetAirQuality extends VacBotCommand {
     constructor() {
         super('getAirQuality');
+    }
+
+    /**
+     * @param {Object} payload
+     * @returns {{ particulateMatter25: number, particulateMatter10: number, airQualityIndex: number, volatileOrganicCompounds: number, temperature: number, humidity: number }}
+     */
+    parseResponse(payload) {
+        const keys = Object.keys(payload);
+        const data = payload['pm25'] ? payload : payload[keys[0]];
+        const result = {
+            particulateMatter25: data['pm25'],
+            particulateMatter10: data['pm10'],
+            airQualityIndex: data['aq'],
+            volatileOrganicCompounds: data['voc'],
+            temperature: data['tem'],
+            humidity: data['hum']
+        };
+        if (data['voc_num'] !== undefined) {
+            result.volatileOrganicCompounds_parts = data['voc_num'];
+        }
+        return result;
     }
 }
 
@@ -626,6 +669,24 @@ class GetAirbotAutoModel extends VacBotCommand {
     constructor() {
         super('getAirbotAutoModel');
     }
+
+    /**
+     * @param {{ enable: number, trigger: string, aq?: { aqStart: number, aqEnd: number } }} payload
+     * @returns {{ enable: number, trigger: string, aq?: { aqStart: number, aqEnd: number } }|null}
+     */
+    parseResponse(payload) {
+        if (payload['aq'] && payload['aq']['aqStart'] && payload['aq']['aqEnd']) {
+            return {
+                enable: payload['enable'],
+                trigger: payload['trigger'],
+                aq: {
+                    aqStart: payload['aq']['aqStart'],
+                    aqEnd: payload['aq']['aqEnd']
+                }
+            };
+        }
+        return null;
+    }
 }
 
 /**
@@ -635,6 +696,11 @@ class GetAirbotAutoModel extends VacBotCommand {
 class GetAngleFollow extends VacBotCommand {
     constructor() {
         super('getAngleFollow');
+    }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
     }
 }
 
@@ -646,6 +712,11 @@ class GetAtmoLight extends VacBotCommand {
     constructor() {
         super('getAtmoLight');
     }
+
+    /** @param {{ intensity: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['intensity'];
+    }
 }
 
 /**
@@ -655,6 +726,11 @@ class GetAtmoLight extends VacBotCommand {
 class GetAtmoVolume extends VacBotCommand {
     constructor() {
         super('getAtmoVolume');
+    }
+
+    /** @param {{ volume: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['volume'];
     }
 }
 
@@ -666,6 +742,18 @@ class GetBlueSpeaker extends VacBotCommand {
     constructor() {
         super('getBlueSpeaker');
     }
+
+    /**
+     * @param {{ enable: number, time: number, name: string }} payload
+     * @returns {{ enabled: boolean, time: number, name: string }}
+     */
+    parseResponse(payload) {
+        return {
+            enabled: Boolean(payload['enable']),
+            time: payload['time'],
+            name: payload['name']
+        };
+    }
 }
 
 /**
@@ -675,6 +763,11 @@ class GetBlueSpeaker extends VacBotCommand {
 class GetChildLock extends VacBotCommand {
     constructor() {
         super('getChildLock');
+    }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
     }
 }
 
@@ -687,6 +780,11 @@ class GetDrivingWheel extends VacBotCommand {
     constructor() {
         super('getDrivingWheel');
     }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
+    }
 }
 
 /**
@@ -697,6 +795,17 @@ class GetDrivingWheel extends VacBotCommand {
 class GetHumanoidFollow extends VacBotCommand {
     constructor() {
         super('getHumanoidFollow');
+    }
+
+    /**
+     * @param {{ video: number, yiko: number }} payload
+     * @returns {{ video: boolean, yiko: boolean }}
+     */
+    parseResponse(payload) {
+        return {
+            video: Boolean(payload['video']),
+            yiko: Boolean(payload['yiko'])
+        };
     }
 }
 
@@ -730,6 +839,11 @@ class GetMic extends VacBotCommand {
     constructor() {
         super('getMic');
     }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
+    }
 }
 
 /**
@@ -740,6 +854,11 @@ class GetMic extends VacBotCommand {
 class GetMonitorAirState extends VacBotCommand {
     constructor() {
         super('getMonitorAirState');
+    }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
     }
 }
 
@@ -762,6 +881,16 @@ class GetThreeModule extends VacBotCommand {
     constructor() {
         super('getThreeModule', []);
     }
+
+    /**
+     * Returns the raw payload (UV, Humidifier, AirFreshener levels).
+     * Structure varies by module configuration.
+     * @param {Object} payload
+     * @returns {Object}
+     */
+    parseResponse(payload) {
+        return payload;
+    }
 }
 
 /**
@@ -772,6 +901,15 @@ class GetThreeModule extends VacBotCommand {
 class GetThreeModuleStatus extends VacBotCommand {
     constructor() {
         super('getThreeModuleStatus');
+    }
+
+    /**
+     * Returns the raw working status payload (UV, Humidifier, AirFreshener).
+     * @param {Object} payload
+     * @returns {Object}
+     */
+    parseResponse(payload) {
+        return payload;
     }
 }
 
@@ -799,6 +937,11 @@ class GetVoiceLifeRemindState extends VacBotCommand {
     constructor() {
         super('getVoiceLifeRemindState');
     }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
+    }
 }
 
 /**
@@ -808,6 +951,11 @@ class GetVoiceLifeRemindState extends VacBotCommand {
 class GetVoiceSimple extends VacBotCommand {
     constructor() {
         super('getVoiceSimple');
+    }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
     }
 }
 
@@ -849,6 +997,11 @@ class GetFanSpeed extends VacBotCommand {
     constructor() {
         super('getSpeed');
     }
+
+    /** @param {{ speed: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['speed'];
+    }
 }
 
 /**
@@ -873,6 +1026,20 @@ class GetMoveUpWarning extends VacBotCommand {
 class GetNetInfoLegacy extends VacBotCommand {
     constructor() {
         super('GetNetInfo');
+    }
+
+    /**
+     * Same payload shape as GetNetInfo — reuses the same normalization.
+     * @param {{ ip?: string, wi?: string, ssid?: string, s?: string, rssi?: number, st?: number, mac?: string, wm?: string }} payload
+     * @returns {{ ip: string, wifiSSID: string, wifiSignal: number, mac: string }}
+     */
+    parseResponse(payload) {
+        return {
+            ip: payload['ip'] || payload['wi'],
+            wifiSSID: payload['ssid'] || payload['s'],
+            wifiSignal: payload['rssi'] || payload['st'],
+            mac: payload['mac'] || payload['wm']
+        };
     }
 }
 
