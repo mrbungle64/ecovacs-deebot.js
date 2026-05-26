@@ -356,5 +356,27 @@ export class SetHumidifierLevel extends SetThreeModule {
 export class SetVoiceSimple extends VacBotCommand {
     constructor(on?: number);
 }
+/**
+ * Sets the 'Carpet Auto Fan Boost' state
+ * @extends VacBotCommand
+ */
+export class SetCarpetAutoFanBoost extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {boolean|number} enable
+     */
+    constructor(enable: boolean | number);
+}
+/**
+ * Sets the 'Mop Auto Wash Frequency' (cleaning interval)
+ * @extends VacBotCommand
+ */
+export class SetMopAutoWashFrequency extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {number} [interval=15] - cleaning interval in minutes
+     */
+    constructor(interval?: number);
+}
 import { VacBotCommand } from "./base";
 //# sourceMappingURL=settings.d.ts.map

@@ -128,6 +128,10 @@ export class GetCleanState_V2 extends VacBotCommand {
  */
 export class GetCleanSpeed extends VacBotCommand {
     constructor();
+    /** @param {{ speed: number }} payload @returns {number} */
+    parseResponse(payload: {
+        speed: number;
+    }): number;
 }
 /**
  * Sets the 'Suction Power' level
@@ -142,6 +146,10 @@ export class SetCleanSpeed extends VacBotCommand {
  */
 export class GetCustomAreaMode extends VacBotCommand {
     constructor();
+    /** @param {{ sweepMode?: number }} payload @returns {number|null} */
+    parseResponse(payload: {
+        sweepMode?: number;
+    }): number | null;
 }
 /**
  * Sets the 'Mopping Mode'/'Efficiency' (e.g. X1 series)
@@ -157,6 +165,19 @@ export class SetCustomAreaMode extends VacBotCommand {
  */
 export class GetCleanSum extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ area: number, time: number, count: number }} payload
+     * @returns {{ totalSquareMeters: number, totalSeconds: number, totalNumber: number }}
+     */
+    parseResponse(payload: {
+        area: number;
+        time: number;
+        count: number;
+    }): {
+        totalSquareMeters: number;
+        totalSeconds: number;
+        totalNumber: number;
+    };
 }
 /**
  * Request information about the (spot) areas
@@ -185,6 +206,10 @@ export class GetMapSpotAreaInfo extends GetMapSubSet {
  */
 export class GetContinuousCleaning extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Sets the value for 'Continuous Cleaning'/'Resumed clean' option
@@ -199,6 +224,10 @@ export class SetContinuousCleaning extends VacBotCommand {
  */
 export class GetCleanCount extends VacBotCommand {
     constructor();
+    /** @param {{ count: number }} payload @returns {number} */
+    parseResponse(payload: {
+        count: number;
+    }): number;
 }
 /**
  * Sets the number of cleaning repetitions ('Cleaning Times')
@@ -213,6 +242,10 @@ export class SetCleanCount extends VacBotCommand {
  */
 export class GetCleanPreference extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Sets the value whether the 'Cleaning Preference' mode is enabled
@@ -227,6 +260,17 @@ export class SetCleanPreference extends VacBotCommand {
  */
 export class GetAICleanItemState extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ items?: Array }} payload
+     * @returns {{ items: Array, particleRemoval: boolean, petPoopPrevention: boolean }|null}
+     */
+    parseResponse(payload: {
+        items?: any[];
+    }): {
+        items: any[];
+        particleRemoval: boolean;
+        petPoopPrevention: boolean;
+    } | null;
 }
 /**
  * Start und Stop 'Mopping Pads Cleaning' (e.g. X1 series)
@@ -257,6 +301,10 @@ export class SinglePoint_V2 extends Clean_V2 {
  */
 export class GetAutonomousClean extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Sets the enabled state
@@ -297,6 +345,46 @@ export class Edge extends Clean {
  */
 export class Spot extends Clean {
     constructor();
+}
+/**
+ * Represents a 'Clean Area' command (e.g., spotArea or customArea)
+ * @extends VacBotCommand
+ */
+export class CleanArea extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {string} mode - 'spotArea' or 'customArea'
+     * @param {string|Array<number|string>} area - area IDs or coordinates
+     * @param {number} [cleanings=1] - number of cleaning iterations
+     */
+    constructor(mode: string, area: string | Array<number | string>, cleanings?: number);
+}
+/**
+ * Represents a 'Clean Area' command V2 (newer models)
+ * @extends VacBotCommand
+ */
+export class CleanArea_V2 extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {string} mode - 'spotArea' or 'customArea'
+     * @param {string|Array<number|string>} area - area IDs or coordinates
+     */
+    constructor(mode: string, area: string | Array<number | string>);
+}
+/**
+ * Requests the clean state/info V2
+ * @extends VacBotCommand
+ */
+export class GetCleanInfoV2 extends VacBotCommand {
+    constructor();
+    /**
+     * @param {Object} payload - The raw clean info payload
+     * @returns {{ state: string, raw: Object }}
+     */
+    parseResponse(payload: Object): {
+        state: string;
+        raw: Object;
+    };
 }
 import { VacBotCommand } from "./base";
 import { GetMapSet } from "./map";

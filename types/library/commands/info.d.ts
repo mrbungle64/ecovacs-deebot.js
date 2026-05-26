@@ -4,6 +4,17 @@
  */
 export class GetBatteryState extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ value: number, isLow?: number }} payload
+     * @returns {{ level: number, isLow: boolean }}
+     */
+    parseResponse(payload: {
+        value: number;
+        isLow?: number;
+    }): {
+        level: number;
+        isLow: boolean;
+    };
 }
 /**
  * Requests information about the consumable components
@@ -32,6 +43,21 @@ export class GetError extends VacBotCommand {
  */
 export class GetWaterInfo extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ amount: number, enable: number, type?: number, sweepType?: number }} payload
+     * @returns {{ waterLevel: number, waterboxInfo: number, moppingType?: number, scrubbingType?: number }}
+     */
+    parseResponse(payload: {
+        amount: number;
+        enable: number;
+        type?: number;
+        sweepType?: number;
+    }): {
+        waterLevel: number;
+        waterboxInfo: number;
+        moppingType?: number;
+        scrubbingType?: number;
+    };
 }
 /**
  * Requests information about the connected network and Wi-Fi
@@ -39,6 +65,25 @@ export class GetWaterInfo extends VacBotCommand {
  */
 export class GetNetInfo extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ ip?: string, wi?: string, ssid?: string, s?: string, rssi?: number, st?: number, mac?: string, wm?: string }} payload
+     * @returns {{ ip: string, wifiSSID: string, wifiSignal: number, mac: string }}
+     */
+    parseResponse(payload: {
+        ip?: string;
+        wi?: string;
+        ssid?: string;
+        s?: string;
+        rssi?: number;
+        st?: number;
+        mac?: string;
+        wm?: string;
+    }): {
+        ip: string;
+        wifiSSID: string;
+        wifiSignal: number;
+        mac: string;
+    };
 }
 /**
  * Request information about if the bot is
@@ -47,6 +92,10 @@ export class GetNetInfo extends VacBotCommand {
  */
 export class GetSleepStatus extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Request the volume value
@@ -54,6 +103,10 @@ export class GetSleepStatus extends VacBotCommand {
  */
 export class GetVolume extends VacBotCommand {
     constructor();
+    /** @param {{ volume: number }} payload @returns {number} */
+    parseResponse(payload: {
+        volume: number;
+    }): number;
 }
 /**
  * Request information if the 'Auto Empty' option is enabled
@@ -62,6 +115,17 @@ export class GetVolume extends VacBotCommand {
  */
 export class GetAutoEmpty extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ enable: number, status?: number }} payload
+     * @returns {{ enabled: boolean, status?: number }}
+     */
+    parseResponse(payload: {
+        enable: number;
+        status?: number;
+    }): {
+        enabled: boolean;
+        status?: number;
+    };
 }
 /**
  * Represents a command to empty the dust bin
@@ -87,6 +151,21 @@ export class EmptyDustBinSA extends VacBotCommand {
  */
 export class GetDoNotDisturb extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ enable: number, start?: string, end?: string }} payload
+     * @returns {{ enabled: boolean, blockTime?: { from: string, to: string } }}
+     */
+    parseResponse(payload: {
+        enable: number;
+        start?: string;
+        end?: string;
+    }): {
+        enabled: boolean;
+        blockTime?: {
+            from: string;
+            to: string;
+        };
+    };
 }
 /**
  * Request information if the 'Advanced Mode' option is enabled
@@ -94,6 +173,10 @@ export class GetDoNotDisturb extends VacBotCommand {
  */
 export class GetAdvancedMode extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Request information if (depending on model)
@@ -119,13 +202,28 @@ export class GetTrueDetect extends VacBotCommand {
  */
 export class GetDusterRemind extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ enable: number, period: number }} payload
+     * @returns {{ enabled: boolean, period: number }}
+     */
+    parseResponse(payload: {
+        enable: number;
+        period: number;
+    }): {
+        enabled: boolean;
+        period: number;
+    };
 }
 /**
- * Request information about if 'Auto-Boost Suction' is enabled
+ * Request the value whether the 'Auto-Boost Suction' is enabled
  * @extends VacBotCommand
  */
 export class GetCarpetPressure extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Request the value of the 'Carpet cleaning strategy' option
@@ -133,6 +231,10 @@ export class GetCarpetPressure extends VacBotCommand {
  */
 export class GetCarpetInfo extends VacBotCommand {
     constructor();
+    /** @param {{ mode: number }} payload @returns {number} */
+    parseResponse(payload: {
+        mode: number;
+    }): number;
 }
 /**
  * Receive information about the station (e.g. X1 series)
@@ -156,6 +258,10 @@ export class GetStationInfo extends VacBotCommand {
  */
 export class GetWashInterval extends VacBotCommand {
     constructor();
+    /** @param {{ interval: number }} payload @returns {number} */
+    parseResponse(payload: {
+        interval: number;
+    }): number;
 }
 /**
  * Request the value whether hot water
@@ -191,6 +297,11 @@ export class GetDryingDuration extends VacBotCommand {
  */
 export class GetBorderSpin extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number, type: number }} payload @returns {boolean|null} */
+    parseResponse(payload: {
+        enable: number;
+        type: number;
+    }): boolean | null;
 }
 /**
  * Requests the value whether the 'Border Switch' is enabled
@@ -198,6 +309,10 @@ export class GetBorderSpin extends VacBotCommand {
  */
 export class GetBorderSwitch extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Requests information about the Firmware
@@ -209,11 +324,21 @@ export class GetOta extends VacBotCommand {
     constructor();
 }
 /**
- * Requests information about the relocation status (e.g. X1 series, Airbot Z1)
+ * Request the current relocation state
  * @extends VacBotCommand
  */
 export class GetRelocationState extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ state: string }} payload
+     * @returns {{ status: Object, state: string }}
+     */
+    parseResponse(payload: {
+        state: string;
+    }): {
+        status: Object;
+        state: string;
+    };
 }
 /**
  * Requests the value whether the 'Mop-Only' mode is enabled (e.g. X1 series)
@@ -228,6 +353,11 @@ export class GetSweepMode extends VacBotCommand {
  */
 export class GetVoiceAssistantState extends VacBotCommand {
     constructor();
+    /** @param {{ enable?: number, state?: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable?: number;
+        state?: number;
+    }): boolean;
 }
 /**
  * Requests the 'Cleaning Mode' (e.g. T20 series)
@@ -242,6 +372,10 @@ export class GetWorkMode extends VacBotCommand {
  */
 export class GetWorkState extends VacBotCommand {
     constructor();
+    /** @param {{ state: number }} payload @returns {number} */
+    parseResponse(payload: {
+        state: number;
+    }): number;
 }
 /**
  * Request information about the 'Scheduled Cleaning' tasks
@@ -249,6 +383,8 @@ export class GetWorkState extends VacBotCommand {
  */
 export class GetSchedule extends VacBotCommand {
     constructor();
+    /** @param {Object} payload @returns {Array} */
+    parseResponse(payload: Object): any[];
 }
 /**
  * Request information about the 'Scheduled Cleaning' tasks
@@ -266,6 +402,19 @@ export class GetSchedule_V2 extends VacBotCommand {
  */
 export class GetTotalStats extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ area: number, time: number, count: number }} payload
+     * @returns {{ totalSquareMeters: number, totalSeconds: number, totalNumber: number }}
+     */
+    parseResponse(payload: {
+        area: number;
+        time: number;
+        count: number;
+    }): {
+        totalSquareMeters: number;
+        totalSeconds: number;
+        totalNumber: number;
+    };
 }
 /**
  * Request information about the stats
@@ -273,6 +422,19 @@ export class GetTotalStats extends VacBotCommand {
  */
 export class GetStats extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ area: number, time: number, type: string }} payload
+     * @returns {{ cleanedArea: number, cleanedSeconds: number, cleanType: string }}
+     */
+    parseResponse(payload: {
+        area: number;
+        time: number;
+        type: string;
+    }): {
+        cleanedArea: number;
+        cleanedSeconds: number;
+        cleanType: string;
+    };
 }
 /**
  * Request information about the
@@ -284,13 +446,15 @@ export class GetQuickCommand extends VacBotCommand {
     constructor(type?: string);
 }
 /**
- * Request information about the Wi-Fi that is in use
- * and also about the stored Wi-Fi settings
- * (incl. Password in plain text!)
+ * Request the 'WiFi List'
  * @extends VacBotCommand
  */
 export class GetWifiList extends VacBotCommand {
     constructor();
+    /** @param {{ list: Array }} payload @returns {Array} */
+    parseResponse(payload: {
+        list: any[];
+    }): any[];
 }
 /**
  * Air quality (Z1 Air Quality Monitor)
@@ -298,6 +462,19 @@ export class GetWifiList extends VacBotCommand {
  */
 export class GetJCYAirQuality extends VacBotCommand {
     constructor();
+    /**
+     * Same structure as GetAirQuality — normalized into the same shape.
+     * @param {Object} payload
+     * @returns {{ particulateMatter25: number, particulateMatter10: number, airQualityIndex: number, volatileOrganicCompounds: number, temperature: number, humidity: number }}
+     */
+    parseResponse(payload: Object): {
+        particulateMatter25: number;
+        particulateMatter10: number;
+        airQualityIndex: number;
+        volatileOrganicCompounds: number;
+        temperature: number;
+        humidity: number;
+    };
 }
 /**
  * Air quality (Airbot Z1)
@@ -305,6 +482,18 @@ export class GetJCYAirQuality extends VacBotCommand {
  */
 export class GetAirQuality extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload
+     * @returns {{ particulateMatter25: number, particulateMatter10: number, airQualityIndex: number, volatileOrganicCompounds: number, temperature: number, humidity: number }}
+     */
+    parseResponse(payload: Object): {
+        particulateMatter25: number;
+        particulateMatter10: number;
+        airQualityIndex: number;
+        volatileOrganicCompounds: number;
+        temperature: number;
+        humidity: number;
+    };
 }
 /**
  * Requests an object with data
@@ -314,6 +503,25 @@ export class GetAirQuality extends VacBotCommand {
  */
 export class GetAirbotAutoModel extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ enable: number, trigger: string, aq?: { aqStart: number, aqEnd: number } }} payload
+     * @returns {{ enable: number, trigger: string, aq?: { aqStart: number, aqEnd: number } }|null}
+     */
+    parseResponse(payload: {
+        enable: number;
+        trigger: string;
+        aq?: {
+            aqStart: number;
+            aqEnd: number;
+        };
+    }): {
+        enable: number;
+        trigger: string;
+        aq?: {
+            aqStart: number;
+            aqEnd: number;
+        };
+    } | null;
 }
 /**
  * Requests the enabled state of the 'Face to Me' option
@@ -321,6 +529,10 @@ export class GetAirbotAutoModel extends VacBotCommand {
  */
 export class GetAngleFollow extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Requests the intensity of the 'Real-time Air Quality Display'
@@ -328,6 +540,10 @@ export class GetAngleFollow extends VacBotCommand {
  */
 export class GetAtmoLight extends VacBotCommand {
     constructor();
+    /** @param {{ intensity: number }} payload @returns {number} */
+    parseResponse(payload: {
+        intensity: number;
+    }): number;
 }
 /**
  * Requests the 'Volume' (0-16)
@@ -335,6 +551,10 @@ export class GetAtmoLight extends VacBotCommand {
  */
 export class GetAtmoVolume extends VacBotCommand {
     constructor();
+    /** @param {{ volume: number }} payload @returns {number} */
+    parseResponse(payload: {
+        volume: number;
+    }): number;
 }
 /**
  * Request the enabled state of the 'Bluetooth Speaker'
@@ -342,6 +562,19 @@ export class GetAtmoVolume extends VacBotCommand {
  */
 export class GetBlueSpeaker extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ enable: number, time: number, name: string }} payload
+     * @returns {{ enabled: boolean, time: number, name: string }}
+     */
+    parseResponse(payload: {
+        enable: number;
+        time: number;
+        name: string;
+    }): {
+        enabled: boolean;
+        time: number;
+        name: string;
+    };
 }
 /**
  * Request the enabled state of the 'Child Lock' option
@@ -349,6 +582,10 @@ export class GetBlueSpeaker extends VacBotCommand {
  */
 export class GetChildLock extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Request the enabled state for 'DrivingWheel'
@@ -357,6 +594,10 @@ export class GetChildLock extends VacBotCommand {
  */
 export class GetDrivingWheel extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Request the enabled state of the
@@ -365,13 +606,36 @@ export class GetDrivingWheel extends VacBotCommand {
  */
 export class GetHumanoidFollow extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ video: number, yiko: number }} payload
+     * @returns {{ video: boolean, yiko: boolean }}
+     */
+    parseResponse(payload: {
+        video: number;
+        yiko: number;
+    }): {
+        video: boolean;
+        yiko: boolean;
+    };
 }
 /**
- * Request Video Manager status info
+ * Request the Live Launch password state
+ * Used by the Video Manager
  * @extends VacBotCommand
  */
 export class GetLiveLaunchPwdState extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ state: string, hasPwd: boolean }} payload
+     * @returns {{ state: string, hasPwd: boolean }}
+     */
+    parseResponse(payload: {
+        state: string;
+        hasPwd: boolean;
+    }): {
+        state: string;
+        hasPwd: boolean;
+    };
 }
 /**
  * Request the enabled state of the microphone
@@ -379,6 +643,10 @@ export class GetLiveLaunchPwdState extends VacBotCommand {
  */
 export class GetMic extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Request the enabled state of the 'MonitorAirState'
@@ -387,6 +655,10 @@ export class GetMic extends VacBotCommand {
  */
 export class GetMonitorAirState extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Request various information about the 'Purification Scenario'
@@ -402,6 +674,13 @@ export class GetScene extends VacBotCommand {
  */
 export class GetThreeModule extends VacBotCommand {
     constructor();
+    /**
+     * Returns the raw payload (UV, Humidifier, AirFreshener levels).
+     * Structure varies by module configuration.
+     * @param {Object} payload
+     * @returns {Object}
+     */
+    parseResponse(payload: Object): Object;
 }
 /**
  * Request status data for the 'Air freshener', 'Humidifier'
@@ -410,13 +689,23 @@ export class GetThreeModule extends VacBotCommand {
  */
 export class GetThreeModuleStatus extends VacBotCommand {
     constructor();
+    /**
+     * Returns the raw working status payload (UV, Humidifier, AirFreshener).
+     * @param {Object} payload
+     * @returns {Object}
+     */
+    parseResponse(payload: Object): Object;
 }
 /**
- * Request information about the 'Time Zone'
+ * Request the 'Time Zone' value
  * @extends VacBotCommand
  */
 export class GetTimeZone extends VacBotCommand {
     constructor();
+    /** @param {{ tz: string }} payload @returns {string} */
+    parseResponse(payload: {
+        tz: string;
+    }): string;
 }
 /**
  * Request enabled state for the 'VoiceLifeRemindState'
@@ -425,6 +714,10 @@ export class GetTimeZone extends VacBotCommand {
  */
 export class GetVoiceLifeRemindState extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
  * Request enabled state for the 'Working Status Voice Report'
@@ -432,20 +725,32 @@ export class GetVoiceLifeRemindState extends VacBotCommand {
  */
 export class GetVoiceSimple extends VacBotCommand {
     constructor();
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        on: number;
+    }): boolean;
 }
 /**
- * Request information if the 'Cross Map Border Warning' is enabled
+ * Request whether the robot mops across map borders (e.g. X1)
  * @extends VacBotCommand
  */
 export class GetCrossMapBorderWarning extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
- * Request information about the 'Cut Direction'
+ * Request the cut direction value (Lawn Mower)
  * @extends VacBotCommand
  */
 export class GetCutDirection extends VacBotCommand {
     constructor();
+    /** @param {{ angle: number }} payload @returns {number} */
+    parseResponse(payload: {
+        angle: number;
+    }): number;
 }
 /**
  * Request information about the 'Fan Speed'
@@ -453,13 +758,21 @@ export class GetCutDirection extends VacBotCommand {
  */
 export class GetFanSpeed extends VacBotCommand {
     constructor();
+    /** @param {{ speed: number }} payload @returns {number} */
+    parseResponse(payload: {
+        speed: number;
+    }): number;
 }
 /**
- * Request information if the 'Move Up Warning' is enabled
+ * Request whether the 'Move Up Warning' is enabled
  * @extends VacBotCommand
  */
 export class GetMoveUpWarning extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Requests information about the connected network and Wi-Fi (Legacy)
@@ -467,13 +780,37 @@ export class GetMoveUpWarning extends VacBotCommand {
  */
 export class GetNetInfoLegacy extends VacBotCommand {
     constructor();
+    /**
+     * Same payload shape as GetNetInfo — reuses the same normalization.
+     * @param {{ ip?: string, wi?: string, ssid?: string, s?: string, rssi?: number, st?: number, mac?: string, wm?: string }} payload
+     * @returns {{ ip: string, wifiSSID: string, wifiSignal: number, mac: string }}
+     */
+    parseResponse(payload: {
+        ip?: string;
+        wi?: string;
+        ssid?: string;
+        s?: string;
+        rssi?: number;
+        st?: number;
+        mac?: string;
+        wm?: string;
+    }): {
+        ip: string;
+        wifiSSID: string;
+        wifiSignal: number;
+        mac: string;
+    };
 }
 /**
- * Request information if the 'Safe Protect' option is enabled
+ * Request the safety protection status
  * @extends VacBotCommand
  */
 export class GetSafeProtect extends VacBotCommand {
     constructor();
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Request an array of cleaning log information
@@ -483,6 +820,48 @@ export class GetSafeProtect extends VacBotCommand {
  */
 export class GetCleanLogs extends VacBotCommand {
     constructor(count?: number);
+}
+/**
+ * Requests the 'Carpet Auto Fan Boost' state
+ * @extends VacBotCommand
+ */
+export class GetCarpetAutoFanBoost extends VacBotCommand {
+    constructor();
+    /**
+     * @param {{ enable: number }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
+}
+/**
+ * Requests the 'Efficiency Mode'
+ * @extends VacBotCommand
+ */
+export class GetEfficiencyMode extends VacBotCommand {
+    constructor();
+    /**
+     * @param {{ efficiency: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload: {
+        efficiency: number;
+    }): number;
+}
+/**
+ * Requests the 'Mop Auto Wash Frequency' (cleaning interval)
+ * @extends VacBotCommand
+ */
+export class GetMopAutoWashFrequency extends VacBotCommand {
+    constructor();
+    /**
+     * @param {{ interval: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload: {
+        interval: number;
+    }): number;
 }
 import { VacBotCommand } from "./base";
 //# sourceMappingURL=info.d.ts.map

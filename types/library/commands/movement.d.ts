@@ -33,6 +33,17 @@ export class MoveForward extends Move {
  */
 export class GetChargeState extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ isCharging: number, mode?: string }} payload
+     * @returns {{ chargeStatus: string, chargeMode: string }}
+     */
+    parseResponse(payload: {
+        isCharging: number;
+        mode?: string;
+    }): {
+        chargeStatus: string;
+        chargeMode: string;
+    };
 }
 import { VacBotCommand } from "./base";
 //# sourceMappingURL=movement.d.ts.map

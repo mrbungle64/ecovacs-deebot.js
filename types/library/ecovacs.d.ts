@@ -28,6 +28,7 @@ declare class Ecovacs extends EventEmitter<any> {
     channel: string;
     username: string;
     payloadType: string;
+    pendingCommands: PendingCommandRegistry;
     /**
      * Get the server address of the Ecovacs endpoint.
      * Different schema for accounts registered in China
@@ -71,11 +72,19 @@ declare class Ecovacs extends EventEmitter<any> {
      */
     handleMessage(topic: string, message: Object | string, type?: string): void;
     /**
-     * It sends a command to the Ecovacs API
+     * It sends a command to the Ecovacs API.
+     * Optionally returns a Promise that resolves with the response payload
+     * when the command's expected event fires.
      * @param {Object} command - the command to send to the Ecovacs API
-     * @returns {Promise<void>}
+     * @param {Object} [options={}]
+     * @param {boolean} [options.returnPromise=false] - if true, returns a Promise
+     * @param {number}  [options.timeoutMs=10000] - timeout in ms before the Promise rejects
+     * @returns {Promise<any>|void}
      */
-    sendCommand(command: Object): Promise<void>;
+    sendCommand(command: Object, options?: {
+        returnPromise?: boolean | undefined;
+        timeoutMs?: number | undefined;
+    }): Promise<any> | void;
     /**
      * Handle life span components to emit combined object
      */
@@ -135,4 +144,5 @@ declare class Ecovacs extends EventEmitter<any> {
     handleFwBuryPoint(payload: Object): Promise<boolean>;
 }
 import EventEmitter = require("node:events");
+import PendingCommandRegistry = require("./managers/pendingCommandRegistry");
 //# sourceMappingURL=ecovacs.d.ts.map
