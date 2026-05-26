@@ -41,6 +41,30 @@ class GetLifeSpan extends VacBotCommand {
     constructor(componentsArray = []) {
         super('getLifeSpan', componentsArray);
     }
+
+    /**
+     * @param {Array} payload
+     * @returns {Object}
+     */
+    parseResponse(payload) {
+        const dictionary = require('../dictionary');
+        const components = {};
+        for (const entry of payload) {
+            if (entry) {
+                const type = entry['type'];
+                const component = dictionary.COMPONENT_FROM_ECOVACS[type] || type;
+                const left = Number(entry['left']);
+                const total = Number(entry['total']) || 1;
+                const percent = Number(((left / total) * 100).toFixed(2));
+                components[component] = {
+                    left: left,
+                    total: total,
+                    percent: percent
+                };
+            }
+        }
+        return components;
+    }
 }
 
 /**
@@ -51,6 +75,30 @@ class GetLifeSpan extends VacBotCommand {
 class GetError extends VacBotCommand {
     constructor() {
         super('getError');
+    }
+
+    /**
+     * @param {Object} payload
+     * @returns {{ code: number, description: string }}
+     */
+    parseResponse(payload) {
+        const errorCodes = require('../errorCodes.json').errorCodes;
+        let code = payload['code'];
+        if (Array.isArray(code)) {
+            code = code.length > 0 ? code[code.length - 1] : 0;
+        }
+        const codeStr = String(code || 0);
+        let description = errorCodes[codeStr];
+        if (!description) {
+            description = `unknown errorCode: ${codeStr}`;
+        }
+        if (codeStr === '1' && payload['error']) {
+            description = `${description}: ${payload['error']}`;
+        }
+        return {
+            code: Number(codeStr),
+            description: description
+        };
     }
 }
 
@@ -235,6 +283,14 @@ class GetRecognization extends VacBotCommand {
     constructor() {
         super('getRecognization');
     }
+
+    /**
+     * @param {{ state: number|boolean }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload) {
+        return !!payload['state'];
+    }
 }
 
 /**
@@ -246,6 +302,14 @@ class GetRecognization extends VacBotCommand {
 class GetTrueDetect extends VacBotCommand {
     constructor() {
         super('getTrueDetect');
+    }
+
+    /**
+     * @param {{ enable: number }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload) {
+        return !!payload['enable'];
     }
 }
 
@@ -309,6 +373,28 @@ class GetStationState extends VacBotCommand {
     constructor() {
         super('getStationState');
     }
+
+    /**
+     * @param {Object} payload
+     * @returns {{ type: number, state: number, isAirDrying: boolean, isSelfCleaning: boolean, isActive: boolean }}
+     */
+    parseResponse(payload) {
+        let type = 0;
+        let state = 0;
+        if (payload.hasOwnProperty('content')) {
+            type = payload['content']['type'];
+        }
+        if (payload.hasOwnProperty('state')) {
+            state = payload['state'];
+        }
+        return {
+            'type': type,
+            'state': state,
+            'isAirDrying': Boolean((type === 2) && state),
+            'isSelfCleaning': Boolean((type === 3) && state),
+            'isActive': Boolean(state)
+        };
+    }
 }
 
 /**
@@ -319,6 +405,20 @@ class GetStationState extends VacBotCommand {
 class GetStationInfo extends VacBotCommand {
     constructor() {
         super('getStationInfo');
+    }
+
+    /**
+     * @param {Object} payload
+     * @returns {{ state: number|string, name: string, model: string, sn: string, wkVer: string }}
+     */
+    parseResponse(payload) {
+        return {
+            state: payload.state,
+            name: payload.name,
+            model: payload.model,
+            sn: payload.sn,
+            wkVer: payload.wkVer
+        };
     }
 }
 
@@ -346,6 +446,14 @@ class GetWashInfo extends VacBotCommand {
     constructor() {
         super('getWashInfo');
     }
+
+    /**
+     * @param {{ mode: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload) {
+        return payload['mode'];
+    }
 }
 
 /**
@@ -356,6 +464,20 @@ class GetWashInfo extends VacBotCommand {
 class GetAirDrying extends VacBotCommand {
     constructor() {
         super('getAirDring');
+    }
+
+    /**
+     * @param {{ status: number|string }} payload
+     * @returns {string|null}
+     */
+    parseResponse(payload) {
+        const status = parseInt(payload['status']);
+        if (status === 1) {
+            return 'airdrying';
+        } else if (status === 2) {
+            return 'idle';
+        }
+        return null;
     }
 }
 
@@ -377,6 +499,14 @@ class Drying extends VacBotCommand {
 class GetDryingDuration extends VacBotCommand {
     constructor() {
         super('getDryingDuration');
+    }
+
+    /**
+     * @param {{ duration: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload) {
+        return payload['duration'];
     }
 }
 
@@ -420,6 +550,20 @@ class GetOta extends VacBotCommand {
     constructor() {
         super('getOta');
     }
+
+    /**
+     * @param {Object} payload
+     * @returns {{ supportAuto: boolean, autoSwitch: boolean, version: string, status: string, progress: string|number }}
+     */
+    parseResponse(payload) {
+        return {
+            supportAuto: !!payload['supportAuto'],
+            autoSwitch: !!payload['autoSwitch'],
+            version: payload['ver'],
+            status: payload['status'],
+            progress: payload['progress']
+        };
+    }
 }
 
 /**
@@ -451,6 +595,14 @@ class GetSweepMode extends VacBotCommand {
     constructor() {
         super('getSweepMode');
     }
+
+    /**
+     * @param {{ type: number }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload) {
+        return Boolean(payload['type']);
+    }
 }
 
 /**
@@ -475,6 +627,14 @@ class GetVoiceAssistantState extends VacBotCommand {
 class GetWorkMode extends VacBotCommand {
     constructor() {
         super('getWorkMode');
+    }
+
+    /**
+     * @param {{ mode: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload) {
+        return payload['mode'];
     }
 }
 
@@ -1071,6 +1231,46 @@ class GetCleanLogs extends VacBotCommand {
                 'count': count
             },
             constants.CLEANLOGS_PATH);
+    }
+
+    /**
+     * @param {Object} payload
+     * @returns {Array<Object>}
+     */
+    parseResponse(payload) {
+        const tools = require('../tools');
+        let logs = [];
+        if (payload.hasOwnProperty('logs')) {
+            logs = payload['logs'];
+        } else if (payload.hasOwnProperty('log')) {
+            logs = payload['log'];
+        } else if (payload.hasOwnProperty('data')) {
+            logs = payload['data'];
+        }
+        const parsedLogs = [];
+        for (const logEntry of logs) {
+            if (logEntry) {
+                const squareMeters = parseInt(logEntry['area']);
+                const timestamp = Number(logEntry['ts']);
+                const date = new Date(timestamp * 1000);
+                const len = parseInt(logEntry['last']);
+                const totalTimeString = tools.getTimeStringFormatted(len);
+                const imageUrl = logEntry['imageUrl'];
+                parsedLogs.push({
+                    id: logEntry['id'],
+                    squareMeters: squareMeters,
+                    timestamp: timestamp,
+                    date: date,
+                    lastTime: len,
+                    totalTime: len,
+                    totalTimeFormatted: totalTimeString,
+                    imageUrl: imageUrl,
+                    type: logEntry['type'],
+                    stopReason: logEntry['stopReason']
+                });
+            }
+        }
+        return parsedLogs;
     }
 }
 

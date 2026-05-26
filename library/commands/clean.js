@@ -225,6 +225,17 @@ class GetCleanState extends VacBotCommand {
     constructor() {
         super('getCleanInfo');
     }
+
+    /**
+     * @param {Object} payload
+     * @returns {{ state: string|number, trigger: string }}
+     */
+    parseResponse(payload) {
+        return {
+            state: payload['state'] || payload['type'],
+            trigger: payload['trigger']
+        };
+    }
 }
 
 /**
@@ -237,6 +248,42 @@ class GetCleanState extends VacBotCommand {
 class GetCleanState_V2 extends VacBotCommand {
     constructor() {
         super('getCleanInfo_V2');
+    }
+
+    /**
+     * @param {Object} payload - The raw clean info payload
+     * @returns {{ state: string, raw: Object }}
+     */
+    parseResponse(payload) {
+        let normalizedState = 'unknown';
+        if (payload['trigger'] === 'alert') {
+            normalizedState = 'error';
+        } else {
+            const state = payload['state'];
+            if (state === 'idle') {
+                normalizedState = 'idle';
+            } else if (state === 'goCharging') {
+                normalizedState = 'returning';
+            } else if (state === 'clean' || state === 'washing') {
+                const cleanState = payload['cleanState'] || {};
+                const motionState = cleanState['motionState'];
+                if (motionState === 'working') {
+                    normalizedState = 'cleaning';
+                } else if (motionState === 'pause') {
+                    normalizedState = 'paused';
+                } else if (motionState === 'goCharging') {
+                    normalizedState = 'returning';
+                } else {
+                    normalizedState = motionState || state;
+                }
+            } else {
+                normalizedState = state || 'unknown';
+            }
+        }
+        return {
+            state: normalizedState,
+            raw: payload
+        };
     }
 }
 
