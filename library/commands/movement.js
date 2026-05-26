@@ -62,6 +62,16 @@ class GetChargeState extends VacBotCommand {
     constructor() {
         super('getChargeState');
     }
+
+    /**
+     * @param {{ isCharging: number, mode?: string }} payload
+     * @returns {{ chargeStatus: string, chargeMode: string }}
+     */
+    parseResponse(payload) {
+        const chargeStatus = parseInt(payload['isCharging']) === 1 ? 'charging' : 'idle';
+        const chargeMode = payload.hasOwnProperty('mode') ? payload['mode'] : 'slot';
+        return { chargeStatus, chargeMode };
+    }
 }
 
 /**

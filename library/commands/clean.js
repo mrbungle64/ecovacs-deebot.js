@@ -248,6 +248,11 @@ class GetCleanSpeed extends VacBotCommand {
     constructor() {
         super('getSpeed');
     }
+
+    /** @param {{ speed: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['speed'];
+    }
 }
 
 /**
@@ -273,6 +278,11 @@ class GetCustomAreaMode extends VacBotCommand {
     constructor() {
         super('getCustomAreaMode');
     }
+
+    /** @param {{ sweepMode?: number }} payload @returns {number|null} */
+    parseResponse(payload) {
+        return payload.hasOwnProperty('sweepMode') ? payload['sweepMode'] : null;
+    }
 }
 
 /**
@@ -295,6 +305,18 @@ class SetCustomAreaMode extends VacBotCommand {
 class GetCleanSum extends VacBotCommand {
     constructor() {
         super('getTotalStats');
+    }
+
+    /**
+     * @param {{ area: number, time: number, count: number }} payload
+     * @returns {{ totalSquareMeters: number, totalSeconds: number, totalNumber: number }}
+     */
+    parseResponse(payload) {
+        return {
+            totalSquareMeters: parseInt(payload['area']),
+            totalSeconds: parseInt(payload['time']),
+            totalNumber: parseInt(payload['count'])
+        };
     }
 }
 
@@ -336,6 +358,11 @@ class GetContinuousCleaning extends VacBotCommand {
     constructor() {
         super('getBreakPoint');
     }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
+    }
 }
 
 /**
@@ -357,6 +384,11 @@ class SetContinuousCleaning extends VacBotCommand {
 class GetCleanCount extends VacBotCommand {
     constructor() {
         super('getCleanCount');
+    }
+
+    /** @param {{ count: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['count'];
     }
 }
 
@@ -380,6 +412,11 @@ class GetCleanPreference extends VacBotCommand {
     constructor() {
         super('getCleanPreference');
     }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
+    }
 }
 
 /**
@@ -401,6 +438,20 @@ class SetCleanPreference extends VacBotCommand {
 class GetAICleanItemState extends VacBotCommand {
     constructor() {
         super('getAICleanItemState');
+    }
+
+    /**
+     * @param {{ items?: Array }} payload
+     * @returns {{ items: Array, particleRemoval: boolean, petPoopPrevention: boolean }|null}
+     */
+    parseResponse(payload) {
+        if (!payload.hasOwnProperty('items')) return null;
+        const items = payload.items;
+        return {
+            items,
+            particleRemoval: Boolean(items[0].state),
+            petPoopPrevention: Boolean(items[2].state)
+        };
     }
 }
 
@@ -447,6 +498,11 @@ class SinglePoint_V2 extends Clean_V2 {
 class GetAutonomousClean extends VacBotCommand {
     constructor() {
         super('getAutonomousClean');
+    }
+
+    /** @param {{ on: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['on']);
     }
 }
 

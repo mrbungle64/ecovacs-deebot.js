@@ -62,6 +62,24 @@ class GetWaterInfo extends VacBotCommand {
     constructor() {
         super('getWaterInfo');
     }
+
+    /**
+     * @param {{ amount: number, enable: number, type?: number, sweepType?: number }} payload
+     * @returns {{ waterLevel: number, waterboxInfo: number, moppingType?: number, scrubbingType?: number }}
+     */
+    parseResponse(payload) {
+        const result = {
+            waterLevel: payload['amount'],
+            waterboxInfo: payload['enable']
+        };
+        if (payload.hasOwnProperty('type')) {
+            result.moppingType = payload['type'];
+        }
+        if (payload.hasOwnProperty('sweepType')) {
+            result.scrubbingType = payload['sweepType'];
+        }
+        return result;
+    }
 }
 
 /**
@@ -239,6 +257,17 @@ class GetDusterRemind extends VacBotCommand {
     constructor() {
         super('getDusterRemind');
     }
+
+    /**
+     * @param {{ enable: number, period: number }} payload
+     * @returns {{ enabled: boolean, period: number }}
+     */
+    parseResponse(payload) {
+        return {
+            enabled: Boolean(payload['enable']),
+            period: payload['period']
+        };
+    }
 }
 
 /**
@@ -394,12 +423,23 @@ class GetOta extends VacBotCommand {
 }
 
 /**
- * Requests information about the relocation status (e.g. X1 series, Airbot Z1)
+ * Request the current relocation state
  * @extends VacBotCommand
  */
 class GetRelocationState extends VacBotCommand {
     constructor() {
         super('getRelocationState');
+    }
+
+    /**
+     * @param {{ state: string }} payload
+     * @returns {{ status: Object, state: string }}
+     */
+    parseResponse(payload) {
+        return {
+            status: payload,
+            state: payload['state']
+        };
     }
 }
 
@@ -445,6 +485,11 @@ class GetWorkMode extends VacBotCommand {
 class GetWorkState extends VacBotCommand {
     constructor() {
         super('getWorkState');
+    }
+
+    /** @param {{ state: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['state'];
     }
 }
 
@@ -537,14 +582,17 @@ class GetQuickCommand extends VacBotCommand {
 }
 
 /**
- * Request information about the Wi-Fi that is in use
- * and also about the stored Wi-Fi settings
- * (incl. Password in plain text!)
+ * Request the 'WiFi List'
  * @extends VacBotCommand
  */
 class GetWifiList extends VacBotCommand {
     constructor() {
         super('getWifiList');
+    }
+
+    /** @param {{ list: Array }} payload @returns {Array} */
+    parseResponse(payload) {
+        return payload['list'] || [];
     }
 }
 
@@ -653,12 +701,24 @@ class GetHumanoidFollow extends VacBotCommand {
 }
 
 /**
- * Request Video Manager status info
+ * Request the Live Launch password state
+ * Used by the Video Manager
  * @extends VacBotCommand
  */
 class GetLiveLaunchPwdState extends VacBotCommand {
     constructor() {
         super('getLiveLaunchPwdState');
+    }
+
+    /**
+     * @param {{ state: string, hasPwd: boolean }} payload
+     * @returns {{ state: string, hasPwd: boolean }}
+     */
+    parseResponse(payload) {
+        return {
+            state: payload.state,
+            hasPwd: payload.hasPwd
+        };
     }
 }
 
@@ -716,12 +776,17 @@ class GetThreeModuleStatus extends VacBotCommand {
 }
 
 /**
- * Request information about the 'Time Zone'
+ * Request the 'Time Zone' value
  * @extends VacBotCommand
  */
 class GetTimeZone extends VacBotCommand {
     constructor() {
         super('getTimeZone');
+    }
+
+    /** @param {{ tz: string }} payload @returns {string} */
+    parseResponse(payload) {
+        return payload['tz'];
     }
 }
 
@@ -747,22 +812,32 @@ class GetVoiceSimple extends VacBotCommand {
 }
 
 /**
- * Request information if the 'Cross Map Border Warning' is enabled
+ * Request whether the robot mops across map borders (e.g. X1)
  * @extends VacBotCommand
  */
 class GetCrossMapBorderWarning extends VacBotCommand {
     constructor() {
         super('getCrossMapBorderWarning');
     }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
+    }
 }
 
 /**
- * Request information about the 'Cut Direction'
+ * Request the cut direction value (Lawn Mower)
  * @extends VacBotCommand
  */
 class GetCutDirection extends VacBotCommand {
     constructor() {
         super('getCutDirection');
+    }
+
+    /** @param {{ angle: number }} payload @returns {number} */
+    parseResponse(payload) {
+        return payload['angle'];
     }
 }
 
@@ -777,12 +852,17 @@ class GetFanSpeed extends VacBotCommand {
 }
 
 /**
- * Request information if the 'Move Up Warning' is enabled
+ * Request whether the 'Move Up Warning' is enabled
  * @extends VacBotCommand
  */
 class GetMoveUpWarning extends VacBotCommand {
     constructor() {
         super('getMoveupWarning');
+    }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
     }
 }
 
@@ -797,12 +877,17 @@ class GetNetInfoLegacy extends VacBotCommand {
 }
 
 /**
- * Request information if the 'Safe Protect' option is enabled
+ * Request the safety protection status
  * @extends VacBotCommand
  */
 class GetSafeProtect extends VacBotCommand {
     constructor() {
         super('getSafeProtect');
+    }
+
+    /** @param {{ enable: number }} payload @returns {boolean} */
+    parseResponse(payload) {
+        return Boolean(payload['enable']);
     }
 }
 
