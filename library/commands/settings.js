@@ -618,6 +618,38 @@ class SetVoiceSimple extends VacBotCommand {
     }
 }
 
+/**
+ * Sets the 'Carpet Auto Fan Boost' state
+ * @extends VacBotCommand
+ */
+class SetCarpetAutoFanBoost extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {boolean|number} enable
+     */
+    constructor(enable) {
+        super('setCarpertPressure', {
+            'enable': enable ? 1 : 0
+        });
+    }
+}
+
+/**
+ * Sets the 'Mop Auto Wash Frequency' (cleaning interval)
+ * @extends VacBotCommand
+ */
+class SetMopAutoWashFrequency extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {number} [interval=15] - cleaning interval in minutes
+     */
+    constructor(interval = 15) {
+        super('setWashInfo', {
+            'interval': interval
+        });
+    }
+}
+
 module.exports = {
     ResetLifeSpan,
     SetFanSpeed,
@@ -663,4 +695,6 @@ module.exports = {
     SetFreshenerLevel,
     SetHumidifierLevel,
     SetVoiceSimple,
+    SetCarpetAutoFanBoost,
+    SetMopAutoWashFrequency,
 };

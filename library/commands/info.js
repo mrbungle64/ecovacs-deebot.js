@@ -1074,6 +1074,60 @@ class GetCleanLogs extends VacBotCommand {
     }
 }
 
+/**
+ * Requests the 'Carpet Auto Fan Boost' state
+ * @extends VacBotCommand
+ */
+class GetCarpetAutoFanBoost extends VacBotCommand {
+    constructor() {
+        super('getCarpertPressure');
+    }
+
+    /**
+     * @param {{ enable: number }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload) {
+        return !!payload['enable'];
+    }
+}
+
+/**
+ * Requests the 'Efficiency Mode'
+ * @extends VacBotCommand
+ */
+class GetEfficiencyMode extends VacBotCommand {
+    constructor() {
+        super('getEfficiency');
+    }
+
+    /**
+     * @param {{ efficiency: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload) {
+        return payload['efficiency'];
+    }
+}
+
+/**
+ * Requests the 'Mop Auto Wash Frequency' (cleaning interval)
+ * @extends VacBotCommand
+ */
+class GetMopAutoWashFrequency extends VacBotCommand {
+    constructor() {
+        super('getWashInfo');
+    }
+
+    /**
+     * @param {{ interval: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload) {
+        return payload['interval'];
+    }
+}
+
 module.exports = {
     GetBatteryState,
     GetLifeSpan,
@@ -1139,4 +1193,7 @@ module.exports = {
     GetNetInfoLegacy,
     GetSafeProtect,
     GetCleanLogs,
+    GetCarpetAutoFanBoost,
+    GetEfficiencyMode,
+    GetMopAutoWashFrequency,
 };

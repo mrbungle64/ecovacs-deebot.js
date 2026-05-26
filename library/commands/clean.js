@@ -567,6 +567,97 @@ class Spot extends Clean {
     }
 }
 
+/**
+ * Represents a 'Clean Area' command (e.g., spotArea or customArea)
+ * @extends VacBotCommand
+ */
+class CleanArea extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {string} mode - 'spotArea' or 'customArea'
+     * @param {string|Array<number|string>} area - area IDs or coordinates
+     * @param {number} [cleanings=1] - number of cleaning iterations
+     */
+    constructor(mode, area, cleanings = 1) {
+        const areaStr = Array.isArray(area) ? area.join(',') : String(area);
+        const cleaningAsNumber = Number(cleanings) || 1;
+        super('clean', {
+            'act': 'start',
+            'type': mode,
+            'content': areaStr,
+            'count': cleaningAsNumber
+        });
+    }
+}
+
+/**
+ * Represents a 'Clean Area' command V2 (newer models)
+ * @extends VacBotCommand
+ */
+class CleanArea_V2 extends VacBotCommand {
+    /**
+     * @constructor
+     * @param {string} mode - 'spotArea' or 'customArea'
+     * @param {string|Array<number|string>} area - area IDs or coordinates
+     */
+    constructor(mode, area) {
+        const areaStr = Array.isArray(area) ? area.join(',') : String(area);
+        super('clean_V2', {
+            'act': 'start',
+            'content': {
+                'type': mode,
+                'value': areaStr
+            }
+        });
+    }
+}
+
+/**
+ * Requests the clean state/info V2
+ * @extends VacBotCommand
+ */
+class GetCleanInfoV2 extends VacBotCommand {
+    constructor() {
+        super('getCleanInfo_V2');
+    }
+
+    /**
+     * @param {Object} payload - The raw clean info payload
+     * @returns {{ state: string, raw: Object }}
+     */
+    parseResponse(payload) {
+        let normalizedState = 'unknown';
+        if (payload['trigger'] === 'alert') {
+            normalizedState = 'error';
+        } else {
+            const state = payload['state'];
+            if (state === 'idle') {
+                normalizedState = 'idle';
+            } else if (state === 'goCharging') {
+                normalizedState = 'returning';
+            } else if (state === 'clean' || state === 'washing') {
+                const cleanState = payload['cleanState'] || {};
+                const motionState = cleanState['motionState'];
+                if (motionState === 'working') {
+                    normalizedState = 'cleaning';
+                } else if (motionState === 'pause') {
+                    normalizedState = 'paused';
+                } else if (motionState === 'goCharging') {
+                    normalizedState = 'returning';
+                } else {
+                    normalizedState = motionState || state;
+                }
+            } else {
+                normalizedState = state || 'unknown';
+            }
+        }
+        return {
+            state: normalizedState,
+            raw: payload
+        };
+    }
+}
+
 module.exports = {
     Clean,
     Clean_V2,
@@ -606,4 +697,7 @@ module.exports = {
     GetAreaPoint,
     Edge,
     Spot,
+    CleanArea,
+    CleanArea_V2,
+    GetCleanInfoV2,
 };
