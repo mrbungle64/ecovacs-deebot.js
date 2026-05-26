@@ -176,23 +176,30 @@ class Ecovacs extends EventEmitter {
 
         let commandPromise = null;
         let rejectPromise = null;
+        let resolvePromise = null;
+        let expectedEvent = null;
 
         if (options.returnPromise) {
             const COMMAND_REGISTRY = require('./commandRegistry');
-            const entry = COMMAND_REGISTRY[command.name];
-            const expectedEvent = (entry && entry.expectedEvent) || null;
+            const registryKey = command._registryKey || command.constructor.name;
+            const entry = COMMAND_REGISTRY[registryKey] || COMMAND_REGISTRY[command.name];
+            expectedEvent = (entry && entry.expectedEvent) || null;
 
             commandPromise = new Promise((resolve, reject) => {
                 rejectPromise = reject;
-                this.pendingCommands.register(
-                    command.getId(),
-                    command.name,
-                    expectedEvent,
-                    command,
-                    resolve,
-                    reject,
-                    options.timeoutMs || 10000
-                );
+                if (expectedEvent) {
+                    this.pendingCommands.register(
+                        command.getId(),
+                        command.name,
+                        expectedEvent,
+                        command,
+                        resolve,
+                        reject,
+                        options.timeoutMs || 10000
+                    );
+                } else {
+                    resolvePromise = resolve;
+                }
             });
         }
 
@@ -209,7 +216,10 @@ class Ecovacs extends EventEmitter {
                 tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
             } catch (e) {
                 this.emitNetworkError(e.message, command.name);
-                if (rejectPromise) rejectPromise(e);
+                if (rejectPromise) {
+                    this.pendingCommands.rejectById(command.getId(), e);
+                    rejectPromise(e);
+                }
                 throw e.message;
             }
 
@@ -218,6 +228,9 @@ class Ecovacs extends EventEmitter {
                     this.emitLastErrorByErrorCode('0');
                 }
                 this.handleCommandResponse(command, response);
+                if (resolvePromise) {
+                    resolvePromise(response);
+                }
             } else {
                 const errorCodeObj = {
                     code: response['errno'],
@@ -232,7 +245,10 @@ class Ecovacs extends EventEmitter {
                 }
                 tools.envLogInfo(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
                 const err = new Error(`Failure code ${response['errno']} (${response['error']})`);
-                if (rejectPromise) rejectPromise(err);
+                if (rejectPromise) {
+                    this.pendingCommands.rejectById(command.getId(), err);
+                    rejectPromise(err);
+                }
                 throw err.message;
             }
         } catch (e) {
@@ -271,12 +287,12 @@ class Ecovacs extends EventEmitter {
         }
     }
 
-    emitMessage(name, payload) {
+    emitMessage(name, payload, rawPayload) {
         tools.envLogResult(name, JSON.stringify(payload));
         this.emit(name, payload);
         // Resolve any pending Promise that is waiting for this event
         if (this.pendingCommands.size > 0) {
-            this.pendingCommands.resolveByEvent(name, payload);
+            this.pendingCommands.resolveByEvent(name, rawPayload === undefined ? payload : rawPayload);
         }
     }
 
@@ -512,21 +528,21 @@ class Ecovacs extends EventEmitter {
             case 'AdvancedMode': {
                 // "Advanced Mode" (e.g. OZMO 920/950, T8 AIVI)
                 this.bot.handleAdvancedMode(payload);
-                this.emitMessage("AdvancedMode", this.bot.advancedMode);
+                this.emitMessage("AdvancedMode", this.bot.advancedMode, payload);
                 break;
             }
             case 'AICleanItemState': {
                 // "Strategic Particle Removal" and "Strategic Pet Poop Avoidance" mode (e.g. X1)
                 this.bot.handleAICleanItemState(payload);
                 if (this.bot.aiCleanItemState.items.length) {
-                    this.emitMessage('AICleanItemState', this.bot.aiCleanItemState);
+                    this.emitMessage('AICleanItemState', this.bot.aiCleanItemState, payload);
                 }
                 break;
             }
             case 'AutoEmpty': {
                 // "Auto empty" status (Auto-Empty Station)
                 this.bot.handleAutoEmpty(payload);
-                this.emitMessage("AutoEmpty", this.bot.autoEmpty);
+                this.emitMessage("AutoEmpty", this.bot.autoEmpty, payload);
                 const autoEmptyStatus = {
                     'autoEmptyEnabled': (this.bot.autoEmpty === 1),
                     'stationStatus': this.bot.autoEmptyStatus,
@@ -540,7 +556,7 @@ class Ecovacs extends EventEmitter {
                 // Battery status
                 this.bot.handleBattery(payload);
                 if (this.bot.batteryLevel) {
-                    this.emitMessage("BatteryInfo", this.bot.batteryLevel);
+                    this.emitMessage("BatteryInfo", this.bot.batteryLevel, payload);
                     this.emitMessage("BatteryIsLow", this.bot.batteryIsLow);
                 }
                 break;
@@ -548,7 +564,7 @@ class Ecovacs extends EventEmitter {
             case 'Block': {
                 // "Do Not Disturb" mode
                 this.bot.handleBlock(payload);
-                this.emitMessage("DoNotDisturbEnabled", this.bot.block);
+                this.emitMessage("DoNotDisturbEnabled", this.bot.block, payload);
                 const doNotDisturbEnabled = Boolean(this.bot.block);
                 if (doNotDisturbEnabled) {
                     this.emitMessage("DoNotDisturbBlockTime", this.bot.blockTime);
@@ -558,18 +574,18 @@ class Ecovacs extends EventEmitter {
             case 'BorderSpin': {
                 // "Edge Deep Cleaning" (e.g. X1)
                 this.bot.handleBorderSpin(payload);
-                this.emitMessage('BorderSpin', this.bot.borderSpin);
+                this.emitMessage('BorderSpin', this.bot.borderSpin, payload);
                 break;
             }
             case 'BorderSwitch': {
                 this.bot.handleBorderSwitch(payload);
-                this.emitMessage('BorderSwitch', this.bot.borderSwitch);
+                this.emitMessage('BorderSwitch', this.bot.borderSwitch, payload);
                 break;
             }
             case 'BreakPoint': {
                 // "Continuous Cleaning Mode" / "Resumed Clean"
                 this.bot.handleBreakPoint(payload);
-                this.emitMessage("ContinuousCleaningEnabled", this.bot.breakPoint);
+                this.emitMessage("ContinuousCleaningEnabled", this.bot.breakPoint, payload);
                 break;
             }
             case 'CleanLogs': {
@@ -581,31 +597,31 @@ class Ecovacs extends EventEmitter {
             case 'CarpertPressure': { // The typo in 'Carpert' is intended
                 // "Auto-Boost Suction"
                 this.bot.handleCarpetPressure(payload);
-                this.emitMessage("CarpetPressure", this.bot.carpetPressure);
+                this.emitMessage("CarpetPressure", this.bot.carpetPressure, payload);
                 break;
             }
             case 'CarpetInfo': {
                 // "Carpet cleaning strategy"
                 this.bot.handleCarpetInfo(payload);
-                this.emitMessage("CarpetInfo", this.bot.carpetInfo);
+                this.emitMessage("CarpetInfo", this.bot.carpetInfo, payload);
                 break;
             }
             case 'CleanPreference': {
                 // "Cleaning Preference"
                 this.bot.handleCleanPreference(payload);
-                this.emitMessage("CleanPreference", this.bot.cleanPreference);
+                this.emitMessage("CleanPreference", this.bot.cleanPreference, payload);
                 break;
             }
             case 'CleanCount': {
                 // "Cleaning Times" (number of cleaning repetitions)
                 this.bot.handleCleanCount(payload);
-                this.emitMessage("CleanCount", this.bot.cleanCount);
+                this.emitMessage("CleanCount", this.bot.cleanCount, payload);
                 break;
             }
             case "CleanInfo": {
                 // Various information about the cleaning status
                 this.bot.handleCleanInfo(payload);
-                this.emitMessage("CleanReport", this.bot.cleanReport);
+                this.emitMessage("CleanReport", this.bot.cleanReport, payload);
                 this.emitMoppingSystemReport();
                 if (this.bot.chargeStatus) {
                     this.emitMessage("ChargeState", this.bot.chargeStatus);
@@ -621,7 +637,7 @@ class Ecovacs extends EventEmitter {
                 // Various information about the charging status
                 this.bot.handleChargeState(payload);
                 if (this.bot.chargeStatus) {
-                    this.emitMessage("ChargeState", this.bot.chargeStatus);
+                    this.emitMessage("ChargeState", this.bot.chargeStatus, payload);
                 }
                 if (this.bot.chargeMode) {
                     this.emitMessage("ChargeMode", this.bot.chargeMode);
@@ -634,29 +650,29 @@ class Ecovacs extends EventEmitter {
             }
             case 'CrossMapBorderWarning': {
                 this.bot.handleCrossMapBorderWarning(payload);
-                this.emitMessage('CrossMapBorderWarning', this.bot.crossMapBorderWarning);
+                this.emitMessage('CrossMapBorderWarning', this.bot.crossMapBorderWarning, payload);
                 break;
             }
             case 'CustomAreaMode': {
                 // "Mopping Mode" / "Cleaning efficiency"
                 this.bot.handleCustomAreaMode(payload);
-                this.emitMessage('SweepMode', this.bot.sweepMode);
+                this.emitMessage('SweepMode', this.bot.sweepMode, payload);
                 break;
             }
             case 'CutDirection': {
                 this.bot.handleCutDirection(payload);
-                this.emitMessage('CutDirection', this.bot.cutDirection);
+                this.emitMessage('CutDirection', this.bot.cutDirection, payload);
                 break;
             }
             case 'DryingDuration': {
                 this.bot.handleDryingDuration(payload);
-                this.emitMessage('DryingDuration', this.bot.dryingDuration);
+                this.emitMessage('DryingDuration', this.bot.dryingDuration, payload);
                 break;
             }
             case 'DModule': { // Air Freshener module (T9 AIVI)
                 this.bot.handleDModule(payload);
                 if (this.bot.dmodule.enabled) {
-                    this.emitMessage("DModuleEnabled", this.bot.dmodule.enabled);
+                    this.emitMessage("DModuleEnabled", this.bot.dmodule.enabled, payload);
                     this.emitMessage("DModuleStatus", this.bot.dmodule.status);
                 }
                 break;
@@ -664,21 +680,21 @@ class Ecovacs extends EventEmitter {
             case 'DusterRemind': {
                 // "Cleaning Cloth Reminder"
                 this.bot.handleDusterRemind(payload);
-                this.emitMessage("DusterRemind", this.bot.dusterRemind);
+                this.emitMessage("DusterRemind", this.bot.dusterRemind, payload);
                 break;
             }
             case 'Evt': {
                 // Rare event, little is known about it yet
                 this.bot.handleEvt(payload);
                 if (this.bot.evt.event) {
-                    this.emitMessage("Evt", this.bot.evt);
+                    this.emitMessage("Evt", this.bot.evt, payload);
                 }
                 break;
             }
             case "Error": {
                 // Error codes
                 this.bot.handleResponseError(payload);
-                this.emitMessage("Error", this.bot.errorDescription);
+                this.emitMessage("Error", this.bot.errorDescription, payload);
                 this.emitMessage('ErrorCode', this.bot.errorCode);
                 this.emitMessage('LastError', {
                     'error': this.bot.errorDescription,
@@ -690,7 +706,7 @@ class Ecovacs extends EventEmitter {
                 // Consumable components
                 this.bot.handleLifespan(payload);
                 if (this.bot.isPlatformTypeAirbot()) {
-                    this.emitMessage("LifeSpan", this.bot.components);
+                    this.emitMessage("LifeSpan", this.bot.components, payload);
                 } else {
                     if (!this.bot.emitFullLifeSpanEvent) {
                         for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
@@ -706,18 +722,22 @@ class Ecovacs extends EventEmitter {
                     } else {
                         this.handleLifeSpanCombined();
                     }
+                    // Resolve GetLifeSpan Promise
+                    if (this.pendingCommands.size > 0) {
+                        this.pendingCommands.resolveByEvent("LifeSpan", payload);
+                    }
                 }
                 break;
             }
             case 'LiveLaunchPwdState': {
                 // Video Manager status info
                 this.bot.handleLiveLaunchPwdState(payload);
-                this.emitMessage("LiveLaunchPwdState", this.bot.liveLaunchPwdState);
+                this.emitMessage("LiveLaunchPwdState", this.bot.liveLaunchPwdState, payload);
                 break;
             }
             case 'MoveupWarning': {
                 this.bot.handleMoveupWarning(payload);
-                this.emitMessage('MoveupWarning', this.bot.moveupWarning);
+                this.emitMessage('MoveupWarning', this.bot.moveupWarning, payload);
                 break;
             }
             case "NetInfo": {
@@ -728,12 +748,12 @@ class Ecovacs extends EventEmitter {
                     'mac': this.bot.netInfoMAC,
                     'wifiSSID': this.bot.netInfoWifiSSID,
                     'wifiSignal': this.bot.netInfoWifiSignal,
-                });
+                }, payload);
                 break;
             }
             case 'Ota': {
                 this.bot.handleOverTheAirUpdate(payload);
-                this.emitMessage('Ota', payload);
+                this.emitMessage('Ota', payload, payload);
                 break;
             }
             case "Pos": {
@@ -755,7 +775,7 @@ class Ecovacs extends EventEmitter {
                             'spotAreaID': this.bot.deebotPosition["currentSpotAreaID"],
                             'spotAreaName': this.bot.deebotPosition["currentSpotAreaName"],
                             'distanceToChargingStation': this.bot.deebotPosition["distanceToChargingStation"]
-                        });
+                        }, payload);
                     }
                     this.bot.deebotPosition["changeFlag"] = false;
                 }
@@ -774,46 +794,46 @@ class Ecovacs extends EventEmitter {
             case 'QuickCommand': {
                 // "Customized Scenario Cleaning" scenarios
                 this.bot.handleQuickCommand(payload);
-                this.emitMessage("CustomizedScenarioCleaning", this.bot.customizedScenarioCleaning);
+                this.emitMessage("CustomizedScenarioCleaning", this.bot.customizedScenarioCleaning, payload);
                 break;
             }
             case 'Recognization': {
                 // True Detect / "AIVI 3D"
                 // e.g. "AIVI Smart Recognition"
                 this.bot.handleRecognization(payload);
-                this.emitMessage('TrueDetect', this.bot.trueDetect);
+                this.emitMessage('TrueDetect', this.bot.trueDetect, payload);
                 break;
             }
             case "RelocationState": {
                 // Relocation status
                 this.bot.handleRelocationState(payload);
                 this.emitMessage("RelocationStatus", this.bot.relocationStatus);
-                this.emitMessage("RelocationState", this.bot.relocationState);
+                this.emitMessage("RelocationState", this.bot.relocationState, payload);
                 break;
             }
             case 'SafeProtect': {
                 this.bot.handleSafeProtect(payload);
-                this.emitMessage('SafeProtect', this.bot.safeProtect);
+                this.emitMessage('SafeProtect', this.bot.safeProtect, payload);
                 break;
             }
             case 'Sched': {
                 // "Scheduling"
                 this.bot.handleSched(payload);
                 if (this.bot.schedule) {
-                    this.emitMessage('Schedule', this.bot.schedule);
+                    this.emitMessage('Schedule', this.bot.schedule, payload);
                 }
                 break;
             }
             case 'Sleep': {
                 // Sleep mode/status
                 this.bot.handleSleepStatus(payload);
-                this.emitMessage("SleepStatus", this.bot.sleepStatus);
+                this.emitMessage("SleepStatus", this.bot.sleepStatus, payload);
                 break;
             }
             case "Speed": {
                 // "Vacuum Power" / "Suction Power"
                 this.bot.handleSpeed(payload);
-                this.emitMessage("CleanSpeed", this.bot.cleanSpeed);
+                this.emitMessage("CleanSpeed", this.bot.cleanSpeed, payload);
                 break;
             }
             case 'stationAction': {
@@ -823,14 +843,14 @@ class Ecovacs extends EventEmitter {
             case "StationInfo": {
                 // Various information about the cleaning station (e.g. X1 series)
                 this.bot.handleStationInfo(payload);
-                this.emitMessage('StationInfo', this.bot.stationInfo);
+                this.emitMessage('StationInfo', this.bot.stationInfo, payload);
                 break;
             }
             case "StationState": {
                 // Various states of the cleaning station (e.g. X1 series)
                 this.bot.handleStationState(payload);
                 if (this.bot.stationState.type !== null) {
-                    this.emitMessage("StationState", this.bot.stationState);
+                    this.emitMessage("StationState", this.bot.stationState, payload);
                     const airDryingState = this.bot.stationState.isAirDrying ? 'airdrying' : 'idle';
                     this.emitMessage('AirDryingState', airDryingState);
                 }
@@ -839,7 +859,7 @@ class Ecovacs extends EventEmitter {
             case "Stats": {
                 this.bot.handleStats(payload);
                 if (this.bot.currentStats) {
-                    this.emitMessage("CurrentStats", this.bot.currentStats);
+                    this.emitMessage("CurrentStats", this.bot.currentStats, payload);
                     this.bot.currentStats = null;
                 }
                 break;
@@ -847,13 +867,13 @@ class Ecovacs extends EventEmitter {
             case 'SweepMode': {
                 // "Mop-Only" mode
                 this.bot.handleSweepMode(payload);
-                this.emitMessage('MopOnlyMode', this.bot.mopOnlyMode);
+                this.emitMessage('MopOnlyMode', this.bot.mopOnlyMode, payload);
                 break;
             }
             case 'TimeZone': {
                 // The configured time zone
                 this.bot.handleTimeZone(payload);
-                this.emitMessage('TimeZone', payload);
+                this.emitMessage('TimeZone', payload, payload);
                 break;
             }
             case 'TotalStats': {
@@ -862,35 +882,36 @@ class Ecovacs extends EventEmitter {
                     'totalSquareMeters': this.bot.cleanSum_totalSquareMeters,
                     'totalSeconds': this.bot.cleanSum_totalSeconds,
                     'totalNumber': this.bot.cleanSum_totalNumber
-                });
+                }, payload);
                 break;
             }
             case 'TrueDetect': {
                 this.bot.handleTrueDetect(payload);
-                this.emitMessage("TrueDetect", this.bot.trueDetect);
+                this.emitMessage("TrueDetect", this.bot.trueDetect, payload);
                 break;
             }
             case 'Volume': {
                 // The set volume level
                 this.bot.handleVolume(payload);
-                this.emitMessage("Volume", this.bot.volume);
+                this.emitMessage("Volume", this.bot.volume, payload);
                 break;
             }
             case 'WashInfo': {
                 this.bot.handleWashInfo(payload);
-                this.emitMessage("WashInfo", this.bot.washInfo);
+                this.emitMessage("WashInfo", this.bot.washInfo, payload);
                 break;
             }
             case "WashInterval": {
                 this.bot.handleWashInterval(payload);
                 if (this.bot.washInterval !== null) {
-                    this.emitMessage("WashInterval", this.bot.washInterval);
+                    this.emitMessage("WashInterval", this.bot.washInterval, payload);
                 }
                 break;
             }
             case "WaterInfo": {
                 // "Water Flow Level"
                 this.bot.handleWaterInfo(payload);
+                this.emitMessage("WaterInfo", payload, payload);
                 this.emitMessage("WaterLevel", this.bot.waterLevel);
                 this.emitMessage("WaterBoxInfo", this.bot.waterboxInfo);
                 if (this.bot.moppingType !== null) {
@@ -905,18 +926,18 @@ class Ecovacs extends EventEmitter {
             case 'WifiList': {
                 // Configured WiFi networks
                 this.bot.handleWiFiList(payload);
-                this.emitMessage('WifiList', payload);
+                this.emitMessage('WifiList', payload, payload);
                 break;
             }
             case "WorkMode": {
                 // "Work Mode", "Cleaning Mode"
                 this.bot.handleWorkMode(payload);
-                this.emitMessage("WorkMode", this.bot.workMode);
+                this.emitMessage("WorkMode", this.bot.workMode, payload);
                 break;
             }
             case 'WorkState': {
                 this.bot.handleWorkState(payload);
-                this.emitMessage('WorkState', this.bot.workState);
+                this.emitMessage('WorkState', this.bot.workState, payload);
                 break;
             }
             // ========
@@ -925,7 +946,7 @@ class Ecovacs extends EventEmitter {
             case "CachedMapInfo": {
                 try {
                     this.bot.handleCachedMapInfo(payload);
-                    this.emitMessage("CurrentMapMID", this.bot.currentMapMID);
+                    this.emitMessage("CurrentMapMID", this.bot.currentMapMID, payload);
                     this.emitMessage("CurrentMapName", this.bot.currentMapName);
                     this.emitMessage("CurrentMapIndex", this.bot.currentMapIndex);
                     this.emitMessage("Maps", this.bot.maps);
@@ -940,7 +961,7 @@ class Ecovacs extends EventEmitter {
                 } else if (tools.isCanvasModuleAvailable()) {
                     let mapImage = await this.bot.handleMapImage(payload);
                     if (mapImage !== null) {
-                        this.emitMessage("MapImageData", mapImage);
+                        this.emitMessage("MapImageData", mapImage, payload);
                         if (this.bot.createMapImageOnly) {
                             this.emitMessage("MapImage", mapImage);
                         }
@@ -960,24 +981,24 @@ class Ecovacs extends EventEmitter {
                 // Handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot.handleMapSet(payload);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
-                    this.emitMessage(mapset["mapsetEvent"], mapset["mapsetData"]);
+                    this.emitMessage(mapset["mapsetEvent"], mapset["mapsetData"], payload);
                 }
                 break;
             }
             case 'MapState': {
                 this.bot.handleMapState(payload);
-                this.emitMessage("MapState", this.bot.mapState);
+                this.emitMessage("MapState", this.bot.mapState, payload);
                 break;
             }
             case 'MultiMapState': {
                 // Status of the Multi Map functionality
                 this.bot.handleMultiMapState(payload);
-                this.emitMessage("MultiMapState", this.bot.multiMapState);
+                this.emitMessage("MultiMapState", this.bot.multiMapState, payload);
                 break;
             }
             case "MapSet_V2": {
                 await this.bot.handleMapSet_V2(payload);
-                this.emitMessage("MapSet_V2", this.bot.mapSet_V2);
+                this.emitMessage("MapSet_V2", this.bot.mapSet_V2, payload);
                 break;
             }
             case "MapSubSet": {
@@ -985,7 +1006,7 @@ class Ecovacs extends EventEmitter {
                 let mapsubset = await this.bot.handleMapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
                     // MapSpotAreaInfo, MapVirtualBoundaryInfo
-                    this.emitMessage(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"]);
+                    this.emitMessage(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"], payload);
                 }
                 break;
             }
@@ -996,7 +1017,7 @@ class Ecovacs extends EventEmitter {
                 // Air drying status
                 this.bot.handleAirDryingState(payload);
                 if (this.bot.airDryingStatus) {
-                    this.emitMessage('AirDryingState', this.bot.airDryingStatus);
+                    this.emitMessage('AirDryingState', this.bot.airDryingStatus, payload);
                 }
                 break;
             }
@@ -1005,7 +1026,7 @@ class Ecovacs extends EventEmitter {
                 // MapInfo_V2 for yeedi models differs from the Ecovacs variant
                 try {
                     this.bot.handleMapInfoV2_Yeedi(payload);
-                    this.emitMessage("CurrentMapMID", this.bot.currentMapMID);
+                    this.emitMessage("CurrentMapMID", this.bot.currentMapMID, payload);
                     this.emitMessage("CurrentMapName", this.bot.currentMapName);
                     this.emitMessage("CurrentMapIndex", this.bot.currentMapIndex);
                     this.emitMessage("Maps", this.bot.maps);
@@ -1021,75 +1042,75 @@ class Ecovacs extends EventEmitter {
             case 'JCYAirQuality': { // Z1 Air Quality Monitor
                 this.bot.handleAirQuality(payload);
                 if (this.bot.airQuality) {
-                    this.emitMessage('AirQuality', this.bot.airQuality);
+                    this.emitMessage('AirQuality', this.bot.airQuality, payload);
                 }
                 break;
             }
             case 'AiBlockPlate': {
                 this.bot.handleAiBlockPlate(payload);
-                this.emitMessage('AiBlockPlate', this.bot.aiBlockPlate);
+                this.emitMessage('AiBlockPlate', this.bot.aiBlockPlate, payload);
                 break;
             }
             case 'AirbotAutoModel': {
                 this.bot.handleAirbotAutoModel(payload);
                 if (this.bot.airbotAutoModel) {
-                    this.emitMessage('AirbotAutoModel', this.bot.airbotAutoModel);
+                    this.emitMessage('AirbotAutoModel', this.bot.airbotAutoModel, payload);
                 }
                 break;
             }
             case 'AngleFollow': {
                 this.bot.handleAngleFollow(payload);
-                this.emitMessage('AngleFollow', this.bot.angleFollow);
+                this.emitMessage('AngleFollow', this.bot.angleFollow, payload);
                 break;
             }
             case 'AngleWakeup': {
                 this.bot.handleAngleWakeup(payload);
-                this.emitMessage('AngleWakeup', this.bot.angleWakeup);
+                this.emitMessage('AngleWakeup', this.bot.angleWakeup, payload);
                 break;
             }
             case 'AtmoLight': {
                 this.bot.handleAtmoLight(payload);
                 if (this.bot.atmoLightIntensity) {
-                    this.emitMessage('AtmoLight', this.bot.atmoLightIntensity);
+                    this.emitMessage('AtmoLight', this.bot.atmoLightIntensity, payload);
                 }
                 break;
             }
             case 'AtmoVolume': {
                 this.bot.handleAtmoVolume(payload);
                 if (this.bot.atmoVolume) {
-                    this.emitMessage('AtmoVolume', this.bot.atmoVolume);
+                    this.emitMessage('AtmoVolume', this.bot.atmoVolume, payload);
                 }
                 break;
             }
             case 'AreaPoint': {
                 this.bot.handleAreaPoint(payload);
-                this.emitMessage('AreaPoint', this.bot.areaPoint);
+                this.emitMessage('AreaPoint', this.bot.areaPoint, payload);
                 break;
             }
             case 'AutonomousClean': {
                 this.bot.handleAutonomousClean(payload);
-                this.emitMessage('AutonomousClean', this.bot.autonomousClean);
+                this.emitMessage('AutonomousClean', this.bot.autonomousClean, payload);
                 break;
             }
             case 'BlueSpeaker': {
                 this.bot.handleBlueSpeaker(payload);
-                this.emitMessage('BlueSpeaker', this.bot.bluetoothSpeaker);
+                this.emitMessage('BlueSpeaker', this.bot.bluetoothSpeaker, payload);
                 break;
             }
             case 'ChildLock': {
                 this.bot.handleChildLock(payload);
-                this.emitMessage('ChildLock', this.bot.childLock);
+                this.emitMessage('ChildLock', this.bot.childLock, payload);
                 break;
             }
             case 'DrivingWheel': {
                 this.bot.handleDrivingWheel(payload);
-                this.emitMessage('DrivingWheel', this.bot.drivingWheel);
+                this.emitMessage('DrivingWheel', this.bot.drivingWheel, payload);
                 break;
             }
             case 'Efficiency': {
                 this.bot.handleEfficiency(payload);
                 if (this.bot.efficiency) {
-                    this.emitMessage('Efficiency', this.bot.efficiency);
+                    this.emitMessage('Efficiency', this.bot.efficiency, payload);
                 }
                 break;
             }
@@ -1097,46 +1118,46 @@ class Ecovacs extends EventEmitter {
                 this.bot.handleHumanoidFollow(payload);
                 if ((this.bot.humanoidFollow_Yiko) || (this.bot.humanoidFollow_Video)) {
                     if (this.bot.humanoidFollow_Yiko) {
-                        this.emitMessage('HumanoidFollowYiko', this.bot.humanoidFollow_Yiko);
+                        this.emitMessage('HumanoidFollowYiko', this.bot.humanoidFollow_Yiko, payload);
                     }
                     if (this.bot.humanoidFollow_Video) {
-                        this.emitMessage('HumanoidFollowVideo', this.bot.humanoidFollow_Video);
+                        this.emitMessage('HumanoidFollowVideo', this.bot.humanoidFollow_Video, payload);
                     }
                 }
                 break;
             }
             case 'Mic': {
                 this.bot.handleMic(payload);
-                this.emitMessage('Mic', this.bot.mic);
+                this.emitMessage('Mic', this.bot.mic, payload);
                 break;
             }
             case 'MonitorAirState': {
                 this.bot.handleMonitorAirState(payload);
-                this.emitMessage('MonitorAirState', this.bot.monitorAirState);
+                this.emitMessage('MonitorAirState', this.bot.monitorAirState, payload);
                 break;
             }
             case 'ThreeModule': {
                 this.bot.handleThreeModule(payload);
                 if (this.bot.threeModule) {
-                    this.emitMessage('ThreeModule', this.bot.threeModule);
+                    this.emitMessage('ThreeModule', this.bot.threeModule, payload);
                 }
                 break;
             }
             case 'ThreeModuleStatus': {
                 this.bot.handleThreeModuleStatus(payload);
                 if (this.bot.threeModuleStatus) {
-                    this.emitMessage('ThreeModuleStatus', this.bot.threeModuleStatus);
+                    this.emitMessage('ThreeModuleStatus', this.bot.threeModuleStatus, payload);
                 }
                 break;
             }
             case 'VoiceSimple': {
                 this.bot.handleVoiceSimple(payload);
-                this.emitMessage('VoiceSimple', this.bot.voiceSimple);
+                this.emitMessage('VoiceSimple', this.bot.voiceSimple, payload);
                 break;
             }
             case 'VoiceAssistantState': {
                 this.bot.handleVoiceAssistantState(payload);
-                this.emitMessage('VoiceAssistantState', this.bot.voiceAssistantState);
+                this.emitMessage('VoiceAssistantState', this.bot.voiceAssistantState, payload);
                 break;
             }
             case 'AirSpeed':
@@ -1150,7 +1171,7 @@ class Ecovacs extends EventEmitter {
             case 'setVoice': {
                 tools.envLogInfo(`[EcovacsMQTT_JSON] SETVOICE:`);
                 tools.envLogInfo(payload);
-                this.emitMessage('SetVoice', payload);
+                this.emitMessage('SetVoice', payload, payload);
                 break;
             }
             case 'Voice': {
@@ -1158,10 +1179,10 @@ class Ecovacs extends EventEmitter {
                     payload.downloads.forEach((dlObject) => {
                         if (dlObject.status === "dl") {
                             tools.envLogInfo(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): ` + dlObject.progress + `%`);
-                            this.emitMessage('VoiceDownloadProgress', dlObject);
+                            this.emitMessage('VoiceDownloadProgress', dlObject, payload);
                         } else if (dlObject.status === "dld") {
                             tools.envLogInfo(`[EcovacsMQTT_JSON] Download(` + dlObject.type + `): Complete`);
-                            this.emitMessage('VoiceDownloadComplete', dlObject);
+                            this.emitMessage('VoiceDownloadComplete', dlObject, payload);
                         } else {
                             tools.envLogInfo(`[EcovacsMQTT_JSON] unknown download state`);
                             tools.envLogInfo(dlObject);
@@ -1203,7 +1224,7 @@ class Ecovacs extends EventEmitter {
             case 'FwBuryPoint-bd_sysinfo':
                 this.bot.handleSysinfo(payload);
                 if (this.bot.sysinfo) {
-                    this.emitMessage('Sysinfo', this.bot.sysinfo);
+                    this.emitMessage('Sysinfo', this.bot.sysinfo, payload);
                 }
                 break;
             case 'FwBuryPoint-bd_air-quality':
@@ -1220,7 +1241,7 @@ class Ecovacs extends EventEmitter {
                 const fwBuryPointEvent = abbreviatedCommand.substring(20);
                 this.bot.handleTask(fwBuryPointEvent, payload);
                 if (this.currentTask) {
-                    this.emitMessage('TaskStarted', this.currentTask);
+                    this.emitMessage('TaskStarted', this.currentTask, payload);
                 }
                 break;
             }

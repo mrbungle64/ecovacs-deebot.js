@@ -1,9 +1,38 @@
 # API Command Reference for Ecovacs & Yeedi Devices
 
-There are commands and functions available to run actions on your robot using the `vacbot.run("CommandName", ...args)` pattern or direct first-class helper methods on the `vacbot` instance.
+There are two primary paradigms to run actions on your robot: the legacy event-based model using `vacbot.run(...)` and the modern Promise-based model using `vacbot.runAsync(...)`.
 
-> [!NOTE]
-> Some commands may not work on all models. Availability depends on the feature set of the specific device, its support tier, and whether the command is implemented for that model.
+## Transitioning from `run` to `runAsync`
+
+For modern asynchronous code, it is recommended to use `runAsync()` which returns a Promise resolving with normalized, parsed command results.
+
+| Command Type | Legacy Event Pattern (`run`) | Modern Promise Pattern (`runAsync`) |
+| --- | --- | --- |
+| **Get Commands** (Returns Data) | `vacbot.run("GetBatteryState");`<br>`vacbot.on("BatteryInfo", (res) => { ... });` | `const battery = await vacbot.runAsync("GetBatteryState");`<br>`// => { level: 87, isLow: false }` |
+| **Set/Action Commands** (Triggers Action) | `vacbot.run("Stop");`<br>*No return value or event confirmation needed.* | `await vacbot.runAsync("Stop");`<br>`// Resolves immediately on server acknowledgment` |
+
+### Key Migration Example
+
+**Legacy Event-driven code:**
+```js
+// Call command
+vacbot.run("GetCleanState");
+
+// Wait for event to fire elsewhere
+vacbot.on("CleanReport", (data) => {
+    console.log("Cleaning state is:", data.cleanState);
+});
+```
+
+**Modern Async/Await code:**
+```js
+try {
+    const cleanState = await vacbot.runAsync("GetCleanState");
+    console.log("Cleaning state is:", cleanState.cleanState);
+} catch (error) {
+    console.error("Failed to retrieve clean state:", error);
+}
+```
 
 ---
 

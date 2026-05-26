@@ -22,7 +22,8 @@ class PendingCommandRegistry {
          *   reject: Function,
          *   timer: NodeJS.Timeout,
          *   commandName: string,
-         *   expectedEvent: string|null
+         *   expectedEvent: string|null,
+         *   commandInstance: Object
          * }>}
          */
         this._pending = new Map();
@@ -68,10 +69,14 @@ class PendingCommandRegistry {
         if (entry) {
             clearTimeout(entry.timer);
             this._pending.delete(requestId);
-            const result = (entry.commandInstance && typeof entry.commandInstance.parseResponse === 'function')
-                ? entry.commandInstance.parseResponse(rawPayload)
-                : rawPayload;
-            entry.resolve(result);
+            try {
+                const result = (entry.commandInstance && typeof entry.commandInstance.parseResponse === 'function')
+                    ? entry.commandInstance.parseResponse(rawPayload)
+                    : rawPayload;
+                entry.resolve(result);
+            } catch (e) {
+                entry.reject(e);
+            }
             return true;
         }
         return false;
@@ -83,7 +88,7 @@ class PendingCommandRegistry {
      * Calls `commandInstance.parseResponse(rawPayload)` to normalize the result
      * before resolving the Promise. Falls back to the raw payload if not overridden.
      * @param {string} eventName - The event name that just fired (e.g. 'BatteryInfo')
-     * @param {any} rawPayload - The raw payload from emitMessage()
+     * @param {any} rawPayload - The raw payload (should be raw command response data)
      * @returns {boolean} true if a matching pending entry was found and resolved
      */
     resolveByEvent(eventName, rawPayload) {
@@ -91,12 +96,34 @@ class PendingCommandRegistry {
             if (entry.expectedEvent === eventName) {
                 clearTimeout(entry.timer);
                 this._pending.delete(requestId);
-                const result = (entry.commandInstance && typeof entry.commandInstance.parseResponse === 'function')
-                    ? entry.commandInstance.parseResponse(rawPayload)
-                    : rawPayload;
-                entry.resolve(result);
+                try {
+                    const result = (entry.commandInstance && typeof entry.commandInstance.parseResponse === 'function')
+                        ? entry.commandInstance.parseResponse(rawPayload)
+                        : rawPayload;
+                    entry.resolve(result);
+                } catch (e) {
+                    entry.reject(e);
+                }
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * Reject a pending command by its request ID.
+     * Used when the command fails immediately (e.g. network or gateway error).
+     * @param {string} requestId
+     * @param {Error} error
+     * @returns {boolean} true if a matching pending entry was found and rejected
+     */
+    rejectById(requestId, error) {
+        const entry = this._pending.get(requestId);
+        if (entry) {
+            clearTimeout(entry.timer);
+            this._pending.delete(requestId);
+            entry.reject(error);
+            return true;
         }
         return false;
     }

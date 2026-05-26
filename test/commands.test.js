@@ -1,6 +1,6 @@
 'use strict';
 
-const { describe, it } = require('node:test');
+const { describe, it, beforeEach, afterEach } = require('node:test');
 const assert = require('assert');
 
 const {
@@ -229,6 +229,256 @@ describe('Deebot Commands parseResponse Tests', function () {
             assert.strictEqual(res[0].squareMeters, 15);
             assert.strictEqual(res[0].timestamp, 1710000000);
             assert.strictEqual(res[0].totalTimeFormatted, '0h 10m 00s');
+        });
+    });
+});
+
+describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
+    const PendingCommandRegistry = require('../library/managers/pendingCommandRegistry');
+    const Ecovacs = require('../library/ecovacs');
+    const axios = require('axios');
+
+    describe('PendingCommandRegistry', function () {
+        it('should register and resolve commands by event name', function () {
+            const registry = new PendingCommandRegistry();
+            let resolvedVal = null;
+            registry.register(
+                'req123',
+                'getBattery',
+                'BatteryInfo',
+                { parseResponse: (val) => ({ parsed: val }) },
+                (val) => { resolvedVal = val; },
+                () => { }
+            );
+            assert.strictEqual(registry.size, 1);
+            const found = registry.resolveByEvent('BatteryInfo', { percentage: 90 });
+            assert.strictEqual(found, true);
+            assert.strictEqual(registry.size, 0);
+            assert.deepStrictEqual(resolvedVal, { parsed: { percentage: 90 } });
+        });
+
+        it('should resolve commands by id', function () {
+            const registry = new PendingCommandRegistry();
+            let resolvedVal = null;
+            registry.register(
+                'req123',
+                'getBattery',
+                'BatteryInfo',
+                { parseResponse: (val) => ({ parsed: val }) },
+                (val) => { resolvedVal = val; },
+                () => { }
+            );
+            assert.strictEqual(registry.size, 1);
+            const found = registry.resolveById('req123', { percentage: 80 });
+            assert.strictEqual(found, true);
+            assert.strictEqual(registry.size, 0);
+            assert.deepStrictEqual(resolvedVal, { parsed: { percentage: 80 } });
+        });
+
+        it('should reject commands by id', function () {
+            const registry = new PendingCommandRegistry();
+            let rejectedError = null;
+            registry.register(
+                'req123',
+                'getBattery',
+                'BatteryInfo',
+                null,
+                () => { },
+                (err) => { rejectedError = err; }
+            );
+            assert.strictEqual(registry.size, 1);
+            const found = registry.rejectById('req123', new Error('HTTP Error'));
+            assert.strictEqual(found, true);
+            assert.strictEqual(registry.size, 0);
+            assert.strictEqual(rejectedError.message, 'HTTP Error');
+        });
+
+        it('should reject all commands on rejectAll', function () {
+            const registry = new PendingCommandRegistry();
+            let rejectedCount = 0;
+            registry.register('req1', 'cmd1', 'evt1', null, () => { }, () => { rejectedCount++; });
+            registry.register('req2', 'cmd2', 'evt2', null, () => { }, () => { rejectedCount++; });
+            assert.strictEqual(registry.size, 2);
+            registry.rejectAll(new Error('Closed'));
+            assert.strictEqual(registry.size, 0);
+            assert.strictEqual(rejectedCount, 2);
+        });
+    });
+
+    describe('Ecovacs sendCommand/runAsync flow', function () {
+        let originalPost;
+        let mockPostResponse = { result: 'ok' };
+        let mockPostError = null;
+
+        const mockBot = {
+            genericCommand: null,
+            errorCode: '0',
+            handleResponseError: () => { },
+            emitLastError: () => { },
+            emitLastErrorByErrorCode: () => { },
+            is950type: () => true,
+            authDomain: 'ecovacs',
+            firmwareVersion: null,
+            handleBattery: function (payload) {
+                this.batteryLevel = payload.value;
+                this.batteryIsLow = payload.hasOwnProperty('isLow') ? !!Number(payload.isLow) : this.batteryLevel <= 15;
+            },
+            handleWaterInfo: function (payload) {
+                this.waterLevel = payload.amount;
+                this.waterboxInfo = payload.enable;
+                this.moppingType = payload.hasOwnProperty('type') ? payload.type : null;
+                this.scrubbingType = payload.hasOwnProperty('sweepType') ? payload.sweepType : null;
+            },
+            handleWashInfo: function (payload) {
+                this.washInfo = payload.mode;
+            }
+        };
+        const mockVacuum = {
+            did: 'mock_did',
+            class: 'mock_class',
+            resource: 'mock_res'
+        };
+
+        beforeEach(() => {
+            originalPost = axios.post;
+            mockPostResponse = { result: 'ok' };
+            mockPostError = null;
+            mockBot.firmwareVersion = null;
+            mockBot.batteryLevel = null;
+            mockBot.batteryIsLow = null;
+            mockBot.waterLevel = null;
+            mockBot.waterboxInfo = null;
+            mockBot.moppingType = null;
+            mockBot.scrubbingType = null;
+            mockBot.washInfo = null;
+            axios.post = async () => {
+                if (mockPostError) {
+                    throw mockPostError;
+                }
+                return { data: mockPostResponse };
+            };
+        });
+
+        afterEach(() => {
+            axios.post = originalPost;
+        });
+
+        it('should resolve immediately for action/set commands (expectedEvent = null)', async function () {
+            const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
+            const cmd = {
+                name: 'Stop',
+                args: { id: 'test_id' },
+                getId: () => 'test_id'
+            };
+            const promise = ecovacs.sendCommand(cmd, { returnPromise: true });
+            const result = await promise;
+            assert.deepStrictEqual(result, { result: 'ok' });
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
+        });
+
+        it('should wait for expectedEvent and parse raw response data from the real response flow', async function () {
+            const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
+            const { GetBatteryState } = require('../library/commands/info');
+            const cmd = new GetBatteryState();
+            cmd.args.id = 'battery_test_id';
+            cmd.getId = () => 'battery_test_id';
+            mockPostResponse = {
+                result: 'ok',
+                resp: {
+                    header: { fwVer: 'fw1', hwVer: 'hw1' },
+                    body: { code: 0, msg: 'ok', data: { value: 85, isLow: 0 } }
+                }
+            };
+
+            const promise = ecovacs.sendCommand(cmd, { returnPromise: true });
+            assert.strictEqual(ecovacs.pendingCommands.size, 1);
+
+            const result = await promise;
+            assert.deepStrictEqual(result, { level: 85, isLow: false });
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
+        });
+
+        it('should resolve GetWaterInfo from the real response flow', async function () {
+            const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
+            const { GetWaterInfo } = require('../library/commands/info');
+            const cmd = new GetWaterInfo();
+            cmd.args.id = 'water_test_id';
+            cmd.getId = () => 'water_test_id';
+            mockPostResponse = {
+                result: 'ok',
+                resp: {
+                    body: { code: 0, msg: 'ok', data: { amount: 2, enable: 1, type: 3, sweepType: 4 } }
+                }
+            };
+
+            const result = await ecovacs.sendCommand(cmd, { returnPromise: true });
+            assert.deepStrictEqual(result, { waterLevel: 2, waterboxInfo: 1, moppingType: 3, scrubbingType: 4 });
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
+        });
+
+        it('should preserve the registry key for alias-specific command metadata', function () {
+            const VacBot = require('../library/vacBot');
+            const result = VacBot.prototype.run.call({
+                is950type_V2: () => false,
+                ecovacs: {
+                    sendCommand: (cmd, options) => ({ cmd, options })
+                },
+                dispatcher: {
+                    dispatch: () => assert.fail('should use registry lookup')
+                }
+            }, 'GetWashInfo');
+
+            assert.strictEqual(result.cmd.constructor.name, 'GetWashInfo');
+            assert.strictEqual(result.cmd._registryKey, 'GetWashInfo');
+        });
+
+        it('should pass user timeout options through runAsync', function () {
+            const VacBot = require('../library/vacBot');
+            const result = VacBot.prototype.runAsync.call({
+                run: (command, ...args) => ({ command, args })
+            }, 'GetBatteryState', { timeoutMs: 250 });
+
+            assert.strictEqual(result.command, 'GetBatteryState');
+            assert.strictEqual(result.args.length, 1);
+            assert.strictEqual(result.args[0].timeoutMs, 250);
+            assert.strictEqual(result.args[0].returnPromise, true);
+            assert.strictEqual(result.args[0].__isRunOptions, true);
+        });
+
+        it('should reject immediately and clean up on network error', async function () {
+            const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
+            const { GetBatteryState } = require('../library/commands/info');
+            const cmd = new GetBatteryState();
+            cmd.args.id = 'battery_test_id';
+            cmd.getId = () => 'battery_test_id';
+
+            mockPostError = new Error('Connection refused');
+
+            try {
+                await ecovacs.sendCommand(cmd, { returnPromise: true });
+                assert.fail('Should have rejected');
+            } catch (e) {
+                assert.ok(e.message.includes('Connection refused'));
+            }
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
+        });
+
+        it('should reject immediately and clean up on gateway error response', async function () {
+            const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
+            const { GetBatteryState } = require('../library/commands/info');
+            const cmd = new GetBatteryState();
+            cmd.args.id = 'battery_test_id';
+            cmd.getId = () => 'battery_test_id';
+
+            mockPostResponse = { result: 'fail', errno: 123, error: 'Internal failure' };
+
+            try {
+                await ecovacs.sendCommand(cmd, { returnPromise: true });
+                assert.fail('Should have rejected');
+            } catch (e) {
+                assert.ok(e.message.includes('Failure code 123'));
+            }
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
         });
     });
 });

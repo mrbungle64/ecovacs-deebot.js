@@ -130,7 +130,7 @@ const COMMAND_REGISTRY = {
     'GetStationInfo': { className: 'GetStationInfo', expectedEvent: 'StationInfo' },
     'GetMopAutoWashFrequency': { className: 'GetMopAutoWashFrequency', expectedEvent: 'WashInterval' },
     'GetStationState': { className: 'GetStationState', expectedEvent: 'StationState' },
-    'GetWashInfo': { className: 'GetWashInterval', expectedEvent: 'WashInfo' },
+    'GetWashInfo': { className: 'GetWashInfo', expectedEvent: 'WashInfo' },
     'GetWashInterval': { className: 'GetWashInterval', expectedEvent: 'WashInterval' },
     'SetAirDrying': { specialLogic: true },
     'SetDryingDuration': { className: 'SetDryingDuration', minArgs: 1 },

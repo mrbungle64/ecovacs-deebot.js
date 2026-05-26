@@ -237,7 +237,9 @@ class VacBot {
             if (entry.minArgs && args.length < entry.minArgs) {
                 return false;
             }
-            return this.ecovacs.sendCommand(new VacBotCommand[entry.className](...cmdArgs), _options);
+            const commandInstance = new VacBotCommand[entry.className](...cmdArgs);
+            commandInstance._registryKey = key;
+            return this.ecovacs.sendCommand(commandInstance, _options);
         }
 
         // Delegate special logic
@@ -258,10 +260,21 @@ class VacBot {
      * @returns {Promise<any>}
      * @example
      * const battery = await bot.runAsync('GetBatteryState');
-     * // => { value: 87, isLow: false } (raw payload, or parseResponse() result if implemented)
+     * // => { level: 87, isLow: false } (raw payload, or parseResponse() result if implemented)
      */
     runAsync(command, ...args) {
-        const options = { returnPromise: true, timeoutMs: 10000, __isRunOptions: true };
+        let options = { returnPromise: true, timeoutMs: 10000, __isRunOptions: true };
+
+        // Support runAsync('Command', arg1, { timeoutMs: 250 })
+        if (args.length > 0) {
+            const lastArg = args[args.length - 1];
+            if (lastArg !== null && typeof lastArg === 'object' && !Array.isArray(lastArg) &&
+                (lastArg.hasOwnProperty('timeoutMs') || lastArg.hasOwnProperty('returnPromise'))) {
+                const userOptions = args.pop();
+                options = Object.assign(options, userOptions, { __isRunOptions: true });
+            }
+        }
+
         return this.run(command, ...args, options);
     }
 
