@@ -5,6 +5,7 @@ const mapTools = require('../mapTools');
 const dictionary = require('../dictionary');
 const { errorCodes } = require('../errorCodes.json');
 const { eventCodes } = require('../eventCodes.json');
+const { GetBatteryState } = require('../commands/info');
 
 /**
  * @class BotState
@@ -263,15 +264,14 @@ class BotState {
 
     /**
      * Handle the payload of the `Battery` response/message (battery level)
+     * Parsing is delegated to `GetBatteryState.parse()` to ensure a single source
+     * of truth shared with the `runAsync()` / `parseResponse()` path.
      * @param {Object} payload
      */
     handleBattery(payload) {
-        this.batteryLevel = payload['value'];
-        if (payload.hasOwnProperty('isLow')) {
-            this.batteryIsLow = !!Number(payload['isLow']);
-        } else {
-            this.batteryIsLow = (this.batteryLevel <= 15);
-        }
+        const result = GetBatteryState.parse(payload);
+        this.batteryLevel = result.level;
+        this.batteryIsLow = result.isLow;
     }
 
     /**

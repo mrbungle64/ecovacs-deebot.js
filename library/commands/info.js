@@ -15,15 +15,26 @@ class GetBatteryState extends VacBotCommand {
     }
 
     /**
+     * Parses the raw `Battery` protocol payload into a normalized result object.
+     * Used both by `parseResponse()` (for `runAsync()`) and by `BotState.handleBattery()`
+     * (for MQTT push events) to ensure a single source of truth.
      * @param {{ value: number, isLow?: number }} payload
      * @returns {{ level: number, isLow: boolean }}
      */
-    parseResponse(payload) {
+    static parse(payload) {
         const level = payload['value'];
         const isLow = payload.hasOwnProperty('isLow')
             ? !!Number(payload['isLow'])
             : level <= 15;
         return { level, isLow };
+    }
+
+    /**
+     * @param {{ value: number, isLow?: number }} payload
+     * @returns {{ level: number, isLow: boolean }}
+     */
+    parseResponse(payload) {
+        return GetBatteryState.parse(payload);
     }
 }
 

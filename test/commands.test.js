@@ -27,7 +27,8 @@ const {
     GetOta,
     GetSweepMode,
     GetWorkMode,
-    GetCleanLogs
+    GetCleanLogs,
+    GetBatteryState
 } = require('../library/commands/info');
 
 const {
@@ -96,6 +97,31 @@ describe('Deebot Commands parseResponse Tests', function () {
                 cleanState: { motionState: 'working' }
             });
             assert.strictEqual(res.state, 'cleaning');
+        });
+    });
+
+    describe('GetBatteryState', function () {
+        it('static parse() should return { level, isLow } when isLow is present', function () {
+            const result = GetBatteryState.parse({ value: 85, isLow: 0 });
+            assert.deepStrictEqual(result, { level: 85, isLow: false });
+
+            const resultLow = GetBatteryState.parse({ value: 10, isLow: 1 });
+            assert.deepStrictEqual(resultLow, { level: 10, isLow: true });
+        });
+
+        it('static parse() should derive isLow from level when isLow field is absent', function () {
+            // level > 15 → not low
+            assert.deepStrictEqual(GetBatteryState.parse({ value: 50 }), { level: 50, isLow: false });
+            // level === 15 → low (boundary)
+            assert.deepStrictEqual(GetBatteryState.parse({ value: 15 }), { level: 15, isLow: true });
+            // level < 15 → low
+            assert.deepStrictEqual(GetBatteryState.parse({ value: 8 }), { level: 8, isLow: true });
+        });
+
+        it('parseResponse() should delegate to static parse() and return the same result', function () {
+            const cmd = new GetBatteryState();
+            const payload = { value: 72, isLow: 0 };
+            assert.deepStrictEqual(cmd.parseResponse(payload), GetBatteryState.parse(payload));
         });
     });
 
