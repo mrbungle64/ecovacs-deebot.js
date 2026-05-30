@@ -41,30 +41,30 @@ describe('API', function () {
     });
 
     it('should store the first 8 characters of the device id as the resource id', function () {
-      const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
+      const api = new ecovacsDeebot.EcovacsAPI("abcdefghijklmnopqrestuvwyz", "nl", "eu");
       assert.strictEqual(api.resource, "abcdefgh");
     });
 
     it('should store the country provided', function () {
       const country = "nl";
-      const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", country, "eu");
+      const api = new ecovacsDeebot.EcovacsAPI("abcdefghijklmnopqrestuvwyz", country, "eu");
       assert.ok(api.country, 'country should be set');
       assert.strictEqual(api.country, country.toUpperCase());
     });
 
     it('should store the continent provided', function () {
       const continent = "eu";
-      const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
+      const api = new ecovacsDeebot.EcovacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
       assert.ok(api.continent, 'continent should be set');
       assert.strictEqual(api.continent, continent);
     });
 
     it('should provide a version number', function () {
       const continent = "eu";
-      const api = new ecovacsDeebot.EcoVacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
+      const api = new ecovacsDeebot.EcovacsAPI("abcdefghijklmnopqrestuvwyz", "nl", continent);
       assert.ok(api.getVersion(), 'getVersion() should return a value');
-      assert.ok(ecovacsDeebot.EcoVacsAPI.version(), 'EcoVacsAPI.version() should return a value');
-      assert.strictEqual(api.getVersion(), ecovacsDeebot.EcoVacsAPI.version());
+      assert.ok(ecovacsDeebot.EcovacsAPI.version(), 'EcovacsAPI.version() should return a value');
+      assert.strictEqual(api.getVersion(), ecovacsDeebot.EcovacsAPI.version());
     });
   });
 

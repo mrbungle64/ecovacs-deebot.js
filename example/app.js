@@ -13,7 +13,7 @@ async function main() {
 
     try {
         const vacbot = await client.init();
-        console.log('Connected to EcoVacs API');
+        console.log('Connected to Ecovacs API');
 
         // Initial device information dump
         tools.dumpSomeVacbotData(vacbot, client.api);

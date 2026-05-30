@@ -1,11 +1,11 @@
-# EcoVacs Deebot Examples
+# Ecovacs Deebot Examples
 
 This directory contains examples for using the `ecovacs-deebot.js` library.
 
 ## Getting Started
 
 1.  **Configure your account:**
-    Copy `example/.env.example` to `example/.env` (or use environment variables) and fill in your EcoVacs credentials.
+    Copy `example/.env.example` to `example/.env` (or use environment variables) and fill in your Ecovacs credentials.
     
     ```bash
     cp example/.env.example example/.env

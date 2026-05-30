@@ -603,5 +603,7 @@ class EcovacsAPI {
 EcovacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
 EcovacsAPI.REALM = constants.REALM;
 
+module.exports.EcovacsAPI = EcovacsAPI;
+/** @deprecated Use EcovacsAPI instead */
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.countries = countries;

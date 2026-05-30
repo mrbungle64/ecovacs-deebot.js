@@ -74,12 +74,12 @@ class HistoryManager {
         };
 
         let searchParams = querystring.encode(queryParams);
-        tools.envLogInfo(`[EcoVacsAPI] callLogsApi calling ${portalPath}`);
+        tools.envLogInfo(`[EcovacsAPI] callLogsApi calling ${portalPath}`);
         try {
             const res = await axios.get(portalPath + searchParams, config);
             return res.data;
         } catch (err) {
-            tools.envLogInfo(`[EcoVacsAPI] callLogsApi error: ${err}`);
+            tools.envLogInfo(`[EcovacsAPI] callLogsApi error: ${err}`);
             throw err;
         }
     }
@@ -124,11 +124,11 @@ class HistoryManager {
             const fs = require('fs');
             fs.writeFile(targetFilename, result, err => {
                 if (err) {
-                    tools.envLogInfo(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
+                    tools.envLogInfo(`[EcovacsAPI] downloadSecuredContent error: ${err}`);
                 }
             });
         } catch (err) {
-            tools.envLogInfo(`[EcoVacsAPI] downloadSecuredContent error: ${err}`);
+            tools.envLogInfo(`[EcovacsAPI] downloadSecuredContent error: ${err}`);
             throw err;
         }
     }

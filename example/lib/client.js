@@ -1,7 +1,7 @@
 'use strict';
 
 const nodeMachineId = require('node-machine-id');
-const { EcoVacsAPI } = require('../../index');
+const { EcovacsAPI } = require('../../index');
 
 /**
  * Encapsulates the authentication and connection logic for the examples.
@@ -22,17 +22,17 @@ class ExampleClient {
     }
 
     /**
-     * Connects to the EcoVacs API and returns a VacBot instance.
+     * Connects to the Ecovacs API and returns a VacBot instance.
      * @returns {Promise<Object>} The connected VacBot instance
      */
     async init() {
         const { ACCOUNT_ID, PASSWORD, COUNTRY_CODE, DEVICE_NUMBER = 0, AUTH_DOMAIN = '' } = this.config;
 
-        const passwordHash = EcoVacsAPI.md5(PASSWORD);
+        const passwordHash = EcovacsAPI.md5(PASSWORD);
         const machineId = await nodeMachineId.machineId();
-        const deviceId = EcoVacsAPI.getDeviceId(machineId, DEVICE_NUMBER);
+        const deviceId = EcovacsAPI.getDeviceId(machineId, DEVICE_NUMBER);
 
-        this.api = new EcoVacsAPI(deviceId, COUNTRY_CODE, '', AUTH_DOMAIN);
+        this.api = new EcovacsAPI(deviceId, COUNTRY_CODE, '', AUTH_DOMAIN);
 
         try {
             await this.api.connect(ACCOUNT_ID, passwordHash);
@@ -49,7 +49,7 @@ class ExampleClient {
 
             this.vacbot = this.api.getVacBot(
                 this.api.uid,
-                EcoVacsAPI.REALM,
+                EcovacsAPI.REALM,
                 this.api.resource,
                 this.api.user_access_token,
                 device

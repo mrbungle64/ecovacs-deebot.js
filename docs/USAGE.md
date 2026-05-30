@@ -25,7 +25,7 @@ This is the standard and recommended way to use the library in Node.js >= 20. It
 'use strict';
 
 const ecovacsDeebot = require('ecovacs-deebot');
-const { EcoVacsAPI } = ecovacsDeebot;
+const { EcovacsAPI } = ecovacsDeebot;
 const nodeMachineId = require('node-machine-id');
 
 // 1. Account Configuration
@@ -40,15 +40,15 @@ const authDomain = '';
 async function main() {
     try {
         // MD5 hash of the password is required by the API
-        const passwordHash = EcoVacsAPI.md5(password);
+        const passwordHash = EcovacsAPI.md5(password);
         
         // Generate a unique device ID identifying this client machine
         const deviceNumber = 0; 
-        const deviceId = EcoVacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
+        const deviceId = EcovacsAPI.getDeviceId(nodeMachineId.machineIdSync(), deviceNumber);
         
-        // Initialize the EcoVacs API wrapper
+        // Initialize the Ecovacs API wrapper
         // The continent is resolved automatically if left as an empty string ''
-        const api = new EcoVacsAPI(deviceId, countryCode, '', authDomain);
+        const api = new EcovacsAPI(deviceId, countryCode, '', authDomain);
         
         console.log("Connecting to the HTTP API...");
         await api.connect(accountId, passwordHash);
@@ -133,7 +133,7 @@ main();
 
 ## 3. Core API Components Explained
 
-### `EcoVacsAPI` Instance
+### `EcovacsAPI` Instance
 * Handles initial connection, auth handshakes, login caching, and device enumeration.
 * Leaving the 3rd argument (`continent`) as an empty string `''` delegates continent resolution automatically to the country-code database.
 
