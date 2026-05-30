@@ -452,7 +452,18 @@ class VacBot {
      * @returns {string}
      */
     getPlatformType() {
-        return this.capabilityManager.getPlatformType();
+        try {
+            if (this.capabilityManager && typeof this.capabilityManager.getPlatformType === 'function') {
+                const type = this.capabilityManager.getPlatformType();
+                if (type && type !== 'unknown') {
+                    return type;
+                }
+            }
+        } catch (e) {
+            // Ignore exception
+        }
+
+        return '';
     }
 
     /**
@@ -461,7 +472,29 @@ class VacBot {
      * @returns {string}
      */
     getDeviceCategory() {
-        return this.capabilityManager.getDeviceCategory();
+        try {
+            if (this.capabilityManager && typeof this.capabilityManager.getDeviceCategory === 'function') {
+                const category = this.capabilityManager.getDeviceCategory();
+                if (category && category !== 'unknown') {
+                    return category;
+                }
+            }
+        } catch (e) {
+            // Ignore exception
+        }
+
+        try {
+            if (typeof this.getDeviceProperty === 'function') {
+                const category = this.getDeviceProperty('deviceCategory');
+                if (category && category !== 'unknown') {
+                    return category;
+                }
+            }
+        } catch (e) {
+            // Ignore exception
+        }
+
+        return 'Unknown Device';
     }
 
     /**

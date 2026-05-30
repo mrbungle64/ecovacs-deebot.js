@@ -20,6 +20,8 @@ function createMockBot(deviceClass) {
                 isLegacyModel: () => tools.isLegacyModel(deviceClass),
                 getPlatformType: () => tools.getPlatformType(deviceClass),
                 getModelType: () => tools.getModelType(deviceClass),
+                getDeviceCategory: () => tools.getDeviceCategory(deviceClass),
+                getDeviceType: () => tools.getDeviceType(deviceClass),
                 is950type: () => !tools.isLegacyModel(deviceClass),
                 getDeviceProperty: (prop) => tools.getDeviceProperty(deviceClass, prop)
             };

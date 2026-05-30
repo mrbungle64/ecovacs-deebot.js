@@ -255,6 +255,68 @@ describe('API tools', function () {
       });
     });
   });
+
+  describe('VacBot platform type & device category robustness', function () {
+    const VacBot = require('../library/vacBot');
+
+    it('should gracefully handle missing capabilityManager and return empty string or Unknown Device', function () {
+      const mockVacuum = {
+        class: 'nonexistent',
+        did: 'mock_did',
+        resource: 'mock_res'
+      };
+      const bot = {
+        vacuum: mockVacuum,
+        deviceClass: 'nonexistent'
+      };
+      
+      bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
+      bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
+
+      assert.strictEqual(bot.getPlatformType(), '');
+      assert.strictEqual(bot.getDeviceCategory(), 'Unknown Device');
+    });
+
+    it('should gracefully handle capabilityManager throwing errors', function () {
+      const bot = {
+        capabilityManager: {
+          getPlatformType: () => { throw new Error('Simulated failure'); },
+          getDeviceCategory: () => { throw new Error('Simulated failure'); }
+        }
+      };
+
+      bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
+      bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
+
+      assert.strictEqual(bot.getPlatformType(), '');
+      assert.strictEqual(bot.getDeviceCategory(), 'Unknown Device');
+    });
+
+    it('should fall back to getDeviceProperty if capabilityManager returns unknown or fails', function () {
+      const bot = {
+        capabilityManager: {
+          getPlatformType: () => 'unknown',
+          getDeviceCategory: () => 'unknown'
+        },
+        getDeviceProperty: (prop) => prop === 'deviceCategory' ? 'Vacuum Cleaner' : null
+      };
+
+      bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
+      bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
+
+      assert.strictEqual(bot.getPlatformType(), '');
+      assert.strictEqual(bot.getDeviceCategory(), 'Vacuum Cleaner');
+    });
+
+    it('should not cause infinite recursion if getModelType calls getPlatformType', function () {
+      const bot = {};
+      bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
+      bot.getModelType = VacBot.prototype.getModelType.bind(bot);
+
+      assert.strictEqual(bot.getPlatformType(), '');
+      assert.strictEqual(bot.getModelType(), '');
+    });
+  });
 });
 
 describe('Tools Extended', function () {
