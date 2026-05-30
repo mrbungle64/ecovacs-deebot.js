@@ -1,9 +1,8 @@
 'use strict';
 
-const tools = require('../tools');
 const constants = require('../constants');
-const constants_type = require('../dictionary');
 const { VacBotCommand } = require('./base');
+
 
 /**
  * Requests information about the battery level

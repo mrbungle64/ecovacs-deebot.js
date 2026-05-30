@@ -1,12 +1,12 @@
 'use strict';
 
-const tools = require('../tools');
 const constants_type = require('../dictionary');
 const { VacBotCommand } = require('./base');
 const { GetMapSet } = require('./map');
 const { GetMapSet_V2 } = require('./map');
 const { GetMapSubSet } = require('./map');
 const { SetThreeModule } = require('./settings');
+
 
 /**
  * It represents a basic clean mode,

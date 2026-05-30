@@ -1,9 +1,8 @@
 'use strict';
 
-const tools = require('../tools');
-const constants = require('../constants');
 const constants_type = require('../dictionary');
 const { VacBotCommand } = require('./base');
+
 
 /**
  * Resets the life span value for a specific component to 100%

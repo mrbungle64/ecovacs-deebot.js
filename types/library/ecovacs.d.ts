@@ -46,32 +46,6 @@ declare class Ecovacs extends EventEmitter<any> {
     connect(): void;
     client: import("mqtt").MqttClient | undefined;
     /**
-     * @param {Object} command - the command that was sent to the Ecovacs API
-     * @param {Object} messagePayload - The message payload that was received
-     * @abstract
-     */
-    handleCommandResponse(command: Object, messagePayload: Object): void;
-    /**
-     * It handles the response from the Ecovacs API
-     * @param {Object} command - the command that was sent to the Ecovacs API
-     * @param {Object} messagePayload - The message payload that was received
-     */
-    handleCommandResponse(command: Object, messagePayload: Object): void;
-    /**
-     * @param {string} topic - the topic of the message
-     * @param {Object|string} message - the message
-     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
-     * @abstract
-     */
-    handleMessage(topic: string, message: Object | string, type?: string): void;
-    /**
-     * It handles the messages from the API (incoming MQTT message or request response)
-     * @param {string} topic - the topic of the message
-     * @param {Object|string} message - the message
-     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
-     */
-    handleMessage(topic: string, message: Object | string, type?: string): void;
-    /**
      * It sends a command to the Ecovacs API.
      * Optionally returns a Promise that resolves with the response payload
      * when the command's expected event fires.
@@ -121,6 +95,19 @@ declare class Ecovacs extends EventEmitter<any> {
      * Disconnect the MQTT client
      */
     disconnect(): Promise<any>;
+    /**
+     * It handles the response from the Ecovacs API
+     * @param {Object} command - the command that was sent to the Ecovacs API
+     * @param {Object} messagePayload - The message payload that was received
+     */
+    handleCommandResponse(command: Object, messagePayload: Object): void;
+    /**
+     * It handles the messages from the API (incoming MQTT message or request response)
+     * @param {string} topic - the topic of the message
+     * @param {Object|string} message - the message
+     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     */
+    handleMessage(topic: string, message: Object | string, type?: string): void;
     /**
      * Handles the message command and the payload
      * and delegates the event object to the corresponding method

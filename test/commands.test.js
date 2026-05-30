@@ -32,8 +32,7 @@ const {
 } = require('../library/commands/info');
 
 const {
-    SetCarpetAutoFanBoost,
-    SetMopAutoWashFrequency
+    SetCarpetAutoFanBoost
 } = require('../library/commands/settings');
 
 describe('Deebot Commands parseResponse Tests', function () {

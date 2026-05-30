@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules", "dist", "types", "example", "test"],
+  "exclude": ["node_modules", "dist", "types", "example", "test", "scratch"],
   "compilerOptions": {
     "allowJs": true,
     "declaration": true,

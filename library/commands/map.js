@@ -1,9 +1,7 @@
 'use strict';
 
-const tools = require('../tools');
-const constants = require('../constants');
-const constants_type = require('../dictionary');
 const { VacBotCommand } = require('./base');
+
 
 /**
  * This command is used to manually relocate the position of a device

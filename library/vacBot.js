@@ -9,16 +9,7 @@ const CapabilityManager = require('./managers/capabilityManager');
 const HistoryManager = require('./managers/historyManager');
 const MaintenanceManager = require('./managers/maintenanceManager');
 const i18n = require('./i18n');
-const map = require('./mapInfo');
-const { errorCodes } = require('./errorCodes.json');
-const constants = require("./constants");
-const dictionary = require('./dictionary');
-const mapTools = require('./mapTools');
-const mapTemplate = require('./mapTemplate');
-const { eventCodes } = require('./eventCodes.json');
 const COMMAND_REGISTRY = require('./commandRegistry');
-
-const HANDLE_LIVE_MAP = false;
 
 /**
  * Internal Symbol used to identify options objects passed from runAsync() to run().

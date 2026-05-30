@@ -74,7 +74,7 @@ class Ecovacs extends EventEmitter {
         tools.envLogHeader(`subscribe()`);
         this.channel = `iot/atr/+/${this.vacuum['did']}/${this.vacuum['class']}/${this.vacuum['resource']}/${this.payloadType}`;
         tools.envLogInfo(`atr channel: '${this.channel}'`);
-        this.client.subscribe(this.channel, (error, granted) => {
+        this.client.subscribe(this.channel, (error) => {
             if (!error) {
                 tools.envLogSuccess(`successfully subscribed to atr channel`);
                 this.emit('ready', 'Successfully subscribed to atr channel');
@@ -122,7 +122,7 @@ class Ecovacs extends EventEmitter {
             }
         });
 
-        this.client.on('disconnect', function (packet) {
+        this.client.on('disconnect', function () {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
             } catch (e) {
@@ -138,27 +138,10 @@ class Ecovacs extends EventEmitter {
             }
         });
 
-        this.on("ready", (event) => {
+        this.on("ready", () => {
             tools.envLogSuccess(`MQTT client received ready event`);
         });
     }
-
-
-
-    /**
-     * @param {Object} command - the command that was sent to the Ecovacs API
-     * @param {Object} messagePayload - The message payload that was received
-     * @abstract
-     */
-    handleCommandResponse(command, messagePayload) { }
-
-    /**
-     * @param {string} topic - the topic of the message
-     * @param {Object|string} message - the message
-     * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
-     * @abstract
-     */
-    handleMessage(topic, message, type = "incoming") { }
 
     /**
      * It sends a command to the Ecovacs API.
