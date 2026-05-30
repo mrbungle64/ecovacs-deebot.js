@@ -89,7 +89,7 @@ declare class Ecovacs extends EventEmitter<any> {
      * Handle life span components to emit combined object
      */
     handleLifeSpanCombined(): void;
-    emitMessage(name: any, payload: any): void;
+    emitMessage(name: any, payload: any, rawPayload: any): void;
     /**
      * Set values for emitting an error
      * @param {string} code - the error code

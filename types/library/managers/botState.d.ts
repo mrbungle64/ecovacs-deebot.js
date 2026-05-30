@@ -9,7 +9,7 @@ declare class BotState {
      */
     constructor(bot: VacBot);
     bot: VacBot;
-    batteryLevel: any;
+    batteryLevel: number | null;
     batteryIsLow: boolean;
     cleanReport: any;
     chargeStatus: any;
@@ -213,6 +213,8 @@ declare class BotState {
     handleWashInfo(payload: Object): void;
     /**
      * Handle the payload of the `Battery` response/message (battery level)
+     * Parsing is delegated to `GetBatteryState.parse()` to ensure a single source
+     * of truth shared with the `runAsync()` / `parseResponse()` path.
      * @param {Object} payload
      */
     handleBattery(payload: Object): void;

@@ -3,6 +3,20 @@
  * @extends VacBotCommand
  */
 export class GetBatteryState extends VacBotCommand {
+    /**
+     * Parses the raw `Battery` protocol payload into a normalized result object.
+     * Used both by `parseResponse()` (for `runAsync()`) and by `BotState.handleBattery()`
+     * (for MQTT push events) to ensure a single source of truth.
+     * @param {{ value: number, isLow?: number }} payload
+     * @returns {{ level: number, isLow: boolean }}
+     */
+    static parse(payload: {
+        value: number;
+        isLow?: number;
+    }): {
+        level: number;
+        isLow: boolean;
+    };
     constructor();
     /**
      * @param {{ value: number, isLow?: number }} payload
@@ -28,6 +42,11 @@ export class GetLifeSpan extends VacBotCommand {
      * @param {Array} componentsArray - An optional array of components
      */
     constructor(componentsArray?: any[]);
+    /**
+     * @param {Array} payload
+     * @returns {Object}
+     */
+    parseResponse(payload: any[]): Object;
 }
 /**
  * Requests the 'Error' messages
@@ -36,6 +55,14 @@ export class GetLifeSpan extends VacBotCommand {
  */
 export class GetError extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload
+     * @returns {{ code: number, description: string }}
+     */
+    parseResponse(payload: Object): {
+        code: number;
+        description: string;
+    };
 }
 /**
  * Requests the 'Water Flow Level'
@@ -186,6 +213,13 @@ export class GetAdvancedMode extends VacBotCommand {
  */
 export class GetRecognization extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ state: number|boolean }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload: {
+        state: number | boolean;
+    }): boolean;
 }
 /**
  * Request information if (depending on model)
@@ -195,6 +229,13 @@ export class GetRecognization extends VacBotCommand {
  */
 export class GetTrueDetect extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ enable: number }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload: {
+        enable: number;
+    }): boolean;
 }
 /**
  * Request information about if 'Cleaning Cloth Reminder' is enabled
@@ -243,6 +284,17 @@ export class GetCarpetInfo extends VacBotCommand {
  */
 export class GetStationState extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload
+     * @returns {{ type: number, state: number, isAirDrying: boolean, isSelfCleaning: boolean, isActive: boolean }}
+     */
+    parseResponse(payload: Object): {
+        type: number;
+        state: number;
+        isAirDrying: boolean;
+        isSelfCleaning: boolean;
+        isActive: boolean;
+    };
 }
 /**
  * Receive information about the station (e.g. X1 series)
@@ -251,6 +303,17 @@ export class GetStationState extends VacBotCommand {
  */
 export class GetStationInfo extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload
+     * @returns {{ state: number|string, name: string, model: string, sn: string, wkVer: string }}
+     */
+    parseResponse(payload: Object): {
+        state: number | string;
+        name: string;
+        model: string;
+        sn: string;
+        wkVer: string;
+    };
 }
 /**
  * Receive the value of the 'Cleaning Interval' (e.g. X1 series)
@@ -270,6 +333,13 @@ export class GetWashInterval extends VacBotCommand {
  */
 export class GetWashInfo extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ mode: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload: {
+        mode: number;
+    }): number;
 }
 /**
  * Receive the value if 'Air Drying' is active (Yeedi Mop Station)
@@ -278,6 +348,13 @@ export class GetWashInfo extends VacBotCommand {
  */
 export class GetAirDrying extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ status: number|string }} payload
+     * @returns {string|null}
+     */
+    parseResponse(payload: {
+        status: number | string;
+    }): string | null;
 }
 /**
  * Start und Stop 'Air Drying' (e.g. X1 series)
@@ -290,6 +367,13 @@ export class Drying extends VacBotCommand {
 }
 export class GetDryingDuration extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ duration: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload: {
+        duration: number;
+    }): number;
 }
 /**
  * Requests the value whether the 'Edge Deep Cleaning' option is enabled (e.g. X1 series)
@@ -322,6 +406,17 @@ export class GetBorderSwitch extends VacBotCommand {
  */
 export class GetOta extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload
+     * @returns {{ supportAuto: boolean, autoSwitch: boolean, version: string, status: string, progress: string|number }}
+     */
+    parseResponse(payload: Object): {
+        supportAuto: boolean;
+        autoSwitch: boolean;
+        version: string;
+        status: string;
+        progress: string | number;
+    };
 }
 /**
  * Request the current relocation state
@@ -346,6 +441,13 @@ export class GetRelocationState extends VacBotCommand {
  */
 export class GetSweepMode extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ type: number }} payload
+     * @returns {boolean}
+     */
+    parseResponse(payload: {
+        type: number;
+    }): boolean;
 }
 /**
  * Requests the value whether 'YIKO' is enabled (e.g. X1 series)
@@ -365,6 +467,13 @@ export class GetVoiceAssistantState extends VacBotCommand {
  */
 export class GetWorkMode extends VacBotCommand {
     constructor();
+    /**
+     * @param {{ mode: number }} payload
+     * @returns {number}
+     */
+    parseResponse(payload: {
+        mode: number;
+    }): number;
 }
 /**
  * Request information about the work status
@@ -820,6 +929,11 @@ export class GetSafeProtect extends VacBotCommand {
  */
 export class GetCleanLogs extends VacBotCommand {
     constructor(count?: number);
+    /**
+     * @param {Object} payload
+     * @returns {Array<Object>}
+     */
+    parseResponse(payload: Object): Array<Object>;
 }
 /**
  * Requests the 'Carpet Auto Fan Boost' state

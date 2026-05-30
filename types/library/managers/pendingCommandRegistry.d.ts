@@ -18,7 +18,8 @@ declare class PendingCommandRegistry {
      *   reject: Function,
      *   timer: NodeJS.Timeout,
      *   commandName: string,
-     *   expectedEvent: string|null
+     *   expectedEvent: string|null,
+     *   commandInstance: Object
      * }>}
      */
     _pending: Map<string, {
@@ -27,6 +28,7 @@ declare class PendingCommandRegistry {
         timer: NodeJS.Timeout;
         commandName: string;
         expectedEvent: string | null;
+        commandInstance: Object;
     }>;
     /**
      * Register a new pending command.
@@ -53,10 +55,18 @@ declare class PendingCommandRegistry {
      * Calls `commandInstance.parseResponse(rawPayload)` to normalize the result
      * before resolving the Promise. Falls back to the raw payload if not overridden.
      * @param {string} eventName - The event name that just fired (e.g. 'BatteryInfo')
-     * @param {any} rawPayload - The raw payload from emitMessage()
+     * @param {any} rawPayload - The raw payload (should be raw command response data)
      * @returns {boolean} true if a matching pending entry was found and resolved
      */
     resolveByEvent(eventName: string, rawPayload: any): boolean;
+    /**
+     * Reject a pending command by its request ID.
+     * Used when the command fails immediately (e.g. network or gateway error).
+     * @param {string} requestId
+     * @param {Error} error
+     * @returns {boolean} true if a matching pending entry was found and rejected
+     */
+    rejectById(requestId: string, error: Error): boolean;
     /**
      * Reject all pending commands.
      * Should be called on disconnect to avoid hanging Promises.

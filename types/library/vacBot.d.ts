@@ -182,27 +182,20 @@ declare class VacBot {
     playSound(soundID?: number): void;
     /**
      * Run a specific command
-     * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
-     * @param args - zero or more arguments to perform the command
-     * @param {Object} [_options={}] - internal options forwarded to sendCommand (e.g. { returnPromise, timeoutMs })
-     * @returns {Promise<any>|boolean}
+     * @param {string} command - The command name
+     * @param {...*} args - Zero or more arguments to perform the command
+     * @returns {Promise<any>|boolean} Returns a Promise if returnPromise is true, otherwise boolean
      */
     run(command: string, ...args: any[]): Promise<any> | boolean;
     /**
      * Run a command and return a Promise that resolves with the response payload.
      * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
-     * Falls back to the first matching event if no `expectedEvent` is defined.
      *
      * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
      *
      * @param {string} command - The command name (same as used in `run()`)
-     * @param args - zero or more arguments to perform the command
-     * @param {Object} [options={}]
-     * @param {number} [options.timeoutMs=10000] - timeout in ms
+     * @param {...*} args - Zero or more arguments to perform the command (optionally an options object at the end)
      * @returns {Promise<any>}
-     * @example
-     * const battery = await bot.runAsync('GetBatteryState');
-     * // => { value: 87, isLow: false } (raw payload, or parseResponse() result if implemented)
      */
     runAsync(command: string, ...args: any[]): Promise<any>;
     /**

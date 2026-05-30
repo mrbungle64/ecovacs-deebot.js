@@ -15,6 +15,13 @@ declare class CommandDispatcher {
      * @param {Array} args - Command arguments.
      * @returns {boolean} True if handled, false otherwise.
      */
-    dispatch(key: string, ...args: any[]): boolean;
+    /**
+     * Dispatch a command with special logic.
+     * @param {string} key - The command key.
+     * @param {Object} options - Command options (e.g. returnPromise)
+     * @param {...*} args - Command arguments.
+     * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise boolean indicating if handled.
+     */
+    dispatch(key: string, options: Object, ...args: any[]): Promise<any> | boolean;
 }
 //# sourceMappingURL=commandDispatcher.d.ts.map

@@ -111,6 +111,14 @@ export class Stop extends VacBotCommand {
  */
 export class GetCleanState extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload
+     * @returns {{ state: string|number, trigger: string }}
+     */
+    parseResponse(payload: Object): {
+        state: string | number;
+        trigger: string;
+    };
 }
 /**
  * Requests various information about the cleaning status
@@ -121,6 +129,14 @@ export class GetCleanState extends VacBotCommand {
  */
 export class GetCleanState_V2 extends VacBotCommand {
     constructor();
+    /**
+     * @param {Object} payload - The raw clean info payload
+     * @returns {{ state: string, raw: Object }}
+     */
+    parseResponse(payload: Object): {
+        state: string;
+        raw: Object;
+    };
 }
 /**
  * Requests the 'Suction Power' level
