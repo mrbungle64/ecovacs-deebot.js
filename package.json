@@ -8,7 +8,7 @@
     "test": "NODE_ENV=test node --test",
     "test_windows": "SET NODE_ENV=test && node --test",
     "test:coverage": "NODE_ENV=test node --test --test-coverage",
-    "appTest": "NODE_ENV=dev node example/app2.js",
+    "appTest": "NODE_ENV=dev node example/app.js",
     "exportTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --outDir types",
     "exportAndCheckTypes": "node_modules/typescript/bin/tsc --declaration --allowJs --emitDeclarationOnly --resolveJsonModule --checkJs --outDir types"
   },

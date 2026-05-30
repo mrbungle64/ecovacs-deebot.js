@@ -344,28 +344,7 @@ class SetCustomAreaMode extends VacBotCommand {
     }
 }
 
-/**
- * Request various information about the current/last cleaning
- * @extends VacBotCommand
- * TODO: potential duplicate of GetTotalStats (info.js)
- */
-class GetCleanSum extends VacBotCommand {
-    constructor() {
-        super('getTotalStats');
-    }
 
-    /**
-     * @param {{ area: number, time: number, count: number }} payload
-     * @returns {{ totalSquareMeters: number, totalSeconds: number, totalNumber: number }}
-     */
-    parseResponse(payload) {
-        return {
-            totalSquareMeters: parseInt(payload['area']),
-            totalSeconds: parseInt(payload['time']),
-            totalNumber: parseInt(payload['count'])
-        };
-    }
-}
 
 /**
  * Request information about the (spot) areas
@@ -705,7 +684,31 @@ class GetCleanInfoV2 extends VacBotCommand {
     }
 }
 
+class BasicPurification extends VacBotCommand {
+    constructor() {
+        super('clean_V2', {
+            'act': 'start',
+            'content': {
+                'type': 'spot'
+            }
+        });
+    }
+}
+
+class MobilePurification extends VacBotCommand {
+    constructor() {
+        super('clean_V2', {
+            'act': 'start',
+            'content': {
+                'type': 'move'
+            }
+        });
+    }
+}
+
 module.exports = {
+    BasicPurification,
+    MobilePurification,
     Clean,
     Clean_V2,
     CustomArea,
@@ -724,7 +727,7 @@ module.exports = {
     SetCleanSpeed,
     GetCustomAreaMode,
     SetCustomAreaMode,
-    GetCleanSum,
+    
     GetMapSpotAreas,
     GetMapSpotAreas_V2,
     GetMapSpotAreaInfo,

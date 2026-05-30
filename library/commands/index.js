@@ -6,7 +6,6 @@ const map = require('./map');
 const info = require('./info');
 const settings = require('./settings');
 const movement = require('./movement');
-const purification = require('./purification');
 
 module.exports = VacBotCommand;
 Object.assign(module.exports,
@@ -15,6 +14,5 @@ Object.assign(module.exports,
     info,
     settings,
     movement,
-    purification,
     { SpotPurification: clean.MapPoint_V2 }
 );

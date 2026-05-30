@@ -8,7 +8,7 @@ const { VacBotCommand } = require('./base');
  * Works for models like OZMO 920/950 and the T8 series
  * @extends VacBotCommand
  */
-class Relocate extends VacBotCommand {
+class SetRelocationState extends VacBotCommand {
     constructor() {
         super('setRelocationState', {
             'mode': 'manu'
@@ -362,19 +362,6 @@ class SetMajorMap extends VacBotCommand {
 }
 
 /**
- * Represents a command to set the relocation state
- * @extends VacBotCommand
- * TODO: potential duplicate of Relocate
- */
-class SetRelocationState extends VacBotCommand {
-    constructor() {
-        super('setRelocationState', {
-            'mode': 'manu'
-        });
-    }
-}
-
-/**
  * Represents a command to get the map trace
  * TODO: Implement handling of the response
  * @extends VacBotCommand
@@ -388,7 +375,7 @@ class GetMapTrace_V2 extends VacBotCommand {
 }
 
 module.exports = {
-    Relocate,
+    SetRelocationState,
     GetPosition,
     GetMajorMap,
     GetMinorMap,
@@ -415,6 +402,5 @@ module.exports = {
     GetAIMap,
     SetMapSet_V2,
     SetMajorMap,
-    SetRelocationState,
     GetMapTrace_V2,
 };

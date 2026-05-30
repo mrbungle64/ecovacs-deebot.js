@@ -80,7 +80,7 @@ const COMMAND_REGISTRY = {
     'GetCleanSpeed': { className: 'GetCleanSpeed', expectedEvent: 'CleanSpeed' },
     'GetCleanState': { className: 'GetCleanState', expectedEvent: 'CleanReport' },
     'GetCleanState_V2': { className: 'GetCleanState_V2', expectedEvent: 'CleanReport' },
-    'GetCleanSum': { className: 'GetCleanSum', expectedEvent: 'CleanSum' },
+    'GetCleanSum': { className: 'GetTotalStats', expectedEvent: 'CleanSum' },
     'GetCrossMapBorderWarning': { className: 'GetCrossMapBorderWarning', expectedEvent: 'CrossMapBorderWarning' },
     'GetCutDirection': { className: 'GetCutDirection', expectedEvent: 'CutDirection' },
     'GetDoNotDisturb': { className: 'GetDoNotDisturb', expectedEvent: 'DoNotDisturbEnabled' },

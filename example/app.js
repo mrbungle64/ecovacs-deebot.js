@@ -2,8 +2,8 @@
 
 const ecovacsDeebot = require('./../index');
 const tools = require('./tools');
-const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
 const nodeMachineId = require('node-machine-id');
+const EcoVacsAPI = ecovacsDeebot.EcoVacsAPI;
 
 let settingsFile = tools.getSettingsFile();
 
@@ -25,54 +25,206 @@ const api = new EcoVacsAPI(deviceId, countryCode, '', domain);
 // the devices linked to your account to prepare connectivity to your vacuum.
 api.connect(accountId, passwordHash).then(() => {
 
-  api.devices().then((devices) => {
-    api.logInfo(`Devices: ${JSON.stringify(devices)}`);
+    api.devices().then((devices) => {
 
-    let vacuum = devices[deviceNumber];
-    let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, api.getContinent());
+        api.logInfo(`Devices: ${JSON.stringify(devices)}`);
+        let vacuum = devices[deviceNumber];
+        api.logInfo(vacuum);
+        let vacbot = api.getVacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum);
 
-    // Once the session has started the bot will fire a "ready" event.
-    // At this point you can request information from your vacuum or send actions to it.
-    vacbot.on('ready', () => {
+        // Once the session has started the bot will fire a 'ready' event.
+        // At this point you can request information from your vacuum or send actions to it.
+        vacbot.on('ready', () => {
 
-      api.logInfo('vacbot ready');
+            api.logInfo('vacbot ready');
 
-      vacbot.run('GetBatteryState');
-      vacbot.run('GetCleanState');
-      vacbot.run('GetChargeState');
+            vacbot.on('ChargeState', (state) => {
+                api.logEvent('ChargeState', state);
+            });
+            vacbot.on('CleanSpeed', (speed) => {
+                api.logEvent('CleanSpeed', speed);
+            });
+            vacbot.on('CleanReport', (state) => {
+                api.logEvent('CleanReport', state);
+            });
+            vacbot.on('BatteryInfo', (value) => {
+                let battery = Math.round(value);
+                api.logEvent('BatteryInfo', battery);
+            });
+            vacbot.on('LifeSpan_filter', (level) => {
+                api.logEvent('filter', Math.round(level));
+            });
+            vacbot.on('LifeSpan_main_brush', (level) => {
+                api.logEvent('main_brush', Math.round(level));
+            });
+            vacbot.on('LifeSpan_side_brush', (level) => {
+                api.logEvent('side_brush', Math.round(level));
+            });
+            vacbot.on('WaterLevel', (level) => {
+                api.logEvent('water level', level);
+            });
+            vacbot.on('WaterBoxInfo', (level) => {
+                api.logEvent('waterBoxInfo', level);
+            });
+            vacbot.on('DustCaseInfo', (value) => {
+                api.logEvent('DustCaseInfo', value);
+            });
+            vacbot.on('Error', (value) => {
+                api.logEvent('Error', value);
+            });
+            vacbot.on('DoNotDisturbEnabled', (value) => {
+                const doNotDisturb = (parseInt(value) === 1);
+                api.logEvent('DoNotDisturbEnabled', doNotDisturb);
+            });
+            vacbot.on('ContinuousCleaningEnabled', (value) => {
+                const continuousCleaning = (parseInt(value) === 1);
+                api.logEvent('ContinuousCleaningEnabled', continuousCleaning);
+            });
+            vacbot.on('Volume', (value) => {
+                api.logEvent('Volume', value);
+            });
+            vacbot.on('ChargePosition', (chargePosition) => {
+                api.logEvent('ChargePosition', chargePosition);
+            });
+            vacbot.on('DeebotPosition', (deebotPosition) => {
+                api.logEvent('DeebotPosition', deebotPosition);
+            });
 
-      vacbot.on('BatteryInfo', (battery) => {
-        api.logEvent('Battery level', Math.round(battery));
-      });
-      vacbot.on('CleanReport', (value) => {
-        api.logEvent('Clean status', value);
-      });
-      vacbot.on('ChargeState', (value) => {
-        api.logEvent('Charge status:', value);
-      });
-    });
-    vacbot.connect();
+            vacbot.on('LastUsedAreaValues', (values) => {
+                api.logEvent('LastUsedAreaValues', values);
+            });
+            vacbot.on('CurrentSpotAreas', (values) => {
+                api.logEvent('CurrentSpotAreas', values);
+            });
+            vacbot.on('CurrentCustomAreaValues', (values) => {
+                api.logEvent('CurrentCustomAreaValues', values);
+            });
 
-    //
-    // Catch ctrl-c to exit program
-    //
-    process.on('SIGINT', function () {
-      api.logInfo('\nGracefully shutting down from SIGINT (Ctrl+C)');
-      disconnect();
-    });
+            // Please uncomment this code block if you want to use GetMaps cmd
+            // to retrieve every single event (without retrieving the map data object)
+            // Please do not uncomment this code block if you want to retrieve the full map data object (standard)
+            // But if you do please also comment out 'MapDataObject' and 'MapImage'
 
-    function disconnect() {
-      (async () => {
-        try {
-          await vacbot.disconnectAsync();
-          api.logEvent("Exiting...");
-          process.exit();
-        } catch (e) {
-          api.logError('Failure in disconnecting: ', e.message);
+            /*vacbot.on('Maps', (maps) => {
+                api.logEvent('Maps', JSON.stringify(maps));
+                for (const i in maps['maps']) {
+                    const mapID = maps['maps'][i]['mapID'];
+                    vacbot.run('GetSpotAreas', mapID);
+                    vacbot.run('GetVirtualBoundaries', mapID);
+                }
+            });
+            vacbot.on('MapSpotAreas', (spotAreas) => {
+                api.logEvent('MapSpotAreas', JSON.stringify(spotAreas));
+                for (const i in spotAreas['mapSpotAreas']) {
+                    const spotAreaID = spotAreas['mapSpotAreas'][i]['mapSpotAreaID'];
+                    vacbot.run('GetSpotAreaInfo', spotAreas['mapID'], spotAreaID);
+                }
+            });
+            vacbot.on('MapSpotAreaInfo', (area) => {
+                api.logEvent('MapSpotAreaInfo', JSON.stringify(area));
+            });
+            vacbot.on('MapVirtualBoundaries', (virtualBoundaries) => {
+                api.logEvent('MapVirtualBoundaries', JSON.stringify(virtualBoundaries));
+                const mapID = virtualBoundaries['mapID'];
+                const virtualBoundariesCombined = [...virtualBoundaries['mapVirtualWalls'], ...virtualBoundaries['mapNoMopZones']];
+                const virtualBoundaryArray = [];
+                for (const i in virtualBoundariesCombined) {
+                    virtualBoundaryArray[virtualBoundariesCombined[i]['mapVirtualBoundaryID']] = virtualBoundariesCombined[i];
+                }
+                for (const i in virtualBoundaryArray) {
+                    const mapVirtualBoundaryID = virtualBoundaryArray[i]['mapVirtualBoundaryID'];
+                    const mapVirtualBoundaryType = virtualBoundaryArray[i]['mapVirtualBoundaryType'];
+                    vacbot.run('GetVirtualBoundaryInfo', mapID, mapVirtualBoundaryID, mapVirtualBoundaryType);
+                }
+            });
+            vacbot.on('MapVirtualBoundaryInfo', (virtualBoundary) => {
+                api.logEvent('MapVirtualBoundaryInfo', JSON.stringify(virtualBoundary));
+            });*/
+
+            // Please comment out 'MapDataObject' and 'MapImage' if you want to use the code block above
+            vacbot.on('MapDataObject', (mapDataObject) => {
+                api.logEvent('MapDataObject' + mapDataObject);
+            });
+            vacbot.on('MapImage', (value) => {
+                api.logEvent('MapImage', value);
+                api.logEvent('<img src="' + value.mapBase64PNG + '" />');
+            });
+
+            vacbot.on('CurrentMapName', (value) => {
+                api.logEvent('CurrentMapName', value);
+            });
+            vacbot.on('CurrentMapMID', (mapID) => {
+                api.logEvent('CurrentMapMID', mapID);
+                vacbot.run('GetSpotAreas', mapID);
+            });
+            vacbot.on('CurrentMapIndex', (value) => {
+                api.logEvent('CurrentMapIndex', value);
+            });
+            vacbot.on('DeebotPositionCurrentSpotAreaID', (spotAreaID) => {
+                api.logEvent('CurrentSpotAreaID', spotAreaID);
+            });
+            vacbot.on('CleanLog', (object) => {
+                api.logEvent('CleanLog', object);
+            });
+            vacbot.on('Schedule', (object) => {
+                api.logEvent('Schedule', object);
+            });
+        });
+
+        vacbot.connect();
+
+        tools.dumpSomeVacbotData(vacbot, api);
+
+        setTimeout(() => {
+            vacbot.run('GetCleanState');
+            vacbot.run('GetChargeState');
+            vacbot.run('GetBatteryState');
+
+            vacbot.run('GetLifeSpan');
+            vacbot.run('GetCleanLogs');
+
+            if (vacbot.hasMappingCapabilities()) {
+                vacbot.run('GetPosition');
+                const createMapDataObject = true; // default = false
+                const createMapImage = false; // default = createMapDataObject && vacbot.isMapImageSupported();
+                vacbot.run('GetMaps', createMapDataObject, createMapImage);
+            }
+        }, 6000);
+
+        setInterval(() => {
+            vacbot.run('GetSleepStatus');
+            if (vacbot.hasMoppingSystem()) {
+                vacbot.run('GetWaterInfo');
+            }
+            if (vacbot.hasVacuumPowerAdjustment()) {
+                vacbot.run('GetCleanSpeed');
+            }
+            if (vacbot.is950type()) {
+                vacbot.run('GetVolume');
+                vacbot.run('GetAdvancedMode');
+            }
+        }, 60000);
+
+        //
+        // Catch ctrl-c to exit program
+        //
+        process.on('SIGINT', function () {
+            api.logInfo('\nGracefully shutting down from SIGINT (Ctrl+C)');
+            disconnect();
+        });
+
+        function disconnect() {
+            (async () => {
+                try {
+                    await vacbot.disconnectAsync();
+                    api.logEvent("Exiting...");
+                    process.exit();
+                } catch (e) {
+                    api.logError('Failure in disconnecting: ', e.message);
+                }
+            })();
         }
-      })();
-    }
-  });
+    });
 }).catch((e) => {
-  console.error(`Failure in connecting: ${e.message}`);
+    api.logError(`Failure in connecting: ${e.message}`);
 });
