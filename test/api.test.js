@@ -86,7 +86,7 @@ describe('API', function () {
 
 describe('API tools', function () {
   describe('#isObject', function () {
-    it('should check if a value is truly an object', function () {
+    it('should return false for primitive values and null', function () {
       assert.strictEqual(tools.isObject(null), false);
       assert.strictEqual(tools.isObject("test"), false);
       assert.strictEqual(tools.isObject(String("test")), false);
@@ -95,24 +95,41 @@ describe('API tools', function () {
       assert.strictEqual(tools.isObject(true), false);
       assert.strictEqual(tools.isObject(undefined), false);
       assert.strictEqual(tools.isObject(Symbol()), false);
+    });
+
+    it('should return true for plain objects, functions and class instances', function () {
       assert.strictEqual(tools.isObject({}), true);
       assert.strictEqual(tools.isObject({ key: "value" }), true);
       assert.strictEqual(tools.isObject(JSON.parse('{"key": "value"}')), true);
-      assert.strictEqual(tools.isObject(() => {
-      }), true);
-      assert.strictEqual(tools.isObject({}), true);
+      assert.strictEqual(tools.isObject(() => {}), true);
       assert.strictEqual(tools.isObject(new Date()), true);
+    });
+
+    it('should return true for arrays (arrays are objects in JavaScript)', function () {
+      // Arrays are objects in JS – isObject() intentionally returns true
+      assert.strictEqual(tools.isObject([]), true);
+      assert.strictEqual(tools.isObject([1, 2, 3]), true);
     });
   });
 
   describe('#string.format', function () {
-    it('should add a format method to the prototype of String', function () {
+    it('should return the original string when called without replacement args', function () {
       assert.ok(tools.formatString("abcdefghijklmnopqrestuvwyz"));
+      assert.strictEqual(tools.formatString("plain string"), "plain string");
+    });
+
+    it('should handle empty string without throwing', function () {
+      assert.strictEqual(tools.formatString(""), "");
+      assert.strictEqual(tools.formatString("", {}), "");
     });
 
     it('should replace key identifiers with provided values', function () {
       assert.strictEqual(tools.formatString("{first} {second}", { first: "Hello", second: "world" }), "Hello world");
       assert.strictEqual(tools.formatString("{first} world", { first: "Hello" }), "Hello world");
+    });
+
+    it('should replace the same key multiple times in one template', function () {
+      assert.strictEqual(tools.formatString("{key}-{key}", { key: "x" }), "x-x");
     });
 
     it('should not replace key identifiers when not provided as values', function () {
@@ -178,7 +195,7 @@ describe('API tools', function () {
     });
   });
 
-  describe('getModelType', function () {
+  describe('getModelType (deprecated alias for getPlatformType)', function () {
     it('should return a valid type (not "unknown") for all models in models.js', function () {
       const allDevices = tools.getAllKnownDevices();
       const deviceClasses = Object.keys(allDevices);
@@ -214,6 +231,23 @@ describe('API tools', function () {
         assert.strictEqual(modelType, expected,
           `Device class "${deviceClass}" should have model type "${expected}", but got "${modelType}"`);
       });
+    });
+
+    it('should always return the same value as getPlatformType() (alias contract)', function () {
+      // getModelType is a @deprecated alias — its return value MUST be identical to getPlatformType
+      const allDevices = tools.getAllKnownDevices();
+      Object.keys(allDevices).forEach(deviceClass => {
+        assert.strictEqual(
+          tools.getModelType(deviceClass),
+          tools.getPlatformType(deviceClass),
+          `getModelType() and getPlatformType() differ for device class "${deviceClass}"`
+        );
+      });
+    });
+
+    it('should return "unknown" for an unrecognized device class', function () {
+      assert.strictEqual(tools.getModelType('__nonexistent_device__'), 'unknown');
+      assert.strictEqual(tools.getPlatformType('__nonexistent_device__'), 'unknown');
     });
   });
 
@@ -325,12 +359,24 @@ describe('Tools Extended', function () {
       assert.strictEqual(tools.getTimeStringFormatted(3661), '1h 01m 01s');
       assert.strictEqual(tools.getTimeStringFormatted(0), '0h 00m 00s');
     });
+
+    it('should pad minutes and seconds with leading zeros', function () {
+      assert.strictEqual(tools.getTimeStringFormatted(60), '0h 01m 00s');
+      assert.strictEqual(tools.getTimeStringFormatted(3600), '1h 00m 00s');
+      assert.strictEqual(tools.getTimeStringFormatted(9), '0h 00m 09s');
+    });
   });
 
   describe('#getReqID', function () {
-    it('should return 8 digits', function () {
+    it('should return exactly 8 digits', function () {
       const id = tools.getReqID();
       assert.match(id, /^\d{8}$/);
+    });
+
+    it('should return a different value on repeated calls (probabilistic)', function () {
+      // With 10^8 possible values, the chance of collision in 5 calls is negligible
+      const ids = new Set(Array.from({ length: 5 }, () => tools.getReqID()));
+      assert.ok(ids.size > 1, 'getReqID() should not always return the same value');
     });
   });
 
@@ -345,6 +391,105 @@ describe('Tools Extended', function () {
           );
         }
       }
+    });
+  });
+
+  describe('#isValidVirtualWallType', function () {
+    it('should return true for valid virtual wall types', function () {
+      assert.strictEqual(tools.isValidVirtualWallType('vw'), true);
+      assert.strictEqual(tools.isValidVirtualWallType('mw'), true);
+    });
+
+    it('should return false for invalid virtual wall types', function () {
+      assert.strictEqual(tools.isValidVirtualWallType(''), false);
+      assert.strictEqual(tools.isValidVirtualWallType('VW'), false);
+      assert.strictEqual(tools.isValidVirtualWallType('MW'), false);
+      assert.strictEqual(tools.isValidVirtualWallType('other'), false);
+      assert.strictEqual(tools.isValidVirtualWallType(null), false);
+      assert.strictEqual(tools.isValidVirtualWallType(undefined), false);
+    });
+  });
+
+  describe('#convertAreaValuesForFreeCleanCmd', function () {
+    it('should convert a simple comma-separated list to semicolon-delimited format', function () {
+      assert.strictEqual(tools.convertAreaValuesForFreeCleanCmd('1,2'), '1,1;1,2;');
+    });
+
+    it('should strip trailing commas before converting', function () {
+      assert.strictEqual(tools.convertAreaValuesForFreeCleanCmd('1,2,'), '1,1;1,2;');
+    });
+
+    it('should strip all spaces before converting', function () {
+      assert.strictEqual(tools.convertAreaValuesForFreeCleanCmd(' 1 , 2 '), '1,1;1,2;');
+    });
+
+    it('should pass through already-converted semicolon format unchanged', function () {
+      const input = '1,1;1,2;';
+      assert.strictEqual(tools.convertAreaValuesForFreeCleanCmd(input), input);
+    });
+  });
+
+  describe('#areaValuesAreValidForFreeCleanCmd', function () {
+    it('should return true for valid semicolon-delimited area values', function () {
+      assert.strictEqual(tools.areaValuesAreValidForFreeCleanCmd('1,2;3,4'), true);
+      assert.strictEqual(tools.areaValuesAreValidForFreeCleanCmd('10,20'), true);
+      assert.strictEqual(tools.areaValuesAreValidForFreeCleanCmd('1,2;'), true); // trailing semicolon stripped
+    });
+
+    it('should return false for malformed area values', function () {
+      assert.strictEqual(tools.areaValuesAreValidForFreeCleanCmd('abc'), false);
+      assert.strictEqual(tools.areaValuesAreValidForFreeCleanCmd('1;2'), false); // missing comma-pair
+      assert.strictEqual(tools.areaValuesAreValidForFreeCleanCmd(''), false);
+    });
+  });
+
+  describe('#paramsToQueryList', function () {
+    it('should encode parameters as a query string', function () {
+      const result = tools.paramsToQueryList({ a: '1', b: '2' });
+      assert.ok(result.includes('a=1'));
+      assert.ok(result.includes('b=2'));
+      assert.ok(result.includes('&'));
+    });
+
+    it('should URI-encode special characters in values', function () {
+      const result = tools.paramsToQueryList({ key: 'hello world' });
+      assert.strictEqual(result, 'key=hello%20world');
+    });
+
+    it('should return an empty string for empty params', function () {
+      assert.strictEqual(tools.paramsToQueryList({}), '');
+    });
+  });
+
+  describe('#createErrorDescription', function () {
+    it('should describe ENOTFOUND as a DNS lookup failure', function () {
+      const desc = tools.createErrorDescription('getaddrinfo ENOTFOUND example.com');
+      assert.ok(desc.includes('DNS lookup failed'), `Expected DNS message, got: ${desc}`);
+    });
+
+    it('should describe EHOSTUNREACH as host unreachable', function () {
+      const desc = tools.createErrorDescription('connect EHOSTUNREACH 192.168.1.1');
+      assert.ok(desc.includes('Host is unreachable'), `Expected host unreachable message, got: ${desc}`);
+    });
+
+    it('should describe ECONNRESET as a connection interruption', function () {
+      const desc = tools.createErrorDescription('read ECONNRESET');
+      assert.ok(desc.includes('Connection is interrupted'), `Expected connection interrupted message, got: ${desc}`);
+    });
+
+    it('should describe ETIMEDOUT as a network connectivity error', function () {
+      const desc = tools.createErrorDescription('connect ETIMEDOUT');
+      assert.ok(desc.includes('Network connectivity error'), `Expected timeout message, got: ${desc}`);
+    });
+
+    it('should include the command name in a generic error description', function () {
+      const desc = tools.createErrorDescription('Something failed', 'GetBatteryState');
+      assert.ok(desc.includes('GetBatteryState'), `Expected command name in message, got: ${desc}`);
+    });
+
+    it('should return a generic message for unknown errors without a command', function () {
+      const desc = tools.createErrorDescription('Unexpected failure');
+      assert.ok(desc.includes('Received error message'), `Expected generic message, got: ${desc}`);
     });
   });
 });

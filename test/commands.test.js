@@ -112,8 +112,10 @@ describe('Deebot Commands parseResponse Tests', function () {
         it('static parse() should derive isLow from level when isLow field is absent', function () {
             // level > 15 → not low
             assert.deepStrictEqual(GetBatteryState.parse({ value: 50 }), { level: 50, isLow: false });
-            // level === 15 → low (boundary)
+            // level === 15 → low (boundary: exactly at threshold)
             assert.deepStrictEqual(GetBatteryState.parse({ value: 15 }), { level: 15, isLow: true });
+            // level === 16 → not low (one above threshold)
+            assert.deepStrictEqual(GetBatteryState.parse({ value: 16 }), { level: 16, isLow: false });
             // level < 15 → low
             assert.deepStrictEqual(GetBatteryState.parse({ value: 8 }), { level: 8, isLow: true });
         });
@@ -179,67 +181,91 @@ describe('Deebot Commands parseResponse Tests', function () {
         });
     });
 
-    describe('GetTrueDetect and GetRecognization', function () {
-        it('should parse values correctly', function () {
-            const cmdTD = new GetTrueDetect();
-            assert.strictEqual(cmdTD.parseResponse({ enable: 1 }), true);
-            assert.strictEqual(cmdTD.parseResponse({ enable: 0 }), false);
-
-            const cmdRec = new GetRecognization();
-            assert.strictEqual(cmdRec.parseResponse({ state: 1 }), true);
-            assert.strictEqual(cmdRec.parseResponse({ state: 0 }), false);
+    describe('GetTrueDetect', function () {
+        it('should parse enable:1 as true and enable:0 as false', function () {
+            const cmd = new GetTrueDetect();
+            assert.strictEqual(cmd.parseResponse({ enable: 1 }), true);
+            assert.strictEqual(cmd.parseResponse({ enable: 0 }), false);
         });
     });
 
-    describe('GetStationState and GetStationInfo', function () {
-        it('should parse station state and info correctly', function () {
-            const cmdState = new GetStationState();
-            const resState = cmdState.parseResponse({ state: 1, content: { type: 2 } });
-            assert.deepStrictEqual(resState, {
+    describe('GetRecognization', function () {
+        it('should parse state:1 as true and state:0 as false', function () {
+            const cmd = new GetRecognization();
+            assert.strictEqual(cmd.parseResponse({ state: 1 }), true);
+            assert.strictEqual(cmd.parseResponse({ state: 0 }), false);
+        });
+    });
+
+    describe('GetStationState', function () {
+        it('should parse station state correctly', function () {
+            const cmd = new GetStationState();
+            const res = cmd.parseResponse({ state: 1, content: { type: 2 } });
+            assert.deepStrictEqual(res, {
                 type: 2,
                 state: 1,
                 isAirDrying: true,
                 isSelfCleaning: false,
                 isActive: true
             });
-
-            const cmdInfo = new GetStationInfo();
-            const resInfo = cmdInfo.parseResponse({ state: 1, name: 'st', model: 'md', sn: '12', wkVer: '1' });
-            assert.deepStrictEqual(resInfo, { state: 1, name: 'st', model: 'md', sn: '12', wkVer: '1' });
         });
     });
 
-    describe('GetWashInfo, GetAirDrying and GetDryingDuration', function () {
-        it('should parse responses correctly', function () {
-            const cmdWash = new GetWashInfo();
-            assert.strictEqual(cmdWash.parseResponse({ mode: 2 }), 2);
-
-            const cmdDry = new GetAirDrying();
-            assert.strictEqual(cmdDry.parseResponse({ status: 1 }), 'airdrying');
-            assert.strictEqual(cmdDry.parseResponse({ status: 2 }), 'idle');
-
-            const cmdDur = new GetDryingDuration();
-            assert.strictEqual(cmdDur.parseResponse({ duration: 180 }), 180);
+    describe('GetStationInfo', function () {
+        it('should pass through station info fields unchanged', function () {
+            const cmd = new GetStationInfo();
+            const res = cmd.parseResponse({ state: 1, name: 'st', model: 'md', sn: '12', wkVer: '1' });
+            assert.deepStrictEqual(res, { state: 1, name: 'st', model: 'md', sn: '12', wkVer: '1' });
         });
     });
 
-    describe('GetOta, GetSweepMode and GetWorkMode', function () {
-        it('should parse responses correctly', function () {
-            const cmdOta = new GetOta();
-            const resOta = cmdOta.parseResponse({ supportAuto: 1, autoSwitch: 1, ver: '1.2.3', status: 'idle', progress: 50 });
-            assert.deepStrictEqual(resOta, {
+    describe('GetWashInfo', function () {
+        it('should return the raw mode value', function () {
+            const cmd = new GetWashInfo();
+            assert.strictEqual(cmd.parseResponse({ mode: 2 }), 2);
+        });
+    });
+
+    describe('GetAirDrying', function () {
+        it('should map status codes to descriptive strings', function () {
+            const cmd = new GetAirDrying();
+            assert.strictEqual(cmd.parseResponse({ status: 1 }), 'airdrying');
+            assert.strictEqual(cmd.parseResponse({ status: 2 }), 'idle');
+        });
+    });
+
+    describe('GetDryingDuration', function () {
+        it('should return the raw duration value', function () {
+            const cmd = new GetDryingDuration();
+            assert.strictEqual(cmd.parseResponse({ duration: 180 }), 180);
+        });
+    });
+
+    describe('GetOta', function () {
+        it('should map fields and convert boolean-integers correctly', function () {
+            const cmd = new GetOta();
+            const res = cmd.parseResponse({ supportAuto: 1, autoSwitch: 1, ver: '1.2.3', status: 'idle', progress: 50 });
+            assert.deepStrictEqual(res, {
                 supportAuto: true,
                 autoSwitch: true,
                 version: '1.2.3',
                 status: 'idle',
                 progress: 50
             });
+        });
+    });
 
-            const cmdSweep = new GetSweepMode();
-            assert.strictEqual(cmdSweep.parseResponse({ type: 1 }), true);
+    describe('GetSweepMode', function () {
+        it('should map type:1 to true', function () {
+            const cmd = new GetSweepMode();
+            assert.strictEqual(cmd.parseResponse({ type: 1 }), true);
+        });
+    });
 
-            const cmdWork = new GetWorkMode();
-            assert.strictEqual(cmdWork.parseResponse({ mode: 1 }), 1);
+    describe('GetWorkMode', function () {
+        it('should return the raw mode value', function () {
+            const cmd = new GetWorkMode();
+            assert.strictEqual(cmd.parseResponse({ mode: 1 }), 1);
         });
     });
 
@@ -317,6 +343,67 @@ describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
             assert.strictEqual(found, true);
             assert.strictEqual(registry.size, 0);
             assert.strictEqual(rejectedError.message, 'HTTP Error');
+        });
+
+        it('should return false when resolving by event with no match', function () {
+            const registry = new PendingCommandRegistry();
+            const found = registry.resolveByEvent('NonExistentEvent', {});
+            assert.strictEqual(found, false);
+            assert.strictEqual(registry.size, 0); // nothing registered, nothing changed
+        });
+
+        it('should return false when resolving by id with no match', function () {
+            const registry = new PendingCommandRegistry();
+            const found = registry.resolveById('unknown_id', {});
+            assert.strictEqual(found, false);
+        });
+
+        it('should return false when rejecting by id with no match', function () {
+            const registry = new PendingCommandRegistry();
+            const found = registry.rejectById('unknown_id', new Error('noop'));
+            assert.strictEqual(found, false);
+        });
+
+        it('should reject a command via reject callback when parseResponse throws', function () {
+            const registry = new PendingCommandRegistry();
+            let rejectedError = null;
+            const throwingInstance = {
+                parseResponse: () => { throw new Error('Parse error'); }
+            };
+            registry.register(
+                'req_throw',
+                'getBattery',
+                'BatteryInfo',
+                throwingInstance,
+                () => { assert.fail('should not resolve'); },
+                (err) => { rejectedError = err; }
+            );
+            registry.resolveByEvent('BatteryInfo', { value: 50 });
+            assert.ok(rejectedError, 'Should have rejected');
+            assert.ok(rejectedError.message.includes('Parse error'));
+            assert.strictEqual(registry.size, 0);
+        });
+
+        it('should reject the command after the specified timeout elapses', async function () {
+            const registry = new PendingCommandRegistry();
+            let rejectedError = null;
+            await new Promise((resolve) => {
+                registry.register(
+                    'req_timeout',
+                    'getBattery',
+                    'BatteryInfo',
+                    null,
+                    () => { assert.fail('should not resolve'); },
+                    (err) => {
+                        rejectedError = err;
+                        resolve();
+                    },
+                    50 // 50 ms timeout for fast test
+                );
+            });
+            assert.ok(rejectedError, 'Should have timed out');
+            assert.ok(rejectedError.message.includes('timed out'), `Expected "timed out" in: ${rejectedError.message}`);
+            assert.strictEqual(registry.size, 0);
         });
 
         it('should reject all commands on rejectAll', function () {
