@@ -1,5 +1,5 @@
-const { SupportedDeebotModels, SupportedAirPurifierModels, KnownDeebotModels, KnownYeediModels, KnownLawnMowerModels, LegacyDevices } = require('/home/sh/Projects/ecovacs-deebot.js/library/models.js');
-const { ModelTypes } = require('/home/sh/Projects/ecovacs-deebot.js/library/modelTypes.js');
+const { SupportedDeebotModels, SupportedAirPurifierModels, KnownDeebotModels, KnownYeediModels, KnownLawnMowerModels, LegacyDevices } = require('../library/models.js');
+const { ModelTypes } = require('../library/modelTypes.js');
 
 const allModels = [
     { group: 'SupportedDeebotModels', models: SupportedDeebotModels },
