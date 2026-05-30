@@ -20,6 +20,13 @@ const COMMAND_REGISTRY = require('./commandRegistry');
 
 const HANDLE_LIVE_MAP = false;
 
+/**
+ * Internal Symbol used to identify options objects passed from runAsync() to run().
+ * Using a Symbol prevents accidental collision with user-supplied command arguments.
+ * @private
+ */
+const RUN_OPTIONS_SYMBOL = Symbol('RunOptions');
+
 const PROXY_MAPPINGS = {
     maintenanceManager: [
         'components', 'lastComponentValues', 'emitFullLifeSpanEvent'
@@ -208,18 +215,16 @@ class VacBot {
      * Run a specific command
      * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
      * @param args - zero or more arguments to perform the command
-     * @param {Object} [_options={}] - internal options forwarded to sendCommand (e.g. { returnPromise, timeoutMs })
-     * @returns {Promise<any>|boolean}
+     * @returns {Promise<any>|boolean|void}
      */
     run(command, ...args) {
-        // Extract internal options object if appended by runAsync()
+        // Extract internal options object stamped by runAsync() with RUN_OPTIONS_SYMBOL.
+        // Using a Symbol prevents accidental collision with user-supplied arguments.
         let _options = {};
-        if (args.length > 0 &&
-            args[args.length - 1] !== null &&
-            typeof args[args.length - 1] === 'object' &&
-            args[args.length - 1].__isRunOptions === true) {
+        if ((args.length > 0) && (args[args.length - 1]?.[RUN_OPTIONS_SYMBOL] === true)) {
             _options = args.pop();
         }
+        const isAsync = Boolean(_options.returnPromise);
 
         let cmdToRun = command;
         if (this.is950type_V2() && !command.endsWith('_V2')) {
@@ -230,54 +235,78 @@ class VacBot {
         }
 
         const key = cmdToRun;
-        // Registry-based lookup for trivial commands
         const entry = COMMAND_REGISTRY[key];
-        if (entry && !entry.specialLogic) {
-            const cmdArgs = entry.fixedArgs || args;
-            if (entry.minArgs && args.length < entry.minArgs) {
-                return false;
-            }
-            const commandInstance = new VacBotCommand[entry.className](...cmdArgs);
-            commandInstance._registryKey = key;
-            return this.ecovacs.sendCommand(commandInstance, _options);
+
+        // Guard: unknown command
+        if (!entry) {
+            const msg = `Unknown command: '${command}'`;
+            tools.envLogError(msg);
+            return isAsync ? Promise.reject(new Error(msg)) : false;
         }
 
-        // Delegate special logic
-        return this.dispatcher.dispatch(key.toLowerCase(), ...args);
+        // Delegate commands with special dispatch logic
+        if (entry.specialLogic) {
+            return this.dispatcher.dispatch(key.toLowerCase(), ...args);
+        }
+
+        // Guard: insufficient arguments
+        if (entry.minArgs && (args.length < entry.minArgs)) {
+            const msg = `Command '${command}' requires at least ${entry.minArgs} argument(s), got ${args.length}`;
+            tools.envLogError(msg);
+            return isAsync ? Promise.reject(new Error(msg)) : false;
+        }
+
+        const cmdArgs = entry.fixedArgs || args;
+        const commandInstance = new VacBotCommand[entry.className](...cmdArgs);
+        commandInstance._registryKey = key;
+        return this.ecovacs.sendCommand(commandInstance, _options);
     }
 
     /**
      * Run a command and return a Promise that resolves with the response payload.
      * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
-     * Falls back to the first matching event if no `expectedEvent` is defined.
      *
      * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
      *
      * @param {string} command - The command name (same as used in `run()`)
      * @param args - zero or more arguments to perform the command
      * @param {Object} [options={}]
-     * @param {number} [options.timeoutMs=10000] - timeout in ms
+     * @param {number} [options.timeoutMs=10000] - timeout in ms before the Promise rejects
      * @returns {Promise<any>}
+     * @throws {Error} if the command is unknown, has too few arguments, or is not async-capable
      * @example
      * const battery = await bot.runAsync('GetBatteryState');
-     * // => { level: 87, isLow: false } (raw payload, or parseResponse() result if implemented)
+     * // => { level: 87, isLow: false }
      */
     runAsync(command, ...args) {
-        let options = { returnPromise: true, timeoutMs: 10000, __isRunOptions: true };
+        const options = { returnPromise: true, timeoutMs: 10000 };
+        options[RUN_OPTIONS_SYMBOL] = true;
 
         // Support runAsync('Command', arg1, { timeoutMs: 250 })
         if (args.length > 0) {
             const lastArg = args[args.length - 1];
-            if (lastArg !== null && typeof lastArg === 'object' && !Array.isArray(lastArg) &&
-                (lastArg.hasOwnProperty('timeoutMs') || lastArg.hasOwnProperty('returnPromise'))) {
-                const userOptions = args.pop();
-                options = Object.assign(options, userOptions, { __isRunOptions: true });
+            const isPlainObject = (lastArg !== null) && (typeof lastArg === 'object') && !Array.isArray(lastArg);
+            if (isPlainObject) {
+                const isInternalOptions = Boolean(lastArg[RUN_OPTIONS_SYMBOL]);
+                const hasUserOptionKeys = lastArg.hasOwnProperty('timeoutMs') || lastArg.hasOwnProperty('returnPromise');
+                if (!isInternalOptions && hasUserOptionKeys) {
+                    const userOptions = args.pop();
+                    Object.assign(options, userOptions);
+                    options[RUN_OPTIONS_SYMBOL] = true;
+                }
             }
         }
 
-        return this.run(command, ...args, options);
-    }
+        const result = this.run(command, ...args, options);
 
+        if (result instanceof Promise) {
+            return result;
+        }
+        // run() returned false or undefined — command exists but has no async support
+        return Promise.reject(
+            new Error(`Command '${command}' is not supported via runAsync()`)
+        );
+    }
 
     /**
      * Get the name of the spot area that the bot is currently in

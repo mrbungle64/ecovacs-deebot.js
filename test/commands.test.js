@@ -458,17 +458,78 @@ describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
             assert.strictEqual(result.cmd._registryKey, 'GetWashInfo');
         });
 
-        it('should pass user timeout options through runAsync', function () {
+        it('should pass user timeout options through runAsync', async function () {
             const VacBot = require('../library/vacBot');
-            const result = VacBot.prototype.runAsync.call({
-                run: (command, ...args) => ({ command, args })
+            // Mock run() must return a Promise — runAsync() now guards non-Promise returns
+            const result = await VacBot.prototype.runAsync.call({
+                run: (command, ...args) => Promise.resolve({ command, args })
             }, 'GetBatteryState', { timeoutMs: 250 });
 
             assert.strictEqual(result.command, 'GetBatteryState');
             assert.strictEqual(result.args.length, 1);
-            assert.strictEqual(result.args[0].timeoutMs, 250);
-            assert.strictEqual(result.args[0].returnPromise, true);
-            assert.strictEqual(result.args[0].__isRunOptions, true);
+            // The last argument must be the merged options object
+            const opts = result.args[0];
+            assert.strictEqual(typeof opts, 'object');
+            assert.strictEqual(opts.timeoutMs, 250);
+            assert.strictEqual(opts.returnPromise, true);
+            // __isRunOptions is now a private Symbol and must NOT appear as an enumerable string key
+            assert.strictEqual(Object.keys(opts).includes('__isRunOptions'), false);
+        });
+
+        it('should reject with a clear error for unknown commands via runAsync', async function () {
+            const VacBot = require('../library/vacBot');
+            const mockContext = {
+                is950type_V2: () => false,
+                ecovacs: { sendCommand: () => assert.fail('should not reach sendCommand') },
+                dispatcher: { dispatch: () => assert.fail('should not reach dispatcher') }
+            };
+            // run() must be reachable as this.run() inside runAsync()
+            mockContext.run = VacBot.prototype.run.bind(mockContext);
+            try {
+                await VacBot.prototype.runAsync.call(mockContext, 'NonExistentCommand');
+                assert.fail('Should have rejected');
+            } catch (e) {
+                assert.ok(e.message.includes('Unknown command'), `Expected "Unknown command" in: ${e.message}`);
+                assert.ok(e.message.includes('NonExistentCommand'));
+            }
+        });
+
+        it('should reject with a clear error when minArgs are not met via runAsync', async function () {
+            const VacBot = require('../library/vacBot');
+            const COMMAND_REGISTRY = require('../library/commandRegistry');
+            const cmdWithMinArgs = Object.keys(COMMAND_REGISTRY).find(
+                k => COMMAND_REGISTRY[k].minArgs > 0 && !COMMAND_REGISTRY[k].specialLogic
+            );
+            if (!cmdWithMinArgs) {
+                return; // No command with minArgs found — skip gracefully
+            }
+            const mockContext = {
+                is950type_V2: () => false,
+                ecovacs: { sendCommand: () => assert.fail('should not reach sendCommand') },
+                dispatcher: { dispatch: () => assert.fail('should not reach dispatcher') }
+            };
+            // run() must be reachable as this.run() inside runAsync()
+            mockContext.run = VacBot.prototype.run.bind(mockContext);
+            try {
+                await VacBot.prototype.runAsync.call(mockContext, cmdWithMinArgs);
+                assert.fail('Should have rejected');
+            } catch (e) {
+                assert.ok(e.message.includes('requires at least'), `Expected "requires at least" in: ${e.message}`);
+            }
+        });
+
+        it('should reject when run() returns a non-Promise (unsupported async command)', async function () {
+            const VacBot = require('../library/vacBot');
+            const mockContext = {
+                // Simulate a run() that returns a non-Promise (e.g. dispatcher void return)
+                run: () => undefined
+            };
+            try {
+                await VacBot.prototype.runAsync.call(mockContext, 'SomeDispatcherCommand');
+                assert.fail('Should have rejected');
+            } catch (e) {
+                assert.ok(e.message.includes('is not supported via runAsync'), `Expected "not supported" in: ${e.message}`);
+            }
         });
 
         it('should reject immediately and clean up on network error', async function () {
