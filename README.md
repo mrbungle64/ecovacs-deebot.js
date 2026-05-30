@@ -77,7 +77,7 @@ Support for new models is no longer added upon request. Due to high time constra
 * **Breaking Changes:**
     * Complete removal of legacy XMPP/XML and MQTT/XML protocol stacks
     * Refactoring for pure MQTT/JSON communication
-* **Refactoring:** Centralized model identification and properties documentation in `library/MODELS.md`
+* **Refactoring:** Centralized model identification and properties documentation in `docs/MODELS.md`
 
 ### 0.9.6 (Final Legacy Support)
 * **Final milestone** for all XML-based models

@@ -356,6 +356,9 @@ vacbot.run("Spot");                       // Deprecated spot cleaning
 vacbot.spot();                            // JS helper (calls Spot)
 
 vacbot.run("GetLifeSpan", "main_brush");   // Deprecated individual lifespan call
+
+vacbot.run("GetWaterBoxInfo");            // Deprecated (use GetWaterInfo)
+vacbot.run("GetWaterLevel");              // Deprecated (use GetWaterInfo)
 ```
 
 ---
@@ -368,6 +371,8 @@ A complete structured reference of all registered command strings matching the `
 * Area_V2
 * Charge
 * Clean
+* CleanArea
+* CleanArea_V2
 * Clean_V2
 * CustomArea
 * CustomArea_V2
@@ -410,11 +415,13 @@ A complete structured reference of all registered command strings matching the `
 * GetAutonomousClean
 * GetBatteryState
 * GetBorderSwitch
+* GetCarpetAutoFanBoost
 * GetCarpetInfo
 * GetCarpetPressure
 * GetChargeState
 * GetCleanCount
 * GetCleanInfo
+* GetCleanInfoV2
 * GetCleanPreference
 * GetCleanSpeed
 * GetCleanState
@@ -448,6 +455,7 @@ A complete structured reference of all registered command strings matching the `
 * Relocate
 * SetAutoEmpty
 * SetBlock
+* SetCarpetAutoFanBoost
 * SetCarpetInfo
 * SetCarpetPressure
 * SetDoNotDisturb
@@ -463,12 +471,14 @@ A complete structured reference of all registered command strings matching the `
 * EmptySuctionStation
 * GetAirDrying
 * GetDryingDuration
+* GetMopAutoWashFrequency
 * GetStationInfo
 * GetStationState
 * GetWashInfo
 * GetWashInterval
 * SetAirDrying
 * SetDryingDuration
+* SetMopAutoWashFrequency
 * SetWashInfo
 * SetWashInterval
 * StationAction
@@ -536,7 +546,9 @@ A complete structured reference of all registered command strings matching the `
 * MoveForward
 
 ### Water
+* GetWaterBoxInfo
 * GetWaterInfo
+* GetWaterLevel
 * SetWaterInfo
 * SetWaterLevel
 
@@ -552,15 +564,16 @@ A complete structured reference of all registered command strings matching the `
 * GetCleanLogs
 * GetDrivingWheel
 * GetEfficiency
+* GetEfficiencyMode
 * GetLifeSpan
 * GetLiveLaunchPwdState
 * GetScene
 * GetTrueDetect
 * PlaySound
 * ResetLifeSpan
+* SetAdvancedMode
 * SetAIVI
 * SetAIVI3D
-* SetAdvancedMode
 * SetBorderSwitch
 * SetChildLock
 * SetCrossMapBorderWarning
