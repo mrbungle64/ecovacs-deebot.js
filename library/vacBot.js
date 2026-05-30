@@ -213,9 +213,9 @@ class VacBot {
 
     /**
      * Run a specific command
-     * @param {string} command - The {@link https://github.com/mrbungle64/ecovacs-deebot.js/wiki/Shortcut-functions|command}
-     * @param args - zero or more arguments to perform the command
-     * @returns {Promise<any>|boolean|void}
+     * @param {string} command - The command name
+     * @param {...*} args - Zero or more arguments to perform the command
+     * @returns {Promise<any>|boolean} Returns a Promise if returnPromise is true, otherwise boolean
      */
     run(command, ...args) {
         // Extract internal options object stamped by runAsync() with RUN_OPTIONS_SYMBOL.
@@ -227,10 +227,11 @@ class VacBot {
         const isAsync = Boolean(_options.returnPromise);
 
         let cmdToRun = command;
-        if (this.is950type_V2() && !command.endsWith('_V2')) {
+        if (this.is950type_V2() && !command.toLowerCase().endsWith('_v2')) {
             const command_v2 = command + '_V2';
-            if (COMMAND_REGISTRY[command_v2]) {
-                cmdToRun = command_v2;
+            const registryEntry = COMMAND_REGISTRY[command_v2] || COMMAND_REGISTRY[command_v2.toLowerCase()];
+            if (registryEntry) {
+                cmdToRun = COMMAND_REGISTRY[command_v2] ? command_v2 : command_v2.toLowerCase();
             }
         }
 
@@ -246,7 +247,7 @@ class VacBot {
 
         // Delegate commands with special dispatch logic
         if (entry.specialLogic) {
-            return this.dispatcher.dispatch(key.toLowerCase(), ...args);
+            return this.dispatcher.dispatch(key.toLowerCase(), _options, ...args);
         }
 
         // Guard: insufficient arguments
@@ -269,18 +270,14 @@ class VacBot {
      * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
      *
      * @param {string} command - The command name (same as used in `run()`)
-     * @param args - zero or more arguments to perform the command
-     * @param {Object} [options={}]
-     * @param {number} [options.timeoutMs=10000] - timeout in ms before the Promise rejects
+     * @param {...*} args - Zero or more arguments to perform the command (optionally an options object at the end)
      * @returns {Promise<any>}
-     * @throws {Error} if the command is unknown, has too few arguments, or is not async-capable
-     * @example
-     * const battery = await bot.runAsync('GetBatteryState');
-     * // => { level: 87, isLow: false }
      */
     runAsync(command, ...args) {
         const options = { returnPromise: true, timeoutMs: 10000 };
         options[RUN_OPTIONS_SYMBOL] = true;
+
+        const KNOWN_OPTION_KEYS = ['timeoutMs', 'returnPromise'];
 
         // Support runAsync('Command', arg1, { timeoutMs: 250 })
         if (args.length > 0) {
@@ -288,7 +285,7 @@ class VacBot {
             const isPlainObject = (lastArg !== null) && (typeof lastArg === 'object') && !Array.isArray(lastArg);
             if (isPlainObject) {
                 const isInternalOptions = Boolean(lastArg[RUN_OPTIONS_SYMBOL]);
-                const hasUserOptionKeys = lastArg.hasOwnProperty('timeoutMs') || lastArg.hasOwnProperty('returnPromise');
+                const hasUserOptionKeys = KNOWN_OPTION_KEYS.some(key => lastArg.hasOwnProperty(key));
                 if (!isInternalOptions && hasUserOptionKeys) {
                     const userOptions = args.pop();
                     Object.assign(options, userOptions);
@@ -297,15 +294,19 @@ class VacBot {
             }
         }
 
-        const result = this.run(command, ...args, options);
+        try {
+            const result = this.run(command, ...args, options);
 
-        if (result instanceof Promise) {
-            return result;
+            if (result instanceof Promise) {
+                return result;
+            }
+            // run() returned false or undefined — command exists but has no async support
+            return Promise.reject(
+                new Error(`Command '${command}' is not supported via runAsync()`)
+            );
+        } catch (error) {
+            return Promise.reject(error);
         }
-        // run() returned false or undefined — command exists but has no async support
-        return Promise.reject(
-            new Error(`Command '${command}' is not supported via runAsync()`)
-        );
     }
 
     /**

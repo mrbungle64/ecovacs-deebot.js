@@ -567,5 +567,64 @@ describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
             }
             assert.strictEqual(ecovacs.pendingCommands.size, 0);
         });
+
+        it('should resolve case-insensitively for V2 commands on V2-capable devices', async function () {
+            const VacBot = require('../library/vacBot');
+            const mockContext = {
+                is950type_V2: () => true,
+                ecovacs: {
+                    sendCommand: (commandInstance) => {
+                        return commandInstance;
+                    }
+                }
+            };
+            mockContext.run = VacBot.prototype.run.bind(mockContext);
+
+            const result = mockContext.run('getcleanstate');
+            assert.strictEqual(result._registryKey, 'getcleanstate_v2');
+        });
+
+        it('should return a Promise when calling a specialLogic command via runAsync', async function () {
+            const VacBot = require('../library/vacBot');
+            const mockContext = {
+                is950type_V2: () => false,
+                isPlatformTypeAirbot: () => false,
+                isPlatformTypeX2: () => false,
+                ecovacs: {
+                    sendCommand: (commandInstance, options) => {
+                        return Promise.resolve({ commandInstance, options });
+                    }
+                },
+                vacBotCommand: {
+                    Pause: class Pause {
+                        constructor(mode) {
+                            this.mode = mode;
+                        }
+                    }
+                }
+            };
+            const CommandDispatcher = require('../library/managers/commandDispatcher');
+            mockContext.dispatcher = new CommandDispatcher(mockContext);
+            mockContext.run = VacBot.prototype.run.bind(mockContext);
+
+            const result = await VacBot.prototype.runAsync.call(mockContext, 'Pause');
+            assert.strictEqual(result.commandInstance.constructor.name, 'Pause');
+            assert.strictEqual(result.options.returnPromise, true);
+        });
+
+        it('should catch synchronous exceptions in run() and return a rejected Promise from runAsync', async function () {
+            const VacBot = require('../library/vacBot');
+            const mockContext = {
+                run: () => {
+                    throw new Error('Instantiation failed');
+                }
+            };
+            try {
+                await VacBot.prototype.runAsync.call(mockContext, 'GetBatteryState');
+                assert.fail('Should have rejected');
+            } catch (e) {
+                assert.strictEqual(e.message, 'Instantiation failed');
+            }
+        });
     });
 });

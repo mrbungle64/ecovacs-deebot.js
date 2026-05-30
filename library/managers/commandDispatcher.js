@@ -22,10 +22,20 @@ class CommandDispatcher {
      * @param {Array} args - Command arguments.
      * @returns {boolean} True if handled, false otherwise.
      */
-    dispatch(key, ...args) {
+    /**
+     * Dispatch a command with special logic.
+     * @param {string} key - The command key.
+     * @param {Object} options - Command options (e.g. returnPromise)
+     * @param {...*} args - Command arguments.
+     * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise boolean indicating if handled.
+     */
+    dispatch(key, options, ...args) {
+        const isAsync = Boolean(options && options.returnPromise);
+        let promise;
+
         switch (key) {
             case 'Generic'.toLowerCase(): {
-                this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Generic(args[0], args[1]));
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Generic(args[0], args[1]), options);
                 this.bot.genericCommand = args[0];
                 break;
             }
@@ -33,7 +43,7 @@ class CommandDispatcher {
                 const area = args[1].toString();
                 const cleanings = args[2] || 1;
                 if (area !== '') {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SpotArea('start', area, cleanings));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SpotArea('start', area, cleanings), options);
                 }
                 break;
             }
@@ -41,7 +51,7 @@ class CommandDispatcher {
                 const area = args[1].toString();
                 const cleanings = args[2] || 1;
                 if (area !== '') {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.CustomArea('start', area, cleanings));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.CustomArea('start', area, cleanings), options);
                 }
                 break;
             }
@@ -49,42 +59,42 @@ class CommandDispatcher {
                 if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
                     // Airbot Z1 and Deebot X2 series
                     const command = 'clean_V2';
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause(command));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause(command), options);
                 } else if (args[0] !== undefined) {
                     // Legacy models
                     const mode = args[0];
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause(mode));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause(mode), options);
                 } else {
                     // Standard
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause());
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause(), options);
                 }
                 break;
             }
             case 'Stop'.toLowerCase(): {
                 if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop('clean_V2'));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop('clean_V2'), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop());
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop(), options);
                 }
                 break;
             }
             case 'Resume'.toLowerCase(): {
                 if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume('clean_V2'));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume('clean_V2'), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume());
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume(), options);
                 }
                 break;
             }
             case 'PlaySound'.toLowerCase(): {
                 let sid = args[0] || 0;
-                this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.PlaySound(Number(sid)));
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.PlaySound(Number(sid)), options);
                 break;
             }
             case 'ResetLifeSpan'.toLowerCase(): {
                 const component = args[0];
                 if (component !== '') {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.ResetLifeSpan(component));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.ResetLifeSpan(component), options);
                 }
                 break;
             }
@@ -93,9 +103,9 @@ class CommandDispatcher {
                 const sweepType = Number(args[1]);
                 if ((amount >= 1) && (amount <= 4)) {
                     if ((sweepType === 1) || (sweepType === 2)) {
-                        this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SetWaterLevel(amount, sweepType));
+                        promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SetWaterLevel(amount, sweepType), options);
                     } else {
-                        this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SetWaterLevel(amount));
+                        promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SetWaterLevel(amount), options);
                     }
                 }
                 break;
@@ -103,14 +113,14 @@ class CommandDispatcher {
             case 'SetCleanSpeed'.toLowerCase(): {
                 const level = Number(args[0]);
                 if ((level >= 1) && (level <= 4)) {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SetCleanSpeed(level));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SetCleanSpeed(level), options);
                 }
                 break;
             }
             case 'Move'.toLowerCase(): {
                 const command = args[0];
                 if (command !== '') {
-                    this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Move(command));
+                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Move(command), options);
                 }
                 break;
             }
@@ -122,14 +132,14 @@ class CommandDispatcher {
                 this.bot.createMapImage = true;
                 this.bot.createMapImageOnly = args[2] !== undefined ? args[2] : true;
                 if (Number(mapID) > 0) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo(mapID, mapType));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo(mapID, mapType), options);
                 }
                 break;
             }
             case 'GetMaps'.toLowerCase():
             case 'GetCachedMapInfo'.toLowerCase(): {
-                this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapState());
-                this.bot.ecovacs.sendCommand(new VacBotCommand.GetMajorMap());
+                const p1 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapState(), options);
+                const p2 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMajorMap(), options);
                 this.bot.createMapImageOnly = false;
                 this.bot.createMapDataObject = !!args[0] || false;
                 this.bot.createMapImage = this.bot.createMapDataObject && this.bot.isMapImageSupported();
@@ -138,58 +148,62 @@ class CommandDispatcher {
                 }
                 // Workaround for some yeedi models (e.g. yeedi mop station)
                 // TODO: Find a better solution
+                let p3;
                 if ((this.bot.deviceClass === 'p5nx9u') || (this.bot.deviceClass === 'vthpeg')) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2_Yeedi());
+                    p3 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2_Yeedi(), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetCachedMapInfo());
+                    p3 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetCachedMapInfo(), options);
+                }
+                if (isAsync) {
+                    promise = Promise.all([p1, p2, p3]);
                 }
                 break;
             }
             case 'BackupMap'.toLowerCase(): {
                 if (args.length === 0) { // Airbot Z1
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup'));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup'), options);
                 } else if (args.length === 1) { // e.g. Deebot X1 series
                     const mid = args[0];
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup', mid));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('backup', mid), options);
                 }
                 break;
             }
             case 'RestoreMap'.toLowerCase(): {
                 if (args.length === 0) { // Airbot Z1
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore'));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore'), options);
                 } else if (args.length === 2) { // e.g. Deebot X1 series
                     const mid = args[0];
                     const reMid = args[1]; // backupId
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore', mid, reMid));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetCachedMapInfo('restore', mid, reMid), options);
                 }
                 break;
             }
             case 'GetSpotAreas'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID), options);
                 }
                 break;
             }
             case 'GetMapInfo_V2'.toLowerCase(): {
                 if (args.length === 1) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0]), options);
                 } else if (args.length >= 2) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0], args[1]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapInfo_V2(args[0], args[1]), options);
                 }
                 break;
             }
             case 'GetMapSet_V2'.toLowerCase(): {
                 if (args.length === 1) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0]), options);
                 } else if (args.length >= 2) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSet_V2(args[0], args[1]), options);
                 }
                 break;
             }
             case 'SetMapSet_V2'.toLowerCase(): {
                 if ((args.length >= 2) && (typeof args[1] === 'object')) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetMapSet_V2(args[0], args[1]), options);
                 }
                 break;
             }
@@ -197,7 +211,7 @@ class CommandDispatcher {
                 const mapID = args[0]; // mapID is a string
                 const spotAreaID = args[1]; // spotAreaID is a string
                 if ((Number(mapID) > 0) && (spotAreaID !== '') && (spotAreaID !== undefined)) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreaInfo(mapID, spotAreaID));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreaInfo(mapID, spotAreaID), options);
                 }
                 break;
             }
@@ -210,8 +224,11 @@ class CommandDispatcher {
                         this.bot.mapVirtualBoundariesResponses[mapID][0] = false;
                         this.bot.mapVirtualBoundariesResponses[mapID][1] = false;
                     }
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'vw'));
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'mw'));
+                    const p1 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'vw'), options);
+                    const p2 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'mw'), options);
+                    if (isAsync) {
+                        promise = Promise.all([p1, p2]);
+                    }
                 }
                 break;
             }
@@ -220,7 +237,7 @@ class CommandDispatcher {
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
                 if ((Number(mapID) > 0) && (spotAreaID !== '') && (spotAreaID !== undefined)) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaryInfo(mapID, spotAreaID, type), options);
                 }
                 break;
             }
@@ -229,7 +246,7 @@ class CommandDispatcher {
                 const coordinates = args[1];
                 const type = tools.isValidVirtualWallType(args[2]) ? args[2] : 'vw';
                 if ((Number(mapID) > 0) && (coordinates !== '')) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.AddMapVirtualBoundary(mapID, coordinates, type));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.AddMapVirtualBoundary(mapID, coordinates, type), options);
                 }
                 break;
             }
@@ -238,7 +255,7 @@ class CommandDispatcher {
                 const spotAreaID = args[1]; // spotAreaID is a string
                 const type = args[2];
                 if ((Number(mapID) > 0) && (Number(spotAreaID) >= 0) && (tools.isValidVirtualWallType(type))) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.DeleteMapVirtualBoundary(mapID, spotAreaID, type));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.DeleteMapVirtualBoundary(mapID, spotAreaID, type), options);
                 }
                 break;
             }
@@ -248,7 +265,7 @@ class CommandDispatcher {
                     this.bot.components = {};
                     this.bot.lastComponentValues = {};
                     if (this.bot.isPlatformTypeAirbot()) {
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan([]));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan([]), options);
                     } else {
                         const componentsArray = [];
                         componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['filter']);
@@ -264,7 +281,7 @@ class CommandDispatcher {
                             componentsArray.push(dictionary.COMPONENT_TO_ECOVACS['air_freshener']);
                         }
                         if (componentsArray.length) {
-                            this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
+                            promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray), options);
                         }
                     }
                 } else {
@@ -273,7 +290,7 @@ class CommandDispatcher {
                     const componentsArray = [
                         dictionary.COMPONENT_TO_ECOVACS[component]
                     ];
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetLifeSpan(componentsArray), options);
                 }
                 break;
             }
@@ -281,14 +298,14 @@ class CommandDispatcher {
                 const start = args[0];
                 const end = args[1];
                 if ((start !== '') && (end !== '')) {
-                    this.bot.run('SetDoNotDisturb', 1, start, end);
+                    promise = this.bot.run('SetDoNotDisturb', 1, start, end, options);
                 } else {
-                    this.bot.run('SetDoNotDisturb', 1);
+                    promise = this.bot.run('SetDoNotDisturb', 1, options);
                 }
                 break;
             }
             case 'DisableDoNotDisturb'.toLowerCase(): {
-                this.bot.run('SetDoNotDisturb', 0);
+                promise = this.bot.run('SetDoNotDisturb', 0, options);
                 break;
             }
             case 'SetBlock'.toLowerCase():
@@ -297,28 +314,32 @@ class CommandDispatcher {
                 const start = args[1];
                 const end = args[2];
                 if ((start !== '') && (end !== '')) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetDoNotDisturb(enable, start, end));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetDoNotDisturb(enable, start, end), options);
                 } else if (args.length >= 1) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetDoNotDisturb(enable));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetDoNotDisturb(enable), options);
                 }
                 break;
             }
             case 'GetCleanLogs'.toLowerCase(): {
                 if (this.bot.isPlatformTypeT9Based()) {
-                    this.bot.callCleanResultsLogsApi().then((logData) => {
+                    const p = this.bot.callCleanResultsLogsApi().then((logData) => {
                         this.bot.handleCleanLogs(logData);
                         this.bot.emitCleanLogEvents();
+                        return logData;
                     });
+                    if (isAsync) {
+                        promise = p;
+                    }
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetCleanLogs());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetCleanLogs(), options);
                 }
                 break;
             }
             case 'GetTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetRecognization());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetRecognization(), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetTrueDetect());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetTrueDetect(), options);
                 }
                 break;
             }
@@ -326,9 +347,9 @@ class CommandDispatcher {
             case 'EnableAIVI3D'.toLowerCase():
             case 'EnableTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(1));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(1), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(1));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(1), options);
                 }
                 break;
             }
@@ -336,9 +357,9 @@ class CommandDispatcher {
             case 'DisableAIVI3D'.toLowerCase():
             case 'DisableTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(0));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(0), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(0));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(0), options);
                 }
                 break;
             }
@@ -346,26 +367,26 @@ class CommandDispatcher {
             case 'SetAIVI3D'.toLowerCase():
             case 'SetTrueDetect'.toLowerCase(): {
                 if (this.bot.getCmdForObstacleDetection() === 'Recognization') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(args[0]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetRecognization(args[0]), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(args[0]));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetTrueDetect(args[0]), options);
                 }
                 break;
             }
             case 'EmptyDustBin'.toLowerCase():
             case 'EmptySuctionStation'.toLowerCase(): {
                 if (this.bot.isPlatformTypeT20() || this.bot.isPlatformTypeX2()) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBinSA());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBinSA(), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBin());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.EmptyDustBin(), options);
                 }
                 break;
             }
             case 'Clean_V2'.toLowerCase(): {
                 if (this.bot.isPlatformTypeAirbot()) {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2('move'));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2('move'), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Clean_V2(), options);
                 }
                 break;
             }
@@ -374,10 +395,10 @@ class CommandDispatcher {
                 if (area !== '') {
                     if (this.bot.isPlatformTypeX2()) {
                         const areaValues = tools.convertAreaValuesForFreeCleanCmd(area);
-                        this.bot.run('FreeClean', areaValues);
+                        promise = this.bot.run('FreeClean', areaValues, options);
                     } else {
                         const cleanings = args[1] || 1;
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.SpotArea_V2(area, cleanings));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SpotArea_V2(area, cleanings), options);
                     }
                 }
                 break;
@@ -386,7 +407,7 @@ class CommandDispatcher {
                 if (args.length >= 1) {
                     const areaValues = args[0];
                     if (tools.areaValuesAreValidForFreeCleanCmd(areaValues)) {
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.FreeClean(areaValues));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.FreeClean(areaValues), options);
                     }
                 }
                 break;
@@ -396,7 +417,7 @@ class CommandDispatcher {
                 const cleanings = args[1] || 1;
                 const doNotClean = args[2] || 0;
                 if (area !== '') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings, doNotClean));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.CustomArea_V2(area, cleanings, doNotClean), options);
                 }
                 break;
             }
@@ -404,10 +425,10 @@ class CommandDispatcher {
                 let area = args[0].toString();
                 if (area !== '') {
                     if (this.bot.isPlatformTypeT9Based()) {
-                        this.bot.run('MapPoint_V2', area);
+                        promise = this.bot.run('MapPoint_V2', area, options);
                     } else if (this.bot.isPlatformTypeT8Based()) {
                         area = area + ',' + area;
-                        this.bot.run('CustomArea_V2', area, 1, 1);
+                        promise = this.bot.run('CustomArea_V2', area, 1, 1, options);
                     }
                 }
                 break;
@@ -415,7 +436,7 @@ class CommandDispatcher {
             case 'MapPoint_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.MapPoint_V2(area));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.MapPoint_V2(area), options);
                 }
                 break;
             }
@@ -426,7 +447,7 @@ class CommandDispatcher {
                         workMode = dictionary.WORKMODE_TO_ECOVACS[workMode];
                     }
                     if ((workMode >= 0) && (workMode <= 3)) {
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.SetWorkMode(workMode));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetWorkMode(workMode), options);
                     }
                 }
                 break;
@@ -434,48 +455,48 @@ class CommandDispatcher {
             case 'SetWashInterval'.toLowerCase(): {
                 if (args.length >= 1) {
                     const washInterval = Number(args[0]);
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetWashInterval(washInterval));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetWashInterval(washInterval), options);
                 }
                 break;
             }
             case 'SetWashInfo'.toLowerCase(): {
                 if (args.length >= 1) {
                     const mode = Number(args[0]);
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetWashInfo(mode));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetWashInfo(mode), options);
                 }
                 break;
             }
             case 'GetAirDrying'.toLowerCase(): {
                 if (this.bot.getPlatformType() === 'yeedi') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetAirDrying());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetAirDrying(), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetStationState());
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetStationState(), options);
                 }
                 break;
             }
             case 'SetAirDrying'.toLowerCase(): {
                 if (args.length >= 1) {
                     if (this.bot.getPlatformType() === 'yeedi') {
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying(args[0]));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying(args[0]), options);
                     } else {
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(args[0]));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(args[0]), options);
                     }
                 }
                 break;
             }
             case 'AirDryingStart'.toLowerCase(): {
                 if (this.bot.getPlatformType() === 'yeedi') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('start'));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('start'), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(1));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(1), options);
                 }
                 break;
             }
             case 'AirDryingStop'.toLowerCase(): {
                 if (this.bot.getPlatformType() === 'yeedi') {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('stop'));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.SetAirDrying('stop'), options);
                 } else {
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(4));
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(4), options);
                 }
                 break;
             }
@@ -488,20 +509,20 @@ class CommandDispatcher {
                         act = value === 'start' ? 1 : 4;
                     }
                     if ((act === 1) || (act === 4)) {
-                        this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(act));
+                        promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Drying(act), options);
                     }
                 }
                 break;
             }
             case 'GetEfficiency'.toLowerCase(): {
-                this.bot.ecovacs.sendCommand(new VacBotCommand.Generic('getEfficiency'));
+                promise = this.bot.ecovacs.sendCommand(new VacBotCommand.Generic('getEfficiency'), options);
                 break;
             }
             default: {
                 return false;
             }
         }
-        return true;
+        return isAsync ? promise : true;
     }
 }
 
