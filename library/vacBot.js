@@ -506,54 +506,106 @@ class VacBot {
         return this.getDeviceCategory();
     }
 
+    /**
+     * Check if the device platform type is legacy.
+     * @returns {boolean}
+     */
     isPlatformTypeLegacy() {
         return this.capabilityManager.isPlatformTypeLegacy();
     }
 
+    /**
+     * Check if the device platform type is N8.
+     * @returns {boolean}
+     */
     isPlatformTypeN8() {
         return this.capabilityManager.isPlatformTypeN8();
     }
 
+    /**
+     * Check if the device platform type is T8.
+     * @returns {boolean}
+     */
     isPlatformTypeT8() {
         return this.capabilityManager.isPlatformTypeT8();
     }
 
+    /**
+     * Check if the device platform type is T9.
+     * @returns {boolean}
+     */
     isPlatformTypeT9() {
         return this.capabilityManager.isPlatformTypeT9();
     }
 
+    /**
+     * Check if the device platform type is T10.
+     * @returns {boolean}
+     */
     isPlatformTypeT10() {
         return this.capabilityManager.isPlatformTypeT10();
     }
 
+    /**
+     * Check if the device platform type is T20.
+     * @returns {boolean}
+     */
     isPlatformTypeT20() {
         return this.capabilityManager.isPlatformTypeT20();
     }
 
+    /**
+     * Check if the device platform type is X1.
+     * @returns {boolean}
+     */
     isPlatformTypeX1() {
         return this.capabilityManager.isPlatformTypeX1();
     }
 
+    /**
+     * Check if the device platform type is X2.
+     * @returns {boolean}
+     */
     isPlatformTypeX2() {
         return this.capabilityManager.isPlatformTypeX2();
     }
 
+    /**
+     * Check if the device platform type is Airbot.
+     * @returns {boolean}
+     */
     isPlatformTypeAirbot() {
         return this.capabilityManager.isPlatformTypeAirbot();
     }
 
+    /**
+     * Check if the device platform type is Air Quality Monitor.
+     * @returns {boolean}
+     */
     isPlatformTypeAqMonitor() {
         return this.capabilityManager.isPlatformTypeAqMonitor();
     }
 
+    /**
+     * Check if the device platform type is Lawn Mower.
+     * @returns {boolean}
+     */
     isPlatformTypeLawnMower() {
         return this.capabilityManager.isPlatformTypeLawnMower();
     }
 
+    /**
+     * Check if the device platform type is T8-based.
+     * @returns {boolean}
+     */
     isPlatformTypeT8Based() {
         return this.capabilityManager.isPlatformTypeT8Based();
     }
 
+    /**
+     * Check if the device platform type is T9-based.
+     * @returns {boolean}
+     */
     isPlatformTypeT9Based() {
         return this.capabilityManager.isPlatformTypeT9Based();
     }

@@ -44,54 +44,106 @@ class CapabilityManager {
 
 
 
+    /**
+     * Check if the device is a legacy platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeLegacy() {
         return this.getPlatformType() === 'legacy';
     }
 
+    /**
+     * Check if the device is an N8 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeN8() {
         return this.getPlatformType() === 'N8';
     }
 
+    /**
+     * Check if the device is a T8 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT8() {
         return this.getPlatformType() === 'T8';
     }
 
+    /**
+     * Check if the device is a T9 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT9() {
         return this.getPlatformType() === 'T9';
     }
 
+    /**
+     * Check if the device is a T10 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT10() {
         return this.getPlatformType() === 'T10';
     }
 
+    /**
+     * Check if the device is a T20 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT20() {
         return this.getPlatformType() === 'T20';
     }
 
+    /**
+     * Check if the device is an X1 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeX1() {
         return this.getPlatformType() === 'X1';
     }
 
+    /**
+     * Check if the device is an X2 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeX2() {
         return this.getPlatformType() === 'X2';
     }
 
+    /**
+     * Check if the device is an Airbot platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeAirbot() {
         return this.getPlatformType() === 'airbot';
     }
 
+    /**
+     * Check if the device is an Air Quality Monitor platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeAqMonitor() {
         return this.getPlatformType() === 'aqMonitor';
     }
 
+    /**
+     * Check if the device is a Lawn Mower platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeLawnMower() {
         return this.getPlatformType() === 'lawnMower';
     }
 
+    /**
+     * Check if the device platform type is T8-based (T8 or N8).
+     * @returns {boolean}
+     */
     isPlatformTypeT8Based() {
         return this.isPlatformTypeT8() || this.isPlatformTypeN8();
     }
 
+    /**
+     * Check if the device platform type is T9-based (T9, T10, T20, X1, or X2).
+     * @returns {boolean}
+     */
     isPlatformTypeT9Based() {
         return this.isPlatformTypeT9() || this.isPlatformTypeT10() || this.isPlatformTypeT20() || this.isPlatformTypeX1() || this.isPlatformTypeX2();
     }

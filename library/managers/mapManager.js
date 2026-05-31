@@ -45,6 +45,9 @@ class MapManager {
         this.setupEventListeners();
     }
 
+    /**
+     * Set up all the event listeners on the bot for map events.
+     */
     setupEventListeners() {
         this.bot.on('Maps', (mapData) => {
             if (this.createMapDataObject) {
@@ -293,6 +296,10 @@ class MapManager {
         this.handleMapDataReady();
     }
 
+    /**
+     * Handle the scenario when there are zero virtual boundaries configured for a map.
+     * @param {string} mapID - The ID of the map.
+     */
     handleZeroVirtualBoundariesForMap(mapID) {
         this.mapDataObjectQueue = this.mapDataObjectQueue.filter(item => {
             return !((item.mapID === mapID) && (item.type === 'GetVirtualBoundaries'));
@@ -300,6 +307,9 @@ class MapManager {
         this.handleMapDataReady();
     }
 
+    /**
+     * Check if all map data components are ready and emit MapDataReady.
+     */
     handleMapDataReady() {
         if (this.mapDataObjectQueue.length === 0) {
             this.bot.ecovacs.emit('MapDataReady');
@@ -341,6 +351,10 @@ class MapManager {
         this.multiMapState = payload['enable'];
     }
 
+    /**
+     * Handle the payload of the `CachedMapInfo` response/message.
+     * @param {Object} payload - The message payload.
+     */
     handleCachedMapInfo(payload) {
         this.currentMapName = 'unknown';
         this.maps = { 'maps': [] };
@@ -669,6 +683,10 @@ class MapManager {
         // TODO: finish implementation
     }
 
+    /**
+     * Handle the payload of the `MapTrace` response/message.
+     * @param {Object} payload - The message payload.
+     */
     async handleMapTrace(payload) {
         tools.envLogPayload(payload);
     }

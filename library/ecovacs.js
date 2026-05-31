@@ -270,6 +270,12 @@ class Ecovacs extends EventEmitter {
         }
     }
 
+    /**
+     * Emit an event message and resolve any pending commands waiting for this event.
+     * @param {string} name - Event name.
+     * @param {*} payload - The main payload of the event.
+     * @param {*} [rawPayload] - Optional raw payload of the event.
+     */
     emitMessage(name, payload, rawPayload) {
         tools.envLogResult(name, JSON.stringify(payload));
         this.emit(name, payload);

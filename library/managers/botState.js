@@ -384,26 +384,50 @@ class BotState {
         this.netInfoMAC = payload['mac'] || payload['wm'];
     }
 
+    /**
+     * Handle the payload of the `BorderSwitch` response/message
+     * @param {Object} payload
+     */
     handleBorderSwitch(payload) {
         this.borderSwitch = payload['enable'];
     }
 
+    /**
+     * Handle the payload of the `CrossMapBorderWarning` response/message
+     * @param {Object} payload
+     */
     handleCrossMapBorderWarning(payload) {
         this.crossMapBorderWarning = payload['enable'];
     }
 
+    /**
+     * Handle the payload of the `CutDirection` response/message
+     * @param {Object} payload
+     */
     handleCutDirection(payload) {
         this.cutDirection = payload['angle'];
     }
 
+    /**
+     * Handle the payload of the `MoveupWarning` response/message
+     * @param {Object} payload
+     */
     handleMoveupWarning(payload) {
         this.moveupWarning = payload['enable'];
     }
 
+    /**
+     * Handle the payload of the `SafeProtect` response/message
+     * @param {Object} payload
+     */
     handleSafeProtect(payload) {
         this.safeProtect = payload['enable'];
     }
 
+    /**
+     * Handle the payload of the `WorkState` response/message
+     * @param {Object} payload
+     */
     handleWorkState(payload) {
         this.workState = {
             robot: payload['robotState'] ? payload['robotState']['state'] : null,
@@ -470,6 +494,10 @@ class BotState {
         }
     }
 
+    /**
+     * Handle the payload of the `DryingDuration` response/message
+     * @param {Object} payload
+     */
     handleDryingDuration(payload) {
         if (payload.hasOwnProperty('duration')) {
             this.dryingDuration = payload['duration'];
@@ -741,10 +769,18 @@ class BotState {
         this.carpetInfo = payload['mode'];
     }
 
+    /**
+     * Handle the payload of the `CleanPreference` response/message
+     * @param {Object} payload
+     */
     handleCleanPreference(payload) {
         this.cleanPreference = payload['enable'];
     }
 
+    /**
+     * Handle the payload of the `LiveLaunchPwdState` response/message
+     * @param {Object} payload
+     */
     handleLiveLaunchPwdState(payload) {
         this.liveLaunchPwdState = {
             state: payload.state,
@@ -752,6 +788,10 @@ class BotState {
         };
     }
 
+    /**
+     * Handle the payload of the `WiFiList` response/message
+     * @param {Object} payload
+     */
     handleWiFiList(payload) {
         if (payload.list) {
             tools.envLogInfo('Configured networks:');
@@ -762,11 +802,19 @@ class BotState {
         tools.envLogInfo(`mac address: ${payload.mac}`);
     }
 
+    /**
+     * Handle the payload of the `OverTheAirUpdate` response/message
+     * @param {Object} payload
+     */
     handleOverTheAirUpdate(payload) {
         this.OTA = payload;
         tools.envLogInfo(`ota status: ${JSON.stringify(payload)}`);
     }
 
+    /**
+     * Handle the payload of the `TimeZone` response/message
+     * @param {Object} payload
+     */
     handleTimeZone(payload) {
         this.timezone = 'GMT' + (payload.tzm > 0 ? '+' : '-') + (payload.tzm / 60) + ':00';
     }
@@ -1109,6 +1157,11 @@ class BotState {
         }
     }
 
+    /**
+     * Handle the payload/state of the current task.
+     * @param {string} type - The type of task.
+     * @param {Object} payload - The task payload.
+     */
     handleTask(type, payload) {
         const stopReason = this.currentTask.stopReason;
         this.currentTask = {
@@ -1125,10 +1178,18 @@ class BotState {
         }
     }
 
+    /**
+     * Handle the payload of the `DModule` response/message
+     * @param {Object} payload
+     */
     handleDModule(payload) {
         this.dmodule = payload;
     }
 
+    /**
+     * Get the correct command name for obstacle detection based on device platform type.
+     * @returns {string}
+     */
     getCmdForObstacleDetection() {
         if ((this.bot.getPlatformType() === 'T8') || (this.bot.getPlatformType() === 'T9')) {
             return "Recognization";
