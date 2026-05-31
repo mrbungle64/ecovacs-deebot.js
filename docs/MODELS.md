@@ -111,17 +111,33 @@ The `smartType` property (defined in `models.js` for each device class) is a met
 Although undocumented by the manufacturer, the `smartType` correlates consistently with the device's hardware platform, brand, and communication protocol generation.
 
 > [!WARNING]
-> **Speculative Terminology:** The expanded meanings of the acronyms below (e.g., *Message Queue Appliance*, *Simple Protocol Appliance*, *Bot Tablet*) are **speculative reconstructions** (educated guesses) based on technical clues and device behavior. They are **not** officially confirmed by the manufacturer.
+> **Highly Speculative Terminology:** The expanded names and meanings of the acronyms listed below (e.g., *Message Queue Application*, *Bluetooth + Access Point*) are **purely speculative reconstructions** by the open-source community. They are **not** officially documented, confirmed, or supported by Ecovacs or Yeedi. In official manufacturer materials, these internal platform identifiers are left entirely undefined.
+
+#### Reconstructed Meanings and Architectural Context
+
+*   **`MQ_AP` / `MQ_APM` (Speculative / Hypothetical):**
+    Commonly associated with mainstream MQTT-based connection platforms. The community has hypothesized that "MQ_AP" stands for "Message Queue Application Protocol" or "MQTT + Access Point", but this is undocumented.
+    > *Generational Overlap:* This profile is assigned across vastly different hardware generations—from older Wi-Fi models like the DEEBOT 600 Series to modern flagship models (e.g. ECOVACS X8 OMNI).
+*   **`BLAP` / `BLAP2` / `BLAPG` (Speculative / Hypothetical):**
+    These designations represent newer iterations of the manufacturer's internal IoT SDK/firmware platform used by modern flagships and lawn mowers. The exact meaning of the letters is undocumented; while the community has hypothesized "Bluetooth + Access Point" due to dual-mode setup chips, there is no official source confirming this.
+*   **`QRP` / `BL_QRP` (Speculative / Hypothetical):**
+    Commonly used for **yeedi**-branded robots (e.g., yeedi vac, mop station, cube) and selected Ecovacs devices such as the **AIRBOT Z1** (which is built on the Deebot X1 Horizon-X3 SoC platform). The meaning of "QRP" is completely undocumented. While early community efforts speculated it stood for "Qirui Robot Platform", public corporate registries show that Shenzhen Qirui Technology is an unrelated accessory manufacturer with no role in robot design or manufacturing (the actual manufacturing arm for Yeedi is Shenzhen Reecoo Electronic Co., Ltd., a wholly-owned Ecovacs subsidiary).
+*   **`BT` (Bluetooth low energy):**
+    Uniquely mapped to WINBOT window-cleaning systems (e.g., WINBOT W2 OMNI). These devices bypass Wi-Fi/WAN API endpoints entirely, relying strictly on point-to-point BLE connections to ensure low-latency physical safety control loops.
+*   **`SPA` / `HK_AP` (Legacy Platforms / Speculative):**
+    Used for legacy REST/XMPP connection protocols. The exact meaning of "SPA" is undocumented (hypothesized by some as "Simple Protocol Appliance", though other community researchers note that "SPA" appears in FCC RF test reports as a lab-internal abbreviation for "Spectrum Analyzer" or "SP Antenna" connections during RF port testing). "HK_AP" is similarly undocumented (speculated as regional Asia-Pacific/Hong Kong gateways or HomeKit access point integrations).
+> [!NOTE]
+> **Model Sourcing:** The specific model-to-platform mapping groups listed in the table below are compiled from empirical reverse-engineering observations and community-maintained files (such as `productIotMap.json`). They are not officially documented, categorized, or verified by the manufacturers.
 
 | `smartType` | Device Category / Series | Reconstructed Protocol / Platform Meaning (Speculative) |
 | :--- | :--- | :--- |
-| **`MQ_AP`** | Standard/Mid-Range DEEBOTs (T8, T9, T10, T20, X1, U2, N8, 950), Air Purifiers, Air Quality Monitors | Mainstream MQTT-based connection platform (Message Queue Appliance). |
-| **`MQ_APM`** | Modern mid-range DEEBOTs (T50, N50) | Modified/modernized MQTT connection platform. |
-| **`BLAP2`** | Modern Flagship DEEBOTs (T30, T80, X5, X8, X2, T30S) | Newer generation IoT connection platform (often Bluetooth/Wi-Fi hybrids). |
-| **`BLAP`** / **`BLAPG`** | GOAT Lawn Mowers (G1, GX-600, A3000, A2500, etc.) | Mähroboter platform (BLAPG is used for RTK/LiDAR-based newer generations). |
-| **`QRP`** / **`BL_QRP`** | **yeedi**-branded vacuum robots (yeedi vac, mop station, cube) and selected Ecovacs devices (e.g. AIRBOT Z1) | Speculative internal platform/protocol identifier. (Previously hypothesized to mean "Qirui Robot Platform", which corporate and regulatory filings have disproven). |
-| **`BT`** | WINBOT window cleaning robots | Bot Tablet / Winbot-specific platform. |
-| **`SPA`** / **`HK_AP`** | Legacy DEEBOTs (Slim2, N79, OZMO 610/930) | Legacy connection protocols (REST/XMPP) (SPA: Simple Protocol Appliance). |
+| **`MQ_AP`** | Standard/Mid-Range DEEBOTs (T8, T9, T10, T20, X1, U2, N8, 950, X8 OMNI), Air Quality Monitors | Mainstream MQTT-based connection platform. |
+| **`MQ_APM`** | Modern mid-range DEEBOTs (T50, N50) | Modified/modernized MQTT connection platform (Mobile/Map streaming). |
+| **`BLAP2`** | Modern Flagship DEEBOTs (T30, T80, X5, X2, T30S) | Newer generation IoT connection platform/SDK. |
+| **`BLAP`** / **`BLAPG`** | GOAT Lawn Mowers (G1, GX-600, A3000, A2500, etc.) | Lawn Mower (Mähroboter) platform. |
+| **`QRP`** / **`BL_QRP`** | **yeedi**-branded robots and selected Ecovacs devices (e.g. AIRBOT Z1) | Internal platform code (previously hypothesized as Qirui Robot Platform, disproven). |
+| **`BT`** | WINBOT window cleaning robots | Bluetooth-based localized communication platform. |
+| **`SPA`** / **`HK_AP`** | Legacy DEEBOTs (Slim2, N79, OZMO 610/930) | Legacy connection protocols / Region routing / Lab-internal test label. |
 
 ## Key Capability Groups
 
