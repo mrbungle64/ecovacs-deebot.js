@@ -90,6 +90,30 @@ const category = vacbot.getDeviceCategory();
 // e.g. 'Vacuum Cleaner', 'Air Purifier', 'Air Quality Monitor', 'Lawn Mower'
 ```
 
+## `smartType` Property
+
+The `smartType` property (defined in `models.js` for each device class) is a metadata field derived from the Ecovacs PIM (Product Information Management) IoT database (`productIotMap.json`). The JSON database was sourced from the public [bumper repository by MVladislav](https://github.com/MVladislav/bumper/tree/main).
+
+> [!NOTE]
+> **No Official Documentation:** The term `smartType` and its values are strictly proprietary, internal identifiers used by the manufacturer. They are not defined or documented in any public Ecovacs APIs, patent logs, or FCC filings. The mapping and naming conventions are reconstructed entirely via community reverse-engineering.
+
+### Platform and Protocol Correlation
+
+Although undocumented by the manufacturer, the `smartType` correlates consistently with the device's hardware platform, brand, and communication protocol generation.
+
+> [!WARNING]
+> **Speculative Terminology:** The expanded meanings of the acronyms below (e.g., *Message Queue Appliance*, *Qirui Robot Platform*, *Simple Protocol Appliance*, *Bot Tablet*) are **speculative reconstructions** (educated guesses) based on technical clues, brands, and device behavior. They are **not** officially confirmed by the manufacturer.
+
+| `smartType` | Device Category / Series | Reconstructed Protocol / Platform Meaning (Speculative) |
+| :--- | :--- | :--- |
+| **`MQ_AP`** | Standard/Mid-Range DEEBOTs (T8, T9, T10, T20, X1, U2, N8, 950), Air Purifiers, Air Quality Monitors | Mainstream MQTT-based connection platform (Message Queue Appliance). |
+| **`MQ_APM`** | Modern mid-range DEEBOTs (T50, N50) | Modified/modernized MQTT connection platform. |
+| **`BLAP2`** | Modern Flagship DEEBOTs (T30, T80, X5, X8, X2, T30S) | Newer generation IoT connection platform (often Bluetooth/Wi-Fi hybrids). |
+| **`BLAP`** / **`BLAPG`** | GOAT Lawn Mowers (G1, GX-600, A3000, A2500, etc.) | Mähroboter platform (BLAPG is used for RTK/LiDAR-based newer generations). |
+| **`QRP`** / **`BL_QRP`** | **yeedi**-branded vacuum robots (yeedi vac, mop station, cube) | Qirui Robot Platform (parent company of yeedi). |
+| **`BT`** | WINBOT window cleaning robots | Bot Tablet / Winbot-specific platform. |
+| **`SPA`** / **`HK_AP`** | Legacy DEEBOTs (Slim2, N79, OZMO 610/930) | Legacy connection protocols (REST/XMPP) (SPA: Simple Protocol Appliance). |
+
 ## Key Capability Groups
 
 These are some of the reusable bundles defined in `capabilityTypes.js`:
