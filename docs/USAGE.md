@@ -69,18 +69,31 @@ async function main() {
         // Get the VacBot instance wrapper for the selected device
         const vacbot = api.getVacBotObj(vacuum);
         
+        // Retrieve and print device metadata
+        console.log(`Device category: ${vacbot.getDeviceCategory()}`);
+        console.log(`Platform architecture: ${vacbot.getPlatformType()}`);
+        console.log(`Internal IoT platform protocol (SmartType): ${vacbot.getSmartType()}`);
+        
         // 3. Register Event Listeners
         vacbot.on('ready', async () => {
             console.log("VacBot connection established. Robot is READY!");
             
-            // Send initial commands to retrieve states
-            // These will trigger event updates (BatteryInfo, CleanReport, etc.)
-            vacbot.run("GetBatteryState");
-            vacbot.run("GetCleanState");
-            vacbot.run("GetChargeState");
+            try {
+                // Send initial commands to retrieve states asynchronously using runAsync
+                const battery = await vacbot.runAsync("GetBatteryState");
+                console.log(`Initial Battery: ${battery.level}% (Low: ${battery.isLow})`);
+                
+                const cleanState = await vacbot.runAsync("GetCleanState");
+                console.log(`Initial Clean State: ${cleanState.cleanState || cleanState.state}`);
+                
+                const chargeState = await vacbot.runAsync("GetChargeState");
+                console.log(`Initial Charge State: ${chargeState.chargeState || chargeState.state}`);
+            } catch (error) {
+                console.error("Failed to retrieve initial states:", error.message);
+            }
         });
         
-        // State change listeners
+        // State change/update listeners (to receive live updates during operation)
         vacbot.on('BatteryInfo', (batteryLevel) => {
             console.log(`Battery State Update: ${Math.round(batteryLevel)}%`);
         });
@@ -146,6 +159,12 @@ main();
 ### `vacbot.run("CommandName", ...args)`
 * Executes a specific command on the device. For a comprehensive index of all supported command names and their parameter structures, refer to the [API Command Reference](COMMANDS.md).
 
+### `vacbot.runAsync("CommandName", ...args)`
+* The modern, Promise-based alternative to `run()`. It executes the command and returns a `Promise` resolving with the parsed, normalized response from the device (e.g., `{ level: 87, isLow: false }` for `GetBatteryState`).
+* For action/set commands, the Promise resolves immediately upon successful server acknowledgment.
+* It accepts an optional options object as the final argument (e.g. `vacbot.runAsync("GetBatteryState", { timeoutMs: 2000 })`).
+* Note: All commands registered in the `COMMAND_REGISTRY` support `runAsync()`. If a command is unknown, or if it is called with incorrect or missing arguments, `runAsync()` will reject with an error.
+
 ### `vacbot.on("EventName", callback)`
 * Listens to live state changes pushed from the vacuum. The primary event mappings are:
   * `BatteryInfo` (Percentage integer)
@@ -153,3 +172,22 @@ main();
   * `ChargeState` (String status, e.g., `returning`, `charging`, `completed`)
   * `WaterLevel` (Mopping water level integer, `1-4`)
   * `CleanSpeed` (Suction speed level integer, `1-4`)
+
+### Device Metadata & Capabilities APIs
+The `VacBot` instance provides helper methods to inspect the device's architecture, hardware type, and internal IoT platform protocol details synchronously:
+
+* **`vacbot.getPlatformType()`**: Returns the base architecture/generation of the device as a string (e.g. `'T20'`, `'X2'`, `'legacy'`, `'950'`). Note: `vacbot.getModelType()` is deprecated and wraps this.
+* **`vacbot.getDeviceCategory()`**: Returns the device category as a string (e.g. `'Vacuum Cleaner'`, `'Air Purifier'`, etc.). Note: `vacbot.getDeviceType()` is deprecated and wraps this.
+* **`vacbot.getSmartType()`**: Returns the internal IoT platform generation/protocol identifier as a string (e.g. `'MQ_AP'`, `'BLAP2'`, `'QRP'`, `'BT'`).
+* **Platform Type Helpers**: Convenience boolean methods to check the platform generation directly:
+  * `vacbot.isPlatformTypeLegacy()`
+  * `vacbot.isPlatformTypeN8()`
+  * `vacbot.isPlatformTypeT8()`
+  * `vacbot.isPlatformTypeT9()`
+  * `vacbot.isPlatformTypeT10()`
+  * `vacbot.isPlatformTypeT20()`
+  * `vacbot.isPlatformTypeX1()`
+  * `vacbot.isPlatformTypeX2()`
+  * `vacbot.isPlatformTypeAirbot()`
+  * `vacbot.isPlatformTypeAqMonitor()`
+  * `vacbot.isPlatformTypeLawnMower()`
