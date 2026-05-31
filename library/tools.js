@@ -149,6 +149,10 @@ function getPlatformType(deviceClass) {
     if (devices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'type', 'unknown');
     }
+    const dynamicDevice = getDynamicDevice(deviceClass);
+    if (dynamicDevice) {
+        return getDeviceProperty(deviceClass, 'type', 'unknown');
+    }
     return 'unknown';
 }
 
@@ -163,6 +167,10 @@ function getDeviceCategory(deviceClass) {
     if (devices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'deviceCategory', 'unknown');
     }
+    const dynamicDevice = getDynamicDevice(deviceClass);
+    if (dynamicDevice) {
+        return getDeviceProperty(deviceClass, 'deviceCategory', 'unknown');
+    }
     return 'unknown';
 }
 
@@ -175,6 +183,10 @@ function getDeviceCategory(deviceClass) {
 function getSmartType(deviceClass) {
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
     if (devices.hasOwnProperty(deviceClass)) {
+        return getDeviceProperty(deviceClass, 'smartType', 'unknown');
+    }
+    const dynamicDevice = getDynamicDevice(deviceClass);
+    if (dynamicDevice) {
         return getDeviceProperty(deviceClass, 'smartType', 'unknown');
     }
     return 'unknown';
@@ -209,8 +221,15 @@ function getDeviceType(deviceClass) {
 function getDeviceProperty(deviceClass, property, defaultValue = false) {
     let value = defaultValue;
     const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    let device;
+
     if (devices.hasOwnProperty(deviceClass)) {
-        let device = devices[deviceClass];
+        device = devices[deviceClass];
+    } else {
+        device = getDynamicDevice(deviceClass);
+    }
+
+    if (device) {
         if (device.hasOwnProperty('deviceClassLink') && devices[device.deviceClassLink]) {
             device = devices[device.deviceClassLink];
         }
@@ -265,6 +284,42 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
         }
     }
     return value;
+}
+
+const dynamicDevicesCache = new Map();
+let productIotMapData = null;
+
+/**
+ * Gets or resolves an unknown deviceClass dynamically using model similarity & heuristics.
+ * @param {string} deviceClass - The 6-character class ID.
+ * @returns {Object|null} The resolved device properties object, or null.
+ */
+function getDynamicDevice(deviceClass) {
+    if (!deviceClass) {
+        return null;
+    }
+    if (dynamicDevicesCache.has(deviceClass)) {
+        return dynamicDevicesCache.get(deviceClass);
+    }
+    try {
+        if (!productIotMapData) {
+            productIotMapData = require('./productIotMap.json');
+        }
+        const modelResolver = require('./modelResolver');
+        const resolved = modelResolver.resolveDeviceProperties(deviceClass, productIotMapData, getAllKnownDevices());
+        if (resolved) {
+            dynamicDevicesCache.set(deviceClass, resolved);
+            if (resolved.resolvedViaSimilarity) {
+                logWarn(`[tools] Device class "${deviceClass}" is not explicitly registered. Dynamically resolved to ${resolved.name} (Similarity: ${resolved.resolvedSimilarityScore}%) based on dynamic analysis.`);
+            } else if (resolved.resolvedViaHeuristics) {
+                logWarn(`[tools] Device class "${deviceClass}" is not explicitly registered. Inferred features dynamically via heuristic patterns.`);
+            }
+            return resolved;
+        }
+    } catch (err) {
+        logError(`[tools] Failed to dynamically resolve properties for device class "${deviceClass}": ${err.message}`);
+    }
+    return null;
 }
 
 /**
@@ -514,6 +569,7 @@ module.exports.envLog = envLog;
 module.exports.formatString = formatString;
 module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getDeviceProperty = getDeviceProperty;
+module.exports.getDynamicDevice = getDynamicDevice;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getPlatformType = getPlatformType;
 module.exports.getDeviceCategory = getDeviceCategory;

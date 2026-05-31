@@ -53,9 +53,10 @@ exports.SupportedDeebotModels = {
         "deviceClassLink": "x5d34r"
     },
     "uzel1r": {
-        "name": "DEEBOT OZMO T8 AIVI",
+        "name": "DEEBOT mini PRO",
         "smartType": "MQ_APM",
-        "deviceClassLink": "x5d34r",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh"],
+        "type": "mini"
     },
     "z0gd1j": {
         "name": "DEEBOT OZMO T8 AIVI",
@@ -63,9 +64,10 @@ exports.SupportedDeebotModels = {
         "deviceClassLink": "x5d34r"
     },
     "npu3pt": {
-        "name": "DEEBOT OZMO T8 AIVI",
+        "name": "DEEBOT N30",
         "smartType": "MQ_APM",
-        "deviceClassLink": "x5d34r"
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus"],
+        "type": "T10"
     },
     "q6pew4": {
         "name": "DEEBOT OZMO T8 AIVI",
@@ -435,7 +437,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT NEO 3.0 OMNI",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T10"
+        "type": "T20"
     },
     "zjavof": {
         "name": "DEEBOT NEO+",
@@ -909,7 +911,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT TEO OMNI",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T10"
+        "type": "T20"
     },
     "626v6g": {
         "name": "DEEBOT TEO+",
