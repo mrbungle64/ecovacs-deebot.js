@@ -15,10 +15,12 @@ describe('modelResolver - unit tests', function () {
             assert.strictEqual(modelResolver.extractPlatformCodename('xyz_BOHR_123'), 'BOHR');
         });
 
-        it('should identify modern platform codes like SS and FS', function () {
+        it('should identify modern platform codes like SS, FS and CARTESIAN', function () {
             assert.strictEqual(modelResolver.extractPlatformCodename('SS_INT'), 'SS');
             assert.strictEqual(modelResolver.extractPlatformCodename('SS_ANZ'), 'SS');
             assert.strictEqual(modelResolver.extractPlatformCodename('FS_OMNI_WHITE'), 'FS');
+            assert.strictEqual(modelResolver.extractPlatformCodename('CARTESIAN-WHITE-INT'), 'CARTESIAN');
+            assert.strictEqual(modelResolver.extractPlatformCodename('CARTESIANPLUS_WHITE_INT'), 'CARTESIANPLUS');
         });
 
         it('should fallback to first model segment if no known platform is found', function () {
@@ -34,7 +36,8 @@ describe('modelResolver - unit tests', function () {
 
     describe('extractUIBasePrefix()', function () {
         it('should extract prefix correctly', function () {
-            assert.strictEqual(modelResolver.extractUIBasePrefix('t30pro_ww_h_t30h5'), 't30pro');
+            assert.strictEqual(modelResolver.extractUIBasePrefix('t30pro_ww_h_t30h5'), 't30');
+            assert.strictEqual(modelResolver.extractUIBasePrefix('keplerse_ww_h_keplerseh5'), 'kepler');
             assert.strictEqual(modelResolver.extractUIBasePrefix('goat_ww_h_goatx'), 'goat');
             assert.strictEqual(modelResolver.extractUIBasePrefix('D_OZMO_900'), 'd');
         });
@@ -303,9 +306,9 @@ describe('modelResolver - tools.js Integration', function () {
         assert.strictEqual(tools.isSupportedDevice('6801mm'), false, '6801mm should not be statically supported');
 
         // Check platform type and capabilities
-        assert.strictEqual(tools.getPlatformType('6801mm'), 'T20', 'Should resolve platform type to match T80 OMNI (inheriting from T30S/T20 base)');
+        assert.strictEqual(tools.getPlatformType('6801mm'), 'T20', 'Should resolve platform type to T20 (base architecture)');
         assert.strictEqual(tools.getSmartType('6801mm'), 'BLAP2', 'Should resolve smartType to BLAP2');
-        assert.ok(tools.getDeviceProperty('6801mm', 'auto_empty_station'), 'Should have auto_empty_station capability');
+        assert.ok(tools.getDeviceProperty('6801mm', 'auto_empty_station'), 'Should have auto_empty_station capability inferred from model string');
     });
 
     it('should return null if class ID is completely unknown and not in productIotMap', function () {

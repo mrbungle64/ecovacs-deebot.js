@@ -12,7 +12,7 @@ const SCIENTISTS = [
     'KEPLER', 'PLANCK', 'HALLEY', 'SHAKESPEARE'
 ];
 
-const KNOWN_PLATFORMS = ['SS', 'FS', 'Y2', 'U2', 'N8', 'T30', 'T20', 'T9', 'X2', 'CARTESIAN'];
+const KNOWN_PLATFORMS = ['SS', 'FS', 'Y2', 'U2', 'N8', 'T30', 'T20', 'T9', 'X2', 'CARTESIANPLUS', 'CARTESIAN'];
 
 const STATION_KEYWORDS = ['OMNI', 'PLUS', 'AES', 'TURBO', 'COMBO', 'STATION'];
 const SIMILARITY_CLONE_THRESHOLD = 95;
@@ -32,6 +32,7 @@ const PLATFORM_TYPES = {
     HALLEY: 'X2',
     SHAKESPEARE: 'T20',
     CARTESIAN: 'T10',
+    CARTESIANPLUS: 'T10',
     SS: 'mini',
     FS: 'T20'
 };
@@ -249,6 +250,8 @@ function findProductInMap(classid, productIotMap) {
 
 /**
  * Extracts a platform codename from the model string.
+ * Supports underscores and hyphens as delimiters.
+ * Matches exact segments to avoid false substring positives.
  * @param {string} model - The model attribute.
  * @returns {string|null} The platform name, or null.
  */
@@ -257,20 +260,18 @@ function extractPlatformCodename(model) {
         return null;
     }
     const upperModel = model.toUpperCase();
-    // 1. Check for famous scientists
-    for (const name of SCIENTISTS) {
-        if (upperModel.includes(name)) {
-            return name;
+    const segments = upperModel.split(/[_-]/);
+
+    // 1. Check segments for exact matches with known scientists or platforms
+    const allKnown = [...SCIENTISTS, ...KNOWN_PLATFORMS];
+    for (const seg of segments) {
+        if (allKnown.includes(seg)) {
+            return seg;
         }
     }
-    // 2. Check for known short platform codes
-    for (const name of KNOWN_PLATFORMS) {
-        if (upperModel.startsWith(name + "_") || upperModel === name) {
-            return name;
-        }
-    }
-    // 3. Fallback: First segment of the model string
-    const firstSegment = upperModel.split('_')[0];
+
+    // 2. Fallback: First segment if it looks like a custom technical ID
+    const firstSegment = segments[0];
     if (firstSegment && firstSegment.length >= 2 && firstSegment !== 'DEEBOT' && firstSegment !== 'GOAT') {
         return firstSegment;
     }
@@ -287,15 +288,30 @@ function extractScientist(model) {
 }
 
 /**
- * Extracts the base UI logic prefix before the first underscore.
+ * Extracts the base UI logic prefix before the first underscore and normalizes it.
+ * Normalization removes marketing suffixes to group variants into families.
  * @param {string} UILogicId - The UI Logic ID.
- * @returns {string|null} The prefix, or null.
+ * @returns {string|null} The normalized prefix, or null.
  */
 function extractUIBasePrefix(UILogicId) {
     if (!UILogicId) {
         return null;
     }
-    return UILogicId.split('_')[0].toLowerCase();
+    let prefix = UILogicId.split('_')[0].toLowerCase();
+    
+    // Normalize: remove known marketing suffixes (sequential removal)
+    const suffixes = ['pro', 'max', 'plus', 'combo', 'mix', 'se', 'black', 'white', 'dock', 'up', 'h'];
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const s of suffixes) {
+            if (prefix.endsWith(s) && prefix.length > s.length) {
+                prefix = prefix.substring(0, prefix.length - s.length);
+                changed = true;
+            }
+        }
+    }
+    return prefix;
 }
 
 /**
