@@ -9,10 +9,10 @@
 const SCIENTISTS = [
     'EINSTEIN', 'TURING', 'CURIE', 'DARWIN', 'BOHR',
     'MENDEL', 'COPERNIC', 'KOPERNIK', 'FARADAY', 'EULER',
-    'KEPLER', 'PLANCK', 'HALLEY'
+    'KEPLER', 'PLANCK', 'HALLEY', 'SHAKESPEARE'
 ];
 
-const KNOWN_PLATFORMS = ['SS', 'FS', 'Y2', 'U2', 'N8', 'T30', 'T20', 'T9', 'X2'];
+const KNOWN_PLATFORMS = ['SS', 'FS', 'Y2', 'U2', 'N8', 'T30', 'T20', 'T9', 'X2', 'CARTESIAN'];
 
 const STATION_KEYWORDS = ['OMNI', 'PLUS', 'AES', 'TURBO', 'COMBO', 'STATION'];
 const SIMILARITY_CLONE_THRESHOLD = 95;
@@ -30,6 +30,8 @@ const PLATFORM_TYPES = {
     KEPLER: 'T20',
     PLANCK: 'X2',
     HALLEY: 'X2',
+    SHAKESPEARE: 'T20',
+    CARTESIAN: 'T10',
     SS: 'mini',
     FS: 'T20'
 };
@@ -163,16 +165,16 @@ function calculateModelSimilarity(p1, p2) {
 function inferPropertiesHeuristically(product) {
     const UILogicId = (product.UILogicId || '').toLowerCase();
     const model = (product.model || '').toLowerCase();
-    const name = product.name || 'DEEBOT Unknown';
+    const name = (product.name || 'DEEBOT Unknown');
     const platform = extractPlatformCodename(product.model);
 
     // Heuristics A: Platform Type Resolution
     let type = platform ? PLATFORM_TYPES[platform] : null;
 
     // Refine type by deep-inspecting UI Plugin suffixes (UI Families)
-    if (UILogicId.endsWith('ssh5')) {
+    if (UILogicId.endsWith('ssh5') || UILogicId.endsWith('ssth5')) {
         type = 'mini';
-    } else if (UILogicId.endsWith('fsh5')) {
+    } else if (UILogicId.endsWith('fsh5') || UILogicId.endsWith('shakespeareh5')) {
         type = 'T20';
     } else if (UILogicId.startsWith('t10_')) {
         type = 'T10';
@@ -180,11 +182,11 @@ function inferPropertiesHeuristically(product) {
         type = 'T20';
     } else if (UILogicId.startsWith('n8_')) {
         type = 'N8';
-    } else if (UILogicId.startsWith('y2_')) {
+    } else if (UILogicId.startsWith('y2_') || UILogicId.startsWith('y30_')) {
         type = 'T10';
-    } else if (UILogicId.startsWith('goat_')) {
+    } else if (UILogicId.startsWith('goat') || UILogicId.startsWith('goatl_') || UILogicId.startsWith('goatr_')) {
         type = 'lawnMower';
-    } else if (UILogicId.startsWith('w2pro_') || UILogicId.startsWith('sharkmini_')) {
+    } else if (UILogicId.startsWith('w2pro_') || UILogicId.startsWith('sharkmini_') || UILogicId.startsWith('belugapro_') || UILogicId.startsWith('davinicih_') || UILogicId.startsWith('taishan_')) {
         type = 'WINBOT';
     } else if (product.smartType === 'BT') {
         type = 'WINBOT';
