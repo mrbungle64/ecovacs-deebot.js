@@ -217,6 +217,14 @@ class CapabilityManager {
     }
 
     /**
+     * Returns true if the model has mapping capabilities
+     * @returns {boolean}
+     */
+    hasMappingCapabilities() {
+        return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode();
+    }
+
+    /**
      * @deprecated - please use `hasSpotAreaCleaningMode()` instead
      */
     hasSpotAreas() {
@@ -244,14 +252,6 @@ class CapabilityManager {
      */
     hasCustomAreaCleaningMode() {
         return this.getDeviceProperty('custom_area');
-    }
-
-    /**
-     * Returns true if the model has mapping capabilities
-     * @returns {boolean}
-     */
-    hasMappingCapabilities() {
-        return this.hasSpotAreaCleaningMode() && this.hasCustomAreaCleaningMode();
     }
 
     /**

@@ -117,6 +117,23 @@ class VacBot {
     }
 
     /**
+     * This is a wrapper function for edge cleaning mode
+     * @since 0.6.2
+     */
+    edge() {
+        this.clean('Edge');
+    }
+
+    /**
+     * This is a wrapper function for spot cleaning mode
+     * @since 0.6.2
+     */
+    spot() {
+        this.clean('Spot');
+    }
+
+    /**
+     * This is a wrapper function to start cleaning.
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
      * @since 0.6.2
@@ -143,22 +160,6 @@ class VacBot {
      */
     customArea(boundaryCoordinates, numberOfCleanings = 1) {
         this.run('CustomArea', 'start', boundaryCoordinates, numberOfCleanings);
-    }
-
-    /**
-     * This is a wrapper function for edge cleaning mode
-     * @since 0.6.2
-     */
-    edge() {
-        this.clean('Edge');
-    }
-
-    /**
-     * This is a wrapper function for spot cleaning mode
-     * @since 0.6.2
-     */
-    spot() {
-        this.clean('Spot');
     }
 
     /**
@@ -200,6 +201,52 @@ class VacBot {
      */
     playSound(soundID = 0) {
         this.run("PlaySound", soundID);
+    }
+
+    /**
+     * Run a command and return a Promise that resolves with the response payload.
+     * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
+     *
+     * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
+     *
+     * @param {string} command - The command name (same as used in `run()`)
+     * @param {...*} args - Zero or more arguments to perform the command (optionally an options object at the end)
+     * @returns {Promise<any>}
+     */
+    runAsync(command, ...args) {
+        const options = { returnPromise: true, timeoutMs: 10000 };
+        options[RUN_OPTIONS_SYMBOL] = true;
+
+        const KNOWN_OPTION_KEYS = ['timeoutMs', 'returnPromise'];
+
+        // Support runAsync('Command', arg1, { timeoutMs: 250 })
+        if (args.length > 0) {
+            const lastArg = args[args.length - 1];
+            const isPlainObject = (lastArg !== null) && (typeof lastArg === 'object') && !Array.isArray(lastArg);
+            if (isPlainObject) {
+                const isInternalOptions = Boolean(lastArg[RUN_OPTIONS_SYMBOL]);
+                const hasUserOptionKeys = KNOWN_OPTION_KEYS.some(key => lastArg.hasOwnProperty(key));
+                if (!isInternalOptions && hasUserOptionKeys) {
+                    const userOptions = args.pop();
+                    Object.assign(options, userOptions);
+                    options[RUN_OPTIONS_SYMBOL] = true;
+                }
+            }
+        }
+
+        try {
+            const result = this.run(command, ...args, options);
+
+            if (result instanceof Promise) {
+                return result;
+            }
+            // run() returned false or undefined — command exists but has no async support
+            return Promise.reject(
+                new Error(`Command '${command}' is not supported via runAsync()`)
+            );
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
     /**
@@ -252,52 +299,6 @@ class VacBot {
         const commandInstance = new VacBotCommand[entry.className](...cmdArgs);
         commandInstance._registryKey = key;
         return this.ecovacs.sendCommand(commandInstance, _options);
-    }
-
-    /**
-     * Run a command and return a Promise that resolves with the response payload.
-     * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
-     *
-     * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
-     *
-     * @param {string} command - The command name (same as used in `run()`)
-     * @param {...*} args - Zero or more arguments to perform the command (optionally an options object at the end)
-     * @returns {Promise<any>}
-     */
-    runAsync(command, ...args) {
-        const options = { returnPromise: true, timeoutMs: 10000 };
-        options[RUN_OPTIONS_SYMBOL] = true;
-
-        const KNOWN_OPTION_KEYS = ['timeoutMs', 'returnPromise'];
-
-        // Support runAsync('Command', arg1, { timeoutMs: 250 })
-        if (args.length > 0) {
-            const lastArg = args[args.length - 1];
-            const isPlainObject = (lastArg !== null) && (typeof lastArg === 'object') && !Array.isArray(lastArg);
-            if (isPlainObject) {
-                const isInternalOptions = Boolean(lastArg[RUN_OPTIONS_SYMBOL]);
-                const hasUserOptionKeys = KNOWN_OPTION_KEYS.some(key => lastArg.hasOwnProperty(key));
-                if (!isInternalOptions && hasUserOptionKeys) {
-                    const userOptions = args.pop();
-                    Object.assign(options, userOptions);
-                    options[RUN_OPTIONS_SYMBOL] = true;
-                }
-            }
-        }
-
-        try {
-            const result = this.run(command, ...args, options);
-
-            if (result instanceof Promise) {
-                return result;
-            }
-            // run() returned false or undefined — command exists but has no async support
-            return Promise.reject(
-                new Error(`Command '${command}' is not supported via runAsync()`)
-            );
-        } catch (error) {
-            return Promise.reject(error);
-        }
     }
 
     /**
@@ -359,12 +360,30 @@ class VacBot {
     }
 
     /**
+     * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
+     * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
+     * @returns {boolean}
+     */
+    isNot950type() {
+        return (!this.is950type());
+    }
+
+    /**
      * Returns true if the model is not a legacy model (i.e. is 950 type or newer)
      * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
      * @returns {boolean}
      */
     is950type() {
         return !this.isLegacyModel();
+    }
+
+    /**
+     * Returns true if V2 commands are not implemented
+     * e.g. Deebot OZMO 920/950 and all older models
+     * @returns {boolean}
+     */
+    isNot950type_V2() {
+        return (!this.is950type_V2());
     }
 
     /**
@@ -375,24 +394,6 @@ class VacBot {
      */
     is950type_V2() {
         return this.getDeviceProperty('V2', false);
-    }
-
-    /**
-     * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
-     * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
-     * @returns {boolean}
-     */
-    isNot950type() {
-        return (!this.is950type());
-    }
-
-    /**
-     * Returns true if V2 commands are not implemented
-     * e.g. Deebot OZMO 920/950 and all older models
-     * @returns {boolean}
-     */
-    isNot950type_V2() {
-        return (!this.is950type_V2());
     }
 
     /**
@@ -507,6 +508,97 @@ class VacBot {
     }
 
     /**
+     * @deprecated use isPlatformTypeLegacy()
+     */
+    isModelTypeLegacy() {
+        return this.isPlatformTypeLegacy();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeN8()
+     */
+    isModelTypeN8() {
+        return this.isPlatformTypeN8();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeT8()
+     */
+    isModelTypeT8() {
+        return this.isPlatformTypeT8();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeT9()
+     */
+    isModelTypeT9() {
+        return this.isPlatformTypeT9();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeT10()
+     */
+    isModelTypeT10() {
+        return this.isPlatformTypeT10();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeT20()
+     */
+    isModelTypeT20() {
+        return this.isPlatformTypeT20();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeX1()
+     */
+    isModelTypeX1() {
+        return this.isPlatformTypeX1();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeX2()
+     */
+    isModelTypeX2() {
+        return this.isPlatformTypeX2();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeAirbot()
+     */
+    isModelTypeAirbot() {
+        return this.isPlatformTypeAirbot();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeAqMonitor()
+     */
+    isModelTypeAqMonitor() {
+        return this.isPlatformTypeAqMonitor();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeLawnMower()
+     */
+    isModelTypeLawnMower() {
+        return this.isPlatformTypeLawnMower();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeT8Based()
+     */
+    isModelTypeT8Based() {
+        return this.isPlatformTypeT8Based();
+    }
+
+    /**
+     * @deprecated use isPlatformTypeT9Based()
+     */
+    isModelTypeT9Based() {
+        return this.isPlatformTypeT9Based();
+    }
+
+    /**
      * Check if the device platform type is legacy.
      * @returns {boolean}
      */
@@ -608,97 +700,6 @@ class VacBot {
      */
     isPlatformTypeT9Based() {
         return this.capabilityManager.isPlatformTypeT9Based();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeLegacy()
-     */
-    isModelTypeLegacy() {
-        return this.isPlatformTypeLegacy();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeN8()
-     */
-    isModelTypeN8() {
-        return this.isPlatformTypeN8();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeT8()
-     */
-    isModelTypeT8() {
-        return this.isPlatformTypeT8();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeT9()
-     */
-    isModelTypeT9() {
-        return this.isPlatformTypeT9();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeT10()
-     */
-    isModelTypeT10() {
-        return this.isPlatformTypeT10();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeT20()
-     */
-    isModelTypeT20() {
-        return this.isPlatformTypeT20();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeX1()
-     */
-    isModelTypeX1() {
-        return this.isPlatformTypeX1();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeX2()
-     */
-    isModelTypeX2() {
-        return this.isPlatformTypeX2();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeAirbot()
-     */
-    isModelTypeAirbot() {
-        return this.isPlatformTypeAirbot();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeAqMonitor()
-     */
-    isModelTypeAqMonitor() {
-        return this.isPlatformTypeAqMonitor();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeLawnMower()
-     */
-    isModelTypeLawnMower() {
-        return this.isPlatformTypeLawnMower();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeT8Based()
-     */
-    isModelTypeT8Based() {
-        return this.isPlatformTypeT8Based();
-    }
-
-    /**
-     * @deprecated use isPlatformTypeT9Based()
-     */
-    isModelTypeT9Based() {
-        return this.isPlatformTypeT9Based();
     }
 
 

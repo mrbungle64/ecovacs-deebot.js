@@ -308,15 +308,6 @@ class MapManager {
     }
 
     /**
-     * Check if all map data components are ready and emit MapDataReady.
-     */
-    handleMapDataReady() {
-        if (this.mapDataObjectQueue.length === 0) {
-            this.bot.ecovacs.emit('MapDataReady');
-        }
-    }
-
-    /**
      * Handle object with map image data to provide a full map data object
      * @param {Object} mapImageData
      * @returns {Promise<void>}
@@ -332,6 +323,15 @@ class MapManager {
         });
         if ((this.mapImageDataQueue.length === 0) || this.createMapImageOnly) {
             this.handleMapDataReady();
+        }
+    }
+
+    /**
+     * Check if all map data components are ready and emit MapDataReady.
+     */
+    handleMapDataReady() {
+        if (this.mapDataObjectQueue.length === 0) {
+            this.bot.ecovacs.emit('MapDataReady');
         }
     }
 

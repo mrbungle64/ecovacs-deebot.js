@@ -19,12 +19,6 @@ class CommandDispatcher {
     /**
      * Dispatch a command with special logic.
      * @param {string} key - The command key.
-     * @param {Array} args - Command arguments.
-     * @returns {boolean} True if handled, false otherwise.
-     */
-    /**
-     * Dispatch a command with special logic.
-     * @param {string} key - The command key.
      * @param {Object} options - Command options (e.g. returnPromise)
      * @param {...*} args - Command arguments.
      * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise boolean indicating if handled.

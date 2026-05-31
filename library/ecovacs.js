@@ -286,6 +286,15 @@ class Ecovacs extends EventEmitter {
     }
 
     /**
+     * Emit a network related error message
+     * @param {string} message - the error message
+     * @param {string} [command=''] - the command
+     */
+    emitNetworkError(message, command = '') {
+        this.emitError('-1', tools.createErrorDescription(message, command));
+    }
+
+    /**
      * Set values for emitting an error
      * @param {string} code - the error code
      * @param {string} message - the error message
@@ -295,15 +304,6 @@ class Ecovacs extends EventEmitter {
         this.bot.errorCode = code;
         this.bot.errorDescription = message;
         this.emitLastError();
-    }
-
-    /**
-     * Emit a network related error message
-     * @param {string} message - the error message
-     * @param {string} [command=''] - the command
-     */
-    emitNetworkError(message, command = '') {
-        this.emitError('-1', tools.createErrorDescription(message, command));
     }
 
     /**
