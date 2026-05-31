@@ -167,6 +167,21 @@ function getDeviceCategory(deviceClass) {
 }
 
 /**
+ * Returns the smartType (internal IoT platform generation/protocol) of the model
+ * (e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT').
+ * @param {string} deviceClass
+ * @returns {string}
+ */
+function getSmartType(deviceClass) {
+    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    if (devices.hasOwnProperty(deviceClass)) {
+        return getDeviceProperty(deviceClass, 'smartType', 'unknown');
+    }
+    return 'unknown';
+}
+
+
+/**
  * @deprecated use getPlatformType()
  * Returns the type of the model
  * @returns {string}
@@ -502,6 +517,7 @@ module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getPlatformType = getPlatformType;
 module.exports.getDeviceCategory = getDeviceCategory;
+module.exports.getSmartType = getSmartType;
 module.exports.getModelType = getModelType;     // @deprecated – use getPlatformType
 module.exports.getDeviceType = getDeviceType;   // @deprecated – use getDeviceCategory
 module.exports.getReqID = getReqID;

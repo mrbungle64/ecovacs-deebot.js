@@ -90,6 +90,15 @@ const category = vacbot.getDeviceCategory();
 // e.g. 'Vacuum Cleaner', 'Air Purifier', 'Air Quality Monitor', 'Lawn Mower'
 ```
 
+## `getSmartType()` API
+
+The `getSmartType()` method returns the internal IoT platform generation/protocol identifier of the device as a string.
+
+```javascript
+const smartType = vacbot.getSmartType();
+// e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT', 'unknown'
+```
+
 ## `smartType` Property
 
 The `smartType` property (defined in `models.js` for each device class) is a metadata field derived from the Ecovacs PIM (Product Information Management) IoT database (`productIotMap.json`). The JSON database was sourced from the public [bumper repository by MVladislav](https://github.com/MVladislav/bumper/tree/main).

@@ -175,6 +175,15 @@ describe('CapabilityManager – getPlatformType / getDeviceCategory', function (
                 `Mismatch for deviceClass ${cls}`);
         });
     });
+
+    it('getSmartType() should return the same value as tools.getSmartType()', function () {
+        const tools = require('../library/tools');
+        [DEVICE['950'], DEVICE.airbot, DEVICE.lawnMower, DEVICE.T8].forEach(cls => {
+            const mgr = new CapabilityManager(makeFakeBot(cls));
+            assert.strictEqual(mgr.getSmartType(), tools.getSmartType(cls),
+                `Mismatch for deviceClass ${cls}`);
+        });
+    });
 });
 
 // ---------------------------------------------------------------------------

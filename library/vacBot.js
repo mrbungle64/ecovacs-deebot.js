@@ -490,6 +490,37 @@ class VacBot {
     }
 
     /**
+     * Returns the smartType (internal IoT platform generation/protocol) of the model
+     * (e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT').
+     * @returns {string}
+     */
+    getSmartType() {
+        try {
+            if (this.capabilityManager && typeof this.capabilityManager.getSmartType === 'function') {
+                const smartType = this.capabilityManager.getSmartType();
+                if (smartType && smartType !== 'unknown') {
+                    return smartType;
+                }
+            }
+        } catch (e) {
+            // Ignore exception
+        }
+
+        try {
+            if (typeof this.getDeviceProperty === 'function') {
+                const smartType = this.getDeviceProperty('smartType');
+                if (smartType && smartType !== 'unknown') {
+                    return smartType;
+                }
+            }
+        } catch (e) {
+            // Ignore exception
+        }
+
+        return 'unknown';
+    }
+
+    /**
      * @deprecated use getPlatformType()
      * Returns the type of the model
      * @returns {string}

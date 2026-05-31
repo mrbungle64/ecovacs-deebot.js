@@ -290,10 +290,49 @@ describe('API tools', function () {
     });
   });
 
-  describe('VacBot platform type & device category robustness', function () {
+  describe('getSmartType', function () {
+    it('should return a valid smartType (not "unknown") for all models in models.js', function () {
+      const allDevices = tools.getAllKnownDevices();
+      const deviceClasses = Object.keys(allDevices);
+
+      assert.ok(deviceClasses.length > 0, 'There should be at least one device class');
+
+      deviceClasses.forEach(deviceClass => {
+        const smartType = tools.getSmartType(deviceClass);
+        assert.notStrictEqual(smartType, 'unknown',
+          `Device class "${deviceClass}" (${allDevices[deviceClass].name}) should have a known smartType, but got "unknown"`);
+      });
+    });
+
+    it('should return the correct smartType for specific example models', function () {
+      const examples = [
+        { class: 'yna5xi', expected: 'MQ_AP' },
+        { class: 'h18jkh', expected: 'MQ_AP' },
+        { class: 'ucn2xe', expected: 'MQ_AP' },
+        { class: 'n6cwdb', expected: 'MQ_AP' },
+        { class: 'jtmf04', expected: 'MQ_AP' },
+        { class: '2o4lnm', expected: 'MQ_AP' },
+        { class: 'e6ofmn', expected: 'BLAP2' },
+        { class: 'ipzjy0', expected: 'MQ_AP' },
+        { class: 'h041es', expected: 'QRP' },
+        { class: 'sdp1y1', expected: 'QRP' },
+        { class: '20anby', expected: 'MQ_AP' },
+        { class: '5xu9h3', expected: 'BLAP' },
+        { class: '123', expected: 'SPA' }
+      ];
+
+      examples.forEach(({ class: deviceClass, expected }) => {
+        const smartType = tools.getSmartType(deviceClass);
+        assert.strictEqual(smartType, expected,
+          `Device class "${deviceClass}" should have smartType "${expected}", but got "${smartType}"`);
+      });
+    });
+  });
+
+  describe('VacBot platform type, device category & smartType robustness', function () {
     const VacBot = require('../library/vacBot');
 
-    it('should gracefully handle missing capabilityManager and return empty string or Unknown Device', function () {
+    it('should gracefully handle missing capabilityManager and return empty string or Unknown Device or unknown', function () {
       const mockVacuum = {
         class: 'nonexistent',
         did: 'mock_did',
@@ -306,40 +345,52 @@ describe('API tools', function () {
       
       bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
       bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
+      bot.getSmartType = VacBot.prototype.getSmartType.bind(bot);
 
       assert.strictEqual(bot.getPlatformType(), '');
       assert.strictEqual(bot.getDeviceCategory(), 'Unknown Device');
+      assert.strictEqual(bot.getSmartType(), 'unknown');
     });
 
     it('should gracefully handle capabilityManager throwing errors', function () {
       const bot = {
         capabilityManager: {
           getPlatformType: () => { throw new Error('Simulated failure'); },
-          getDeviceCategory: () => { throw new Error('Simulated failure'); }
+          getDeviceCategory: () => { throw new Error('Simulated failure'); },
+          getSmartType: () => { throw new Error('Simulated failure'); }
         }
       };
 
       bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
       bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
+      bot.getSmartType = VacBot.prototype.getSmartType.bind(bot);
 
       assert.strictEqual(bot.getPlatformType(), '');
       assert.strictEqual(bot.getDeviceCategory(), 'Unknown Device');
+      assert.strictEqual(bot.getSmartType(), 'unknown');
     });
 
     it('should fall back to getDeviceProperty if capabilityManager returns unknown or fails', function () {
       const bot = {
         capabilityManager: {
           getPlatformType: () => 'unknown',
-          getDeviceCategory: () => 'unknown'
+          getDeviceCategory: () => 'unknown',
+          getSmartType: () => 'unknown'
         },
-        getDeviceProperty: (prop) => prop === 'deviceCategory' ? 'Vacuum Cleaner' : null
+        getDeviceProperty: (prop) => {
+          if (prop === 'deviceCategory') return 'Vacuum Cleaner';
+          if (prop === 'smartType') return 'BLAP2';
+          return null;
+        }
       };
 
       bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
       bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
+      bot.getSmartType = VacBot.prototype.getSmartType.bind(bot);
 
       assert.strictEqual(bot.getPlatformType(), '');
       assert.strictEqual(bot.getDeviceCategory(), 'Vacuum Cleaner');
+      assert.strictEqual(bot.getSmartType(), 'BLAP2');
     });
 
     it('should not cause infinite recursion if getModelType calls getPlatformType', function () {

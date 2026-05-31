@@ -42,6 +42,15 @@ class CapabilityManager {
         return tools.getDeviceCategory(this.bot.deviceClass);
     }
 
+    /**
+     * Returns the smartType (internal IoT platform generation/protocol) of the model
+     * (e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT').
+     * @returns {string}
+     */
+    getSmartType() {
+        return tools.getSmartType(this.bot.deviceClass);
+    }
+
 
 
     /**
