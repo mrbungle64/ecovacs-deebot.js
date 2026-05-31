@@ -111,7 +111,7 @@ The `smartType` property (defined in `models.js` for each device class) is a met
 Although undocumented by the manufacturer, the `smartType` correlates consistently with the device's hardware platform, brand, and communication protocol generation.
 
 > [!WARNING]
-> **Speculative Terminology:** The expanded meanings of the acronyms below (e.g., *Message Queue Appliance*, *Qirui Robot Platform*, *Simple Protocol Appliance*, *Bot Tablet*) are **speculative reconstructions** (educated guesses) based on technical clues, brands, and device behavior. They are **not** officially confirmed by the manufacturer.
+> **Speculative Terminology:** The expanded meanings of the acronyms below (e.g., *Message Queue Appliance*, *Simple Protocol Appliance*, *Bot Tablet*) are **speculative reconstructions** (educated guesses) based on technical clues and device behavior. They are **not** officially confirmed by the manufacturer.
 
 | `smartType` | Device Category / Series | Reconstructed Protocol / Platform Meaning (Speculative) |
 | :--- | :--- | :--- |
@@ -119,7 +119,7 @@ Although undocumented by the manufacturer, the `smartType` correlates consistent
 | **`MQ_APM`** | Modern mid-range DEEBOTs (T50, N50) | Modified/modernized MQTT connection platform. |
 | **`BLAP2`** | Modern Flagship DEEBOTs (T30, T80, X5, X8, X2, T30S) | Newer generation IoT connection platform (often Bluetooth/Wi-Fi hybrids). |
 | **`BLAP`** / **`BLAPG`** | GOAT Lawn Mowers (G1, GX-600, A3000, A2500, etc.) | Mähroboter platform (BLAPG is used for RTK/LiDAR-based newer generations). |
-| **`QRP`** / **`BL_QRP`** | **yeedi**-branded vacuum robots (yeedi vac, mop station, cube) | Qirui Robot Platform (parent company of yeedi). |
+| **`QRP`** / **`BL_QRP`** | **yeedi**-branded vacuum robots (yeedi vac, mop station, cube) and selected Ecovacs devices (e.g. AIRBOT Z1) | Speculative internal platform/protocol identifier. (Previously hypothesized to mean "Qirui Robot Platform", which corporate and regulatory filings have disproven). |
 | **`BT`** | WINBOT window cleaning robots | Bot Tablet / Winbot-specific platform. |
 | **`SPA`** / **`HK_AP`** | Legacy DEEBOTs (Slim2, N79, OZMO 610/930) | Legacy connection protocols (REST/XMPP) (SPA: Simple Protocol Appliance). |
 

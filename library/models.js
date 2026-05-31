@@ -10,7 +10,7 @@
 // internal Ecovacs IoT platform protocol/family (e.g., MQ_AP, BLAP2, QRP, SPA).
 // These are proprietary, undocumented identifiers mapped from productIotMap.json 
 // (sourced from https://github.com/MVladislav/bumper/tree/main) or deduced.
-// Any expanded names (e.g., Qirui Robot Platform) are speculative and unofficial.
+// Any expanded names are speculative and unofficial.
 
 // Modern and actively supported DEEBOT models
 exports.SupportedDeebotModels = {
