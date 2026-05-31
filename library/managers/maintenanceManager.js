@@ -25,20 +25,21 @@ class MaintenanceManager {
      */
     handleLifespan(payload) {
         for (let index in payload) {
-            if (payload[index]) {
-                const type = payload[index][`type`];
-                let component = type;
-                if (dictionary.COMPONENT_FROM_ECOVACS[type]) {
-                    component = dictionary.COMPONENT_FROM_ECOVACS[type];
-                } else {
-                    tools.envLogWarn(`unknown life span component type: ${type}`);
-                    this.bot.ecovacs.emit('Debug', `Unknown life span component type: ${type}`);
-                }
-                const left = payload[index]['left'];
-                const total = payload[index]['total'];
-                const lifespan = parseInt(left) / parseInt(total) * 100;
-                this.components[component] = Number(lifespan.toFixed(2));
+            if (!payload[index]) {
+                continue;
             }
+            const type = payload[index][`type`];
+            let component = type;
+            if (dictionary.COMPONENT_FROM_ECOVACS[type]) {
+                component = dictionary.COMPONENT_FROM_ECOVACS[type];
+            } else {
+                tools.envLogWarn(`unknown life span component type: ${type}`);
+                this.bot.ecovacs.emit('Debug', `Unknown life span component type: ${type}`);
+            }
+            const left = payload[index]['left'];
+            const total = payload[index]['total'];
+            const lifespan = parseInt(left) / parseInt(total) * 100;
+            this.components[component] = Number(lifespan.toFixed(2));
         }
     }
 }

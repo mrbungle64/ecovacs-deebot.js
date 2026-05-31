@@ -41,18 +41,20 @@ class CommandDispatcher {
             }
             case 'SpotArea'.toLowerCase(): {
                 const area = args[1].toString();
-                const cleanings = args[2] || 1;
-                if (area !== '') {
-                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SpotArea('start', area, cleanings), options);
+                if (area === '') {
+                    break;
                 }
+                const cleanings = args[2] || 1;
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.SpotArea('start', area, cleanings), options);
                 break;
             }
             case 'CustomArea'.toLowerCase(): {
                 const area = args[1].toString();
-                const cleanings = args[2] || 1;
-                if (area !== '') {
-                    promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.CustomArea('start', area, cleanings), options);
+                if (area === '') {
+                    break;
                 }
+                const cleanings = args[2] || 1;
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.CustomArea('start', area, cleanings), options);
                 break;
             }
             case 'Pause'.toLowerCase(): {

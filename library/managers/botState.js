@@ -591,35 +591,37 @@ class BotState {
         }
 
         for (let logIndex in logs) {
-            if (logs.hasOwnProperty(logIndex)) {
-                const logEntry = logs[logIndex];
-                if (!this.cleanLog[logEntry['id']]) { //log not yet existing
-                    let squareMeters = parseInt(logEntry['area']);
-                    let timestamp = Number(logEntry['ts']);
-                    let date = new Date(timestamp * 1000);
-                    let len = parseInt(logEntry['last']);
-                    let totalTimeString = tools.getTimeStringFormatted(len);
-                    let imageUrl = logEntry['imageUrl'];
-                    if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
-                        this.cleanLog_lastImageUrl = imageUrl;
-                        this.cleanLog_lastTimestamp = timestamp;
-                        this.cleanLog_lastSquareMeters = squareMeters;
-                        this.cleanLog_lastTotalTime = len;
-                        this.cleanLog_lastTotalTimeString = totalTimeString;
-                    }
-                    this.cleanLog[logEntry['id']] = {
-                        'squareMeters': squareMeters,
-                        'timestamp': timestamp,
-                        'date': date,
-                        'lastTime': len,
-                        'totalTime': len,
-                        'totalTimeFormatted': totalTimeString,
-                        'imageUrl': imageUrl,
-                        'type': logEntry['type'],
-                        'stopReason': logEntry['stopReason']
-                    };
-                }
+            if (!logs.hasOwnProperty(logIndex)) {
+                continue;
             }
+            const logEntry = logs[logIndex];
+            if (this.cleanLog[logEntry['id']]) {
+                continue;
+            }
+            let squareMeters = parseInt(logEntry['area']);
+            let timestamp = Number(logEntry['ts']);
+            let date = new Date(timestamp * 1000);
+            let len = parseInt(logEntry['last']);
+            let totalTimeString = tools.getTimeStringFormatted(len);
+            let imageUrl = logEntry['imageUrl'];
+            if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
+                this.cleanLog_lastImageUrl = imageUrl;
+                this.cleanLog_lastTimestamp = timestamp;
+                this.cleanLog_lastSquareMeters = squareMeters;
+                this.cleanLog_lastTotalTime = len;
+                this.cleanLog_lastTotalTimeString = totalTimeString;
+            }
+            this.cleanLog[logEntry['id']] = {
+                'squareMeters': squareMeters,
+                'timestamp': timestamp,
+                'date': date,
+                'lastTime': len,
+                'totalTime': len,
+                'totalTimeFormatted': totalTimeString,
+                'imageUrl': imageUrl,
+                'type': logEntry['type'],
+                'stopReason': logEntry['stopReason']
+            };
         }
     }
 
