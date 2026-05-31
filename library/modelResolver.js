@@ -191,14 +191,16 @@ function inferPropertiesHeuristically(product) {
         type = 'WINBOT';
     } else if (product.smartType === 'BT') {
         type = 'WINBOT';
+    } else if (product.smartType === 'SPA' || product.smartType === 'HK_AP') {
+        type = 'legacy';
     }
     
     if (!type) {
-        type = 'T10'; // Safe default
+        type = 'unknown';
     }
 
     // Default basic capabilities
-    const capabilities = ['vacuumBase', 'navigationBase', 'moppingHigh'];
+    const capabilities = type === 'legacy' ? ['vacuumBase'] : ['vacuumBase', 'navigationBase', 'moppingHigh'];
 
     // Heuristics B: Dynamic Station & Capability Inference
     // We only trust the name and model for hardware station features (OMNI/PLUS/COMBO)

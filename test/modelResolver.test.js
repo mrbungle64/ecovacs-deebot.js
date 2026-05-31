@@ -204,8 +204,19 @@ describe('modelResolver - unit tests', function () {
             const resolved = tools.getDynamicDevice('0xyhhr');
             assert.ok(resolved, 'Should resolve 0xyhhr');
             assert.strictEqual(resolved.name, 'DEEBOT OZMO 700');
-            assert.strictEqual(resolved.type, 'T10', 'Should fallback to T10 (default) as it does not match specific prefixes');
+            assert.strictEqual(resolved.type, 'unknown', 'Should fallback to unknown (no longer speculating T10)');
             assert.ok(resolved.resolvedViaHeuristics, 'Should be resolved via heuristics');
+        });
+
+        it('should resolve SPA/HK_AP to legacy type', function () {
+            const res = modelResolver.inferPropertiesHeuristically({
+                UILogicId: 'Slim2_Series',
+                model: 'Slim2_Series',
+                smartType: 'SPA',
+                name: 'DEEBOT Slim2 Series'
+            });
+            assert.strictEqual(res.type, 'legacy');
+            assert.deepStrictEqual(res.capabilities, ['vacuumBase']);
         });
 
         it('should resolve "8n0t5d" (T30S PRO OMNI) via similarity if it were missing', function () {
