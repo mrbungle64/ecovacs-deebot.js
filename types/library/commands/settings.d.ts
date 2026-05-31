@@ -12,7 +12,7 @@ export class ResetLifeSpan extends VacBotCommand {
  * 3 = 'strong'
  * 4 = 'smart'
  * @extends VacBotCommand
- * TODO: potential duplicate of SetCleanSpeed (clean.js)
+ 
  */
 export class SetFanSpeed extends VacBotCommand {
     constructor(level: any);
@@ -21,7 +21,7 @@ export class SetFanSpeed extends VacBotCommand {
  * Sets the 'Water Flow Level'
  * (and the 'Scrubbing Pattern' for a few models)
  * @extends VacBotCommand
- * TODO: potential duplicate of SetWaterInfo
+ 
  */
 export class SetWaterLevel extends VacBotCommand {
     constructor(level: any, sweepType?: number);
@@ -46,7 +46,7 @@ export class SetVolume extends VacBotCommand {
  * Sets the value whether the 'Auto Empty' option is enabled
  * Used by models with Auto Empty Station
  * @extends VacBotCommand
- * TODO: potential duplicate of EmptyDustBin (info.js)
+ 
  */
 export class SetAutoEmpty extends VacBotCommand {
     constructor(enable?: number);
@@ -235,7 +235,7 @@ export class SetWaterInfo extends VacBotCommand {
 /**
  * Represents a command to trigger a station action
  * @extends VacBotCommand
- * TODO: potential duplicate of EmptyDustBinSA / Drying (info.js)
+ 
  */
 export class StationAction extends VacBotCommand {
     constructor(action: any, act?: number);

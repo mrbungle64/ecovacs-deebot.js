@@ -33,6 +33,9 @@ declare class MapManager {
     mapDataObject: any[] | null;
     mapDataObjectQueue: any[];
     mapImageDataQueue: any[];
+    /**
+     * Set up all the event listeners on the bot for map events.
+     */
     setupEventListeners(): void;
     /**
      * Handle object with infos about the maps to provide a full map data object
@@ -64,14 +67,21 @@ declare class MapManager {
      * @returns {Promise<void>}
      */
     handleMapVirtualBoundaryInfo(virtualBoundaryInfo: Object): Promise<void>;
-    handleZeroVirtualBoundariesForMap(mapID: any): void;
-    handleMapDataReady(): void;
+    /**
+     * Handle the scenario when there are zero virtual boundaries configured for a map.
+     * @param {string} mapID - The ID of the map.
+     */
+    handleZeroVirtualBoundariesForMap(mapID: string): void;
     /**
      * Handle object with map image data to provide a full map data object
      * @param {Object} mapImageData
      * @returns {Promise<void>}
      */
     handleMapImageData(mapImageData: Object): Promise<void>;
+    /**
+     * Check if all map data components are ready and emit MapDataReady.
+     */
+    handleMapDataReady(): void;
     /**
      * Handle the payload of the `MapState` response/message
      * @param {Object} payload
@@ -82,7 +92,11 @@ declare class MapManager {
      * @param {Object} payload
      */
     handleMultiMapState(payload: Object): void;
-    handleCachedMapInfo(payload: any): void;
+    /**
+     * Handle the payload of the `CachedMapInfo` response/message.
+     * @param {Object} payload - The message payload.
+     */
+    handleCachedMapInfo(payload: Object): void;
     /**
      * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
@@ -136,7 +150,11 @@ declare class MapManager {
         mapType: any;
         mapBase64PNG: string;
     }>;
-    handleMapTrace(payload: any): Promise<void>;
+    /**
+     * Handle the payload of the `MapTrace` response/message.
+     * @param {Object} payload - The message payload.
+     */
+    handleMapTrace(payload: Object): Promise<void>;
     /**
      * Get the name of the spot area that the bot is currently in
      * @param {string} currentSpotAreaID - the ID of the spot area that the player is currently in

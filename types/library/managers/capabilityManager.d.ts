@@ -28,18 +28,76 @@ declare class CapabilityManager {
      * @returns {string}
      */
     getDeviceCategory(): string;
+    /**
+     * Returns the smartType (internal IoT platform generation/protocol) of the model
+     * (e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT').
+     * @returns {string}
+     */
+    getSmartType(): string;
+    /**
+     * Check if the device is a legacy platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeLegacy(): boolean;
+    /**
+     * Check if the device is an N8 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeN8(): boolean;
+    /**
+     * Check if the device is a T8 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT8(): boolean;
+    /**
+     * Check if the device is a T9 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT9(): boolean;
+    /**
+     * Check if the device is a T10 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT10(): boolean;
+    /**
+     * Check if the device is a T20 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeT20(): boolean;
+    /**
+     * Check if the device is an X1 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeX1(): boolean;
+    /**
+     * Check if the device is an X2 platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeX2(): boolean;
+    /**
+     * Check if the device is an Airbot platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeAirbot(): boolean;
+    /**
+     * Check if the device is an Air Quality Monitor platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeAqMonitor(): boolean;
+    /**
+     * Check if the device is a Lawn Mower platform type.
+     * @returns {boolean}
+     */
     isPlatformTypeLawnMower(): boolean;
+    /**
+     * Check if the device platform type is T8-based (T8 or N8).
+     * @returns {boolean}
+     */
     isPlatformTypeT8Based(): boolean;
+    /**
+     * Check if the device platform type is T9-based (T9, T10, T20, X1, or X2).
+     * @returns {boolean}
+     */
     isPlatformTypeT9Based(): boolean;
     /**
      * Returns true if the model has a filter
@@ -84,6 +142,11 @@ declare class CapabilityManager {
      */
     hasSpotCleaningMode(): boolean;
     /**
+     * Returns true if the model has mapping capabilities
+     * @returns {boolean}
+     */
+    hasMappingCapabilities(): boolean;
+    /**
      * @deprecated - please use `hasSpotAreaCleaningMode()` instead
      */
     hasSpotAreas(): boolean;
@@ -101,11 +164,6 @@ declare class CapabilityManager {
      * @returns {boolean}
      */
     hasCustomAreaCleaningMode(): boolean;
-    /**
-     * Returns true if the model has mapping capabilities
-     * @returns {boolean}
-     */
-    hasMappingCapabilities(): boolean;
     /**
      * Returns true if the model has mopping functionality
      * @returns {boolean}

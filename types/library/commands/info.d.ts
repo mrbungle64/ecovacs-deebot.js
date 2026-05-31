@@ -158,7 +158,6 @@ export class GetAutoEmpty extends VacBotCommand {
  * Represents a command to empty the dust bin
  * of the Auto Empty Station
  * @extends VacBotCommand
- * TODO: potential duplicate of SetAutoEmpty (settings.js)
  */
 export class EmptyDustBin extends VacBotCommand {
     constructor();

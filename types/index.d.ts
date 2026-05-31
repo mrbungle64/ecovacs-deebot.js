@@ -7,7 +7,7 @@
  * @property @private {string} deviceId - the device ID of the bot
  * @property @private {string} authDomain - the domain for the authentication API
  */
-declare class EcovacsAPI {
+export class EcovacsAPI {
     /**
      * Get the version of the package
      * @returns {string} the version of the package
@@ -206,7 +206,7 @@ declare class EcovacsAPI {
     logError(message: any): void;
     logEvent(event: any, value: any): void;
 }
-declare namespace EcovacsAPI {
+export namespace EcovacsAPI {
     let PUBLIC_KEY: string;
     let REALM: "ecouser.net";
 }

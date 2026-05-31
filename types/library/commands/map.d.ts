@@ -3,7 +3,7 @@
  * Works for models like OZMO 920/950 and the T8 series
  * @extends VacBotCommand
  */
-export class Relocate extends VacBotCommand {
+export class SetRelocationState extends VacBotCommand {
     constructor();
 }
 /**
@@ -206,14 +206,6 @@ export class SetMapSet_V2 extends VacBotCommand {
  */
 export class SetMajorMap extends VacBotCommand {
     constructor(mapID: any);
-}
-/**
- * Represents a command to set the relocation state
- * @extends VacBotCommand
- * TODO: potential duplicate of Relocate
- */
-export class SetRelocationState extends VacBotCommand {
-    constructor();
 }
 /**
  * Represents a command to get the map trace

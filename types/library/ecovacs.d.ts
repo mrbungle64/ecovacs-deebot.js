@@ -63,19 +63,25 @@ declare class Ecovacs extends EventEmitter<any> {
      * Handle life span components to emit combined object
      */
     handleLifeSpanCombined(): void;
-    emitMessage(name: any, payload: any, rawPayload: any): void;
     /**
-     * Set values for emitting an error
-     * @param {string} code - the error code
-     * @param {string} message - the error message
+     * Emit an event message and resolve any pending commands waiting for this event.
+     * @param {string} name - Event name.
+     * @param {*} payload - The main payload of the event.
+     * @param {*} [rawPayload] - Optional raw payload of the event.
      */
-    emitError(code: string, message: string): void;
+    emitMessage(name: string, payload: any, rawPayload?: any): void;
     /**
      * Emit a network related error message
      * @param {string} message - the error message
      * @param {string} [command=''] - the command
      */
     emitNetworkError(message: string, command?: string): void;
+    /**
+     * Set values for emitting an error
+     * @param {string} code - the error code
+     * @param {string} message - the error message
+     */
+    emitError(code: string, message: string): void;
     /**
      * Emit an error by a given error code
      * @param {string} errorCode

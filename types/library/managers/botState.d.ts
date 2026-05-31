@@ -55,7 +55,7 @@ declare class BotState {
     netInfoMAC: any;
     firmwareVersion: any;
     timezone: string | null;
-    OTA: any;
+    OTA: Object | null;
     sysinfo: {
         load: any;
         uptime: any;
@@ -175,7 +175,7 @@ declare class BotState {
     monitorAirState: any;
     threeModule: Object | null;
     threeModuleStatus: Object | null;
-    dmodule: any;
+    dmodule: Object | null;
     efficiency: any;
     dryingDuration: any;
     airDryingStatus: string | null;
@@ -240,12 +240,36 @@ declare class BotState {
      * @param {Object} payload
      */
     handleNetInfo(payload: Object): void;
-    handleBorderSwitch(payload: any): void;
-    handleCrossMapBorderWarning(payload: any): void;
-    handleCutDirection(payload: any): void;
-    handleMoveupWarning(payload: any): void;
-    handleSafeProtect(payload: any): void;
-    handleWorkState(payload: any): void;
+    /**
+     * Handle the payload of the `BorderSwitch` response/message
+     * @param {Object} payload
+     */
+    handleBorderSwitch(payload: Object): void;
+    /**
+     * Handle the payload of the `CrossMapBorderWarning` response/message
+     * @param {Object} payload
+     */
+    handleCrossMapBorderWarning(payload: Object): void;
+    /**
+     * Handle the payload of the `CutDirection` response/message
+     * @param {Object} payload
+     */
+    handleCutDirection(payload: Object): void;
+    /**
+     * Handle the payload of the `MoveupWarning` response/message
+     * @param {Object} payload
+     */
+    handleMoveupWarning(payload: Object): void;
+    /**
+     * Handle the payload of the `SafeProtect` response/message
+     * @param {Object} payload
+     */
+    handleSafeProtect(payload: Object): void;
+    /**
+     * Handle the payload of the `WorkState` response/message
+     * @param {Object} payload
+     */
+    handleWorkState(payload: Object): void;
     /**
      * Handle the payload of the `WaterInfo` response/message
      * (water level and water box status)
@@ -265,7 +289,11 @@ declare class BotState {
      * @param {Object} payload
      */
     handleAirDryingState(payload: Object): void;
-    handleDryingDuration(payload: any): void;
+    /**
+     * Handle the payload of the `DryingDuration` response/message
+     * @param {Object} payload
+     */
+    handleDryingDuration(payload: Object): void;
     /**
      * Handle the payload of the `BorderSpin` response/message
      * @param {Object} payload
@@ -378,11 +406,31 @@ declare class BotState {
      * @param {Object} payload
      */
     handleCarpetInfo(payload: Object): void;
-    handleCleanPreference(payload: any): void;
-    handleLiveLaunchPwdState(payload: any): void;
-    handleWiFiList(payload: any): void;
-    handleOverTheAirUpdate(payload: any): void;
-    handleTimeZone(payload: any): void;
+    /**
+     * Handle the payload of the `CleanPreference` response/message
+     * @param {Object} payload
+     */
+    handleCleanPreference(payload: Object): void;
+    /**
+     * Handle the payload of the `LiveLaunchPwdState` response/message
+     * @param {Object} payload
+     */
+    handleLiveLaunchPwdState(payload: Object): void;
+    /**
+     * Handle the payload of the `WiFiList` response/message
+     * @param {Object} payload
+     */
+    handleWiFiList(payload: Object): void;
+    /**
+     * Handle the payload of the `OverTheAirUpdate` response/message
+     * @param {Object} payload
+     */
+    handleOverTheAirUpdate(payload: Object): void;
+    /**
+     * Handle the payload of the `TimeZone` response/message
+     * @param {Object} payload
+     */
+    handleTimeZone(payload: Object): void;
     /**
      * Handle the payload of the 'Stats' response/message
      * @param {Object} payload
@@ -524,8 +572,21 @@ declare class BotState {
      * @param {Object} payload
      */
     handleSysinfo(payload: Object): void;
-    handleTask(type: any, payload: any): void;
-    handleDModule(payload: any): void;
-    getCmdForObstacleDetection(): "Recognization" | "TrueDetect";
+    /**
+     * Handle the payload/state of the current task.
+     * @param {string} type - The type of task.
+     * @param {Object} payload - The task payload.
+     */
+    handleTask(type: string, payload: Object): void;
+    /**
+     * Handle the payload of the `DModule` response/message
+     * @param {Object} payload
+     */
+    handleDModule(payload: Object): void;
+    /**
+     * Get the correct command name for obstacle detection based on device platform type.
+     * @returns {string}
+     */
+    getCmdForObstacleDetection(): string;
 }
 //# sourceMappingURL=botState.d.ts.map

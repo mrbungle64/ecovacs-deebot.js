@@ -1,3 +1,9 @@
+export class BasicPurification extends VacBotCommand {
+    constructor();
+}
+export class MobilePurification extends VacBotCommand {
+    constructor();
+}
 /**
  * It represents a basic clean mode,
  * and it runs an auto clean command
@@ -173,27 +179,6 @@ export class GetCustomAreaMode extends VacBotCommand {
  */
 export class SetCustomAreaMode extends VacBotCommand {
     constructor(sweepMode?: number);
-}
-/**
- * Request various information about the current/last cleaning
- * @extends VacBotCommand
- * TODO: potential duplicate of GetTotalStats (info.js)
- */
-export class GetCleanSum extends VacBotCommand {
-    constructor();
-    /**
-     * @param {{ area: number, time: number, count: number }} payload
-     * @returns {{ totalSquareMeters: number, totalSeconds: number, totalNumber: number }}
-     */
-    parseResponse(payload: {
-        area: number;
-        time: number;
-        count: number;
-    }): {
-        totalSquareMeters: number;
-        totalSeconds: number;
-        totalNumber: number;
-    };
 }
 /**
  * Request information about the (spot) areas

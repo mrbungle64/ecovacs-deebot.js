@@ -58,6 +58,13 @@ export function getPlatformType(deviceClass: string): string;
  */
 export function getDeviceCategory(deviceClass: string): string;
 /**
+ * Returns the smartType (internal IoT platform generation/protocol) of the model
+ * (e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT').
+ * @param {string} deviceClass
+ * @returns {string}
+ */
+export function getSmartType(deviceClass: string): string;
+/**
  * @deprecated use getPlatformType()
  * Returns the type of the model
  * @returns {string}

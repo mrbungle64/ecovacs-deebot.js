@@ -125,6 +125,17 @@ declare class VacBot {
     historyManager: HistoryManager;
     maintenanceManager: MaintenanceManager;
     /**
+     * This is a wrapper function for edge cleaning mode
+     * @since 0.6.2
+     */
+    edge(): void;
+    /**
+     * This is a wrapper function for spot cleaning mode
+     * @since 0.6.2
+     */
+    spot(): void;
+    /**
+     * This is a wrapper function to start cleaning.
      * It takes a single argument, `mode`, which defaults to `"Clean"` (auto clean)
      * The function then calls the `run` function with the value of `mode` as the first argument
      * @since 0.6.2
@@ -144,16 +155,6 @@ declare class VacBot {
      * @param {number} [numberOfCleanings=1] - The number of times the robot will repeat the cleaning process
      */
     customArea(boundaryCoordinates: string, numberOfCleanings?: number): void;
-    /**
-     * This is a wrapper function for edge cleaning mode
-     * @since 0.6.2
-     */
-    edge(): void;
-    /**
-     * This is a wrapper function for spot cleaning mode
-     * @since 0.6.2
-     */
-    spot(): void;
     /**
      * This is a wrapper function to send the vacuum back to the charging station
      * @since 0.6.2
@@ -181,13 +182,6 @@ declare class VacBot {
      */
     playSound(soundID?: number): void;
     /**
-     * Run a specific command
-     * @param {string} command - The command name
-     * @param {...*} args - Zero or more arguments to perform the command
-     * @returns {Promise<any>|boolean} Returns a Promise if returnPromise is true, otherwise boolean
-     */
-    run(command: string, ...args: any[]): Promise<any> | boolean;
-    /**
      * Run a command and return a Promise that resolves with the response payload.
      * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
      *
@@ -198,6 +192,13 @@ declare class VacBot {
      * @returns {Promise<any>}
      */
     runAsync(command: string, ...args: any[]): Promise<any>;
+    /**
+     * Run a specific command
+     * @param {string} command - The command name
+     * @param {...*} args - Zero or more arguments to perform the command
+     * @returns {Promise<any>|boolean} Returns a Promise if returnPromise is true, otherwise boolean
+     */
+    run(command: string, ...args: any[]): Promise<any> | boolean;
     /**
      * Get the name of the spot area that the bot is currently in
      * @param {string} currentSpotAreaID - the ID of the spot area that the player is currently in
@@ -233,11 +234,23 @@ declare class VacBot {
      */
     getProtocol(): string;
     /**
+     * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
+     * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
+     * @returns {boolean}
+     */
+    isNot950type(): boolean;
+    /**
      * Returns true if the model is not a legacy model (i.e. is 950 type or newer)
      * e.g. Deebot OZMO 920, Deebot OZMO 950, Deebot T9 series
      * @returns {boolean}
      */
     is950type(): boolean;
+    /**
+     * Returns true if V2 commands are not implemented
+     * e.g. Deebot OZMO 920/950 and all older models
+     * @returns {boolean}
+     */
+    isNot950type_V2(): boolean;
     /**
      * Returns true if V2 commands are implemented (newer 950 type models)
      * e.g. Deebot T8, T9, T10, T20, X1, X2 series
@@ -245,18 +258,6 @@ declare class VacBot {
      * @returns {boolean}
      */
     is950type_V2(): boolean;
-    /**
-     * Returns true if the model is not 950 type (XMPP/XML or MQTT/XML)
-     * e.g. Deebot OZMO 930, Deebot 900/901, Deebot Slim 2
-     * @returns {boolean}
-     */
-    isNot950type(): boolean;
-    /**
-     * Returns true if V2 commands are not implemented
-     * e.g. Deebot OZMO 920/950 and all older models
-     * @returns {boolean}
-     */
-    isNot950type_V2(): boolean;
     /**
      * Returns true if the model is a fully supported model
      * @returns {boolean}
@@ -297,6 +298,12 @@ declare class VacBot {
      */
     getDeviceCategory(): string;
     /**
+     * Returns the smartType (internal IoT platform generation/protocol) of the model
+     * (e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT').
+     * @returns {string}
+     */
+    getSmartType(): string;
+    /**
      * @deprecated use getPlatformType()
      * Returns the type of the model
      * @returns {string}
@@ -308,19 +315,6 @@ declare class VacBot {
      * @returns {string}
      */
     getDeviceType(): string;
-    isPlatformTypeLegacy(): boolean;
-    isPlatformTypeN8(): boolean;
-    isPlatformTypeT8(): boolean;
-    isPlatformTypeT9(): boolean;
-    isPlatformTypeT10(): boolean;
-    isPlatformTypeT20(): boolean;
-    isPlatformTypeX1(): boolean;
-    isPlatformTypeX2(): boolean;
-    isPlatformTypeAirbot(): boolean;
-    isPlatformTypeAqMonitor(): boolean;
-    isPlatformTypeLawnMower(): boolean;
-    isPlatformTypeT8Based(): boolean;
-    isPlatformTypeT9Based(): boolean;
     /**
      * @deprecated use isPlatformTypeLegacy()
      */
@@ -373,6 +367,71 @@ declare class VacBot {
      * @deprecated use isPlatformTypeT9Based()
      */
     isModelTypeT9Based(): boolean;
+    /**
+     * Check if the device platform type is legacy.
+     * @returns {boolean}
+     */
+    isPlatformTypeLegacy(): boolean;
+    /**
+     * Check if the device platform type is N8.
+     * @returns {boolean}
+     */
+    isPlatformTypeN8(): boolean;
+    /**
+     * Check if the device platform type is T8.
+     * @returns {boolean}
+     */
+    isPlatformTypeT8(): boolean;
+    /**
+     * Check if the device platform type is T9.
+     * @returns {boolean}
+     */
+    isPlatformTypeT9(): boolean;
+    /**
+     * Check if the device platform type is T10.
+     * @returns {boolean}
+     */
+    isPlatformTypeT10(): boolean;
+    /**
+     * Check if the device platform type is T20.
+     * @returns {boolean}
+     */
+    isPlatformTypeT20(): boolean;
+    /**
+     * Check if the device platform type is X1.
+     * @returns {boolean}
+     */
+    isPlatformTypeX1(): boolean;
+    /**
+     * Check if the device platform type is X2.
+     * @returns {boolean}
+     */
+    isPlatformTypeX2(): boolean;
+    /**
+     * Check if the device platform type is Airbot.
+     * @returns {boolean}
+     */
+    isPlatformTypeAirbot(): boolean;
+    /**
+     * Check if the device platform type is Air Quality Monitor.
+     * @returns {boolean}
+     */
+    isPlatformTypeAqMonitor(): boolean;
+    /**
+     * Check if the device platform type is Lawn Mower.
+     * @returns {boolean}
+     */
+    isPlatformTypeLawnMower(): boolean;
+    /**
+     * Check if the device platform type is T8-based.
+     * @returns {boolean}
+     */
+    isPlatformTypeT8Based(): boolean;
+    /**
+     * Check if the device platform type is T9-based.
+     * @returns {boolean}
+     */
+    isPlatformTypeT9Based(): boolean;
     /**
      * Get the value of the given property for the device class
      * @param {string} property - The property to get
@@ -892,7 +951,7 @@ declare class VacBot {
     handleSysinfo(payload: Object): void;
     handleTask(type: any, payload: any): void;
     handleDModule(payload: any): void;
-    getCmdForObstacleDetection(): "Recognization" | "TrueDetect";
+    getCmdForObstacleDetection(): string;
 }
 import CapabilityManager = require("./managers/capabilityManager");
 import CommandDispatcher = require("./managers/commandDispatcher");
