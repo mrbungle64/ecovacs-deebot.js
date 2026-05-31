@@ -67,7 +67,7 @@ exports.SupportedDeebotModels = {
         "name": "DEEBOT N30",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus"],
-        "type": "T10"
+        "type": "T20"
     },
     "q6pew4": {
         "name": "DEEBOT OZMO T8 AIVI",
@@ -437,7 +437,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT NEO 3.0 OMNI",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
+        "type": "mini"
     },
     "zjavof": {
         "name": "DEEBOT NEO+",

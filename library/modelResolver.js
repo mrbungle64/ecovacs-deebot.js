@@ -30,7 +30,7 @@ const PLATFORM_TYPES = {
     KEPLER: 'T20',
     PLANCK: 'X2',
     HALLEY: 'X2',
-    SS: 'T20',
+    SS: 'mini',
     FS: 'T20'
 };
 
@@ -168,7 +168,13 @@ function inferPropertiesHeuristically(product) {
 
     // Heuristics A: Platform Type Resolution
     let type = platform ? PLATFORM_TYPES[platform] : null;
-    if (UILogicId.startsWith('t10_')) {
+
+    // Refine type by deep-inspecting UI Plugin suffixes (UI Families)
+    if (UILogicId.endsWith('ssh5')) {
+        type = 'mini';
+    } else if (UILogicId.endsWith('fsh5')) {
+        type = 'T20';
+    } else if (UILogicId.startsWith('t10_')) {
         type = 'T10';
     } else if (UILogicId.startsWith('t30_') || UILogicId.startsWith('omni_')) {
         type = 'T20';
@@ -183,6 +189,7 @@ function inferPropertiesHeuristically(product) {
     } else if (product.smartType === 'BT') {
         type = 'WINBOT';
     }
+    
     if (!type) {
         type = 'T10'; // Safe default
     }
@@ -192,7 +199,6 @@ function inferPropertiesHeuristically(product) {
 
     // Heuristics B: Dynamic Station & Capability Inference
     // We only trust the name and model for hardware station features (OMNI/PLUS/COMBO)
-    // UILogicId is often generic (e.g. 'omni_...' for all SS/FS variants)
     const hardwareSearchString = (name + " " + model).toLowerCase();
     const hasOmni = hardwareSearchString.includes('omni');
     const hasPlus = hardwareSearchString.includes('plus') || hardwareSearchString.includes('aes');
