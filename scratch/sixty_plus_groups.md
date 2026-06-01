@@ -2,7 +2,7 @@
 
 Total groups found: 54
 
-## Group 1 (20 models)
+## Group 1: Ecovacs T30 [Obere Mittelklasse / Performance] (MENDEL, T30, T30S) (20 models)
 - **DEEBOT T30 PRO OMNI** (Class ID: `3w7j5e` | Model: `T30_PRO_INT_BLACK` | UILogicId: `t30pro_ww_h_t30h5` | SmartType: `BLAP2`)
 - **DEEBOT T30S COMBO** (Class ID: `4bdkrs` | Model: `T30_COMBO_INT_BLACK` | UILogicId: `t30combo_ww_h_t30h5` | SmartType: `BLAP2`)
 - **DEEBOT T30 PRO OMNI** (Class ID: `4vhygi` | Model: `T30_PRO_INT` | UILogicId: `t30pro_ww_h_t30h5` | SmartType: `BLAP2`)
@@ -24,7 +24,7 @@ Total groups found: 54
 - **DEEBOT T30C PRO** (Class ID: `poke1m` | Model: `T30S_WHITE_INT` | UILogicId: `t30up_ww_h_t30h5` | SmartType: `BLAP2`)
 - **DEEBOT T30C PRO Gen2** (Class ID: `ohjbzz` | Model: `MENDEL_PRO_GER_WH` | UILogicId: `t30up_ww_h_t30h5` | SmartType: `BLAP2`)
 
-## Group 2 (17 models)
+## Group 2: Ecovacs / Yeedi M12, N50, T30, T30E [yeedi Premium / OMNI] (EULER, OL) (17 models)
 - **DEEBOT N50 OMNI** (Class ID: `36hdj8` | Model: `EULER_AU_BK` | UILogicId: `eulerh_ww_h_eulerh5` | SmartType: `MQ_APM`)
 - **DEEBOT N50 OMNI** (Class ID: `6q3rfp` | Model: `EULER_AU_WH` | UILogicId: `eulerh_ww_h_eulerh5` | SmartType: `MQ_APM`)
 - **N50 PRO OMNI** (Class ID: `a2ywac` | Model: `EULER_IND_BK` | UILogicId: `eulerh_ww_h_eulerh5` | SmartType: `MQ_APM`)
@@ -43,7 +43,7 @@ Total groups found: 54
 - **DEEBOT T30e OMNI** (Class ID: `pv7pmv` | Model: `EULER_WH_INT` | UILogicId: `eulerseh_ww_h_eulerh5` | SmartType: `MQ_APM`)
 - **DEEBOT T30e OMNI** (Class ID: `wdhjmt` | Model: `EULER_BK_INT` | UILogicId: `eulerseh_ww_h_eulerh5` | SmartType: `MQ_APM`)
 
-## Group 3 (15 models)
+## Group 3: Ecovacs U2 [Einstiegsklasse (Gyro)] (U2) (15 models)
 - **DEEBOT U2 PRO** (Class ID: `12baap` | Model: `U2_APAC2` | UILogicId: `U2_HIGH_G` | SmartType: `MQ_AP`)
 - **DEEBOT U2 POWER** (Class ID: `1zqysa` | Model: `U2_HK` | UILogicId: `U2_HIGH_NOMAG_G` | SmartType: `MQ_AP`)
 - **DEEBOT U2 PRO** (Class ID: `7j1tu6` | Model: `U2_EH2` | UILogicId: `U2_HIGH_G` | SmartType: `MQ_AP`)
@@ -60,7 +60,7 @@ Total groups found: 54
 - **DEEBOT U2 PRO** (Class ID: `y2qy3m` | Model: `U2_APAC3` | UILogicId: `U2_HIGH_G` | SmartType: `MQ_AP`)
 - **DEEBOT U2 SE** (Class ID: `zjna8m` | Model: `U2_SE` | UILogicId: `U2_HIGH_MODE_G` | SmartType: `MQ_AP`)
 
-## Group 4 (14 models)
+## Group 4: Ecovacs N20, N20E, N30, NEO [Budget / Mittelklasse mit LiDAR] (FS) (14 models)
 - **DEEBOT NEO 4.0 PLUS** (Class ID: `3gwbbm` | Model: `FS_AES_BLACK_AU_Y` | UILogicId: `aes_ww_h_fsh5` | SmartType: `MQ_APM`)
 - **DEEBOT N30 PLUS** (Class ID: `53qyvr` | Model: `FS_WHITE_INT_NEW` | UILogicId: `aes_ww_h_fsh5` | SmartType: `MQ_APM`)
 - **DEEBOT N20 Family** (Class ID: `7piq03` | Model: `FS_AES_BLACK_INT` | UILogicId: `aes_ww_h_fsh5` | SmartType: `MQ_AP`)
@@ -76,7 +76,7 @@ Total groups found: 54
 - **DEEBOT N20e** (Class ID: `ruhc0q` | Model: `FS_DOCK_BLACK_INT` | UILogicId: `aesdock_ww_h_fsh5` | SmartType: `MQ_AP`)
 - **DEEBOT N20e** (Class ID: `zgsvkq` | Model: `FS_DOCK_WHITE_INT` | UILogicId: `aesdock_ww_h_fsh5` | SmartType: `MQ_AP`)
 
-## Group 5 (13 models)
+## Group 5: Ecovacs N8 [Budget / Mittelklasse mit LiDAR] (N8) (13 models)
 - **DEEBOT N8** (Class ID: `36xnxf` | Model: `N8_BLACK	` | UILogicId: `N8_PLUS` | SmartType: `MQ_AP`)
 - **DEEBOT N8+** (Class ID: `7bryc5` | Model: `N8_PLUS_WHITE` | UILogicId: `N8_PLUS` | SmartType: `MQ_AP`)
 - **DEEBOT N8 BLACK** (Class ID: `7zya6u` | Model: `N8_BLACK_EMEA` | UILogicId: `N8_PLUS` | SmartType: `MQ_AP`)
@@ -91,7 +91,7 @@ Total groups found: 54
 - **DEEBOT N8** (Class ID: `n6cwdb` | Model: `N8_LDS_WHITE_N` | UILogicId: `T5_SE_G_DTOF` | SmartType: `MQ_AP`)
 - **DEEBOT N8** (Class ID: `r5y7re` | Model: `N8_DTOF_TW` | UILogicId: `T5_SE_G_DTOF` | SmartType: `MQ_AP`)
 
-## Group 6 (11 models)
+## Group 6: Ecovacs T50 [Obere Mittelklasse / Performance] (FARADAY) (11 models)
 - **DEEBOT T50 OMNI CARE** (Class ID: `2kuxj0` | Model: `FARADAY_MAX_B_INT_COSTCO` | UILogicId: `faraday_ww_h_keplerh5` | SmartType: `MQ_APM`)
 - **DEEBOT T50 PRO OMNI Gen2 with Auto Refill and Drain** (Class ID: `53q2xv` | Model: `FARADAY_PRO_UP_GER_WH` | UILogicId: `faradayhup_ww_h_keplerh5` | SmartType: `MQ_APM`)
 - **DEEBOT T50 PRO OMNI** (Class ID: `cuoipb` | Model: `FARADAY_PRO_W_INT` | UILogicId: `faradayh_ww_h_keplerh5` | SmartType: `MQ_APM`)
@@ -104,7 +104,7 @@ Total groups found: 54
 - **DEEBOT T50 PRO OMNI with Auto Refill and Drain** (Class ID: `wnx0t3` | Model: `FARADAY_PRO_A_W_INT` | UILogicId: `faradayhup_ww_h_keplerh5` | SmartType: `MQ_APM`)
 - **DEEBOT T50 PRO OMNI Gen2** (Class ID: `xztz07` | Model: `FARADAY_PRO_GER_BK` | UILogicId: `faradayh_ww_h_keplerh5` | SmartType: `MQ_APM`)
 
-## Group 7 (11 models)
+## Group 7: Ecovacs X12 [Premium / Flaggschiff] (PLANCKS) (11 models)
 - **DEEBOT X12 PRO OMNI Care** (Class ID: `5itx49` | Model: `PLANCKS_BLACK_H_AMR_CARE` | UILogicId: `plancksh_ww_h_plancksh5` | SmartType: `BLAP2`)
 - **DEEBOT X12 PRO OMNI** (Class ID: `6v4trk` | Model: `PLANCKS_BLACK_H_AMR` | UILogicId: `plancksh_ww_h_plancksh5` | SmartType: `BLAP2`)
 - **DEEBOT X12 PRO OMNI** (Class ID: `993uxb` | Model: `PLANCKS_WHITE_H_KO_INT` | UILogicId: `plancksh_ww_h_plancksh5` | SmartType: `BLAP2`)
@@ -117,7 +117,7 @@ Total groups found: 54
 - **DEEBOT X12 OmniCyclone Care Complete** (Class ID: `vihhjp` | Model: `PLANCKS_DUST_BLACK_H_EU_CARE` | UILogicId: `planckshcyc_ww_h_plancksh5` | SmartType: `BLAP2`)
 - **DEEBOT X12 PRO OMNI** (Class ID: `xzynh2` | Model: `PLANCKS_WHITE_H_INT` | UILogicId: `plancksh_ww_h_plancksh5` | SmartType: `BLAP2`)
 
-## Group 8 (10 models)
+## Group 8: Ecovacs W2 [WINBOT Fensterreiniger] (W2) (10 models)
 - **WINBOT W2 PRO OMNI** (Class ID: `28ds68` | Model: `W2_PRO_OMNI_RU` | UILogicId: `w2pro_ww_h_w2` | SmartType: `BT`)
 - **WINBOT W2 PRO OMNI** (Class ID: `2nps8i` | Model: `W2_STATION_HIGH_LEVEL` | UILogicId: `w2pro_ww_h_w2` | SmartType: `BT`)
 - **WINBOT W2 OMNI** (Class ID: `81gpyd` | Model: `W2_STATION_AMR` | UILogicId: `w2pro_ww_h_w2` | SmartType: `BT`)
@@ -129,7 +129,7 @@ Total groups found: 54
 - **WINBOT W2** (Class ID: `yephu9` | Model: `W2_SINGLE_EMEA` | UILogicId: `w2_ww_h_w2` | SmartType: `BT`)
 - **WINBOT W2 PRO OMNI** (Class ID: `zqswe5` | Model: `W2_PRO_OMNI_711` | UILogicId: `w2pro_ww_h_w2` | SmartType: `BT`)
 
-## Group 9 (10 models)
+## Group 9: Ecovacs T90, X9 [Obere Mittelklasse / Performance] (SHAKESPEARE) (10 models)
 - **DEEBOT T90 OMNI** (Class ID: `7fpaed` | Model: `SHAKESPEARE_LITE_EU_WH` | UILogicId: `shakespearem_ww_h_shakespeareh5` | SmartType: `BLAP2`)
 - **DEEBOT T90 PRO OMNI With Auto Refill And Drain** (Class ID: `8rf7m2` | Model: `SHAKESPEARE_TW_WH_AUTO` | UILogicId: `shakespeareup_ww_h_shakespeareh5` | SmartType: `BLAP2`)
 - **DEEBOT T90 OMNI** (Class ID: `cgkjbx` | Model: `SHAKESPEARE_LITE_AU_BLK` | UILogicId: `shakespearem_ww_h_shakespeareh5` | SmartType: `BLAP2`)
@@ -141,7 +141,7 @@ Total groups found: 54
 - **DEEBOT T90 PRO** (Class ID: `rx6f4s` | Model: `Shakespeare_INT_W_TW` | UILogicId: `shakespeare_ww_h_shakespeareh5` | SmartType: `BLAP2`)
 - **DEEBOT X9S PRO OMNI** (Class ID: `vm59fw` | Model: `SHAKESPEARE_PRO_BLK_INT` | UILogicId: `shakespeareh_ww_h_shakespeareh5` | SmartType: `BLAP2`)
 
-## Group 10 (10 models)
+## Group 10: Ecovacs N20 [Budget / Mittelklasse mit LiDAR] (Y2) (10 models)
 - **DEEBOT N20 PLUS** (Class ID: `9kpees` | Model: `Y2_AES_LITE_BLACK_US` | UILogicId: `y2se_ww_h_y2h5` | SmartType: `MQ_AP`)
 - **DEEBOT N20 PRO** (Class ID: `aavvfb` | Model: `Y2_BLACK_INT` | UILogicId: `y2dock_ww_h_y2h5` | SmartType: `MQ_AP`)
 - **DEEBOT N20 PLUS** (Class ID: `buom7k` | Model: `Y2_AES_LITE_INT` | UILogicId: `y2se_ww_h_y2h5` | SmartType: `MQ_AP`)
@@ -153,7 +153,7 @@ Total groups found: 54
 - **DEEBOT N20 PRO PLUS** (Class ID: `p0l0af` | Model: `Y2_AES_BLACK_US` | UILogicId: `y2_ww_h_y2h5` | SmartType: `MQ_AP`)
 - **DEEBOT N20 PRO PLUS** (Class ID: `qhe2o2` | Model: `Y2_AES_BLACK_INT` | UILogicId: `y2_ww_h_y2h5` | SmartType: `MQ_AP`)
 
-## Group 11 (10 models)
+## Group 11: Ecovacs T50 [Obere Mittelklasse / Performance] (FARADAYS) (10 models)
 - **DEEBOT T50 PRO OMNI Gen3 Care Kit** (Class ID: `be9ucr` | Model: `FARADAYS_SE_BLACK_PRO_KIT_INT` | UILogicId: `faradaysseh_ww_h_faradaysh5` | SmartType: `MQ_APM`)
 - **DEEBOT T50S PRO OMNI** (Class ID: `epzmc3` | Model: `FARADAYS_SE_WHITE_PRO_INT` | UILogicId: `faradaysseh_ww_h_faradaysh5` | SmartType: `MQ_APM`)
 - **DEEBOT T50S PRO OMNI Care** (Class ID: `ijr9cf` | Model: `FARADAYS_SE_BLACK_PRO_CARE_INT` | UILogicId: `faradaysseh_ww_h_faradaysh5` | SmartType: `MQ_APM`)
@@ -165,7 +165,7 @@ Total groups found: 54
 - **DEEBOT T50S OMNI** (Class ID: `tdb2j3` | Model: `FARADAYS_SE_WHITE_INT` | UILogicId: `faradaysse_ww_h_faradaysh5` | SmartType: `MQ_APM`)
 - **DEEBOT T50 OMNI Gen3** (Class ID: `tquqs3` | Model: `FARADAYS_SE_BLACK_GEN3_INT` | UILogicId: `faradaysse_ww_h_faradaysh5` | SmartType: `MQ_APM`)
 
-## Group 12 (8 models)
+## Group 12: Ecovacs X8, X9 [Premium / Flaggschiff] (KEPLER) (8 models)
 - **DEEBOT X8 OMNI** (Class ID: `4bx3w9` | Model: `KEPLER_WHITE_INT` | UILogicId: `kepler_ww_h_keplerh5` | SmartType: `BLAP2`)
 - **DEEBOT X8 OMNI** (Class ID: `co3fyu` | Model: `KEPLER_BLACK_INT` | UILogicId: `kepler_ww_h_keplerh5` | SmartType: `BLAP2`)
 - **DEEBOT X8 PRO OMNI** (Class ID: `gcu5tt` | Model: `KEPLER_WHITE_AI_INT` | UILogicId: `keplerh_ww_h_keplerh5` | SmartType: `BLAP2`)
@@ -175,7 +175,7 @@ Total groups found: 54
 - **DEEBOT X8 PRO OMNI** (Class ID: `y72606` | Model: `KEPLER_BLACK_AI_US_COSTCO` | UILogicId: `keplerh_ww_h_keplerh5` | SmartType: `BLAP2`)
 - **DEEBOT X9 PRO OMNI** (Class ID: `ilt3k8` | Model: `KEPLER_SPRO_BLACK_INT` | UILogicId: `keplersph_ww_h_keplersph5` | SmartType: `BLAP2`)
 
-## Group 13 (8 models)
+## Group 13: Ecovacs W1 [WINBOT Fensterreiniger] (BELUGA, W1S, W980) (8 models)
 - **WINBOT W1 PRO** (Class ID: `4xq430` | Model: `BELUGA_PRO_INT` | UILogicId: `belugapro_ww_h_beluga` | SmartType: `BT`)
 - **WINBOT W1 PRO** (Class ID: `62uooe` | Model: `BELUGA_PRO_US` | UILogicId: `belugapro_ww_h_beluga` | SmartType: `BT`)
 - **WINBOT W1S** (Class ID: `63y3bt` | Model: `W1S_TW` | UILogicId: `belugapro_ww_h_beluga` | SmartType: `BT`)
@@ -185,7 +185,7 @@ Total groups found: 54
 - **WINBOT W1S** (Class ID: `xjkrto` | Model: `W980_SK` | UILogicId: `belugapro_ww_h_beluga` | SmartType: `BT`)
 - **WINBOT W1S** (Class ID: `g83vm7` | Model: `W1S_W2SE_RU` | UILogicId: `w1stk_ww_h_w2` | SmartType: `BT`)
 
-## Group 14 (8 models)
+## Group 14: Ecovacs X11 [Premium / Flaggschiff] (PLANCK) (8 models)
 - **DEEBOT X11 OmniCyclone** (Class ID: `62asng` | Model: `PLANCK_CYCLONE_US` | UILogicId: `planckcyc_ww_h_planckh5` | SmartType: `BLAP2`)
 - **DEEBOT X11 PRO OMNI With Auto Refill And Drain** (Class ID: `7ohr1d` | Model: `PLANCK_PRO_UP_INT` | UILogicId: `planckhup_ww_h_planckh5` | SmartType: `BLAP2`)
 - **DEEBOT X11 PRO OMNI** (Class ID: `fmprq4` | Model: `PLANCK_PRO_INT_WH` | UILogicId: `planckh_ww_h_planckh5` | SmartType: `BLAP2`)
@@ -195,7 +195,7 @@ Total groups found: 54
 - **DEEBOT X11 PRO** (Class ID: `nyik8q` | Model: `PLANCK_PRO_TW` | UILogicId: `planckh_ww_h_planckh5` | SmartType: `BLAP2`)
 - **DEEBOT X11 PRO 上下水款** (Class ID: `yn5qid` | Model: `PLANCK_PRO_UP_TW` | UILogicId: `planckhup_ww_h_planckh5` | SmartType: `BLAP2`)
 
-## Group 15 (7 models)
+## Group 15: Ecovacs T80 [Obere Mittelklasse / Performance] (KEPLER, T80) (7 models)
 - **DEEBOT T80 OMNI** (Class ID: `02qwum` | Model: `KEPLER_SE_WHITE_INT` | UILogicId: `keplerse_ww_h_keplerseh5` | SmartType: `BLAP2`)
 - **DEEBOT T80 OMNI** (Class ID: `9eamof` | Model: `KEPLER_SE_BLACK_INT` | UILogicId: `keplerse_ww_h_keplerseh5` | SmartType: `BLAP2`)
 - **DEEBOT T80 OMNI** (Class ID: `aasdks` | Model: `T80` | UILogicId: `keplerse_ww_h_keplerseh5` | SmartType: `BLAP2`)
@@ -204,7 +204,7 @@ Total groups found: 54
 - **DEEBOT T80 OMNI** (Class ID: `kdnfi5` | Model: `KEPLER_SE_CR_WHITE_INT` | UILogicId: `keplerse_ww_h_keplerseh5` | SmartType: `BLAP2`)
 - **DEEBOT T80S OMNI** (Class ID: `rzwv5p` | Model: `KEPLER_INT_BLK` | UILogicId: `keplerplus_ww_h_keplerplush5` | SmartType: `BLAP2`)
 
-## Group 16 (7 models)
+## Group 16: Ecovacs MINI, NI2 (WHITESHARK, WINBOT) (7 models)
 - **WINBOT MINI** (Class ID: `05uq5v` | Model: `WHITESHARK_INT_AMR` | UILogicId: `sharkmini_ww_h_wshark` | SmartType: `BT`)
 - **WINBOT MINI** (Class ID: `6q6ctd` | Model: `WHITESHARK_INT_BROWN` | UILogicId: `sharkmini_ww_h_wshark` | SmartType: `BT`)
 - **WINBOT MINI** (Class ID: `crso4a` | Model: `WHITESHARK_INT` | UILogicId: `sharkmini_ww_h_wshark` | SmartType: `BT`)
@@ -213,7 +213,7 @@ Total groups found: 54
 - **WINBOT mini 2** (Class ID: `zbsb7p` | Model: `WINBOT_MINI_S` | UILogicId: `minis_ww_h_w3` | SmartType: `BT`)
 - **WINBOT Lite** (Class ID: `zr4mqt` | Model: `WINBOT_MINI2_ANZ` | UILogicId: `minis_ww_h_w3` | SmartType: `BT`)
 
-## Group 17 (6 models)
+## Group 17: Ecovacs T8 [Obere Mittelklasse / Performance] (OT8, OT8+, OT8G, T8+, T8G, T8GC) (6 models)
 - **DEEBOT OZMO T8 PURE** (Class ID: `0bdtzz` | Model: `OT8_PURE` | UILogicId: `DT_8G` | SmartType: `MQ_AP`)
 - **DEEBOT OZMO T8+** (Class ID: `55aiho` | Model: `T8+` | UILogicId: `DT_8G` | SmartType: `MQ_AP`)
 - **DEEBOT OZMO T8** (Class ID: `b742vd` | Model: `T8G` | UILogicId: `DT_8G` | SmartType: `MQ_AP`)
@@ -221,7 +221,7 @@ Total groups found: 54
 - **DEEBOT OZMO T8** (Class ID: `h18jkh` | Model: `OT8G` | UILogicId: `DT_8G` | SmartType: `MQ_AP`)
 - **DEEBOT T8** (Class ID: `wgxm70` | Model: `T8GC` | UILogicId: `DT_8G` | SmartType: `MQ_AP`)
 
-## Group 18 (6 models)
+## Group 18: Ecovacs X5 [Premium / Flaggschiff] (BOHR) (6 models)
 - **DEEBOT X5 OMNI** (Class ID: `4jd37g` | Model: `BOHR_INT_WH` | UILogicId: `bohrwhite_ww_h_bohrh5` | SmartType: `BLAP2`)
 - **DEEBOT X5 OMNI** (Class ID: `e6yxdm` | Model: `BOHR_INT_BK` | UILogicId: `bohr_ww_h_bohrh5` | SmartType: `BLAP2`)
 - **DEEBOT X5 PRO OMNI** (Class ID: `lr4qcs` | Model: `BOHR_PRO_BLACK_INT` | UILogicId: `bohrproblack_ww_h_bohrh5` | SmartType: `BLAP2`)
@@ -229,7 +229,7 @@ Total groups found: 54
 - **DEEBOT X5 PRO OMNI** (Class ID: `rvflzn` | Model: `BOHR_PRO_WHITE_INT` | UILogicId: `bohrpro_ww_h_bohrh5` | SmartType: `BLAP2`)
 - **DEEBOT X5 PRO OMNI** (Class ID: `w7k3yc` | Model: `BOHR_PRO_WHITE_TW` | UILogicId: `bohrpro_ww_h_bohrh5` | SmartType: `BLAP2`)
 
-## Group 19 (6 models)
+## Group 19: Ecovacs T9 [Obere Mittelklasse / Performance] (T9) (6 models)
 - **DEEBOT TEO+** (Class ID: `626v6g` | Model: `T9_PLUS_COSTCO` | UILogicId: `T9_PRO_G` | SmartType: `MQ_AP`)
 - **DEEBOT T9 AIVI** (Class ID: `659yh8` | Model: `T9_AIVI_INT` | UILogicId: `T9_AF_G` | SmartType: `MQ_AP`)
 - **DEEBOT T9** (Class ID: `ipohi5` | Model: `T9_ECO_INT` | UILogicId: `T9_PRO_G` | SmartType: `MQ_AP`)
@@ -237,7 +237,7 @@ Total groups found: 54
 - **DEEBOT T9** (Class ID: `ucn2xe` | Model: `DEEBOT_OZMO_T9` | UILogicId: `T9_PRO_G` | SmartType: `MQ_AP`)
 - **DEEBOT T9+** (Class ID: `um2ywg` | Model: `T9_PLUS_ECO_INT` | UILogicId: `T9_PRO_G` | SmartType: `MQ_AP`)
 
-## Group 20 (6 models)
+## Group 20: Ecovacs T10, X1E [Obere Mittelklasse / Performance] (CURIE) (6 models)
 - **DEEBOT T10 TURBO** (Class ID: `9s1s80` | Model: `CURIE_ACS_INT` | UILogicId: `t10_ww_n_curieacs` | SmartType: `MQ_AP`)
 - **DEEBOT T10** (Class ID: `jtmf04` | Model: `CURIE_INT` | UILogicId: `t10_ww_n_curie` | SmartType: `MQ_AP`)
 - **DEEBOT T10 OMNI** (Class ID: `lx3j7m` | Model: `CURIE_OMNI_INT` | UILogicId: `t10_ww_n_curieomni` | SmartType: `MQ_AP`)
@@ -245,164 +245,164 @@ Total groups found: 54
 - **DEEBOT T10 PLUS** (Class ID: `rss8xk` | Model: `CURIE_AES_INT` | UILogicId: `t10_ww_n_curieaesnoyiko` | SmartType: `MQ_AP`)
 - **DEEBOT X1e OMNI** (Class ID: `bro5wu` | Model: `CURIE_OMNI_INT_E` | UILogicId: `t10_ww_n_curieomni` | SmartType: `MQ_AP`)
 
-## Group 21 (5 models)
+## Group 21: Ecovacs T8 [Obere Mittelklasse / Performance] (DXAI, DXAIS) (5 models)
 - **DEEBOT T8 AIVI +** (Class ID: `34vhpm` | Model: `DXAIS_TW` | UILogicId: `DX_AIG` | SmartType: `MQ_AP`)
 - **DEEBOT T8 AIVI** (Class ID: `5089oy` | Model: `DXAI_TW` | UILogicId: `DX_AIG` | SmartType: `MQ_AP`)
 - **DEEBOT T8 AIVI +** (Class ID: `tpnwyu` | Model: `DXAIS_HK` | UILogicId: `DX_AIG` | SmartType: `MQ_AP`)
 - **DEEBOT OZMO T8 AIVI+** (Class ID: `w16crm` | Model: `DXAIS_US` | UILogicId: `DX_AIG` | SmartType: `MQ_AP`)
 - **DEEBOT OZMO T8 AIVI** (Class ID: `x5d34r` | Model: `DXAI_INTL` | UILogicId: `DX_AIG` | SmartType: `MQ_AP`)
 
-## Group 22 (5 models)
+## Group 22: Ecovacs G1 [GOAT Mähroboter] (5 models)
 - **GOAT G1** (Class ID: `5xu9h3` | Model: `GOAT_INT` | UILogicId: `goat_ww_h_goat` | SmartType: `BLAP`)
 - **GOAT G1-800** (Class ID: `77atlz` | Model: `GOAT_INT_G1_800` | UILogicId: `goat_ww_h_goat` | SmartType: `BLAP`)
 - **GOAT G1-800** (Class ID: `guzput` | Model: `GOAT_INT_G1_800_WHITE` | UILogicId: `goat_ww_h_goat` | SmartType: `BLAP`)
 - **GOAT G1** (Class ID: `itk04l` | Model: `GOAT_INT_G1` | UILogicId: `goat_ww_h_goat` | SmartType: `BLAP`)
 - **GOAT G1-2000** (Class ID: `s69g6z` | Model: `GOAT_INT_G1_2000` | UILogicId: `goat_ww_h_goat` | SmartType: `BLAP`)
 
-## Group 23 (5 models)
+## Group 23: Yeedi K960 [yeedi Einstiegsklasse] (K960) (5 models)
 - **yeedi Floor 3 Station** (Class ID: `kd0una` | Model: `K960_ACS_TW` | UILogicId: `k960_ww_h_k960` | SmartType: `MQ_AP`)
 - **yeedi Floor 3+** (Class ID: `rwp09o` | Model: `K960_AES_INT` | UILogicId: `k960_ww_h_k960` | SmartType: `MQ_AP`)
 - **yeedi Floor 3 Station** (Class ID: `t5e5o6` | Model: `K960_ACS_INT` | UILogicId: `k960_ww_h_k960` | SmartType: `MQ_AP`)
 - **yeedi Floor 3** (Class ID: `t6kipw` | Model: `K960_TW` | UILogicId: `k960_ww_h_k960` | SmartType: `MQ_AP`)
 - **yeedi Floor 3** (Class ID: `u3bsxq` | Model: `K960_INT` | UILogicId: `k960_ww_h_k960` | SmartType: `MQ_AP`)
 
-## Group 24 (4 models)
+## Group 24: Ecovacs AT80 (AT80, AT80K) (4 models)
 - **Aaron** (Class ID: `1qdu4z` | Model: `AT80K` | UILogicId: `AT80` | SmartType: `MQ_AP`)
 - **Aaron** (Class ID: `kckkso` | Model: `AT80_TW` | UILogicId: `AT80` | SmartType: `MQ_AP`)
 - **Aaron** (Class ID: `npggh4` | Model: `AT80_AUS` | UILogicId: `AT80` | SmartType: `MQ_AP`)
 - **Aaron** (Class ID: `uzhlnc` | Model: `AT80_INA` | UILogicId: `AT80` | SmartType: `MQ_AP`)
 
-## Group 25 (4 models)
+## Group 25: Ecovacs NEO, Y1 [yeedi LiDAR-Mittelklasse] (CARTESIAN) (4 models)
 - **DEEBOT Y1** (Class ID: `3ggyju` | Model: `CARTESIAN-WHITE-INT-STANDARD` | UILogicId: `y30_ww_h_y30h5` | SmartType: `MQ_AP`)
 - **DEEBOT Y1 PRO** (Class ID: `cqyi87` | Model: `CARTESIAN_BLACK_INT` | UILogicId: `y30_ww_h_y30h5` | SmartType: `MQ_AP`)
 - **DEEBOT NEO 2.0** (Class ID: `eyfj07` | Model: `CARTESIAN-BLACK-INT-STANDARD` | UILogicId: `y30_ww_h_y30h5` | SmartType: `MQ_AP`)
 - **DEEBOT Y1 PRO** (Class ID: `kduunv` | Model: `CARTESIAN_WHITE_INT` | UILogicId: `y30_ww_h_y30h5` | SmartType: `MQ_AP`)
 
-## Group 26 (4 models)
+## Group 26: Ecovacs T50 [Obere Mittelklasse / Performance] (COPERNIC, KOPERNIK) (4 models)
 - **DEEBOT T50 MAX PRO OMNI Gen2** (Class ID: `7c26ui` | Model: `KOPERNIK_GER_WH` | UILogicId: `copernich_ww_h_copernich5` | SmartType: `BLAP2`)
 - **DEEBOT T50 MAX PRO OMNI Gen2** (Class ID: `bheggm` | Model: `KOPERNIK_GER_BK` | UILogicId: `copernich_ww_h_copernich5` | SmartType: `BLAP2`)
 - **DEEBOT T50 MAX PRO OMNI** (Class ID: `c8rj4y` | Model: `COPERNIC_BLACK_INT` | UILogicId: `copernich_ww_h_copernich5` | SmartType: `BLAP2`)
 - **DEEBOT T50 MAX PRO OMNI** (Class ID: `qnkybo` | Model: `COPERNIC_WHITE_INT` | UILogicId: `copernich_ww_h_copernich5` | SmartType: `BLAP2`)
 
-## Group 27 (4 models)
+## Group 27: Ecovacs N30 [Budget / Mittelklasse mit LiDAR] (FS) (4 models)
 - **DEEBOT N30 PRO OMNI** (Class ID: `87swps` | Model: `FS_OMNI_WHITE_INT` | UILogicId: `omni_ww_h_fsh5` | SmartType: `MQ_AP`)
 - **DEEBOT N30 PRO OMNI** (Class ID: `dlrbzq` | Model: `FS_OMNI_BLACK_INT` | UILogicId: `omni_ww_h_fsh5` | SmartType: `MQ_AP`)
 - **DEEBOT N30 PRO** (Class ID: `uuu4n6` | Model: `FS_OMNI_WHITE_TAIWAN` | UILogicId: `omni_ww_h_fsh5` | SmartType: `MQ_AP`)
 - **DEEBOT N30 OMNI** (Class ID: `zwkcqc` | Model: `FS_N_OMNI_BLACK_INT` | UILogicId: `omnin_ww_h_fsh5` | SmartType: `MQ_AP`)
 
-## Group 28 (4 models)
+## Group 28: Ecovacs X2 [Premium / Flaggschiff] (X2) (4 models)
 - **DEEBOT X2** (Class ID: `e6ofmn` | Model: `X2_OMNI_INT_WH` | UILogicId: `x2white_ww_h_x2omnih5` | SmartType: `BLAP2`)
 - **DEEBOT X2 COMBO** (Class ID: `e6rcnf` | Model: `X2_Combo_INT` | UILogicId: `x2combo_ww_h_x2omnih5` | SmartType: `BLAP2`)
 - **DEEBOT X2 PRO OMNI** (Class ID: `ip3mmy` | Model: `X2_OMNI_HIGH_INT` | UILogicId: `x2whiteplus_ww_h_x2omnih5` | SmartType: `BLAP2`)
 - **DEEBOT X2** (Class ID: `lf3bn4` | Model: `X2_OMNI_INT` | UILogicId: `x2_ww_h_x2omnih5` | SmartType: `BLAP2`)
 
-## Group 29 (4 models)
+## Group 29: Ecovacs MILO (PHOENIX) (4 models)
 - **LilMilo** (Class ID: `mqxwwf` | Model: `Phoenix_Brown_INT` | UILogicId: `phoenix_ww_h_peth5` | SmartType: `QR_APM`)
 - **LilMilo** (Class ID: `sut2fi` | Model: `Phoenix_Blue_INT` | UILogicId: `phoenix_ww_h_peth5` | SmartType: `QR_APM`)
 - **LilMilo** (Class ID: `u54k2b` | Model: `Phoenix_White_INT` | UILogicId: `phoenix_ww_h_peth5` | SmartType: `QR_APM`)
 - **LilMilo** (Class ID: `wgrte3` | Model: `Phoenix_Green_INT` | UILogicId: `phoenix_ww_h_peth5` | SmartType: `QR_APM`)
 
-## Group 30 (3 models)
+## Group 30: Yeedi C12 [yeedi LiDAR-Mittelklasse] (Y2) (3 models)
 - **YEEDI C12** (Class ID: `3doypz` | Model: `Y2_LITE_YEDDI_INT` | UILogicId: `y2sedock_ww_h_yy2h5` | SmartType: `MQ_AP`)
 - **YEEDI C12 PRO PLUS** (Class ID: `gjr92u` | Model: `Y2_AES_BLACK_YEDDI_INT` | UILogicId: `y2_ww_h_yy2h5` | SmartType: `MQ_AP`)
 - **YEEDI C12 PLUS** (Class ID: `ojcqh7` | Model: `Y2_AES_LITE_YEDDI_INT` | UILogicId: `y2se_ww_h_yy2h5` | SmartType: `MQ_AP`)
 
-## Group 31 (3 models)
+## Group 31: Ecovacs MINI, NEO (SS) (3 models)
 - **DEEBOT mini** (Class ID: `55uoqe` | Model: `SS_INT` | UILogicId: `omni_ww_h_ssh5` | SmartType: `MQ_APM`)
 - **DEEBOT mini PRO** (Class ID: `uzel1r` | Model: `SS_INT_BLUE` | UILogicId: `omni_ww_h_ssh5` | SmartType: `MQ_APM`)
 - **DEEBOT NEO 3.0 OMNI** (Class ID: `zg6qbz` | Model: `SS_ANZ` | UILogicId: `omni_ww_h_ssh5` | SmartType: `MQ_APM`)
 
-## Group 32 (3 models)
+## Group 32: Ecovacs N10 [Budget / Mittelklasse mit LiDAR] (NOBEL) (3 models)
 - **DEEBOT N10 MAX+** (Class ID: `clojes` | Model: `NOBEL_PLUS_INT_COSTCO_BLACK` | UILogicId: `t8_ww_n_nobelpluscostcoblack` | SmartType: `MQ_AP`)
 - **DEEBOT N10** (Class ID: `m1wkuw` | Model: `NOBEL_INT` | UILogicId: `t8_ww_n_nobel` | SmartType: `MQ_AP`)
 - **DEEBOT N10 PLUS** (Class ID: `umwv6z` | Model: `NOBEL_PLUS_INT` | UILogicId: `t8_ww_n_nobelplus` | SmartType: `MQ_AP`)
 
-## Group 33 (3 models)
+## Group 33: Ecovacs AVA (AVA) (3 models)
 - **AVA** (Class ID: `f32i67` | Model: `AVA_TW` | UILogicId: `ATMOBOT_AVA` | SmartType: `MQ_AP`)
 - **AVA** (Class ID: `jh3ry2` | Model: `AVA` | UILogicId: `ATMOBOT_AVA` | SmartType: `MQ_AP`)
 - **AVA** (Class ID: `l01kak` | Model: `AVA_INA` | UILogicId: `ATMOBOT_AVA_IN` | SmartType: `MQ_AP`)
 
-## Group 34 (2 models)
+## Group 34: Yeedi K781 [yeedi Einstiegsklasse] (K781) (2 models)
 - **yeedi vac max** (Class ID: `04z443` | Model: `K781` | UILogicId: `DK_781_PLUS` | SmartType: `QRP`)
 - **yeedi vac station** (Class ID: `mnx7f4` | Model: `K781_PLUS` | UILogicId: `DK_781_PLUS` | SmartType: `QRP`)
 
-## Group 35 (2 models)
+## Group 35: Ecovacs X1 [Premium / Flaggschiff] (EINSTEIN) (2 models)
 - **DEEBOT X1 OMNI** (Class ID: `1b23du` | Model: `EINSTEIN_WHITE_INT` | UILogicId: `t10_ww_n_omniwhite` | SmartType: `MQ_AP`)
 - **DEEBOT X1 OMNI** (Class ID: `1vxt52` | Model: `EINSTEIN_INT` | UILogicId: `t10_ww_n_omni` | SmartType: `MQ_AP`)
 
-## Group 36 (2 models)
+## Group 36: Ecovacs Z1 [Airbot Luftreiniger] (AT90) (2 models)
 - **Z1 Air Quality Monitor** (Class ID: `20anby` | Model: `AT90_INT` | UILogicId: `at90_ww_h_at90` | SmartType: `MQ_AP`)
 - **Z1 Air Quality Monitor** (Class ID: `99fqkn` | Model: `AT90_INT_NEW` | UILogicId: `at90_ww_h_at91` | SmartType: `MQ_AP`)
 
-## Group 37 (2 models)
+## Group 37: Ecovacs 600 (2 models)
 - **GOAT GX-600** (Class ID: `2ap5uq` | Model: `GOAT_GX_600_EU` | UILogicId: `goat_ww_h_goatx` | SmartType: `BLAP`)
 - **GOAT GX-600** (Class ID: `ao7fpw` | Model: `GOAT_GX_600_NA` | UILogicId: `goat_ww_h_goatx` | SmartType: `BLAP`)
 
-## Group 38 (2 models)
+## Group 38: Ecovacs 920 (W920) (2 models)
 - **WINBOT 920** (Class ID: `2pj946` | Model: `W920_INT` | UILogicId: `winbot_g` | SmartType: `BT`)
 - **WINBOT 920** (Class ID: `yu7oqr` | Model: `W920_INT_GD` | UILogicId: `winbot_g` | SmartType: `BT`)
 
-## Group 39 (2 models)
+## Group 39: Ecovacs X1 [Premium / Flaggschiff] (NEWTON) (2 models)
 - **DEEBOT X1** (Class ID: `3yqsch` | Model: `NEWTON_INT` | UILogicId: `t10_ww_n_newton` | SmartType: `MQ_AP`)
 - **DEEBOT X1 PLUS** (Class ID: `n4gstt` | Model: `NEWTON_AES_INT` | UILogicId: `t10_ww_n_newtonaes` | SmartType: `MQ_AP`)
 
-## Group 40 (2 models)
+## Group 40: Ecovacs AT01 (AT01) (2 models)
 - **AT01** (Class ID: `4f0c4e` | Model: `AT01` | UILogicId: `AT_01G` | SmartType: `MQ_AP`)
 - **AT01** (Class ID: `q1v5dn` | Model: `AT01` | UILogicId: `AT_01G` | SmartType: `MQ_AP`)
 
-## Group 41 (2 models)
+## Group 41: Ecovacs A3000 (2 models)
 - **GOAT A3000 LiDAR Pro** (Class ID: `51rcxt` | Model: `GOAT_INT_A2600_LIDAR_PLUS_NA` | UILogicId: `goatl_ww_h_goat2plus` | SmartType: `BLAPG`)
 - **GOAT A3000 LiDAR Pro** (Class ID: `wwswjm` | Model: `GOAT_INT_A2600_LIDAR_PLUS_EU` | UILogicId: `goatl_ww_h_goat2plus` | SmartType: `BLAPG`)
 
-## Group 42 (2 models)
+## Group 42: Yeedi M14 [yeedi Premium / OMNI] (KEPLER) (2 models)
 - **YEEDI M14 PLUS** (Class ID: `6801mm` | Model: `KEPLER_SE_YEEDI_BLACK_INT` | UILogicId: `keplerse_ww_h_ykeplerseh5` | SmartType: `BLAP2`)
 - **YEEDI M14 PLUS** (Class ID: `p1jjhp` | Model: `KEPLER_SE_YEEDI_WHITE_INT` | UILogicId: `keplerse_ww_h_ykeplerseh5` | SmartType: `BLAP2`)
 
-## Group 43 (2 models)
+## Group 43: Yeedi CUBE (CC) (2 models)
 - **yeedi cube** (Class ID: `6r6dbt` | Model: `CC` | UILogicId: `cc_ww_h_cc` | SmartType: `BL_QRP`)
 - **yeedi cube (black)** (Class ID: `delg6a` | Model: `CC_BLACK_INT` | UILogicId: `cc_ww_h_cc` | SmartType: `BL_QRP`)
 
-## Group 44 (2 models)
+## Group 44: Ecovacs W2 [WINBOT Fensterreiniger] (DAVINCI) (2 models)
 - **WINBOT W2S** (Class ID: `780627` | Model: `DAVINCI_H_INT` | UILogicId: `davinicih_ww_h_vinci` | SmartType: `BT`)
 - **WINBOT W2S OMNI** (Class ID: `v50csw` | Model: `DAVINCI_PRO_INT` | UILogicId: `davinicipro_ww_h_vinci` | SmartType: `BT`)
 
-## Group 45 (2 models)
+## Group 45: Ecovacs NEO, Y1 [yeedi LiDAR-Mittelklasse] (CARTESIANPLUS) (2 models)
 - **DEEBOT Y1 PLUS** (Class ID: `7s881f` | Model: `CARTESIANPLUS-WHITE-INT-STANDARD` | UILogicId: `y30plus_ww_h_y30h5` | SmartType: `MQ_AP`)
 - **DEEBOT NEO 2.0 PLUS** (Class ID: `q287s6` | Model: `CARTESIANPLUS-BLACK-INT-STANDARD` | UILogicId: `y30plus_ww_h_y30h5` | SmartType: `MQ_AP`)
 
-## Group 46 (2 models)
+## Group 46: Ecovacs T20E [Obere Mittelklasse / Performance] (T20E) (2 models)
 - **DEEBOT T20e OMNI** (Class ID: `9ku8nu` | Model: `T20E_OMINI_INT` | UILogicId: `t10_ww_n_darwin_e` | SmartType: `MQ_AP`)
 - **DEEBOT T20e OMNI** (Class ID: `py3qif` | Model: `T20E_OMNI_SE_INT` | UILogicId: `t10_ww_n_darwinnoyiko_e` | SmartType: `MQ_AP`)
 
-## Group 47 (2 models)
+## Group 47: Ecovacs 950, T5 [Obere Mittelklasse / Performance] (DX9G) (2 models)
 - **DEEBOT OZMO T5** (Class ID: `9rft3c` | Model: `DX9G_T5` | UILogicId: `DX_9G` | SmartType: `MQ_AP`)
 - **DEEBOT OZMO 950 Series** (Class ID: `yna5xi` | Model: `DX9G` | UILogicId: `DX_9G` | SmartType: `MQ_AP`)
 
-## Group 48 (2 models)
+## Group 48: Yeedi S20 [yeedi Premium / OMNI] (PLANCK) (2 models)
 - **YEEDI S20 Infinity** (Class ID: `cqvabr` | Model: `PLANCK_CYCLONE_YEEDI` | UILogicId: `planckcyc_ww_h_yplanckh5` | SmartType: `BLAP2`)
 - **YEEDI S20 Infinity** (Class ID: `irdzs4` | Model: `PLANCK_CYCLONE_US_YEEDI` | UILogicId: `planckcyc_ww_h_yplanckh5` | SmartType: `BLAP2`)
 
-## Group 49 (2 models)
+## Group 49: Ecovacs A3000 (QINGGENG) (2 models)
 - **GOAT A3000 LiDAR** (Class ID: `cr0e4u` | Model: `GOAT_INT_G2_LIDAR3000_NA` | UILogicId: `goatl_ww_h_goat2` | SmartType: `BLAPG`)
 - **GOAT A3000 LiDAR** (Class ID: `o4kvvk` | Model: `QingGeng-L` | UILogicId: `goatl_ww_h_goat2` | SmartType: `BLAPG`)
 
-## Group 50 (2 models)
+## Group 50: Ecovacs Y1 [yeedi LiDAR-Mittelklasse] (CARTESIANPLUS) (2 models)
 - **DEEBOT Y1 PRO PLUS** (Class ID: `dd5b88` | Model: `CARTESIANPLUS_BLACK_INT` | UILogicId: `y30aes_ww_h_y30h5` | SmartType: `MQ_AP`)
 - **DEEBOT Y1 PRO PLUS** (Class ID: `rvbmro` | Model: `CARTESIANPLUS_WHITE_INT` | UILogicId: `y30aes_ww_h_y30h5` | SmartType: `MQ_AP`)
 
-## Group 51 (2 models)
+## Group 51: Yeedi K760 [yeedi Einstiegsklasse] (K760) (2 models)
 - **yeedi vac hybrid** (Class ID: `h041es` | Model: `K760_EU` | UILogicId: `DK_781_PLUS` | SmartType: `QRP`)
 - **yeedi vac** (Class ID: `u5vcmk` | Model: `K760_US` | UILogicId: `DK_781_PLUS` | SmartType: `QRP`)
 
-## Group 52 (2 models)
+## Group 52: Ecovacs ANDY (ANDY) (2 models)
 - **ANDY** (Class ID: `hsgwhi` | Model: `ANDY` | UILogicId: `ATMOBOT_ANDY` | SmartType: `MQ_AP`)
 - **ANDY PRO** (Class ID: `n4h5sz` | Model: `ANDY_PRO_APAC` | UILogicId: `ANDY_PRO_AU` | SmartType: `MQ_AP`)
 
-## Group 53 (2 models)
+## Group 53: Ecovacs 900 (DN5G) (2 models)
 - **DEEBOT 900 Series** (Class ID: `ls1ok3` | Model: `DN5G` | UILogicId: `D_900` | SmartType: `MQ_AP`)
 - **DEEBOT OZMO 900 Series** (Class ID: `y79a7u` | Model: `DN5G` | UILogicId: `D_OZMO_900` | SmartType: `MQ_AP`)
 
-## Group 54 (2 models)
+## Group 54: Yeedi K850 [yeedi Einstiegsklasse] (K850) (2 models)
 - **yeedi mop station** (Class ID: `vthpeg` | Model: `K850_PLUS` | UILogicId: `DK_850` | SmartType: `QRP`)
 - **yeedi mop station pro** (Class ID: `zwvyi2` | Model: `K850_PLUS_NEW_INT` | UILogicId: `k850_ww_h_k850` | SmartType: `QRP`)
 
