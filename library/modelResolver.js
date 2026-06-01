@@ -12,7 +12,7 @@ const SCIENTISTS = [
     'KEPLER', 'PLANCK', 'HALLEY', 'SHAKESPEARE'
 ];
 
-const KNOWN_PLATFORMS = ['SS', 'FS', 'Y2', 'U2', 'N8', 'T30', 'T20', 'T9', 'X2', 'CARTESIANPLUS', 'CARTESIAN'];
+const KNOWN_PLATFORMS = ['SS', 'FS', 'Y2', 'U2', 'N8', 'T30', 'T30S', 'T50', 'T80', 'N30', 'N50', 'X8', 'X11', 'T20', 'T9', 'X2', 'CARTESIANPLUS', 'CARTESIAN'];
 
 const STATION_KEYWORDS = ['OMNI', 'PLUS', 'AES', 'TURBO', 'COMBO', 'STATION'];
 const SIMILARITY_CLONE_THRESHOLD = 95;
@@ -26,7 +26,7 @@ const PLATFORM_TYPES = {
     COPERNIC: 'T20',
     KOPERNIK: 'T20',
     FARADAY: 'T20',
-    EULER: 'T10',
+    EULER: 'T20',
     KEPLER: 'T20',
     PLANCK: 'X2',
     HALLEY: 'X2',
@@ -34,7 +34,15 @@ const PLATFORM_TYPES = {
     CARTESIAN: 'T10',
     CARTESIANPLUS: 'T10',
     SS: 'mini',
-    FS: 'T20'
+    FS: 'T20',
+    T30: 'T20',
+    T30S: 'T20',
+    T50: 'T20',
+    T80: 'T20',
+    N30: 'T20',
+    N50: 'T20',
+    X8: 'T20',
+    X11: 'X2'
 };
 
 /**
@@ -192,7 +200,7 @@ function inferPropertiesHeuristically(product) {
         type = 'T20';
     } else if (UILogicId.startsWith('t10_')) {
         type = 'T10';
-    } else if (UILogicId.startsWith('t30_') || UILogicId.startsWith('omni_')) {
+    } else if (UILogicId.startsWith('t30_') || UILogicId.startsWith('omni_') || UILogicId.startsWith('euler')) {
         type = 'T20';
     } else if (UILogicId.startsWith('n8_')) {
         type = 'N8';
