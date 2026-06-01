@@ -33,7 +33,7 @@ exports.SupportedDeebotModels = {
         "type": "T8"
     },
     "sa4tf7": {
-        "name": "DEEBOT OZMO T8 AIVI",
+        "name": "DEEBOT N-α",
         "smartType": "MQ_AP",
         "deviceClassLink": "x5d34r"
     },
@@ -44,7 +44,7 @@ exports.SupportedDeebotModels = {
         "type": "mini"
     },
     "z0gd1j": {
-        "name": "DEEBOT OZMO T8 AIVI",
+        "name": "DEEBOT Neo",
         "smartType": "MQ_AP",
         "deviceClassLink": "x5d34r"
     },
@@ -55,7 +55,7 @@ exports.SupportedDeebotModels = {
         "type": "T20"
     },
     "q6pew4": {
-        "name": "DEEBOT OZMO T8 AIVI",
+        "name": "DEEBOT N30",
         "smartType": "MQ_AP",
         "deviceClassLink": "x5d34r"
     },
@@ -445,61 +445,61 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "ohjbzz": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C PRO Gen2",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "poke1m": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C PRO",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "qdajz8": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "r0321c": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "ulzked": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "viq3mw": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "x9ugz3": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT T30C",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "cgm9ex": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT NEO 4.0",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "dzuvdj": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT N30 PRO",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
     "uuu4n6": {
-        "name": "DEEBOT T20 OMNI",
+        "name": "DEEBOT N30 PRO",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
@@ -547,19 +547,19 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "36hdj8": {
-        "name": "DEEBOT T30C Gen2",
+        "name": "DEEBOT N50 OMNI",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "6q3rfp": {
-        "name": "DEEBOT T30C Gen2",
+        "name": "DEEBOT N50 OMNI",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
     },
     "kl54s5": {
-        "name": "DEEBOT T30C Gen2",
+        "name": "DEEBOT N50",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingHigh", "stationBase"],
         "type": "T20"
@@ -619,73 +619,73 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "63cum9": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T30S CARE",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "7c26ui": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 MAX PRO OMNI Gen2",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "8o3xke": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T30S AI Care",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "bheggm": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 MAX PRO OMNI Gen2",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "c8rj4y": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 MAX PRO OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "cuoipb": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 PRO OMNI",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "czjwet": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 PRO OMNI Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "elrxgb": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 PRO OMNI",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "k1lgm7": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T30S AI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "qnkybo": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 MAX PRO OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "xztz07": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T50 PRO OMNI Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
     },
     "8n0t5d": {
-        "name": "DEEBOT T30S PRO OMNI",
+        "name": "DEEBOT T30S PRO OMNI Gen2",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "T20"
@@ -1040,19 +1040,19 @@ exports.KnownDeebotModels = {
         "type": "X2"
     },
     "62asng": {
-        "name": "DEEBOT X9 PRO OMNI",
+        "name": "DEEBOT X11 OmniCyclone",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "X2"
     },
     "huhcip": {
-        "name": "DEEBOT X9 PRO OMNI",
+        "name": "DEEBOT X11 OmniCyclone",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "X2"
     },
     "m2nkyq": {
-        "name": "DEEBOT X9 PRO OMNI",
+        "name": "DEEBOT X8 MAX PRO OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "X2"
@@ -1204,17 +1204,17 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "0jbd6s": {
-        "name": "GOAT G1",
+        "name": "GOAT O1000 LiDAR Pro",
         "smartType": "BLAP",
         "type": "lawnMower"
     },
     "2i0fns": {
-        "name": "GOAT G1",
+        "name": "GOAT O1200 LiDAR Pro",
         "smartType": "BLAP",
         "type": "lawnMower"
     },
     "2px96q": {
-        "name": "GOAT G1",
+        "name": "GOAT O800 RTK",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
@@ -1224,57 +1224,57 @@ exports.KnownLawnMowerModels = {
         "type": "lawnMower"
     },
     "51rcxt": {
-        "name": "GOAT A3000 LiDAR PRO",
+        "name": "GOAT A3000 LiDAR Pro",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "6cibhb": {
-        "name": "GOAT G1",
+        "name": "GOAT O1000 RTK",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "6n9pcz": {
-        "name": "GOAT G1",
+        "name": "GOAT O600 RTK",
         "smartType": "BLAP",
         "type": "lawnMower"
     },
     "9bts2s": {
-        "name": "GOAT G1",
+        "name": "GOAT O800 RTK",
         "smartType": "BLAP",
         "type": "lawnMower"
     },
     "cr0e4u": {
-        "name": "GOAT G1",
+        "name": "GOAT A3000 LiDAR",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "o4kvvk": {
-        "name": "GOAT G1",
+        "name": "GOAT A3000 LiDAR",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "qhq6i0": {
-        "name": "GOAT G1",
+        "name": "GOAT O1200 RTK",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "aadham": {
-        "name": "GOAT A3000 LiDAR PRO",
+        "name": "GOAT A2000 LiDAR Pro",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "e4gqia": {
-        "name": "GOAT A3000 LiDAR PRO",
+        "name": "GOAT A1600 LiDAR Pro",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "neiwny": {
-        "name": "GOAT A1600 RTK",
+        "name": "GOAT A2500 RTK",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
     "wwswjm": {
-        "name": "GOAT A3000 LiDAR PRO",
+        "name": "GOAT A3000 LiDAR Pro",
         "smartType": "BLAPG",
         "type": "lawnMower"
     },
@@ -1403,7 +1403,7 @@ exports.LegacyDevices = {
         "type": "legacy"
     },
     "aqdd5p": {
-        "name": "DEEBOT OZMO 905",
+        "name": "DEEBOT DE55",
         "smartType": "MQ_AP",
         "type": "legacy"
     },
