@@ -13,6 +13,9 @@
 // Any expanded names are speculative and unofficial.
 
 // Modern and actively supported DEEBOT models
+// Note: vi829v (OZMO 920) and yna5xi (OZMO 950) are technically/architecturally identical twins.
+// They share the same platform architecture and main board, differing only in battery capacity
+// and the suctionMaxPlus (Max+) speed level.
 exports.SupportedDeebotModels = {
     "vi829v": {
         "name": "DEEBOT OZMO 920",

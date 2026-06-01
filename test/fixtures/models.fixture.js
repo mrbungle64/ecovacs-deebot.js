@@ -246,23 +246,7 @@ exports.KnownDevices = {
         "map_image_supported": true,
         "type": "T9"
     },
-    "8kwdb4": {
-        "name": "DEEBOT T9 AIVI",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "unit_care_info": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": true,
-        "clean_speed": true,
-        "map_image_supported": true,
-        "type": "T9"
-    },
+
     "n6cwdb": {
         "name": "DEEBOT N8",
         "950type": true,
@@ -401,27 +385,7 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "X1"
     },
-    "8bja83": {
-        "name": "DEEBOT X1 Omni",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "unit_care_info": true,
-        "round_mop_info": true,
-        "air_drying": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": true,
-        "clean_speed": true,
-        "map_image_supported": true,
-        "hosted_mode": true,
-        "yiko": true,
-        "type": "X1"
-    },
+
     "n4gstt": {
         "name": "DEEBOT X1 PLUS",
         "950type": true,
@@ -464,27 +428,7 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "X2"
     },
-    "p7l7iu": {
-        "name": "DEEBOT X2 OMNI Height",
-        "950type": true,
-        "950type_V2": true,
-        "main_brush": true,
-        "side_brush": true,
-        "filter": true,
-        "unit_care_info": true,
-        "round_mop_info": true,
-        "air_drying": true,
-        "spot_area": true,
-        "custom_area": true,
-        "mopping_system": true,
-        "voice_report": true,
-        "auto_empty_station": true,
-        "clean_speed": true,
-        "map_image_supported": true,
-        "hosted_mode": true,
-        "yiko": true,
-        "type": "X2"
-    },
+
     "ipzjy0": {
         "name": "DEEBOT U2",
         "950type": true,

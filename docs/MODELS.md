@@ -20,6 +20,8 @@ When the library checks a device's capabilities (e.g., via `CapabilityManager`),
 *   **Base Architecture vs. Specific Names**: Specific marketing names (e.g., "DEEBOT T20 OMNI") usually don't require entirely separate model types if they share the same base architecture. Instead, they refer to a common base type (like `T20`).
 *   **Variants via Capabilities**: Product variants such as "OMNI", "PLUS", or "TURBO" are handled using capability arrays in `models.js` rather than creating separate types. For instance, the OMNI capability will set the appropriate flags for a station with auto-empty, mop washing, and hot air drying features.
 *   **Protocol Versions**: The `V2` flag indicates the use of modern "V2" commands (e.g., `getMapInfo_V2`, `clean_V2`) rather than legacy commands (which are still used by the `950` generation).
+*   **Known Architecture Twins**: Some models are technically/architecturally identical twins (sharing the same main board and platform architecture) despite different marketing names or small component changes:
+    *   **DEEBOT OZMO 920 (`vi829v`) vs. DEEBOT OZMO 950 Series (`yna5xi`)**: These share the exact same `950` platform/architecture. The only differences are the battery capacity (3200 mAh vs. 5200 mAh) and the software/firmware-level support for the `suctionMaxPlus` (Max+) speed level.
 
 ## `getPlatformType()` API
 
@@ -96,7 +98,7 @@ The `getSmartType()` method returns the internal IoT platform generation/protoco
 
 ```javascript
 const smartType = vacbot.getSmartType();
-// e.g. 'MQ_AP', 'BLAP2', 'QRP', 'SPA', 'BT', 'unknown'
+// e.g. 'MQ_AP', 'BLAP2', 'QRP', 'QR_APM', 'SPA', 'BT', 'unknown'
 ```
 
 ## `smartType` Property
@@ -122,6 +124,8 @@ Although undocumented by the manufacturer, the `smartType` correlates consistent
     These designations represent newer iterations of the manufacturer's internal IoT SDK/firmware platform used by modern flagships and lawn mowers. The exact meaning of the letters is undocumented; while the community has hypothesized "Bluetooth + Access Point" due to dual-mode setup chips, there is no official source confirming this.
 *   **`QRP` / `BL_QRP` (Speculative / Hypothetical):**
     Commonly used for **yeedi**-branded robots (e.g., yeedi vac, mop station, cube) and selected Ecovacs devices such as the **AIRBOT Z1** (which is built on the Deebot X1 Horizon-X3 SoC platform). The meaning of "QRP" is completely undocumented. While early community efforts speculated it stood for "Qirui Robot Platform", public corporate registries show that Shenzhen Qirui Technology is an unrelated accessory manufacturer with no role in robot design or manufacturing (the actual manufacturing arm for Yeedi is Shenzhen Reecoo Electronic Co., Ltd., a wholly-owned Ecovacs subsidiary).
+*   **`QR_APM` (Speculative / Hypothetical):**
+    Used for **Emotional AI Companion Robots** (specifically the **LilMilo** series, based on the Phoenix platform). The meaning of the letters is undocumented, but it identifies companion/pet robots rather than vacuum cleaners.
 *   **`BT` (Bluetooth low energy):**
     Uniquely mapped to WINBOT window-cleaning systems (e.g., WINBOT W2 OMNI). These devices bypass Wi-Fi/WAN API endpoints entirely, relying strictly on point-to-point BLE connections to ensure low-latency physical safety control loops.
 *   **`SPA` / `HK_AP` (Legacy Platforms / Speculative):**
@@ -136,6 +140,7 @@ Although undocumented by the manufacturer, the `smartType` correlates consistent
 | **`BLAP2`** | Modern Flagship DEEBOTs (T30, T80, X5, X2, T30S) | Newer generation IoT connection platform/SDK. |
 | **`BLAP`** / **`BLAPG`** | GOAT Lawn Mowers (G1, GX-600, A3000, A2500, etc.) | Lawn Mower (Mähroboter) platform. |
 | **`QRP`** / **`BL_QRP`** | **yeedi**-branded robots and selected Ecovacs devices (e.g. AIRBOT Z1) | Internal platform code (previously hypothesized as Qirui Robot Platform, disproven). |
+| **`QR_APM`** | **LilMilo** Emotional AI Companion Robots | Internal companion robot platform. |
 | **`BT`** | WINBOT window cleaning robots | Bluetooth-based localized communication platform. |
 | **`SPA`** / **`HK_AP`** | Legacy DEEBOTs (Slim2, N79, OZMO 610/930) | Legacy connection protocols / Region routing / Lab-internal test label. |
 

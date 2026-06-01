@@ -119,16 +119,16 @@ function findBestSimilarityMatch(targetProduct, productIotMap, allKnownDevices) 
 function calculateModelSimilarity(p1, p2) {
     let score = 0;
 
-    // F1: Platform Codename (Weight: 40)
+    // F1: Platform Codename (Weight: 30)
     const s1 = extractPlatformCodename(p1.model);
     const s2 = extractPlatformCodename(p2.model);
     if (s1 && s2 && s1 === s2) {
-        score += 40;
+        score += 30;
     }
 
-    // F2: UILogicId Full Match (Weight: 30)
+    // F2: UILogicId Full Match (Weight: 25)
     if (p1.UILogicId && p2.UILogicId && p1.UILogicId.toLowerCase() === p2.UILogicId.toLowerCase()) {
-        score += 30;
+        score += 25;
     }
 
     // F3: SmartType (Weight: 10)
@@ -153,6 +153,19 @@ function calculateModelSimilarity(p1, p2) {
     const icon2 = extractIconId(p2.icon || p2.iconUrl);
     if (icon1 && icon2 && icon1 === icon2) {
         score += 5;
+    }
+
+    // F7: Brand and Series Family Match (Weight: 15)
+    const m1 = getManufacturer(p1);
+    const m2 = getManufacturer(p2);
+    const ser1 = getProductSeries(p1);
+    const ser2 = getProductSeries(p2);
+    if (ser1 !== 'unknown' && ser2 !== 'unknown' && ser1 === ser2) {
+        if (m1 === m2) {
+            score += 15;
+        } else {
+            score += 7.5;
+        }
     }
 
     return score;
@@ -392,6 +405,104 @@ function extractIconId(iconOrUrl) {
     return parts[parts.length - 1].toLowerCase();
 }
 
+/**
+ * Classifies the manufacturer based on the product metadata.
+ * @param {Object} product - The product object.
+ * @returns {string} The manufacturer name ('yeedi' or 'ecovacs').
+ */
+function getManufacturer(product) {
+    const name = (product.name || '').toLowerCase();
+    const model = (product.model || '').toLowerCase();
+    const ui = (product.UILogicId || '').toLowerCase();
+    if (name.includes('yeedi') || model.includes('yeedi') || ui.includes('yyeedi') || ui.includes('yeedi')) {
+        return 'yeedi';
+    }
+    return 'ecovacs';
+}
+
+/**
+ * Extracts a normalized series codename from the product metadata.
+ * @param {Object} product - The product object.
+ * @returns {string} The normalized series codename, or 'unknown'.
+ */
+function getProductSeries(product) {
+    const name = (product.name || '').toLowerCase();
+    const model = (product.model || '').toLowerCase();
+    
+    // 1. Try to match standard alphanumeric series patterns (e.g. T8, T30, X1, S20, M12, G1, W2, etc.)
+    const match = name.toUpperCase().match(/\b([A-Z]{1,2}\d{1,4}[A-Z]*)\b/);
+    if (match) {
+        let series = match[1].toLowerCase();
+        if (series.endsWith('e')) {
+            series = series.replace(/([a-z]{1,2}\d+)e$/, '$1e');
+        } else {
+            series = series.replace(/([a-z]{1,2}\d+)[a-z]+$/, '$1');
+        }
+        return series;
+    }
+    
+    // 2. Look for 3-4 digit numbers (e.g. 920, 950, 900, 710, 500)
+    const numMatch = name.match(/\b(\d{3,4})\b/);
+    if (numMatch) {
+        return numMatch[1];
+    }
+
+    // 3. Fallback to model string matching
+    const modelMatch = model.toUpperCase().match(/([A-Z]{1,2}\d{1,4})/);
+    if (modelMatch) {
+        return modelMatch[1].toLowerCase();
+    }
+    
+    // 4. Try descriptive keywords in name or model
+    if (name.includes('neo')) {
+        return 'neo';
+    }
+    if (name.includes('mini')) {
+        return 'mini';
+    }
+    if (name.includes('cube') || model.includes('cube') || model.includes('_cc')) {
+        return 'cube';
+    }
+    if (name.includes('vac') || model.includes('vac') || model.includes('_k7')) {
+        return 'vac';
+    }
+    if (name.includes('floor') || model.includes('k960')) {
+        return 'floor';
+    }
+    if (name.includes('milo') || model.includes('phoenix')) {
+        return 'milo';
+    }
+    if (name.includes('purifier') || name.includes('airbot') || name.includes('at90')) {
+        return 'airbot';
+    }
+    if (name.includes('monalisa')) {
+        return 'monalisa';
+    }
+    if (name.includes('aaron') || model.includes('at80')) {
+        return 'aaron';
+    }
+    if (name.includes('ava') || model.includes('ava')) {
+        return 'ava';
+    }
+    if (name.includes('goat') || model.includes('goat')) {
+        return 'goat';
+    }
+    if (name.includes('teo') || model.includes('teo') || model.includes('darwin_omni_teo')) {
+        return 'teo';
+    }
+    if (name.includes('iboto') || model.includes('iboto')) {
+        return 'iboto';
+    }
+    if (name.includes('andy') || model.includes('andy')) {
+        return 'andy';
+    }
+    if (name.includes('alpha') || model.includes('alpha')) {
+        return 'alpha';
+    }
+    
+    return 'unknown';
+}
+
 module.exports = {
     resolveDeviceProperties,
     calculateModelSimilarity,
@@ -401,5 +512,7 @@ module.exports = {
     extractUIBasePrefix,
     getStationKeywords,
     hasH5PluginSuffix,
-    extractIconId
+    extractIconId,
+    getManufacturer,
+    getProductSeries
 };
