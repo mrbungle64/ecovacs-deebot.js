@@ -7,7 +7,7 @@
  */
 
 // Note on smartType: Every model has a `smartType` parameter representing its 
-// internal Ecovacs IoT platform protocol/family (e.g., MQ_AP, BLAP2, QRP, SPA).
+// internal Ecovacs IoT platform protocol/family (e.g., MQ_AP, BLAP2, QRP, QR_APM, SPA).
 // These are proprietary, undocumented identifiers mapped from productIotMap.json 
 // (sourced from https://github.com/MVladislav/bumper/tree/main) or deduced.
 // Any expanded names are speculative and unofficial.
@@ -20,11 +20,6 @@ exports.SupportedDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "moppingUltraHigh", "OZMO"],
         "type": "950"
     },
-    "eazo2f": {
-        "name": "DEEBOT OZMO 920/950",
-        "smartType": "MQ_AP",
-        "deviceClassLink": "vi829v"
-    },
     "yna5xi": {
         "name": "DEEBOT OZMO 950 Series",
         "smartType": "MQ_AP",
@@ -36,16 +31,6 @@ exports.SupportedDeebotModels = {
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OZMO", "stationBaseOptional"],
         "type": "T8"
-    },
-    "7n95dm": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "smartType": "MQ_AP",
-        "deviceClassLink": "x5d34r"
-    },
-    "dqcneu": {
-        "name": "DEEBOT OZMO T8 AIVI",
-        "smartType": "MQ_AP",
-        "deviceClassLink": "x5d34r"
     },
     "sa4tf7": {
         "name": "DEEBOT OZMO T8 AIVI",
@@ -85,16 +70,6 @@ exports.SupportedDeebotModels = {
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "TURBO"],
         "type": "X1"
-    },
-    "8onkgl": {
-        "name": "DEEBOT X1 TURBO",
-        "smartType": "MQ_AP",
-        "deviceClassLink": "2o4lnm"
-    },
-    "s523z1": {
-        "name": "DEEBOT X1 TURBO",
-        "smartType": "MQ_AP",
-        "deviceClassLink": "2o4lnm"
     },
 };
 
@@ -158,12 +133,6 @@ exports.KnownDeebotModels = {
         "type": "T10"
     },
     "9s1s80": {
-        "name": "DEEBOT T10 TURBO",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "TURBO"],
-        "type": "T10"
-    },
-    "yaj7uz": {
         "name": "DEEBOT T10 TURBO",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "TURBO"],
@@ -421,12 +390,6 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "N8"
     },
-    "a7lhb1": {
-        "name": "DEEBOT N9+",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "PLUS"],
-        "type": "N8"
-    },
     "c2of2s": {
         "name": "DEEBOT N9+",
         "smartType": "MQ_AP",
@@ -481,21 +444,9 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
-    "m4xnd8": {
-        "name": "DEEBOT T20 OMNI",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
-    },
     "ohjbzz": {
         "name": "DEEBOT T20 OMNI",
         "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
-    },
-    "paeygf": {
-        "name": "DEEBOT T20 OMNI",
-        "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
@@ -532,12 +483,6 @@ exports.KnownDeebotModels = {
     "x9ugz3": {
         "name": "DEEBOT T20 OMNI",
         "smartType": "MQ_APM",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
-    },
-    "yi396x": {
-        "name": "DEEBOT T20 OMNI",
-        "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "T20"
     },
@@ -781,12 +726,6 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T8"
     },
-    "bs40nz": {
-        "name": "DEEBOT T8 AIVI",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
-        "type": "T8"
-    },
     "5089oy": {
         "name": "DEEBOT T8 AIVI",
         "smartType": "MQ_AP",
@@ -803,24 +742,6 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T8 AIVI +",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
-        "type": "T8"
-    },
-    "vdehg6": {
-        "name": "DEEBOT T8 AIVI +",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
-        "type": "T8"
-    },
-    "a1nNMoAGAsH": {
-        "name": "DEEBOT T8 MAX",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "moppingHigh"],
-        "type": "T8"
-    },
-    "no61kx": {
-        "name": "DEEBOT T8 POWER",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh"],
         "type": "T8"
     },
     "02qwum": {
@@ -859,12 +780,6 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "T20"
     },
-    "w7y3cb": {
-        "name": "DEEBOT T80 OMNI",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
-    },
     "ucn2xe": {
         "name": "DEEBOT T9",
         "smartType": "MQ_AP",
@@ -877,22 +792,10 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
         "type": "T9"
     },
-    "8kwdb4": {
-        "name": "DEEBOT T9 AIVI",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
-        "type": "T9"
-    },
     "659yh8": {
         "name": "DEEBOT T9 AIVI",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "stationBaseOptional"],
-        "type": "T9"
-    },
-    "kw9ayx": {
-        "name": "DEEBOT T9 AIVI Plus",
-        "smartType": "MQ_AP",
-        "capabilities": ["vacuumBase", "navigationBase", "PLUS"],
         "type": "T9"
     },
     "lhbd50": {
@@ -1022,12 +925,6 @@ exports.KnownDeebotModels = {
         "air_freshener_info": true,
         "type": "X1"
     },
-    "8bja83": {
-        "name": "DEEBOT X1 OMNI",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
-        "type": "X1"
-    },
     "1b23du": {
         "name": "DEEBOT X1 OMNI",
         "smartType": "MQ_AP",
@@ -1062,12 +959,6 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT X2 COMBO",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingHigh", "COMBO"],
-        "type": "X2"
-    },
-    "p7l7iu": {
-        "name": "DEEBOT X2 OMNI Height",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "X2"
     },
     "ip3mmy": {
@@ -1112,12 +1003,6 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
         "type": "X2"
     },
-    "mxse7w": {
-        "name": "DEEBOT X5 PRO OMNI",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
-        "type": "X2"
-    },
     "co3fyu": {
         "name": "DEEBOT X8 OMNI",
         "smartType": "BLAP2",
@@ -1136,12 +1021,6 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "X2"
     },
-    "eom321": {
-        "name": "DEEBOT X8 PRO OMNI",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "X2"
-    },
     "gcu5tt": {
         "name": "DEEBOT X8 PRO OMNI",
         "smartType": "BLAP2",
@@ -1155,18 +1034,6 @@ exports.KnownDeebotModels = {
         "type": "X2"
     },
     "ilt3k8": {
-        "name": "DEEBOT X9 PRO OMNI",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
-        "type": "X2"
-    },
-    "lwmdoj": {
-        "name": "DEEBOT X9 PRO OMNI",
-        "smartType": "BLAP2",
-        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
-        "type": "X2"
-    },
-    "0jv4ti": {
         "name": "DEEBOT X9 PRO OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
