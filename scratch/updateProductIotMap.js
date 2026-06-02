@@ -80,6 +80,14 @@ async function main() {
         console.log('Sorting by classid...');
         mergedList.sort((a, b) => a.classid.localeCompare(b.classid));
 
+        console.log('Normalizing and completing product names...');
+        const { getNormalizedProductName } = require('../library/modelResolver');
+        for (const item of mergedList) {
+            if (item && item.product) {
+                item.product.name = getNormalizedProductName(item.product);
+            }
+        }
+
         console.log('Applying domain replacements (api-app.dc-{na,eu,as}.ww -> portal-ww)...');
         let jsonStr = JSON.stringify(mergedList, null, 2);
         jsonStr = jsonStr.replace(/api-app\.dc-(na|eu|as)\.ww/g, 'portal-ww');

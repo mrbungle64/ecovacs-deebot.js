@@ -422,9 +422,26 @@ function getManufacturer(product) {
     const name = (product.name || '').toLowerCase();
     const model = (product.model || '').toLowerCase();
     const ui = (product.UILogicId || '').toLowerCase();
-    if (name.includes('yeedi') || model.includes('yeedi') || ui.includes('yyeedi') || ui.includes('yeedi')) {
+    
+    // 1. Explicit yeedi/yeddi brand keywords
+    if (name.includes('yeedi') || model.includes('yeedi') || ui.includes('yeedi') || ui.includes('yyeedi') || model.includes('yeddi')) {
         return 'yeedi';
     }
+    
+    // 2. Legacy/specific Yeedi series (K650, K700)
+    if (name.includes('k650') || model.includes('k650') || ui.includes('k650') ||
+        name.includes('k700') || model.includes('k700') || ui.includes('k700')) {
+        return 'yeedi';
+    }
+    
+    // 3. Yeedi specific plugin suffix starting with 'y' (e.g. yfsh5, yeulerh5, yt30h5)
+    if (ui) {
+        const pluginId = ui.split('_').pop();
+        if (/^y(t30|euler|fs|kepler|planck|faraday|shakespeare)/i.test(pluginId)) {
+            return 'yeedi';
+        }
+    }
+    
     return 'ecovacs';
 }
 
@@ -511,6 +528,36 @@ function getProductSeries(product) {
     return 'unknown';
 }
 
+/**
+ * Normalizes and completes the product name by adding missing brand prefixes (e.g. DEEBOT or yeedi).
+ * @param {Object} product - The product object.
+ * @returns {string} The normalized product name.
+ */
+function getNormalizedProductName(product) {
+    if (!product || !product.name) {
+        return '';
+    }
+    let name = product.name.trim();
+    const manufacturer = getManufacturer(product);
+    
+    if (manufacturer === 'yeedi') {
+        // If it's a Yeedi product but doesn't start with "yeedi" (case-insensitive)
+        if (!/^yeedi/i.test(name)) {
+            // Capitalize "yeedi" if the original name is uppercase, else use lowercase
+            const prefix = name === name.toUpperCase() ? 'YEEDI ' : 'yeedi ';
+            name = prefix + name;
+        }
+    } else if (manufacturer === 'ecovacs') {
+        // If it's an Ecovacs vacuum cleaner but doesn't start with "DEEBOT"
+        const isVacuum = /^[ntxuvy]\d/i.test(name) || name.toUpperCase() === 'ROBOT' || name.toUpperCase() === 'IBOTO';
+        if (isVacuum && !/^deebot/i.test(name)) {
+            name = 'DEEBOT ' + name;
+        }
+    }
+    
+    return name;
+}
+
 module.exports = {
     resolveDeviceProperties,
     calculateModelSimilarity,
@@ -522,5 +569,6 @@ module.exports = {
     hasH5PluginSuffix,
     extractIconId,
     getManufacturer,
-    getProductSeries
+    getProductSeries,
+    getNormalizedProductName
 };

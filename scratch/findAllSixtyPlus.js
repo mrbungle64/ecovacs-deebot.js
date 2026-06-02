@@ -65,7 +65,7 @@ items.forEach(item => {
     classToProduct[item.classid] = item.product;
 });
 
-const { getProductSeries, extractPlatformCodename, getManufacturer } = require('../library/modelResolver.js');
+const { getProductSeries, extractPlatformCodename, getManufacturer, getNormalizedProductName } = require('../library/modelResolver.js');
 
 /**
  * Generates a descriptive name for a group of products.
@@ -151,15 +151,30 @@ let markdownOutput = `# Model Groups (Similarity >= 60%)\n\n`;
 markdownOutput += `Total groups found: ${groups.length}\n\n`;
 
 groups.forEach((group, index) => {
+    // Sort the group members alphanumerically by normalized product name, then model, then classid
+    group.sort((a, b) => {
+        const pA = classToProduct[a];
+        const pB = classToProduct[b];
+        const nameA = getNormalizedProductName(pA);
+        const nameB = getNormalizedProductName(pB);
+        
+        const nameComp = nameA.localeCompare(nameB);
+        if (nameComp !== 0) return nameComp;
+        
+        const modelComp = (pA.model || '').localeCompare(pB.model || '');
+        if (modelComp !== 0) return modelComp;
+        
+        return a.localeCompare(b);
+    });
+
     const groupProducts = group.map(classid => classToProduct[classid]);
     const groupName = nameGroup(groupProducts);
 
     markdownOutput += `## Group ${index + 1}: ${groupName} (${group.length} models)\n`;
 
-    // Let's print details of the models in this group
     group.forEach(classid => {
         const p = classToProduct[classid];
-        markdownOutput += `- **${p.name.trim()}** (Class ID: \`${classid}\` | Model: \`${p.model}\` | UILogicId: \`${p.UILogicId}\` | SmartType: \`${p.smartType}\`)\n`;
+        markdownOutput += `- **${getNormalizedProductName(p)}** (Class ID: \`${classid}\` | Model: \`${p.model}\` | UILogicId: \`${p.UILogicId}\` | SmartType: \`${p.smartType}\`)\n`;
     });
     markdownOutput += `\n`;
 });
