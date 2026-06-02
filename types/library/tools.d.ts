@@ -40,6 +40,12 @@ export function getAllKnownDevices(): Object;
  */
 export function getDeviceProperty(deviceClass: string, property: string, defaultValue?: any): any;
 /**
+ * Gets or resolves an unknown deviceClass dynamically using model similarity & heuristics.
+ * @param {string} deviceClass - The 6-character class ID.
+ * @returns {Object|null} The resolved device properties object, or null.
+ */
+export function getDynamicDevice(deviceClass: string): Object | null;
+/**
  * @returns {Object} a dictionary of known devices
  */
 export function getKnownDevices(): Object;

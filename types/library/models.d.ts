@@ -5,11 +5,6 @@ export const SupportedDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    eazo2f: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
     yna5xi: {
         name: string;
         smartType: string;
@@ -22,62 +17,11 @@ export const SupportedDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    "7n95dm": {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    dqcneu: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    sa4tf7: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    uzel1r: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    z0gd1j: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    npu3pt: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    q6pew4: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    w16crm: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     "2o4lnm": {
         name: string;
         smartType: string;
         capabilities: string[];
         type: string;
-    };
-    "8onkgl": {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
-    };
-    s523z1: {
-        name: string;
-        smartType: string;
-        deviceClassLink: string;
     };
 };
 export const SupportedAirPurifierModels: {
@@ -98,6 +42,18 @@ export const SupportedAirPurifierModels: {
     };
 };
 export const KnownDeebotModels: {
+    z0gd1j: {
+        name: string;
+        smartType: string;
+        capabilities: string[];
+        type: string;
+    };
+    sa4tf7: {
+        name: string;
+        smartType: string;
+        capabilities: string[];
+        type: string;
+    };
     "9rft3c": {
         name: string;
         smartType: string;
@@ -105,6 +61,12 @@ export const KnownDeebotModels: {
         type: string;
     };
     "55uoqe": {
+        name: string;
+        smartType: string;
+        capabilities: string[];
+        type: string;
+    };
+    uzel1r: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -136,12 +98,6 @@ export const KnownDeebotModels: {
         type: string;
     };
     "9s1s80": {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    yaj7uz: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -291,6 +247,18 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
+    npu3pt: {
+        name: string;
+        smartType: string;
+        capabilities: string[];
+        type: string;
+    };
+    q6pew4: {
+        name: string;
+        smartType: string;
+        capabilities: string[];
+        type: string;
+    };
     zwkcqc: {
         name: string;
         smartType: string;
@@ -399,12 +367,6 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    a7lhb1: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     c2of2s: {
         name: string;
         smartType: string;
@@ -453,25 +415,19 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
+    w16crm: {
+        name: string;
+        smartType: string;
+        capabilities: string[];
+        type: string;
+    };
     p1jij8: {
         name: string;
         smartType: string;
         capabilities: string[];
         type: string;
     };
-    m4xnd8: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     ohjbzz: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    paeygf: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -508,12 +464,6 @@ export const KnownDeebotModels: {
         type: string;
     };
     x9ugz3: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    yi396x: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -759,12 +709,6 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    bs40nz: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     "5089oy": {
         name: string;
         smartType: string;
@@ -778,24 +722,6 @@ export const KnownDeebotModels: {
         type: string;
     };
     "34vhpm": {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    vdehg6: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    a1nNMoAGAsH: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    no61kx: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -837,12 +763,6 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    w7y3cb: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     ucn2xe: {
         name: string;
         smartType: string;
@@ -855,19 +775,7 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    "8kwdb4": {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     "659yh8": {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    kw9ayx: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -1000,12 +908,6 @@ export const KnownDeebotModels: {
         air_freshener_info: boolean;
         type: string;
     };
-    "8bja83": {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     "1b23du": {
         name: string;
         smartType: string;
@@ -1037,12 +939,6 @@ export const KnownDeebotModels: {
         type: string;
     };
     e6rcnf: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    p7l7iu: {
         name: string;
         smartType: string;
         capabilities: string[];
@@ -1090,12 +986,6 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    mxse7w: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     co3fyu: {
         name: string;
         smartType: string;
@@ -1114,12 +1004,6 @@ export const KnownDeebotModels: {
         capabilities: string[];
         type: string;
     };
-    eom321: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
     gcu5tt: {
         name: string;
         smartType: string;
@@ -1133,18 +1017,6 @@ export const KnownDeebotModels: {
         type: string;
     };
     ilt3k8: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    lwmdoj: {
-        name: string;
-        smartType: string;
-        capabilities: string[];
-        type: string;
-    };
-    "0jv4ti": {
         name: string;
         smartType: string;
         capabilities: string[];
