@@ -44,9 +44,9 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^25.9.1",
-    "eslint": "^8.57.1",
+    "eslint": "^10.4.1",
     "globals": "^15.15.0",
     "node-machine-id": "^1.1.12",
     "typescript": "^6.0.2",
