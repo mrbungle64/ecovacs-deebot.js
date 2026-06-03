@@ -18,6 +18,16 @@ This directory contains examples for using the `ecovacs-deebot.js` library.
     npm run appTest
     ```
 
+### Alternatively: Run with Docker Compose
+
+If you prefer to run the example application in a containerized environment (without installing Node.js locally):
+
+1. **Configure your account** by copying and editing the `.env` file as described above.
+2. **Start the container:**
+   ```bash
+   docker compose up
+   ```
+
 ## Files
 
 -   `app.js`: The unified entry point for all device types.
