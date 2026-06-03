@@ -1,6 +1,6 @@
 services:
   ecovacs:
-    image: node:20-bookworm-slim
+    build: .
     user: node
     working_dir: /home/node/app
     volumes:

@@ -102,6 +102,22 @@ For local development and running the example application in a self-contained en
    docker compose up
    ```
 
+   > [!TIP]
+   > If you encounter a `permission denied` error when connecting to the Docker daemon socket, you can either run the command with `sudo`:
+   > ```bash
+   > sudo docker compose up
+   > ```
+   > Or add your current user to the `docker` group to run docker without root privileges:
+   > ```bash
+   > # Create the docker group if it does not exist
+   > sudo groupadd docker
+   > 
+   > # Add user to the docker group
+   > sudo usermod -aG docker $USER
+   > # Then log out and log back in, or run:
+   > newgrp docker
+   > ```
+
 This will:
 * Boot a container using the official `node:20-bookworm-slim` image.
 * Bind-mount the current repository directory into `/home/node/app` within the container.

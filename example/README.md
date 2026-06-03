@@ -27,6 +27,7 @@ If you prefer to run the example application in a containerized environment (wit
    ```bash
    docker compose up
    ```
+   *(Note: If you run into permission errors, use `sudo docker compose up` or configure your user group as documented in [docs/INSTALLATION.md](docs/INSTALLATION.md#5-running-with-docker-compose-local-development--testing)).*
 
 ## Files
 

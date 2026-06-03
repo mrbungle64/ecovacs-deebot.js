@@ -34,3 +34,8 @@ AGENTS.md
 .env
 .env.local
 example/.env
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
