@@ -16,7 +16,8 @@ COPY --chown=node:node package*.json ./
 USER node
 
 # Abhängigkeiten installieren (erstellt node_modules im Image als Benutzer node)
-RUN npm install
+# npm ci ist deterministisch, schneller und nutzt strikt das Lock-File
+RUN npm ci
 
 # Quellcode kopieren
 COPY --chown=node:node . .

@@ -18,4 +18,4 @@ services:
       - ECOVACS_DEVICE_NUMBER
       - ECOVACS_COUNTRY_CODE
       - ECOVACS_AUTH_DOMAIN
-    command: bash -c "npm install && node example/app.js"
+    command: node example/app.js

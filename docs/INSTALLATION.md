@@ -102,6 +102,12 @@ For local development and running the example application in a self-contained en
    docker compose up
    ```
 
+   > [!NOTE]
+   > If you add new dependencies to `package.json`, rebuild the image first:
+   > ```bash
+   > docker compose build
+   > ```
+
    > [!TIP]
    > If you encounter a `permission denied` error when connecting to the Docker daemon socket, you can either run the command with `sudo`:
    > ```bash
