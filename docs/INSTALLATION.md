@@ -91,9 +91,9 @@ For local development and running the example application in a self-contained en
 ### Steps:
 
 1. **Configure credentials:**
-   Copy the example environment file to `example/.env` and fill in your Ecovacs account credentials:
+   Copy the example environment file to `.env` in the root directory and fill in your Ecovacs account credentials:
    ```bash
-   cp example/.env.example example/.env
+   cp example/.env.example .env
    ```
 
 2. **Start the container:**

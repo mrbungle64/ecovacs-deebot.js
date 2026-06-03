@@ -5,10 +5,10 @@ This directory contains examples for using the `ecovacs-deebot.js` library.
 ## Getting Started
 
 1.  **Configure your account:**
-    Copy `example/.env.example` to `example/.env` (or use environment variables) and fill in your Ecovacs credentials.
+    Copy `example/.env.example` to `.env` in the root directory (or use environment variables) and fill in your Ecovacs credentials.
     
     ```bash
-    cp example/.env.example example/.env
+    cp example/.env.example .env
     ```
 
 2.  **Run the unified example app:**

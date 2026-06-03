@@ -9,7 +9,7 @@ services:
     tty: true
     stdin_open: true
     env_file:
-      - path: example/.env
+      - path: .env
         required: false
     environment:
       - NODE_ENV=development
