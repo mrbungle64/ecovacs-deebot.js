@@ -17,3 +17,8 @@ library/map/
 
 .clinerules
 AGENTS.md
+
+# Credentials and Environment
+.env
+.env.local
+example/.env

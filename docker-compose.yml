@@ -1,17 +1,21 @@
-version: '3.3'
-
 services:
   ecovacs:
     image: node:20-bookworm-slim
+    user: node
+    working_dir: /home/node/app
     volumes:
-      - ./:/opt/app
+      - ./:/home/node/app
+      - /home/node/app/node_modules
     tty: true
     stdin_open: true
+    env_file:
+      - path: example/.env
+        required: false
     environment:
       - NODE_ENV=development
       - ECOVACS_ACCOUNT_ID
       - ECOVACS_PASSWORD
       - ECOVACS_DEVICE_NUMBER
       - ECOVACS_COUNTRY_CODE
-    working_dir: /opt/app
-    command: bash -c 'npm install && node example/app2'
+      - ECOVACS_AUTH_DOMAIN
+    command: bash -c "npm install && node example/app.js"
