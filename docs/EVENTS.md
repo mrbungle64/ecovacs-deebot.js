@@ -43,12 +43,12 @@ Events related to suction power, water flow, cleaning modes, and active cleaning
 | Event Name | Payload Type | Description |
 | :--- | :--- | :--- |
 | **`CleanSpeed`** | `number` | Current vacuum suction power level. |
-| **`WaterInfo`** | `object` | Raw water information payload from `WaterInfo` messages and `GetWaterInfo` responses. |
+| **`WaterInfo`** | `object` | Raw device payload from `WaterInfo` messages and `GetWaterInfo` responses. Use `WaterLevel`, `WaterBoxInfo`, `WaterBoxMoppingType`, and `WaterBoxScrubbingType` for the normalized values. |
 | **`WaterLevel`** | `number` | Current water flow level for mopping. |
 | **`WaterBoxInfo`** | `number` | Water box status, for example connected or disconnected. |
 | **`WaterBoxMoppingType`** | `number` | Mopping plate or mopping type reported by the robot. |
 | **`WaterBoxScrubbingType`** | `number` | Scrubbing or sweep type reported by the robot. |
-| **`SweepMode`** | `boolean \| number \| null` | Sweep, mop-only, or custom-area mode depending on source message. |
+| **`SweepMode`** | `boolean \| number \| null` | Custom-area cleaning mode, emitted from `CustomAreaMode` push messages. Note: the `SweepMode` MQTT push yields `MopOnlyMode`, not this event. |
 | **`MopOnlyMode`** | `boolean \| null` | `true` if mop-only mode is enabled, or `null` if the source payload does not include the mode. |
 | **`CarpetPressure`** | `boolean` | Automatic carpet suction boost setting. |
 | **`LastUsedAreaValues`** | `string` | Coordinates of the last custom area cleaned. |
@@ -107,7 +107,7 @@ Events for models with auto-empty stations, OMNI stations, drying or washing sup
 | **`AirDryingState`** | `string` | Mop drying status, such as `airdrying` or `idle`. |
 | **`DustCaseInfo`** | `number` | Dustbin or dust case installation status. |
 | **`AromaMode`** | `number` | Air freshener or aroma module mode. |
-| **`DModuleEnabled`** | `boolean` | `true` if the air freshener module is enabled. |
+| **`DModuleEnabled`** | `number` | `1` if the air freshener module is enabled, `0` if disabled. |
 | **`DModuleStatus`** | `number` | Air freshener module status. |
 
 ---
@@ -119,7 +119,7 @@ These events help with troubleshooting, connection state, network details, firmw
 | Event Name | Payload Type | Description |
 | :--- | :--- | :--- |
 | **`Error`** | `string` | Human-readable description of the last error reported by the robot. |
-| **`ErrorCode`** | `number` | Numerical error code. Refer to `library/errorCodes.json`. |
+| **`ErrorCode`** | `string` | Error code as a string (e.g. `"104"`). Refer to `library/errorCodes.json`. |
 | **`LastError`** | `object` | Combined error object with `error` and `code`. |
 | **`NetworkInfo`** | `object` | Wi-Fi details: `ip`, `mac`, `wifiSSID`, and `wifiSignal`. |
 | **`WifiList`** | `object` | Raw configured or discovered Wi-Fi list payload. The payload may contain a `list` array. |
@@ -189,7 +189,7 @@ Historical logs, current statistics, cumulative statistics, schedules, and misce
 | **`LastCleanLogs`** | `object` | Summary of the latest cleaning task, including timestamp, image URL, area, and duration when available. |
 | **`CleanSum`** | `object` | Cumulative cleaning statistics with total area, total time, and total count. |
 | **`CurrentStats`** | `object` | Real-time statistics for the current cleaning task. |
-| **`TaskStarted`** | `string` | Fired when a specific task starts. |
+| **`TaskStarted`** | `object` | Fired when a FwBuryPoint task event starts. Contains `type`, `triggerType`, `failed`, and `stopReason`. |
 | **`Schedule`** | `array` | Cleaning schedule data. |
 | **`CustomizedScenarioCleaning`** | `object` | Custom cleaning scenario status and configuration. |
 | **`Evt`** | `object` | Generic event container for miscellaneous system reports. |
@@ -229,10 +229,10 @@ Most frequently used command responses are already listed in the sections above.
 | **`MoveupWarning`** | `boolean` | Wheel-up warning status setting. |
 | **`SafeProtect`** | `boolean` | Safe-protect setting. |
 | **`Scene`** | `object` | Scene configuration or state. |
-| **`Stats`** | `object` | Raw statistics response for `GetStats`. MQTT `Stats` push messages are normalized to `CurrentStats`. |
+| **`Stats`** | `object` | Raw statistics payload resolved via `runAsync('GetStats')`. Both MQTT push messages and command responses are normalized and emitted as `CurrentStats` to EventEmitter listeners. |
 | **`ThreeModule`** | `object` | AIRBOT three-module setting. |
 | **`ThreeModuleStatus`** | `object` | AIRBOT three-module status. |
-| **`TotalStats`** | `object` | Raw total statistics response for `GetTotalStats`. MQTT `TotalStats` push messages are normalized to `CleanSum`. |
+| **`TotalStats`** | `object` | Raw total-statistics payload resolved via `runAsync('GetTotalStats')`. Both MQTT push messages and command responses are normalized and emitted as `CleanSum` to EventEmitter listeners. |
 | **`VoiceAssistantState`** | `boolean` | Voice assistant setting. |
 | **`VoiceLifeRemindState`** | `boolean` | Voice life reminder setting. |
 | **`VoiceSimple`** | `boolean` | AIRBOT simple voice setting. |
@@ -512,6 +512,26 @@ Wi-Fi connection properties.
   "mac": "AA:BB:CC:DD:EE:FF",
   "wifiSSID": "HomeNetwork",
   "wifiSignal": -55
+}
+```
+
+### `DoNotDisturbBlockTime` (Object)
+Configured time window for do-not-disturb mode. Only emitted when `DoNotDisturbEnabled` is truthy.
+```javascript
+{
+  "from": "22:00", // Start time as reported by the device
+  "to": "08:00"   // End time as reported by the device
+}
+```
+
+### `TaskStarted` (Object)
+Current task state emitted on FwBuryPoint task events (e.g. T8/T9 series).
+```javascript
+{
+  "type": "bd_task-clean-move-start", // FwBuryPoint event suffix
+  "triggerType": "none",              // Trigger type, or 'none'
+  "failed": false,                    // true if the task failed
+  "stopReason": "none"               // Stop reason when available
 }
 ```
 
