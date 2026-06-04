@@ -13,13 +13,13 @@ declare class BotState {
     batteryIsLow: boolean;
     cleanReport: any;
     chargeStatus: any;
-    chargeMode: any;
+    chargeMode: string | null;
     cleanSpeed: any;
-    waterLevel: any;
-    waterboxInfo: any;
-    moppingType: any;
-    scrubbingType: any;
-    sleepStatus: any;
+    waterLevel: number | null;
+    waterboxInfo: number | null;
+    moppingType: number | null;
+    scrubbingType: number | null;
+    sleepStatus: boolean | null;
     deebotPosition: {
         x: null;
         y: null;
@@ -49,10 +49,10 @@ declare class BotState {
         cleanedSeconds: null;
         cleanType: null;
     };
-    netInfoIP: any;
-    netInfoWifiSSID: any;
-    netInfoWifiSignal: any;
-    netInfoMAC: any;
+    netInfoIP: string | null;
+    netInfoWifiSSID: string | null;
+    netInfoWifiSignal: number | null;
+    netInfoMAC: string | null;
     firmwareVersion: any;
     timezone: string | null;
     OTA: Object | null;
@@ -71,44 +71,44 @@ declare class BotState {
         isActive: boolean;
     } | null;
     stationInfo: {
-        state: any;
-        name: any;
-        model: any;
-        sn: any;
-        wkVer: any;
+        state: number | string;
+        name: string;
+        model: string;
+        sn: string;
+        wkVer: string;
     } | null;
-    washInterval: any;
-    washInfo: any;
-    advancedMode: any;
+    washInterval: number | null;
+    washInfo: number | null;
+    advancedMode: boolean | null;
     autoEmpty: any;
     autoEmptyStatus: any;
-    cleanCount: any;
-    cleanPreference: any;
-    workMode: any;
+    cleanCount: number | null;
+    cleanPreference: boolean | null;
+    workMode: number | null;
     workState: {
         robot: any;
         station: any;
         paused: boolean;
     } | null;
-    sweepMode: any;
+    sweepMode: number | null;
     mopOnlyMode: boolean | null;
-    borderSpin: any;
-    borderSwitch: any;
+    borderSpin: boolean | null;
+    borderSwitch: boolean | null;
     dusterRemind: {
         enabled: any;
         period: any;
     } | null;
-    carpetPressure: any;
-    carpetInfo: any;
+    carpetPressure: boolean | null;
+    carpetInfo: number | null;
     block: any;
     blockTime: {
         from: any;
         to: any;
     } | null;
-    breakPoint: any;
-    volume: any;
-    voiceSimple: any;
-    voiceAssistantState: any;
+    breakPoint: boolean | null;
+    volume: number | null;
+    voiceSimple: boolean | null;
+    voiceAssistantState: boolean | null;
     trueDetect: any;
     avoidedObstacles: number;
     obstacleTypes: any;
@@ -117,10 +117,10 @@ declare class BotState {
         particleRemoval: boolean;
         petPoopPrevention: boolean;
     } | null;
-    crossMapBorderWarning: any;
-    cutDirection: any;
-    moveupWarning: any;
-    safeProtect: any;
+    crossMapBorderWarning: boolean | null;
+    cutDirection: number | null;
+    moveupWarning: boolean | null;
+    safeProtect: boolean | null;
     evt: {
         code: any;
         event: any;
@@ -155,32 +155,32 @@ declare class BotState {
             aqEnd: any;
         };
     } | null;
-    angleFollow: any;
+    angleFollow: boolean | null;
     angleWakeup: any;
-    atmoLightIntensity: any;
-    atmoVolume: any;
+    atmoLightIntensity: number | null;
+    atmoVolume: number | null;
     areaPoint: Object | null;
-    autonomousClean: any;
+    autonomousClean: boolean | null;
     bluetoothSpeaker: {
         enable: any;
         time: any;
         name: any;
     } | null;
-    childLock: any;
+    childLock: boolean | null;
     humanoidFollow: {
         video: any;
         yiko: any;
     } | null;
-    mic: any;
-    monitorAirState: any;
+    mic: boolean | null;
+    monitorAirState: boolean | null;
     threeModule: Object | null;
     threeModuleStatus: Object | null;
     dmodule: Object | null;
-    efficiency: any;
-    dryingDuration: any;
+    efficiency: number | null;
+    dryingDuration: number | null;
     airDryingStatus: string | null;
     relocationStatus: Object | null;
-    relocationState: any;
+    relocationState: string | null;
     customizedScenarioCleaning: Object | null;
     errorCode: string;
     errorDescription: string;
@@ -197,7 +197,7 @@ declare class BotState {
      */
     handleStationState(payload: Object): void;
     /**
-     * Handle the payload of the `handleStationInfo` response/message
+     * Handle the payload of the `StationInfo` response/message
      * @param {Object} payload
      */
     handleStationInfo(payload: Object): void;
@@ -490,7 +490,7 @@ declare class BotState {
      * @param {Object} payload
      */
     handleDrivingWheel(payload: Object): void;
-    drivingWheel: any;
+    drivingWheel: boolean | undefined;
     /**
      * Handle the payload of the 'ChildLock' response/message
      * 'Child Lock'

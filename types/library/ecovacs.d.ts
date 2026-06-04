@@ -109,11 +109,45 @@ declare class Ecovacs extends EventEmitter<any> {
     handleCommandResponse(command: Object, messagePayload: Object): void;
     /**
      * It handles the messages from the API (incoming MQTT message or request response)
-     * @param {string} topic - the topic of the message
+     * @param {string} name - the name of the command or MQTT event
      * @param {Object|string} message - the message
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      */
-    handleMessage(topic: string, message: Object | string, type?: string): void;
+    handleMessage(name: string, envelope: any, type?: string): void;
+    /**
+     * Extracts and returns the payload from an incoming MQTT message envelope.
+     * Logs a warning if the message structure is unhandled.
+     * @param {string} name - Event name.
+     * @param {Object} envelope - The message envelope.
+     * @returns {*} The extracted payload, or undefined if invalid.
+     */
+    _extractIncomingPayload(name: string, envelope: Object): any;
+    /**
+     * Extracts and returns the payload from a REST/HTTP response envelope.
+     * Validates the result code and handles firmware versioning.
+     * @param {string} name - Command name.
+     * @param {Object} envelope - The response envelope.
+     * @returns {*} The extracted payload, or undefined if invalid or error code is non-zero.
+     */
+    _extractResponsePayload(name: string, envelope: Object): any;
+    /**
+     * Parses a raw incoming MQTT message into eventName + payload.
+     * Topic format: "iot/atr/<eventName>/<did>/<class>/<resource>/j"
+     * @param {string} name
+     * @param {string} rawMessage - JSON string
+     * @returns {Object|null} parsed JSON object, null if malformed
+     */
+    _parseMqttMessage(name: string, rawMessage: string): Object | null;
+    /**
+     * Emits HeaderInfo if the firmware version changed.
+     * @param {{ fwVer: string, hwVer: string }} header
+     */
+    _handleFirmwareVersion(header: {
+        fwVer: string;
+        hwVer: string;
+    }): void;
+    /** @returns {void} — intentionally fire-and-forget */
+    _dispatchPayload(eventName: any, payload: any): void;
     /**
      * Handles the message command and the payload
      * and delegates the event object to the corresponding method
