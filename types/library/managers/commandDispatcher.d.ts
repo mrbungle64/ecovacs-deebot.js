@@ -5,10 +5,10 @@ export = CommandDispatcher;
  */
 declare class CommandDispatcher {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: VacBot);
-    bot: VacBot;
+    constructor(bot: import("../vacBot"));
+    bot: import("../vacBot");
     /**
      * Dispatch a command with special logic.
      * @param {string} key - The command key.

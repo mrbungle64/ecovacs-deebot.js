@@ -5,10 +5,10 @@ export = BotState;
  */
 declare class BotState {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: VacBot);
-    bot: VacBot;
+    constructor(bot: import("../vacBot"));
+    bot: import("../vacBot");
     batteryLevel: number | null;
     batteryIsLow: boolean;
     cleanReport: any;

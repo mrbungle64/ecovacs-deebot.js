@@ -9,7 +9,7 @@ const dictionary = require('../dictionary');
  */
 class MaintenanceManager {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
     constructor(bot) {
         this.bot = bot;

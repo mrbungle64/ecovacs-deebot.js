@@ -5,10 +5,10 @@ export = HistoryManager;
  */
 declare class HistoryManager {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: VacBot);
-    bot: VacBot;
+    constructor(bot: import("../vacBot"));
+    bot: import("../vacBot");
     /**
      * Call the REST API to fetch cleaning results logs.
      * @returns {Promise<Object>}

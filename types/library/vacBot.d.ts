@@ -515,6 +515,12 @@ declare class VacBot {
      */
     hasAirDrying(): boolean;
     /**
+     * Returns true if the station supports hot-water mop washing (55 °C).
+     * Introduced with the T20 OMNI; not available on X1 or older platforms.
+     * @returns {boolean}
+     */
+    hasHotWaterWashing(): boolean;
+    /**
      * Returns true if the model has power adjustment functionality
      * @returns {boolean}
      */

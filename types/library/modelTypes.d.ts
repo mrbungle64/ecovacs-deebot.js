@@ -41,6 +41,7 @@ export const ModelTypes: {
         unit_care_info: boolean;
         housekeeper_mode: boolean;
         yiko: boolean;
+        hot_water_washing: boolean;
     };
     X1: {
         deviceCategory: string;
@@ -55,6 +56,7 @@ export const ModelTypes: {
         unit_care_info: boolean;
         housekeeper_mode: boolean;
         yiko: boolean;
+        hot_water_washing: boolean;
     };
     airbot: {
         deviceCategory: string;

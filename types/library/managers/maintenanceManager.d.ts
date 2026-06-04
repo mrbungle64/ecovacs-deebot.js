@@ -5,10 +5,10 @@ export = MaintenanceManager;
  */
 declare class MaintenanceManager {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: VacBot);
-    bot: VacBot;
+    constructor(bot: import("../vacBot"));
+    bot: import("../vacBot");
     components: {};
     lastComponentValues: {};
     emitFullLifeSpanEvent: boolean;

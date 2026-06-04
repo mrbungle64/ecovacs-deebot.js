@@ -5,10 +5,10 @@ export = CapabilityManager;
  */
 declare class CapabilityManager {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: VacBot);
-    bot: VacBot;
+    constructor(bot: import("../vacBot"));
+    bot: import("../vacBot");
     /**
      * Get the value of the given property for the device class
      * @param {string} property - The property to get
@@ -174,6 +174,12 @@ declare class CapabilityManager {
      * @returns {boolean}
      */
     hasAirDrying(): boolean;
+    /**
+     * Returns true if the station supports hot-water mop washing (55 °C).
+     * Introduced with the T20 OMNI; not available on X1 or older platforms.
+     * @returns {boolean}
+     */
+    hasHotWaterWashing(): boolean;
     /**
      * Returns true if the model has power adjustment functionality
      * @returns {boolean}

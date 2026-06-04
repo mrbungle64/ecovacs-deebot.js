@@ -12,7 +12,7 @@ const VacBotCommand = require('../command');
  */
 class MapManager {
     /**
-     * @param {VacBot} bot - The VacBot instance.
+     * @param {import('../vacBot')} bot - The VacBot instance.
      */
     constructor(bot) {
         this.bot = bot;
