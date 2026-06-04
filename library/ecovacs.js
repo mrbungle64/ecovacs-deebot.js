@@ -432,39 +432,69 @@ class Ecovacs extends EventEmitter {
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      */
     handleMessage(name, envelope, type = MESSAGE_TYPE.INCOMING) {
-        let resultCode = 0;
-        let resultCodeMessage = 'ok';
         let payload;
-
         if (type === MESSAGE_TYPE.INCOMING) {
-            if (envelope['body']?.['data']) {
-                payload = envelope['body']['data'];
-            } else if (envelope['body']) {
-                payload = envelope['body'];
-            } else {
-                tools.envLogWarn(`Unhandled MQTT message payload for event '${name}'`);
+            payload = this._extractIncomingPayload(name, envelope);
+            if (payload === undefined) {
                 return;
             }
         } else if (type === MESSAGE_TYPE.RESPONSE) {
-            resultCode = envelope['body']['code'];
-            resultCodeMessage = envelope['body']['msg'];
-            payload = envelope['body']['data'];
-            if (envelope['header']) {
-                this._handleFirmwareVersion(envelope['header']);
+            payload = this._extractResponsePayload(name, envelope);
+            const body = envelope?.body;
+            if (!body || body.code !== 0) {
+                return;
+            }
+            if (payload === undefined) {
+                tools.envLogWarn(`got empty payload for command '${name}'`);
+                return;
             }
         }
 
-        if (resultCode !== 0) {
-            tools.envLogError(`got unexpected resultCode for command '${name}': ${resultCode}`);
-            tools.envLogError(`resultCodeMessage for command '${name}': '${resultCodeMessage}'`);
-            return;
+        this._dispatchPayload(name, payload);
+    }
+
+    /**
+     * Extracts and returns the payload from an incoming MQTT message envelope.
+     * Logs a warning if the message structure is unhandled.
+     * @param {string} name - Event name.
+     * @param {Object} envelope - The message envelope.
+     * @returns {*} The extracted payload, or undefined if invalid.
+     */
+    _extractIncomingPayload(name, envelope) {
+        const body = envelope?.body;
+        if (!body) {
+            tools.envLogWarn(`Unhandled MQTT message payload for event '${name}'`);
+            return undefined;
         }
-        if (payload === undefined) {
-            tools.envLogWarn(`got empty payload for command '${name}'`);
-            return;
+        return Object.prototype.hasOwnProperty.call(body, 'data') ? body.data : body;
+    }
+
+    /**
+     * Extracts and returns the payload from a REST/HTTP response envelope.
+     * Validates the result code and handles firmware versioning.
+     * @param {string} name - Command name.
+     * @param {Object} envelope - The response envelope.
+     * @returns {*} The extracted payload, or undefined if invalid or error code is non-zero.
+     */
+    _extractResponsePayload(name, envelope) {
+        const body = envelope?.body;
+        if (!body) {
+            return undefined;
         }
 
-        this._dispatchPayload(name, payload);
+        if (envelope.header) {
+            this._handleFirmwareVersion(envelope.header);
+        }
+
+        const resultCode = body.code;
+        if (resultCode !== 0) {
+            const resultCodeMessage = body.msg;
+            tools.envLogError(`got unexpected resultCode for command '${name}': ${resultCode}`);
+            tools.envLogError(`resultCodeMessage for command '${name}': '${resultCodeMessage}'`);
+            return undefined;
+        }
+
+        return body.data;
     }
 
     /**
