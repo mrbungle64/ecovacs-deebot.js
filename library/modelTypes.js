@@ -103,8 +103,9 @@ exports.ModelTypes = {
     "deviceCategory": "Vacuum Cleaner",
     "V2": true,
     "unit_care_info": true,
-    "housekeeper_mode": true, // AI Smart Hosting: dynamic room-by-room cleaning strategy.
-    "yiko": true              // YIKO voice assistant (native Ecovacs AI voice control).
+    "housekeeper_mode": true,   // AI Smart Hosting: dynamic room-by-room cleaning strategy.
+    "yiko": true,               // YIKO voice assistant (native Ecovacs AI voice control).
+    "hot_water_washing": true   // Hot-water mop washing (55 °C) via station. Added from T20 OMNI onwards.
   },
 
   // X1 series. See note on T10.
@@ -123,8 +124,9 @@ exports.ModelTypes = {
     "deviceCategory": "Vacuum Cleaner",
     "V2": true,
     "unit_care_info": true,
-    "housekeeper_mode": true, // AI Smart Hosting: dynamic room-by-room cleaning strategy.
-    "yiko": true              // YIKO voice assistant (native Ecovacs AI voice control).
+    "housekeeper_mode": true,   // AI Smart Hosting: dynamic room-by-room cleaning strategy.
+    "yiko": true,               // YIKO voice assistant (native Ecovacs AI voice control).
+    "hot_water_washing": true   // Hot-water mop washing (55 °C) via station.
   },
 
   // AIRBOT series (air purifiers, e.g. AIRBOT Z1). Focuses on air quality
