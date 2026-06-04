@@ -59,6 +59,7 @@ Support for new models is no longer added upon request. Due to high time constra
 * [Installation Guide](docs/INSTALLATION.md) (includes [Docker Compose Setup](docs/INSTALLATION.md#5-running-with-docker-compose-local-development--testing))
 * [Usage Instructions](docs/USAGE.md)
 * [Command Reference](docs/COMMANDS.md)
+* [Event Reference](docs/EVENTS.md)
 
 **Requirement:** Node.js >= 20.x
 
