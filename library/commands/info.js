@@ -610,7 +610,7 @@ class GetSweepMode extends VacBotCommand {
      * @returns {boolean}
      */
     parseResponse(payload) {
-        return Boolean(payload['type']);
+        return payload.hasOwnProperty('type') ? Boolean(payload['type']) : null;
     }
 }
 

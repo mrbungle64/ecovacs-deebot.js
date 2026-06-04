@@ -170,7 +170,7 @@ describe('BotState – handleWashInterval() / handleWashInfo()', function () {
     it('should not change washInterval when interval key is absent', function () {
         const state = new BotState(makeFakeBot());
         state.handleWashInterval({});
-        assert.strictEqual(state.washInterval, null);
+        assert.strictEqual(state.washInterval, undefined);
     });
 
     it('should set washInfo when mode key is present', function () {
@@ -182,7 +182,7 @@ describe('BotState – handleWashInterval() / handleWashInfo()', function () {
     it('should not change washInfo when mode key is absent', function () {
         const state = new BotState(makeFakeBot());
         state.handleWashInfo({});
-        assert.strictEqual(state.washInfo, null);
+        assert.strictEqual(state.washInfo, undefined);
     });
 });
 
@@ -441,7 +441,7 @@ describe('BotState – handleDryingDuration()', function () {
     it('should not change dryingDuration when duration key is absent', function () {
         const state = new BotState(makeFakeBot());
         state.handleDryingDuration({});
-        assert.strictEqual(state.dryingDuration, null);
+        assert.strictEqual(state.dryingDuration, undefined);
     });
 });
 

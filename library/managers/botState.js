@@ -19,6 +19,7 @@ const {
     GetCrossMapBorderWarning,
     GetCutDirection,
     GetDrivingWheel,
+    GetDryingDuration,
     GetEfficiencyMode,
     GetMic,
     GetMonitorAirState,
@@ -270,10 +271,7 @@ class BotState {
      * @param {Object} payload
      */
     handleWashInterval(payload) {
-        const result = new GetWashInterval().parseResponse(payload);
-        if (result !== undefined) {
-            this.washInterval = result;
-        }
+        this.washInterval = new GetWashInterval().parseResponse(payload);
     }
 
     /**
@@ -281,10 +279,7 @@ class BotState {
      * @param {Object} payload
      */
     handleWashInfo(payload) {
-        const result = new GetWashInfo().parseResponse(payload);
-        if (result !== undefined) {
-            this.washInfo = result;
-        }
+        this.washInfo = new GetWashInfo().parseResponse(payload);
     }
 
     /**
@@ -523,9 +518,7 @@ class BotState {
      * @param {Object} payload
      */
     handleDryingDuration(payload) {
-        if (payload.hasOwnProperty('duration')) {
-            this.dryingDuration = payload['duration'];
-        }
+        this.dryingDuration = new GetDryingDuration().parseResponse(payload);
     }
 
     /**
@@ -565,9 +558,7 @@ class BotState {
      * @param {Object} payload
      */
     handleSweepMode(payload) {
-        if (payload.hasOwnProperty('type')) {
-            this.mopOnlyMode = new GetSweepMode().parseResponse(payload);
-        }
+        this.mopOnlyMode = new GetSweepMode().parseResponse(payload);
     }
 
     /**
