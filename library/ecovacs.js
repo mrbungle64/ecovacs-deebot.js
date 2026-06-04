@@ -1280,10 +1280,6 @@ class Ecovacs extends EventEmitter {
         if (command.startsWith("get") || command.startsWith("Get")) {
             commandPrefix = 'get';
         }
-        // Remove "set" from the command
-        if (command.startsWith("set") || command.startsWith("Set")) {
-            commandPrefix = 'set';
-        }
         return commandPrefix;
     }
 
