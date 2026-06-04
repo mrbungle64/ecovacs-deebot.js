@@ -5,7 +5,16 @@ const mapTools = require('../mapTools');
 const dictionary = require('../dictionary');
 const { errorCodes } = require('../errorCodes.json');
 const { eventCodes } = require('../eventCodes.json');
-const { GetBatteryState } = require('../commands/info');
+const {
+    GetBatteryState,
+    GetNetInfo,
+    GetRelocationState,
+    GetStationInfo,
+    GetStationState,
+    GetTotalStats,
+    GetWaterInfo
+} = require('../commands/info');
+const { GetChargeState } = require('../commands/movement');
 
 /**
  * @class BotState
@@ -210,35 +219,15 @@ class BotState {
      * @param {Object} payload
      */
     handleStationState(payload) {
-        let type = 0;
-        let state = 0;
-        if (payload.hasOwnProperty('content')) {
-            type = payload['content']['type'];
-        }
-        if (payload.hasOwnProperty('state')) {
-            state = payload['state'];
-        }
-        this.stationState = {
-            'type': type,
-            'state': state,
-            'isAirDrying': Boolean((type === 2) && state),
-            'isSelfCleaning': Boolean((type === 3) && state),
-            'isActive': Boolean(state)
-        };
+        this.stationState = new GetStationState().parseResponse(payload);
     }
 
     /**
-     * Handle the payload of the `handleStationInfo` response/message
+     * Handle the payload of the `StationInfo` response/message
      * @param {Object} payload
      */
     handleStationInfo(payload) {
-        this.stationInfo = {
-            state: payload.state,
-            name: payload.name,
-            model: payload.model,
-            sn: payload.sn,
-            wkVer: payload.wkVer
-        };
+        this.stationInfo = new GetStationInfo().parseResponse(payload);
     }
 
     /**
@@ -378,10 +367,11 @@ class BotState {
      * @param {Object} payload
      */
     handleNetInfo(payload) {
-        this.netInfoIP = payload['ip'] || payload['wi'];
-        this.netInfoWifiSSID = payload['ssid'] || payload['s'];
-        this.netInfoWifiSignal = payload['rssi'] || payload['st'];
-        this.netInfoMAC = payload['mac'] || payload['wm'];
+        const result = new GetNetInfo().parseResponse(payload);
+        this.netInfoIP = result.ip;
+        this.netInfoWifiSSID = result.wifiSSID;
+        this.netInfoWifiSignal = result.wifiSignal;
+        this.netInfoMAC = result.mac;
     }
 
     /**
@@ -442,18 +432,16 @@ class BotState {
      * @param {Object} payload
      */
     handleWaterInfo(payload) {
-        this.waterLevel = payload['amount'];
-        this.waterboxInfo = payload['enable'];
-        if (payload.hasOwnProperty('type')) {
-            // 1 = Regular
-            // 2 = OZMO Pro
-            this.moppingType = payload['type'];
+        const result = new GetWaterInfo().parseResponse(payload);
+        this.waterLevel = result.waterLevel;
+        this.waterboxInfo = result.waterboxInfo;
+        // 1 = Regular, 2 = OZMO Pro
+        if (result.moppingType !== undefined) {
+            this.moppingType = result.moppingType;
         }
-        if (payload.hasOwnProperty('sweepType')) {
-            // Scrubbing pattern
-            // 1 = Quick scrubbing
-            // 2 = Deep scrubbing
-            this.scrubbingType = payload['sweepType'];
+        // 1 = Quick scrubbing, 2 = Deep scrubbing
+        if (result.scrubbingType !== undefined) {
+            this.scrubbingType = result.scrubbingType;
         }
     }
 
@@ -557,14 +545,9 @@ class BotState {
      * @param {Object} payload
      */
     handleChargeState(payload) {
-        this.chargeStatus = 'idle';
-        if (parseInt(payload['isCharging']) === 1) {
-            this.chargeStatus = 'charging';
-        }
-        this.chargeMode = 'slot';
-        if (payload.hasOwnProperty('mode')) {
-            this.chargeMode = payload['mode'];
-        }
+        const result = new GetChargeState().parseResponse(payload);
+        this.chargeStatus = result.chargeStatus;
+        this.chargeMode = result.chargeMode;
     }
 
     /**
@@ -652,9 +635,10 @@ class BotState {
      * @param {Object} payload
      */
     handleTotalStats(payload) {
-        this.cleanSum_totalSquareMeters = parseInt(payload['area']);
-        this.cleanSum_totalSeconds = parseInt(payload['time']);
-        this.cleanSum_totalNumber = parseInt(payload['count']);
+        const result = new GetTotalStats().parseResponse(payload);
+        this.cleanSum_totalSquareMeters = result.totalSquareMeters;
+        this.cleanSum_totalSeconds = result.totalSeconds;
+        this.cleanSum_totalNumber = result.totalNumber;
     }
 
     /**
@@ -662,8 +646,9 @@ class BotState {
      * @param {Object} payload
      */
     handleRelocationState(payload) {
-        this.relocationStatus = payload;
-        this.relocationState = payload['state'];
+        const result = new GetRelocationState().parseResponse(payload);
+        this.relocationStatus = result.status;
+        this.relocationState = result.state;
     }
 
     /**
