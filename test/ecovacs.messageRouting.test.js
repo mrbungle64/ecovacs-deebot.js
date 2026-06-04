@@ -29,23 +29,23 @@ function makeFakeBot(overrides = {}) {
         isPlatformTypeAirbot: () => false,
         genericCommand: null,
         // handle* stubs — no-ops unless overridden
-        handleBattery: () => {},
-        handleWaterInfo: () => {},
-        handleChargeState: () => {},
-        handleCleanInfo: () => {},
-        handleNetInfo: () => {},
-        handleTotalStats: () => {},
-        handleSpeed: () => {},
-        handleAdvancedMode: () => {},
-        handleBreakPoint: () => {},
-        handleTrueDetect: () => {},
-        handleSweepMode: () => {},
-        handleRelocationState: () => {},
+        handleBattery: () => { },
+        handleWaterInfo: () => { },
+        handleChargeState: () => { },
+        handleCleanInfo: () => { },
+        handleNetInfo: () => { },
+        handleTotalStats: () => { },
+        handleSpeed: () => { },
+        handleAdvancedMode: () => { },
+        handleBreakPoint: () => { },
+        handleTrueDetect: () => { },
+        handleSweepMode: () => { },
+        handleRelocationState: () => { },
         handleMapSet: () => ({ mapsetEvent: 'skip', mapsetData: null }),
         handleMapSubset: async () => ({ mapsubsetEvent: 'error', mapsubsetData: null }),
-        handleMapTrace: () => {},
-        handleMultiMapState: () => {},
-        handleCachedMapInfo: () => {},
+        handleMapTrace: () => { },
+        handleMultiMapState: () => { },
+        handleCachedMapInfo: () => { },
         // state properties
         batteryLevel: null,
         waterLevel: null,
@@ -89,7 +89,7 @@ function makeEcovacs(botOverrides = {}) {
 
     ecovacs.bot = bot;
     ecovacs.dictionary = require('../library/dictionary');
-    ecovacs.pendingCommands = { size: 0, resolveByEvent: () => {} };
+    ecovacs.pendingCommands = { size: 0, resolveByEvent: () => { } };
 
     // Capture all emitted events for assertions
     ecovacs.emit = (name, ...args) => {
@@ -156,14 +156,14 @@ describe('handleMessagePayload() – prefix normalisation', function () {
 
         for (const [name, target] of [['onWaterInfo', emitted1], ['getWaterInfo', emitted2]]) {
             const { ecovacs } = makeEcovacs({
-                handleWaterInfo: () => {},
+                handleWaterInfo: () => { },
                 waterLevel: 2,
                 waterboxInfo: 1,
                 moppingType: null,
                 scrubbingType: null,
             });
             ecovacs.emitMessage = (evtName, payload) => { target[evtName] = payload; };
-            ecovacs.emitMoppingSystemReport = () => {};
+            ecovacs.emitMoppingSystemReport = () => { };
 
             await ecovacs.handleMessagePayload(name, { amount: 2, enable: 1 });
         }
@@ -178,7 +178,7 @@ describe('handleMessagePayload() – prefix normalisation', function () {
     it('"reportStats" reaches the Stats handler (emits Stats → CurrentStats)', async function () {
         const emitted = {};
         const { ecovacs } = makeEcovacs({
-            handleStats: () => {},
+            handleStats: () => { },
             currentStats: { cleanedArea: 10 },
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
@@ -191,14 +191,14 @@ describe('handleMessagePayload() – prefix normalisation', function () {
     it('"reportCleanInfo" reaches the CleanInfo handler (emits CleanReport)', async function () {
         const emitted = {};
         const { ecovacs } = makeEcovacs({
-            handleCleanInfo: () => {},
+            handleCleanInfo: () => { },
             cleanReport: 'idle',
             chargeStatus: null,
             currentCustomAreaValues: null,
             currentSpotAreas: null,
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
-        ecovacs.emitMoppingSystemReport = () => {};
+        ecovacs.emitMoppingSystemReport = () => { };
 
         await ecovacs.handleMessagePayload('reportCleanInfo', {});
 
@@ -255,7 +255,7 @@ describe('handleMessagePayload() – _V2 suffix stripping', function () {
     it('"onSpeed_V2" strips "_V2" and reaches the Speed (CleanSpeed) handler', async function () {
         const emitted = {};
         const { ecovacs } = makeEcovacs({
-            handleSpeed: () => {},
+            handleSpeed: () => { },
             cleanSpeed: 'MAX',
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
@@ -268,7 +268,7 @@ describe('handleMessagePayload() – _V2 suffix stripping', function () {
     it('"onMapSet_V2" does NOT strip "_V2" (explicit exception in handleV2commands)', async function () {
         const emitted = {};
         const { ecovacs } = makeEcovacs({
-            handleMapSet_V2: async () => {},
+            handleMapSet_V2: async () => { },
             mapSet_V2: null,
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
@@ -330,8 +330,8 @@ describe('GetNetInfoLegacy – payload field compatibility', function () {
         const state = new BotState({
             deviceClass: 'ucn2xe',
             isPlatformTypeAirbot: () => false,
-            run: () => {},
-            ecovacs: { emit: () => {}, emitMessage: () => {} },
+            run: () => { },
+            ecovacs: { emit: () => { }, emitMessage: () => { } },
             currentMapMID: '100',
             mapSpotAreaInfos: { '100': [] },
             currentSpotAreas: '',
@@ -352,8 +352,8 @@ describe('GetNetInfoLegacy – payload field compatibility', function () {
         const state = new BotState({
             deviceClass: 'ucn2xe',
             isPlatformTypeAirbot: () => false,
-            run: () => {},
-            ecovacs: { emit: () => {}, emitMessage: () => {} },
+            run: () => { },
+            ecovacs: { emit: () => { }, emitMessage: () => { } },
             currentMapMID: '100',
             mapSpotAreaInfos: { '100': [] },
             currentSpotAreas: '',
@@ -378,31 +378,31 @@ describe('Ecovacs._parseMqttMessage()', function () {
     const { ecovacs } = makeEcovacs();
 
     it('should return null for malformed JSON', function () {
-        const result = ecovacs._parseMqttMessage('iot/atr/Battery/did/class/res/j', '{invalid-json}');
+        const result = ecovacs._parseMqttMessage('onBattery', '{invalid-json}');
         assert.strictEqual(result, null);
     });
 
-    it('should split the topic and extract the correct eventName', function () {
+    it('should extract the correct eventName and payload', function () {
         const payloadStr = JSON.stringify({ body: { data: { value: 100 } } });
-        const result = ecovacs._parseMqttMessage('iot/atr/CustomEventName/did/class/res/j', payloadStr);
+        const result = ecovacs._parseMqttMessage('onCustomEventName', payloadStr);
         assert.deepStrictEqual(result, {
-            eventName: 'CustomEventName',
+            eventName: 'onCustomEventName',
             payload: { value: 100 }
         });
     });
 
     it('should fall back to message.body if message.body.data is missing', function () {
         const payloadStr = JSON.stringify({ body: { value: 50 } });
-        const result = ecovacs._parseMqttMessage('iot/atr/CustomEventName/did/class/res/j', payloadStr);
+        const result = ecovacs._parseMqttMessage('onCustomEventName', payloadStr);
         assert.deepStrictEqual(result, {
-            eventName: 'CustomEventName',
+            eventName: 'onCustomEventName',
             payload: { value: 50 }
         });
     });
 
     it('should return null if message.body is completely missing', function () {
         const payloadStr = JSON.stringify({ other: 'field' });
-        const result = ecovacs._parseMqttMessage('iot/atr/CustomEventName/did/class/res/j', payloadStr);
+        const result = ecovacs._parseMqttMessage('onCustomEventName', payloadStr);
         assert.strictEqual(result, null);
     });
 });
