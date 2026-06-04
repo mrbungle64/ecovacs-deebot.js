@@ -9,6 +9,11 @@ const commandObj = require('./command');
 const PendingCommandRegistry = require('./managers/pendingCommandRegistry');
 const COMMAND_REGISTRY = require('./commandRegistry');
 
+const MESSAGE_TYPE = Object.freeze({
+    INCOMING: 'incoming',
+    RESPONSE: 'response',
+});
+
 class Ecovacs extends EventEmitter {
     /**
      * @param {Object} vacBot - the VacBot object
@@ -112,7 +117,7 @@ class Ecovacs extends EventEmitter {
         });
 
         this.client.on('message', (topic, message) => {
-            this.handleMessage(topic, message.toString(), "incoming");
+            this.handleMessage(topic, message.toString(), MESSAGE_TYPE.INCOMING);
         });
 
         this.client.on('offline', function () {
@@ -401,7 +406,7 @@ class Ecovacs extends EventEmitter {
     handleCommandResponse(command, messagePayload) {
         if (messagePayload) {
             if (messagePayload.hasOwnProperty('resp')) {
-                this.handleMessage(command.name, messagePayload['resp'], "response");
+                this.handleMessage(command.name, messagePayload['resp'], MESSAGE_TYPE.RESPONSE);
             } else if (command.api === constants.CLEANLOGS_PATH) {
                 // CleanLogs uses a different API path and response format
                 tools.envLogInfo(`got CleanLogs response`);
@@ -426,12 +431,12 @@ class Ecovacs extends EventEmitter {
      * @param {Object|string} message - the message
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      */
-    handleMessage(topic, message, type = "incoming") {
+    handleMessage(topic, message, type = MESSAGE_TYPE.INCOMING) {
         let eventName = topic;
         let resultCode = 0;
         let resultCodeMessage = "ok";
         let payload = message;
-        if (type === "incoming") {
+        if (type === MESSAGE_TYPE.INCOMING) {
             eventName = topic.split('/')[2];
             try {
                 message = JSON.parse(message);
@@ -449,7 +454,7 @@ class Ecovacs extends EventEmitter {
                 tools.envLogWarn('Unhandled MQTT message payload ...');
                 return;
             }
-        } else if (type === "response") {
+        } else if (type === MESSAGE_TYPE.RESPONSE) {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
             payload = message['body']['data'];
