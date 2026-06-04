@@ -7,6 +7,7 @@ const { errorCodes } = require('./errorCodes.json');
 const axios = require("axios").default;
 const commandObj = require('./command');
 const PendingCommandRegistry = require('./managers/pendingCommandRegistry');
+const COMMAND_REGISTRY = require('./commandRegistry');
 
 class Ecovacs extends EventEmitter {
     /**
@@ -163,7 +164,6 @@ class Ecovacs extends EventEmitter {
         let expectedEvent = null;
 
         if (options.returnPromise) {
-            const COMMAND_REGISTRY = require('./commandRegistry');
             const registryKey = COMMAND_REGISTRY.resolveKey(command._registryKey || command.constructor.name)
                 || COMMAND_REGISTRY.resolveKey(command.name);
             const entry = registryKey ? COMMAND_REGISTRY[registryKey] : null;
@@ -191,49 +191,48 @@ class Ecovacs extends EventEmitter {
             const params = commandObj.getRequestObject(this, command);
             const portalUrl = commandObj.getRequestUrl(this, command, params);
             const headers = commandObj.getRequestHeaders(this, params);
-            let response;
+            let responseData;
             try {
-                const res = await axios.post(portalUrl, params, {
+                const response = await axios.post(portalUrl, params, {
                     headers: headers
                 });
-                response = res.data;
+                responseData = response.data;
                 tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
             } catch (e) {
                 this.emitNetworkError(e.message, command.name);
-                if (rejectPromise) {
+                if (expectedEvent) {
                     this.pendingCommands.rejectById(command.getId(), e);
+                } else if (rejectPromise) {
                     rejectPromise(e);
                 }
-                throw e.message;
+                throw e;
             }
 
-            if ((response['result'] === 'ok') || (response['ret'] === 'ok')) {
-                if (this.bot.errorCode !== '0') {
-                    this.emitLastErrorByErrorCode('0');
-                }
-                this.handleCommandResponse(command, response);
+            if ((responseData['result'] === 'ok') || (responseData['ret'] === 'ok')) {
+                this.emitLastErrorByErrorCode('0');
+                this.handleCommandResponse(command, responseData);
                 if (resolvePromise) {
-                    resolvePromise(response);
+                    resolvePromise(responseData);
                 }
             } else {
                 const errorCodeObj = {
-                    code: response['errno'],
-                    error: response['error']
+                    code: responseData['errno'],
+                    error: responseData['error']
                 };
                 this.bot.handleResponseError(errorCodeObj);
                 // Error code 500 = wait for response timed out (see issue #19)
                 if (this.bot.errorCode === '500') {
                     this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
-                } else {
-                    this.emitLastError();
                 }
-                tools.envLogInfo(`[EcovacsMQTT] failure code ${response['errno']} (${response['error']}) sending command '${command.name}'`);
-                const err = new Error(`Failure code ${response['errno']} (${response['error']})`);
-                if (rejectPromise) {
+                this.emitLastError();
+                tools.envLogInfo(`[EcovacsMQTT] failure code ${responseData['errno']} (${responseData['error']}) sending command '${command.name}'`);
+                const err = new Error(`Failure code ${responseData['errno']} (${responseData['error']})`);
+                if (expectedEvent) {
                     this.pendingCommands.rejectById(command.getId(), err);
+                } else if (rejectPromise) {
                     rejectPromise(err);
                 }
-                throw err.message;
+                throw err;
             }
         } catch (e) {
             tools.envLogError(`error sending command: ${e.toString()}`);
@@ -241,8 +240,6 @@ class Ecovacs extends EventEmitter {
 
         return commandPromise;
     }
-
-
 
     /**
      * Handle life span components to emit combined object
