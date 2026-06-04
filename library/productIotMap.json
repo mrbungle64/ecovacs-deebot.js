@@ -594,6 +594,24 @@
     }
   },
   {
+    "classid": "2jdx8d",
+    "product": {
+      "_id": "69f307d5ebac0102b1e17ab2",
+      "materialNo": "110-F008-0203",
+      "smartType": "MQ_APM",
+      "name": "DEEBOT N50 OMNI",
+      "icon": "69a8ebdfefc58689990d5009",
+      "model": "EULER_BK_JP",
+      "UILogicId": "eulerseh_ww_h_eulerh5",
+      "ota": true,
+      "supportType": {
+        "share": true
+      },
+      "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/69a8ebdfefc58689990d5009",
+      "status": "valid"
+    }
+  },
+  {
     "classid": "2kuxj0",
     "product": {
       "_id": "67a44aaba9d37d2f3912d699",
@@ -1796,6 +1814,24 @@
         "share": true
       },
       "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/669a34530e86038e73a3377a",
+      "status": "valid"
+    }
+  },
+  {
+    "classid": "8a5jkt",
+    "product": {
+      "_id": "69cc732238d6518bccac5da7",
+      "materialNo": "110-F008-0114",
+      "smartType": "MQ_APM",
+      "name": "yeedi M12 PRO Gen2",
+      "icon": "69eb0f66a8119be74620b6d6",
+      "model": "EULER_WH_AMR_YEEDI",
+      "UILogicId": "eulerseh_ww_h_yeulerh5",
+      "ota": true,
+      "supportType": {
+        "share": true
+      },
+      "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/69eb0f66a8119be74620b6d6",
       "status": "valid"
     }
   },
@@ -3236,6 +3272,24 @@
         "share": true
       },
       "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/6764e0d16e6f97c3ea24af44",
+      "status": "valid"
+    }
+  },
+  {
+    "classid": "fhaf9g",
+    "product": {
+      "_id": "69f307b5a8119be74620b7bc",
+      "materialNo": "110-F008-0204",
+      "smartType": "MQ_APM",
+      "name": "DEEBOT N50 OMNI",
+      "icon": "69aa346f4066fead5641e534",
+      "model": "EULER_WH_JP",
+      "UILogicId": "eulerseh_ww_h_eulerh5",
+      "ota": true,
+      "supportType": {
+        "share": true
+      },
+      "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/69aa346f4066fead5641e534",
       "status": "valid"
     }
   },
