@@ -13,6 +13,11 @@ const { describe, it, beforeEach } = require('node:test');
 const assert = require('assert');
 const Ecovacs = require('../library/ecovacs');
 
+const MESSAGE_TYPE = Object.freeze({
+    INCOMING: 'incoming',
+    RESPONSE: 'response',
+});
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -382,28 +387,54 @@ describe('Ecovacs._parseMqttMessage()', function () {
         assert.strictEqual(result, null);
     });
 
-    it('should extract the correct eventName and payload', function () {
+    it('should parse and return valid JSON object', function () {
         const payloadStr = JSON.stringify({ body: { data: { value: 100 } } });
         const result = ecovacs._parseMqttMessage('onCustomEventName', payloadStr);
         assert.deepStrictEqual(result, {
-            eventName: 'onCustomEventName',
-            payload: { value: 100 }
+            body: { data: { value: 100 } }
         });
     });
+});
 
-    it('should fall back to message.body if message.body.data is missing', function () {
-        const payloadStr = JSON.stringify({ body: { value: 50 } });
-        const result = ecovacs._parseMqttMessage('onCustomEventName', payloadStr);
-        assert.deepStrictEqual(result, {
-            eventName: 'onCustomEventName',
-            payload: { value: 50 }
-        });
+describe('Ecovacs.handleMessage()', function () {
+    it('should handle INCOMING type with parsed envelope object', async function () {
+        const { ecovacs } = makeEcovacs();
+        let dispatched = null;
+        ecovacs._dispatchPayload = (eventName, payload) => {
+            dispatched = { eventName, payload };
+        };
+
+        const envelope = { body: { data: { value: 123 } } };
+        ecovacs.handleMessage('onBattery', envelope, MESSAGE_TYPE.INCOMING);
+
+        assert.deepStrictEqual(dispatched, { eventName: 'onBattery', payload: { value: 123 } });
     });
 
-    it('should return null if message.body is completely missing', function () {
-        const payloadStr = JSON.stringify({ other: 'field' });
-        const result = ecovacs._parseMqttMessage('onCustomEventName', payloadStr);
-        assert.strictEqual(result, null);
+    it('should handle RESPONSE type', async function () {
+        const { ecovacs } = makeEcovacs();
+        let dispatched = null;
+        ecovacs._dispatchPayload = (eventName, payload) => {
+            dispatched = { eventName, payload };
+        };
+
+        const envelope = { body: { code: 0, msg: 'ok', data: { status: 'done' } } };
+        ecovacs.handleMessage('Clean', envelope, MESSAGE_TYPE.RESPONSE);
+
+        assert.deepStrictEqual(dispatched, { eventName: 'Clean', payload: { status: 'done' } });
+    });
+
+    it('should emit firmware version if header is present in RESPONSE', function () {
+        const { ecovacs, bot, emitted } = makeEcovacs();
+        bot.firmwareVersion = '1.0.0';
+
+        const envelope = {
+            header: { fwVer: '2.0.0', hwVer: '1.0.1' },
+            body: { code: 0, msg: 'ok', data: { status: 'done' } }
+        };
+        ecovacs.handleMessage('Clean', envelope, MESSAGE_TYPE.RESPONSE);
+
+        assert.strictEqual(bot.firmwareVersion, '2.0.0');
+        assert.deepStrictEqual(emitted['HeaderInfo'], { fwVer: '2.0.0', hwVer: '1.0.1' });
     });
 });
 

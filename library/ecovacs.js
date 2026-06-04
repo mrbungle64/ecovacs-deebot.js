@@ -120,7 +120,10 @@ class Ecovacs extends EventEmitter {
             const eventName = topic.split('/')[2];
             tools.envLogMqtt(topic);
             tools.envLogMqtt(eventName);
-            this.handleMessage(eventName, message.toString(), MESSAGE_TYPE.INCOMING);
+            const parsedEnvelope = this._parseMqttMessage(eventName, message.toString());
+            if (parsedEnvelope) {
+                this.handleMessage(eventName, parsedEnvelope, MESSAGE_TYPE.INCOMING);
+            }
         });
 
         this.client.on('offline', function () {
@@ -428,36 +431,40 @@ class Ecovacs extends EventEmitter {
      * @param {Object|string} message - the message
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      */
-    handleMessage(name, message, type = MESSAGE_TYPE.INCOMING) {
-        let eventName = name;
+    handleMessage(name, envelope, type = MESSAGE_TYPE.INCOMING) {
         let resultCode = 0;
         let resultCodeMessage = 'ok';
         let payload;
 
         if (type === MESSAGE_TYPE.INCOMING) {
-            const parsed = this._parseMqttMessage(name, message);
-            if (!parsed) return;
-            ({ eventName, payload } = parsed);
+            if (envelope['body']?.['data']) {
+                payload = envelope['body']['data'];
+            } else if (envelope['body']) {
+                payload = envelope['body'];
+            } else {
+                tools.envLogWarn(`Unhandled MQTT message payload for event '${name}'`);
+                return;
+            }
         } else if (type === MESSAGE_TYPE.RESPONSE) {
-            resultCode = message['body']['code'];
-            resultCodeMessage = message['body']['msg'];
-            payload = message['body']['data'];
-            if (message['header']) {
-                this._handleFirmwareVersion(message['header']);
+            resultCode = envelope['body']['code'];
+            resultCodeMessage = envelope['body']['msg'];
+            payload = envelope['body']['data'];
+            if (envelope['header']) {
+                this._handleFirmwareVersion(envelope['header']);
             }
         }
 
         if (resultCode !== 0) {
-            tools.envLogError(`got unexpected resultCode for command '${eventName}': ${resultCode}`);
-            tools.envLogError(`resultCodeMessage for command '${eventName}': '${resultCodeMessage}'`);
+            tools.envLogError(`got unexpected resultCode for command '${name}': ${resultCode}`);
+            tools.envLogError(`resultCodeMessage for command '${name}': '${resultCodeMessage}'`);
             return;
         }
         if (payload === undefined) {
-            tools.envLogWarn(`got empty payload for command '${eventName}'`);
+            tools.envLogWarn(`got empty payload for command '${name}'`);
             return;
         }
 
-        this._dispatchPayload(eventName, payload);
+        this._dispatchPayload(name, payload);
     }
 
     /**
@@ -465,26 +472,15 @@ class Ecovacs extends EventEmitter {
      * Topic format: "iot/atr/<eventName>/<did>/<class>/<resource>/j"
      * @param {string} name
      * @param {string} rawMessage - JSON string
-     * @returns {{ eventName: string, payload: Object } | null} null if malformed
+     * @returns {Object|null} parsed JSON object, null if malformed
      */
     _parseMqttMessage(name, rawMessage) {
-
-        let message;
         try {
-            message = JSON.parse(rawMessage);
+            return JSON.parse(rawMessage);
         } catch (e) {
             tools.envLogError(`Failed to parse MQTT message on event '${name}': ${e.message}`);
             return null;
         }
-
-        if (message['body']?.['data']) {
-            return { eventName: name, payload: message['body']['data'] };
-        }
-        if (message['body']) {
-            return { eventName: name, payload: message['body'] };
-        }
-        tools.envLogWarn('Unhandled MQTT message payload ...');
-        return null;
     }
 
     /**
