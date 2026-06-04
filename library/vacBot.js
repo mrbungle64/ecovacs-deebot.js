@@ -267,13 +267,13 @@ class VacBot {
         let cmdToRun = command;
         if (this.is950type_V2() && !command.toLowerCase().endsWith('_v2')) {
             const command_v2 = command + '_V2';
-            const registryEntry = COMMAND_REGISTRY[command_v2] || COMMAND_REGISTRY[command_v2.toLowerCase()];
-            if (registryEntry) {
-                cmdToRun = COMMAND_REGISTRY[command_v2] ? command_v2 : command_v2.toLowerCase();
+            const v2Key = COMMAND_REGISTRY.resolveKey(command_v2);
+            if (v2Key) {
+                cmdToRun = command_v2;
             }
         }
 
-        const key = cmdToRun;
+        const key = COMMAND_REGISTRY.resolveKey(cmdToRun);
         const entry = COMMAND_REGISTRY[key];
 
         // Guard: unknown command

@@ -667,7 +667,8 @@ describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
             mockContext.run = VacBot.prototype.run.bind(mockContext);
 
             const result = mockContext.run('getcleanstate');
-            assert.strictEqual(result._registryKey, 'getcleanstate_v2');
+            // resolveKey() always returns the canonical CamelCase key
+            assert.strictEqual(result._registryKey, 'GetCleanState_V2');
         });
 
         it('should return a Promise when calling a specialLogic command via runAsync', async function () {

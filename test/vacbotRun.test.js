@@ -291,7 +291,8 @@ describe('vacbot.run() – V2 auto-upgrade', function () {
         // assert the correct upgraded key was stamped on the sent command instance.
         ctx.run('getcleanstate');
         assert.strictEqual(ctx.sentCommands.length, 1);
-        assert.strictEqual(ctx.sentCommands[0].cmd._registryKey, 'getcleanstate_v2');
+        // resolveKey() always returns the canonical CamelCase key
+        assert.strictEqual(ctx.sentCommands[0].cmd._registryKey, 'GetCleanState_V2');
     });
 
     it('non-V2 device does NOT upgrade Clean', function () {
@@ -504,10 +505,11 @@ describe('vacbot.run() – _registryKey is stamped', function () {
         assert.strictEqual(ctx.sentCommands[0].cmd._registryKey, 'GetBatteryState');
     });
 
-    it('stamps lowercase _registryKey when looked up lowercase', function () {
+    it('stamps canonical _registryKey even when looked up in different casing', function () {
         const ctx = buildMockContext();
         ctx.run('getbatterystate');
-        assert.strictEqual(ctx.sentCommands[0].cmd._registryKey, 'getbatterystate');
+        // resolveKey() normalises input and always returns the canonical (CamelCase) key
+        assert.strictEqual(ctx.sentCommands[0].cmd._registryKey, 'GetBatteryState');
     });
 });
 
@@ -542,14 +544,12 @@ describe('vacbot.runAsync() – non-Promise rejection', function () {
 // ─── Section 10: Case-insensitive run() lookup ────────────────────────────
 
 describe('vacbot.run() – case-insensitive lookup', function () {
-    // The registry exports both camelCase and lowercase keys; it does NOT export arbitrary
-    // UPPER_CASE variants.  Only the original camelCase and its full lowercase form work.
-    // TODO: run() does `COMMAND_REGISTRY[key]` directly — purely uppercase input (e.g.
-    // 'GETBATTERYSTATE') is not found because neither the camelCase key nor the lowercase key
-    // matches.  Callers must use camelCase or lowercase only.
+    // With resolveKey() all casing variants are now supported.
     const SUPPORTED_VARIANTS = [
         'getbatterystate',
         'GetBatteryState',
+        'GETBATTERYSTATE',
+        'gEtBaTtErYsTaTe',
     ];
 
     for (const variant of SUPPORTED_VARIANTS) {
@@ -560,20 +560,6 @@ describe('vacbot.run() – case-insensitive lookup', function () {
             assert.strictEqual(ctx.sentCommands[0].cmd.constructor.name, 'GetBatteryState');
         });
     }
-
-    it('returns false for purely uppercase variant (GETBATTERYSTATE) — not in registry', function () {
-        // TODO: run() only has camelCase + lowercase entries; arbitrary uppercase is unsupported.
-        const ctx = buildMockContext();
-        const result = ctx.run('GETBATTERYSTATE');
-        assert.strictEqual(result, false);
-    });
-
-    it('returns false for mixed-case variant (gEtBaTtErYsTaTe) — not in registry', function () {
-        // TODO: run() only has camelCase + lowercase entries; arbitrary mixed-case is unsupported.
-        const ctx = buildMockContext();
-        const result = ctx.run('gEtBaTtErYsTaTe');
-        assert.strictEqual(result, false);
-    });
 });
 
 // ─── Section 11: runAsync options passthrough ─────────────────────────────
@@ -611,6 +597,8 @@ describe('vacbot.runAsync() – options passthrough', function () {
 describe('COMMAND_REGISTRY integrity', function () {
     it('every entry has either className or specialLogic', function () {
         for (const [key, entry] of Object.entries(COMMAND_REGISTRY)) {
+            // Skip the resolveKey helper function attached to the module.exports object
+            if (typeof entry !== 'object' || entry === null) continue;
             const hasClassName = typeof entry.className === 'string';
             const hasSpecialLogic = entry.specialLogic === true;
             assert.ok(

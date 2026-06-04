@@ -164,8 +164,9 @@ class Ecovacs extends EventEmitter {
 
         if (options.returnPromise) {
             const COMMAND_REGISTRY = require('./commandRegistry');
-            const registryKey = command._registryKey || command.constructor.name;
-            const entry = COMMAND_REGISTRY[registryKey] || COMMAND_REGISTRY[command.name];
+            const registryKey = COMMAND_REGISTRY.resolveKey(command._registryKey || command.constructor.name)
+                || COMMAND_REGISTRY.resolveKey(command.name);
+            const entry = registryKey ? COMMAND_REGISTRY[registryKey] : null;
             expectedEvent = (entry && entry.expectedEvent) || null;
 
             commandPromise = new Promise((resolve, reject) => {

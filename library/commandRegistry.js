@@ -292,11 +292,22 @@ const COMMAND_REGISTRY = {
     'SpotPurification': { className: 'SpotPurification', minArgs: 1 },
 };
 
-// Build a combined object for export that includes both CamelCase and lowercased keys.
-const EXPORTED_REGISTRY = {};
+// Build a lowercase index: lowercaseKey -> canonicalKey
+// This enables case-insensitive lookup without duplicating entries.
+const _lowercaseIndex = {};
 for (const key in COMMAND_REGISTRY) {
-    EXPORTED_REGISTRY[key] = COMMAND_REGISTRY[key];
-    EXPORTED_REGISTRY[key.toLowerCase()] = COMMAND_REGISTRY[key];
+    _lowercaseIndex[key.toLowerCase()] = key;
 }
 
-module.exports = EXPORTED_REGISTRY;
+/**
+ * Resolves a command name (any casing) to its canonical registry key.
+ * Returns the canonical key string if found, or `undefined` if unknown.
+ * @param {string} cmd - The command name to resolve (any case)
+ * @returns {string|undefined}
+ */
+function resolveKey(cmd) {
+    return _lowercaseIndex[cmd.toLowerCase()];
+}
+
+module.exports = COMMAND_REGISTRY;
+module.exports.resolveKey = resolveKey;
