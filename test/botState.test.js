@@ -302,21 +302,21 @@ describe('BotState – work mode handlers', function () {
 describe('BotState – simple payload-mapping handlers', function () {
     const cases = [
         { fn: 'handleVolume',           payload: { volume: 7 },         prop: 'volume',           expected: 7 },
-        { fn: 'handleBreakPoint',       payload: { enable: 1 },         prop: 'breakPoint',       expected: 1 },
-        { fn: 'handleAdvancedMode',     payload: { enable: 1 },         prop: 'advancedMode',     expected: 1 },
-        { fn: 'handleTrueDetect',       payload: { enable: 1 },         prop: 'trueDetect',       expected: 1 },
+        { fn: 'handleBreakPoint',       payload: { enable: 1 },         prop: 'breakPoint',       expected: true },
+        { fn: 'handleAdvancedMode',     payload: { enable: 1 },         prop: 'advancedMode',     expected: true },
+        { fn: 'handleTrueDetect',       payload: { enable: 1 },         prop: 'trueDetect',       expected: true },
         { fn: 'handleCleanCount',       payload: { count: 3 },          prop: 'cleanCount',       expected: 3 },
-        { fn: 'handleCarpetPressure',   payload: { enable: 1 },         prop: 'carpetPressure',   expected: 1 },
+        { fn: 'handleCarpetPressure',   payload: { enable: 1 },         prop: 'carpetPressure',   expected: true },
         { fn: 'handleCarpetInfo',       payload: { mode: 1 },           prop: 'carpetInfo',       expected: 1 },
-        { fn: 'handleSleepStatus',      payload: { enable: 1 },         prop: 'sleepStatus',      expected: 1 },
+        { fn: 'handleSleepStatus',      payload: { enable: 1 },         prop: 'sleepStatus',      expected: true },
         { fn: 'handleAutoEmpty',        payload: { enable: 1 },         prop: 'autoEmpty',        expected: 1 },
-        { fn: 'handleBorderSwitch',     payload: { enable: 1 },         prop: 'borderSwitch',     expected: 1 },
-        { fn: 'handleCleanPreference',  payload: { enable: 1 },         prop: 'cleanPreference',  expected: 1 },
+        { fn: 'handleBorderSwitch',     payload: { enable: 1 },         prop: 'borderSwitch',     expected: true },
+        { fn: 'handleCleanPreference',  payload: { enable: 1 },         prop: 'cleanPreference',  expected: true },
         { fn: 'handleWorkMode',         payload: { mode: 3 },           prop: 'workMode',         expected: 3 },
-        { fn: 'handleSafeProtect',      payload: { enable: 0 },         prop: 'safeProtect',      expected: 0 },
-        { fn: 'handleMoveupWarning',    payload: { enable: 1 },         prop: 'moveupWarning',    expected: 1 },
+        { fn: 'handleSafeProtect',      payload: { enable: 0 },         prop: 'safeProtect',      expected: false },
+        { fn: 'handleMoveupWarning',    payload: { enable: 1 },         prop: 'moveupWarning',    expected: true },
         { fn: 'handleCutDirection',     payload: { angle: 45 },         prop: 'cutDirection',     expected: 45 },
-        { fn: 'handleCrossMapBorderWarning', payload: { enable: 1 },    prop: 'crossMapBorderWarning', expected: 1 },
+        { fn: 'handleCrossMapBorderWarning', payload: { enable: 1 },    prop: 'crossMapBorderWarning', expected: true },
     ];
 
     cases.forEach(({ fn, payload, prop, expected }) => {
@@ -395,7 +395,7 @@ describe('BotState – handleBorderSpin()', function () {
     it('should set borderSpin when type is truthy', function () {
         const state = new BotState(makeFakeBot());
         state.handleBorderSpin({ enable: 1, type: 1 });
-        assert.strictEqual(state.borderSpin, 1);
+        assert.strictEqual(state.borderSpin, true);
     });
 
     it('should not set borderSpin when type is falsy', function () {

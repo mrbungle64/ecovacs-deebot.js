@@ -7,14 +7,49 @@ const { errorCodes } = require('../errorCodes.json');
 const { eventCodes } = require('../eventCodes.json');
 const {
     GetBatteryState,
+    GetAdvancedMode,
+    GetAngleFollow,
+    GetAtmoLight,
+    GetAtmoVolume,
+    GetBorderSpin,
+    GetBorderSwitch,
+    GetCarpetInfo,
+    GetCarpetPressure,
+    GetChildLock,
+    GetCrossMapBorderWarning,
+    GetCutDirection,
+    GetDrivingWheel,
+    GetEfficiencyMode,
+    GetMic,
+    GetMonitorAirState,
+    GetMoveUpWarning,
     GetNetInfo,
     GetRelocationState,
+    GetSafeProtect,
+    GetSleepStatus,
     GetStationInfo,
     GetStationState,
+    GetSweepMode,
+    GetThreeModule,
+    GetThreeModuleStatus,
     GetTotalStats,
-    GetWaterInfo
+    GetTrueDetect,
+    GetVoiceAssistantState,
+    GetVoiceSimple,
+    GetVolume,
+    GetWashInfo,
+    GetWashInterval,
+    GetWaterInfo,
+    GetWorkMode,
 } = require('../commands/info');
 const { GetChargeState } = require('../commands/movement');
+const {
+    GetAutonomousClean,
+    GetCleanCount,
+    GetCleanPreference,
+    GetContinuousCleaning,
+    GetCustomAreaMode,
+} = require('../commands/clean');
 
 /**
  * @class BotState
@@ -235,19 +270,20 @@ class BotState {
      * @param {Object} payload
      */
     handleWashInterval(payload) {
-        if (payload.hasOwnProperty('interval')) {
-            this.washInterval = payload['interval'];
+        const result = new GetWashInterval().parseResponse(payload);
+        if (result !== undefined) {
+            this.washInterval = result;
         }
     }
-
 
     /**
      * Handle the payload of the `WashInfo` response/message
      * @param {Object} payload
      */
     handleWashInfo(payload) {
-        if (payload.hasOwnProperty('mode')) {
-            this.washInfo = payload['mode'];
+        const result = new GetWashInfo().parseResponse(payload);
+        if (result !== undefined) {
+            this.washInfo = result;
         }
     }
 
@@ -379,7 +415,7 @@ class BotState {
      * @param {Object} payload
      */
     handleBorderSwitch(payload) {
-        this.borderSwitch = payload['enable'];
+        this.borderSwitch = new GetBorderSwitch().parseResponse(payload);
     }
 
     /**
@@ -387,7 +423,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCrossMapBorderWarning(payload) {
-        this.crossMapBorderWarning = payload['enable'];
+        this.crossMapBorderWarning = new GetCrossMapBorderWarning().parseResponse(payload);
     }
 
     /**
@@ -395,7 +431,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCutDirection(payload) {
-        this.cutDirection = payload['angle'];
+        this.cutDirection = new GetCutDirection().parseResponse(payload);
     }
 
     /**
@@ -403,7 +439,7 @@ class BotState {
      * @param {Object} payload
      */
     handleMoveupWarning(payload) {
-        this.moveupWarning = payload['enable'];
+        this.moveupWarning = new GetMoveUpWarning().parseResponse(payload);
     }
 
     /**
@@ -411,7 +447,7 @@ class BotState {
      * @param {Object} payload
      */
     handleSafeProtect(payload) {
-        this.safeProtect = payload['enable'];
+        this.safeProtect = new GetSafeProtect().parseResponse(payload);
     }
 
     /**
@@ -497,11 +533,7 @@ class BotState {
      * @param {Object} payload
      */
     handleBorderSpin(payload) {
-        const enable = payload['enable'];
-        const type = payload['type']; // The value of type seems to be always 1
-        if (type) {
-            this.borderSpin = enable;
-        }
+        this.borderSpin = new GetBorderSpin().parseResponse(payload);
     }
 
     /**
@@ -514,7 +546,7 @@ class BotState {
      * @param {Object} payload
      */
     handleWorkMode(payload) {
-        this.workMode = payload['mode'];
+        this.workMode = new GetWorkMode().parseResponse(payload);
     }
 
     /**
@@ -524,9 +556,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCustomAreaMode(payload) {
-        if (payload.hasOwnProperty('sweepMode')) {
-            this.sweepMode = payload['sweepMode'];
-        }
+        this.sweepMode = new GetCustomAreaMode().parseResponse(payload);
     }
 
     /**
@@ -536,7 +566,7 @@ class BotState {
      */
     handleSweepMode(payload) {
         if (payload.hasOwnProperty('type')) {
-            this.mopOnlyMode = Boolean(payload['type']);
+            this.mopOnlyMode = new GetSweepMode().parseResponse(payload);
         }
     }
 
@@ -555,7 +585,7 @@ class BotState {
      * @param {Object} payload
      */
     handleSleepStatus(payload) {
-        this.sleepStatus = payload['enable'];
+        this.sleepStatus = new GetSleepStatus().parseResponse(payload);
     }
 
     /**
@@ -656,7 +686,7 @@ class BotState {
      * @param {Object} payload
      */
     handleVolume(payload) {
-        this.volume = payload['volume'];
+        this.volume = new GetVolume().parseResponse(payload);
     }
 
     /**
@@ -664,7 +694,7 @@ class BotState {
      * @param {Object} payload
      */
     handleBreakPoint(payload) {
-        this.breakPoint = payload['enable'];
+        this.breakPoint = new GetContinuousCleaning().parseResponse(payload);
     }
 
     /**
@@ -701,7 +731,7 @@ class BotState {
      * @param {Object} payload
      */
     handleAdvancedMode(payload) {
-        this.advancedMode = payload['enable'];
+        this.advancedMode = new GetAdvancedMode().parseResponse(payload);
     }
 
     /**
@@ -709,7 +739,7 @@ class BotState {
      * @param {Object} payload
      */
     handleTrueDetect(payload) {
-        this.trueDetect = payload['enable'];
+        this.trueDetect = new GetTrueDetect().parseResponse(payload);
     }
 
     handleRecognization(payload) {
@@ -724,7 +754,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCleanCount(payload) {
-        this.cleanCount = payload['count'];
+        this.cleanCount = new GetCleanCount().parseResponse(payload);
     }
 
     /**
@@ -744,7 +774,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCarpetPressure(payload) {
-        this.carpetPressure = payload['enable'];
+        this.carpetPressure = new GetCarpetPressure().parseResponse(payload);
     }
 
     /**
@@ -753,7 +783,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCarpetInfo(payload) {
-        this.carpetInfo = payload['mode'];
+        this.carpetInfo = new GetCarpetInfo().parseResponse(payload);
     }
 
     /**
@@ -761,7 +791,7 @@ class BotState {
      * @param {Object} payload
      */
     handleCleanPreference(payload) {
-        this.cleanPreference = payload['enable'];
+        this.cleanPreference = new GetCleanPreference().parseResponse(payload);
     }
 
     /**
@@ -948,7 +978,7 @@ class BotState {
      * @param {Object} payload
      */
     handleMonitorAirState(payload) {
-        this.monitorAirState = payload['on'];
+        this.monitorAirState = new GetMonitorAirState().parseResponse(payload);
     }
 
     /**
@@ -957,7 +987,7 @@ class BotState {
      * @param {Object} payload
      */
     handleAngleFollow(payload) {
-        this.angleFollow = payload['on'];
+        this.angleFollow = new GetAngleFollow().parseResponse(payload);
     }
 
     /**
@@ -974,7 +1004,7 @@ class BotState {
      * @param {Object} payload
      */
     handleMic(payload) {
-        this.mic = payload['on'];
+        this.mic = new GetMic().parseResponse(payload);
     }
 
     /**
@@ -983,7 +1013,7 @@ class BotState {
      * @param {Object} payload
      */
     handleVoiceSimple(payload) {
-        this.voiceSimple = payload['on'];
+        this.voiceSimple = new GetVoiceSimple().parseResponse(payload);
     }
 
     /**
@@ -991,7 +1021,7 @@ class BotState {
      * @param {Object} payload
      */
     handleDrivingWheel(payload) {
-        this.drivingWheel = payload['on'];
+        this.drivingWheel = new GetDrivingWheel().parseResponse(payload);
     }
 
     /**
@@ -1000,7 +1030,7 @@ class BotState {
      * @param {Object} payload
      */
     handleChildLock(payload) {
-        this.childLock = payload['on'];
+        this.childLock = new GetChildLock().parseResponse(payload);
     }
 
     /**
@@ -1009,7 +1039,7 @@ class BotState {
      * @param {Object} payload
      */
     handleVoiceAssistantState(payload) {
-        this.voiceAssistantState = payload['enable'];
+        this.voiceAssistantState = new GetVoiceAssistantState().parseResponse(payload);
     }
 
     /**
@@ -1030,7 +1060,7 @@ class BotState {
      * @param {Object} payload
      */
     handleAutonomousClean(payload) {
-        this.autonomousClean = payload['on'];
+        this.autonomousClean = new GetAutonomousClean().parseResponse(payload);
     }
 
     /**
@@ -1070,7 +1100,7 @@ class BotState {
      * @param {Object} payload
      */
     handleEfficiency(payload) {
-        this.efficiency = payload['efficiency'];
+        this.efficiency = new GetEfficiencyMode().parseResponse(payload);
     }
 
     /**
@@ -1079,7 +1109,7 @@ class BotState {
      * @param {Object} payload
      */
     handleAtmoLight(payload) {
-        this.atmoLightIntensity = payload['intensity'];
+        this.atmoLightIntensity = new GetAtmoLight().parseResponse(payload);
     }
 
     /**
@@ -1088,7 +1118,7 @@ class BotState {
      * @param {Object} payload
      */
     handleAtmoVolume(payload) {
-        this.atmoVolume = payload['volume'];
+        this.atmoVolume = new GetAtmoVolume().parseResponse(payload);
     }
 
     /**
@@ -1097,7 +1127,7 @@ class BotState {
      * @param {Object} payload
      */
     handleThreeModule(payload) {
-        this.threeModule = payload;
+        this.threeModule = new GetThreeModule().parseResponse(payload);
     }
 
     /**
@@ -1106,7 +1136,7 @@ class BotState {
      * @param {Object} payload
      */
     handleThreeModuleStatus(payload) {
-        this.threeModuleStatus = payload;
+        this.threeModuleStatus = new GetThreeModuleStatus().parseResponse(payload);
     }
 
     /**
