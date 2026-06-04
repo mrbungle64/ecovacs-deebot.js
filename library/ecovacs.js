@@ -1051,12 +1051,12 @@ class Ecovacs extends EventEmitter {
             }
             case 'HumanoidFollow': {
                 this.bot.handleHumanoidFollow(payload);
-                if ((this.bot.humanoidFollow_Yiko) || (this.bot.humanoidFollow_Video)) {
-                    if (this.bot.humanoidFollow_Yiko) {
-                        this.emitMessage('HumanoidFollowYiko', this.bot.humanoidFollow_Yiko, payload);
+                if (this.bot.humanoidFollow?.yiko || this.bot.humanoidFollow?.video) {
+                    if (this.bot.humanoidFollow.yiko) {
+                        this.emitMessage('HumanoidFollowYiko', this.bot.humanoidFollow.yiko, payload);
                     }
-                    if (this.bot.humanoidFollow_Video) {
-                        this.emitMessage('HumanoidFollowVideo', this.bot.humanoidFollow_Video, payload);
+                    if (this.bot.humanoidFollow.video) {
+                        this.emitMessage('HumanoidFollowVideo', this.bot.humanoidFollow.video, payload);
                     }
                 }
                 break;
