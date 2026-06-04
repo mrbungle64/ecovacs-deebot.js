@@ -434,57 +434,82 @@ class Ecovacs extends EventEmitter {
     handleMessage(topic, message, type = MESSAGE_TYPE.INCOMING) {
         let eventName = topic;
         let resultCode = 0;
-        let resultCodeMessage = "ok";
-        let payload = message;
+        let resultCodeMessage = 'ok';
+        let payload;
+
         if (type === MESSAGE_TYPE.INCOMING) {
-            eventName = topic.split('/')[2];
-            try {
-                message = JSON.parse(message);
-            } catch (e) {
-                tools.envLogError(`Failed to parse MQTT message on topic '${topic}': ${e.message}`);
-                return;
-            }
-            tools.envLogMqtt(topic);
-            tools.envLogMqtt(eventName);
-            if (message['body'] && message['body']['data']) {
-                payload = message['body']['data'];
-            } else if (message['body']) {
-                payload = message['body'];
-            } else {
-                tools.envLogWarn('Unhandled MQTT message payload ...');
-                return;
-            }
+            const parsed = this._parseMqttMessage(topic, message);
+            if (!parsed) return;
+            ({ eventName, payload } = parsed);
         } else if (type === MESSAGE_TYPE.RESPONSE) {
             resultCode = message['body']['code'];
             resultCodeMessage = message['body']['msg'];
             payload = message['body']['data'];
             if (message['header']) {
-                const header = message['header'];
-                if (this.bot.firmwareVersion !== header['fwVer']) {
-                    this.bot.firmwareVersion = header['fwVer'];
-                    this.emitMessage('HeaderInfo', {
-                        'fwVer': header['fwVer'],
-                        'hwVer': header['hwVer']
-                    });
-                }
+                this._handleFirmwareVersion(message['header']);
             }
         }
 
-        if ((payload !== undefined) && (resultCode === 0)) {
-            (async () => {
-                try {
-                    await this.handleMessagePayload(eventName, payload);
-                } catch (e) {
-                    this.emitError('-2', e.message);
-                }
-            })();
-        } else if (resultCode != 0) {
+        if (resultCode !== 0) {
             tools.envLogError(`got unexpected resultCode for command '${eventName}': ${resultCode}`);
-            tools.envLogError(`resultCodeMessage for command '${eventName}': '${resultCodeMessage}`);
+            tools.envLogError(`resultCodeMessage for command '${eventName}': '${resultCodeMessage}'`);
             return;
-        } else if (payload === undefined) {
+        }
+        if (payload === undefined) {
             tools.envLogWarn(`got empty payload for command '${eventName}'`);
             return;
+        }
+
+        (async () => {
+            try {
+                await this.handleMessagePayload(eventName, payload);
+            } catch (e) {
+                this.emitError('-2', e.message);
+            }
+        })();
+    }
+
+    /**
+     * Parses a raw incoming MQTT message into eventName + payload.
+     * Topic format: "iot/atr/<eventName>/<did>/<class>/<resource>/j"
+     * @param {string} topic
+     * @param {string} rawMessage - JSON string
+     * @returns {{ eventName: string, payload: Object } | null} null if malformed
+     */
+    _parseMqttMessage(topic, rawMessage) {
+        const eventName = topic.split('/')[2];
+        tools.envLogMqtt(topic);
+        tools.envLogMqtt(eventName);
+
+        let message;
+        try {
+            message = JSON.parse(rawMessage);
+        } catch (e) {
+            tools.envLogError(`Failed to parse MQTT message on topic '${topic}': ${e.message}`);
+            return null;
+        }
+
+        if (message['body']?.['data']) {
+            return { eventName, payload: message['body']['data'] };
+        }
+        if (message['body']) {
+            return { eventName, payload: message['body'] };
+        }
+        tools.envLogWarn('Unhandled MQTT message payload ...');
+        return null;
+    }
+
+    /**
+     * Emits HeaderInfo if the firmware version changed.
+     * @param {{ fwVer: string, hwVer: string }} header
+     */
+    _handleFirmwareVersion(header) {
+        if (this.bot.firmwareVersion !== header['fwVer']) {
+            this.bot.firmwareVersion = header['fwVer'];
+            this.emitMessage('HeaderInfo', {
+                'fwVer': header['fwVer'],
+                'hwVer': header['hwVer']
+            });
         }
     }
 
