@@ -369,3 +369,96 @@ describe('GetNetInfoLegacy – payload field compatibility', function () {
         assert.strictEqual(state.netInfoMAC, '11:22:33:44:55:66');
     });
 });
+
+// ---------------------------------------------------------------------------
+// Private Helpers & Routing Methods
+// ---------------------------------------------------------------------------
+
+describe('Ecovacs._parseMqttMessage()', function () {
+    const { ecovacs } = makeEcovacs();
+
+    it('should return null for malformed JSON', function () {
+        const result = ecovacs._parseMqttMessage('iot/atr/Battery/did/class/res/j', '{invalid-json}');
+        assert.strictEqual(result, null);
+    });
+
+    it('should split the topic and extract the correct eventName', function () {
+        const payloadStr = JSON.stringify({ body: { data: { value: 100 } } });
+        const result = ecovacs._parseMqttMessage('iot/atr/CustomEventName/did/class/res/j', payloadStr);
+        assert.deepStrictEqual(result, {
+            eventName: 'CustomEventName',
+            payload: { value: 100 }
+        });
+    });
+
+    it('should fall back to message.body if message.body.data is missing', function () {
+        const payloadStr = JSON.stringify({ body: { value: 50 } });
+        const result = ecovacs._parseMqttMessage('iot/atr/CustomEventName/did/class/res/j', payloadStr);
+        assert.deepStrictEqual(result, {
+            eventName: 'CustomEventName',
+            payload: { value: 50 }
+        });
+    });
+
+    it('should return null if message.body is completely missing', function () {
+        const payloadStr = JSON.stringify({ other: 'field' });
+        const result = ecovacs._parseMqttMessage('iot/atr/CustomEventName/did/class/res/j', payloadStr);
+        assert.strictEqual(result, null);
+    });
+});
+
+describe('Ecovacs._handleFirmwareVersion()', function () {
+    it('should update firmwareVersion and emit HeaderInfo if firmware version changed', function () {
+        const { ecovacs, emitted, bot } = makeEcovacs();
+        bot.firmwareVersion = '1.0.0';
+
+        ecovacs._handleFirmwareVersion({ fwVer: '2.0.0', hwVer: '1.0.1' });
+
+        assert.strictEqual(bot.firmwareVersion, '2.0.0');
+        assert.deepStrictEqual(emitted['HeaderInfo'], {
+            fwVer: '2.0.0',
+            hwVer: '1.0.1'
+        });
+    });
+
+    it('should not update firmwareVersion or emit HeaderInfo if firmware version did not change', function () {
+        const { ecovacs, emitted, bot } = makeEcovacs();
+        bot.firmwareVersion = '1.0.0';
+
+        ecovacs._handleFirmwareVersion({ fwVer: '1.0.0', hwVer: '1.0.1' });
+
+        assert.strictEqual(bot.firmwareVersion, '1.0.0');
+        assert.ok(!('HeaderInfo' in emitted));
+    });
+});
+
+describe('Ecovacs._dispatchPayload()', function () {
+    it('should dispatch payload via handleMessagePayload', async function () {
+        const { ecovacs } = makeEcovacs();
+        let dispatched = null;
+        ecovacs.handleMessagePayload = async (eventName, payload) => {
+            dispatched = { eventName, payload };
+        };
+        ecovacs._dispatchPayload('TestEvent', { value: 1 });
+
+        // Wait for the async task queue to flush
+        await new Promise(resolve => setTimeout(resolve, 10));
+        assert.deepStrictEqual(dispatched, { eventName: 'TestEvent', payload: { value: 1 } });
+    });
+
+    it('should emit error code -2 if handleMessagePayload throws', async function () {
+        const { ecovacs } = makeEcovacs();
+        let emittedError = null;
+        ecovacs.handleMessagePayload = async () => {
+            throw new Error('Test error');
+        };
+        ecovacs.emitError = (code, message) => {
+            emittedError = { code, message };
+        };
+        ecovacs._dispatchPayload('TestEvent', { value: 1 });
+
+        // Wait for the async task queue to flush
+        await new Promise(resolve => setTimeout(resolve, 10));
+        assert.deepStrictEqual(emittedError, { code: '-2', message: 'Test error' });
+    });
+});
