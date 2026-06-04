@@ -433,7 +433,12 @@ class Ecovacs extends EventEmitter {
         let payload = message;
         if (type === "incoming") {
             eventName = topic.split('/')[2];
-            message = JSON.parse(message);
+            try {
+                message = JSON.parse(message);
+            } catch (e) {
+                tools.envLogError(`Failed to parse MQTT message on topic '${topic}': ${e.message}`);
+                return;
+            }
             tools.envLogMqtt(topic);
             tools.envLogMqtt(eventName);
             if (message['body'] && message['body']['data']) {
