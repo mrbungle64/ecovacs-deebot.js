@@ -475,8 +475,6 @@ class Ecovacs extends EventEmitter {
         } else if (payload === undefined) {
             tools.envLogWarn(`got empty payload for command '${eventName}'`);
             return;
-        } else {
-            tools.envLogError(`something unexpected happend for command '${eventName}'`);
         }
     }
 
