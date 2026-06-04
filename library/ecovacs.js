@@ -403,7 +403,6 @@ class Ecovacs extends EventEmitter {
         });
     }
 
-
     /**
      * It handles the response from the Ecovacs API
      * @param {Object} command - the command that was sent to the Ecovacs API
@@ -435,19 +434,17 @@ class Ecovacs extends EventEmitter {
         let payload;
         if (type === MESSAGE_TYPE.INCOMING) {
             payload = this._extractIncomingPayload(name, envelope);
-            if (payload === undefined) {
-                return;
-            }
         } else if (type === MESSAGE_TYPE.RESPONSE) {
             payload = this._extractResponsePayload(name, envelope);
             const body = envelope?.body;
             if (!body || body.code !== 0) {
+                tools.envLogWarn(`got payload with empty body for command '${name}'`);
                 return;
             }
-            if (payload === undefined) {
-                tools.envLogWarn(`got empty payload for command '${name}'`);
-                return;
-            }
+        }
+        if (payload === undefined) {
+            tools.envLogWarn(`got empty payload for command '${name}'`);
+            return;
         }
 
         this._dispatchPayload(name, payload);
