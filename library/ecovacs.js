@@ -411,13 +411,7 @@ class Ecovacs extends EventEmitter {
                 // CleanLogs uses a different API path and response format
                 tools.envLogInfo(`got CleanLogs response`);
                 if (messagePayload['ret'] === 'ok') {
-                    (async () => {
-                        try {
-                            await this.handleMessagePayload(command.name, messagePayload);
-                        } catch (e) {
-                            this.emitError('-2', e.message);
-                        }
-                    })();
+                    this._dispatchPayload(command.name, messagePayload);
                 }
             } else {
                 tools.envLogWarn(`handleCommandResponse invalid response`);
@@ -460,13 +454,7 @@ class Ecovacs extends EventEmitter {
             return;
         }
 
-        (async () => {
-            try {
-                await this.handleMessagePayload(eventName, payload);
-            } catch (e) {
-                this.emitError('-2', e.message);
-            }
-        })();
+        this._dispatchPayload(eventName, payload);
     }
 
     /**
@@ -511,6 +499,17 @@ class Ecovacs extends EventEmitter {
                 'hwVer': header['hwVer']
             });
         }
+    }
+
+    /** @returns {void} — intentionally fire-and-forget */
+    _dispatchPayload(eventName, payload) {
+        (async () => {
+            try {
+                await this.handleMessagePayload(eventName, payload);
+            } catch (e) {
+                this.emitError('-2', e.message);
+            }
+        })();
     }
 
     /**
