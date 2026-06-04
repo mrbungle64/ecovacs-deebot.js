@@ -931,6 +931,10 @@ class Ecovacs extends EventEmitter {
             // Map info
             // ========
             case "CachedMapInfo": {
+                if (!this.bot.hasMappingCapabilities()) {
+                    tools.envLogWarn(`Skipping 'CachedMapInfo' push: device lacks mapping capabilities`);
+                    break;
+                }
                 try {
                     this.bot.handleCachedMapInfo(payload);
                     this.emitMessage("CurrentMapMID", this.bot.currentMapMID, payload);
@@ -965,6 +969,10 @@ class Ecovacs extends EventEmitter {
                 break;
             }
             case "MapSet": {
+                if (!this.bot.hasMappingCapabilities()) {
+                    tools.envLogWarn(`Skipping 'MapSet' push: device lacks mapping capabilities`);
+                    break;
+                }
                 // Handle spotAreas, virtualWalls, noMopZones
                 let mapset = this.bot.handleMapSet(payload);
                 if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
@@ -978,6 +986,10 @@ class Ecovacs extends EventEmitter {
                 break;
             }
             case 'MultiMapState': {
+                if (!this.bot.hasMappingCapabilities()) {
+                    tools.envLogWarn(`Skipping 'MultiMapState' push: device lacks mapping capabilities`);
+                    break;
+                }
                 // Status of the Multi Map functionality
                 this.bot.handleMultiMapState(payload);
                 this.emitMessage("MultiMapState", this.bot.multiMapState, payload);
@@ -989,6 +1001,10 @@ class Ecovacs extends EventEmitter {
                 break;
             }
             case "MapSubSet": {
+                if (!this.bot.hasMappingCapabilities()) {
+                    tools.envLogWarn(`Skipping 'MapSubSet' push: device lacks mapping capabilities`);
+                    break;
+                }
                 // Handle spotAreas, virtualWalls, noMopZones
                 let mapsubset = await this.bot.handleMapSubset(payload);
                 if (mapsubset["mapsubsetEvent"] !== 'error') {
@@ -1196,11 +1212,19 @@ class Ecovacs extends EventEmitter {
                 break;
             }
             case 'MapTrace': {
+                if (!this.bot.hasMappingCapabilities()) {
+                    tools.envLogWarn(`Skipping 'MapTrace' push: device lacks mapping capabilities`);
+                    break;
+                }
                 this.bot.handleMapTrace(payload);
                 // TODO: finish implementing MapTrace
                 break;
             }
             case 'MinorMap': {
+                if (!this.bot.hasMappingCapabilities()) {
+                    tools.envLogWarn(`Skipping 'MinorMap' push: device lacks mapping capabilities`);
+                    break;
+                }
                 // TODO: finish implementing MinorMap and emit MapLiveImage
                 // let mapImage = this.bot.handleMinorMap(payload);
                 break;
