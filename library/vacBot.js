@@ -334,6 +334,22 @@ class VacBot {
         this.ecovacs.connect();
     }
 
+    /**
+     * Attach to an existing MQTT client owned by another VacBot instance.
+     * @param {Object} existingMqttClient - connected mqtt.Client to reuse
+     */
+    connectShared(existingMqttClient) {
+        this.ecovacs.connectShared(existingMqttClient);
+    }
+
+    /**
+     * Return the underlying MQTT client, or null if not yet connected.
+     * @returns {Object|null}
+     */
+    getMqttClient() {
+        return this.ecovacs ? this.ecovacs.client : null;
+    }
+
     on(name, func) {
         this.ecovacs.on(name, func);
     }

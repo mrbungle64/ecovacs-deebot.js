@@ -117,7 +117,9 @@ class Ecovacs extends EventEmitter {
         });
 
         this.client.on('message', (topic, message) => {
-            const eventName = topic.split('/')[2];
+            const topicParts = topic.split('/');
+            if (topicParts[3] !== this.vacuum['did']) return;
+            const eventName = topicParts[2];
             tools.envLogMqtt(topic);
             tools.envLogMqtt(eventName);
             const parsedEnvelope = this._parseMqttMessage(eventName, message.toString());
@@ -153,6 +155,62 @@ class Ecovacs extends EventEmitter {
         this.on("ready", () => {
             tools.envLogSuccess(`MQTT client received ready event`);
         });
+    }
+
+    /**
+     * Attach to an existing MQTT client owned by another Ecovacs instance.
+     * Used when multiple vacbots share one MQTT session (one login, one connection,
+     * multiple topic subscriptions). The caller retains ownership of the client;
+     * this instance will subscribe/unsubscribe but will NOT call client.end().
+     * @param {Object} existingClient - connected mqtt.Client to reuse
+     */
+    connectShared(existingClient) {
+        tools.envLogHeader(`connectShared()`);
+        tools.envLogInfo(`vacuum did: '${this.vacuum['did']}'`);
+
+        this._sharedClient = true;
+        this.client = existingClient;
+
+        this.client.on('message', (topic, message) => {
+            const topicParts = topic.split('/');
+            if (topicParts[3] !== this.vacuum['did']) return;
+            const eventName = topicParts[2];
+            tools.envLogMqtt(topic);
+            tools.envLogMqtt(eventName);
+            const parsedEnvelope = this._parseMqttMessage(eventName, message.toString());
+            if (parsedEnvelope) {
+                this.handleMessage(eventName, parsedEnvelope, MESSAGE_TYPE.INCOMING);
+            }
+        });
+
+        this.client.on('connect', () => {
+            tools.envLogSuccess(`shared MQTT client reconnected, re-subscribing for did '${this.vacuum['did']}'`);
+            this.subscribe();
+        });
+
+        this.client.on('offline', () => {
+            try {
+                this.emitNetworkError('MQTT server is offline or not reachable');
+            } catch (e) {
+                tools.envLogError(`MQTT server is offline or not reachable`);
+            }
+        });
+
+        this.client.on('error', (error) => {
+            try {
+                this.emitNetworkError(`MQTT client error: ${error.message}`);
+            } catch (e) {
+                tools.envLogError(`MQTT client error: '${error.message}'`);
+            }
+        });
+
+        this.on('ready', () => {
+            tools.envLogSuccess(`MQTT client received ready event (shared connection)`);
+        });
+
+        if (this.client.connected) {
+            this.subscribe();
+        }
     }
 
     /**
@@ -388,6 +446,9 @@ class Ecovacs extends EventEmitter {
      */
     async disconnect() {
         this.pendingCommands.rejectAll(new Error('Connection closed'));
+        if (!this.client || !this.client.connected) {
+            return Promise.resolve(false);
+        }
         return new Promise((resolve, reject) => {
             this.client.unsubscribe(this.channel, error => {
                 if (error) {
@@ -395,8 +456,10 @@ class Ecovacs extends EventEmitter {
                     reject(false);
                 } else {
                     tools.envLogSuccess(`successfully unsubscribed from the atr channel`);
-                    tools.envLogInfo(`now trying to close MQTT client connection ...`);
-                    this.client.end();
+                    if (!this._sharedClient) {
+                        tools.envLogInfo(`now trying to close MQTT client connection ...`);
+                        this.client.end();
+                    }
                     resolve(true);
                 }
             });
