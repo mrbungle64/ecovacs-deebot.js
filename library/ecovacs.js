@@ -96,7 +96,12 @@ class Ecovacs extends EventEmitter {
     connect() {
         tools.envLogHeader(`connect()`);
         let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
-        const clientId = this.username + '/' + this.resource;
+        let clientIdSuffix = '';
+        if (this.vacuum && this.vacuum['did']) {
+            const cleanDid = this.vacuum['did'].replace(/[^a-zA-Z0-9]/g, '');
+            clientIdSuffix = '_' + cleanDid.substring(0, 8);
+        }
+        const clientId = this.username + '/' + this.resource + clientIdSuffix;
         tools.envLogInfo(`url: '${url}'`);
         tools.envLogInfo(`username: '${this.username}'`);
         tools.envLogInfo(`clientId: '${clientId}'`);
