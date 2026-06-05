@@ -220,6 +220,16 @@ declare class VacBot {
      * Connect to the robot
      */
     connect(): void;
+    /**
+     * Attach to an existing MQTT client owned by another VacBot instance.
+     * @param {Object} existingMqttClient - connected mqtt.Client to reuse
+     */
+    connectShared(existingMqttClient: Object): void;
+    /**
+     * Return the underlying MQTT client, or null if not yet connected.
+     * @returns {Object|null}
+     */
+    getMqttClient(): Object | null;
     on(name: any, func: any): void;
     once(name: any, func: any): void;
     /**

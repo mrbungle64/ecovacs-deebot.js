@@ -44,7 +44,16 @@ declare class Ecovacs extends EventEmitter<any> {
      * Connect to the MQTT server and listen to broadcast messages
      */
     connect(): void;
-    client: import("mqtt").MqttClient | undefined;
+    client: Object | import("mqtt").MqttClient | undefined;
+    /**
+     * Attach to an existing MQTT client owned by another Ecovacs instance.
+     * Used when multiple vacbots share one MQTT session (one login, one connection,
+     * multiple topic subscriptions). The caller retains ownership of the client;
+     * this instance will subscribe/unsubscribe but will NOT call client.end().
+     * @param {Object} existingClient - connected mqtt.Client to reuse
+     */
+    connectShared(existingClient: Object): void;
+    _sharedClient: boolean | undefined;
     /**
      * It sends a command to the Ecovacs API.
      * Optionally returns a Promise that resolves with the response payload
