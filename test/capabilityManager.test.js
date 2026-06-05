@@ -242,6 +242,9 @@ describe('CapabilityManager – device property accessors', function () {
         it('should return true for a device with mopping system (T9)', function () {
             assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.T9)).hasMoppingSystem(), true);
         });
+        it('should return false for Airbot which does not have a mopping system', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.airbot)).hasMoppingSystem(), false);
+        });
         it('should be consistent: a mopping device returns truthy, a non-mopping device returns falsy or a defined default', function () {
             // hasMoppingSystem() checks getDeviceProperty('water_amount') !== undefined
             // getDeviceProperty always returns false (never undefined) for missing props,
