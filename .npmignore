@@ -19,6 +19,7 @@ tsconfig.json
 
 .eslintrc.json
 .eslintrc.js
+eslint.config.js
 
 # npm package files
 package-lock.json
