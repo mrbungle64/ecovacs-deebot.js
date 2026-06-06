@@ -26,9 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install system dependencies for canvas
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev librsvg2-dev
+        uses: ./.github/actions/setup-canvas
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:

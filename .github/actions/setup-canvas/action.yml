@@ -1,0 +1,10 @@
+name: 'Install canvas system dependencies'
+description: 'Installs system libraries required by the canvas npm package'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install system dependencies for canvas
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev librsvg2-dev
