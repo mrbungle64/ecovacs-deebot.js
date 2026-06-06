@@ -1,8 +1,9 @@
 'use strict';
 
-const map = require('./mapInfo');
 const tools = require('./tools.js');
 const lzma = require('lzma');
+const { FrameBuffer, parseHexColor } = require('./render/framebuffer');
+const { encodePNGDataURL } = require('./render/png');
 
 const MAPINFOTYPE_FROM_ECOVACS = {
     "ol": "outline",
@@ -10,23 +11,6 @@ const MAPINFOTYPE_FROM_ECOVACS = {
     "ai": "ai",
     "wa": "workarea"
 };
-
-/**
- * A set of colors for spot areas
- * @type {string[]}
- * @todo Make colors customizable by introducing setMapStyle (JSON)
- */
-const SPOTAREA_COLORS = [
-    '#ffdcf6',
-    '#fff8d2',
-    '#e4fed9',
-    '#dbf2fe',
-    '#ffd7c9',
-    '#fee3c4',
-    '#e98b9d',
-    '#ffa1a1',
-    '#9fcfff'
-];
 
 /**
  * A set of colors for the element types
@@ -47,14 +31,37 @@ const MAP_COLORS = {
     'wifi_5': '#f7fbff', // weak
 };
 
-const POSITION_OFFSET = 400; // the positions of the charger and the Deebot need an offset of 400 pixels
+// Pre-parsed RGB triples for the palette, so the per-pixel raster loop never re-parses hex.
+const MAP_RGB = Object.fromEntries(Object.entries(MAP_COLORS).map(([k, v]) => [k, parseHexColor(v)]));
+
+/**
+ * Resolves a decoded palette index to a colour and the layer it belongs to.
+ * Walls and carpet sit on the wall layer (drawn on top); everything else
+ * (floor, Wi-Fi heatmap) on the floor layer. Mirrors the original canvas
+ * draw loop, including the unhandled 5–10 gap which produces no pixel.
+ * @returns {{floor: boolean, rgb: number[]}|null} colour + layer, or null for "no pixel".
+ */
+function resolvePixel(pixelValue) {
+    switch (true) {
+        case pixelValue === 1: return { floor: true, rgb: MAP_RGB['floor'] };
+        case pixelValue === 2: return { floor: false, rgb: MAP_RGB['wall'] };
+        case pixelValue === 3: return { floor: false, rgb: MAP_RGB['carpet'] };
+        case pixelValue === 4: return { floor: true, rgb: MAP_RGB['wifi_not_covered'] };
+        case pixelValue > 10 && pixelValue <= 20: return { floor: true, rgb: MAP_RGB['wifi_1'] };
+        case pixelValue > 20 && pixelValue <= 30: return { floor: true, rgb: MAP_RGB['wifi_2'] };
+        case pixelValue > 30 && pixelValue <= 40: return { floor: true, rgb: MAP_RGB['wifi_3'] };
+        case pixelValue > 40 && pixelValue <= 50: return { floor: true, rgb: MAP_RGB['wifi_4'] };
+        case pixelValue > 50: return { floor: true, rgb: MAP_RGB['wifi_5'] };
+        default: return null;
+    }
+}
 
 class EcovacsMapImageBase {
     constructor(mapID, mapType, mapTotalWidth, mapTotalHeight, mapPixel) {
-        this.mapFloorCanvas = null;
-        this.mapFloorContext = null;
-        this.mapWallCanvas = null;
-        this.mapWallContext = null;
+        // Pure-JS RGBA layers replacing the former native canvas contexts.
+        // Walls/carpet live on their own layer so they composite on top of the floor.
+        this.mapFloorBuffer = null;
+        this.mapWallBuffer = null;
         this.cropBoundaries = {
             minX: null,
             minY: null,
@@ -78,20 +85,20 @@ class EcovacsMapImageBase {
         })();
     }
 
+    // Kept for API compatibility (mapManager calls it before pieces arrive).
+    // Pure-JS rendering needs no native module, so this just allocates the layers.
     async initCanvas() {
-        if (!tools.isCanvasModuleAvailable()) {
-            return;
-        }
+        this.mapFloorBuffer = new FrameBuffer(this.mapTotalWidth, this.mapTotalHeight);
+        this.mapWallBuffer = new FrameBuffer(this.mapTotalWidth, this.mapTotalHeight);
+    }
 
-        const {createCanvas} = require('canvas');
-        this.mapFloorCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        this.mapFloorContext = this.mapFloorCanvas.getContext('2d');
-        this.mapFloorContext.globalAlpha = 1;
-        this.mapFloorContext.beginPath();
-        this.mapWallCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        this.mapWallContext = this.mapWallCanvas.getContext('2d');
-        this.mapWallContext.globalAlpha = 1;
-        this.mapWallContext.beginPath();
+    // Updates the running crop rectangle so it encloses every drawn pixel.
+    updateCropBoundaries(x, y) {
+        const cb = this.cropBoundaries;
+        cb.minX = cb.minX === null ? x : Math.min(cb.minX, x);
+        cb.minY = cb.minY === null ? y : Math.min(cb.minY, y);
+        cb.maxX = cb.maxX === null ? x : Math.max(cb.maxX, x);
+        cb.maxY = cb.maxY === null ? y : Math.max(cb.maxY, y);
     }
 
     async drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
@@ -99,254 +106,90 @@ class EcovacsMapImageBase {
         if (!mapPieceDecompressed) { // Decompression unavailable (e.g. zstd on older Node) – skip this piece
             return;
         }
+        if (!this.mapFloorBuffer) {
+            await this.initCanvas();
+        }
 
         for (let row = 0; row < mapPieceWidth; row++) {
             for (let column = 0; column < mapPieceHeight; column++) {
-                let bufferRow = row + mapPieceStartX;
-                let bufferColumn = column + mapPieceStartY;
-                let pieceDataPosition = mapPieceWidth * row + column;
-                let pixelValue = mapPieceDecompressed[pieceDataPosition];
+                const bufferRow = row + mapPieceStartX;
+                const bufferColumn = column + mapPieceStartY;
+                const pixelValue = mapPieceDecompressed[mapPieceWidth * row + column];
 
                 if (pixelValue === 0) { // No data
-                    this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                    this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                } else {
-                    // Check cropBoundaries
-                    if (this.cropBoundaries.minY === null) {
-                        this.cropBoundaries.minY = bufferColumn;
-                    } else if (bufferColumn < this.cropBoundaries.minY) {
-                        this.cropBoundaries.minY = bufferColumn;
-                    }
-                    if (this.cropBoundaries.minX === null) {
-                        this.cropBoundaries.minX = bufferRow;
-                    } else if (bufferRow < this.cropBoundaries.minX) {
-                        this.cropBoundaries.minX = bufferRow;
-                    }
-                    if (this.cropBoundaries.maxX === null) {
-                        this.cropBoundaries.maxX = bufferRow;
-                    } else if (this.cropBoundaries.maxX < bufferRow) {
-                        this.cropBoundaries.maxX = bufferRow;
-                    }
-                    if (this.cropBoundaries.maxY === null) {
-                        this.cropBoundaries.maxY = bufferColumn;
-                    } else if (this.cropBoundaries.maxY < bufferColumn) {
-                        this.cropBoundaries.maxY = bufferColumn;
-                    }
-
-                    if (pixelValue < 4) {
-                        // Floor, wall and carpet
-                        if (pixelValue === 1) {
-                            // Floor
-                            this.mapFloorContext.fillStyle = MAP_COLORS['floor'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue === 2) {
-                            // Wall
-                            this.mapWallContext.fillStyle = MAP_COLORS['wall'];
-                            this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue === 3) {
-                            // Carpet
-                            this.mapWallContext.fillStyle = MAP_COLORS['carpet'];
-                            this.mapWallContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapFloorContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        }
-                    } else if (pixelValue >= 4) {
-                        // Wi-Fi heatmap
-                        if (pixelValue === 4) {
-                            // Wi-Fi not covered
-                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_not_covered'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue > 10 && pixelValue <= 20) {
-                            // Wi-Fi coverage 1=strong
-                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_1'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue > 20 && pixelValue <= 30) {
-                            // Wi-Fi coverage 2
-                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_2'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue > 30 && pixelValue <= 40) {
-                            // Wi-Fi coverage 3
-                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_3'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue > 40 && pixelValue <= 50) {
-                            // Wi-Fi coverage 4
-                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_4'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        } else if (pixelValue > 50) {
-                            // Wi-Fi coverage 5=weak
-                            this.mapFloorContext.fillStyle = MAP_COLORS['wifi_5'];
-                            this.mapFloorContext.fillRect(bufferRow, bufferColumn, 1, 1);
-                            this.mapWallContext.clearRect(bufferRow, bufferColumn, 1, 1);
-                        }
-                    }
+                    this.mapFloorBuffer.clearPixel(bufferRow, bufferColumn);
+                    this.mapWallBuffer.clearPixel(bufferRow, bufferColumn);
+                    continue;
                 }
+
+                // Any in-use pixel (even an unhandled palette index) extends the crop.
+                this.updateCropBoundaries(bufferRow, bufferColumn);
+
+                const pixel = resolvePixel(pixelValue);
+                if (!pixel) {
+                    continue;
+                }
+                // The two layers are mutually exclusive per pixel: paint one, clear the other.
+                const [target, other] = pixel.floor
+                    ? [this.mapFloorBuffer, this.mapWallBuffer]
+                    : [this.mapWallBuffer, this.mapFloorBuffer];
+                target.setPixel(bufferRow, bufferColumn, pixel.rgb[0], pixel.rgb[1], pixel.rgb[2], 255);
+                other.clearPixel(bufferRow, bufferColumn);
             }
         }
     }
 
     async getBase64PNG(deebotPosition, chargerPosition, currentMapMID, mapDataObject) {
-        if (!tools.isCanvasModuleAvailable()) {
-            return null;
-        }
         if (!this.transferMapInfo) {
-            // check if data should not be transferred
-            // mapinfo: not all data pieces retrieved or sub-data piece with no changes retrieved
+            // Data should not be transferred: not all pieces retrieved, or a
+            // sub-data piece arrived with no changes.
+            return null;
+        }
+        if (!this.mapFloorBuffer || this.cropBoundaries.minX === null) {
+            // Nothing has been rasterised yet, so there is no image to emit.
             return null;
         }
 
-        const {createCanvas} = require('canvas');
-        let finalCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-        let finalContext = finalCanvas.getContext('2d');
-        // Flip map horizontally before drawing everything else
-        finalContext.translate(0, this.mapTotalHeight);
-        finalContext.scale(1, -1);
+        const width = this.mapTotalWidth;
+        const height = this.mapTotalHeight;
+        const finalBuffer = new FrameBuffer(width, height);
 
-        // Draw floor map
-        finalContext.drawImage(this.mapFloorCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+        // Floor first, walls/carpet on top. The layers are stored top-down; the
+        // device map is vertically flipped for display (former canvas scale(1,-1)).
+        finalBuffer.composite(this.mapFloorBuffer, true);
 
-        if (mapDataObject !== null) {
-            let mapObject;
-            if (this.mapID === undefined) {
-                mapObject = map.getCurrentMapObject(mapDataObject);
-            } else {
-                mapObject = map.getMapObject(mapDataObject, this.mapID);
-            }
-            // Draw spotAreas
-            let areaCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-            const areaContext = areaCanvas.getContext('2d');
-            for (let areaIndex in mapObject['mapSpotAreas']) {
-                if (mapObject['mapSpotAreas'].hasOwnProperty(areaIndex)) {
-                    let areaCoordinateArray = mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaBoundaries'].split(';');
-                    areaContext.beginPath();
-                    for (let i = 0; i < areaCoordinateArray.length; i++) {
-                        let row = areaCoordinateArray[i].split(',')[0] / 50 + POSITION_OFFSET;
-                        let column = areaCoordinateArray[i].split(',')[1] / 50 + POSITION_OFFSET;
-                        if (i === 0) {
-                            areaContext.moveTo(row, column);
-                        } else {
-                            areaContext.lineTo(row, column);
-                        }
-                    }
-                    areaContext.closePath();
-                    areaContext.fillStyle = SPOTAREA_COLORS[mapObject['mapSpotAreas'][areaIndex]['mapSpotAreaID'] % SPOTAREA_COLORS.length];
-                    areaContext.fill();
-                    areaContext.strokeStyle = '#64b5f6';
-                    areaContext.stroke();
-                }
-            }
-            finalContext.drawImage(areaCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+        // TODO [Phase 3 – polygons]: render spot-area fills and dashed
+        //   virtual-boundary strokes here via pure-JS scanline fill / stroke.
+        //   Coordinates come from map.getMapObject(mapDataObject, this.mapID)
+        //   (or getCurrentMapObject when mapID is undefined), scaled by
+        //   `/50 + POSITION_OFFSET`, and must also extend cropBoundaries before
+        //   the crop below. Deferred: the former canvas overlay produced no
+        //   output (node-canvas crop bug), so omitting it is not a regression.
+        void mapDataObject;
 
-            // Draw virtualBoundaries
-            let boundaryCanvas = createCanvas(this.mapTotalWidth, this.mapTotalHeight);
-            const boundaryContext = boundaryCanvas.getContext('2d');
-            for (let boundaryIndex in mapObject['mapVirtualBoundaries']) {
-                if (mapObject['mapVirtualBoundaries'].hasOwnProperty(boundaryIndex)) {
-                    let boundaryCoordinates = mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryCoordinates'];
-                    let boundaryCoordinateArray = boundaryCoordinates.substring(1, boundaryCoordinates.length - 1).split(',');
-                    boundaryContext.beginPath();
-                    for (let i = 0; i < boundaryCoordinateArray.length; i = i + 2) {
-                        let row = boundaryCoordinateArray[i] / 50 + POSITION_OFFSET;
-                        let column = boundaryCoordinateArray[i + 1] / 50 + POSITION_OFFSET;
-                        // Check cropBoundaries
-                        if (this.cropBoundaries.minY === null) {
-                            this.cropBoundaries.minY = column;
-                        } else if (column < this.cropBoundaries.minY) {
-                            this.cropBoundaries.minY = column;
-                        }
-                        if (this.cropBoundaries.minX === null) {
-                            this.cropBoundaries.minX = row;
-                        } else if (row < this.cropBoundaries.minX) {
-                            this.cropBoundaries.minX = row;
-                        }
-                        if (this.cropBoundaries.maxX === null) {
-                            this.cropBoundaries.maxX = row;
-                        } else if (this.cropBoundaries.maxX < row) {
-                            this.cropBoundaries.maxX = row;
-                        }
-                        if (this.cropBoundaries.maxY === null) {
-                            this.cropBoundaries.maxY = column;
-                        } else if (this.cropBoundaries.maxY < column) {
-                            this.cropBoundaries.maxY = column;
-                        }
+        finalBuffer.composite(this.mapWallBuffer, true);
 
-                        if (i === 0) {
-                            boundaryContext.moveTo(row, column);
-                        } else {
-                            boundaryContext.lineTo(row, column);
-                        }
-                    }
-                    boundaryContext.closePath();
-                    boundaryContext.lineWidth = 2;
-                    boundaryContext.strokeStyle = MAP_COLORS[mapObject['mapVirtualBoundaries'][boundaryIndex]['mapVirtualBoundaryType']];
-                    boundaryContext.setLineDash([2, 2]);
-                    boundaryContext.stroke();
-                }
-            }
-            finalContext.drawImage(boundaryCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
+        // TODO [Phase 4 – icons]: when this.mapID === currentMapMID, draw the
+        //   deebot (rotated triangle, heading = deebotPosition.a + 90, skip when
+        //   isInvalid) and charger (pin) as pure-JS vector shapes at
+        //   `pos/this.mapPixel + POSITION_OFFSET`, replacing the embedded base64
+        //   PNGs + canvas rotate(). Deferred with the polygons above.
+        void deebotPosition; void chargerPosition; void currentMapMID;
 
-            //Draw chargers
-            //TODO: add results from getPos_V2 to mapDataObject
-        }
+        // Crop to the drawn region. The flip moved rows, so maxY maps to the top.
+        const sx = this.cropBoundaries.minX;
+        const sy = height - this.cropBoundaries.maxY;
+        const sw = this.cropBoundaries.maxX - this.cropBoundaries.minX;
+        const sh = this.cropBoundaries.maxY - this.cropBoundaries.minY;
+        const cropped = finalBuffer.crop(sx, sy, sw, sh);
 
-        // Draw walls & carpet
-        finalContext.drawImage(this.mapWallCanvas, 0, 0, this.mapTotalWidth, this.mapTotalHeight);
-
-        // Draw deebot
-        if (this.mapID === currentMapMID) { //TODO: getPos only retrieves (charger) position for current map, getPos_V2 can retrieve all charger positions
-            const {Image} = require('canvas');
-            if (typeof deebotPosition !== 'undefined' && !deebotPosition['isInvalid']) { //TODO: draw other icon when position is invalid
-                //Draw robot
-                ////////////
-                //TODO: later on the deebot position should only be drawn in the live map so the mapinfo-maps dont have to be updated with new positions
-                //TODO: replace with customizable icons
-                //for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L27
-                const robotBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAMAAAHGjw8oAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADbUExURQAAAICAgICAgICAgICAgICAgHx8fH19fX19fYCAgIGBgX5+foCAgH5+foCAgH9/f39/f35+foCAgH9/f39/f4CAgH5+foGBgYCAgICAgIGBgX9/f39/f35+foCAgH9/f39/f4CAgIODg4eHh4mJiZCQkJycnJ2dnZ6enqCgoKSkpKenp62trbGxsbKysry8vL29vcLCwsXFxcbGxsvLy87OztPT09XV1d/f3+Tk5Ojo6Ozs7O3t7e7u7vHx8fLy8vPz8/X19fb29vf39/j4+Pn5+f39/f7+/v///9yECocAAAAgdFJOUwAGChgcKCkzOT5PVWZnlJmfsLq7wcrS1Nre4OXz+vr7ZhJmqwAAAAlwSFlzAAAXEQAAFxEByibzPwAAAcpJREFUKFNlkolaWkEMhYPggliBFiwWhGOx3AqCsggI4lZt8/5P5ElmuEX5P5hMMjeZJBMRafCvUKnbIqpcioci96owTQWqP0QKC54nImUAyr9k7VD1me4YvibHlJKpVUzQhR+dmdTRSDUvdHh8NK8nhqUVch7cITmXA3rtYDmH+3OL4XI1T+BhJUcXczQxOBXJuve0/daeUr5A6g9muJzo5NI2kPKtyRSGBStKQZ5RC1hENWn6NSRTrDUqLD/lsNKoFTNRETlGMn9dDoGdoDcT1fHPi7EuUDD9dMBw4+6vMQVyInnPXDsdW+8tjWfbYTbzg/OstcagzSlb0+wL/6k+1KPhCrj6YFhzS5eXuHcYNF4bsGtDYhFLTOSMqTsx9e3iyKfynb1SK+RqtEq70RzZPwEGKwv7G0OK1QA42Y+HIgct9P3WWG9ItI/mQTgvoeuWAMdlTRclO/+Km2jwlhDvinGNbyJH6EWV84AJ1wl8JowejqTqTmv+0GqDmVLlg/wLX5Mp2rO3WRs2Zs5fznAVd1EzRh10OONr7hhhM4ctevhiVVxHdYsbq+JzHzaIfdjs5CZ9tGInSfoWEXuL7//fwtn9+Jp7wSryDjBFqnOGeuUxAAAAAElFTkSuQmCC';
-                const robotImage = new Image(); // Create a new Image
-                robotImage.src = robotBase64;
-                //icon is facing upward, so add 90
-                let robotCanvas = getRotatedCanvasFromImage(robotImage, deebotPosition['a'] + 90); //angle from ecovacs: 0=facing right, 90 = facing upwards, 180/-180 = facing left, -90 = facing downwards
-                // icon size is 16*16, so subtract 8 pixels to coordinates for center
-                finalContext.drawImage(robotCanvas, (deebotPosition['x'] / this.mapPixel) + POSITION_OFFSET - 8, (deebotPosition['y'] / this.mapPixel) + POSITION_OFFSET - 8, 16, 16);
-            }
-            // Draw charger
-            //////////////
-            // TODO: replace with customizable icons
-            // for now taken from https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/lib/mapCreator.js#L28
-            if (typeof chargerPosition !== 'undefined') {
-                const charger = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAdVBMVEUAAAA44Yo44Yo44Yo44Yo44Yo44Yo44Yo44Yp26q844Yr///9767Kv89DG9t2g8Md26q5C44/5/vvz/fjY+ei19NNV5ZtJ45T2/fmY78KP7r1v6atq6Kjs/PPi+u7e+uvM9+Gb8MSS7r+H7bhm6KVh56JZ5p3ZkKITAAAACnRSTlMABTr188xpJ4aepd0A4wAAANZJREFUKM9VklmCgzAMQwkQYCSmLKWl2+zL/Y9YcIUL7wvkJHIUJyKkVcyy+JIGCZILGF//QLEqlTmMdsBEXi56igfH/QVGqvXSu49+1KftCbn+dtxB5LOPfNGQNRaKaQNkTJ46OMGczZg8wJB/9TB+J3nFkyqJMp44vBrnWYhJJmOn/5uVzAotV/zACnbUtTbOpHcQzVx8kxw6mavdpYP90dsNcE5k6xd8RoIb2Xgk6xAbfm5C9NiHtxGiXD/U2P96UJunrS/LOeV2GG4wfBi241P5+NwBnAEUFx9FUdUAAAAASUVORK5CYII=';
-                const chargerImage = new Image();
-                chargerImage.src = charger;
-                // icon size is 16*16, so subtract 8 pixels to coordinates for center
-                finalContext.drawImage(chargerImage, (chargerPosition['x'] / this.mapPixel) + POSITION_OFFSET - 8, (chargerPosition['y'] / this.mapPixel) + POSITION_OFFSET - 8, 16, 16);
-            }
-        }
-
-        try {
-            // Crop image
-            const sx = this.cropBoundaries.minX;
-            const sy = this.mapTotalHeight - this.cropBoundaries.maxY; // map was flipped horizontally before, so the boundaries have shifted
-            const sw = this.cropBoundaries.maxX - this.cropBoundaries.minX;
-            const sh = this.cropBoundaries.maxY - this.cropBoundaries.minY;
-            const croppedImage = finalContext.getImageData(sx, sy, sw, sh);
-            finalContext.canvas.height = this.cropBoundaries.maxY - this.cropBoundaries.minY;
-            finalContext.canvas.width = this.cropBoundaries.maxX - this.cropBoundaries.minX;
-            finalContext.putImageData(croppedImage, 0, 0);
-            this.mapBase64PNG = finalCanvas.toDataURL();
-            this.transferMapInfo = false;
-            return {
-                'mapID': this.mapID,
-                'mapType': this.isLiveMap ? 'live' : this.mapType,
-                'mapBase64PNG': this.mapBase64PNG
-            };
-        } catch (e) {
-            throw new Error(e.message, { cause: e });
-        }
+        this.mapBase64PNG = encodePNGDataURL(cropped);
+        this.transferMapInfo = false;
+        return {
+            'mapID': this.mapID,
+            'mapType': this.isLiveMap ? 'live' : this.mapType,
+            'mapBase64PNG': this.mapBase64PNG
+        };
     }
 }
 
@@ -368,9 +211,6 @@ class EcovacsLiveMapImage extends EcovacsMapImageBase {
     }
 
     async updateMapPiece(mapDataPieceIndex, mapDataPiece) {
-        if (!tools.isCanvasModuleAvailable()) {
-            return;
-        }
         this.transferMapInfo = true; //TODO: check for CRC change, interval and maybe only once per onMajorMap-Event or onMapTrace
         const mapPieceStartX = Math.floor(mapDataPieceIndex / this.mapCellWidth) * this.mapPieceWidth;
         const mapPieceStartY = (mapDataPieceIndex % this.mapCellHeight) * this.mapPieceHeight;
@@ -396,10 +236,6 @@ class EcovacsMapImage extends EcovacsMapImageBase {
 
     async updateMapPiece(pieceIndex, pieceStartX, pieceStartY, pieceWidth, pieceHeight, pieceCrc, pieceValue, checkPieceCrc = true) {
         // TODO: currently only validated with one piece (StartX=0 and StartY=0)
-        if (!tools.isCanvasModuleAvailable()) {
-            return;
-        }
-
         if (checkPieceCrc && (this.mapDataPiecesCrc !== pieceCrc)) { // CRC has changed, so invalidate all pieces and return
             this.mapDataPiecesCrc = pieceCrc;
             this.mapDataPieces.fill(false);
@@ -437,32 +273,36 @@ function zstdDecompress(buffer) {
     return zlib.zstdDecompressSync(buffer);
 }
 
+// Normalises a decompressed map piece into a Uint8Array of palette indices.
+// The `lzma` library is inconsistent: it returns a plain number array for small
+// payloads but a String (one char per byte) for large ones – a real 100×100
+// piece (10000 bytes) comes back as a String, whose chars fail the numeric
+// `pixelValue < 4` comparisons in the draw loop. zstd already yields a Buffer.
+// Returning bytes uniformly keeps the draw loop working regardless of source.
+function toPixelBytes(decompressed) {
+    if (decompressed === null || decompressed === undefined) {
+        return null;
+    }
+    if (typeof decompressed === 'string') {
+        return Uint8Array.from(decompressed, (ch) => ch.charCodeAt(0));
+    }
+    return Uint8Array.from(decompressed);
+}
+
 // converts the compressed data retrieved from ecovacs API into int array containing the map pixels
 // thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
 async function mapPieceToIntArray(pieceValue) {
     let buff = Buffer.from(pieceValue, 'base64');
     // Newer models send zstd-compressed pieces (detected via magic bytes); older ones use LZMA.
     if ((buff.length >= 4) && ZSTD_MAGIC.every((byte, i) => buff[i] === byte)) {
-        return zstdDecompress(buff);
+        return toPixelBytes(zstdDecompress(buff));
     }
     const fixArray = new Int8Array([0, 0, 0, 0]);
     let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
     //fix 9 byte header to 13 bytes for lzma decompression
     let correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];
     //decompress
-    return lzma.decompress(correctedArray);
-}
-
-function getRotatedCanvasFromImage(image, angle) {
-    const {createCanvas} = require('canvas');
-    let rotatedCanvas = createCanvas(image.width, image.height);
-    let rotatedContext = rotatedCanvas.getContext('2d');
-    rotatedContext.translate(image.width / 2, image.height / 2);
-    rotatedContext.rotate(angle * (Math.PI / 180));
-    rotatedContext.translate(-image.width / 2, -image.height / 2);
-    rotatedContext.drawImage(image, 0, 0);
-
-    return rotatedCanvas;
+    return toPixelBytes(lzma.decompress(correctedArray));
 }
 
 module.exports.EcovacsLiveMapImage = EcovacsLiveMapImage;

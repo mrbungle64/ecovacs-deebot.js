@@ -3,7 +3,7 @@
 const { describe, it } = require('node:test');
 const assert = require('assert');
 const lzma = require('lzma');
-const tools = require('../library/tools');
+const zlib = require('zlib');
 const constants = require('../library/constants');
 const MapManager = require('../library/managers/mapManager');
 
@@ -66,14 +66,35 @@ function makeBot() {
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
 
-describe('MapManager – live map (MajorMap/MinorMap) rendering', function () {
-    // The live map render requires the optional `canvas` module.
-    if (!tools.isCanvasModuleAvailable()) {
-        it('skipped (canvas module not available)', function () {
-            assert.ok(true);
-        });
-        return;
+// Counts opaque pixels in a filter-0 truecolour-alpha PNG, to assert the map
+// actually painted something (a blank PNG still has a valid signature + size).
+function opaquePixelCount(png) {
+    let offset = 8;
+    let width = 0;
+    const idat = [];
+    while (offset < png.length) {
+        const length = png.readUInt32BE(offset);
+        const type = png.toString('ascii', offset + 4, offset + 8);
+        const data = png.subarray(offset + 8, offset + 8 + length);
+        if (type === 'IHDR') width = data.readUInt32BE(0);
+        else if (type === 'IDAT') idat.push(Buffer.from(data));
+        offset += 12 + length;
     }
+    const raw = zlib.inflateSync(Buffer.concat(idat));
+    const stride = width * 4;
+    const height = (stride + 1) ? raw.length / (stride + 1) : 0;
+    let count = 0;
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const alpha = raw[y * (stride + 1) + 1 + x * 4 + 3];
+            if (alpha !== 0) count++;
+        }
+    }
+    return count;
+}
+
+describe('MapManager – live map (MajorMap/MinorMap) rendering', function () {
+    // Rendering is now pure-JS, so it runs without the optional `canvas` module.
 
     it('requests only in-use pieces (sentinel fix), not all 64', async function () {
         const bot = makeBot();
@@ -113,7 +134,8 @@ describe('MapManager – live map (MajorMap/MinorMap) rendering', function () {
 
         const png = Buffer.from(result.mapBase64PNG.replace(/^data:image\/png;base64,/, ''), 'base64');
         assert.deepStrictEqual([...png.subarray(0, 8)], PNG_SIGNATURE, 'output must be a valid PNG');
-        assert.ok(png.length > 200, 'rendered PNG should be non-trivial');
+        // A blank PNG also has a valid signature, so assert real painted content.
+        assert.ok(opaquePixelCount(png) > 30000, 'rendered map should be filled, not blank');
     });
 
     it('renders even when positions are unknown (no charger/robot)', async function () {
