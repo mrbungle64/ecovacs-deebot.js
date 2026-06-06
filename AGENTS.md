@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-`ecovacs-deebot` is a Node.js library for controlling Ecovacs Deebot vacuum cleaner robots. It handles API communication (XMPP and MQTT), device state management, and map data processing.
+`ecovacs-deebot` is a Node.js library for controlling Ecovacs Deebot vacuum cleaner robots. It handles API communication (MQTT/JSON), device state management, and map data processing.
 
 ## Workspace Configuration
 
