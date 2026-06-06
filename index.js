@@ -8,6 +8,19 @@ const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
 
+/**
+ * @typedef {Object} ApiDevice
+ * @property {string} [did]
+ * @property {string} [name]
+ * @property {string} [deviceName]
+ * @property {string} [nick]
+ * @property {string} [class]
+ * @property {string} [company]
+ * @property {string} [icon]
+ * @property {string} [resource]
+ * @property {number} [deviceNumber]
+ */
+
 /** @type {Object} */
 const countries = require('./countries.json').countries;
 /** @type {Object} */
@@ -383,7 +396,7 @@ class EcovacsAPI {
   }
 
   /**
-   * @returns {Promise<Array<Object>>} a list of all devices of the users Ecovacs account
+   * @returns {Promise<Array<ApiDevice>>} a list of all devices of the users Ecovacs account
    */
   async devices() {
     const deviceList = await this.getDevices(constants.USER_API_PATH, 'GetDeviceList');
@@ -444,7 +457,7 @@ class EcovacsAPI {
 
   /**
    * Wrapper method for the `getVacBot` method (but with only 1 parameter)
-   * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
+   * @param {ApiDevice} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
    * @returns {import('./library/vacBot')} a corresponding instance of the 'VacBot' class
    */
   getVacBotObj(vacuum) {
@@ -457,7 +470,7 @@ class EcovacsAPI {
    * @param {string} hostname - the host name (for the Ecovacs API)
    * @param {string} resource - the resource of the vacuum
    * @param {string} userToken - the user token
-   * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
+   * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
    * @returns {import('./library/vacBot')} a corresponding instance of the `VacBot` class
    */
