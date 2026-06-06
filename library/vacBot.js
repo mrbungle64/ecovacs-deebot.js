@@ -53,6 +53,48 @@ const PROXY_MAPPINGS = {
 };
 
 /**
+ * Maps each manager to the `handleX(payload)` message handlers it owns.
+ * These are pure passthroughs — `bot.handleX(payload)` simply forwards to
+ * `this[manager].handleX(payload)` and returns its result (so async map
+ * handlers keep returning a Promise the caller can await).
+ *
+ * The delegators are generated onto `VacBot.prototype` at the bottom of this
+ * file, the same way `PROXY_MAPPINGS` generates the property getters/setters.
+ * Handlers that are NOT simple passthroughs (e.g. `handleClearMap`,
+ * `handleStationAction`, `handleTask`) stay hand-written in the class body.
+ * @private
+ */
+const HANDLER_MAPPINGS = {
+    stateManager: [
+        'handleCleanInfo', 'handleStationState', 'handleStationInfo', 'handleWashInterval',
+        'handleWashInfo', 'handleBattery', 'handlePos', 'handleEvt', 'handleSpeed',
+        'handleNetInfo', 'handleBorderSwitch', 'handleCrossMapBorderWarning', 'handleCutDirection',
+        'handleMoveupWarning', 'handleSafeProtect', 'handleWorkState', 'handleWaterInfo',
+        'handleAICleanItemState', 'handleAirDryingState', 'handleDryingDuration', 'handleBorderSpin',
+        'handleWorkMode', 'handleCustomAreaMode', 'handleSweepMode', 'handleChargeState',
+        'handleSleepStatus', 'handleCleanLogs', 'handleTotalStats', 'handleRelocationState',
+        'handleVolume', 'handleBreakPoint', 'handleBlock', 'handleAutoEmpty', 'handleAdvancedMode',
+        'handleTrueDetect', 'handleRecognization', 'handleCleanCount', 'handleDusterRemind',
+        'handleCarpetPressure', 'handleCarpetInfo', 'handleCleanPreference', 'handleLiveLaunchPwdState',
+        'handleWiFiList', 'handleOverTheAirUpdate', 'handleTimeZone', 'handleStats', 'handleSched',
+        'handleQuickCommand', 'handleResponseError', 'handleAirQuality', 'handleMonitorAirState',
+        'handleAngleFollow', 'handleAngleWakeup', 'handleMic', 'handleVoiceSimple', 'handleDrivingWheel',
+        'handleChildLock', 'handleVoiceAssistantState', 'handleHumanoidFollow', 'handleAutonomousClean',
+        'handleAirbotAutoModel', 'handleBlueSpeaker', 'handleEfficiency', 'handleAtmoLight',
+        'handleAtmoVolume', 'handleThreeModule', 'handleThreeModuleStatus', 'handleAreaPoint',
+        'handleAiBlockPlate', 'handleSysinfo', 'handleDModule'
+    ],
+    maintenanceManager: [
+        'handleLifespan'
+    ],
+    mapManager: [
+        'handleMapState', 'handleMultiMapState', 'handleCachedMapInfo', 'handleMapInfoV2',
+        'handleMapInfoV2_Yeedi', 'handleMapSet', 'handleMapSubset', 'handleMapSet_V2',
+        'handleMapImage', 'handleMajorMap', 'handleMinorMap', 'handleMapTrace'
+    ]
+};
+
+/**
  * @class VacBot
  * This class represents the vacuum bot
  */
@@ -1011,241 +1053,12 @@ class VacBot {
         return await this.historyManager.downloadSecuredContent(url, targetFilename);
     }
 
-    /**
-     * Handle the payload of the `CleanInfo` response/message
-     * (e.g. charge status, clean status and the last area values)
-     * @param {Object} payload
-     */
-    handleCleanInfo(payload) {
-        this.stateManager.handleCleanInfo(payload);
-    }
-
-    /**
-     * Handle the payload of the `StationState` response/message
-     * @param {Object} payload
-     */
-    handleStationState(payload) {
-        this.stateManager.handleStationState(payload);
-    }
-
-    /**
-     * Handle the payload of the `handleStationInfo` response/message
-     * @param {Object} payload
-     */
-    handleStationInfo(payload) {
-        this.stateManager.handleStationInfo(payload);
-    }
-
-    /**
-     * Handle the payload of the `WashInterval` response/message
-     * @param {Object} payload
-     */
-    handleWashInterval(payload) {
-        this.stateManager.handleWashInterval(payload);
-    }
-
-
-    /**
-     * Handle the payload of the `WashInfo` response/message
-     * @param {Object} payload
-     */
-    handleWashInfo(payload) {
-        this.stateManager.handleWashInfo(payload);
-    }
-
-    /**
-     * Handle the payload of the `Battery` response/message (battery level)
-     * @param {Object} payload
-     */
-    handleBattery(payload) {
-        this.stateManager.handleBattery(payload);
-    }
-
-    /**
-     * Handle the payload of the `LifeSpan` response/message
-     * (information about accessories components)
-     * @param {Object} payload
-     */
-    handleLifespan(payload) {
-        this.maintenanceManager.handleLifespan(payload);
-    }
-
-    /**
-     * Handle the payload of the `Pos` response/message
-     * (vacuum position and charger resp. charge position)
-     * @param {Object} payload
-     */
-    handlePos(payload) {
-        this.stateManager.handlePos(payload);
-    }
-
-    /**
-     * TODO: Find out the value of the 'Evt' message
-     * @param {Object} payload - The payload of the event.
-     */
-    handleEvt(payload) {
-        this.stateManager.handleEvt(payload);
-    }
-
-    /**
-     * Handle the payload of the `Speed` response/message (vacuum power resp. suction power)
-     * @param {Object} payload
-     */
-    handleSpeed(payload) {
-        this.stateManager.handleSpeed(payload);
-    }
-
-    /**
-     * Handle the payload of the `NetInfo` response/message
-     * (network addresses and Wi-Fi status)
-     * @param {Object} payload
-     */
-    handleNetInfo(payload) {
-        this.stateManager.handleNetInfo(payload);
-    }
-
     handleClearMap(payload) {
         tools.envLogInfo(`ClearMap response: ${JSON.stringify(payload)}`);
     }
 
-    handleBorderSwitch(payload) {
-        this.stateManager.handleBorderSwitch(payload);
-    }
-
-    handleCrossMapBorderWarning(payload) {
-        this.stateManager.handleCrossMapBorderWarning(payload);
-    }
-
-    handleCutDirection(payload) {
-        this.stateManager.handleCutDirection(payload);
-    }
-
-    handleMoveupWarning(payload) {
-        this.stateManager.handleMoveupWarning(payload);
-    }
-
-    handleSafeProtect(payload) {
-        this.stateManager.handleSafeProtect(payload);
-    }
-
-    handleWorkState(payload) {
-        this.stateManager.handleWorkState(payload);
-    }
-
     handleStationAction(payload) {
         tools.envLogInfo(`StationAction response: ${JSON.stringify(payload)}`);
-    }
-
-    /**
-     * Handle the payload of the `WaterInfo` response/message
-     * (water level and water box status)
-     * @param {Object} payload
-     */
-    handleWaterInfo(payload) {
-        this.stateManager.handleWaterInfo(payload);
-    }
-
-    /**
-     * Handle the payload of the `AICleanItemState` response/message
-     * Particle Removal and Pet Poop Avoidance mode (e.g. X1)
-     * @param {Object} payload
-     */
-    handleAICleanItemState(payload) {
-        this.stateManager.handleAICleanItemState(payload);
-    }
-
-    /**
-     * Handle the payload of the `AirDring` (sic) response/message (air drying status)
-     * Seems to work for yeedi only
-     * See `StationState` for Deebot models
-     * @param {Object} payload
-     */
-    handleAirDryingState(payload) {
-        this.stateManager.handleAirDryingState(payload);
-    }
-
-    handleDryingDuration(payload) {
-        this.stateManager.handleDryingDuration(payload);
-    }
-
-    /**
-     * Handle the payload of the `BorderSpin` response/message
-     * @param {Object} payload
-     */
-    handleBorderSpin(payload) {
-        this.stateManager.handleBorderSpin(payload);
-    }
-
-    /**
-     * Handle the payload of the `WorkMode` response/message
-     * ('Work Mode', 'Cleaning Mode')
-     * vacuum and mop = 0
-     * vacuum only = 1
-     * mop only = 2
-     * mop after vacuum = 3
-     * @param {Object} payload
-     */
-    handleWorkMode(payload) {
-        this.stateManager.handleWorkMode(payload);
-    }
-
-    /**
-     * Handle the payload of the `CustomAreaMode` response/message
-     * `Mopping Mode`/`Cleaning efficiency` is taken from the `CustomAreaMode` message
-     * not from the `SweepMode` message
-     * @param {Object} payload
-     */
-    handleCustomAreaMode(payload) {
-        this.stateManager.handleCustomAreaMode(payload);
-    }
-
-    /**
-     * Handle the payload of the `SweepMode` response/message
-     * "Mop-Only" is taken from the SweepMode message
-     * @param {Object} payload
-     */
-    handleSweepMode(payload) {
-        this.stateManager.handleSweepMode(payload);
-    }
-
-    /**
-     * Handle the payload of the `ChargeState` response/message (charge status)
-     * @param {Object} payload
-     */
-    handleChargeState(payload) {
-        this.stateManager.handleChargeState(payload);
-    }
-
-    /**
-     * Handle the payload of the `Sleep` response/message (sleep status)
-     * @param {Object} payload
-     */
-    handleSleepStatus(payload) {
-        this.stateManager.handleSleepStatus(payload);
-    }
-
-    /**
-     * Handle the payload of the `MapState` response/message
-     * @param {Object} payload
-     */
-    handleMapState(payload) {
-        this.mapManager.handleMapState(payload);
-    }
-
-    /**
-     * Handle the payload of the `MultiMapState` response/message
-     * @param {Object} payload
-     */
-    handleMultiMapState(payload) {
-        this.mapManager.handleMultiMapState(payload);
-    }
-
-    /**
-     * Handle the payload of the `CleanLogs` response/message
-     * @param {Object} payload
-     */
-    handleCleanLogs(payload) {
-        this.stateManager.handleCleanLogs(payload);
     }
 
     /**
@@ -1258,388 +1071,12 @@ class VacBot {
     }
 
     /**
-     * Handle the payload of the `TotalStats` response/message
+     * Handle the payload of a FwBuryPoint task message
+     * @param {string} type - The task event type
      * @param {Object} payload
      */
-    handleTotalStats(payload) {
-        this.stateManager.handleTotalStats(payload);
-    }
-
-    /**
-     * Handle the payload of the `RelocationState` response/message
-     * @param {Object} payload
-     */
-    handleRelocationState(payload) {
-        this.stateManager.handleRelocationState(payload);
-    }
-
-    /**
-     * Handle the payload of the `Volume` response/message
-     * @param {Object} payload
-     */
-    handleVolume(payload) {
-        this.stateManager.handleVolume(payload);
-    }
-
-    /**
-     * Handle the payload of the `BreakPoint` response/message
-     * @param {Object} payload
-     */
-    handleBreakPoint(payload) {
-        this.stateManager.handleBreakPoint(payload);
-    }
-
-    /**
-     * Handle the payload of the `Block` response/message
-     * @param {Object} payload
-     */
-    handleBlock(payload) {
-        this.stateManager.handleBlock(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AutoEmpty' response/message
-     * @param {Object} payload
-     */
-    handleAutoEmpty(payload) {
-        this.stateManager.handleAutoEmpty(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AdvancedMode' response/message
-     * @param {Object} payload
-     */
-    handleAdvancedMode(payload) {
-        this.stateManager.handleAdvancedMode(payload);
-    }
-
-    /**
-     * Handle the payload of the 'TrueDetect' response/message
-     * @param {Object} payload
-     */
-    handleTrueDetect(payload) {
-        this.stateManager.handleTrueDetect(payload);
-    }
-
-    handleRecognization(payload) {
-        this.stateManager.handleRecognization(payload);
-    }
-
-    /**
-     * Handle the payload of the 'CleanCount' response/message
-     * @param {Object} payload
-     */
-    handleCleanCount(payload) {
-        this.stateManager.handleCleanCount(payload);
-    }
-
-    /**
-     * Handle the payload of the 'DusterRemind' response/message
-     * @param {Object} payload
-     */
-    handleDusterRemind(payload) {
-        this.stateManager.handleDusterRemind(payload);
-    }
-
-    /**
-     * Handle the payload of the 'CarpertPressure' (sic) response/message
-     * 'Auto-Boost Suction'
-     * @param {Object} payload
-     */
-    handleCarpetPressure(payload) {
-        this.stateManager.handleCarpetPressure(payload);
-    }
-
-    /**
-     * Handle the payload of the 'CarpetInfo' response/message
-     * 'Carpet cleaning strategy'
-     * @param {Object} payload
-     */
-    handleCarpetInfo(payload) {
-        this.stateManager.handleCarpetInfo(payload);
-    }
-
-    handleCleanPreference(payload) {
-        this.stateManager.handleCleanPreference(payload);
-    }
-
-    handleLiveLaunchPwdState(payload) {
-        this.stateManager.handleLiveLaunchPwdState(payload);
-    }
-
-    handleWiFiList(payload) {
-        this.stateManager.handleWiFiList(payload);
-    }
-
-    handleOverTheAirUpdate(payload) {
-        this.stateManager.handleOverTheAirUpdate(payload);
-    }
-
-    handleTimeZone(payload) {
-        this.stateManager.handleTimeZone(payload);
-    }
-
-    /**
-     * Handle the payload of the 'Stats' response/message
-     * @param {Object} payload
-     */
-    handleStats(payload) {
-        this.stateManager.handleStats(payload);
-    }
-
-    /**
-     * Handle the payload of the 'Sched' response/message (Schedule)
-     * @param {Object} payload
-     */
-    handleSched(payload) {
-        this.stateManager.handleSched(payload);
-    }
-
-    /**
-     * Handle the payload of the 'QuickCommand' response/message
-     * @param {Object} payload - The payload containing the customized scenario cleaning.
-     */
-    handleQuickCommand(payload) {
-        this.stateManager.handleQuickCommand(payload);
-    }
-
-    handleCachedMapInfo(payload) {
-        return this.mapManager.handleCachedMapInfo(payload);
-    }
-
-    handleMapInfoV2(payload) {
-        return this.mapManager.handleMapInfoV2(payload);
-    }
-
-    handleMapInfoV2_Yeedi(payload) {
-        return this.mapManager.handleMapInfoV2_Yeedi(payload);
-    }
-
-    handleMapSet(payload) {
-        return this.mapManager.handleMapSet(payload);
-    }
-
-    async handleMapSubset(payload) {
-        return await this.mapManager.handleMapSubset(payload);
-    }
-
-    async handleMapSet_V2(payload) {
-        return await this.mapManager.handleMapSet_V2(payload);
-    }
-
-    async handleMapImage(payload) {
-        return await this.mapManager.handleMapImage(payload);
-    }
-
-    handleMajorMap(payload) {
-        return this.mapManager.handleMajorMap(payload);
-    }
-
-    async handleMinorMap(payload) {
-        return await this.mapManager.handleMinorMap(payload);
-    }
-
-    async handleMapTrace(payload) {
-        return await this.mapManager.handleMapTrace(payload);
-    }
-
-    /**
-     * Handle the payload of the 'Error' response/message
-     * @param {Object} payload
-     */
-    handleResponseError(payload) {
-        this.stateManager.handleResponseError(payload);
-    }
-
-    /**
-     * Handles the air quality data received from the payload.
-     * 'Indoor' Air Quality
-     * @param {object} payload - The air quality data payload.
-     */
-    handleAirQuality(payload) {
-        this.stateManager.handleAirQuality(payload);
-    }
-
-    /**
-     * Handle the payload of the 'MonitorAirState' response/message
-     * @param {Object} payload
-     */
-    handleMonitorAirState(payload) {
-        this.stateManager.handleMonitorAirState(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AngleFollow' response/message
-     * 'Face to Me' option
-     * @param {Object} payload
-     */
-    handleAngleFollow(payload) {
-        this.stateManager.handleAngleFollow(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AngleWakeup' response/message
-     * @param {Object} payload
-     */
-    handleAngleWakeup(payload) {
-        this.stateManager.handleAngleWakeup(payload);
-    }
-
-    /**
-     * Handle the payload of the 'Mic' response/message
-     * 'Microphone'
-     * @param {Object} payload
-     */
-    handleMic(payload) {
-        this.stateManager.handleMic(payload);
-    }
-
-    /**
-     * Handle the payload of the 'VoiceSimple' response/message
-     * 'Working Status Voice Report'
-     * @param {Object} payload
-     */
-    handleVoiceSimple(payload) {
-        this.stateManager.handleVoiceSimple(payload);
-    }
-
-    /**
-     * Handle the payload of the 'DrivingWheel' response/message
-     * @param {Object} payload
-     */
-    handleDrivingWheel(payload) {
-        this.stateManager.handleDrivingWheel(payload);
-    }
-
-    /**
-     * Handle the payload of the 'ChildLock' response/message
-     * 'Child Lock'
-     * @param {Object} payload
-     */
-    handleChildLock(payload) {
-        this.stateManager.handleChildLock(payload);
-    }
-
-    /**
-     * Handle the payload of the 'VoiceAssistantState' response/message
-     * 'YIKO Voice Assistant'
-     * @param {Object} payload
-     */
-    handleVoiceAssistantState(payload) {
-        this.stateManager.handleVoiceAssistantState(payload);
-    }
-
-    /**
-     * Handle the payload of the 'HumanoidFollow' response/message
-     * 'Lab Features' => 'Follow Me'
-     * @param {Object} payload
-     */
-    handleHumanoidFollow(payload) {
-        this.stateManager.handleHumanoidFollow(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AutonomousClean' response/message
-     * 'Self-linked Purification'
-     * @param {Object} payload
-     */
-    handleAutonomousClean(payload) {
-        this.stateManager.handleAutonomousClean(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AirbotAutoMode' response/message
-     * 'Linked Purification' (linked to Air Quality Monitor)
-     * @param {Object} payload
-     */
-    handleAirbotAutoModel(payload) {
-        this.stateManager.handleAirbotAutoModel(payload);
-    }
-
-    /**
-     * Handle the payload of the 'BlueSpeaker' response/message
-     * 'Bluetooth Speaker'
-     * @param {Object} payload
-     */
-    handleBlueSpeaker(payload) {
-        this.stateManager.handleBlueSpeaker(payload);
-    }
-
-    /**
-     * Handle the payload of the 'Efficiency' response/message
-     * Always seems to return a value of 0
-     * @param {Object} payload
-     */
-    handleEfficiency(payload) {
-        this.stateManager.handleEfficiency(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AtmoLight' response/message
-     * 'Light Brightness'
-     * @param {Object} payload
-     */
-    handleAtmoLight(payload) {
-        this.stateManager.handleAtmoLight(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AtmoVolume' response/message
-     * 'Volume'
-     * @param {Object} payload
-     */
-    handleAtmoVolume(payload) {
-        this.stateManager.handleAtmoVolume(payload);
-    }
-
-    /**
-     * Handle the payload of the 'ThreeModule' (UV, Humidifier, AirFreshener) response/message
-     * It contains the current level set for Air Freshening and Humidification
-     * @param {Object} payload
-     */
-    handleThreeModule(payload) {
-        this.stateManager.handleThreeModule(payload);
-    }
-
-    /**
-     * Handle the payload of the 'ThreeModuleStatus' (UV, Humidifier, AirFreshener) response/message
-     * It contains the working status of these modules
-     * @param {Object} payload
-     */
-    handleThreeModuleStatus(payload) {
-        this.stateManager.handleThreeModuleStatus(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AreaPoint' response/message
-     * @param {Object} payload
-     */
-    handleAreaPoint(payload) {
-        this.stateManager.handleAreaPoint(payload);
-    }
-
-    /**
-     * Handle the payload of the 'AiBlockPlate' response/message
-     * @param {Object} payload
-     */
-    handleAiBlockPlate(payload) {
-        this.stateManager.handleAiBlockPlate(payload);
-    }
-
-    /**
-     * Handle the payload of the '(FwBuryPoint-)Sysinfo' response/message
-     * @param {Object} payload
-     */
-    handleSysinfo(payload) {
-        this.stateManager.handleSysinfo(payload);
-    }
-
     handleTask(type, payload) {
         this.stateManager.handleTask(type, payload);
-    }
-
-    handleDModule(payload) {
-        this.stateManager.handleDModule(payload);
     }
 
     getCmdForObstacleDetection() {
@@ -1661,6 +1098,14 @@ for (const [manager, props] of Object.entries(PROXY_MAPPINGS)) {
             enumerable: true,
             configurable: true
         });
+    }
+}
+
+for (const [manager, handlers] of Object.entries(HANDLER_MAPPINGS)) {
+    for (const handler of handlers) {
+        VacBot.prototype[handler] = function (payload) {
+            return this[manager][handler](payload);
+        };
     }
 }
 

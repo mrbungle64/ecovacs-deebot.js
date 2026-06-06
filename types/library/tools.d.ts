@@ -28,7 +28,7 @@ export function envLog(...args: any[]): void;
 export function formatString(string: any, ...args: any[]): any;
 /**
  * Get all known devices, including the supported devices and the known devices
- * @returns {Object} a dictionary of all known devices
+ * @returns {Object} a frozen dictionary of all known devices
  */
 export function getAllKnownDevices(): Object;
 /**
@@ -89,7 +89,7 @@ export function getDeviceType(deviceClass: any): string;
  */
 export function getReqID(): string;
 /**
- * @returns {Object} a dictionary of supported devices
+ * @returns {Object} a frozen dictionary of supported devices
  */
 export function getSupportedDevices(): Object;
 /**
