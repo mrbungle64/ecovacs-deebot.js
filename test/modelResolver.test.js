@@ -222,8 +222,7 @@ describe('modelResolver - unit tests', function () {
         it('should resolve "8n0t5d" (T30S PRO OMNI) via similarity if it were missing', function () {
             // Even if 8n0t5d IS in models.js, we can test the resolver directly
             const productIotMapData = require('../library/productIotMap.json');
-            const allKnownDevices = tools.getAllKnownDevices();
-            
+
             const targetProduct = productIotMapData.find(item => item.classid === '8n0t5d').product;
             
             // We calculate similarity against all known devices

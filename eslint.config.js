@@ -24,12 +24,7 @@ module.exports = [
             'no-unused-vars': 'warn',
             'prefer-const': 'off',
             'semi': ['error', 'always'],
-            'no-prototype-builtins': 'off',
-            // Rules newly added to eslint:recommended in ESLint 10. They were not
-            // enforced when this codebase was written; keep them as warnings (like
-            // no-unused-vars) so they surface for cleanup without breaking the build.
-            'preserve-caught-error': 'warn',
-            'no-useless-assignment': 'warn'
+            'no-prototype-builtins': 'off'
         }
     }
 ];

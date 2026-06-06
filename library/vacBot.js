@@ -476,7 +476,7 @@ class VacBot {
                     return type;
                 }
             }
-        } catch (e) {
+        } catch {
             // Ignore exception
         }
 
@@ -496,7 +496,7 @@ class VacBot {
                     return category;
                 }
             }
-        } catch (e) {
+        } catch {
             // Ignore exception
         }
 
@@ -507,7 +507,7 @@ class VacBot {
                     return category;
                 }
             }
-        } catch (e) {
+        } catch {
             // Ignore exception
         }
 
@@ -527,7 +527,7 @@ class VacBot {
                     return smartType;
                 }
             }
-        } catch (e) {
+        } catch {
             // Ignore exception
         }
 
@@ -538,7 +538,7 @@ class VacBot {
                     return smartType;
                 }
             }
-        } catch (e) {
+        } catch {
             // Ignore exception
         }
 

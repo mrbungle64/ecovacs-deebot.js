@@ -22,14 +22,14 @@ describe('EcovacsAPI Extended tests', function () {
     mockGetError = null;
     mockPostError = null;
 
-    axios.get = async (url, config) => {
+    axios.get = async () => {
       if (mockGetError) {
         throw mockGetError;
       }
       return { data: mockGetResponse };
     };
 
-    axios.post = async (url, data, config) => {
+    axios.post = async () => {
       if (mockPostError) {
         throw mockPostError;
       }
@@ -251,7 +251,7 @@ describe('EcovacsAPI Extended tests', function () {
       // 3. callPortalApi loginByItToken (axios.post) -> returns token (user_access_token) and userId
       
       let getCallCount = 0;
-      axios.get = async (url) => {
+      axios.get = async () => {
         getCallCount++;
         if (getCallCount === 1) {
           return {
@@ -319,7 +319,7 @@ describe('EcovacsAPI Extended tests', function () {
       api.user_access_token = 'token';
       
       let postCallCount = 0;
-      axios.post = async (url, params) => {
+      axios.post = async () => {
         postCallCount++;
         if (postCallCount === 1) {
           // getDevices('GetDeviceList')

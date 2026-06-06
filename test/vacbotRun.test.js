@@ -240,7 +240,7 @@ describe('vacbot.run() – alias commands', function () {
         const dispatched = [];
         const ctx = buildMockContext({
             dispatcher: {
-                dispatch: (key, opts, ...args) => {
+                dispatch: (key) => {
                     dispatched.push(key);
                     return Promise.resolve();
                 }
@@ -259,7 +259,7 @@ describe('vacbot.run() – V2 auto-upgrade', function () {
         const ctx = buildMockContext({
             is950type_V2: () => true,
             dispatcher: {
-                dispatch: (key, opts, ...args) => {
+                dispatch: (key) => {
                     dispatched.push(key);
                     return Promise.resolve();
                 }
@@ -274,7 +274,7 @@ describe('vacbot.run() – V2 auto-upgrade', function () {
         const ctx = buildMockContext({
             is950type_V2: () => true,
             dispatcher: {
-                dispatch: (key, opts, ...args) => {
+                dispatch: (key) => {
                     dispatched.push(key);
                     return Promise.resolve();
                 }

@@ -22,7 +22,7 @@ function isCanvasModuleAvailable() {
     try {
         require.resolve('canvas');
         return true;
-    } catch (e) {
+    } catch {
         return false;
     }
 }
@@ -56,9 +56,8 @@ function createErrorDescription(message, command = '') {
  */
 function getReqID() {
     let reqIdString = '';
-    let randomValue = '';
     for (let i = 0; i < 8; i++) {
-        randomValue = Math.floor(Math.random() * 10).toString();
+        const randomValue = Math.floor(Math.random() * 10).toString();
         reqIdString = reqIdString + randomValue;
     }
     return reqIdString;
@@ -355,7 +354,7 @@ function isValidJsonString(jsonString) {
     try {
         envLog(`[tools] isValidJsonString() str: ${jsonString}`);
         JSON.parse(jsonString);
-    } catch (e) {
+    } catch {
         envLog('[tools] isValidJsonString() false');
         return false;
     }

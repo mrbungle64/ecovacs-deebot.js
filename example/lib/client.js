@@ -57,7 +57,7 @@ class ExampleClient {
 
             return this.vacbot;
         } catch (error) {
-            throw new Error(`Failed to initialize ExampleClient: ${error.message}`);
+            throw new Error(`Failed to initialize ExampleClient: ${error.message}`, { cause: error });
         }
     }
 

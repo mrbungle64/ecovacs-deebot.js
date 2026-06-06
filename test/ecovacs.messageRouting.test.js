@@ -9,7 +9,7 @@
  * can be controlled per test.
  */
 
-const { describe, it, beforeEach } = require('node:test');
+const { describe, it } = require('node:test');
 const assert = require('assert');
 const Ecovacs = require('../library/ecovacs');
 

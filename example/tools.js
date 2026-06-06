@@ -4,7 +4,7 @@ function isExternSettingsFileAvailable() {
     try {
         require.resolve('./../../deebotExampleSettings');
         return true;
-    } catch (e) {
+    } catch {
         return false;
     }
 }

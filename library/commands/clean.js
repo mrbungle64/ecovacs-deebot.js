@@ -255,7 +255,7 @@ class GetCleanState_V2 extends VacBotCommand {
      * @returns {{ state: string, raw: Object }}
      */
     parseResponse(payload) {
-        let normalizedState = 'unknown';
+        let normalizedState;
         if (payload['trigger'] === 'alert') {
             normalizedState = 'error';
         } else {
@@ -652,7 +652,7 @@ class GetCleanInfoV2 extends VacBotCommand {
      * @returns {{ state: string, raw: Object }}
      */
     parseResponse(payload) {
-        let normalizedState = 'unknown';
+        let normalizedState;
         if (payload['trigger'] === 'alert') {
             normalizedState = 'error';
         } else {

@@ -91,8 +91,8 @@ function setupAirPurifierListeners(vacbot) {
 
 function setupMapListeners(vacbot) {
     vacbot.on('Position', (pos) => console.log('Position:', pos));
-    vacbot.on('MapDataObject', (data) => console.log('Map Data received (Object)'));
-    vacbot.on('MapImage', (img) => console.log('Map Image received (Base64 available)'));
+    vacbot.on('MapDataObject', () => console.log('Map Data received (Object)'));
+    vacbot.on('MapImage', () => console.log('Map Image received (Base64 available)'));
 }
 
 main();

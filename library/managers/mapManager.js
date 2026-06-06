@@ -625,7 +625,7 @@ class MapManager {
             );
         } catch (e) {
             tools.envLogError(`error calling getBase64PNG: ${e.message}`);
-            throw new Error(`error calling getBase64PNG: ${e.message}`);
+            throw new Error(`error calling getBase64PNG: ${e.message}`, { cause: e });
         }
     }
 

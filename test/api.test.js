@@ -32,7 +32,7 @@ describe('API', function () {
             await axios.get(url, { timeout: 5000 });
           } catch (err) {
             if (err.code === 'ENOTFOUND') {
-              throw Error(err);
+              throw new Error(err.message, { cause: err });
             }
             assert.strictEqual(err.response.status, 404);
           }

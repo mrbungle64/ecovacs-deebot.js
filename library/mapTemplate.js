@@ -340,7 +340,7 @@ class EcovacsMapImageBase {
                 'mapBase64PNG': this.mapBase64PNG
             };
         } catch (e) {
-            throw new Error(e);
+            throw new Error(e.message, { cause: e });
         }
     }
 }

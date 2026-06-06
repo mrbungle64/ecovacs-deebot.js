@@ -131,7 +131,7 @@ class Ecovacs extends EventEmitter {
         this.client.on('offline', function () {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT server is offline or not reachable');
-            } catch (e) {
+            } catch {
                 tools.envLogError(`MQTT server is offline or not reachable`);
             }
         });
@@ -139,7 +139,7 @@ class Ecovacs extends EventEmitter {
         this.client.on('disconnect', function () {
             try {
                 ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
-            } catch (e) {
+            } catch {
                 tools.envLogWarn(`MQTT client received disconnect event`);
             }
         });
@@ -147,7 +147,7 @@ class Ecovacs extends EventEmitter {
         this.client.on('error', (error) => {
             try {
                 ecovacsMQTT.emitNetworkError(`MQTT client error: ${error.message}`);
-            } catch (e) {
+            } catch {
                 tools.envLogError(`MQTT client error: '${error.message}'`);
             }
         });
@@ -191,7 +191,7 @@ class Ecovacs extends EventEmitter {
         this.client.on('offline', () => {
             try {
                 this.emitNetworkError('MQTT server is offline or not reachable');
-            } catch (e) {
+            } catch {
                 tools.envLogError(`MQTT server is offline or not reachable`);
             }
         });
@@ -199,7 +199,7 @@ class Ecovacs extends EventEmitter {
         this.client.on('error', (error) => {
             try {
                 this.emitNetworkError(`MQTT client error: ${error.message}`);
-            } catch (e) {
+            } catch {
                 tools.envLogError(`MQTT client error: '${error.message}'`);
             }
         });
@@ -1334,7 +1334,7 @@ class Ecovacs extends EventEmitter {
                 // try to fix invalid JSON
                 try {
                     dValObject = (typeof dVal === 'string') ? JSON.parse(dVal) : dVal;
-                } catch (e) {
+                } catch {
                     if (dVal.indexOf("}") < dVal.indexOf("{")) {
                         if (dVal.indexOf("]") > -1 && dVal.indexOf("[") === -1) {
                             dVal = "[" + dVal.substring(dVal.indexOf("{"));
