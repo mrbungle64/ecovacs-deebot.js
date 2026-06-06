@@ -16,15 +16,21 @@ function formatString(string) {
 }
 
 /**
- * @returns {boolean} whether the canvas module is available
+ * Map rendering is pure-JS now (no native `canvas` module), so it is always
+ * available regardless of the build toolchain.
+ * @returns {boolean} always true
+ */
+function isMapRenderingAvailable() {
+    return true;
+}
+
+/**
+ * Backward-compatible alias for {@link isMapRenderingAvailable}. Kept because the
+ * public `getCanvasModuleIsAvailable()` API and existing integrations call it.
+ * @returns {boolean} always true
  */
 function isCanvasModuleAvailable() {
-    try {
-        require.resolve('canvas');
-        return true;
-    } catch {
-        return false;
-    }
+    return isMapRenderingAvailable();
 }
 
 /**
@@ -589,6 +595,7 @@ module.exports.getReqID = getReqID;
 module.exports.getSupportedDevices = getSupportedDevices;
 module.exports.getTimeStringFormatted = getTimeStringFormatted;
 module.exports.isCanvasModuleAvailable = isCanvasModuleAvailable;
+module.exports.isMapRenderingAvailable = isMapRenderingAvailable;
 module.exports.isKnownDevice = isKnownDevice;
 module.exports.isLegacyModel = isLegacyModel;
 module.exports.isObject = isObject;

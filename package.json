@@ -38,9 +38,6 @@
     "mqtt": "5.15.1",
     "uniqid": "5.4.0"
   },
-  "optionalDependencies": {
-    "canvas": "3.2.3"
-  },
   "engines": {
     "node": ">=22"
   },

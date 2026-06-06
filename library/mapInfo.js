@@ -1,7 +1,5 @@
 'use strict';
 
-const tools = require("./tools");
-
 /**
 * Dictionary of the spot area types
 * @see i18n.js for translation dictionary
@@ -93,10 +91,22 @@ class EcovacsMapSpotAreaInfo {
         }
         this.mapSpotAreaConnections = mapSpotAreaConnections;
         this.mapSpotAreaBoundaries = mapSpotAreaBoundaries;
-        this.mapSpotAreaCanvas = createCanvasFromCoordinates(mapSpotAreaBoundaries);
+        // Parsed `[x, y]` polygon vertices for pure-JS hit-testing (replaces the
+        // former native-canvas path used with isPointInPath).
+        this.mapSpotAreaBoundaryPoints = parseBoundaryPoints(mapSpotAreaBoundaries);
         this.mapSpotAreaSubType = mapSubType;
         this.mapSpotAreaSequenceNumber = null;
         this.mapSpotAreaCleanSet = {};
+    }
+
+    /**
+     * Whether the given point lies inside this spot area's boundary polygon.
+     * @param {number} x
+     * @param {number} y
+     * @returns {boolean}
+     */
+    containsPoint(x, y) {
+        return pointInPolygon(x, y, this.mapSpotAreaBoundaryPoints);
     }
 
     setSequenceNumber(index) {
@@ -231,27 +241,44 @@ function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
     return null;
 }
 
-function createCanvasFromCoordinates(coordinates, width = 100, height = 100) {
-    if (!tools.isCanvasModuleAvailable()) {
-        return null;
+/**
+ * Parses an Ecovacs boundary string (`"x,y;x,y;..."`) into `[x, y]` number pairs.
+ * @param {string} coordinates
+ * @returns {number[][]}
+ */
+function parseBoundaryPoints(coordinates) {
+    if (!coordinates) {
+        return [];
     }
-    let coordinateArray = coordinates.split(';');
+    return coordinates.split(';').map((pair) => {
+        const [x, y] = pair.split(',');
+        return [Number(x), Number(y)];
+    });
+}
 
-    const { createCanvas } = require('canvas');
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    for (let i = 0; i < coordinateArray.length; i++) {
-        let xi = coordinateArray[i].split(',')[0];
-        let yi = coordinateArray[i].split(',')[1];
-        if (i === 0) {
-            ctx.moveTo(xi, yi);
-        } else {
-            ctx.lineTo(xi, yi);
+/**
+ * Ray-casting point-in-polygon test (replaces canvas isPointInPath).
+ * Source: https://github.com/substack/point-in-polygon (based on the
+ * pnpoly algorithm by W. Randolph Franklin).
+ * @param {number} x
+ * @param {number} y
+ * @param {number[][]} points - polygon vertices `[x, y]`
+ * @returns {boolean}
+ */
+function pointInPolygon(x, y, points) {
+    let inside = false;
+    for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+        const xi = points[i][0];
+        const yi = points[i][1];
+        const xj = points[j][0];
+        const yj = points[j][1];
+        const intersects = ((yi > y) !== (yj > y)) &&
+            (x < ((xj - xi) * (y - yi)) / (yj - yi) + xi);
+        if (intersects) {
+            inside = !inside;
         }
     }
-    ctx.closePath();
-    return canvas;
+    return inside;
 }
 
 module.exports.EcovacsMap = EcovacsMap;

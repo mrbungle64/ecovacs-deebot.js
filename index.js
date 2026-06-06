@@ -515,16 +515,18 @@ class EcovacsAPI {
   }
 
   /**
-   * Is the canvas module available?
-   * @returns {boolean} a boolean value
+   * Is map rendering available? Always true – rendering is pure JS now.
+   * Kept for backward compatibility (formerly reported native `canvas` availability).
+   * @returns {boolean} always true
    */
   getCanvasModuleIsAvailable() {
     return EcovacsAPI.isCanvasModuleAvailable();
   }
 
   /**
-   * Is the canvas module available?
-   * @returns {boolean} a boolean value
+   * Is map rendering available? Always true – rendering is pure JS now.
+   * Kept for backward compatibility (formerly reported native `canvas` availability).
+   * @returns {boolean} always true
    */
   static isCanvasModuleAvailable() {
     return tools.isCanvasModuleAvailable();

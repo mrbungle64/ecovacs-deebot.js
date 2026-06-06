@@ -67,7 +67,7 @@ Support for new models is no longer added upon request. Due to high time constra
 ---
 
 ## ⚠️ Known issues
-* **Map Image Generation:** Unstable on 32-bit systems and currently limited for newer series like X1, X2 or T30.
+* **Map Image Generation:** Rendering is now pure JavaScript (the native `canvas` dependency was removed), which resolves the previous instability on 32-bit systems and needs no Cairo/build prerequisites. Overlay edges (spot areas, virtual boundaries) and the robot/charger icons are drawn as simple aliased vector shapes, and pixel-level parity with the official app across all series is still being validated.
 * **Movement Control:** The "move" function is highly model-specific and not implemented with universal logic.
 * **Legacy Models:** If you own a model that requires the XML protocol, this version will throw an `Error`. Please stick to `v0.9.5` or `v0.9.6-beta.12`.
 

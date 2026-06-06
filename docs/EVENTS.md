@@ -76,8 +76,8 @@ These events provide data about the robot position, charging station, maps, room
 | **`MapState`** | `number` | Current map state. |
 | **`MultiMapState`** | `number` | Multi-map feature state. |
 | **`MapSet_V2`** | `object` | Parsed V2 map set data. |
-| **`MapImageData`** | `object` | Generated map image object with `mapID`, `mapType`, and `mapBase64PNG`. Requires the optional `canvas` dependency. |
-| **`MapImage`** | `object` | Generated map image object with `mapID`, `mapType`, and `mapBase64PNG`, emitted for map-image-only workflows. Requires the optional `canvas` dependency. |
+| **`MapImageData`** | `object` | Generated map image object with `mapID`, `mapType`, and `mapBase64PNG`. Rendered in pure JS (no native dependency). |
+| **`MapImage`** | `object` | Generated map image object with `mapID`, `mapType`, and `mapBase64PNG`, emitted for map-image-only workflows. Rendered in pure JS (no native dependency). |
 | **`MapSpotAreas`** | `object` | List of all rooms or spot areas identified on the map. |
 | **`MapVirtualBoundaries`** | `object` | Combined list of virtual walls and no-mop zones. |
 | **`MapSpotAreaInfo`** | `object` | Detailed geometry and settings for a specific room. |
@@ -338,7 +338,7 @@ Parsed V2 room data for a map.
 ```
 
 ### `MapImageData` / `MapImage` (Object)
-Generated map image details. Requires the optional `canvas` dependency.
+Generated map image details. Rendered in pure JS (no native dependency).
 ```javascript
 {
   "mapID": "1234567890",

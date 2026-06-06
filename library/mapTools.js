@@ -1,7 +1,5 @@
 'use strict';
 
-const tools = require("./tools.js");
-
 /**
  * Given the position of the Deebot and the position of the charging station,
  * return the distance to the charging station in meters
@@ -39,25 +37,18 @@ function getDistance(x1, y1, x2, y2) {
  * @param {number} x - The x-coordinate of the point to check
  * @param {number} y - The y-coordinate of the point to check
  * @param {Object} spotAreaInfo - an object instance of EcovacsMapSpotAreaInfo
- * @returns {string} the ID of the spot area (`unknown` if not determinable or `void` if Canvas module is not installed)
+ * @returns {string} the ID of the spot area (`unknown` if not determinable)
  */
 function getCurrentSpotAreaID(x, y, spotAreaInfo) {
-    // Source: https://github.com/substack/point-in-polygon/blob/master/index.js
-    // ray-casting algorithm based on
-    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-    if (tools.isCanvasModuleAvailable()) {
-        for (let infoID in spotAreaInfo) {
-            if (spotAreaInfo.hasOwnProperty(infoID)) {
-                if (spotAreaInfo[infoID]["mapSpotAreaCanvas"].getContext('2d').isPointInPath(x, y)) {
-                    return spotAreaInfo[infoID]["mapSpotAreaID"];
-                }
+    for (let infoID in spotAreaInfo) {
+        if (spotAreaInfo.hasOwnProperty(infoID)) {
+            if (spotAreaInfo[infoID].containsPoint(x, y)) {
+                return spotAreaInfo[infoID]["mapSpotAreaID"];
             }
         }
-        // Spot area is unknown because the position is not found in the given coordinates
-        return 'unknown';
     }
-    // Spot area is unknown because the Canvas module is not installed
-    return 'void';
+    // Spot area is unknown because the position is not found in the given coordinates
+    return 'unknown';
 }
 
 module.exports.getDistanceToChargingStation = getDistanceToChargingStation;
