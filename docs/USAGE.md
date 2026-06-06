@@ -19,7 +19,7 @@ Before writing any code, make sure you have:
 
 ## 2. Modern Example (`async/await`)
 
-This is the standard and recommended way to use the library in Node.js >= 20. It uses modern `async/await` for clean, asynchronous flow control.
+This is the standard and recommended way to use the library in Node.js >= 22.15. It uses modern `async/await` for clean, asynchronous flow control.
 
 ```javascript
 'use strict';

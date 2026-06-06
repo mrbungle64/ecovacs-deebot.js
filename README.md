@@ -29,7 +29,7 @@ To reduce technical debt and ensure long-term maintainability, the following arc
 
 The decision to end support for XML-based models is a technical necessity:
 
-* **Node.js 20+ & Infrastructure Constraints:** Modern environments and ARM64 architectures require up-to-date build toolchains. Our legacy infrastructure and the reliance on native components for older protocols have reached a point where they no longer reliably compile or run with modern Node.js headers ("Compilation Hell").
+* **Node.js 22.15+ & Infrastructure Constraints:** Modern environments and ARM64 architectures require up-to-date runtime support. Newer map payloads can use zstd compression, which depends on Node.js 22.15+ built-in `zlib` support.
 * **Security vs. Compatibility:** To bypass the build issues of native modules, legacy protocols often rely on pure JavaScript XML parsers like `@xmldom/xmldom`. These are known to be vulnerable to security risks like XML Injection (XXE) and are no longer suitable for modern, secure architectures.
 * **Official End-of-Life:** Most legacy models (e.g., 500, 600, 700, 900 series, OZMO 930) reached their official manufacturer support end.
 * **Clean Cut:** Dropping these protocols allows us to remove the associated technical debt and risky dependencies, focusing exclusively on a fast and stable MQTT/JSON architecture.
@@ -62,7 +62,7 @@ Support for new models is no longer added upon request. Due to high time constra
 * [Command Reference](docs/COMMANDS.md)
 * [Event Reference](docs/EVENTS.md)
 
-**Requirement:** Node.js >= 20.x
+**Requirement:** Node.js >= 22.15
 
 ---
 

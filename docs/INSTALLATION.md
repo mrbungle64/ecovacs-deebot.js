@@ -10,7 +10,7 @@ This guide describes how to install and configure the `ecovacs-deebot` library.
 ## Prerequisites
 
 * **Operating System:** Linux (Debian, Ubuntu, Alpine, etc.)
-* **Node.js:** `>= 22.x` is required (as defined in `package.json`).
+* **Node.js:** `>= 22.15` is required (as defined in `package.json`).
 * **Package Manager:** `npm` (included with Node.js), `yarn`, or `pnpm`.
 
 ---
@@ -104,7 +104,7 @@ For local development and running the example application in a self-contained en
    > ```
 
 This will:
-* Boot a container using the official `node:20-bookworm-slim` image.
+* Boot a container using the official `node:22-bookworm-slim` image.
 * Bind-mount the current repository directory into `/home/node/app` within the container.
 * Run the container as the non-root `node` user to prevent file permission issues on your host.
 * Automatically run `npm install` inside the container.

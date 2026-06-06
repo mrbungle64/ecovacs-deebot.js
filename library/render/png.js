@@ -16,8 +16,8 @@ const zlib = require('zlib');
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]);
 
 // CRC32 (IEEE) lookup table, built once. Each PNG chunk carries a CRC over its
-// type + data. Hand-rolled rather than using `zlib.crc32`, which only exists
-// from Node 22.2 (the project floor is Node >=22).
+// type + data. Hand-rolled rather than relying on `zlib.crc32`, keeping this
+// helper self-contained even though the project floor is Node >=22.15.
 const CRC_TABLE = (() => {
     const table = new Uint32Array(256);
     for (let n = 0; n < 256; n++) {

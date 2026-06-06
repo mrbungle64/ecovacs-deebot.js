@@ -39,7 +39,7 @@
     "uniqid": "5.4.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.15"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
