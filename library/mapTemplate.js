@@ -96,6 +96,9 @@ class EcovacsMapImageBase {
 
     async drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
         let mapPieceDecompressed = await mapPieceToIntArray(mapPieceCompressed);
+        if (!mapPieceDecompressed) { // Decompression unavailable (e.g. zstd on older Node) – skip this piece
+            return;
+        }
 
         for (let row = 0; row < mapPieceWidth; row++) {
             for (let column = 0; column < mapPieceHeight; column++) {
@@ -417,11 +420,29 @@ class EcovacsMapImage extends EcovacsMapImageBase {
     }
 }
 
+// zstd frame magic bytes. Newer models compress map pieces with zstd instead of LZMA.
+const ZSTD_MAGIC = [0x28, 0xB5, 0x2F, 0xFD];
+
+// Decompresses a zstd buffer using Node's built-in zlib (available since Node 22.15).
+// Returns the decompressed bytes, or null if the runtime lacks zstd support.
+function zstdDecompress(buffer) {
+    const zlib = require('zlib');
+    if (typeof zlib.zstdDecompressSync !== 'function') {
+        tools.envLogError('Received zstd-compressed map data, but this Node.js version lacks zstd support (requires Node >= 22.15). Map generation will be incomplete.');
+        return null;
+    }
+    return zlib.zstdDecompressSync(buffer);
+}
+
 // converts the compressed data retrieved from ecovacs API into int array containing the map pixels
 // thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
 async function mapPieceToIntArray(pieceValue) {
-    const fixArray = new Int8Array([0, 0, 0, 0]);
     let buff = Buffer.from(pieceValue, 'base64');
+    // Newer models send zstd-compressed pieces (detected via magic bytes); older ones use LZMA.
+    if ((buff.length >= 4) && ZSTD_MAGIC.every((byte, i) => buff[i] === byte)) {
+        return zstdDecompress(buff);
+    }
+    const fixArray = new Int8Array([0, 0, 0, 0]);
     let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
     //fix 9 byte header to 13 bytes for lzma decompression
     let correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];
