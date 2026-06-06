@@ -29,10 +29,17 @@ export class EcovacsMapSpotAreaInfo {
     mapSpotAreaName: any;
     mapSpotAreaConnections: any;
     mapSpotAreaBoundaries: any;
-    mapSpotAreaCanvas: import("canvas").Canvas | null;
+    mapSpotAreaBoundaryPoints: number[][];
     mapSpotAreaSubType: string;
     mapSpotAreaSequenceNumber: any;
     mapSpotAreaCleanSet: {};
+    /**
+     * Whether the given point lies inside this spot area's boundary polygon.
+     * @param {number} x
+     * @param {number} y
+     * @returns {boolean}
+     */
+    containsPoint(x: number, y: number): boolean;
     setSequenceNumber(index: any): void;
     setCleanSet(cleanSet: any): void;
     toJSON(): {

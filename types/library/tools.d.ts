@@ -83,8 +83,7 @@ export function getModelType(deviceClass: any): string;
  */
 export function getDeviceType(deviceClass: any): string;
 /**
- * Generate a somewhat random string for request id with 8 chars.
- * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
+ * Generate a somewhat random 8-digit numeric string for use as a request ID.
  * @returns {string} the generated ID
  */
 export function getReqID(): string;
@@ -99,9 +98,17 @@ export function getSupportedDevices(): Object;
  */
 export function getTimeStringFormatted(totalSeconds: number): string;
 /**
- * @returns {boolean} whether the canvas module is available
+ * Backward-compatible alias for {@link isMapRenderingAvailable}. Kept because the
+ * public `getCanvasModuleIsAvailable()` API and existing integrations call it.
+ * @returns {boolean} always true
  */
 export function isCanvasModuleAvailable(): boolean;
+/**
+ * Map rendering is pure-JS now (no native `canvas` module), so it is always
+ * available regardless of the build toolchain.
+ * @returns {boolean} always true
+ */
+export function isMapRenderingAvailable(): boolean;
 /**
  * Check if the deviceClass belongs to a known model
  * @param {string} deviceClass - The device class to check for

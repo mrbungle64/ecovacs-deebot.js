@@ -11,7 +11,7 @@ export function getDistanceToChargingStation(deebotPosition: string, chargePosit
  * @param {number} x - The x-coordinate of the point to check
  * @param {number} y - The y-coordinate of the point to check
  * @param {Object} spotAreaInfo - an object instance of EcovacsMapSpotAreaInfo
- * @returns {string} the ID of the spot area (`unknown` if not determinable or `void` if Canvas module is not installed)
+ * @returns {string} the ID of the spot area (`unknown` if not determinable)
  */
 export function getCurrentSpotAreaID(x: number, y: number, spotAreaInfo: Object): string;
 //# sourceMappingURL=mapTools.d.ts.map

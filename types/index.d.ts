@@ -26,8 +26,9 @@ export class EcovacsAPI {
      */
     static version(): string;
     /**
-     * Is the canvas module available?
-     * @returns {boolean} a boolean value
+     * Is map rendering available? Always true – rendering is pure JS now.
+     * Kept for backward compatibility (formerly reported native `canvas` availability).
+     * @returns {boolean} always true
      */
     static isCanvasModuleAvailable(): boolean;
     /**
@@ -209,8 +210,9 @@ export class EcovacsAPI {
      */
     getVersion(): string;
     /**
-     * Is the canvas module available?
-     * @returns {boolean} a boolean value
+     * Is map rendering available? Always true – rendering is pure JS now.
+     * Kept for backward compatibility (formerly reported native `canvas` availability).
+     * @returns {boolean} always true
      */
     getCanvasModuleIsAvailable(): boolean;
     logInfo(message: any): void;

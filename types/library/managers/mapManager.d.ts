@@ -26,7 +26,8 @@ declare class MapManager {
         mid: any;
         subsets: any[];
     } | null;
-    liveMapImage: any;
+    liveMapImage: mapTemplate.EcovacsLiveMapImage | null;
+    liveMapPendingPieces: Set<any> | null;
     createMapDataObject: boolean;
     createMapImage: boolean;
     createMapImageOnly: boolean;
@@ -139,7 +140,7 @@ declare class MapManager {
      * @todo: finish the implementation
      * @param {Object} payload
      */
-    handleMajorMap(payload: Object): null | undefined;
+    handleMajorMap(payload: Object): Promise<null>;
     /**
      * @todo: finish the implementation
      * @param {Object} payload
@@ -162,4 +163,5 @@ declare class MapManager {
      */
     getSpotAreaName(currentSpotAreaID: string): string;
 }
+import mapTemplate = require("../mapTemplate");
 //# sourceMappingURL=mapManager.d.ts.map
