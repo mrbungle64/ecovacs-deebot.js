@@ -15,10 +15,11 @@ on:
   push:
     branches:
       - master
+      - '1.0.0-alpha.*'
   pull_request:
-    # The branches below must be a subset of the branches above
     branches:
       - master
+      - '1.0.0-alpha.*'
   schedule:
     - cron: "20 10 * * 0"
 
