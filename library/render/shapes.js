@@ -53,6 +53,33 @@ function fillPolygon(fb, points, rgb, alpha = 255) {
     }
 }
 
+/**
+ * Fills a circle (disc) centred on `(cx, cy)` with radius `r` via per-scanline
+ * span filling. Used for the charger icon.
+ * @param {FrameBuffer} fb
+ * @param {number} cx
+ * @param {number} cy
+ * @param {number} r
+ * @param {number[]} rgb
+ * @param {number} [alpha=255]
+ */
+function fillCircle(fb, cx, cy, r, rgb, alpha = 255) {
+    if (r <= 0) {
+        return;
+    }
+    const yStart = Math.max(0, Math.ceil(cy - r));
+    const yEnd = Math.min(fb.height - 1, Math.floor(cy + r));
+    for (let y = yStart; y <= yEnd; y++) {
+        const dy = y - cy;
+        const dx = Math.sqrt(r * r - dy * dy);
+        const xStart = Math.max(0, Math.ceil(cx - dx));
+        const xEnd = Math.min(fb.width - 1, Math.floor(cx + dx));
+        for (let x = xStart; x <= xEnd; x++) {
+            fb.blendPixel(x, y, rgb[0], rgb[1], rgb[2], alpha);
+        }
+    }
+}
+
 // Plots a filled square brush (size×size) centred on (x, y) – the poor man's
 // line width. width 1 plots a single pixel.
 function plotBrush(fb, x, y, rgb, alpha, width) {
@@ -155,4 +182,5 @@ function strokePolyline(fb, points, rgb, opts = {}) {
 }
 
 module.exports.fillPolygon = fillPolygon;
+module.exports.fillCircle = fillCircle;
 module.exports.strokePolyline = strokePolyline;

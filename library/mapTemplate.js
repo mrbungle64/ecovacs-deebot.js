@@ -55,6 +55,13 @@ const POSITION_OFFSET = 400; // the positions of the charger and the Deebot need
 // Outline colour for spot-area polygons (matches the former canvas stroke).
 const SPOTAREA_STROKE = '#64b5f6';
 
+// Vector icon colours (replacing the former embedded base64 PNG icons).
+const DEEBOT_ICON_FILL = '#00a2ff';   // robot body
+const DEEBOT_ICON_STROKE = '#0061a8'; // robot outline
+const CHARGER_ICON_FILL = '#43a047';  // charger dot
+const CHARGER_ICON_STROKE = '#1b5e20';
+const ICON_RADIUS = 8; // icons were drawn 16×16, i.e. ±8 px from centre
+
 // Pre-parsed RGB triples for the palette, so the per-pixel raster loop never re-parses hex.
 const MAP_RGB = Object.fromEntries(Object.entries(MAP_COLORS).map(([k, v]) => [k, parseHexColor(v)]));
 
@@ -216,6 +223,51 @@ class EcovacsMapImageBase {
         return overlay;
     }
 
+    // Converts a device map position to display-space pixel coordinates. The x
+    // axis maps directly; the y axis is flipped to match the vertically-flipped
+    // composite (so icons land where they do in the final image).
+    positionToPixel(position) {
+        return {
+            x: position['x'] / this.mapPixel + POSITION_OFFSET,
+            y: this.mapTotalHeight - (position['y'] / this.mapPixel + POSITION_OFFSET)
+        };
+    }
+
+    // Draws the deebot (heading triangle) and charger (dot) icons onto the final
+    // composited buffer, in display space. Only for the current map – getPos only
+    // returns the current map's positions (former canvas behaviour). Invalid
+    // deebot positions are skipped entirely (deebot-client reference).
+    drawIcons(finalBuffer, deebotPosition, chargerPosition, currentMapMID) {
+        if (this.mapID !== currentMapMID) {
+            return;
+        }
+
+        if (deebotPosition && !deebotPosition['isInvalid']) {
+            const c = this.positionToPixel(deebotPosition);
+            // Display raster is y-down; ecovacs angle: 0 = right, 90 = up.
+            const angle = (deebotPosition['a'] || 0) * Math.PI / 180;
+            const dirX = Math.cos(angle);
+            const dirY = -Math.sin(angle);
+            const baseX = c.x - dirX * ICON_RADIUS * 0.6;
+            const baseY = c.y - dirY * ICON_RADIUS * 0.6;
+            const half = ICON_RADIUS * 0.7;
+            const triangle = [
+                [c.x + dirX * ICON_RADIUS, c.y + dirY * ICON_RADIUS], // tip in heading direction
+                [baseX - dirY * half, baseY + dirX * half],           // base corners (± perpendicular)
+                [baseX + dirY * half, baseY - dirX * half]
+            ];
+            shapes.fillPolygon(finalBuffer, triangle, parseHexColor(DEEBOT_ICON_FILL), 255);
+            shapes.strokePolyline(finalBuffer, triangle, parseHexColor(DEEBOT_ICON_STROKE), { closed: true });
+        }
+
+        if (chargerPosition) {
+            const c = this.positionToPixel(chargerPosition);
+            const r = ICON_RADIUS * 0.7;
+            shapes.fillCircle(finalBuffer, c.x, c.y, r + 1, parseHexColor(CHARGER_ICON_STROKE), 255);
+            shapes.fillCircle(finalBuffer, c.x, c.y, r, parseHexColor(CHARGER_ICON_FILL), 255);
+        }
+    }
+
     async getBase64PNG(deebotPosition, chargerPosition, currentMapMID, mapDataObject) {
         if (!this.transferMapInfo) {
             // Data should not be transferred: not all pieces retrieved, or a
@@ -246,12 +298,8 @@ class EcovacsMapImageBase {
 
         finalBuffer.composite(this.mapWallBuffer, true);
 
-        // TODO [Phase 4 – icons]: when this.mapID === currentMapMID, draw the
-        //   deebot (rotated triangle, heading = deebotPosition.a + 90, skip when
-        //   isInvalid) and charger (pin) as pure-JS vector shapes at
-        //   `pos/this.mapPixel + POSITION_OFFSET`, replacing the embedded base64
-        //   PNGs + canvas rotate(). Deferred with the polygons above.
-        void deebotPosition; void chargerPosition; void currentMapMID;
+        // Deebot + charger icons, drawn last so they sit on top of everything.
+        this.drawIcons(finalBuffer, deebotPosition, chargerPosition, currentMapMID);
 
         // Crop to the drawn region. Boundary coordinates can be fractional, so
         // floor the origin / ceil the extent to an integer rectangle that still
