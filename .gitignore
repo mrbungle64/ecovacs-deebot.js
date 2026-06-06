@@ -11,6 +11,7 @@ example/myInfo.js
 library/map/
 .vs/*
 .vscode/*
+.claude/*
 
 *.code-workspace
 /qodana.yaml

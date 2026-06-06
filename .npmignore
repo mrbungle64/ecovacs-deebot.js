@@ -1,6 +1,7 @@
 .git
 .idea
 
+.claude/*
 node_modules/
 nbproject/
 .vs*/
