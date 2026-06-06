@@ -1,42 +1,45 @@
-.git
-.idea
-
-.claude/*
-node_modules/
-nbproject/
-.vs*/
+# Version control / IDE
+.idea/
+.vs/
+.vscode/
 *.code-workspace
-Thumbs.db
-gulpfile.js
+.claude/
+nbproject/
 
+# Dependencies and lock files
+node_modules/
+package-lock.json
+
+# Tests and CI
 test/
-travis/
+coverage/
 .travis.yml
-appveyor.yml
 .travis.yaml
+appveyor.yml
 appveyor.yaml
+.github/
 
+# Linting / build config
 tsconfig.json
-
 .eslintrc.json
 .eslintrc.js
 eslint.config.js
+gulpfile.js
+/qodana.yaml
 
-# npm package files
-package-lock.json
+# Project-specific
+scratch/
+docs/
 
-example/myInfo.js
-
-library/map/
-
+# AI / workflow config
 .clinerules
 AGENTS.md
-scratch/
 
 # Credentials and Environment
 .env
 .env.local
 example/.env
+.nvmrc
 
 # Docker
 Dockerfile

@@ -1,23 +1,29 @@
-node_modules
-.DS_STORE
-.idea
-*.log
-test-results.xml
-.cache/
-launch.json
-app_BWE.js
-logs
-example/myInfo.js
-library/map/
-.vs/*
-.vscode/*
-.claude/*
+node_modules/
 
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.idea/
+.vs/
+.vscode/
 *.code-workspace
-/qodana.yaml
+.claude/
 
-.clinerules
-AGENTS.md
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test output
+test-results.xml
+coverage/
+
+# Build / cache
+.cache/
 
 # Credentials and Environment
 .env
