@@ -105,10 +105,6 @@ function getAllKnownDevices() {
     return _allKnownDevices;
 }
 
-function getAllKnownModelTypes() {
-    return _allKnownModelTypes;
-}
-
 /**
  * @returns {Object} a frozen dictionary of supported devices
  */
@@ -128,12 +124,6 @@ function getKnownDevices() {
     );
 }
 
-/**
- * @returns {Object} a dictionary of known legacy (unsupported) devices
- */
-function getLegacyDevices() {
-    return deebotModels.LegacyDevices;
-}
 
 /**
  * Check if the deviceClass belongs to a supported model
