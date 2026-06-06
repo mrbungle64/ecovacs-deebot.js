@@ -164,6 +164,7 @@ main();
 * For action/set commands, the Promise resolves immediately upon successful server acknowledgment.
 * It accepts an optional options object as the final argument (e.g. `vacbot.runAsync("GetBatteryState", { timeoutMs: 2000 })`).
 * Note: All commands registered in the `COMMAND_REGISTRY` support `runAsync()`. If a command is unknown, or if it is called with incorrect or missing arguments, `runAsync()` will reject with an error.
+* Any MQTT transport or network failure (unreachable broker, malformed request) also rejects the returned Promise **and** emits `Error`, `ErrorCode` (code `"-1"`), and `LastError` events so you can observe failures even without `await`.
 
 ### `vacbot.on("EventName", callback)`
 * Listens to live state changes pushed from the vacuum. The primary event mappings are:

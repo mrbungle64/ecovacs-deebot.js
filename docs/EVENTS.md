@@ -118,9 +118,9 @@ These events help with troubleshooting, connection state, network details, firmw
 
 | Event Name | Payload Type | Description |
 | :--- | :--- | :--- |
-| **`Error`** | `string` | Human-readable description of the last error reported by the robot. |
-| **`ErrorCode`** | `string` | Error code as a string (e.g. `"104"`). Refer to `library/errorCodes.json`. |
-| **`LastError`** | `object` | Combined error object with `error` and `code`. |
+| **`Error`** | `string` | Human-readable error description. Fires for robot-reported errors and for command/network transport failures (code `"-1"`). |
+| **`ErrorCode`** | `string` | Error code as a string (e.g. `"104"`). `"-1"` indicates a command or network transport failure. Refer to `library/errorCodes.json` for robot error codes. |
+| **`LastError`** | `object` | Combined error object with `error` and `code`. Fired alongside every `Error` event. |
 | **`NetworkInfo`** | `object` | Wi-Fi details: `ip`, `mac`, `wifiSSID`, and `wifiSignal`. |
 | **`WifiList`** | `object` | Raw configured or discovered Wi-Fi list payload. The payload may contain a `list` array. |
 | **`Ota`** | `object` | Firmware update status and availability payload. |

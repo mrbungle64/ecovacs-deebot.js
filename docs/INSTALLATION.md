@@ -82,6 +82,12 @@ To ensure everything is installed and working correctly, run the built-in test s
 npm test
 ```
 
+### Linting
+To check the code for style and quality issues, run:
+```bash
+npm run lint
+```
+
 ---
 
 ## 5. Running with Docker Compose (Local Development & Testing)
