@@ -64,42 +64,68 @@ function getReqID() {
 }
 
 /**
+ * Recursively freezes an object and all nested plain-object / array values.
+ * Only freezes own enumerable properties; skips null/non-objects.
+ * @param {Object} obj
+ * @returns {Object} the same object, now frozen
+ */
+function deepFreeze(obj) {
+    if (obj === null || typeof obj !== 'object' || Object.isFrozen(obj)) {
+        return obj;
+    }
+    Object.freeze(obj);
+    for (const val of Object.values(obj)) {
+        deepFreeze(val);
+    }
+    return obj;
+}
+
+// Module-level frozen memos — built once at require() time, never cloned again.
+const _supportedDevices = deepFreeze(
+    Object.assign({}, deebotModels.SupportedDeebotModels, deebotModels.SupportedAirPurifierModels)
+);
+const _allKnownDevices = deepFreeze(
+    Object.assign(
+        {},
+        deebotModels.SupportedDeebotModels,
+        deebotModels.SupportedAirPurifierModels,
+        deebotModels.KnownDeebotModels,
+        deebotModels.KnownYeediModels,
+        deebotModels.KnownLawnMowerModels,
+        deebotModels.LegacyDevices
+    )
+);
+const _allKnownModelTypes = deepFreeze(Object.assign({}, modelTypes.ModelTypes));
+
+/**
  * Get all known devices, including the supported devices and the known devices
- * @returns {Object} a dictionary of all known devices
+ * @returns {Object} a frozen dictionary of all known devices
  */
 function getAllKnownDevices() {
-    let devices = {};
-    Object.assign(devices, getSupportedDevices());
-    Object.assign(devices, getKnownDevices());
-    Object.assign(devices, getLegacyDevices());
-    return devices;
+    return _allKnownDevices;
 }
 
 function getAllKnownModelTypes() {
-    let types = {};
-    Object.assign(types, modelTypes.ModelTypes);
-    return types;
+    return _allKnownModelTypes;
 }
 
 /**
- * @returns {Object} a dictionary of supported devices
+ * @returns {Object} a frozen dictionary of supported devices
  */
 function getSupportedDevices() {
-    let devices = {};
-    Object.assign(devices, deebotModels.SupportedDeebotModels);
-    Object.assign(devices, deebotModels.SupportedAirPurifierModels);
-    return devices;
+    return _supportedDevices;
 }
 
 /**
  * @returns {Object} a dictionary of known devices
  */
 function getKnownDevices() {
-    let devices = {};
-    Object.assign(devices, deebotModels.KnownDeebotModels);
-    Object.assign(devices, deebotModels.KnownYeediModels);
-    Object.assign(devices, deebotModels.KnownLawnMowerModels);
-    return devices;
+    return Object.assign(
+        {},
+        deebotModels.KnownDeebotModels,
+        deebotModels.KnownYeediModels,
+        deebotModels.KnownLawnMowerModels
+    );
 }
 
 /**
@@ -115,8 +141,7 @@ function getLegacyDevices() {
  * @returns {boolean} whether the deviceClass belongs to a supported model
  */
 function isSupportedDevice(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getSupportedDevices()));
-    return devices.hasOwnProperty(deviceClass);
+    return _supportedDevices.hasOwnProperty(deviceClass);
 }
 
 /**
@@ -125,8 +150,7 @@ function isSupportedDevice(deviceClass) {
  * @returns {boolean} whether the deviceClass belongs to a known model
  */
 function isKnownDevice(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
-    return devices.hasOwnProperty(deviceClass);
+    return _allKnownDevices.hasOwnProperty(deviceClass);
 }
 
 /**
@@ -144,8 +168,7 @@ function isLegacyModel(deviceClass) {
  * @returns {string}
  */
 function getPlatformType(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
-    if (devices.hasOwnProperty(deviceClass)) {
+    if (_allKnownDevices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'type', 'unknown');
     }
     const dynamicDevice = getDynamicDevice(deviceClass);
@@ -162,8 +185,7 @@ function getPlatformType(deviceClass) {
  * @returns {string}
  */
 function getDeviceCategory(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
-    if (devices.hasOwnProperty(deviceClass)) {
+    if (_allKnownDevices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'deviceCategory', 'unknown');
     }
     const dynamicDevice = getDynamicDevice(deviceClass);
@@ -180,8 +202,7 @@ function getDeviceCategory(deviceClass) {
  * @returns {string}
  */
 function getSmartType(deviceClass) {
-    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
-    if (devices.hasOwnProperty(deviceClass)) {
+    if (_allKnownDevices.hasOwnProperty(deviceClass)) {
         return getDeviceProperty(deviceClass, 'smartType', 'unknown');
     }
     const dynamicDevice = getDynamicDevice(deviceClass);
@@ -219,7 +240,7 @@ function getDeviceType(deviceClass) {
  */
 function getDeviceProperty(deviceClass, property, defaultValue = false) {
     let value = defaultValue;
-    const devices = JSON.parse(JSON.stringify(getAllKnownDevices()));
+    const devices = _allKnownDevices;
     let device;
 
     if (devices.hasOwnProperty(deviceClass)) {
@@ -235,7 +256,7 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
 
         let platformType = device.type;
         if (platformType) {
-            const platformTypeProperties = getAllKnownModelTypes()[platformType];
+            const platformTypeProperties = _allKnownModelTypes[platformType];
             if (platformTypeProperties && platformTypeProperties.hasOwnProperty(property)) {
                 value = platformTypeProperties[property];
             }
