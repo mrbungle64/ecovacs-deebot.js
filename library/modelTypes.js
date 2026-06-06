@@ -37,8 +37,7 @@
 
 exports.ModelTypes = {
   // OZMO 920/950 generation. Introduced the OZMO flat-pad mopping system.
-  // First Ecovacs models to use the JSON/MQTT protocol
-  // (replacing legacy XMPP/XML). V2: false → uses original (V1) JSON/MQTT commands.
+  // V2: false → uses original (V1) JSON/MQTT commands.
   "950": {
     "deviceCategory": "Vacuum Cleaner",
     "V2": false
@@ -168,8 +167,7 @@ exports.ModelTypes = {
   },
 
   // Legacy models (pre-950 generation, XMPP/XML protocol).
-  // These are robots sold before the JSON/MQTT transition (roughly pre-2019).
-  // The models are kept only for identification purposes.
+  // Kept for device identification only.
   "legacy": {
     "deviceCategory": "Vacuum Cleaner"
   }

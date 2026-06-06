@@ -50,8 +50,7 @@ function createErrorDescription(message, command = '') {
 }
 
 /**
- * Generate a somewhat random string for request id with 8 chars.
- * This is required for e.g. the OZMO 930 (possibly required for all models using XMPP)
+ * Generate a somewhat random 8-digit numeric string for use as a request ID.
  * @returns {string} the generated ID
  */
 function getReqID() {
