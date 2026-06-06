@@ -256,55 +256,56 @@ class Ecovacs extends EventEmitter {
             });
         }
 
-        try {
-            const params = commandObj.getRequestObject(this, command);
-            const portalUrl = commandObj.getRequestUrl(this, command, params);
-            const headers = commandObj.getRequestHeaders(this, params);
-            let responseData;
-            try {
-                const response = await axios.post(portalUrl, params, {
-                    headers: headers
-                });
-                responseData = response.data;
-                tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
-            } catch (e) {
-                this.emitNetworkError(e.message, command.name);
-                if (expectedEvent) {
-                    this.pendingCommands.rejectById(command.getId(), e);
-                } else if (rejectPromise) {
-                    rejectPromise(e);
-                }
-                throw e;
+        const rejectCommand = (e) => {
+            if (expectedEvent) {
+                this.pendingCommands.rejectById(command.getId(), e);
+            } else if (rejectPromise) {
+                rejectPromise(e);
             }
+        };
 
-            if ((responseData['result'] === 'ok') || (responseData['ret'] === 'ok')) {
-                this.emitLastErrorByErrorCode('0');
-                this.handleCommandResponse(command, responseData);
-                if (resolvePromise) {
-                    resolvePromise(responseData);
-                }
-            } else {
-                const errorCodeObj = {
-                    code: responseData['errno'],
-                    error: responseData['error']
-                };
-                this.bot.handleResponseError(errorCodeObj);
-                // Error code 500 = wait for response timed out (see issue #19)
-                if (this.bot.errorCode === '500') {
-                    this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
-                }
-                this.emitLastError();
-                tools.envLogInfo(`[EcovacsMQTT] failure code ${responseData['errno']} (${responseData['error']}) sending command '${command.name}'`);
-                const err = new Error(`Failure code ${responseData['errno']} (${responseData['error']})`);
-                if (expectedEvent) {
-                    this.pendingCommands.rejectById(command.getId(), err);
-                } else if (rejectPromise) {
-                    rejectPromise(err);
-                }
-                throw err;
-            }
+        let params, portalUrl, headers;
+        try {
+            params = commandObj.getRequestObject(this, command);
+            portalUrl = commandObj.getRequestUrl(this, command, params);
+            headers = commandObj.getRequestHeaders(this, params);
         } catch (e) {
-            tools.envLogError(`error sending command: ${e.toString()}`);
+            this.emitNetworkError(e.message, command.name);
+            rejectCommand(e);
+            tools.envLogError(`error building command request: ${e.toString()}`);
+            return commandPromise;
+        }
+
+        let responseData;
+        try {
+            const response = await axios.post(portalUrl, params, { headers });
+            responseData = response.data;
+            tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
+        } catch (e) {
+            this.emitNetworkError(e.message, command.name);
+            rejectCommand(e);
+            return commandPromise;
+        }
+
+        if ((responseData['result'] === 'ok') || (responseData['ret'] === 'ok')) {
+            this.emitLastErrorByErrorCode('0');
+            this.handleCommandResponse(command, responseData);
+            if (resolvePromise) {
+                resolvePromise(responseData);
+            }
+        } else {
+            const errorCodeObj = {
+                code: responseData['errno'],
+                error: responseData['error']
+            };
+            this.bot.handleResponseError(errorCodeObj);
+            // Error code 500 = wait for response timed out (see issue #19)
+            if (this.bot.errorCode === '500') {
+                this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
+            }
+            this.emitLastError();
+            tools.envLogInfo(`[EcovacsMQTT] failure code ${responseData['errno']} (${responseData['error']}) sending command '${command.name}'`);
+            rejectCommand(new Error(`Failure code ${responseData['errno']} (${responseData['error']})`));
         }
 
         return commandPromise;
