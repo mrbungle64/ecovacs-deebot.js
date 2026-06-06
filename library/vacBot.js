@@ -344,6 +344,17 @@ class VacBot {
     }
 
     /**
+     * Sends a raw `VacBotCommand` instance directly to the device.
+     * Compatibility wrapper for the pre-1.0 API; prefer `run()` / `runAsync()` for named commands.
+     * @param {Object} command - a `VacBotCommand` instance
+     * @param {Object} [options={}] - optional command options
+     * @returns {Promise} resolves with the command response
+     */
+    sendCommand(command, options = {}) {
+        return this.ecovacs.sendCommand(command, options);
+    }
+
+    /**
      * Get the name of the spot area that the bot is currently in
      * @param {string} currentSpotAreaID - the ID of the spot area that the player is currently in
      * @returns {string} the name of the current spot area
