@@ -1,9 +1,11 @@
 'use strict';
 
+const map = require('./mapInfo');
 const tools = require('./tools.js');
 const lzma = require('lzma');
 const { FrameBuffer, parseHexColor } = require('./render/framebuffer');
 const { encodePNGDataURL } = require('./render/png');
+const shapes = require('./render/shapes');
 
 const MAPINFOTYPE_FROM_ECOVACS = {
     "ol": "outline",
@@ -11,6 +13,23 @@ const MAPINFOTYPE_FROM_ECOVACS = {
     "ai": "ai",
     "wa": "workarea"
 };
+
+/**
+ * A set of colors for spot areas
+ * @type {string[]}
+ * @todo Make colors customizable by introducing setMapStyle (JSON)
+ */
+const SPOTAREA_COLORS = [
+    '#ffdcf6',
+    '#fff8d2',
+    '#e4fed9',
+    '#dbf2fe',
+    '#ffd7c9',
+    '#fee3c4',
+    '#e98b9d',
+    '#ffa1a1',
+    '#9fcfff'
+];
 
 /**
  * A set of colors for the element types
@@ -30,6 +49,11 @@ const MAP_COLORS = {
     'wifi_4': '#ddebfa',
     'wifi_5': '#f7fbff', // weak
 };
+
+const POSITION_OFFSET = 400; // the positions of the charger and the Deebot need an offset of 400 pixels
+
+// Outline colour for spot-area polygons (matches the former canvas stroke).
+const SPOTAREA_STROKE = '#64b5f6';
 
 // Pre-parsed RGB triples for the palette, so the per-pixel raster loop never re-parses hex.
 const MAP_RGB = Object.fromEntries(Object.entries(MAP_COLORS).map(([k, v]) => [k, parseHexColor(v)]));
@@ -139,6 +163,59 @@ class EcovacsMapImageBase {
         }
     }
 
+    // Builds the spot-area / virtual-boundary overlay (top-down, pre-flip) for
+    // the given map data, or null when there is nothing to draw. Coordinates are
+    // device units scaled by `/50 + POSITION_OFFSET`. Virtual boundaries also
+    // extend the crop rectangle, matching the former canvas behaviour.
+    renderOverlay(mapDataObject) {
+        const mapObject = this.mapID === undefined
+            ? map.getCurrentMapObject(mapDataObject)
+            : map.getMapObject(mapDataObject, this.mapID);
+        if (!mapObject) {
+            return null;
+        }
+
+        const overlay = new FrameBuffer(this.mapTotalWidth, this.mapTotalHeight);
+
+        // Spot areas: filled polygon + outline.
+        const spotAreas = mapObject['mapSpotAreas'] || [];
+        for (const areaIndex in spotAreas) {
+            if (!spotAreas.hasOwnProperty(areaIndex)) {
+                continue;
+            }
+            const area = spotAreas[areaIndex];
+            const points = area['mapSpotAreaBoundaries'].split(';').map((pair) => {
+                const [x, y] = pair.split(',');
+                return [Number(x) / 50 + POSITION_OFFSET, Number(y) / 50 + POSITION_OFFSET];
+            });
+            const fill = parseHexColor(SPOTAREA_COLORS[area['mapSpotAreaID'] % SPOTAREA_COLORS.length]);
+            shapes.fillPolygon(overlay, points, fill, 255);
+            shapes.strokePolyline(overlay, points, parseHexColor(SPOTAREA_STROKE), { closed: true });
+        }
+
+        // Virtual boundaries: dashed 2px outline (red virtual wall / orange no-mop zone).
+        const boundaries = mapObject['mapVirtualBoundaries'] || [];
+        for (const boundaryIndex in boundaries) {
+            if (!boundaries.hasOwnProperty(boundaryIndex)) {
+                continue;
+            }
+            const boundary = boundaries[boundaryIndex];
+            const raw = boundary['mapVirtualBoundaryCoordinates'];
+            const flat = raw.substring(1, raw.length - 1).split(',');
+            const points = [];
+            for (let i = 0; i + 1 < flat.length; i += 2) {
+                const x = Number(flat[i]) / 50 + POSITION_OFFSET;
+                const y = Number(flat[i + 1]) / 50 + POSITION_OFFSET;
+                points.push([x, y]);
+                this.updateCropBoundaries(x, y);
+            }
+            const color = MAP_RGB[boundary['mapVirtualBoundaryType']] || MAP_RGB['vw'];
+            shapes.strokePolyline(overlay, points, color, { closed: true, width: 2, dash: [2, 2] });
+        }
+
+        return overlay;
+    }
+
     async getBase64PNG(deebotPosition, chargerPosition, currentMapMID, mapDataObject) {
         if (!this.transferMapInfo) {
             // Data should not be transferred: not all pieces retrieved, or a
@@ -158,14 +235,14 @@ class EcovacsMapImageBase {
         // device map is vertically flipped for display (former canvas scale(1,-1)).
         finalBuffer.composite(this.mapFloorBuffer, true);
 
-        // TODO [Phase 3 – polygons]: render spot-area fills and dashed
-        //   virtual-boundary strokes here via pure-JS scanline fill / stroke.
-        //   Coordinates come from map.getMapObject(mapDataObject, this.mapID)
-        //   (or getCurrentMapObject when mapID is undefined), scaled by
-        //   `/50 + POSITION_OFFSET`, and must also extend cropBoundaries before
-        //   the crop below. Deferred: the former canvas overlay produced no
-        //   output (node-canvas crop bug), so omitting it is not a regression.
-        void mapDataObject;
+        // Spot-area fills + dashed virtual-boundary strokes sit between floor and
+        // walls. Drawn top-down into an overlay, then composited with the same flip.
+        if (mapDataObject !== null) {
+            const overlay = this.renderOverlay(mapDataObject);
+            if (overlay) {
+                finalBuffer.composite(overlay, true);
+            }
+        }
 
         finalBuffer.composite(this.mapWallBuffer, true);
 
@@ -176,12 +253,14 @@ class EcovacsMapImageBase {
         //   PNGs + canvas rotate(). Deferred with the polygons above.
         void deebotPosition; void chargerPosition; void currentMapMID;
 
-        // Crop to the drawn region. The flip moved rows, so maxY maps to the top.
-        const sx = this.cropBoundaries.minX;
-        const sy = height - this.cropBoundaries.maxY;
-        const sw = this.cropBoundaries.maxX - this.cropBoundaries.minX;
-        const sh = this.cropBoundaries.maxY - this.cropBoundaries.minY;
-        const cropped = finalBuffer.crop(sx, sy, sw, sh);
+        // Crop to the drawn region. Boundary coordinates can be fractional, so
+        // floor the origin / ceil the extent to an integer rectangle that still
+        // encloses everything. The flip moved rows, so maxY maps to the top.
+        const minX = Math.floor(this.cropBoundaries.minX);
+        const minY = Math.floor(this.cropBoundaries.minY);
+        const maxX = Math.ceil(this.cropBoundaries.maxX);
+        const maxY = Math.ceil(this.cropBoundaries.maxY);
+        const cropped = finalBuffer.crop(minX, height - maxY, maxX - minX, maxY - minY);
 
         this.mapBase64PNG = encodePNGDataURL(cropped);
         this.transferMapInfo = false;
