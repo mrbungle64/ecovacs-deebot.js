@@ -230,6 +230,11 @@ declare class VacBot {
      * @returns {Object|null}
      */
     getMqttClient(): Object | null;
+    /**
+     * Getter for the underlying MQTT client.
+     * @returns {Object|null}
+     */
+    get client(): Object | null;
     on(name: any, func: any): void;
     once(name: any, func: any): void;
     /**

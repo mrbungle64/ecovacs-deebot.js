@@ -350,6 +350,15 @@ class VacBot {
         return this.ecovacs ? this.ecovacs.client : null;
     }
 
+    /**
+     * Getter for the underlying MQTT client.
+     * @returns {Object|null}
+     */
+    get client() {
+        return this.getMqttClient();
+    }
+
+
     on(name, func) {
         this.ecovacs.on(name, func);
     }

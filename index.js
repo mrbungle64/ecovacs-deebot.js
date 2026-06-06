@@ -383,7 +383,7 @@ class EcovacsAPI {
   }
 
   /**
-   * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
+   * @returns {Promise<Array<Object>>} a list of all devices of the users Ecovacs account
    */
   async devices() {
     const deviceList = await this.getDevices(constants.USER_API_PATH, 'GetDeviceList');
@@ -445,7 +445,7 @@ class EcovacsAPI {
   /**
    * Wrapper method for the `getVacBot` method (but with only 1 parameter)
    * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
-   * @returns {Object} a corresponding instance of the 'vacBot' class
+   * @returns {import('./library/vacBot')} a corresponding instance of the 'VacBot' class
    */
   getVacBotObj(vacuum) {
     return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum);
@@ -459,7 +459,7 @@ class EcovacsAPI {
    * @param {string} userToken - the user token
    * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
-   * @returns {Object} a corresponding instance of the `VacBot` class
+   * @returns {import('./library/vacBot')} a corresponding instance of the `VacBot` class
    */
   getVacBot(user, hostname, resource, userToken, vacuum, continent = '') {
     tools.envLogHeader(`getVacBot('${user}','${hostname}','${resource}','${userToken}','${vacuum}','${continent}')`);
@@ -607,3 +607,4 @@ module.exports.EcovacsAPI = EcovacsAPI;
 /** @deprecated Use EcovacsAPI instead */
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.countries = countries;
+module.exports.VacBot = require('./library/vacBot');

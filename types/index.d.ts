@@ -1,3 +1,4 @@
+export const VacBot: typeof import("./library/vacBot");
 /**
  * @class EcovacsAPI
  * An instance of this class provides access to the Ecovacs account and to the API
@@ -148,9 +149,9 @@ export class EcovacsAPI {
      */
     getDevices(api?: string, func?: string): Promise<Object>;
     /**
-     * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
+     * @returns {Promise<Array<Object>>} a list of all devices of the users Ecovacs account
      */
-    devices(): Promise<Object>;
+    devices(): Promise<Array<Object>>;
     /**
      * Merge the data from the global device list (GetGlobalDeviceList)
      * with the data from the device list (GetDeviceList) of the users Ecovacs account
@@ -177,9 +178,9 @@ export class EcovacsAPI {
     /**
      * Wrapper method for the `getVacBot` method (but with only 1 parameter)
      * @param {Object} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
-     * @returns {Object} a corresponding instance of the 'vacBot' class
+     * @returns {import('./library/vacBot')} a corresponding instance of the 'VacBot' class
      */
-    getVacBotObj(vacuum: Object): Object;
+    getVacBotObj(vacuum: Object): import("./library/vacBot");
     /**
      * Get a corresponding instance of the `vacBot` class
      * @param {string} user - the user ID (retrieved from Ecovacs API)
@@ -188,9 +189,9 @@ export class EcovacsAPI {
      * @param {string} userToken - the user token
      * @param {Object} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {string} [continent] - the continent
-     * @returns {Object} a corresponding instance of the `VacBot` class
+     * @returns {import('./library/vacBot')} a corresponding instance of the `VacBot` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: Object, continent?: string): Object;
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: Object, continent?: string): import("./library/vacBot");
     /**
      * Get the version of the package
      * @returns {string} the version of the package
