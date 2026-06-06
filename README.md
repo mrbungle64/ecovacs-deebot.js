@@ -2,24 +2,25 @@
 
 ![Logo](ecovacs-deebot.png)
 
-[![Latest version](http://img.shields.io/npm/v/ecovacs-deebot/latest?label=stable)](https://www.npmjs.com/package/ecovacs-deebot)
-[![Latest version](http://img.shields.io/npm/v/ecovacs-deebot/beta?label=beta)](https://www.npmjs.com/package/ecovacs-deebot)
+[![Stable version](https://img.shields.io/npm/v/ecovacs-deebot/latest?label=stable)](https://www.npmjs.com/package/ecovacs-deebot)
+[![Beta version](https://img.shields.io/npm/v/ecovacs-deebot/beta?label=beta)](https://www.npmjs.com/package/ecovacs-deebot)
+[![Alpha version](https://img.shields.io/npm/v/ecovacs-deebot/alpha?label=alpha)](https://www.npmjs.com/package/ecovacs-deebot)
 [![github-workflow](https://github.com/mrbungle64/ecovacs-deebot.js/actions/workflows/node.js.yml/badge.svg)](https://github.com/mrbungle64/ecovacs-deebot.js)
 
-> **⚠️ Maintenance Status:** This project is transitioning to a more sustainable maintenance model. Development is shifting to focus exclusively on modern **MQTT/JSON** communication.
+> **⚠️ Maintenance Status:** This project has transitioned to a more sustainable maintenance model. Development now focuses exclusively on modern **MQTT/JSON** communication.
 
 ---
 
 ## 🗺️ The Roadmap & Legacy "Clean Cut"
 
-To reduce technical debt and ensure long-term maintainability, the following architectural cut is implemented:
+To reduce technical debt and ensure long-term maintainability, the following architectural cut has been implemented:
 
-### Phase 1: Final Legacy Milestone (v0.9.x)
+### Phase 1: Final Legacy Milestone (v0.9.x) — Final
 * **v0.9.5 (Stable):** Final stable release with verified support for legacy XML-based protocols.
 * **v0.9.6-beta.12 (Final Legacy Release):** Last development milestone to support legacy hardware (XMPP/XML and MQTT/XML).
 
-### Phase 2: Modernization (v1.0.0+)
-* **v1.0.0+:** Development has shifted exclusively to a pure **MQTT/JSON** stack.
+### Phase 2: Modernization (v1.0.0+) — In Progress
+* **v1.0.0-alpha:** Development has shifted exclusively to a pure **MQTT/JSON** stack.
 * **Legacy Removal:** All legacy XML-based code and dependencies have been removed to ensure stability and security.
 
 ---
@@ -74,7 +75,7 @@ Support for new models is no longer added upon request. Due to high time constra
 
 ## Changelog
 
-### 1.0.0-alpha.x
+### 1.0.0-alpha (current)
 * **Breaking Changes:**
     * Complete removal of legacy XMPP/XML and MQTT/XML protocol stacks
     * Refactoring for pure MQTT/JSON communication
