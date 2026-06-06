@@ -332,45 +332,22 @@ describe('API tools', function () {
   describe('VacBot platform type, device category & smartType robustness', function () {
     const VacBot = require('../library/vacBot');
 
-    it('should gracefully handle missing capabilityManager and return empty string or Unknown Device or unknown', function () {
-      const mockVacuum = {
-        class: 'nonexistent',
-        did: 'mock_did',
-        resource: 'mock_res'
-      };
+    it('should return unknown sentinel when capabilityManager is absent', function () {
       const bot = {
-        vacuum: mockVacuum,
+        vacuum: { class: 'nonexistent', did: 'mock_did', resource: 'mock_res' },
         deviceClass: 'nonexistent'
       };
-      
-      bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
-      bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
-      bot.getSmartType = VacBot.prototype.getSmartType.bind(bot);
-
-      assert.strictEqual(bot.getPlatformType(), '');
-      assert.strictEqual(bot.getDeviceCategory(), 'Unknown Device');
-      assert.strictEqual(bot.getSmartType(), 'unknown');
-    });
-
-    it('should gracefully handle capabilityManager throwing errors', function () {
-      const bot = {
-        capabilityManager: {
-          getPlatformType: () => { throw new Error('Simulated failure'); },
-          getDeviceCategory: () => { throw new Error('Simulated failure'); },
-          getSmartType: () => { throw new Error('Simulated failure'); }
-        }
-      };
 
       bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
       bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
       bot.getSmartType = VacBot.prototype.getSmartType.bind(bot);
 
-      assert.strictEqual(bot.getPlatformType(), '');
-      assert.strictEqual(bot.getDeviceCategory(), 'Unknown Device');
+      assert.strictEqual(bot.getPlatformType(), 'unknown');
+      assert.strictEqual(bot.getDeviceCategory(), 'unknown');
       assert.strictEqual(bot.getSmartType(), 'unknown');
     });
 
-    it('should fall back to getDeviceProperty if capabilityManager returns unknown or fails', function () {
+    it('should fall back to getDeviceProperty if capabilityManager returns unknown', function () {
       const bot = {
         capabilityManager: {
           getPlatformType: () => 'unknown',
@@ -388,7 +365,7 @@ describe('API tools', function () {
       bot.getDeviceCategory = VacBot.prototype.getDeviceCategory.bind(bot);
       bot.getSmartType = VacBot.prototype.getSmartType.bind(bot);
 
-      assert.strictEqual(bot.getPlatformType(), '');
+      assert.strictEqual(bot.getPlatformType(), 'unknown');
       assert.strictEqual(bot.getDeviceCategory(), 'Vacuum Cleaner');
       assert.strictEqual(bot.getSmartType(), 'BLAP2');
     });
@@ -398,8 +375,8 @@ describe('API tools', function () {
       bot.getPlatformType = VacBot.prototype.getPlatformType.bind(bot);
       bot.getModelType = VacBot.prototype.getModelType.bind(bot);
 
-      assert.strictEqual(bot.getPlatformType(), '');
-      assert.strictEqual(bot.getModelType(), '');
+      assert.strictEqual(bot.getPlatformType(), 'unknown');
+      assert.strictEqual(bot.getModelType(), 'unknown');
     });
   });
 });

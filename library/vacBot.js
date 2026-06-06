@@ -511,18 +511,10 @@ class VacBot {
      * @returns {string}
      */
     getPlatformType() {
-        try {
-            if (this.capabilityManager && typeof this.capabilityManager.getPlatformType === 'function') {
-                const type = this.capabilityManager.getPlatformType();
-                if (type && type !== 'unknown') {
-                    return type;
-                }
-            }
-        } catch {
-            // Ignore exception
+        if (this.capabilityManager) {
+            return this.capabilityManager.getPlatformType();
         }
-
-        return '';
+        return 'unknown';
     }
 
     /**
@@ -531,29 +523,19 @@ class VacBot {
      * @returns {string}
      */
     getDeviceCategory() {
-        try {
-            if (this.capabilityManager && typeof this.capabilityManager.getDeviceCategory === 'function') {
-                const category = this.capabilityManager.getDeviceCategory();
-                if (category && category !== 'unknown') {
-                    return category;
-                }
+        if (this.capabilityManager) {
+            const category = this.capabilityManager.getDeviceCategory();
+            if (category && category !== 'unknown') {
+                return category;
             }
-        } catch {
-            // Ignore exception
         }
-
-        try {
-            if (typeof this.getDeviceProperty === 'function') {
-                const category = this.getDeviceProperty('deviceCategory');
-                if (category && category !== 'unknown') {
-                    return category;
-                }
+        if (typeof this.getDeviceProperty === 'function') {
+            const category = this.getDeviceProperty('deviceCategory');
+            if (category && category !== 'unknown') {
+                return category;
             }
-        } catch {
-            // Ignore exception
         }
-
-        return 'Unknown Device';
+        return 'unknown';
     }
 
     /**
@@ -562,28 +544,18 @@ class VacBot {
      * @returns {string}
      */
     getSmartType() {
-        try {
-            if (this.capabilityManager && typeof this.capabilityManager.getSmartType === 'function') {
-                const smartType = this.capabilityManager.getSmartType();
-                if (smartType && smartType !== 'unknown') {
-                    return smartType;
-                }
+        if (this.capabilityManager) {
+            const smartType = this.capabilityManager.getSmartType();
+            if (smartType && smartType !== 'unknown') {
+                return smartType;
             }
-        } catch {
-            // Ignore exception
         }
-
-        try {
-            if (typeof this.getDeviceProperty === 'function') {
-                const smartType = this.getDeviceProperty('smartType');
-                if (smartType && smartType !== 'unknown') {
-                    return smartType;
-                }
+        if (typeof this.getDeviceProperty === 'function') {
+            const smartType = this.getDeviceProperty('smartType');
+            if (smartType && smartType !== 'unknown') {
+                return smartType;
             }
-        } catch {
-            // Ignore exception
         }
-
         return 'unknown';
     }
 
