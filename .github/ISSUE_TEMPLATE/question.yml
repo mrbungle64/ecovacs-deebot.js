@@ -29,12 +29,24 @@ body:
         - Deebot N8 series
         - Deebot N9 series
         - Deebot N10 series
+        - Deebot N20 series
+        - Deebot N30 series
+        - Deebot N50 series
         - Deebot T8 series
         - Deebot T9 series
         - Deebot T10 series
         - Deebot T20 series
+        - Deebot T30 series
+        - Deebot T50 series
+        - Deebot T80 series
+        - Deebot T90 series
         - Deebot X1 series
         - Deebot X2 series
+        - Deebot X5 series
+        - Deebot X8 series
+        - Deebot X9 series
+        - yeedi series
+        - GOAT series (Lawn Mower)
         - Other model (Please fill out the fields at the bottom of the form)
   - type: markdown
     attributes:
@@ -55,4 +67,4 @@ body:
       label: Which "other" models are you using?
       placeholder: Deebot [OZMO] xxx
       description: >
-        Only needed if the model is not listed above ("With which model does the problem occur?") or if you use more than one model with this adapter
+        Only needed if the model is not listed above ("With which model does the problem occur?") or if you use more than one model with this library

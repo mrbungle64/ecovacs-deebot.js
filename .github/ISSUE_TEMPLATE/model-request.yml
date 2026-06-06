@@ -1,0 +1,44 @@
+name: Model request
+description: Request support for a new or unsupported Deebot, yeedi, or GOAT model
+labels: [ "Model request" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### ⚠️ Important Note on New Models
+        
+        Support for new models is no longer added upon request. Due to high time constraints, **we will not implement new models based on logs alone**.
+        
+        Requests for new model support without an accompanying **Pull Request** may be closed without further notice.
+  - type: checkboxes
+    id: pr_check
+    validations:
+      required: true
+    attributes:
+      label: Pull Request Requirement
+      options:
+        - label: I understand that support will not be added based on logs alone, and I have opened or am opening an accompanying Pull Request.
+          required: true
+  - type: input
+    id: model_name
+    validations:
+      required: true
+    attributes:
+      label: Model Name
+      placeholder: e.g. Deebot T50 PRO OMNI, GOAT G1-800
+      description: What is the exact marketing name of the device?
+  - type: input
+    id: device_class
+    validations:
+      required: false
+    attributes:
+      label: Device Class / ID (if known)
+      placeholder: e.g. kr0277, z4lvk7
+      description: The 6-character device code/class (often visible in your home automation logs or debug outputs).
+  - type: textarea
+    id: info
+    validations:
+      required: false
+    attributes:
+      label: Additional Info / Logs
+      placeholder: Paste any logs, raw JSON outputs, or details about the device here.

@@ -1,0 +1,11 @@
+name: Feedback
+description: Share your feedback or suggestions for the project
+labels: [ Feedback ]
+body:
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback / Suggestion
+      description: What's on your mind? We'd love to hear your feedback, positive or negative!
+    validations:
+      required: true
