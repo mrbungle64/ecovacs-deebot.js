@@ -5,6 +5,7 @@ const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
 const dictionary = require('../dictionary');
 const VacBotCommand = require('../command');
+const constants = require('../constants');
 
 /**
  * @class MapManager
@@ -34,6 +35,7 @@ class MapManager {
         this.multiMapState = null;
         this.mapSet_V2 = null;
         this.liveMapImage = null;
+        this.liveMapPendingPieces = null; // set of in-use piece indices awaited before rendering
 
         this.createMapDataObject = false;
         this.createMapImage = false;
@@ -633,7 +635,7 @@ class MapManager {
      * @todo: finish the implementation
      * @param {Object} payload
      */
-    handleMajorMap(payload) {
+    async handleMajorMap(payload) {
         tools.envLogPayload(payload);
         let mapID = payload['mid'];
         if (isNaN(mapID)) {
@@ -644,21 +646,34 @@ class MapManager {
                 return null;
             }
         }
-        const crcList = payload['value'];
-        if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
-            const crcArray = crcList.split(',');
-            for (let c = 0; c < crcArray.length; c++) {
-                if (crcArray[c] !== '00000000') { // constants.CRC_EMPTY_PIECE
-                    this.bot.ecovacs.sendCommand(new VacBotCommand.GetMinorMap(mapID, c));
-                }
-            }
-            // TODO: Implement liveMapImage
-            // this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapTrace());
-            // TODO: handle liveMapImage
-            // if (HANDLE_LIVE_MAP) ...
-        } else {
-            // TODO: handle liveMapImage
+        if (!tools.isCanvasModuleAvailable()) {
+            return null;
         }
+
+        // (Re)create the live map image when the map changes, otherwise refresh its piece CRCs.
+        if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
+            this.liveMapImage = new mapTemplate.EcovacsLiveMapImage(
+                mapID, payload['type'] || 'ol',
+                payload['pieceWidth'], payload['pieceHeight'],
+                payload['cellWidth'], payload['cellHeight'],
+                payload['pixel'], payload['value']
+            );
+            await this.liveMapImage.initCanvas(); // ensure the canvas exists before pieces arrive
+        } else {
+            this.liveMapImage.updateMapDataPiecesCrc(payload['value']);
+        }
+
+        // Request only the pieces that are actually in use (non-empty CRC) and track them
+        // so the image is rendered once the full set has been received.
+        const crcArray = String(payload['value']).split(',');
+        this.liveMapPendingPieces = new Set();
+        for (let c = 0; c < crcArray.length; c++) {
+            if (crcArray[c] !== constants.CRC_EMPTY_PIECE) {
+                this.liveMapPendingPieces.add(c);
+                this.bot.ecovacs.sendCommand(new VacBotCommand.GetMinorMap(mapID, c));
+            }
+        }
+        return null;
     }
 
     /**
@@ -680,7 +695,31 @@ class MapManager {
         if (!this.liveMapImage || (this.liveMapImage.mapID !== mapID)) {
             return null;
         }
-        // TODO: finish implementation
+        const pieceIndex = payload['pieceIndex'];
+        const pieceValue = payload['pieceValue'];
+        if ((pieceValue === undefined) || (pieceValue === '')) {
+            return null;
+        }
+
+        await this.liveMapImage.updateMapPiece(pieceIndex, pieceValue);
+
+        // Wait until every in-use piece has arrived before rendering, to avoid
+        // re-rendering the whole map for each of the (up to 64) individual pieces.
+        if (this.liveMapPendingPieces) {
+            this.liveMapPendingPieces.delete(pieceIndex);
+            if (this.liveMapPendingPieces.size > 0) {
+                return null;
+            }
+        }
+
+        try {
+            return await this.liveMapImage.getBase64PNG(
+                this.bot.deebotPosition, this.bot.chargePosition, mapID, this.mapDataObject
+            );
+        } catch (e) {
+            tools.envLogError(`error rendering live map: ${e.message}`);
+            return null;
+        }
     }
 
     /**

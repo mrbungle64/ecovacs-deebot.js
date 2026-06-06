@@ -1427,9 +1427,8 @@ class Ecovacs extends EventEmitter {
     /**
      * @param {Object} payload
      */
-    _msgMajorMap(payload) {
-        this.bot.handleMajorMap(payload);
-        // TODO: finish implementing MajorMap
+    async _msgMajorMap(payload) {
+        await this.bot.handleMajorMap(payload);
     }
 
     /**
@@ -1445,15 +1444,22 @@ class Ecovacs extends EventEmitter {
     }
 
     /**
-     * Status of the Minor Map functionality
+     * Handle a Minor Map piece: feed it to the live map image and emit the
+     * rendered image once the full set of pieces has been received.
+     * @param {Object} payload
      */
-    _msgMinorMap() {
+    async _msgMinorMap(payload) {
         if (!this.bot.hasMappingCapabilities()) {
             tools.envLogWarn(`Skipping 'MinorMap' push: device lacks mapping capabilities`);
             return;
         }
-        // TODO: finish implementing MinorMap and emit MapLiveImage
-        // let mapImage = this.bot.handleMinorMap(payload);
+        if (!tools.isCanvasModuleAvailable()) {
+            return;
+        }
+        const mapImage = await this.bot.handleMinorMap(payload);
+        if (mapImage !== null) {
+            this.emitMessage('MapImage', mapImage);
+        }
     }
 
     // ====================
