@@ -42,3 +42,6 @@ exports.APP_SK_GLOBAL = "2ea31cf06e6711eaa0aff7b9558a534e";
 exports.APP_SK_YEEDI = "8b611ff06e6211eab47193426edbdb27";
 
 exports.CRC_EMPTY_PIECE = "1295764014";
+
+// Fallback access-token validity (7 days in ms) when the API omits the `last` field
+exports.TOKEN_DEFAULT_VALIDITY_MS = 604800000;

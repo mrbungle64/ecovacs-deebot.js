@@ -150,6 +150,31 @@ main();
 * Handles initial connection, auth handshakes, login caching, and device enumeration.
 * Leaving the 3rd argument (`continent`) as an empty string `''` delegates continent resolution automatically to the country-code database.
 
+### Long-running connections: automatic token refresh (opt-in)
+The access token returned by `connect()` is only valid for a limited time (typically ~7 days). For short-lived scripts this never matters, but a long-running process (e.g. a 24/7 adapter) will eventually see authentication errors once the token expires.
+
+`EcovacsAPI` can refresh the token proactively. It is **opt-in** and decoupled from the bot, so you wire the refreshed token to your `VacBot` instance(s) yourself:
+
+```javascript
+// After api.connect(...) and creating your vacbot(s):
+api.on('credentialsUpdated', (creds) => {
+    // Apply the refreshed token: updates REST auth immediately and reconnects MQTT
+    vacbot.updateUserAccessToken(creds.token);
+});
+
+// Re-authenticate automatically shortly before the token expires
+api.enableAutoTokenRefresh(accountId, passwordHash);
+
+// ... and when shutting down:
+api.disableAutoTokenRefresh();
+```
+
+* **`api.getTokenExpiry()`** returns the absolute timestamp (ms since epoch) at which the token will be refreshed, or `null` before the first login.
+* **`api.getCredentials()`** returns `{ userId, token, expiresAt }`.
+* The **`credentialsUpdated`** event also fires after the initial `connect()`, so you can register the listener before connecting.
+* If an automatic refresh fails, a **`credentialsRefreshError`** event is emitted and the refresh is retried after a short delay.
+* For multiple bots sharing one MQTT connection, call `updateUserAccessToken()` on **every** `VacBot` instance — each one needs its own refreshed REST token. Only the connection owner actually reconnects MQTT; the shared instances just update their token in place.
+
 ### `getVacBotObj(vacuum)`
 * This is the preferred, high-level method to initialize your device instance from the retrieved `devices` array. It automatically passes the correct auth tokens, uid, realm, and resource behind the scenes.
 

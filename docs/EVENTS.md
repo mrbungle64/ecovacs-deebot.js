@@ -118,6 +118,7 @@ These events help with troubleshooting, connection state, network details, firmw
 
 | Event Name | Payload Type | Description |
 | :--- | :--- | :--- |
+| **`Availability`** | `object` | `{ available: boolean }`. Edge-triggered: fires `false` when a command is rejected with error code `4200` (device offline / not reachable) and `true` again once a command succeeds. Only emitted on a state change, so it is safe to use directly as a reachability signal. |
 | **`Error`** | `string` | Human-readable error description. Fires for robot-reported errors and for command/network transport failures (code `"-1"`). |
 | **`ErrorCode`** | `string` | Error code as a string (e.g. `"104"`). `"-1"` indicates a command or network transport failure. Refer to `library/errorCodes.json` for robot error codes. |
 | **`LastError`** | `object` | Combined error object with `error` and `code`. Fired alongside every `Error` event. |

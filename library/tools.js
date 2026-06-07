@@ -565,6 +565,64 @@ function logError(message) {
 }
 
 /**
+ * Resolves after the given number of milliseconds.
+ * @param {number} ms - the delay in milliseconds
+ * @returns {Promise<void>}
+ */
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Returns true if the given (axios) error represents an HTTP 502 Bad Gateway
+ * response. The Ecovacs cloud returns this sporadically; it is safe to retry.
+ * @param {*} error - the caught error
+ * @returns {boolean}
+ */
+function isBadGatewayError(error) {
+    return Boolean(error && error.response && error.response.status === 502);
+}
+
+/**
+ * Runs an async operation with limited, defensive retries.
+ *
+ * Only retries when `retryOn({error})` or `retryOn({result})` returns true.
+ * Waits `backoffMs[attempt]` (clamped to the last entry) before each retry.
+ * Re-throws the last error / returns the last result once retries are exhausted,
+ * so the caller's existing success/error handling stays unchanged.
+ *
+ * @template T
+ * @param {() => Promise<T>} fn - the async operation to (re)try
+ * @param {Object} [opts]
+ * @param {number} [opts.retries=3] - total number of attempts (including the first)
+ * @param {(info: {error?: *, result?: T}) => boolean} [opts.retryOn] - predicate deciding whether to retry
+ * @param {number[]} [opts.backoffMs] - delay before each retry (default `[0, 500, 1500]`)
+ * @returns {Promise<T>}
+ */
+async function withRetry(fn, opts = {}) {
+    const retries = opts.retries ?? 3;
+    const retryOn = opts.retryOn ?? (() => false);
+    const backoffMs = opts.backoffMs ?? [0, 500, 1500];
+    for (let attempt = 0; ; attempt++) {
+        const isLast = attempt >= retries - 1;
+        try {
+            const result = await fn();
+            if (!isLast && retryOn({ result })) {
+                await delay(backoffMs[Math.min(attempt, backoffMs.length - 1)]);
+                continue;
+            }
+            return result;
+        } catch (error) {
+            if (!isLast && retryOn({ error })) {
+                await delay(backoffMs[Math.min(attempt, backoffMs.length - 1)]);
+                continue;
+            }
+            throw error;
+        }
+    }
+}
+
+/**
  * Prints to `stdout` only in development mode (`dev` or `development`)
  */
 let envLog = function () {
@@ -580,8 +638,11 @@ let envLog = function () {
 module.exports.areaValuesAreValidForFreeCleanCmd = areaValuesAreValidForFreeCleanCmd;
 module.exports.convertAreaValuesForFreeCleanCmd = convertAreaValuesForFreeCleanCmd;
 module.exports.createErrorDescription = createErrorDescription;
+module.exports.delay = delay;
 module.exports.envLog = envLog;
 module.exports.formatString = formatString;
+module.exports.isBadGatewayError = isBadGatewayError;
+module.exports.withRetry = withRetry;
 module.exports.getAllKnownDevices = getAllKnownDevices;
 module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getDynamicDevice = getDynamicDevice;

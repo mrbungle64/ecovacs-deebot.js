@@ -165,6 +165,15 @@ class Ecovacs extends EventEmitter {
         this.payloadType = 'j';
 
         this.pendingCommands = new PendingCommandRegistry();
+
+        // Registered once for the lifetime of this instance. The 'ready' event
+        // fires on every (re)subscribe, so attaching it here — rather than in
+        // connect()/connectShared() — avoids accumulating listeners across
+        // reconnects/token refreshes (which would trip MaxListenersExceededWarning).
+        this.on('ready', () => {
+            const suffix = this._sharedClient ? ' (shared connection)' : '';
+            tools.envLogSuccess(`MQTT client received ready event${suffix}`);
+        });
     }
 
     /**
@@ -260,10 +269,6 @@ class Ecovacs extends EventEmitter {
                 tools.envLogError(`MQTT client error: '${error.message}'`);
             }
         });
-
-        this.on("ready", () => {
-            tools.envLogSuccess(`MQTT client received ready event`);
-        });
     }
 
     /**
@@ -313,12 +318,48 @@ class Ecovacs extends EventEmitter {
             }
         });
 
-        this.on('ready', () => {
-            tools.envLogSuccess(`MQTT client received ready event (shared connection)`);
-        });
-
         if (this.client.connected) {
             this.subscribe();
+        }
+    }
+
+    /**
+     * Apply a refreshed user access token. Takes effect immediately for REST
+     * commands (which read `this.secret` when building the auth object). For an
+     * owned MQTT connection the client is reconnected with the new password; for
+     * a shared client only the secret is updated and the owner is responsible
+     * for reconnecting.
+     * @param {string} newToken - the refreshed user access token
+     */
+    updateToken(newToken) {
+        if (!newToken || newToken === this.secret) {
+            return;
+        }
+        this.secret = newToken;
+        if (this._sharedClient) {
+            tools.envLogInfo(`updateToken on shared client: secret updated, owner must reconnect`);
+            return;
+        }
+        // Replace the owned client even when it is currently offline: the mqtt
+        // client keeps its original password in its options and would otherwise
+        // keep auto-reconnecting with the now-stale credentials.
+        if (this.client) {
+            this._reconnectWithNewSecret();
+        }
+    }
+
+    /**
+     * Reconnect the owned MQTT client using the current `this.secret` as password.
+     * @private
+     */
+    _reconnectWithNewSecret() {
+        tools.envLogInfo(`reconnecting MQTT client with refreshed token`);
+        try {
+            this.client.end(true, () => {
+                this.connect();
+            });
+        } catch (e) {
+            tools.envLogError(`error during token reconnect: ${e.message}`);
         }
     }
 
@@ -387,7 +428,11 @@ class Ecovacs extends EventEmitter {
 
         let responseData;
         try {
-            const response = await axios.post(portalUrl, params, { headers });
+            // The Ecovacs cloud sporadically returns HTTP 502; retry defensively.
+            const response = await tools.withRetry(
+                () => axios.post(portalUrl, params, { headers }),
+                { retryOn: ({ error }) => tools.isBadGatewayError(error) }
+            );
             responseData = response.data;
             tools.envLogSuccess(`got response for '${command.name}' with id '${command.args.id}':`);
         } catch (e) {
@@ -398,6 +443,7 @@ class Ecovacs extends EventEmitter {
 
         if ((responseData['result'] === 'ok') || (responseData['ret'] === 'ok')) {
             this.emitLastErrorByErrorCode('0');
+            this._emitAvailability(true);
             this.handleCommandResponse(command, responseData);
             if (resolvePromise) {
                 resolvePromise(responseData);
@@ -407,6 +453,10 @@ class Ecovacs extends EventEmitter {
                 code: responseData['errno'],
                 error: responseData['error']
             };
+            // Error code 4200 = bot offline / not reachable
+            if (Number(responseData['errno']) === 4200) {
+                this._emitAvailability(false);
+            }
             this.bot.handleResponseError(errorCodeObj);
             // Error code 500 = wait for response timed out (see issue #19)
             if (this.bot.errorCode === '500') {
@@ -460,6 +510,20 @@ class Ecovacs extends EventEmitter {
         if (this.pendingCommands.size > 0) {
             this.pendingCommands.resolveByEvent(name, rawPayload === undefined ? payload : rawPayload);
         }
+    }
+
+    /**
+     * Emit an `Availability` event, but only on a state change (edge-triggered),
+     * so consumers see the device going offline (errno 4200) and recovering.
+     * @param {boolean} available - whether the device is currently reachable
+     * @private
+     */
+    _emitAvailability(available) {
+        if (this._deviceAvailable === available) {
+            return;
+        }
+        this._deviceAvailable = available;
+        this.emitMessage('Availability', { available });
     }
 
     /**
