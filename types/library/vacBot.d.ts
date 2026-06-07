@@ -47,8 +47,8 @@ declare class VacBot {
         getCleanLogsCommandObject: (ecovacs: any, command: any) => import("./typedefs").CleanLogsCommandObject;
         getAuthObject: (ecovacs: any) => import("./typedefs").AuthObject;
     };
-    protocolModule: typeof import("./ecovacs");
-    ecovacs: import("./ecovacs");
+    protocolModule: typeof import("./ecovacsDeviceSession");
+    ecovacs: import("./ecovacsDeviceSession");
     dispatcher: CommandDispatcher;
     mapManager: MapManager;
     stateManager: BotState;

@@ -10,7 +10,7 @@
 const { describe, it } = require('node:test');
 const assert = require('assert');
 const axios = require('axios').default;
-const Ecovacs = require('../library/ecovacs');
+const Ecovacs = require('../library/ecovacsDeviceSession');
 const constants = require('../library/constants');
 
 /** Build a bare Ecovacs instance (no real MQTT) with EventEmitter wired. */

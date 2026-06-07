@@ -286,7 +286,7 @@ describe('Deebot Commands parseResponse Tests', function () {
 
 describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
     const PendingCommandRegistry = require('../library/managers/pendingCommandRegistry');
-    const Ecovacs = require('../library/ecovacs');
+    const Ecovacs = require('../library/ecovacsDeviceSession');
     const axios = require('axios');
 
     describe('PendingCommandRegistry', function () {

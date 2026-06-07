@@ -123,7 +123,7 @@ const MESSAGE_HANDLERS = Object.freeze({
     'FwBuryPoint-bd_cri04': '_msgNoop',
 });
 
-class Ecovacs extends EventEmitter {
+class EcovacsDeviceSession extends EventEmitter {
     /**
      * @param {Object} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
@@ -482,7 +482,7 @@ class Ecovacs extends EventEmitter {
                 this.bot.errorDescription = this.bot.errorDescription + ` (command '${command.name}')`;
             }
             this.emitLastError();
-            tools.envLogInfo(`[EcovacsMQTT] failure code ${responseData['errno']} (${responseData['error']}) sending command '${command.name}'`);
+            tools.envLogInfo(`[EcovacsDeviceSession] failure code ${responseData['errno']} (${responseData['error']}) sending command '${command.name}'`);
             rejectCommand(new Error(`Failure code ${responseData['errno']} (${responseData['error']})`));
         }
 
@@ -1818,4 +1818,4 @@ class Ecovacs extends EventEmitter {
     }
 }
 
-module.exports = Ecovacs;
+module.exports = EcovacsDeviceSession;

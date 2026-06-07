@@ -1,5 +1,5 @@
-export = Ecovacs;
-declare class Ecovacs extends EventEmitter<any> {
+export = EcovacsDeviceSession;
+declare class EcovacsDeviceSession extends EventEmitter<any> {
     /**
      * @param {Object} vacBot - the VacBot object
      * @param {string} user - the userId retrieved by the Ecovacs API
@@ -537,4 +537,4 @@ declare class Ecovacs extends EventEmitter<any> {
 }
 import EventEmitter = require("node:events");
 import PendingCommandRegistry = require("./managers/pendingCommandRegistry");
-//# sourceMappingURL=ecovacs.d.ts.map
+//# sourceMappingURL=ecovacsDeviceSession.d.ts.map

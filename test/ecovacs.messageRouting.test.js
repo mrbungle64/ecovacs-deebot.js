@@ -11,7 +11,7 @@
 
 const { describe, it } = require('node:test');
 const assert = require('assert');
-const Ecovacs = require('../library/ecovacs');
+const Ecovacs = require('../library/ecovacsDeviceSession');
 
 const MESSAGE_TYPE = Object.freeze({
     INCOMING: 'incoming',
