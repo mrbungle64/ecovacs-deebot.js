@@ -547,17 +547,14 @@ class EcovacsAPI extends EventEmitter {
    * @returns {Object} a dictionary of all known devices
    */
   mergeDeviceLists(deviceList, globalDeviceList) {
-    // This is a workaround to keep compatibility
-    // The device lists are not returned in the same order
-    for (let deviceNumber = 0; deviceNumber < deviceList.length; deviceNumber++) {
-      for (let index = 0; index < globalDeviceList.length; index++) {
-        if (globalDeviceList[index].did === deviceList[deviceNumber].did) {
-          deviceList[deviceNumber] = Object.assign(globalDeviceList[index]);
-          deviceList[deviceNumber].deviceNumber = deviceNumber;
-        }
-      }
-    }
-    return deviceList;
+    // The two lists are not returned in the same order, so index the global
+    // list by `did` and merge each device with its global counterpart. Returns
+    // fresh objects (no mutation of either input list).
+    const globalDevicesByDid = new Map(globalDeviceList.map((device) => [device.did, device]));
+    return deviceList.map((device, deviceNumber) => {
+      const globalDevice = globalDevicesByDid.get(device.did);
+      return globalDevice ? { ...device, ...globalDevice, deviceNumber } : device;
+    });
   }
 
   /**
