@@ -227,48 +227,7 @@ class Ecovacs extends EventEmitter {
             rejectUnauthorized: false
         });
 
-        let ecovacsMQTT = this;
-
-        this.client.on('connect', function () {
-            tools.envLogSuccess(`MQTT client connected`);
-            ecovacsMQTT.subscribe();
-        });
-
-        this.client.on('message', (topic, message) => {
-            const topicParts = topic.split('/');
-            if (topicParts[3] !== this.vacuum['did']) return;
-            const eventName = topicParts[2];
-            tools.envLogMqtt(topic);
-            tools.envLogMqtt(eventName);
-            const parsedEnvelope = this._parseMqttMessage(eventName, message.toString());
-            if (parsedEnvelope) {
-                this.handleMessage(eventName, parsedEnvelope, MESSAGE_TYPE.INCOMING);
-            }
-        });
-
-        this.client.on('offline', function () {
-            try {
-                ecovacsMQTT.emitNetworkError('MQTT server is offline or not reachable');
-            } catch {
-                tools.envLogError(`MQTT server is offline or not reachable`);
-            }
-        });
-
-        this.client.on('disconnect', function () {
-            try {
-                ecovacsMQTT.emitNetworkError('MQTT client received disconnect event');
-            } catch {
-                tools.envLogWarn(`MQTT client received disconnect event`);
-            }
-        });
-
-        this.client.on('error', (error) => {
-            try {
-                ecovacsMQTT.emitNetworkError(`MQTT client error: ${error.message}`);
-            } catch {
-                tools.envLogError(`MQTT client error: '${error.message}'`);
-            }
-        });
+        this._attachClientListeners();
     }
 
     /**
@@ -285,41 +244,92 @@ class Ecovacs extends EventEmitter {
         this._sharedClient = true;
         this.client = existingClient;
 
-        this.client.on('message', (topic, message) => {
-            const topicParts = topic.split('/');
-            if (topicParts[3] !== this.vacuum['did']) return;
-            const eventName = topicParts[2];
-            tools.envLogMqtt(topic);
-            tools.envLogMqtt(eventName);
-            const parsedEnvelope = this._parseMqttMessage(eventName, message.toString());
-            if (parsedEnvelope) {
-                this.handleMessage(eventName, parsedEnvelope, MESSAGE_TYPE.INCOMING);
-            }
-        });
-
-        this.client.on('connect', () => {
-            tools.envLogSuccess(`shared MQTT client reconnected, re-subscribing for did '${this.vacuum['did']}'`);
-            this.subscribe();
-        });
-
-        this.client.on('offline', () => {
-            try {
-                this.emitNetworkError('MQTT server is offline or not reachable');
-            } catch {
-                tools.envLogError(`MQTT server is offline or not reachable`);
-            }
-        });
-
-        this.client.on('error', (error) => {
-            try {
-                this.emitNetworkError(`MQTT client error: ${error.message}`);
-            } catch {
-                tools.envLogError(`MQTT client error: '${error.message}'`);
-            }
-        });
+        this._attachClientListeners();
 
         if (this.client.connected) {
             this.subscribe();
+        }
+    }
+
+    /**
+     * Bind this instance's MQTT event handlers and attach them to `this.client`.
+     * The handlers are stored so they can be removed again in `disconnect()`.
+     * Any previously-attached handlers are detached first, so repeated
+     * `connect()`/`connectShared()` calls (reconnects, token refresh) and shared
+     * clients shared by several bots do not accumulate duplicate listeners.
+     * @private
+     */
+    _attachClientListeners() {
+        this._detachClientListeners();
+        const listeners = {
+            message: (topic, message) => this._onMqttMessage(topic, message),
+            connect: () => {
+                const prefix = this._sharedClient ? 'shared ' : '';
+                tools.envLogSuccess(`${prefix}MQTT client connected, subscribing for did '${this.vacuum['did']}'`);
+                this.subscribe();
+            },
+            offline: () => this._onClientNetworkEvent('MQTT server is offline or not reachable'),
+            disconnect: () => this._onClientNetworkEvent('MQTT client received disconnect event'),
+            error: (error) => this._onClientNetworkEvent(`MQTT client error: ${error.message}`)
+        };
+        // Each bot on a shared client adds its own listener set; raise the cap so
+        // legitimate multi-bot sharing does not trip MaxListenersExceededWarning.
+        if (this._sharedClient && typeof this.client.setMaxListeners === 'function') {
+            this.client.setMaxListeners(this.client.getMaxListeners() + Object.keys(listeners).length);
+        }
+        for (const [event, handler] of Object.entries(listeners)) {
+            this.client.on(event, handler);
+        }
+        this._clientListeners = listeners;
+    }
+
+    /**
+     * Remove this instance's MQTT event handlers from `this.client`, if attached.
+     * @private
+     */
+    _detachClientListeners() {
+        if (!this.client || !this._clientListeners) {
+            return;
+        }
+        for (const [event, handler] of Object.entries(this._clientListeners)) {
+            this.client.removeListener(event, handler);
+        }
+        this._clientListeners = null;
+    }
+
+    /**
+     * Parse and dispatch an incoming MQTT broadcast message for this device.
+     * A shared client receives messages for every device on the account, so
+     * messages whose topic `did` does not match this instance are ignored.
+     * @param {string} topic - the MQTT topic the message arrived on
+     * @param {Buffer} message - the raw message payload
+     * @private
+     */
+    _onMqttMessage(topic, message) {
+        const topicParts = topic.split('/');
+        if (topicParts[3] !== this.vacuum['did']) {
+            return;
+        }
+        const eventName = topicParts[2];
+        tools.envLogMqtt(topic);
+        tools.envLogMqtt(eventName);
+        const parsedEnvelope = this._parseMqttMessage(eventName, message.toString());
+        if (parsedEnvelope) {
+            this.handleMessage(eventName, parsedEnvelope, MESSAGE_TYPE.INCOMING);
+        }
+    }
+
+    /**
+     * Emit a network error for a client-level MQTT event (offline/disconnect/error),
+     * falling back to a log line if emitting fails.
+     * @param {string} message - the error message
+     * @private
+     */
+    _onClientNetworkEvent(message) {
+        try {
+            this.emitNetworkError(message);
+        } catch {
+            tools.envLogError(message);
         }
     }
 
@@ -620,6 +630,9 @@ class Ecovacs extends EventEmitter {
      */
     async disconnect() {
         this.pendingCommands.rejectAll(new Error('Connection closed'));
+        // Remove this instance's listeners first so a shared client (which we do
+        // not close) stops routing messages here and does not accumulate handlers.
+        this._detachClientListeners();
         if (!this.client || !this.client.connected) {
             return Promise.resolve(false);
         }
