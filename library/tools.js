@@ -1,19 +1,24 @@
 'use strict';
 
+const crypto = require('crypto');
 const deebotModels = require('./models');
 const modelTypes = require('./modelTypes');
 const capabilityTypes = require('./capabilityTypes');
 const constants = require('./constants');
 const chalk = require('chalk');
 
-function formatString(string) {
-    if (arguments.length === 0) {
+/**
+ * Replaces `{key}` placeholders in `string` with values from `args`.
+ * Unknown placeholders are left untouched.
+ * @param {string} string - the template string
+ * @param {Object} [args] - the replacement values keyed by placeholder name
+ * @returns {string} the formatted string
+ */
+function formatString(string, args) {
+    if (!string || !args) {
         return string;
     }
-    const args = arguments[1];
-    return string.replace(/{(\w+)}/g, function (match, key) {
-        return typeof args[key] !== 'undefined' ? args[key] : match;
-    });
+    return string.replace(/{(\w+)}/g, (match, key) => (typeof args[key] !== 'undefined' ? args[key] : match));
 }
 
 /**
@@ -61,12 +66,7 @@ function createErrorDescription(message, command = '') {
  * @returns {string} the generated ID
  */
 function getReqID() {
-    let reqIdString = '';
-    for (let i = 0; i < 8; i++) {
-        const randomValue = Math.floor(Math.random() * 10).toString();
-        reqIdString = reqIdString + randomValue;
-    }
-    return reqIdString;
+    return String(crypto.randomInt(100000000)).padStart(8, '0');
 }
 
 /**
@@ -158,20 +158,27 @@ function isLegacyModel(deviceClass) {
 }
 
 /**
+ * Resolves a property for a device class that is either explicitly registered or
+ * dynamically resolvable, returning 'unknown' otherwise.
+ * @param {string} deviceClass
+ * @param {string} property - the property to look up
+ * @returns {string} the property value, or 'unknown' if the class is not resolvable
+ */
+function getResolvableDeviceProperty(deviceClass, property) {
+    if (_allKnownDevices.hasOwnProperty(deviceClass) || getDynamicDevice(deviceClass)) {
+        return getDeviceProperty(deviceClass, property, 'unknown');
+    }
+    return 'unknown';
+}
+
+/**
  * Returns the platform/architecture type of the model (e.g. '950', 'T8', 'T20', 'airbot').
  * This is the technical architecture key, not the product category.
  * @param {string} deviceClass
  * @returns {string}
  */
 function getPlatformType(deviceClass) {
-    if (_allKnownDevices.hasOwnProperty(deviceClass)) {
-        return getDeviceProperty(deviceClass, 'type', 'unknown');
-    }
-    const dynamicDevice = getDynamicDevice(deviceClass);
-    if (dynamicDevice) {
-        return getDeviceProperty(deviceClass, 'type', 'unknown');
-    }
-    return 'unknown';
+    return getResolvableDeviceProperty(deviceClass, 'type');
 }
 
 /**
@@ -181,14 +188,7 @@ function getPlatformType(deviceClass) {
  * @returns {string}
  */
 function getDeviceCategory(deviceClass) {
-    if (_allKnownDevices.hasOwnProperty(deviceClass)) {
-        return getDeviceProperty(deviceClass, 'deviceCategory', 'unknown');
-    }
-    const dynamicDevice = getDynamicDevice(deviceClass);
-    if (dynamicDevice) {
-        return getDeviceProperty(deviceClass, 'deviceCategory', 'unknown');
-    }
-    return 'unknown';
+    return getResolvableDeviceProperty(deviceClass, 'deviceCategory');
 }
 
 /**
@@ -198,14 +198,7 @@ function getDeviceCategory(deviceClass) {
  * @returns {string}
  */
 function getSmartType(deviceClass) {
-    if (_allKnownDevices.hasOwnProperty(deviceClass)) {
-        return getDeviceProperty(deviceClass, 'smartType', 'unknown');
-    }
-    const dynamicDevice = getDynamicDevice(deviceClass);
-    if (dynamicDevice) {
-        return getDeviceProperty(deviceClass, 'smartType', 'unknown');
-    }
-    return 'unknown';
+    return getResolvableDeviceProperty(deviceClass, 'smartType');
 }
 
 
@@ -659,13 +652,9 @@ async function withRetry(fn, opts = {}) {
 /**
  * Prints to `stdout` only in development mode (`dev` or `development`)
  */
-let envLog = function () {
+let envLog = function (...args) {
     if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
-        if (arguments) {
-            console.log.apply(this, arguments);
-        } else {
-            console.log(this);
-        }
+        console.log(...args);
     }
 };
 

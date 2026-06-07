@@ -50,8 +50,8 @@ class EcovacsAPI extends EventEmitter {
 
     this.deviceId = deviceId;
     this.country = country.toUpperCase();
-    this.continent = continent ? continent : this.getContinent();
-    this.authDomain = authDomain ? authDomain : constants.AUTH_DOMAIN;
+    this.continent = continent || this.getContinent();
+    this.authDomain = authDomain || constants.AUTH_DOMAIN;
     this.resource = deviceId.substring(0, 8);
   }
 
@@ -229,12 +229,8 @@ class EcovacsAPI extends EventEmitter {
   getUserLoginParams(params) {
     params['authTimeZone'] = 'GMT-8';
 
-    let authSignParams = JSON.parse(JSON.stringify(this.getMetaObject()));
-    for (let key in params) {
-      if (params.hasOwnProperty(key)) {
-        authSignParams[key] = params[key];
-      }
-    }
+    // Sign over the meta object merged with the request params (params win on conflict).
+    const authSignParams = { ...this.getMetaObject(), ...params };
 
     const authAppkey = this._authDomainValue(constants.AUTH_USERLOGIN_AUTH_APPKEY, constants.AUTH_USERLOGIN_AUTH_APPKEY_YD);
     const authSecret = this._authDomainValue(constants.AUTH_USERLOGIN_SECRET, constants.AUTH_USERLOGIN_SECRET_YD);
@@ -386,14 +382,7 @@ class EcovacsAPI extends EventEmitter {
    */
   async callPortalApi(loginPath, func, args) {
     tools.envLogHeader(`callPortalApi('${loginPath}','${func}','${JSON.stringify(args)}')`);
-    let params = {
-      'todo': func
-    };
-    for (let key in args) {
-      if (args.hasOwnProperty(key)) {
-        params[key] = args[key];
-      }
-    }
+    const params = { 'todo': func, ...args };
     tools.envLogInfo(`params: ${JSON.stringify(params)}`);
 
     let portalUrlFormat = tools.getPortalUrlFormat(this.country, this.continent);
