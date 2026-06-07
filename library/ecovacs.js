@@ -779,7 +779,7 @@ class Ecovacs extends EventEmitter {
      * @returns {Promise<void>}
      */
     async handleMessagePayload(command, payload) {
-        tools.logEvent(command, payload);
+        tools.envLogEvent(command, payload);
         let abbreviatedCommand = command.replace(/^_+|_+$/g, '');
         const commandPrefix = this.getCommandPrefix(abbreviatedCommand);
         abbreviatedCommand = abbreviatedCommand.substring(commandPrefix.length);

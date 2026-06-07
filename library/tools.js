@@ -543,6 +543,20 @@ function logEvent(event, value) {
     }
 }
 
+/**
+ * Logs an event only in development mode (`dev`/`development`). Used for the
+ * library's internal per-payload tracing so it stays silent by default and does
+ * not leak raw robot payloads into consumer logs. The public `logEvent` remains
+ * available for callers that want to log unconditionally.
+ * @param {string} event - the event name
+ * @param {*} value - the event value/payload
+ */
+function envLogEvent(event, value) {
+    if (verbose(event)) {
+        logEvent(event, value);
+    }
+}
+
 function logInfo(message) {
     if (typeof message === 'object') {
         console.log(chalk.bgWhite.black(' object '));
@@ -667,6 +681,7 @@ module.exports.paramsToQueryList = paramsToQueryList;
 
 module.exports.envLogCommand = envLogCommand;
 module.exports.envLogError = envLogError;
+module.exports.envLogEvent = envLogEvent;
 module.exports.envLogFwBuryPoint = envLogFwBuryPoint;
 module.exports.envLogHeader = envLogHeader;
 module.exports.envLogInfo = envLogInfo;
