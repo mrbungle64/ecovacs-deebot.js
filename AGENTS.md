@@ -8,7 +8,10 @@
 
 This project uses a VS Code Multi-Root Workspace:
 - **App-Code**: Located in the current git root (`.`).
+
+Optional:
 - **Docs**: Located in the sibling directory (`../docs/ecovacs-deebot` or the workspace folder named "Docs").
+- **ioBroker Adapter**: Located in the sibling directory (`../ioBroker.ecovacs-deebot` or the workspace folder named "ioBroker Adapter").
 
 ## General Guidelines for the Agent
 
