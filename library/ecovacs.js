@@ -516,9 +516,11 @@ class Ecovacs extends EventEmitter {
     emitMessage(name, payload, rawPayload) {
         tools.envLogResult(name, JSON.stringify(payload));
         this.emit(name, payload);
-        // Resolve any pending Promise that is waiting for this event
+        // Resolve any pending Promise that is waiting for this event. When this
+        // emit originates from a command response, `_responseCommandId` lets the
+        // registry resolve that exact command rather than the oldest match.
         if (this.pendingCommands.size > 0) {
-            this.pendingCommands.resolveByEvent(name, rawPayload === undefined ? payload : rawPayload);
+            this.pendingCommands.resolveByEvent(name, rawPayload === undefined ? payload : rawPayload, this._responseCommandId);
         }
     }
 
@@ -659,14 +661,17 @@ class Ecovacs extends EventEmitter {
      * @param {Object} messagePayload - The message payload that was received
      */
     handleCommandResponse(command, messagePayload) {
+        // The originating command is known for a response, so its request id can
+        // disambiguate which pending Promise to resolve (see resolveByEvent).
+        const commandId = (typeof command.getId === 'function') ? command.getId() : null;
         if (messagePayload) {
             if (messagePayload.hasOwnProperty('resp')) {
-                this.handleMessage(command.name, messagePayload['resp'], MESSAGE_TYPE.RESPONSE);
+                this.handleMessage(command.name, messagePayload['resp'], MESSAGE_TYPE.RESPONSE, commandId);
             } else if (command.api === constants.CLEANLOGS_PATH) {
                 // CleanLogs uses a different API path and response format
                 tools.envLogInfo(`got CleanLogs response`);
                 if (messagePayload['ret'] === 'ok') {
-                    this._dispatchPayload(command.name, messagePayload);
+                    this._dispatchPayload(command.name, messagePayload, commandId);
                 }
             } else {
                 tools.envLogWarn(`handleCommandResponse invalid response`);
@@ -679,8 +684,9 @@ class Ecovacs extends EventEmitter {
      * @param {string} name - the name of the command or MQTT event
      * @param {Object|string} message - the message
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     * @param {string|null} [commandId] - request id of the originating command (response path only)
      */
-    handleMessage(name, envelope, type = MESSAGE_TYPE.INCOMING) {
+    handleMessage(name, envelope, type = MESSAGE_TYPE.INCOMING, commandId = null) {
         let payload;
         if (type === MESSAGE_TYPE.INCOMING) {
             payload = this._extractIncomingPayload(name, envelope);
@@ -697,7 +703,7 @@ class Ecovacs extends EventEmitter {
             return;
         }
 
-        this._dispatchPayload(name, payload);
+        this._dispatchPayload(name, payload, commandId);
     }
 
     /**
@@ -775,12 +781,19 @@ class Ecovacs extends EventEmitter {
     }
 
     /** @returns {void} — intentionally fire-and-forget */
-    _dispatchPayload(eventName, payload) {
+    _dispatchPayload(eventName, payload, commandId = null) {
         (async () => {
+            // Expose the originating command id (if any) to emitMessage() for the
+            // duration of this dispatch, so a command response resolves its own
+            // pending Promise by id rather than the oldest event-name match.
+            const previous = this._responseCommandId;
+            this._responseCommandId = commandId;
             try {
                 await this.handleMessagePayload(eventName, payload);
             } catch (e) {
                 this.emitError('-2', e.message);
+            } finally {
+                this._responseCommandId = previous;
             }
         })();
     }
@@ -1013,7 +1026,7 @@ class Ecovacs extends EventEmitter {
             }
             // Resolve GetLifeSpan Promise
             if (this.pendingCommands.size > 0) {
-                this.pendingCommands.resolveByEvent("LifeSpan", payload);
+                this.pendingCommands.resolveByEvent("LifeSpan", payload, this._responseCommandId);
             }
         }
     }
