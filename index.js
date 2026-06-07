@@ -487,23 +487,18 @@ class EcovacsAPI extends EventEmitter {
   /**
    * @returns {Promise<Object>} a dictionary of Ecovacs products
    */
-  getConfigProducts() {
-    return new Promise((resolve, reject) => {
-      this.callPortalApi('pim/product/getConfigProducts', 'GetConfigProducts', {
+  async getConfigProducts() {
+    const data = await this.callPortalApi('pim/product/getConfigProducts', 'GetConfigProducts', {
+      'userid': this.uid,
+      'auth': {
+        'with': 'users',
         'userid': this.uid,
-        'auth': {
-          'with': 'users',
-          'userid': this.uid,
-          'realm': constants.REALM,
-          'token': this.user_access_token,
-          'resource': this.resource
-        }
-      }).then((data) => {
-        resolve(data['data']);
-      }).catch((e) => {
-        reject(e);
-      });
+        'realm': constants.REALM,
+        'token': this.user_access_token,
+        'resource': this.resource
+      }
     });
+    return data['data'];
   }
 
   /**
@@ -512,22 +507,17 @@ class EcovacsAPI extends EventEmitter {
    * @returns {Promise<Object>} a dictionary of all devices of the users Ecovacs account
    */
   async getDevices(api = constants.USER_API_PATH, func = 'GetDeviceList') {
-    return new Promise((resolve, reject) => {
-      this.callPortalApi(api, func, {
+    const data = await this.callPortalApi(api, func, {
+      'userid': this.uid,
+      'auth': {
+        'with': 'users',
         'userid': this.uid,
-        'auth': {
-          'with': 'users',
-          'userid': this.uid,
-          'realm': constants.REALM,
-          'token': this.user_access_token,
-          'resource': this.resource
-        }
-      }).then((data) => {
-        resolve(data['devices']);
-      }).catch((e) => {
-        reject(e);
-      });
+        'realm': constants.REALM,
+        'token': this.user_access_token,
+        'resource': this.resource
+      }
     });
+    return data['devices'];
   }
 
   /**
