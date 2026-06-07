@@ -1,6 +1,6 @@
 # Event Reference for Ecovacs & Yeedi Devices
 
-This document describes the events exposed through the `VacBot` instance. `VacBot` forwards `on()` and `once()` listeners to the underlying `Ecovacs` `EventEmitter`.
+This document describes the events exposed through the `VacBot` instance. `VacBot` forwards `on()` and `once()` listeners to the underlying `EcovacsDeviceSession` `EventEmitter`.
 
 Events can be emitted when the robot pushes MQTT state updates, when command responses are received, or when the library updates internal map and connection state.
 
