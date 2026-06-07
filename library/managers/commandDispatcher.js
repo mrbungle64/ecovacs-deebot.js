@@ -21,11 +21,16 @@ class CommandDispatcher {
      * @param {string} key - The command key.
      * @param {Object} options - Command options (e.g. returnPromise)
      * @param {...*} args - Command arguments.
-     * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise boolean indicating if handled.
+     * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise a boolean
+     *   indicating whether a command was actually dispatched (false if the key is unknown or
+     *   the arguments were invalid, so nothing was sent).
      */
     dispatch(key, options, ...args) {
         const isAsync = Boolean(options && options.returnPromise);
         let promise;
+        // Tracks whether a command was actually sent in branches that issue
+        // multiple commands but only build a combined `promise` when `isAsync`.
+        let dispatched = false;
 
         switch (key) {
             case 'Generic'.toLowerCase(): {
@@ -136,6 +141,7 @@ class CommandDispatcher {
             case 'GetCachedMapInfo'.toLowerCase(): {
                 const p1 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapState(), options);
                 const p2 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMajorMap(), options);
+                dispatched = true;
                 this.bot.createMapImageOnly = false;
                 this.bot.createMapDataObject = !!args[0] || false;
                 this.bot.createMapImage = this.bot.createMapDataObject && this.bot.isMapImageSupported();
@@ -222,6 +228,7 @@ class CommandDispatcher {
                     }
                     const p1 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'vw'), options);
                     const p2 = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapVirtualBoundaries(mapID, 'mw'), options);
+                    dispatched = true;
                     if (isAsync) {
                         promise = Promise.all([p1, p2]);
                     }
@@ -323,6 +330,7 @@ class CommandDispatcher {
                         this.bot.emitCleanLogEvents();
                         return logData;
                     });
+                    dispatched = true;
                     if (isAsync) {
                         promise = p;
                     }
@@ -518,7 +526,9 @@ class CommandDispatcher {
                 return false;
             }
         }
-        return isAsync ? promise : true;
+        // For sync calls, report whether a command was actually sent — invalid
+        // argument paths fall through without dispatching and now return false.
+        return isAsync ? promise : (Boolean(promise) || dispatched);
     }
 }
 
