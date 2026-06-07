@@ -63,18 +63,14 @@ class EcovacsAPI extends EventEmitter {
   async connect(accountId, passwordHash) {
     tools.envLogHeader(`connect(accountId,passwordHash)`);
 
-    let error;
     if (!accountId) {
-      error = new Error('No account ID provided');
+      throw new Error('No account ID provided');
     }
     if (!this.country) {
-      error = new Error('No country code provided');
+      throw new Error('No country code provided');
     }
     if (!countries[this.country]) {
-      error = new Error('Wrong or unknown country code provided');
-    }
-    if (error) {
-      throw error;
+      throw new Error('Wrong or unknown country code provided');
     }
 
     let result = await this.callUserAuthApi(this.getLoginPath(), {
