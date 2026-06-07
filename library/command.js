@@ -36,6 +36,13 @@ module.exports.getRequestHeaders = function(ecovacs, params) {
     return headers;
 };
 
+/**
+ * Builds the request body for a command (device-manager envelope, or the flatter
+ * CleanLogs envelope for `GetCleanLogs`).
+ * @param {*} ecovacs - the Ecovacs transport instance
+ * @param {*} command - the command instance
+ * @returns {import('./typedefs').CommandRequestObject|import('./typedefs').CleanLogsCommandObject}
+ */
 module.exports.getRequestObject = function(ecovacs, command) {
     if (command.name === 'GetCleanLogs') {
         return module.exports.getCleanLogsCommandObject(ecovacs, command);
@@ -46,6 +53,10 @@ module.exports.getRequestObject = function(ecovacs, command) {
     }
 };
 
+/**
+ * @param {*} command - the command instance (its `args` become `body.data`)
+ * @returns {import('./typedefs').CommandPayload}
+ */
 module.exports.getCommandPayload = function(command) {
     return {
         'header': {
@@ -68,6 +79,12 @@ module.exports.getApiPath = function(command) {
     return api;
 };
 
+/**
+ * @param {*} ecovacs - the Ecovacs transport instance
+ * @param {*} command - the command instance
+ * @param {import('./typedefs').CommandPayload} payload
+ * @returns {import('./typedefs').CommandRequestObject}
+ */
 module.exports.getCommandRequestObject = function(ecovacs, command, payload) {
     return {
         'cmdName': command.name,
@@ -81,6 +98,11 @@ module.exports.getCommandRequestObject = function(ecovacs, command, payload) {
     };
 };
 
+/**
+ * @param {*} ecovacs - the Ecovacs transport instance
+ * @param {*} command - the command instance
+ * @returns {import('./typedefs').CleanLogsCommandObject}
+ */
 module.exports.getCleanLogsCommandObject = function(ecovacs, command) {
     return {
         'auth': module.exports.getAuthObject(ecovacs),
@@ -91,6 +113,10 @@ module.exports.getCleanLogsCommandObject = function(ecovacs, command) {
     };
 };
 
+/**
+ * @param {*} ecovacs - the Ecovacs transport instance
+ * @returns {import('./typedefs').AuthObject}
+ */
 module.exports.getAuthObject = function(ecovacs) {
     return {
         'realm': constants.REALM,

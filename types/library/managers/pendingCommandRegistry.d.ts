@@ -50,15 +50,33 @@ declare class PendingCommandRegistry {
      */
     resolveById(requestId: string, rawPayload: any): boolean;
     /**
-     * Resolve the oldest pending command that matches the given event name.
-     * Used as a fallback when ID-based matching is not possible (e.g. MQTT broadcasts).
+     * Resolve a single pending entry: normalize the payload via
+     * `commandInstance.parseResponse()` (falling back to the raw payload),
+     * resolve its Promise, and remove it from the registry.
+     * @param {string} requestId
+     * @param {Object} entry - the pending entry
+     * @param {any} rawPayload - the raw response body data
+     * @returns {boolean} always true (the entry was resolved)
+     * @private
+     */
+    private _resolveEntry;
+    /**
+     * Resolve a pending command that matches the given event name.
+     *
+     * When `preferredId` is supplied (e.g. an HTTP command response, where the
+     * originating command — and thus its request id — is known) the entry with
+     * that exact id is resolved, so concurrent commands waiting on the same event
+     * are not mismatched. Otherwise — or if the preferred id is not pending — it
+     * falls back to the oldest matching entry (e.g. unsolicited MQTT broadcasts).
+     *
      * Calls `commandInstance.parseResponse(rawPayload)` to normalize the result
      * before resolving the Promise. Falls back to the raw payload if not overridden.
      * @param {string} eventName - The event name that just fired (e.g. 'BatteryInfo')
      * @param {any} rawPayload - The raw payload (should be raw command response data)
+     * @param {string|null} [preferredId] - request id of the originating command, if known
      * @returns {boolean} true if a matching pending entry was found and resolved
      */
-    resolveByEvent(eventName: string, rawPayload: any): boolean;
+    resolveByEvent(eventName: string, rawPayload: any, preferredId?: string | null): boolean;
     /**
      * Reject a pending command by its request ID.
      * Used when the command fails immediately (e.g. network or gateway error).

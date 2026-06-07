@@ -35,87 +35,17 @@ declare class VacBot {
     genericCommand: any;
     vacBotCommand: {
         new (name: string, payload?: object, api?: string): import("./commands/base").VacBotCommand;
-        getRequestUrl: (ecovacs: any, command: any, params: any) => any;
+        getRequestUrl: (ecovacs: any, command: any, params: any) => string;
         getRequestHeaders: (ecovacs: any, params: any) => {
             'Content-Type': string;
             'Content-Length': number;
         };
-        getRequestObject: (ecovacs: any, command: any) => {
-            auth: {
-                realm: "ecouser.net";
-                resource: any;
-                token: any;
-                userid: any;
-                with: string;
-            };
-            did: any;
-            country: any;
-            td: any;
-            resource: any;
-        } | {
-            cmdName: any;
-            payload: any;
-            payloadType: any;
-            auth: {
-                realm: "ecouser.net";
-                resource: any;
-                token: any;
-                userid: any;
-                with: string;
-            };
-            td: string;
-            toId: any;
-            toRes: any;
-            toType: any;
-        };
-        getCommandPayload: (command: any) => {
-            header: {
-                pri: string;
-                ts: number;
-                tzm: number;
-                ver: string;
-            };
-            body: {
-                data: any;
-            };
-        };
+        getRequestObject: (ecovacs: any, command: any) => import("./typedefs").CommandRequestObject | import("./typedefs").CleanLogsCommandObject;
+        getCommandPayload: (command: any) => import("./typedefs").CommandPayload;
         getApiPath: (command: any) => "iot/devmanager.do";
-        getCommandRequestObject: (ecovacs: any, command: any, payload: any) => {
-            cmdName: any;
-            payload: any;
-            payloadType: any;
-            auth: {
-                realm: "ecouser.net";
-                resource: any;
-                token: any;
-                userid: any;
-                with: string;
-            };
-            td: string;
-            toId: any;
-            toRes: any;
-            toType: any;
-        };
-        getCleanLogsCommandObject: (ecovacs: any, command: any) => {
-            auth: {
-                realm: "ecouser.net";
-                resource: any;
-                token: any;
-                userid: any;
-                with: string;
-            };
-            did: any;
-            country: any;
-            td: any;
-            resource: any;
-        };
-        getAuthObject: (ecovacs: any) => {
-            realm: "ecouser.net";
-            resource: any;
-            token: any;
-            userid: any;
-            with: string;
-        };
+        getCommandRequestObject: (ecovacs: any, command: any, payload: import("./typedefs").CommandPayload) => import("./typedefs").CommandRequestObject;
+        getCleanLogsCommandObject: (ecovacs: any, command: any) => import("./typedefs").CleanLogsCommandObject;
+        getAuthObject: (ecovacs: any) => import("./typedefs").AuthObject;
     };
     protocolModule: typeof import("./ecovacs");
     ecovacs: import("./ecovacs");

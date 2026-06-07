@@ -658,7 +658,7 @@ class Ecovacs extends EventEmitter {
     /**
      * It handles the response from the Ecovacs API
      * @param {Object} command - the command that was sent to the Ecovacs API
-     * @param {Object} messagePayload - The message payload that was received
+     * @param {import('./typedefs').MessageEnvelope & {resp?: Object, ret?: string}} messagePayload - The message payload that was received
      */
     handleCommandResponse(command, messagePayload) {
         // The originating command is known for a response, so its request id can
@@ -682,7 +682,7 @@ class Ecovacs extends EventEmitter {
     /**
      * It handles the messages from the API (incoming MQTT message or request response)
      * @param {string} name - the name of the command or MQTT event
-     * @param {Object|string} message - the message
+     * @param {import('./typedefs').MessageEnvelope} envelope - the message envelope
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
      * @param {string|null} [commandId] - request id of the originating command (response path only)
      */
@@ -710,7 +710,7 @@ class Ecovacs extends EventEmitter {
      * Extracts and returns the payload from an incoming MQTT message envelope.
      * Logs a warning if the message structure is unhandled.
      * @param {string} name - Event name.
-     * @param {Object} envelope - The message envelope.
+     * @param {import('./typedefs').MessageEnvelope} envelope - The message envelope.
      * @returns {*} The extracted payload, or undefined if invalid.
      */
     _extractIncomingPayload(name, envelope) {
@@ -726,7 +726,7 @@ class Ecovacs extends EventEmitter {
      * Extracts and returns the payload from a REST/HTTP response envelope.
      * Validates the result code and handles firmware versioning.
      * @param {string} name - Command name.
-     * @param {Object} envelope - The response envelope.
+     * @param {import('./typedefs').MessageEnvelope} envelope - The response envelope.
      * @returns {*} The extracted payload, or undefined if invalid or error code is non-zero.
      */
     _extractResponsePayload(name, envelope) {

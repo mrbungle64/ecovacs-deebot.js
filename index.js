@@ -99,7 +99,7 @@ class EcovacsAPI extends EventEmitter {
     /**
      * Fired after a successful (re-)login with fresh credentials.
      * @event EcovacsAPI#credentialsUpdated
-     * @type {{userId: string, token: string, expiresAt: number|null}}
+     * @type {import('./library/typedefs').Credentials}
      */
     this.emit('credentialsUpdated', this.getCredentials());
     return 'ready';
@@ -107,7 +107,7 @@ class EcovacsAPI extends EventEmitter {
 
   /**
    * Get the current credentials (user id + access token + expiry timestamp).
-   * @returns {{userId: string, token: string, expiresAt: number|null}}
+   * @returns {import('./library/typedefs').Credentials}
    */
   getCredentials() {
     return {
@@ -283,7 +283,7 @@ class EcovacsAPI extends EventEmitter {
 
   /**
    * Get the meta-object that will be used to make a request to the server
-   * @returns {Object}
+   * @returns {import('./library/typedefs').MetaObject}
    */
   getMetaObject() {
     const appCode = this._authDomainValue('global_e', 'yd_global_e');
@@ -422,7 +422,7 @@ class EcovacsAPI extends EventEmitter {
 
   /**
    * It calls the API to login by access token
-   * @returns {Promise<Object>} an object including user token and user ID
+   * @returns {Promise<import('./library/typedefs').ItTokenResult>} an object including user token and user ID
    */
   callUserApiLoginByItToken() {
     let org = this._authDomainValue('ECOWW', 'ECOYDWW');

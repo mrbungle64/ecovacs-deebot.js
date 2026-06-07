@@ -31,7 +31,14 @@ export function delay(ms: number): Promise<void>;
  * Prints to `stdout` only in development mode (`dev` or `development`)
  */
 export function envLog(...args: any[]): void;
-export function formatString(string: any, ...args: any[]): any;
+/**
+ * Replaces `{key}` placeholders in `string` with values from `args`.
+ * Unknown placeholders are left untouched.
+ * @param {string} string - the template string
+ * @param {Object} [args] - the replacement values keyed by placeholder name
+ * @returns {string} the formatted string
+ */
+export function formatString(string: string, args?: Object): string;
 /**
  * Returns true if the given (axios) error represents an HTTP 502 Bad Gateway
  * response. The Ecovacs cloud returns this sporadically; it is safe to retry.
@@ -93,6 +100,16 @@ export function getKnownDevices(): Object;
  * @returns {string}
  */
 export function getPlatformType(deviceClass: string): string;
+/**
+ * Selects the portal base-URL format string for the given account region.
+ * China accounts use the CN portal; a `WW` country or continent uses the legacy
+ * portal; everything else uses the default `api-app` portal. The returned string
+ * still contains the `{continent}` placeholder for {@link formatString}.
+ * @param {string} country - the (upper-case) ISO country code
+ * @param {string} [continent=''] - the continent code
+ * @returns {string} the templated portal base URL
+ */
+export function getPortalUrlFormat(country: string, continent?: string): string;
 /**
  * Returns the human-readable product category of the device
  * (e.g. 'Vacuum Cleaner', 'Air Purifier', 'Lawn Mower').
@@ -189,6 +206,15 @@ export function isValidVirtualWallType(type: string): boolean;
 export function paramsToQueryList(params: Object): string;
 export function envLogCommand(message: any): void;
 export function envLogError(message: any): void;
+/**
+ * Logs an event only in development mode (`dev`/`development`). Used for the
+ * library's internal per-payload tracing so it stays silent by default and does
+ * not leak raw robot payloads into consumer logs. The public `logEvent` remains
+ * available for callers that want to log unconditionally.
+ * @param {string} event - the event name
+ * @param {*} value - the event value/payload
+ */
+export function envLogEvent(event: string, value: any): void;
 export function envLogFwBuryPoint(message: any): void;
 export function envLogHeader(message: any): void;
 export function envLogInfo(message: any): void;

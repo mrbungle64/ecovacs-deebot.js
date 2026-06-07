@@ -98,13 +98,9 @@ export class EcovacsAPI extends EventEmitter<any> {
     tokenExpiresAt: number | undefined;
     /**
      * Get the current credentials (user id + access token + expiry timestamp).
-     * @returns {{userId: string, token: string, expiresAt: number|null}}
+     * @returns {import('./library/typedefs').Credentials}
      */
-    getCredentials(): {
-        userId: string;
-        token: string;
-        expiresAt: number | null;
-    };
+    getCredentials(): import("./library/typedefs").Credentials;
     /**
      * Get the absolute timestamp (ms since epoch) at which the access token should
      * be refreshed, or `null` if not yet authenticated.
@@ -149,6 +145,15 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     private _runTokenRefresh;
     /**
+     * Select between an Ecovacs and a yeedi value based on the configured auth domain.
+     * @template T
+     * @param {T} ecovacsValue - value to use for the Ecovacs auth domain
+     * @param {T} yeediValue - value to use for the yeedi auth domain
+     * @returns {T}
+     * @private
+     */
+    private _authDomainValue;
+    /**
      * Get the parameters for the user login
      * @param {Object} params - an object with the data to retrieve the parameters
      * @returns {string} the parameters
@@ -172,9 +177,9 @@ export class EcovacsAPI extends EventEmitter<any> {
     buildAuthSignText(authAppkey: any, authSignParams: any, authSecret: any): any;
     /**
      * Get the meta-object that will be used to make a request to the server
-     * @returns {Object}
+     * @returns {import('./library/typedefs').MetaObject}
      */
-    getMetaObject(): Object;
+    getMetaObject(): import("./library/typedefs").MetaObject;
     /**
      * @param {string} loginPath - the login path
      * @param {Object} params - an object with the data to retrieve the parameters
@@ -196,9 +201,9 @@ export class EcovacsAPI extends EventEmitter<any> {
     callPortalApi(loginPath: string, func: string, args: Object): Promise<Object>;
     /**
      * It calls the API to login by access token
-     * @returns {Promise<Object>} an object including user token and user ID
+     * @returns {Promise<import('./library/typedefs').ItTokenResult>} an object including user token and user ID
      */
-    callUserApiLoginByItToken(): Promise<Object>;
+    callUserApiLoginByItToken(): Promise<import("./library/typedefs").ItTokenResult>;
     /**
      * Get the login path for the current country
      * @returns {string} the login path is being returned.

@@ -14,7 +14,9 @@ declare class CommandDispatcher {
      * @param {string} key - The command key.
      * @param {Object} options - Command options (e.g. returnPromise)
      * @param {...*} args - Command arguments.
-     * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise boolean indicating if handled.
+     * @returns {Promise<any>|boolean} Promise if returnPromise is true, otherwise a boolean
+     *   indicating whether a command was actually dispatched (false if the key is unknown or
+     *   the arguments were invalid, so nothing was sent).
      */
     dispatch(key: string, options: Object, ...args: any[]): Promise<any> | boolean;
 }

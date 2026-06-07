@@ -55,6 +55,43 @@ declare class Ecovacs extends EventEmitter<any> {
     connectShared(existingClient: Object): void;
     _sharedClient: boolean | undefined;
     /**
+     * Bind this instance's MQTT event handlers and attach them to `this.client`.
+     * The handlers are stored so they can be removed again in `disconnect()`.
+     * Any previously-attached handlers are detached first, so repeated
+     * `connect()`/`connectShared()` calls (reconnects, token refresh) and shared
+     * clients shared by several bots do not accumulate duplicate listeners.
+     * @private
+     */
+    private _attachClientListeners;
+    _clientListeners: {
+        message: (topic: any, message: any) => void;
+        connect: () => void;
+        offline: () => void;
+        disconnect: () => void;
+        error: (error: any) => void;
+    } | null | undefined;
+    /**
+     * Remove this instance's MQTT event handlers from `this.client`, if attached.
+     * @private
+     */
+    private _detachClientListeners;
+    /**
+     * Parse and dispatch an incoming MQTT broadcast message for this device.
+     * A shared client receives messages for every device on the account, so
+     * messages whose topic `did` does not match this instance are ignored.
+     * @param {string} topic - the MQTT topic the message arrived on
+     * @param {Buffer} message - the raw message payload
+     * @private
+     */
+    private _onMqttMessage;
+    /**
+     * Emit a network error for a client-level MQTT event (offline/disconnect/error),
+     * falling back to a log line if emitting fails.
+     * @param {string} message - the error message
+     * @private
+     */
+    private _onClientNetworkEvent;
+    /**
      * Apply a refreshed user access token. Takes effect immediately for REST
      * commands (which read `this.secret` when building the auth object). For an
      * owned MQTT connection the client is reconnected with the new password; for
@@ -135,32 +172,36 @@ declare class Ecovacs extends EventEmitter<any> {
     /**
      * It handles the response from the Ecovacs API
      * @param {Object} command - the command that was sent to the Ecovacs API
-     * @param {Object} messagePayload - The message payload that was received
+     * @param {import('./typedefs').MessageEnvelope & {resp?: Object, ret?: string}} messagePayload - The message payload that was received
      */
-    handleCommandResponse(command: Object, messagePayload: Object): void;
+    handleCommandResponse(command: Object, messagePayload: import("./typedefs").MessageEnvelope & {
+        resp?: Object;
+        ret?: string;
+    }): void;
     /**
      * It handles the messages from the API (incoming MQTT message or request response)
      * @param {string} name - the name of the command or MQTT event
-     * @param {Object|string} message - the message
+     * @param {import('./typedefs').MessageEnvelope} envelope - the message envelope
      * @param {string} [type=incoming] the type of message. Can be "incoming" (MQTT message) or "response"
+     * @param {string|null} [commandId] - request id of the originating command (response path only)
      */
-    handleMessage(name: string, envelope: any, type?: string): void;
+    handleMessage(name: string, envelope: import("./typedefs").MessageEnvelope, type?: string, commandId?: string | null): void;
     /**
      * Extracts and returns the payload from an incoming MQTT message envelope.
      * Logs a warning if the message structure is unhandled.
      * @param {string} name - Event name.
-     * @param {Object} envelope - The message envelope.
+     * @param {import('./typedefs').MessageEnvelope} envelope - The message envelope.
      * @returns {*} The extracted payload, or undefined if invalid.
      */
-    _extractIncomingPayload(name: string, envelope: Object): any;
+    _extractIncomingPayload(name: string, envelope: import("./typedefs").MessageEnvelope): any;
     /**
      * Extracts and returns the payload from a REST/HTTP response envelope.
      * Validates the result code and handles firmware versioning.
      * @param {string} name - Command name.
-     * @param {Object} envelope - The response envelope.
+     * @param {import('./typedefs').MessageEnvelope} envelope - The response envelope.
      * @returns {*} The extracted payload, or undefined if invalid or error code is non-zero.
      */
-    _extractResponsePayload(name: string, envelope: Object): any;
+    _extractResponsePayload(name: string, envelope: import("./typedefs").MessageEnvelope): any;
     /**
      * Parses a raw incoming MQTT message into eventName + payload.
      * Topic format: "iot/atr/<eventName>/<did>/<class>/<resource>/j"
@@ -178,7 +219,8 @@ declare class Ecovacs extends EventEmitter<any> {
         hwVer: string;
     }): void;
     /** @returns {void} — intentionally fire-and-forget */
-    _dispatchPayload(eventName: any, payload: any): void;
+    _dispatchPayload(eventName: any, payload: any, commandId?: null): void;
+    _responseCommandId: any;
     /**
      * Handles the message command and the payload
      * and delegates the event object to the corresponding method
