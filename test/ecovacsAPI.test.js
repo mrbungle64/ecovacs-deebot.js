@@ -190,6 +190,15 @@ describe('EcovacsAPI Extended tests', function () {
       await assert.rejects(api.callUserAuthApi('user/login', {}), /Incorrect account id or password/);
     });
 
+    it('should throw clear error on invalid authentication code 1010', async function () {
+      const api = new EcovacsAPI('deviceId123', 'de');
+      mockGetResponse = {
+        code: '1010',
+        msg: 'Invalid'
+      };
+      await assert.rejects(api.callUserAuthApi('user/login', {}), /Incorrect account id or password/);
+    });
+
     it('should throw generic failure code error', async function () {
       const api = new EcovacsAPI('deviceId123', 'de');
       mockGetResponse = {

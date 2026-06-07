@@ -344,7 +344,9 @@ class EcovacsAPI extends EventEmitter {
         return result.data;
       } else {
         let error;
-        if (result.code === '1005') {
+        // '1005' and '1010' both indicate an invalid account id / password
+        // (the latter matches deebot-client's invalid-authentication handling).
+        if ((result.code === '1005') || (result.code === '1010')) {
           error = new Error('Incorrect account id or password');
         } else {
           error = new Error(`Failure code ${result.code}: ${result.msg}`);
