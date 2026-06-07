@@ -214,6 +214,18 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
+   * Select between an Ecovacs and a yeedi value based on the configured auth domain.
+   * @template T
+   * @param {T} ecovacsValue - value to use for the Ecovacs auth domain
+   * @param {T} yeediValue - value to use for the yeedi auth domain
+   * @returns {T}
+   * @private
+   */
+  _authDomainValue(ecovacsValue, yeediValue) {
+    return this.authDomain === constants.AUTH_DOMAIN_YD ? yeediValue : ecovacsValue;
+  }
+
+  /**
    * Get the parameters for the user login
    * @param {Object} params - an object with the data to retrieve the parameters
    * @returns {string} the parameters
@@ -228,14 +240,8 @@ class EcovacsAPI extends EventEmitter {
       }
     }
 
-    let authAppkey = constants.AUTH_USERLOGIN_AUTH_APPKEY;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      authAppkey = constants.AUTH_USERLOGIN_AUTH_APPKEY_YD;
-    }
-    let authSecret = constants.AUTH_USERLOGIN_SECRET;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      authSecret = constants.AUTH_USERLOGIN_SECRET_YD;
-    }
+    const authAppkey = this._authDomainValue(constants.AUTH_USERLOGIN_AUTH_APPKEY, constants.AUTH_USERLOGIN_AUTH_APPKEY_YD);
+    const authSecret = this._authDomainValue(constants.AUTH_USERLOGIN_SECRET, constants.AUTH_USERLOGIN_SECRET_YD);
 
     return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
   }
@@ -246,19 +252,12 @@ class EcovacsAPI extends EventEmitter {
    * @returns {string} the parameters
    */
   getAuthParams(params) {
-    let authSignParams = params;
-    authSignParams['openId'] = 'global';
+    params['openId'] = 'global';
 
-    let authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      authAppkey = constants.AUTH_GETAUTH_AUTH_APPKEY_YD;
-    }
-    let authSecret = constants.AUTH_GETAUTH_SECRET;
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      authSecret = constants.AUTH_GETAUTH_SECRET_YD;
-    }
+    const authAppkey = this._authDomainValue(constants.AUTH_GETAUTH_AUTH_APPKEY, constants.AUTH_GETAUTH_AUTH_APPKEY_YD);
+    const authSecret = this._authDomainValue(constants.AUTH_GETAUTH_SECRET, constants.AUTH_GETAUTH_SECRET_YD);
 
-    return this.buildQueryList(params, authSignParams, authAppkey, authSecret);
+    return this.buildQueryList(params, params, authAppkey, authSecret);
   }
 
   /**
@@ -295,12 +294,8 @@ class EcovacsAPI extends EventEmitter {
    * @returns {Object}
    */
   getMetaObject() {
-    let appCode = 'global_e';
-    let appVersion = '2.2.3';
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      appCode = 'yd_global_e';
-      appVersion = '1.3.0';
-    }
+    const appCode = this._authDomainValue('global_e', 'yd_global_e');
+    const appVersion = this._authDomainValue('2.2.3', '1.3.0');
     // deviceType 1 = Android
     return {
       'country': this.country,
@@ -443,16 +438,10 @@ class EcovacsAPI extends EventEmitter {
    * @returns {Promise<Object>} an object including user token and user ID
    */
   callUserApiLoginByItToken() {
-    let org = 'ECOWW';
-    if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-      org = 'ECOYDWW';
-    }
+    let org = this._authDomainValue('ECOWW', 'ECOYDWW');
     let country = this.country;
     if (this.country === 'CN') {
-      org = 'ECOCN';
-      if (this.authDomain === constants.AUTH_DOMAIN_YD) {
-        org = 'ECOYDCN';
-      }
+      org = this._authDomainValue('ECOCN', 'ECOYDCN');
       country = 'Chinese';
     }
     return this.callPortalApi(constants.USER_API_PATH, 'loginByItToken', {

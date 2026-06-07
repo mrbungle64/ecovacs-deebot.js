@@ -68,6 +68,31 @@ describe('API', function () {
     });
   });
 
+  describe('auth domain selection (Ecovacs vs yeedi)', function () {
+    const DEVICE_ID = 'abcdefghijklmnopqrestuvwyz';
+
+    it('uses Ecovacs app identity for the default auth domain', function () {
+      const api = new ecovacsDeebot.EcovacsAPI(DEVICE_ID, 'de', 'eu');
+      const meta = api.getMetaObject();
+      assert.strictEqual(meta.appCode, 'global_e');
+      assert.strictEqual(meta.appVersion, '2.2.3');
+    });
+
+    it('uses yeedi app identity for the yeedi auth domain', function () {
+      const api = new ecovacsDeebot.EcovacsAPI(DEVICE_ID, 'de', 'eu', constants.AUTH_DOMAIN_YD);
+      const meta = api.getMetaObject();
+      assert.strictEqual(meta.appCode, 'yd_global_e');
+      assert.strictEqual(meta.appVersion, '1.3.0');
+    });
+
+    it('_authDomainValue picks the value matching the auth domain', function () {
+      const ecovacsApi = new ecovacsDeebot.EcovacsAPI(DEVICE_ID, 'de', 'eu');
+      const yeediApi = new ecovacsDeebot.EcovacsAPI(DEVICE_ID, 'de', 'eu', constants.AUTH_DOMAIN_YD);
+      assert.strictEqual(ecovacsApi._authDomainValue('eco', 'yd'), 'eco');
+      assert.strictEqual(yeediApi._authDomainValue('eco', 'yd'), 'yd');
+    });
+  });
+
   describe('rsa key file', function () {
     it('should exist as a file', async function () {
       await fs.promises.stat("key.pem");
