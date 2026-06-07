@@ -496,7 +496,8 @@ class MapManager {
         if (payload['type'] === 'ar') {
             let mapSpotAreaBoundaries = payload['value'];
             if (payload['compress']) {
-                mapSpotAreaBoundaries = await mapTemplate.mapPieceToIntArray(payload['value']);
+                // Compressed boundaries are a coordinate *string* ("x,y;x,y;…"), not pixels.
+                mapSpotAreaBoundaries = await mapTemplate.decompressToString(payload['value']);
             }
             let customName = '';
             if (payload['name']) {
@@ -551,7 +552,7 @@ class MapManager {
     async handleMapSet_V2(payload) {
         let subsets = payload['subsets'];
         if (typeof subsets === 'string') {
-            subsets = JSON.parse(await mapTemplate.mapPieceToIntArray(subsets));
+            subsets = JSON.parse(await mapTemplate.decompressToString(subsets));
         }
         if ((subsets !== undefined) && Array.isArray(subsets)) {
             const type = payload['type'];

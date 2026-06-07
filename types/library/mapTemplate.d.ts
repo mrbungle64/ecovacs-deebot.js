@@ -15,6 +15,7 @@ export class EcovacsMapImage extends EcovacsMapImageBase {
     mapDataPiecesCrc: any;
 }
 export function mapPieceToIntArray(pieceValue: any): Promise<Uint8Array<ArrayBuffer> | null>;
+export function decompressToString(pieceValue: any): Promise<string | null>;
 declare class EcovacsMapImageBase {
     constructor(mapID: any, mapType: any, mapTotalWidth: any, mapTotalHeight: any, mapPixel: any);
     mapFloorBuffer: FrameBuffer | null;

@@ -247,7 +247,7 @@ function getVirtualBoundaryObject(mapDataObject, mapID, virtualBoundaryID) {
  * @returns {number[][]}
  */
 function parseBoundaryPoints(coordinates) {
-    if (!coordinates) {
+    if (typeof coordinates !== 'string' || coordinates === '') {
         return [];
     }
     return coordinates.split(';').map((pair) => {

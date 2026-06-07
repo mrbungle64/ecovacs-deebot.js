@@ -416,22 +416,48 @@ function toPixelBytes(decompressed) {
     return Uint8Array.from(decompressed);
 }
 
-// converts the compressed data retrieved from ecovacs API into int array containing the map pixels
+// Decompresses a base64 map payload to its raw form, dispatching on the wire
+// format. Returns whatever the decoder yields (kept un-normalised so both the
+// pixel and text consumers can interpret it correctly):
+//   - zstd  -> Buffer of bytes
+//   - LZMA  -> String (large payloads, already text-decoded) or number[] (small)
+//   - null when decompression is unavailable (e.g. zstd on older Node)
 // thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
-async function mapPieceToIntArray(pieceValue) {
+async function decompressMapPiece(pieceValue) {
     let buff = Buffer.from(pieceValue, 'base64');
     // Newer models send zstd-compressed pieces (detected via magic bytes); older ones use LZMA.
     if ((buff.length >= 4) && ZSTD_MAGIC.every((byte, i) => buff[i] === byte)) {
-        return toPixelBytes(zstdDecompress(buff));
+        return zstdDecompress(buff);
     }
     const fixArray = new Int8Array([0, 0, 0, 0]);
     let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
     //fix 9 byte header to 13 bytes for lzma decompression
     let correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];
     //decompress
-    return toPixelBytes(lzma.decompress(correctedArray));
+    return lzma.decompress(correctedArray);
+}
+
+// converts the compressed data retrieved from ecovacs API into int array containing the map pixels
+async function mapPieceToIntArray(pieceValue) {
+    return toPixelBytes(await decompressMapPiece(pieceValue));
+}
+
+// Decompresses a base64 payload to a string. Used for the *text* payloads
+// (compressed spot-area/boundary coordinate strings, V2 subset JSON) – not pixel
+// data. Callers that need text (`.split(';')`, `JSON.parse`) must use this rather
+// than `mapPieceToIntArray`, which normalises to bytes. Returns null when
+// decompression is unavailable (e.g. zstd on older Node).
+async function decompressToString(pieceValue) {
+    const raw = await decompressMapPiece(pieceValue);
+    if (raw === null || raw === undefined) {
+        return null;
+    }
+    // LZMA returns text already decoded as a String; zstd (Buffer) and the
+    // small-payload number[] form are raw bytes that decode as UTF-8.
+    return typeof raw === 'string' ? raw : Buffer.from(raw).toString('utf8');
 }
 
 module.exports.EcovacsLiveMapImage = EcovacsLiveMapImage;
 module.exports.EcovacsMapImage = EcovacsMapImage;
 module.exports.mapPieceToIntArray = mapPieceToIntArray;
+module.exports.decompressToString = decompressToString;
