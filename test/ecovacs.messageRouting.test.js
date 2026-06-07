@@ -1,17 +1,21 @@
 'use strict';
 
 /**
- * Tests for MQTT message-name normalization logic in Ecovacs.
+ * Tests for MQTT message-name normalization and routing.
  *
- * Strategy: test `getCommandPrefix()` and `handleMessagePayload()` in isolation
- * without a real MQTT connection. A minimal fake `bot` object is injected so
- * that `hasMappingCapabilities()` and the various `handle*()` / `emit*()` hooks
- * can be controlled per test.
+ * The routing logic (getCommandPrefix / handleMessagePayload / handleV2commands
+ * / the `_msg*` handlers) lives on EcovacsMessageDispatcher; the transport-level
+ * helpers (_parseMqttMessage / handleMessage / _handleFirmwareVersion /
+ * _dispatchPayload) live on EcovacsDeviceSession. Both are exercised here without
+ * a real MQTT connection: a minimal fake `bot` is injected so that
+ * `hasMappingCapabilities()` and the various `handle*()` / `emit*()` hooks can be
+ * controlled per test, and a real dispatcher is bound to the fake session.
  */
 
 const { describe, it } = require('node:test');
 const assert = require('assert');
-const Ecovacs = require('../library/ecovacsDeviceSession');
+const EcovacsDeviceSession = require('../library/ecovacsDeviceSession');
+const EcovacsMessageDispatcher = require('../library/ecovacsMessageDispatcher');
 
 const MESSAGE_TYPE = Object.freeze({
     INCOMING: 'incoming',
@@ -23,7 +27,7 @@ const MESSAGE_TYPE = Object.freeze({
 // ---------------------------------------------------------------------------
 
 /**
- * Build the minimal `bot` stub that Ecovacs.handleMessagePayload() needs.
+ * Build the minimal `bot` stub that handleMessagePayload() needs.
  * @param {Object} overrides - Properties to override on the stub.
  * @returns {Object}
  */
@@ -76,18 +80,19 @@ function makeFakeBot(overrides = {}) {
 }
 
 /**
- * Build a minimal Ecovacs instance without a real MQTT connection.
- * We skip `connect()` entirely and stub the EventEmitter infrastructure.
+ * Build a minimal EcovacsDeviceSession instance (no real MQTT connection) plus a
+ * real EcovacsMessageDispatcher bound to it. We skip `connect()` entirely and
+ * stub the EventEmitter infrastructure.
  * @param {Object} botOverrides
- * @returns {{ ecovacs: Ecovacs, emitted: Object }}
+ * @returns {{ ecovacs: EcovacsDeviceSession, dispatcher: EcovacsMessageDispatcher, emitted: Object, bot: Object }}
  */
 function makeEcovacs(botOverrides = {}) {
     const bot = makeFakeBot(botOverrides);
     const emitted = {};
 
-    // Ecovacs extends EventEmitter — instantiate it directly via Object.create
-    // so we don't need a real MQTT client.
-    const ecovacs = Object.create(Ecovacs.prototype);
+    // EcovacsDeviceSession extends EventEmitter — instantiate it directly via
+    // Object.create so we don't need a real MQTT client.
+    const ecovacs = Object.create(EcovacsDeviceSession.prototype);
     // Wire the minimal EventEmitter surface
     require('events').EventEmitter.call(ecovacs);
     Object.assign(ecovacs, require('events').EventEmitter.prototype);
@@ -104,49 +109,54 @@ function makeEcovacs(botOverrides = {}) {
         emitted[name] = payload;
     };
 
-    return { ecovacs, emitted, bot };
+    // The dispatcher delegates bot / emit / emitMessage back to the session, so
+    // its handler bodies operate against the captures wired above.
+    const dispatcher = new EcovacsMessageDispatcher(ecovacs);
+    ecovacs.dispatcher = dispatcher;
+
+    return { ecovacs, dispatcher, emitted, bot };
 }
 
 // ---------------------------------------------------------------------------
 // getCommandPrefix()
 // ---------------------------------------------------------------------------
 
-describe('Ecovacs.getCommandPrefix()', function () {
-    const { ecovacs } = makeEcovacs();
+describe('EcovacsMessageDispatcher.getCommandPrefix()', function () {
+    const { dispatcher } = makeEcovacs();
 
     it('should return "on" for "on"-prefixed names', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('onWaterInfo'), 'on');
-        assert.strictEqual(ecovacs.getCommandPrefix('onBattery'), 'on');
+        assert.strictEqual(dispatcher.getCommandPrefix('onWaterInfo'), 'on');
+        assert.strictEqual(dispatcher.getCommandPrefix('onBattery'), 'on');
     });
 
     it('should return "off" for "off"-prefixed names', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('offMapSubSet'), 'off');
+        assert.strictEqual(dispatcher.getCommandPrefix('offMapSubSet'), 'off');
     });
 
     it('should return "report" for "report"-prefixed names', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('reportStats'), 'report');
-        assert.strictEqual(ecovacs.getCommandPrefix('reportCleanInfo'), 'report');
+        assert.strictEqual(dispatcher.getCommandPrefix('reportStats'), 'report');
+        assert.strictEqual(dispatcher.getCommandPrefix('reportCleanInfo'), 'report');
     });
 
     it('should return "get" for lowercase "get"-prefixed names', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('getWaterInfo'), 'get');
+        assert.strictEqual(dispatcher.getCommandPrefix('getWaterInfo'), 'get');
     });
 
     it('should return "get" for capitalised "Get"-prefixed names', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('GetWaterInfo'), 'get');
+        assert.strictEqual(dispatcher.getCommandPrefix('GetWaterInfo'), 'get');
     });
 
     it('should return "" for names with no known prefix', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('WaterInfo'), '');
-        assert.strictEqual(ecovacs.getCommandPrefix('Battery'), '');
-        assert.strictEqual(ecovacs.getCommandPrefix('SomeNewFeature'), '');
+        assert.strictEqual(dispatcher.getCommandPrefix('WaterInfo'), '');
+        assert.strictEqual(dispatcher.getCommandPrefix('Battery'), '');
+        assert.strictEqual(dispatcher.getCommandPrefix('SomeNewFeature'), '');
     });
 
     // Regression: "set" must NOT be treated as a normalisation prefix.
     // set-prefixed names are Command-Responses, not MQTT push messages.
     it('should return "" for "set"-prefixed names (not an MQTT push prefix)', function () {
-        assert.strictEqual(ecovacs.getCommandPrefix('setWaterInfo'), '');
-        assert.strictEqual(ecovacs.getCommandPrefix('SetWaterInfo'), '');
+        assert.strictEqual(dispatcher.getCommandPrefix('setWaterInfo'), '');
+        assert.strictEqual(dispatcher.getCommandPrefix('SetWaterInfo'), '');
     });
 });
 
@@ -160,7 +170,7 @@ describe('handleMessagePayload() – prefix normalisation', function () {
         const emitted2 = {};
 
         for (const [name, target] of [['onWaterInfo', emitted1], ['getWaterInfo', emitted2]]) {
-            const { ecovacs } = makeEcovacs({
+            const { ecovacs, dispatcher } = makeEcovacs({
                 handleWaterInfo: () => { },
                 waterLevel: 2,
                 waterboxInfo: 1,
@@ -168,9 +178,9 @@ describe('handleMessagePayload() – prefix normalisation', function () {
                 scrubbingType: null,
             });
             ecovacs.emitMessage = (evtName, payload) => { target[evtName] = payload; };
-            ecovacs.emitMoppingSystemReport = () => { };
+            dispatcher.emitMoppingSystemReport = () => { };
 
-            await ecovacs.handleMessagePayload(name, { amount: 2, enable: 1 });
+            await dispatcher.handleMessagePayload(name, { amount: 2, enable: 1 });
         }
 
         // Both paths must have emitted WaterInfo and WaterLevel
@@ -182,20 +192,20 @@ describe('handleMessagePayload() – prefix normalisation', function () {
 
     it('"reportStats" reaches the Stats handler (emits Stats → CurrentStats)', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs({
+        const { ecovacs, dispatcher } = makeEcovacs({
             handleStats: () => { },
             currentStats: { cleanedArea: 10 },
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
-        await ecovacs.handleMessagePayload('reportStats', { area: 10, time: 300, type: 'auto' });
+        await dispatcher.handleMessagePayload('reportStats', { area: 10, time: 300, type: 'auto' });
 
         assert.ok('CurrentStats' in emitted, '"reportStats" should emit CurrentStats');
     });
 
     it('"reportCleanInfo" reaches the CleanInfo handler (emits CleanReport)', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs({
+        const { ecovacs, dispatcher } = makeEcovacs({
             handleCleanInfo: () => { },
             cleanReport: 'idle',
             chargeStatus: null,
@@ -203,9 +213,9 @@ describe('handleMessagePayload() – prefix normalisation', function () {
             currentSpotAreas: null,
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
-        ecovacs.emitMoppingSystemReport = () => { };
+        dispatcher.emitMoppingSystemReport = () => { };
 
-        await ecovacs.handleMessagePayload('reportCleanInfo', {});
+        await dispatcher.handleMessagePayload('reportCleanInfo', {});
 
         assert.ok('CleanReport' in emitted, '"reportCleanInfo" should emit CleanReport');
     });
@@ -218,12 +228,12 @@ describe('handleMessagePayload() – prefix normalisation', function () {
 describe('handleMessagePayload() – set-prefix is NOT normalised', function () {
     it('"setWaterInfo" does NOT reach the WaterInfo switch-case', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs();
+        const { ecovacs, dispatcher } = makeEcovacs();
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
         // "setWaterInfo" → getCommandPrefix() returns '' → abbreviatedCommand = "setWaterInfo"
         // There is no switch-case "setWaterInfo", so it falls to default and only warns.
-        await ecovacs.handleMessagePayload('setWaterInfo', { amount: 2, enable: 1 });
+        await dispatcher.handleMessagePayload('setWaterInfo', { amount: 2, enable: 1 });
 
         assert.ok(!('WaterInfo' in emitted), '"setWaterInfo" must not emit WaterInfo');
         assert.ok(!('WaterLevel' in emitted), '"setWaterInfo" must not emit WaterLevel');
@@ -237,12 +247,12 @@ describe('handleMessagePayload() – set-prefix is NOT normalised', function () 
 describe('handleMessagePayload() – unknown on... messages', function () {
     it('"onSomeNewFeature" does not throw and does not emit a known event', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs();
+        const { ecovacs, dispatcher } = makeEcovacs();
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
         // Must not throw
         await assert.doesNotReject(
-            () => ecovacs.handleMessagePayload('onSomeNewFeature', { foo: 'bar' })
+            () => dispatcher.handleMessagePayload('onSomeNewFeature', { foo: 'bar' })
         );
 
         // Should not have emitted any domain event
@@ -259,26 +269,26 @@ describe('handleMessagePayload() – unknown on... messages', function () {
 describe('handleMessagePayload() – _V2 suffix stripping', function () {
     it('"onSpeed_V2" strips "_V2" and reaches the Speed (CleanSpeed) handler', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs({
+        const { ecovacs, dispatcher } = makeEcovacs({
             handleSpeed: () => { },
             cleanSpeed: 'MAX',
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
-        await ecovacs.handleMessagePayload('onSpeed_V2', { speed: 2 });
+        await dispatcher.handleMessagePayload('onSpeed_V2', { speed: 2 });
 
         assert.ok('CleanSpeed' in emitted, '"onSpeed_V2" should emit CleanSpeed');
     });
 
     it('"onMapSet_V2" does NOT strip "_V2" (explicit exception in handleV2commands)', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs({
+        const { ecovacs, dispatcher } = makeEcovacs({
             handleMapSet_V2: async () => { },
             mapSet_V2: null,
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
-        await ecovacs.handleMessagePayload('onMapSet_V2', {});
+        await dispatcher.handleMessagePayload('onMapSet_V2', {});
 
         // MapSet_V2 case should have been reached (even if mapSet_V2 is null)
         assert.ok('MapSet_V2' in emitted, '"onMapSet_V2" should emit MapSet_V2');
@@ -295,13 +305,13 @@ describe('handleMessagePayload() – map capability guard', function () {
     for (const stem of MAP_STEMS) {
         it(`"on${stem}" is silently skipped for a device without mapping capabilities`, async function () {
             const emitted = {};
-            const { ecovacs } = makeEcovacs({
+            const { ecovacs, dispatcher } = makeEcovacs({
                 hasMappingCapabilities: () => false,
             });
             ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
             await assert.doesNotReject(
-                () => ecovacs.handleMessagePayload(`on${stem}`, {})
+                () => dispatcher.handleMessagePayload(`on${stem}`, {})
             );
 
             // Only 'messageReceived' is allowed; no map event should be emitted
@@ -313,13 +323,13 @@ describe('handleMessagePayload() – map capability guard', function () {
 
     it('"onMapSet" IS processed for a device WITH mapping capabilities', async function () {
         const emitted = {};
-        const { ecovacs } = makeEcovacs({
+        const { ecovacs, dispatcher } = makeEcovacs({
             hasMappingCapabilities: () => true,
             handleMapSet: () => ({ mapsetEvent: 'SpotAreas', mapsetData: [] }),
         });
         ecovacs.emitMessage = (name, payload) => { emitted[name] = payload; };
 
-        await ecovacs.handleMessagePayload('onMapSet', { mid: '123', type: 'sa' });
+        await dispatcher.handleMessagePayload('onMapSet', { mid: '123', type: 'sa' });
 
         assert.ok('SpotAreas' in emitted, '"onMapSet" should emit SpotAreas on map-capable device');
     });
@@ -379,7 +389,7 @@ describe('GetNetInfoLegacy – payload field compatibility', function () {
 // Private Helpers & Routing Methods
 // ---------------------------------------------------------------------------
 
-describe('Ecovacs._parseMqttMessage()', function () {
+describe('EcovacsDeviceSession._parseMqttMessage()', function () {
     const { ecovacs } = makeEcovacs();
 
     it('should return null for malformed JSON', function () {
@@ -396,7 +406,7 @@ describe('Ecovacs._parseMqttMessage()', function () {
     });
 });
 
-describe('Ecovacs.handleMessage()', function () {
+describe('EcovacsDeviceSession.handleMessage()', function () {
     it('should handle INCOMING type with parsed envelope object', async function () {
         const { ecovacs } = makeEcovacs();
         let dispatched = null;
@@ -438,7 +448,7 @@ describe('Ecovacs.handleMessage()', function () {
     });
 });
 
-describe('Ecovacs._handleFirmwareVersion()', function () {
+describe('EcovacsDeviceSession._handleFirmwareVersion()', function () {
     it('should update firmwareVersion and emit HeaderInfo if firmware version changed', function () {
         const { ecovacs, emitted, bot } = makeEcovacs();
         bot.firmwareVersion = '1.0.0';
@@ -463,11 +473,11 @@ describe('Ecovacs._handleFirmwareVersion()', function () {
     });
 });
 
-describe('Ecovacs._dispatchPayload()', function () {
-    it('should dispatch payload via handleMessagePayload', async function () {
+describe('EcovacsDeviceSession._dispatchPayload()', function () {
+    it('should dispatch payload via dispatcher.handleMessagePayload', async function () {
         const { ecovacs } = makeEcovacs();
         let dispatched = null;
-        ecovacs.handleMessagePayload = async (eventName, payload) => {
+        ecovacs.dispatcher.handleMessagePayload = async (eventName, payload) => {
             dispatched = { eventName, payload };
         };
         ecovacs._dispatchPayload('TestEvent', { value: 1 });
@@ -480,7 +490,7 @@ describe('Ecovacs._dispatchPayload()', function () {
     it('should emit error code -2 if handleMessagePayload throws', async function () {
         const { ecovacs } = makeEcovacs();
         let emittedError = null;
-        ecovacs.handleMessagePayload = async () => {
+        ecovacs.dispatcher.handleMessagePayload = async () => {
             throw new Error('Test error');
         };
         ecovacs.emitError = (code, message) => {
