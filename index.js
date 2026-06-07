@@ -1,6 +1,7 @@
 'use strict';
 
 const url = require('url');
+const EventEmitter = require('events');
 const axios = require('axios').default;
 const crypto = require('crypto');
 const fs = require('fs');
@@ -34,8 +35,9 @@ const packageInfo = require('./package.json');
  * @property @private {string} continent - the continent where the Ecovacs account is registered
  * @property @private {string} deviceId - the device ID of the bot
  * @property @private {string} authDomain - the domain for the authentication API
+ * @fires EcovacsAPI#credentialsUpdated
  */
-class EcovacsAPI {
+class EcovacsAPI extends EventEmitter {
   /**
    * @param {string} deviceId - the device ID of the bot
    * @param {string} country - the country code of the country where the Ecovacs account is registered
@@ -43,6 +45,7 @@ class EcovacsAPI {
    * @param {string} [authDomain='ecovacs.com'] - the domain for the authentication API
    */
   constructor(deviceId, country, continent = '', authDomain = '') {
+    super();
     tools.envLogInfo('Setting up EcovacsAPI instance');
 
     this.deviceId = deviceId;
@@ -90,8 +93,124 @@ class EcovacsAPI {
     result = await this.callUserApiLoginByItToken();
     this.user_access_token = result['token'];
     this.uid = result['userId'];
+
+    // `last` is the token validity in milliseconds (usually 7 days). Track the
+    // expiry at 99% of the validity so it can be refreshed proactively.
+    const validityMs = Number(result['last']) > 0 ? Number(result['last']) : constants.TOKEN_DEFAULT_VALIDITY_MS;
+    this.tokenExpiresAt = Date.now() + Math.floor(validityMs * 0.99);
+
     tools.envLogSuccess('user authentication complete');
+    /**
+     * Fired after a successful (re-)login with fresh credentials.
+     * @event EcovacsAPI#credentialsUpdated
+     * @type {{userId: string, token: string, expiresAt: number|null}}
+     */
+    this.emit('credentialsUpdated', this.getCredentials());
     return 'ready';
+  }
+
+  /**
+   * Get the current credentials (user id + access token + expiry timestamp).
+   * @returns {{userId: string, token: string, expiresAt: number|null}}
+   */
+  getCredentials() {
+    return {
+      userId: this.uid,
+      token: this.user_access_token,
+      expiresAt: this.tokenExpiresAt || null
+    };
+  }
+
+  /**
+   * Get the absolute timestamp (ms since epoch) at which the access token should
+   * be refreshed, or `null` if not yet authenticated.
+   * @returns {number|null}
+   */
+  getTokenExpiry() {
+    return this.tokenExpiresAt || null;
+  }
+
+  /**
+   * Enable automatic, proactive re-authentication shortly before the access
+   * token expires. Opt-in: when enabled, the API re-runs the login flow and
+   * emits a {@link EcovacsAPI#event:credentialsUpdated} event with the new
+   * credentials. Wire it to your bot(s) so the refreshed token is applied:
+   *
+   * ```js
+   * api.on('credentialsUpdated', (c) => vacbot.updateUserAccessToken(c.token));
+   * api.enableAutoTokenRefresh(accountId, passwordHash);
+   * ```
+   *
+   * @param {string} accountId - the account ID (same as used for `connect()`)
+   * @param {string} passwordHash - the password hash (same as used for `connect()`)
+   * @returns {EcovacsAPI} this (for chaining)
+   */
+  enableAutoTokenRefresh(accountId, passwordHash) {
+    this._autoRefresh = { accountId, passwordHash };
+    this._scheduleTokenRefresh();
+    return this;
+  }
+
+  /**
+   * Disable automatic token refresh and cancel any pending refresh timer.
+   */
+  disableAutoTokenRefresh() {
+    this._autoRefresh = null;
+    if (this._refreshTimer) {
+      clearTimeout(this._refreshTimer);
+      this._refreshTimer = null;
+    }
+  }
+
+  /**
+   * (Re)schedule the next token refresh based on the tracked expiry.
+   * @private
+   */
+  _scheduleTokenRefresh() {
+    if (!this._autoRefresh) {
+      return;
+    }
+    if (this._refreshTimer) {
+      clearTimeout(this._refreshTimer);
+    }
+    const msUntilRefresh = Math.max((this.tokenExpiresAt || Date.now()) - Date.now(), 60000);
+    this._refreshTimer = setTimeout(() => this._runTokenRefresh(), msUntilRefresh);
+    // Don't keep the event loop alive solely for the refresh timer
+    if (this._refreshTimer.unref) {
+      this._refreshTimer.unref();
+    }
+  }
+
+  /**
+   * Perform a token refresh by re-running the login flow, then reschedule.
+   * On failure, retries after a short delay.
+   * @private
+   * @fires EcovacsAPI#credentialsRefreshError
+   */
+  async _runTokenRefresh() {
+    if (!this._autoRefresh) {
+      return;
+    }
+    try {
+      // connect() updates the token/expiry and emits 'credentialsUpdated'
+      await this.connect(this._autoRefresh.accountId, this._autoRefresh.passwordHash);
+      this._scheduleTokenRefresh();
+    } catch (e) {
+      tools.envLogError(`token refresh failed: ${e.message}`);
+      /**
+       * Fired when an automatic token refresh attempt fails.
+       * @event EcovacsAPI#credentialsRefreshError
+       * @type {Error}
+       */
+      this.emit('credentialsRefreshError', e);
+      if (this._refreshTimer) {
+        clearTimeout(this._refreshTimer);
+      }
+      this._refreshTimer = setTimeout(() => this._runTokenRefresh(), 5 * 60 * 1000);
+      if (this._refreshTimer.unref) {
+        this._refreshTimer.unref();
+      }
+    }
   }
 
   /**
@@ -227,7 +346,11 @@ class EcovacsAPI {
     tools.envLogInfo(`portalUrl.href: '${portalUrl.href}'`);
     tools.envLogInfo(`searchParams: '${searchParams.toString()}'`);
     try {
-      const res = await axios.get(portalUrl.href, axiosConfig);
+      // The Ecovacs cloud sporadically returns HTTP 502; retry defensively.
+      const res = await tools.withRetry(
+        () => axios.get(portalUrl.href, axiosConfig),
+        { retryOn: ({ error }) => tools.isBadGatewayError(error) }
+      );
       const result = res.data;
       tools.envLogPayload(result);
       if (result.code === '0000') {
@@ -294,9 +417,21 @@ class EcovacsAPI {
       'Content-Length': Buffer.byteLength(JSON.stringify(params))
     };
     tools.envLogInfo(`portalUrl: '${portalUrl}'`);
-    const res = await axios.post(portalUrl, params, {
-      headers: headers
-    });
+    // Retry on HTTP 502 (Bad Gateway) and on the transient 'set token error'
+    // that `loginByItToken` occasionally returns. Other responses pass through
+    // unchanged to the success/error handling below.
+    const res = await tools.withRetry(
+      () => axios.post(portalUrl, params, { headers: headers }),
+      {
+        retryOn: ({ error, result }) => {
+          if (error) {
+            return tools.isBadGatewayError(error);
+          }
+          const data = result && result.data;
+          return Boolean(data && data['result'] === 'fail' && data['error'] === 'set token error.');
+        }
+      }
+    );
 
     const response = res.data;
     if ((response['result'] !== 'ok') && (response['ret'] !== 'ok') && (response['msg'] !== 'success')) {
