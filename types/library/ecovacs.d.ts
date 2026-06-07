@@ -63,6 +63,7 @@ declare class Ecovacs extends EventEmitter<any> {
      * @private
      */
     private _attachClientListeners;
+    _maxListenersBump: number | undefined;
     _clientListeners: {
         message: (topic: any, message: any) => void;
         connect: () => void;
@@ -71,7 +72,8 @@ declare class Ecovacs extends EventEmitter<any> {
         error: (error: any) => void;
     } | null | undefined;
     /**
-     * Remove this instance's MQTT event handlers from `this.client`, if attached.
+     * Remove this instance's MQTT event handlers from `this.client`, if attached,
+     * and revert any max-listener cap increase this instance applied.
      * @private
      */
     private _detachClientListeners;

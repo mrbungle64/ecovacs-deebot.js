@@ -18,7 +18,13 @@ declare const _exports: {
      * @returns {import('./typedefs').CommandPayload}
      */
     getCommandPayload: (command: any) => import("./typedefs").CommandPayload;
-    getApiPath: (command: any) => "iot/devmanager.do";
+    /**
+     * Returns the API path for a command: the device-manager path by default, or the
+     * command's own `api` when set (e.g. `lg/log.do` for CleanLogs).
+     * @param {*} command - the command instance
+     * @returns {string} the API path
+     */
+    getApiPath: (command: any) => string;
     /**
      * @param {*} ecovacs - the Ecovacs transport instance
      * @param {*} command - the command instance

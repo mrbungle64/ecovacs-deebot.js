@@ -71,6 +71,12 @@ module.exports.getCommandPayload = function(command) {
     };
 };
 
+/**
+ * Returns the API path for a command: the device-manager path by default, or the
+ * command's own `api` when set (e.g. `lg/log.do` for CleanLogs).
+ * @param {*} command - the command instance
+ * @returns {string} the API path
+ */
 module.exports.getApiPath = function(command) {
     let api = constants.IOT_DEVMANAGER_PATH; // non 950 type models
     if (command.api) {

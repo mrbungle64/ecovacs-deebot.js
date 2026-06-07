@@ -69,6 +69,48 @@ describe('Ecovacs MQTT listener lifecycle', function () {
         assert.deepStrictEqual(handled, ['onBattery']);
     });
 
+    it('does not ratchet the shared-client max-listener cap across re-attach / detach', function () {
+        const client = new EventEmitter();
+        const baseline = client.getMaxListeners();
+        const ecovacs = makeEcovacs({ client, _sharedClient: true });
+        const bump = 5; // message, connect, offline, disconnect, error
+
+        ecovacs._attachClientListeners();
+        assert.strictEqual(client.getMaxListeners(), baseline + bump, 'cap raised once on attach');
+
+        // Re-attach (reconnect / token refresh) must not stack the bump.
+        ecovacs._attachClientListeners();
+        assert.strictEqual(client.getMaxListeners(), baseline + bump, 'cap not ratcheted on re-attach');
+
+        ecovacs._detachClientListeners();
+        assert.strictEqual(client.getMaxListeners(), baseline, 'cap restored on detach');
+    });
+
+    it('shared cap reflects only currently-attached bots', async function () {
+        const client = new EventEmitter();
+        client.connected = true;
+        client.unsubscribe = (channel, cb) => cb();
+        const baseline = client.getMaxListeners();
+
+        const botA = makeEcovacs({
+            vacuum: { did: 'didA', class: 'c', resource: 'r' },
+            client, _sharedClient: true, channel: 'chA',
+            pendingCommands: { rejectAll: () => { } }
+        });
+        const botB = makeEcovacs({
+            vacuum: { did: 'didB', class: 'c', resource: 'r' },
+            client, _sharedClient: true, channel: 'chB',
+            pendingCommands: { rejectAll: () => { } }
+        });
+
+        botA._attachClientListeners();
+        botB._attachClientListeners();
+        assert.strictEqual(client.getMaxListeners(), baseline + 10, 'two bots -> +10');
+
+        await botA.disconnect();
+        assert.strictEqual(client.getMaxListeners(), baseline + 5, 'one bot left -> +5');
+    });
+
     it('shared client: each bot keeps its own listeners; disconnect removes only its own', async function () {
         const client = new EventEmitter();
         client.connected = true;

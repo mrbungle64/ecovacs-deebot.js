@@ -42,7 +42,7 @@ declare class VacBot {
         };
         getRequestObject: (ecovacs: any, command: any) => import("./typedefs").CommandRequestObject | import("./typedefs").CleanLogsCommandObject;
         getCommandPayload: (command: any) => import("./typedefs").CommandPayload;
-        getApiPath: (command: any) => "iot/devmanager.do";
+        getApiPath: (command: any) => string;
         getCommandRequestObject: (ecovacs: any, command: any, payload: import("./typedefs").CommandPayload) => import("./typedefs").CommandRequestObject;
         getCleanLogsCommandObject: (ecovacs: any, command: any) => import("./typedefs").CleanLogsCommandObject;
         getAuthObject: (ecovacs: any) => import("./typedefs").AuthObject;

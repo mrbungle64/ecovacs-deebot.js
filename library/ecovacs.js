@@ -274,8 +274,12 @@ class Ecovacs extends EventEmitter {
         };
         // Each bot on a shared client adds its own listener set; raise the cap so
         // legitimate multi-bot sharing does not trip MaxListenersExceededWarning.
+        // The bump is tracked and reverted in _detachClientListeners(), so the cap
+        // does not ratchet upward across reconnects / bot churn (which would mask
+        // genuine leaks).
         if (this._sharedClient && typeof this.client.setMaxListeners === 'function') {
-            this.client.setMaxListeners(this.client.getMaxListeners() + Object.keys(listeners).length);
+            this._maxListenersBump = Object.keys(listeners).length;
+            this.client.setMaxListeners(this.client.getMaxListeners() + this._maxListenersBump);
         }
         for (const [event, handler] of Object.entries(listeners)) {
             this.client.on(event, handler);
@@ -284,7 +288,8 @@ class Ecovacs extends EventEmitter {
     }
 
     /**
-     * Remove this instance's MQTT event handlers from `this.client`, if attached.
+     * Remove this instance's MQTT event handlers from `this.client`, if attached,
+     * and revert any max-listener cap increase this instance applied.
      * @private
      */
     _detachClientListeners() {
@@ -294,6 +299,10 @@ class Ecovacs extends EventEmitter {
         for (const [event, handler] of Object.entries(this._clientListeners)) {
             this.client.removeListener(event, handler);
         }
+        if (this._maxListenersBump && typeof this.client.setMaxListeners === 'function') {
+            this.client.setMaxListeners(this.client.getMaxListeners() - this._maxListenersBump);
+        }
+        this._maxListenersBump = 0;
         this._clientListeners = null;
     }
 
