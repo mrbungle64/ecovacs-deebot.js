@@ -405,12 +405,7 @@ class EcovacsAPI extends EventEmitter {
     }
     tools.envLogInfo(`params: ${JSON.stringify(params)}`);
 
-    let portalUrlFormat = constants.PORTAL_ECOUSER_API;
-    if (this.country === 'CN') {
-      portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
-    } else if ((this.country === 'WW') || (this.continent.toUpperCase() === 'WW')) {
-      portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
-    }
+    let portalUrlFormat = tools.getPortalUrlFormat(this.country, this.continent);
     let portalUrl = tools.formatString(portalUrlFormat + "/" + loginPath, { continent: this.continent });
     let headers = {
       'Content-Type': 'application/json',

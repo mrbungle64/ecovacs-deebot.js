@@ -8,12 +8,7 @@ const constants = require('./constants');
 
 module.exports.getRequestUrl = function(ecovacs, command, params) {
     const apiPath = module.exports.getApiPath(command);
-    let portalUrlFormat = constants.PORTAL_ECOUSER_API;
-    if (ecovacs.country === 'CN') {
-        portalUrlFormat = constants.PORTAL_ECOUSER_API_CN;
-    } else if ((ecovacs.country === 'WW') || (ecovacs.continent.toUpperCase() === 'WW')) {
-        portalUrlFormat = constants.PORTAL_ECOUSER_API_LEGACY;
-    }
+    let portalUrlFormat = tools.getPortalUrlFormat(ecovacs.country, ecovacs.continent);
     let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, { continent: ecovacs.continent });
     if (ecovacs.bot.is950type()) {
         if (ecovacs.bot.authDomain === constants.AUTH_DOMAIN_YD) {

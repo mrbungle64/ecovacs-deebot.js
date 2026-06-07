@@ -395,6 +395,23 @@ describe('Tools Extended', function () {
     });
   });
 
+  describe('#getPortalUrlFormat', function () {
+    it('should select the CN portal for China accounts', function () {
+      assert.strictEqual(tools.getPortalUrlFormat('CN', 'as'), constants.PORTAL_ECOUSER_API_CN);
+    });
+
+    it('should select the legacy portal for a WW country or continent', function () {
+      assert.strictEqual(tools.getPortalUrlFormat('WW', 'eu'), constants.PORTAL_ECOUSER_API_LEGACY);
+      assert.strictEqual(tools.getPortalUrlFormat('US', 'WW'), constants.PORTAL_ECOUSER_API_LEGACY);
+      assert.strictEqual(tools.getPortalUrlFormat('US', 'ww'), constants.PORTAL_ECOUSER_API_LEGACY);
+    });
+
+    it('should select the default api-app portal otherwise', function () {
+      assert.strictEqual(tools.getPortalUrlFormat('DE', 'eu'), constants.PORTAL_ECOUSER_API);
+      assert.strictEqual(tools.getPortalUrlFormat('US', ''), constants.PORTAL_ECOUSER_API);
+    });
+  });
+
   describe('#getReqID', function () {
     it('should return exactly 8 digits', function () {
       const id = tools.getReqID();

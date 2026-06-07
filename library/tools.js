@@ -3,6 +3,7 @@
 const deebotModels = require('./models');
 const modelTypes = require('./modelTypes');
 const capabilityTypes = require('./capabilityTypes');
+const constants = require('./constants');
 const chalk = require('chalk');
 
 function formatString(string) {
@@ -429,6 +430,25 @@ function areaValuesAreValidForFreeCleanCmd(areaValues) {
 }
 
 /**
+ * Selects the portal base-URL format string for the given account region.
+ * China accounts use the CN portal; a `WW` country or continent uses the legacy
+ * portal; everything else uses the default `api-app` portal. The returned string
+ * still contains the `{continent}` placeholder for {@link formatString}.
+ * @param {string} country - the (upper-case) ISO country code
+ * @param {string} [continent=''] - the continent code
+ * @returns {string} the templated portal base URL
+ */
+function getPortalUrlFormat(country, continent = '') {
+    if (country === 'CN') {
+        return constants.PORTAL_ECOUSER_API_CN;
+    }
+    if ((country === 'WW') || ((continent || '').toUpperCase() === 'WW')) {
+        return constants.PORTAL_ECOUSER_API_LEGACY;
+    }
+    return constants.PORTAL_ECOUSER_API;
+}
+
+/**
  * Given a dictionary of parameters, return a string of the form "key1=value1&key2=value2&key3=value3"
  * @param {Object} params - the parameters to be encoded
  * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
@@ -662,6 +682,7 @@ module.exports.getDeviceProperty = getDeviceProperty;
 module.exports.getDynamicDevice = getDynamicDevice;
 module.exports.getKnownDevices = getKnownDevices;
 module.exports.getPlatformType = getPlatformType;
+module.exports.getPortalUrlFormat = getPortalUrlFormat;
 module.exports.getDeviceCategory = getDeviceCategory;
 module.exports.getSmartType = getSmartType;
 module.exports.getModelType = getModelType;     // @deprecated – use getPlatformType
