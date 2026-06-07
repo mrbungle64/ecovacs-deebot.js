@@ -141,7 +141,7 @@ class VacBot {
             throw new Error(msg);
         }
 
-        this.vacBotCommand = require('./command');
+        this.vacBotCommand = VacBotCommand;
         this.protocolModule = require('./ecovacs');
 
         this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
