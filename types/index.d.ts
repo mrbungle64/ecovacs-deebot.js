@@ -18,8 +18,9 @@ export type ApiDevice = {
  * @property @private {string} continent - the continent where the Ecovacs account is registered
  * @property @private {string} deviceId - the device ID of the bot
  * @property @private {string} authDomain - the domain for the authentication API
+ * @fires EcovacsAPI#credentialsUpdated
  */
-export class EcovacsAPI {
+export class EcovacsAPI extends EventEmitter<any> {
     /**
      * Get the version of the package
      * @returns {string} the version of the package
@@ -94,6 +95,59 @@ export class EcovacsAPI {
     uid: any;
     authCode: any;
     user_access_token: any;
+    tokenExpiresAt: number | undefined;
+    /**
+     * Get the current credentials (user id + access token + expiry timestamp).
+     * @returns {{userId: string, token: string, expiresAt: number|null}}
+     */
+    getCredentials(): {
+        userId: string;
+        token: string;
+        expiresAt: number | null;
+    };
+    /**
+     * Get the absolute timestamp (ms since epoch) at which the access token should
+     * be refreshed, or `null` if not yet authenticated.
+     * @returns {number|null}
+     */
+    getTokenExpiry(): number | null;
+    /**
+     * Enable automatic, proactive re-authentication shortly before the access
+     * token expires. Opt-in: when enabled, the API re-runs the login flow and
+     * emits a {@link EcovacsAPI#event:credentialsUpdated} event with the new
+     * credentials. Wire it to your bot(s) so the refreshed token is applied:
+     *
+     * ```js
+     * api.on('credentialsUpdated', (c) => vacbot.updateUserAccessToken(c.token));
+     * api.enableAutoTokenRefresh(accountId, passwordHash);
+     * ```
+     *
+     * @param {string} accountId - the account ID (same as used for `connect()`)
+     * @param {string} passwordHash - the password hash (same as used for `connect()`)
+     * @returns {EcovacsAPI} this (for chaining)
+     */
+    enableAutoTokenRefresh(accountId: string, passwordHash: string): EcovacsAPI;
+    _autoRefresh: {
+        accountId: string;
+        passwordHash: string;
+    } | null | undefined;
+    /**
+     * Disable automatic token refresh and cancel any pending refresh timer.
+     */
+    disableAutoTokenRefresh(): void;
+    _refreshTimer: NodeJS.Timeout | null | undefined;
+    /**
+     * (Re)schedule the next token refresh based on the tracked expiry.
+     * @private
+     */
+    private _scheduleTokenRefresh;
+    /**
+     * Perform a token refresh by re-running the login flow, then reschedule.
+     * On failure, retries after a short delay.
+     * @private
+     * @fires EcovacsAPI#credentialsRefreshError
+     */
+    private _runTokenRefresh;
     /**
      * Get the parameters for the user login
      * @param {Object} params - an object with the data to retrieve the parameters
@@ -238,5 +292,6 @@ export namespace EcovacsAPI {
  */
 /** @type {Object} */
 export const countries: Object;
+import EventEmitter = require("node:events");
 export { EcovacsAPI as EcoVacsAPI };
 //# sourceMappingURL=index.d.ts.map

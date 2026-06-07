@@ -55,6 +55,20 @@ declare class Ecovacs extends EventEmitter<any> {
     connectShared(existingClient: Object): void;
     _sharedClient: boolean | undefined;
     /**
+     * Apply a refreshed user access token. Takes effect immediately for REST
+     * commands (which read `this.secret` when building the auth object). For an
+     * owned MQTT connection the client is reconnected with the new password; for
+     * a shared client only the secret is updated and the owner is responsible
+     * for reconnecting.
+     * @param {string} newToken - the refreshed user access token
+     */
+    updateToken(newToken: string): void;
+    /**
+     * Reconnect the owned MQTT client using the current `this.secret` as password.
+     * @private
+     */
+    private _reconnectWithNewSecret;
+    /**
      * It sends a command to the Ecovacs API.
      * Optionally returns a Promise that resolves with the response payload
      * when the command's expected event fires.
@@ -79,6 +93,14 @@ declare class Ecovacs extends EventEmitter<any> {
      * @param {*} [rawPayload] - Optional raw payload of the event.
      */
     emitMessage(name: string, payload: any, rawPayload?: any): void;
+    /**
+     * Emit an `Availability` event, but only on a state change (edge-triggered),
+     * so consumers see the device going offline (errno 4200) and recovering.
+     * @param {boolean} available - whether the device is currently reachable
+     * @private
+     */
+    private _emitAvailability;
+    _deviceAvailable: any;
     /**
      * Emit a network related error message
      * @param {string} message - the error message

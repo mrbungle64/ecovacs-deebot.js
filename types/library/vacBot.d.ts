@@ -234,6 +234,13 @@ declare class VacBot {
      */
     connectShared(existingMqttClient: Object): void;
     /**
+     * Apply a refreshed user access token (e.g. from the `EcovacsAPI`
+     * `credentialsUpdated` event). Updates REST auth immediately and reconnects
+     * the MQTT connection with the new credentials.
+     * @param {string} token - the refreshed user access token
+     */
+    updateUserAccessToken(token: string): void;
+    /**
      * Return the underlying MQTT client, or null if not yet connected.
      * @returns {Object|null}
      */

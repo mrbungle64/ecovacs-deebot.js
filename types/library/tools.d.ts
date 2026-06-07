@@ -22,10 +22,47 @@ export function convertAreaValuesForFreeCleanCmd(areaValues: string): string;
  */
 export function createErrorDescription(message: string, command?: string): string;
 /**
+ * Resolves after the given number of milliseconds.
+ * @param {number} ms - the delay in milliseconds
+ * @returns {Promise<void>}
+ */
+export function delay(ms: number): Promise<void>;
+/**
  * Prints to `stdout` only in development mode (`dev` or `development`)
  */
 export function envLog(...args: any[]): void;
 export function formatString(string: any, ...args: any[]): any;
+/**
+ * Returns true if the given (axios) error represents an HTTP 502 Bad Gateway
+ * response. The Ecovacs cloud returns this sporadically; it is safe to retry.
+ * @param {*} error - the caught error
+ * @returns {boolean}
+ */
+export function isBadGatewayError(error: any): boolean;
+/**
+ * Runs an async operation with limited, defensive retries.
+ *
+ * Only retries when `retryOn({error})` or `retryOn({result})` returns true.
+ * Waits `backoffMs[attempt]` (clamped to the last entry) before each retry.
+ * Re-throws the last error / returns the last result once retries are exhausted,
+ * so the caller's existing success/error handling stays unchanged.
+ *
+ * @template T
+ * @param {() => Promise<T>} fn - the async operation to (re)try
+ * @param {Object} [opts]
+ * @param {number} [opts.retries=3] - total number of attempts (including the first)
+ * @param {(info: {error?: *, result?: T}) => boolean} [opts.retryOn] - predicate deciding whether to retry
+ * @param {number[]} [opts.backoffMs] - delay before each retry (default `[0, 500, 1500]`)
+ * @returns {Promise<T>}
+ */
+export function withRetry<T>(fn: () => Promise<T>, opts?: {
+    retries?: number | undefined;
+    retryOn?: ((info: {
+        error?: any;
+        result?: T;
+    }) => boolean) | undefined;
+    backoffMs?: number[] | undefined;
+}): Promise<T>;
 /**
  * Get all known devices, including the supported devices and the known devices
  * @returns {Object} a frozen dictionary of all known devices
