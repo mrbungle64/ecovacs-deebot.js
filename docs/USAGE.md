@@ -66,27 +66,27 @@ async function main() {
         const vacuum = devices[0];
         console.log(`Selected device: ${vacuum.name} (${vacuum.model})`);
         
-        // Get the VacBot instance wrapper for the selected device
-        const vacbot = api.getVacBotObj(vacuum);
+        // Get the EcovacsDevice instance for the selected device
+        const device = api.getDeviceObj(vacuum);
         
         // Retrieve and print device metadata
-        console.log(`Device category: ${vacbot.getDeviceCategory()}`);
-        console.log(`Platform architecture: ${vacbot.getPlatformType()}`);
-        console.log(`Internal IoT platform protocol (SmartType): ${vacbot.getSmartType()}`);
+        console.log(`Device category: ${device.getDeviceCategory()}`);
+        console.log(`Platform architecture: ${device.getPlatformType()}`);
+        console.log(`Internal IoT platform protocol (SmartType): ${device.getSmartType()}`);
         
         // 3. Register Event Listeners
-        vacbot.on('ready', async () => {
-            console.log("VacBot connection established. Robot is READY!");
+        device.on('ready', async () => {
+            console.log("Device connection established. Robot is READY!");
             
             try {
                 // Send initial commands to retrieve states asynchronously using runAsync
-                const battery = await vacbot.runAsync("GetBatteryState");
+                const battery = await device.runAsync("GetBatteryState");
                 console.log(`Initial Battery: ${battery.level}% (Low: ${battery.isLow})`);
                 
-                const cleanState = await vacbot.runAsync("GetCleanState");
+                const cleanState = await device.runAsync("GetCleanState");
                 console.log(`Initial Clean State: ${cleanState.cleanState || cleanState.state}`);
                 
-                const chargeState = await vacbot.runAsync("GetChargeState");
+                const chargeState = await device.runAsync("GetChargeState");
                 console.log(`Initial Charge State: ${chargeState.chargeState || chargeState.state}`);
             } catch (error) {
                 console.error("Failed to retrieve initial states:", error.message);
@@ -94,30 +94,30 @@ async function main() {
         });
         
         // State change/update listeners (to receive live updates during operation)
-        vacbot.on('BatteryInfo', (batteryLevel) => {
+        device.on('BatteryInfo', (batteryLevel) => {
             console.log(`Battery State Update: ${Math.round(batteryLevel)}%`);
         });
         
-        vacbot.on('CleanReport', (status) => {
+        device.on('CleanReport', (status) => {
             console.log(`Cleaning Status Update: ${status}`);
         });
         
-        vacbot.on('ChargeState', (status) => {
+        device.on('ChargeState', (status) => {
             console.log(`Charging Status Update: ${status}`);
         });
         
-        vacbot.on('Error', (errorMsg) => {
+        device.on('Error', (errorMsg) => {
             console.warn(`Robot reported an error/warning: ${errorMsg}`);
         });
         
         // 4. Connect to the Robot's MQTT Broker
-        vacbot.connect();
+        device.connect();
         
         // Example: Trigger an Auto-Clean after 10 seconds, then charge
         /*
         setTimeout(() => {
             console.log("Triggering Auto-Clean...");
-            vacbot.run("Clean");
+            device.run("Clean");
         }, 10000);
         */
         
@@ -125,7 +125,7 @@ async function main() {
         process.on('SIGINT', async () => {
             console.log('\nDisconnecting and shutting down...');
             try {
-                await vacbot.disconnectAsync();
+                await device.disconnectAsync();
                 console.log("Disconnected successfully. Exiting.");
                 process.exit(0);
             } catch (e) {
@@ -153,13 +153,13 @@ main();
 ### Long-running connections: automatic token refresh (opt-in)
 The access token returned by `connect()` is only valid for a limited time (typically ~7 days). For short-lived scripts this never matters, but a long-running process (e.g. a 24/7 adapter) will eventually see authentication errors once the token expires.
 
-`EcovacsAPI` can refresh the token proactively. It is **opt-in** and decoupled from the bot, so you wire the refreshed token to your `VacBot` instance(s) yourself:
+`EcovacsAPI` can refresh the token proactively. It is **opt-in** and decoupled from the bot, so you wire the refreshed token to your `EcovacsDevice` instance(s) yourself:
 
 ```javascript
-// After api.connect(...) and creating your vacbot(s):
+// After api.connect(...) and creating your device(s):
 api.on('credentialsUpdated', (creds) => {
     // Apply the refreshed token: updates REST auth immediately and reconnects MQTT
-    vacbot.updateUserAccessToken(creds.token);
+    device.updateUserAccessToken(creds.token);
 });
 
 // Re-authenticate automatically shortly before the token expires
@@ -173,25 +173,29 @@ api.disableAutoTokenRefresh();
 * **`api.getCredentials()`** returns `{ userId, token, expiresAt }`.
 * The **`credentialsUpdated`** event also fires after the initial `connect()`, so you can register the listener before connecting.
 * If an automatic refresh fails, a **`credentialsRefreshError`** event is emitted and the refresh is retried after a short delay.
-* For multiple bots sharing one MQTT connection, call `updateUserAccessToken()` on **every** `VacBot` instance — each one needs its own refreshed REST token. Only the connection owner actually reconnects MQTT; the shared instances just update their token in place.
+* For multiple bots sharing one MQTT connection, call `updateUserAccessToken()` on **every** `EcovacsDevice` instance — each one needs its own refreshed REST token. Only the connection owner actually reconnects MQTT; the shared instances just update their token in place.
 
-### `getVacBotObj(vacuum)`
+### `getDeviceObj(vacuum)`
 * This is the preferred, high-level method to initialize your device instance from the retrieved `devices` array. It automatically passes the correct auth tokens, uid, realm, and resource behind the scenes.
+* Returns an **`EcovacsDevice`** instance — the client-side handle for one device (vacuum, air purifier, lawn mower or air-quality monitor).
+* For full control over the connection parameters there is also the lower-level `getDevice(user, hostname, resource, userToken, vacuum[, continent])`.
 
-### `vacbot.connect()`
+> **Naming note:** The device class is exported as **`EcovacsDevice`** (the former name **`VacBot`** is retained as a **deprecated alias** — `require('ecovacs-deebot').VacBot === require('ecovacs-deebot').EcovacsDevice`). The factory methods were likewise renamed: use **`getDeviceObj()`** / **`getDevice()`**; the previous **`getVacBotObj()`** / **`getVacBot()`** still work as deprecated aliases. Prefer the `Device` names in new code.
+
+### `device.connect()`
 * Opens the persistent MQTT/JSON communication channel with the device.
 
-### `vacbot.run("CommandName", ...args)`
+### `device.run("CommandName", ...args)`
 * Executes a specific command on the device. For a comprehensive index of all supported command names and their parameter structures, refer to the [API Command Reference](COMMANDS.md).
 
-### `vacbot.runAsync("CommandName", ...args)`
+### `device.runAsync("CommandName", ...args)`
 * The modern, Promise-based alternative to `run()`. It executes the command and returns a `Promise` resolving with the parsed, normalized response from the device (e.g., `{ level: 87, isLow: false }` for `GetBatteryState`).
 * For action/set commands, the Promise resolves immediately upon successful server acknowledgment.
-* It accepts an optional options object as the final argument (e.g. `vacbot.runAsync("GetBatteryState", { timeoutMs: 2000 })`).
+* It accepts an optional options object as the final argument (e.g. `device.runAsync("GetBatteryState", { timeoutMs: 2000 })`).
 * Note: All commands registered in the `COMMAND_REGISTRY` support `runAsync()`. If a command is unknown, or if it is called with incorrect or missing arguments, `runAsync()` will reject with an error.
 * Any MQTT transport or network failure (unreachable broker, malformed request) also rejects the returned Promise **and** emits `Error`, `ErrorCode` (code `"-1"`), and `LastError` events so you can observe failures even without `await`.
 
-### `vacbot.on("EventName", callback)`
+### `device.on("EventName", callback)`
 * Listens to live state changes pushed from the vacuum. The primary event mappings are:
   * `BatteryInfo` (Percentage integer)
   * `CleanReport` (String status, e.g., `auto`, `pause`, `stop`)
@@ -200,20 +204,20 @@ api.disableAutoTokenRefresh();
   * `CleanSpeed` (Suction speed level integer, `1-4`)
 
 ### Device Metadata & Capabilities APIs
-The `VacBot` instance provides helper methods to inspect the device's architecture, hardware type, and internal IoT platform protocol details synchronously:
+The `EcovacsDevice` instance provides helper methods to inspect the device's architecture, hardware type, and internal IoT platform protocol details synchronously:
 
-* **`vacbot.getPlatformType()`**: Returns the base architecture/generation of the device as a string (e.g. `'T20'`, `'X2'`, `'legacy'`, `'950'`). Note: `vacbot.getModelType()` is deprecated and wraps this.
-* **`vacbot.getDeviceCategory()`**: Returns the device category as a string (e.g. `'Vacuum Cleaner'`, `'Air Purifier'`, etc.). Note: `vacbot.getDeviceType()` is deprecated and wraps this.
-* **`vacbot.getSmartType()`**: Returns the internal IoT platform generation/protocol identifier as a string (e.g. `'MQ_AP'`, `'BLAP2'`, `'QRP'`, `'BT'`).
+* **`device.getPlatformType()`**: Returns the base architecture/generation of the device as a string (e.g. `'T20'`, `'X2'`, `'legacy'`, `'950'`). Note: `device.getModelType()` is deprecated and wraps this.
+* **`device.getDeviceCategory()`**: Returns the device category as a string (e.g. `'Vacuum Cleaner'`, `'Air Purifier'`, etc.). Note: `device.getDeviceType()` is deprecated and wraps this.
+* **`device.getSmartType()`**: Returns the internal IoT platform generation/protocol identifier as a string (e.g. `'MQ_AP'`, `'BLAP2'`, `'QRP'`, `'BT'`).
 * **Platform Type Helpers**: Convenience boolean methods to check the platform generation directly:
-  * `vacbot.isPlatformTypeLegacy()`
-  * `vacbot.isPlatformTypeN8()`
-  * `vacbot.isPlatformTypeT8()`
-  * `vacbot.isPlatformTypeT9()`
-  * `vacbot.isPlatformTypeT10()`
-  * `vacbot.isPlatformTypeT20()`
-  * `vacbot.isPlatformTypeX1()`
-  * `vacbot.isPlatformTypeX2()`
-  * `vacbot.isPlatformTypeAirbot()`
-  * `vacbot.isPlatformTypeAqMonitor()`
-  * `vacbot.isPlatformTypeLawnMower()`
+  * `device.isPlatformTypeLegacy()`
+  * `device.isPlatformTypeN8()`
+  * `device.isPlatformTypeT8()`
+  * `device.isPlatformTypeT9()`
+  * `device.isPlatformTypeT10()`
+  * `device.isPlatformTypeT20()`
+  * `device.isPlatformTypeX1()`
+  * `device.isPlatformTypeX2()`
+  * `device.isPlatformTypeAirbot()`
+  * `device.isPlatformTypeAqMonitor()`
+  * `device.isPlatformTypeLawnMower()`

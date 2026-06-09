@@ -42,6 +42,6 @@ If you prefer to run the example application in a containerized environment (wit
 ## Files
 
 -   `app.js`: Unified entry point — auto-detects device type and capabilities.
--   `lib/client.js`: Handles authentication, API connection, and VacBot initialization.
+-   `lib/client.js`: Handles authentication, API connection, and EcovacsDevice initialization.
 -   `tools.js`: Settings loader and utility functions for logging device data.
 -   `settings.js`: Default configuration, reads credentials from environment variables.

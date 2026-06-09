@@ -22,8 +22,8 @@ class ExampleClient {
     }
 
     /**
-     * Connects to the Ecovacs API and returns a VacBot instance.
-     * @returns {Promise<Object>} The connected VacBot instance
+     * Connects to the Ecovacs API and returns an EcovacsDevice instance.
+     * @returns {Promise<Object>} The connected EcovacsDevice instance
      */
     async init() {
         const { ACCOUNT_ID, PASSWORD, COUNTRY_CODE, DEVICE_NUMBER = 0, AUTH_DOMAIN = '' } = this.config;
@@ -47,7 +47,7 @@ class ExampleClient {
                 throw new Error(`Device at index ${DEVICE_NUMBER} not found.`);
             }
 
-            this.vacbot = this.api.getVacBot(
+            this.vacbot = this.api.getDevice(
                 this.api.uid,
                 EcovacsAPI.REALM,
                 this.api.resource,
@@ -62,7 +62,7 @@ class ExampleClient {
     }
 
     /**
-     * Disconnects the VacBot session.
+     * Disconnects the EcovacsDevice session.
      */
     async disconnect() {
         if (this.vacbot) {

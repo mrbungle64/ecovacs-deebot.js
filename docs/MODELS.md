@@ -25,7 +25,7 @@ When the library checks a device's capabilities (e.g., via `CapabilityManager`),
 
 ## `getPlatformType()` API
 
-The `getPlatformType()` method is available on the `VacBot` instance and returns the model's
+The `getPlatformType()` method is available on the `EcovacsDevice` instance and returns the model's
 base architecture type as a string. This value corresponds directly to the key used for the
 model's entry in `modelTypes.js` (via the `type` property set in `models.js`).
 
@@ -33,11 +33,11 @@ model's entry in `modelTypes.js` (via the `type` property set in `models.js`).
 > `getPlatformType()` internally. Prefer `getPlatformType()` in new code.
 
 ```javascript
-const platformType = vacbot.getPlatformType();
+const platformType = device.getPlatformType();
 // e.g. 'T20', 'X2', 'legacy', 'unknown'
 
 // Still works, but deprecated:
-const modelType = vacbot.getModelType();
+const modelType = device.getModelType();
 ```
 
 ### Possible Return Values
@@ -63,7 +63,7 @@ const modelType = vacbot.getModelType();
 
 ### Related Helper Methods
 
-The `VacBot` instance exposes convenience boolean methods built on top of `getPlatformType()`:
+The `EcovacsDevice` instance exposes convenience boolean methods built on top of `getPlatformType()`:
 
 | Method | Equivalent check |
 | :--- | :--- |
@@ -88,7 +88,7 @@ The `getDeviceCategory()` method returns the human-readable product category of 
 This is completely separate from the platform/architecture type returned by `getPlatformType()`.
 
 ```javascript
-const category = vacbot.getDeviceCategory();
+const category = device.getDeviceCategory();
 // e.g. 'Vacuum Cleaner', 'Air Purifier', 'Air Quality Monitor', 'Lawn Mower'
 ```
 
@@ -97,7 +97,7 @@ const category = vacbot.getDeviceCategory();
 The `getSmartType()` method returns the internal IoT platform generation/protocol identifier of the device as a string.
 
 ```javascript
-const smartType = vacbot.getSmartType();
+const smartType = device.getSmartType();
 // e.g. 'MQ_AP', 'BLAP2', 'QRP', 'QR_APM', 'SPA', 'BT', 'unknown'
 ```
 

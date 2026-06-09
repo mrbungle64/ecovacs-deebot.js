@@ -7,8 +7,8 @@ declare class CommandDispatcher {
     /**
      * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: import("../vacBot"));
-    bot: import("../vacBot");
+    constructor(bot: typeof import("../ecovacsDevice"));
+    bot: typeof import("../ecovacsDevice");
     /**
      * Dispatch a command with special logic.
      * @param {string} key - The command key.

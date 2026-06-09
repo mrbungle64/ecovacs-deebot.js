@@ -7,8 +7,8 @@ declare class HistoryManager {
     /**
      * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: import("../vacBot"));
-    bot: import("../vacBot");
+    constructor(bot: typeof import("../ecovacsDevice"));
+    bot: typeof import("../ecovacsDevice");
     /**
      * Call the REST API to fetch cleaning results logs.
      * @returns {Promise<Object>}

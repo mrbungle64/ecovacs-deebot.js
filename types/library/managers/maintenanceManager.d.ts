@@ -7,8 +7,8 @@ declare class MaintenanceManager {
     /**
      * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: import("../vacBot"));
-    bot: import("../vacBot");
+    constructor(bot: typeof import("../ecovacsDevice"));
+    bot: typeof import("../ecovacsDevice");
     components: {};
     lastComponentValues: {};
     emitFullLifeSpanEvent: boolean;

@@ -1,6 +1,6 @@
 # Event Reference for Ecovacs & Yeedi Devices
 
-This document describes the events exposed through the `VacBot` instance. `VacBot` forwards `on()` and `once()` listeners to the underlying `EcovacsDeviceSession` `EventEmitter`.
+This document describes the events exposed through the `EcovacsDevice` instance (formerly `VacBot`, retained as a deprecated alias). `EcovacsDevice` forwards `on()` and `once()` listeners to the underlying `EcovacsDeviceSession` `EventEmitter`.
 
 Events can be emitted when the robot pushes MQTT state updates, when command responses are received, or when the library updates internal map and connection state.
 
@@ -9,7 +9,7 @@ Events can be emitted when the robot pushes MQTT state updates, when command res
 You can listen for events using the standard Node.js `EventEmitter` pattern:
 
 ```javascript
-vacbot.on('BatteryInfo', (level) => {
+device.on('BatteryInfo', (level) => {
     console.log(`Battery level: ${level}%`);
 });
 ```

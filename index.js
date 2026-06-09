@@ -549,30 +549,40 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
-   * Wrapper method for the `getVacBot` method (but with only 1 parameter)
-   * @param {ApiDevice} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
-   * @returns {import('./library/vacBot')} a corresponding instance of the 'VacBot' class
+   * Get an `EcovacsDevice` instance for a device, using the credentials of the
+   * current API session (convenience wrapper for `getDevice`, with only 1 parameter).
+   * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+   * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
-  getVacBotObj(vacuum) {
-    return this.getVacBot(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum);
+  getDeviceObj(vacuum) {
+    return this.getDevice(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum);
   }
 
   /**
-   * Get a corresponding instance of the `vacBot` class
+   * @deprecated Use `getDeviceObj()` instead. Retained as a backward-compatible alias.
+   * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+   * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
+   */
+  getVacBotObj(vacuum) {
+    return this.getDeviceObj(vacuum);
+  }
+
+  /**
+   * Get a corresponding instance of the `EcovacsDevice` class
    * @param {string} user - the user ID (retrieved from Ecovacs API)
    * @param {string} hostname - the host name (for the Ecovacs API)
-   * @param {string} resource - the resource of the vacuum
+   * @param {string} resource - the resource of the device
    * @param {string} userToken - the user token
    * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
-   * @returns {import('./library/vacBot')} a corresponding instance of the `VacBot` class
+   * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
-  getVacBot(user, hostname, resource, userToken, vacuum, continent = '') {
-    tools.envLogHeader(`getVacBot('${user}','${hostname}','${resource}','${userToken}','${vacuum}','${continent}')`);
+  getDevice(user, hostname, resource, userToken, vacuum, continent = '') {
+    tools.envLogHeader(`getDevice('${user}','${hostname}','${resource}','${userToken}','${vacuum}','${continent}')`);
     if (continent !== '') {
       tools.envLogWarn(`got value '${continent}' for continent (deprecated)`);
     }
-    let vacBotClass;
+    let DeviceClass;
     const is950Type = EcovacsAPI.isDeviceClass950type(vacuum['class']);
     const is950Type_v2 = EcovacsAPI.isDeviceClass950v2type(vacuum['class']);
     if (is950Type) {
@@ -582,13 +592,27 @@ class EcovacsAPI extends EventEmitter {
       else {
         tools.envLogSuccess(`'MQTT/JSON' model identified`);
       }
-      vacBotClass = require('./library/vacBot');
+      DeviceClass = require('./library/ecovacsDevice');
     } else {
       const msg = `'XML' based model identified (unsupported)`;
       tools.envLogError(msg);
       throw new Error(msg);
     }
-    return new vacBotClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
+    return new DeviceClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
+  }
+
+  /**
+   * @deprecated Use `getDevice()` instead. Retained as a backward-compatible alias.
+   * @param {string} user - the user ID (retrieved from Ecovacs API)
+   * @param {string} hostname - the host name (for the Ecovacs API)
+   * @param {string} resource - the resource of the device
+   * @param {string} userToken - the user token
+   * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
+   * @param {string} [continent] - the continent
+   * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
+   */
+  getVacBot(user, hostname, resource, userToken, vacuum, continent = '') {
+    return this.getDevice(user, hostname, resource, userToken, vacuum, continent);
   }
 
   /**
@@ -715,4 +739,6 @@ module.exports.EcovacsAPI = EcovacsAPI;
 /** @deprecated Use EcovacsAPI instead */
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.countries = countries;
-module.exports.VacBot = require('./library/vacBot');
+module.exports.EcovacsDevice = require('./library/ecovacsDevice');
+/** @deprecated Use EcovacsDevice instead */
+module.exports.VacBot = module.exports.EcovacsDevice;

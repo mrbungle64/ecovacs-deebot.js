@@ -1,4 +1,4 @@
-export const VacBot: typeof import("./library/vacBot");
+export const EcovacsDevice: typeof import("./library/ecovacsDevice");
 export type ApiDevice = {
     did?: string | undefined;
     name?: string | undefined;
@@ -247,22 +247,40 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     getContinent(): string;
     /**
-     * Wrapper method for the `getVacBot` method (but with only 1 parameter)
-     * @param {ApiDevice} vacuum - The object for the vacuum, retrieved by the `devices` dictionary
-     * @returns {import('./library/vacBot')} a corresponding instance of the 'VacBot' class
+     * Get an `EcovacsDevice` instance for a device, using the credentials of the
+     * current API session (convenience wrapper for `getDevice`, with only 1 parameter).
+     * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+     * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
-    getVacBotObj(vacuum: ApiDevice): import("./library/vacBot");
+    getDeviceObj(vacuum: ApiDevice): import("./library/ecovacsDevice");
     /**
-     * Get a corresponding instance of the `vacBot` class
+     * @deprecated Use `getDeviceObj()` instead. Retained as a backward-compatible alias.
+     * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+     * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
+     */
+    getVacBotObj(vacuum: ApiDevice): import("./library/ecovacsDevice");
+    /**
+     * Get a corresponding instance of the `EcovacsDevice` class
      * @param {string} user - the user ID (retrieved from Ecovacs API)
      * @param {string} hostname - the host name (for the Ecovacs API)
-     * @param {string} resource - the resource of the vacuum
+     * @param {string} resource - the resource of the device
      * @param {string} userToken - the user token
      * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {string} [continent] - the continent
-     * @returns {import('./library/vacBot')} a corresponding instance of the `VacBot` class
+     * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string): import("./library/vacBot");
+    getDevice(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string): import("./library/ecovacsDevice");
+    /**
+     * @deprecated Use `getDevice()` instead. Retained as a backward-compatible alias.
+     * @param {string} user - the user ID (retrieved from Ecovacs API)
+     * @param {string} hostname - the host name (for the Ecovacs API)
+     * @param {string} resource - the resource of the device
+     * @param {string} userToken - the user token
+     * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
+     * @param {string} [continent] - the continent
+     * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
+     */
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string): import("./library/ecovacsDevice");
     /**
      * Get the version of the package
      * @returns {string} the version of the package
@@ -298,5 +316,5 @@ export namespace EcovacsAPI {
 /** @type {Object} */
 export const countries: Object;
 import EventEmitter = require("node:events");
-export { EcovacsAPI as EcoVacsAPI };
+export { EcovacsAPI as EcoVacsAPI, EcovacsDevice as VacBot };
 //# sourceMappingURL=index.d.ts.map

@@ -7,8 +7,8 @@ declare class CapabilityManager {
     /**
      * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: import("../vacBot"));
-    bot: import("../vacBot");
+    constructor(bot: typeof import("../ecovacsDevice"));
+    bot: typeof import("../ecovacsDevice");
     /**
      * Get the value of the given property for the device class
      * @param {string} property - The property to get

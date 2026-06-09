@@ -7,8 +7,8 @@ declare class BotState {
     /**
      * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: import("../vacBot"));
-    bot: import("../vacBot");
+    constructor(bot: typeof import("../ecovacsDevice"));
+    bot: typeof import("../ecovacsDevice");
     batteryLevel: number | null;
     batteryIsLow: boolean;
     cleanReport: any;

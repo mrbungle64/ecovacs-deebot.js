@@ -7,8 +7,8 @@ declare class MapManager {
     /**
      * @param {import('../vacBot')} bot - The VacBot instance.
      */
-    constructor(bot: import("../vacBot"));
-    bot: import("../vacBot");
+    constructor(bot: typeof import("../ecovacsDevice"));
+    bot: typeof import("../ecovacsDevice");
     maps: {};
     mapImages: any[];
     mapVirtualBoundaries: any[];

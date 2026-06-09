@@ -58,7 +58,7 @@ const PROXY_MAPPINGS = {
  * `this[manager].handleX(payload)` and returns its result (so async map
  * handlers keep returning a Promise the caller can await).
  *
- * The delegators are generated onto `VacBot.prototype` at the bottom of this
+ * The delegators are generated onto `EcovacsDevice.prototype` at the bottom of this
  * file, the same way `PROXY_MAPPINGS` generates the property getters/setters.
  * Handlers that are NOT simple passthroughs (e.g. `handleClearMap`,
  * `handleStationAction`, `handleTask`) stay hand-written in the class body.
@@ -95,10 +95,14 @@ const HANDLER_MAPPINGS = {
 };
 
 /**
- * @class VacBot
- * This class represents the vacuum bot
+ * @class EcovacsDevice
+ * The client-side handle for a single Ecovacs device (vacuum, air purifier,
+ * lawn mower or air-quality monitor). Owns identity/tokens, constructs the
+ * {@link EcovacsDeviceSession}, routes commands and proxies state/map/history.
+ *
+ * Exported publicly as both `EcovacsDevice` and the legacy alias `VacBot`.
  */
-class VacBot {
+class EcovacsDevice {
     /**
      * @param {string} user - the userId retrieved by the Ecovacs API
      * @param {string} hostname - the hostname of the API endpoint
@@ -153,7 +157,7 @@ class VacBot {
         this.maintenanceManager = new MaintenanceManager(this);
 
         this.ecovacs.on('ready', () => {
-            tools.envLogInfo(`[VacBot] Ready event!`);
+            tools.envLogInfo(`[EcovacsDevice] Ready event!`);
             this.is_ready = true;
         });
     }
@@ -388,7 +392,7 @@ class VacBot {
     }
 
     /**
-     * Attach to an existing MQTT client owned by another VacBot instance.
+     * Attach to an existing MQTT client owned by another EcovacsDevice instance.
      * @param {Object} existingMqttClient - connected mqtt.Client to reuse
      */
     connectShared(existingMqttClient) {
@@ -1080,7 +1084,7 @@ class VacBot {
 
 for (const [manager, props] of Object.entries(PROXY_MAPPINGS)) {
     for (const prop of props) {
-        Object.defineProperty(VacBot.prototype, prop, {
+        Object.defineProperty(EcovacsDevice.prototype, prop, {
             get() {
                 return this[manager] ? this[manager][prop] : undefined;
             },
@@ -1097,10 +1101,10 @@ for (const [manager, props] of Object.entries(PROXY_MAPPINGS)) {
 
 for (const [manager, handlers] of Object.entries(HANDLER_MAPPINGS)) {
     for (const handler of handlers) {
-        VacBot.prototype[handler] = function (payload) {
+        EcovacsDevice.prototype[handler] = function (payload) {
             return this[manager][handler](payload);
         };
     }
 }
 
-module.exports = VacBot;
+module.exports = EcovacsDevice;
