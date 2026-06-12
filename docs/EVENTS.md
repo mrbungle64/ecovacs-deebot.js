@@ -223,7 +223,6 @@ Most frequently used command responses are already listed in the sections above.
 | **`DusterRemind`** | `object` | Dust reminder setting. |
 | **`FanSpeed`** | `number` | Fan speed setting. |
 | **`HumanoidFollow`** | `object` | AIRBOT humanoid follow setting returned by command responses. Push updates may emit `HumanoidFollowYiko` and `HumanoidFollowVideo` instead. |
-| **`JCYAirQuality`** | `object` | Z1 Air Quality Monitor command response. Push messages are normalized to `AirQuality`. |
 | **`LiveLaunchPwdState`** | `object` | Live launch password state. |
 | **`Mic`** | `boolean` | AIRBOT microphone setting. |
 | **`MonitorAirState`** | `boolean` | AIRBOT monitor air state. |

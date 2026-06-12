@@ -267,7 +267,9 @@ const COMMAND_REGISTRY = {
     'GetAtmoVolume': { className: 'GetAtmoVolume', expectedEvent: 'AtmoVolume' },
     'GetBlueSpeaker': { className: 'GetBlueSpeaker', expectedEvent: 'BlueSpeaker' },
     'GetHumanoidFollow': { className: 'GetHumanoidFollow', expectedEvent: 'HumanoidFollow' },
-    'GetJCYAirQuality': { className: 'GetJCYAirQuality', expectedEvent: 'JCYAirQuality' },
+    // The dispatcher normalizes 'JCYAirQuality' messages to the 'AirQuality' event,
+    // so the pending promise must wait for 'AirQuality' (a 'JCYAirQuality' event never fires).
+    'GetJCYAirQuality': { className: 'GetJCYAirQuality', expectedEvent: 'AirQuality' },
     'GetMapTrace_V2': { className: 'GetMapTrace_V2', minArgs: 1 },
     'GetMic': { className: 'GetMic', expectedEvent: 'Mic' },
     'GetMonitorAirState': { className: 'GetMonitorAirState', expectedEvent: 'MonitorAirState' },
