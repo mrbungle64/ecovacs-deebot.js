@@ -157,6 +157,8 @@ These are some of the reusable bundles defined in `capabilityTypes.js`:
 | `OMNI` | All-in-One station: auto-empty, mop washing, air drying, rotating pads. |
 | `PLUS` | Pure dustbin suction station (no mop maintenance). |
 | `TURBO` | Rotating mop system + drying dock, but NO auto-empty station. |
+| `airQualitySensors` | Indoor air quality sensors: PM2.5, PM10, AQI, VOC, temperature, humidity. |
+| `airPurifierBase` | AIRBOT purifier base: replaceable filter + "three module" bay (UV sanitizer, humidifier, air freshener). |
 
 ## Possible Properties
 
@@ -184,6 +186,8 @@ The following properties can be defined in `modelTypes.js` or `capabilityTypes.j
 *   **`unit_care_info`** (boolean): Reports accessory life and maintenance info (brushes, filters).
 *   **`round_mop_info`** (boolean): Provides information about rotating mops (e.g., OZMO Turbo).
 *   **`air_freshener_info`** (boolean): Air freshener module status (e.g., T9).
+*   **`air_quality_sensors`** (boolean): Indoor air quality sensors (PM2.5, PM10, AQI, VOC, temperature, humidity). Used by AIRBOT purifiers and Air Quality Monitors.
+*   **`three_module`** (boolean): AIRBOT "three module" bay (UV sanitizer, humidifier, air freshener modules).
 
 ### Station Capabilities
 *   **`auto_empty_station`** (boolean): Device has an auto-empty station.

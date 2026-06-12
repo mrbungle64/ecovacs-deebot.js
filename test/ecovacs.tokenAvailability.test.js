@@ -166,3 +166,49 @@ describe('Ecovacs.sendCommand() availability signalling', function () {
         assert.deepStrictEqual(availability, [false, true]);
     });
 });
+
+describe('Ecovacs.sendCommand() timeout during hung portal request', function () {
+    it('does not trigger an unhandled rejection when the command times out before the HTTP request settles', async function () {
+        const PendingCommandRegistry = require('../library/managers/pendingCommandRegistry');
+        const unhandled = [];
+        const onUnhandled = (reason) => unhandled.push(reason);
+        process.on('unhandledRejection', onUnhandled);
+        const originalPost = axios.post;
+        // Portal request hangs forever; the registry timeout fires first and
+        // rejects the command Promise while sendCommand() is still awaiting axios
+        axios.post = () => new Promise(() => { });
+        const ecovacs = makeEcovacs({
+            country: 'DE',
+            continent: 'eu',
+            resource: 'res12345',
+            secret: 'token',
+            user: 'uid',
+            payloadType: 'j',
+            vacuum: { did: 'did1', resource: 'devres', class: 'yna5xi' },
+            pendingCommands: new PendingCommandRegistry(),
+            bot: {
+                is950type: () => true,
+                handleResponseError: () => { },
+                errorCode: '0',
+                errorDescription: ''
+            }
+        });
+        const command = {
+            name: 'getBattery',
+            args: { id: 't1' },
+            api: constants.IOT_DEVMANAGER_PATH,
+            getId: () => 't1',
+            _registryKey: 'GetBatteryState'
+        };
+        try {
+            ecovacs.sendCommand(command, { returnPromise: true, timeoutMs: 30 });
+            // Give the 30ms registry timeout time to fire and reject
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            assert.deepStrictEqual(unhandled, []);
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
+        } finally {
+            axios.post = originalPost;
+            process.removeListener('unhandledRejection', onUnhandled);
+        }
+    });
+});

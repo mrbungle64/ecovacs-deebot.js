@@ -48,16 +48,19 @@ exports.SupportedAirPurifierModels = {
     "sdp1y1": {
         "name": "AIRBOT Z1",
         "smartType": "QRP",
+        "capabilities": ["airQualitySensors", "airPurifierBase"],
         "type": "airbot"
     },
     "20anby": {
         "name": "Z1 Air Quality Monitor",
         "smartType": "MQ_AP",
+        "capabilities": ["airQualitySensors"],
         "type": "aqMonitor"
     },
     "99fqkn": {
         "name": "Z1 Air Quality Monitor",
         "smartType": "MQ_AP",
+        "capabilities": ["airQualitySensors"],
         "type": "aqMonitor"
     }
 };

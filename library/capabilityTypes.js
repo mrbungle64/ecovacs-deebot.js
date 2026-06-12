@@ -151,6 +151,25 @@ exports.CapabilityTypes = {
         round_mop_info: false,  // No rotating mop pads for station washing (overrides default).
         air_drying: false,      // No hot-air drying at station (overrides default).
         auto_empty_station: true
+    },
+    // Indoor air quality sensor suite: PM2.5, PM10, air quality index (AQI),
+    // VOC (Volatile Organic Compounds), temperature, and humidity.
+    // Shared by AIRBOT purifiers and standalone Air Quality Monitors.
+    // Values are retrieved via GetAirQuality (AIRBOT) resp. GetJCYAirQuality
+    // (Z1 Air Quality Monitor) and emitted as the 'AirQuality' event.
+    "airQualitySensors": {
+        air_quality_sensors: true
+    },
+    // Base capability for AIRBOT air purifiers (e.g. AIRBOT Z1).
+    // - filter: replaceable purification filter with life-span tracking (GetLifeSpan).
+    // - three_module: the swappable "three module" bay holding the UV sanitizer,
+    //   humidifier, and air-freshener modules (GetThreeModule / SetThreeModule,
+    //   SetUVCleaner, SetHumidifierLevel, SetFreshenerLevel).
+    // Movement-related properties (spot_area, clean_speed) come from the
+    // 'airbot' modelType, not from this capability.
+    "airPurifierBase": {
+        filter: true,
+        three_module: true
     }
 };
 

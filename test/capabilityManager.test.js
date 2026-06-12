@@ -291,6 +291,30 @@ describe('CapabilityManager – device property accessors', function () {
         });
     });
 
+    describe('hasAirQualitySensors()', function () {
+        it('should return true for an Airbot device', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.airbot)).hasAirQualitySensors(), true);
+        });
+        it('should return true for an air quality monitor device', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.aqMonitor)).hasAirQualitySensors(), true);
+        });
+        it('should return false for a vacuum device (T9)', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.T9)).hasAirQualitySensors(), false);
+        });
+    });
+
+    describe('hasThreeModule()', function () {
+        it('should return true for an Airbot device', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.airbot)).hasThreeModule(), true);
+        });
+        it('should return false for an air quality monitor device (passive, no modules)', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.aqMonitor)).hasThreeModule(), false);
+        });
+        it('should return false for a vacuum device (T9)', function () {
+            assert.strictEqual(new CapabilityManager(makeFakeBot(DEVICE.T9)).hasThreeModule(), false);
+        });
+    });
+
     describe('getDeviceProperty() with defaultValue', function () {
         it('should return the defaultValue when the property does not exist', function () {
             const mgr = new CapabilityManager(makeFakeBot(DEVICE['950']));

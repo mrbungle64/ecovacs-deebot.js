@@ -208,6 +208,24 @@ class CapabilityManager {
     }
 
     /**
+     * Returns true if the model has indoor air quality sensors
+     * (PM2.5, PM10, AQI, VOC, temperature, humidity)
+     * @returns {boolean}
+     */
+    hasAirQualitySensors() {
+        return this.getDeviceProperty('air_quality_sensors');
+    }
+
+    /**
+     * Returns true if the model has the AIRBOT "three module" bay
+     * (UV sanitizer, humidifier, and air-freshener modules)
+     * @returns {boolean}
+     */
+    hasThreeModule() {
+        return this.getDeviceProperty('three_module');
+    }
+
+    /**
      * Returns true if the model has Edge cleaning mode
      * It is assumed that a model can have either an Edge or Spot Area mode
      * @returns {boolean}
