@@ -110,6 +110,10 @@ class EcovacsDeviceSession extends EventEmitter {
      */
     connect() {
         tools.envLogHeader(`connect()`);
+        // Detach from any previous client before replacing it, so the old client
+        // stops routing events here (and the listener bookkeeping stays correct)
+        this._detachClientListeners();
+        this._sharedClient = false;
         let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
         const clientId = this.username + '/' + this.resource;
         tools.envLogInfo(`url: '${url}'`);
@@ -138,6 +142,10 @@ class EcovacsDeviceSession extends EventEmitter {
         tools.envLogHeader(`connectShared()`);
         tools.envLogInfo(`vacuum did: '${this.vacuum['did']}'`);
 
+        // Detach from any previous client before replacing it, so the old client
+        // stops routing events here and the max-listeners revert is applied to
+        // the client that was actually bumped
+        this._detachClientListeners();
         this._sharedClient = true;
         this.client = existingClient;
 
@@ -320,6 +328,12 @@ class EcovacsDeviceSession extends EventEmitter {
                     resolvePromise = resolve;
                 }
             });
+            // The registry timeout (or rejectAll on disconnect) may reject this
+            // Promise while we are still awaiting the HTTP request below — i.e.
+            // before the caller had any chance to attach handlers. Mark it as
+            // handled so a slow portal request cannot trigger an unhandled
+            // rejection; the caller still receives the rejection when awaiting.
+            commandPromise.catch(() => {});
         }
 
         const rejectCommand = (e) => {
@@ -468,7 +482,11 @@ class EcovacsDeviceSession extends EventEmitter {
         // Error code 3 = 'RequestOAuthError: Authentication error'
         if (this.bot.errorCode === '3') {
             this.emit('disconnect', true);
-            this.disconnect();
+            // Fire-and-forget: a failing disconnect must not surface as an
+            // unhandled rejection in the consuming application
+            this.disconnect().catch((e) => {
+                tools.envLogError(`error disconnecting after auth error: ${e.message}`);
+            });
         }
     }
 
@@ -487,7 +505,7 @@ class EcovacsDeviceSession extends EventEmitter {
             this.client.unsubscribe(this.channel, error => {
                 if (error) {
                     tools.envLogError(`error unsubscribing from the atr channel: ${error.toString()}`);
-                    reject(false);
+                    reject(new Error(`failed to unsubscribe from the atr channel: ${error.toString()}`));
                 } else {
                     tools.envLogSuccess(`successfully unsubscribed from the atr channel`);
                     if (!this._sharedClient) {
