@@ -332,31 +332,22 @@ class EcovacsAPI extends EventEmitter {
 
     tools.envLogInfo(`portalUrl.href: '${portalUrl.href}'`);
     tools.envLogInfo(`searchParams: '${searchParams.toString()}'`);
-    try {
-      // The Ecovacs cloud sporadically returns HTTP 502; retry defensively.
-      const res = await tools.withRetry(
-        () => axios.get(portalUrl.href, axiosConfig),
-        { retryOn: ({ error }) => tools.isBadGatewayError(error) }
-      );
-      const result = res.data;
-      tools.envLogPayload(result);
-      if (result.code === '0000') {
-        return result.data;
-      } else {
-        let error;
-        // '1005' and '1010' both indicate an invalid account id / password
-        // (the latter matches deebot-client's invalid-authentication handling).
-        if ((result.code === '1005') || (result.code === '1010')) {
-          error = new Error('Incorrect account id or password');
-        } else {
-          error = new Error(`Failure code ${result.code}: ${result.msg}`);
-        }
-        throw error;
-      }
-    } catch (err) {
-      tools.envLogError(`error: '${err}'`);
-      throw err;
+    // The Ecovacs cloud sporadically returns HTTP 502; retry defensively.
+    const res = await tools.withRetry(
+      () => axios.get(portalUrl.href, axiosConfig),
+      { retryOn: ({ error }) => tools.isBadGatewayError(error) }
+    );
+    const result = res.data;
+    tools.envLogPayload(result);
+    if (result.code === '0000') {
+      return result.data;
     }
+    // '1005' and '1010' both indicate an invalid account id / password
+    // (the latter matches deebot-client's invalid-authentication handling).
+    if ((result.code === '1005') || (result.code === '1010')) {
+      throw new Error('Incorrect account id or password');
+    }
+    throw new Error(`Failure code ${result.code}: ${result.msg}`);
   }
 
   /**
