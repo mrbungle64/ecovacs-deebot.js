@@ -34,7 +34,7 @@ class HistoryManager {
         }
         portalPath = portalPath + '/dln/api/log/clean_result/list?';
 
-        let auth = {
+        const auth = {
             "realm": constants.REALM,
             "with": "users",
             "userid": this.bot.uid,
@@ -42,10 +42,10 @@ class HistoryManager {
             "resource": this.bot.resource
         };
 
-        let ts = Date.now();
-        let sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
+        const ts = Date.now();
+        const sign = crypto.createHash('sha256').update(constants.APP_ID + constants.APP_SK + ts.toString()).digest("hex");
 
-        let queryParams = {
+        const queryParams = {
             'auth': JSON.stringify(auth),
             'channel': 'google_play',
             'did': this.bot.did,
@@ -58,7 +58,7 @@ class HistoryManager {
             'version': 'v2'
         };
 
-        let config = {
+        const config = {
             headers: {
                 'Authorization': 'Bearer ' + this.bot.user_access_token,
                 'token': this.bot.user_access_token,
@@ -73,7 +73,7 @@ class HistoryManager {
             }
         };
 
-        let searchParams = querystring.encode(queryParams);
+        const searchParams = querystring.encode(queryParams);
         tools.envLogInfo(`[EcovacsAPI] callLogsApi calling ${portalPath}`);
         try {
             const res = await axios.get(portalPath + searchParams, config);
@@ -100,9 +100,9 @@ class HistoryManager {
      * @returns {Promise<void>}
      */
     async downloadSecuredContent(url, targetFilename) {
-        let sign = crypto.createHash('sha256').update(this.getCryptoHashStringForSecuredContent()).digest("hex");
+        const sign = crypto.createHash('sha256').update(this.getCryptoHashStringForSecuredContent()).digest("hex");
 
-        let headers = {
+        const headers = {
             'Authorization': 'Bearer ' + this.bot.user_access_token,
             'token': this.bot.user_access_token,
             'appid': 'ecovacs',

@@ -88,7 +88,7 @@ class CommandDispatcher {
                 break;
             }
             case 'PlaySound'.toLowerCase(): {
-                let sid = args[0] || 0;
+                const sid = args[0] || 0;
                 promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.PlaySound(Number(sid)), options);
                 break;
             }
@@ -506,7 +506,7 @@ class CommandDispatcher {
             }
             case 'Drying'.toLowerCase(): {
                 if (args.length >= 1) {
-                    let value = args[0];
+                    const value = args[0];
                     let act = Number(value);
                     if (isNaN(act)) {
                         // 'start' and 'stop' are also valid arguments

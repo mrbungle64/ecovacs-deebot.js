@@ -146,7 +146,7 @@ class EcovacsMessageDispatcher {
      */
     handleLifeSpanCombined() {
         const emitComponent = {};
-        for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+        for (const component in this.dictionary.COMPONENT_TO_ECOVACS) {
             if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
                 if (this.bot.components[component]) {
                     emitComponent[component] = this.bot.components[component] && (this.bot.components[component] !== this.bot.lastComponentValues[component]);
@@ -176,7 +176,7 @@ class EcovacsMessageDispatcher {
         const vacuumPowerAdjustmentOk = !this.bot.hasVacuumPowerAdjustment() || (this.bot.cleanSpeed !== null);
         const moppingSystemOk = !this.bot.hasMoppingSystem() || (this.bot.waterLevel !== null);
         if (vacuumPowerAdjustmentOk && moppingSystemOk) {
-            let r = {
+            const r = {
                 'cleanStatus': this.bot.cleanReport
             };
             if (this.bot.hasVacuumPowerAdjustment() && (this.bot.cleanSpeed !== null)) {
@@ -415,7 +415,7 @@ class EcovacsMessageDispatcher {
             this.emitMessage("LifeSpan", this.bot.components, payload);
         } else {
             if (!this.bot.emitFullLifeSpanEvent) {
-                for (let component in this.dictionary.COMPONENT_TO_ECOVACS) {
+                for (const component in this.dictionary.COMPONENT_TO_ECOVACS) {
                     if (this.dictionary.COMPONENT_TO_ECOVACS.hasOwnProperty(component)) {
                         if (this.bot.components[component]) {
                             if (this.bot.components[component] !== this.bot.lastComponentValues[component]) {
@@ -697,7 +697,7 @@ class EcovacsMessageDispatcher {
         if (ctx.commandPrefix === 'get') { //the getMapInfo only triggers the onMapInfo events but itself returns only status
             tools.envLogWarn(`getMapInfo responded: ${JSON.stringify(payload)}`);
         } else if (tools.isCanvasModuleAvailable()) {
-            let mapImage = await this.bot.handleMapImage(payload);
+            const mapImage = await this.bot.handleMapImage(payload);
             if (mapImage !== null) {
                 this.emitMessage("MapImageData", mapImage, payload);
                 if (this.bot.createMapImageOnly) {
@@ -727,7 +727,7 @@ class EcovacsMessageDispatcher {
             tools.envLogWarn(`Skipping 'MapSet' push: device lacks mapping capabilities`);
             return;
         }
-        let mapset = this.bot.handleMapSet(payload);
+        const mapset = this.bot.handleMapSet(payload);
         if ((mapset["mapsetEvent"] !== 'error') || (mapset["mapsetEvent"] !== 'skip')) { //skip if not both boundary types are already processed
             this.emitMessage(mapset["mapsetEvent"], mapset["mapsetData"], payload);
         }
@@ -771,7 +771,7 @@ class EcovacsMessageDispatcher {
             tools.envLogWarn(`Skipping 'MapSubSet' push: device lacks mapping capabilities`);
             return;
         }
-        let mapsubset = await this.bot.handleMapSubset(payload);
+        const mapsubset = await this.bot.handleMapSubset(payload);
         if (mapsubset["mapsubsetEvent"] !== 'error') {
             // MapSpotAreaInfo, MapVirtualBoundaryInfo
             this.emitMessage(mapsubset["mapsubsetEvent"], mapsubset["mapsubsetData"], payload);

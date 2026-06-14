@@ -361,7 +361,7 @@ class MapManager {
         this.currentMapName = 'unknown';
         this.maps = { 'maps': [] };
         const info = payload['info'];
-        for (let mapIndex in info) {
+        for (const mapIndex in info) {
             if (info.hasOwnProperty(mapIndex)) {
                 if (info[mapIndex]['mid'] !== '0') {
                     const data = info[mapIndex];
@@ -432,8 +432,8 @@ class MapManager {
             return { mapsetEvent: 'skip' };
         }
         if (payload['type'] === 'ar') {
-            let mapSpotAreas = new map.EcovacsMapSpotAreas(mapID, payload['msid']);
-            for (let mapIndex in payload['subsets']) {
+            const mapSpotAreas = new map.EcovacsMapSpotAreas(mapID, payload['msid']);
+            for (const mapIndex in payload['subsets']) {
                 if (payload['subsets'].hasOwnProperty(mapIndex)) {
                     mapSpotAreas.push(
                         new map.EcovacsMapSpotArea(payload['subsets'][mapIndex]['mssid'])
@@ -450,7 +450,7 @@ class MapManager {
                 this.mapVirtualBoundaries[mapID] = new map.EcovacsMapVirtualBoundaries(mapID);
                 this.mapVirtualBoundariesResponses[mapID] = [false, false];
             }
-            for (let mapIndex in payload['subsets']) {
+            for (const mapIndex in payload['subsets']) {
                 if (payload['subsets'].hasOwnProperty(mapIndex)) {
                     this.mapVirtualBoundaries[mapID].push(
                         new map.EcovacsMapVirtualBoundary(payload['subsets'][mapIndex]['mssid'], payload['type'])
@@ -505,7 +505,7 @@ class MapManager {
             }
             //TODO: filter out reportMapSubSet events (missing data)
             //reportMapSubSet event comes without map reference, replace
-            let mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
+            const mapSpotAreaInfo = new map.EcovacsMapSpotAreaInfo(
                 mapID,
                 payload['mssid'],
                 payload['connections'], //reportMapSubSet event comes without connections
@@ -530,7 +530,7 @@ class MapManager {
                 mapsubsetData: mapSpotAreaInfo
             };
         } else if ((payload['type'] === 'vw') || (payload['type'] === 'mw')) {
-            let mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(mapID, payload['mssid'], payload['type'], payload['value']);
+            const mapVirtualBoundaryInfo = new map.EcovacsMapVirtualBoundaryInfo(mapID, payload['mssid'], payload['type'], payload['value']);
             if (typeof this.mapVirtualBoundaryInfos[mapID] === 'undefined') {
                 this.mapVirtualBoundaryInfos[mapID] = []; //initialize array for mapVirtualBoundaryInfos if not existing
             }
@@ -556,7 +556,7 @@ class MapManager {
         }
         if ((subsets !== undefined) && Array.isArray(subsets)) {
             const type = payload['type'];
-            let subsetData = [];
+            const subsetData = [];
             subsets.forEach((subset) => {
                 const mssid = subset[0];
                 const name = subset[1];

@@ -133,7 +133,7 @@ class EcovacsMapImageBase {
     }
 
     async drawMapPieceToCanvas(mapPieceCompressed, mapPieceStartX, mapPieceStartY, mapPieceWidth, mapPieceHeight) {
-        let mapPieceDecompressed = await mapPieceToIntArray(mapPieceCompressed);
+        const mapPieceDecompressed = await mapPieceToIntArray(mapPieceCompressed);
         if (!mapPieceDecompressed) { // Decompression unavailable (e.g. zstd on older Node) – skip this piece
             return;
         }
@@ -424,15 +424,15 @@ function toPixelBytes(decompressed) {
 //   - null when decompression is unavailable (e.g. zstd on older Node)
 // thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
 async function decompressMapPiece(pieceValue) {
-    let buff = Buffer.from(pieceValue, 'base64');
+    const buff = Buffer.from(pieceValue, 'base64');
     // Newer models send zstd-compressed pieces (detected via magic bytes); older ones use LZMA.
     if ((buff.length >= 4) && ZSTD_MAGIC.every((byte, i) => buff[i] === byte)) {
         return zstdDecompress(buff);
     }
     const fixArray = new Int8Array([0, 0, 0, 0]);
-    let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
+    const int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
     //fix 9 byte header to 13 bytes for lzma decompression
-    let correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];
+    const correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];
     //decompress
     return lzma.decompress(correctedArray);
 }

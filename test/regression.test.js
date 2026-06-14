@@ -105,7 +105,7 @@ describe('Regression Tests (Baseline v1)', function () {
 
                 const currentValue = bot.getDeviceProperty(prop);
                 let actual = currentValue;
-                let expected = baselineValue;
+                const expected = baselineValue;
 
                 // Handle cases where we have an array (e.g. clean_speed) but baseline expected true
                 if (expected === true && Array.isArray(actual)) {

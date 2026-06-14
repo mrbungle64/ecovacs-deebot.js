@@ -114,7 +114,7 @@ class EcovacsDeviceSession extends EventEmitter {
         // stops routing events here (and the listener bookkeeping stays correct)
         this._detachClientListeners();
         this._sharedClient = false;
-        let url = `mqtts://${this.serverAddress}:${this.serverPort}`;
+        const url = `mqtts://${this.serverAddress}:${this.serverPort}`;
         const clientId = this.username + '/' + this.resource;
         tools.envLogInfo(`url: '${url}'`);
         tools.envLogInfo(`username: '${this.username}'`);

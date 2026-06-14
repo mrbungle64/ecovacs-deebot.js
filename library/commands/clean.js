@@ -22,14 +22,14 @@ class Clean extends VacBotCommand {
      * @return {void}
      */
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
-        let payload = {
+        const payload = {
             'act': action,
             'count': 1,
             'donotClean': 0,
             'router': 'plan',
             'type': constants_type.CLEAN_MODE_TO_ECOVACS[mode]
         };
-        for (let key in kwargs) {
+        for (const key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
                 payload[key] = kwargs[key];
             }
@@ -45,7 +45,7 @@ class Clean extends VacBotCommand {
  */
 class Clean_V2 extends VacBotCommand {
     constructor(mode = 'auto', action = 'start', kwargs = {}) {
-        let payload = {
+        const payload = {
             'act': action,
             'content': {
                 'count': 1,
@@ -55,7 +55,7 @@ class Clean_V2 extends VacBotCommand {
             'mode': '',
             'router': 'plan'
         };
-        for (let key in kwargs) {
+        for (const key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
                 Object.assign(payload[key], kwargs[key]);
             }
@@ -70,7 +70,7 @@ class Clean_V2 extends VacBotCommand {
  */
 class CustomArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
-        let cleaningAsNumber = Number(cleanings);
+        const cleaningAsNumber = Number(cleanings);
         super('customArea', action, {
             'content': area,
             'count': cleaningAsNumber
@@ -86,7 +86,7 @@ class CustomArea extends Clean {
  */
 class CustomArea_V2 extends Clean_V2 {
     constructor(area = '', cleanings = 1, donotClean = 0) {
-        let cleaningAsNumber = Number(cleanings);
+        const cleaningAsNumber = Number(cleanings);
         super('customArea', 'start', {
             'content': {
                 'total': 0,
@@ -104,7 +104,7 @@ class CustomArea_V2 extends Clean_V2 {
  */
 class SpotArea extends Clean {
     constructor(action = 'start', area = '', cleanings = 1) {
-        let cleaningAsNumber = Number(cleanings);
+        const cleaningAsNumber = Number(cleanings);
         super('spotArea', action, {
             'content': area,
             'count': cleaningAsNumber
@@ -120,7 +120,7 @@ class SpotArea extends Clean {
  */
 class SpotArea_V2 extends Clean_V2 {
     constructor(area = '', cleanings = 1) {
-        let cleaningAsNumber = Number(cleanings);
+        const cleaningAsNumber = Number(cleanings);
         super('spotArea', 'start', {
             'content': {
                 'count': cleaningAsNumber,

@@ -8,7 +8,7 @@ const constants = require('./constants');
 
 module.exports.getRequestUrl = function(ecovacs, command, params) {
     const apiPath = module.exports.getApiPath(command);
-    let portalUrlFormat = tools.getPortalUrlFormat(ecovacs.country, ecovacs.continent);
+    const portalUrlFormat = tools.getPortalUrlFormat(ecovacs.country, ecovacs.continent);
     let portalUrl = tools.formatString(portalUrlFormat + '/' + apiPath, { continent: ecovacs.continent });
     if (ecovacs.bot.is950type()) {
         if (ecovacs.bot.authDomain === constants.AUTH_DOMAIN_YD) {
@@ -24,7 +24,7 @@ module.exports.getRequestUrl = function(ecovacs, command, params) {
 };
 
 module.exports.getRequestHeaders = function(ecovacs, params) {
-    let headers = {
+    const headers = {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(JSON.stringify(params))
     };

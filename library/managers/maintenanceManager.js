@@ -24,7 +24,7 @@ class MaintenanceManager {
      * @param {Object} payload
      */
     handleLifespan(payload) {
-        for (let index in payload) {
+        for (const index in payload) {
             if (!payload[index]) {
                 continue;
             }

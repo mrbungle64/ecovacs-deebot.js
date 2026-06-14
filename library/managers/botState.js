@@ -305,7 +305,7 @@ class BotState {
         const chargePos = payload['chargePos'];
         if (chargePos) {
             // check if position changed
-            let changed = (
+            const changed = (
                 chargePos[0]['x'] !== this.chargePosition.x ||
                 chargePos[0]['y'] !== this.chargePosition.y ||
                 chargePos[0]['a'] !== this.chargePosition.a
@@ -324,7 +324,7 @@ class BotState {
         const deebotPos = payload['deebotPos'];
         if (typeof deebotPos === 'object') {
             // check if position changed or currentSpotAreaID is 'unknown'
-            let changed = (
+            const changed = (
                 deebotPos['x'] !== this.deebotPosition.x ||
                 deebotPos['y'] !== this.deebotPosition.y ||
                 deebotPos['a'] !== this.deebotPosition.a ||
@@ -334,10 +334,10 @@ class BotState {
             if (changed) {
                 const posX = Number(deebotPos['x']);
                 const posY = Number(deebotPos['y']);
-                let currentSpotAreaID = mapTools.getCurrentSpotAreaID(
+                const currentSpotAreaID = mapTools.getCurrentSpotAreaID(
                     posX, posY, this.bot.mapSpotAreaInfos[this.bot.currentMapMID]
                 );
-                let isInvalid = Number(deebotPos['invalid']) === 1;
+                const isInvalid = Number(deebotPos['invalid']) === 1;
                 let distanceToChargingStation = null;
                 if (this.chargePosition) {
                     const pos = deebotPos['x'] + ',' + deebotPos['y'];
@@ -594,7 +594,7 @@ class BotState {
             logs = payload['data'];
         }
 
-        for (let logIndex in logs) {
+        for (const logIndex in logs) {
             if (!logs.hasOwnProperty(logIndex)) {
                 continue;
             }
@@ -602,12 +602,12 @@ class BotState {
             if (this.cleanLog[logEntry['id']]) {
                 continue;
             }
-            let squareMeters = parseInt(logEntry['area']);
-            let timestamp = Number(logEntry['ts']);
-            let date = new Date(timestamp * 1000);
-            let len = parseInt(logEntry['last']);
-            let totalTimeString = tools.getTimeStringFormatted(len);
-            let imageUrl = logEntry['imageUrl'];
+            const squareMeters = parseInt(logEntry['area']);
+            const timestamp = Number(logEntry['ts']);
+            const date = new Date(timestamp * 1000);
+            const len = parseInt(logEntry['last']);
+            const totalTimeString = tools.getTimeStringFormatted(len);
+            const imageUrl = logEntry['imageUrl'];
             if ((this.cleanLog_lastTimestamp < timestamp) || (!this.cleanLog_lastTimestamp)) {
                 this.cleanLog_lastImageUrl = imageUrl;
                 this.cleanLog_lastTimestamp = timestamp;
@@ -635,8 +635,8 @@ class BotState {
      * (MQTT response via `lg/log.do` and REST API via `dln/api/log/clean_result/list`)
      */
     emitCleanLogEvents() {
-        let cleanLog = [];
-        for (let i in this.cleanLog) {
+        const cleanLog = [];
+        for (const i in this.cleanLog) {
             if (this.cleanLog.hasOwnProperty(i)) {
                 cleanLog.push(this.cleanLog[i]);
             }
@@ -861,7 +861,7 @@ class BotState {
         for (let c = 0; c < payload.length; c++) {
             const resultData = payload[c];
             if (resultData.repeat !== undefined) {
-                let cleanCtl = {
+                const cleanCtl = {
                     'type': 'auto'
                 };
                 if (resultData.hasOwnProperty('content') && resultData.content.hasOwnProperty('jsonStr')) {
@@ -1153,7 +1153,7 @@ class BotState {
      */
     handleSysinfo(payload) {
         try {
-            let event = payload[0];
+            const event = payload[0];
             this.sysinfo = {
                 'load': event['uptime'].substring(event['uptime'].indexOf('average') + 9),
                 'uptime': event['uptime'].substring(event['uptime'].indexOf('up') + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).indexOf('users')).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).substr(0, event['uptime'].substring(event['uptime'].indexOf('up') + 3).indexOf('users')).lastIndexOf(',')),

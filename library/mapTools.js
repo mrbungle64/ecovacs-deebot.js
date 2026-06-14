@@ -40,7 +40,7 @@ function getDistance(x1, y1, x2, y2) {
  * @returns {string} the ID of the spot area (`unknown` if not determinable)
  */
 function getCurrentSpotAreaID(x, y, spotAreaInfo) {
-    for (let infoID in spotAreaInfo) {
+    for (const infoID in spotAreaInfo) {
         if (spotAreaInfo.hasOwnProperty(infoID)) {
             if (spotAreaInfo[infoID].containsPoint(x, y)) {
                 return spotAreaInfo[infoID]["mapSpotAreaID"];

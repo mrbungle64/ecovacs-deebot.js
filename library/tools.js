@@ -243,7 +243,7 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
             device = devices[device.deviceClassLink];
         }
 
-        let platformType = device.type;
+        const platformType = device.type;
         if (platformType) {
             const platformTypeProperties = _allKnownModelTypes[platformType];
             if (platformTypeProperties && platformTypeProperties.hasOwnProperty(property)) {
@@ -392,7 +392,7 @@ function convertAreaValuesForFreeCleanCmd(areaValues) {
     areaValues = areaValues.replace(/ /g, ''); // Remove all spaces
     areaValues = areaValues.replace(/,$/, ''); // Remove trailing comma
     if (!areaValues.includes(';')) {
-        let areas = areaValues.split(',');
+        const areas = areaValues.split(',');
         areaValues = '1,' + areas[0] + ';';
         for (let i = 1; i < areas.length; i++) {
             const value = areas[i];
@@ -447,8 +447,8 @@ function getPortalUrlFormat(country, continent = '') {
  * @returns {string} a string of the form "key1=value1&key2=value2&key3=value3"
  */
 function paramsToQueryList(params) {
-    let query = [];
-    for (let key in params) {
+    const query = [];
+    for (const key in params) {
         if (params.hasOwnProperty(key)) {
             query.push(key + "=" + encodeURIComponent(params[key]));
         }
@@ -652,7 +652,7 @@ async function withRetry(fn, opts = {}) {
 /**
  * Prints to `stdout` only in development mode (`dev` or `development`)
  */
-let envLog = function (...args) {
+const envLog = function (...args) {
     if ((process.env.NODE_ENV === 'development') || (process.env.NODE_ENV === 'dev')) {
         console.log(...args);
     }

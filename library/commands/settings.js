@@ -80,7 +80,7 @@ class SetWaterInfo extends VacBotCommand {
  */
 class PlaySound extends VacBotCommand {
     constructor(sid = 0) {
-        let sidAsNumber = Number(sid);
+        const sidAsNumber = Number(sid);
         super('playSound', {
             'sid': sidAsNumber
         });

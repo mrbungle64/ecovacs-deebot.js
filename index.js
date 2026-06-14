@@ -261,7 +261,7 @@ class EcovacsAPI extends EventEmitter {
    * @returns An array of query strings
    */
   buildQueryList(params, authSignParams, authAppkey, authSecret) {
-    let authSignText = this.buildAuthSignText(authAppkey, authSignParams, authSecret);
+    const authSignText = this.buildAuthSignText(authAppkey, authSignParams, authSecret);
 
     params['authAppkey'] = authAppkey;
     params['authSign'] = EcovacsAPI.md5(authSignText);
@@ -271,10 +271,10 @@ class EcovacsAPI extends EventEmitter {
 
   buildAuthSignText(authAppkey, authSignParams, authSecret) {
     let authSignText = authAppkey;
-    let keys = Object.keys(authSignParams);
+    const keys = Object.keys(authSignParams);
     keys.sort();
     for (let i = 0; i < keys.length; i++) {
-      let k = keys[i];
+      const k = keys[i];
       authSignText += k + "=" + authSignParams[k];
     }
     authSignText += authSecret;
@@ -311,7 +311,7 @@ class EcovacsAPI extends EventEmitter {
     } else {
       tools.envLogHeader(`callUserAuthApi('${loginPath}',${JSON.stringify(params)})`);
     }
-    let portalPath = this.getPortalPath(loginPath);
+    const portalPath = this.getPortalPath(loginPath);
     let portalUrl;
     let searchParams;
     params['authTimespan'] = Date.now();
@@ -378,9 +378,9 @@ class EcovacsAPI extends EventEmitter {
     const params = { 'todo': func, ...args };
     tools.envLogInfo(`params: ${JSON.stringify(params)}`);
 
-    let portalUrlFormat = tools.getPortalUrlFormat(this.country, this.continent);
-    let portalUrl = tools.formatString(portalUrlFormat + "/" + loginPath, { continent: this.continent });
-    let headers = {
+    const portalUrlFormat = tools.getPortalUrlFormat(this.country, this.continent);
+    const portalUrl = tools.formatString(portalUrlFormat + "/" + loginPath, { continent: this.continent });
+    const headers = {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(JSON.stringify(params))
     };
