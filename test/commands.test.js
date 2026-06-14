@@ -475,16 +475,31 @@ describe('PendingCommandRegistry & sendCommand Lifecycle', function () {
             axios.post = originalPost;
         });
 
-        it('should resolve immediately for action/set commands (expectedEvent = null)', async function () {
+        it('should resolve immediately for action/set commands (expectedEvent = null) with the device payload', async function () {
             const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
             const cmd = {
                 name: 'Stop',
                 args: { id: 'test_id' },
                 getId: () => 'test_id'
             };
+            // Unified contract: resolve with the device payload (resp.body.data),
+            // the same shape the expectedEvent path resolves with — not the raw envelope.
+            mockPostResponse = {
+                result: 'ok',
+                resp: { body: { code: 0, msg: 'ok', data: { acked: true } } }
+            };
             const promise = ecovacs.sendCommand(cmd, { returnPromise: true });
             const result = await promise;
-            assert.deepStrictEqual(result, { result: 'ok' });
+            assert.deepStrictEqual(result, { acked: true });
+            assert.strictEqual(ecovacs.pendingCommands.size, 0);
+        });
+
+        it('should resolve action/set commands with undefined when no device envelope is present', async function () {
+            const ecovacs = new Ecovacs(mockBot, 'user', 'hostname', 'resource', 'secret', 'continent', 'US', mockVacuum);
+            const cmd = { name: 'Stop', args: { id: 'test_id' }, getId: () => 'test_id' };
+            mockPostResponse = { result: 'ok' }; // bare HTTP ok, no resp envelope
+            const result = await ecovacs.sendCommand(cmd, { returnPromise: true });
+            assert.strictEqual(result, undefined);
             assert.strictEqual(ecovacs.pendingCommands.size, 0);
         });
 

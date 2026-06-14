@@ -376,7 +376,7 @@ class EcovacsDeviceSession extends EventEmitter {
             this._emitAvailability(true);
             this.handleCommandResponse(command, responseData);
             if (resolvePromise) {
-                resolvePromise(responseData);
+                resolvePromise(this._resolveImmediatePayload(command, responseData));
             }
         } else {
             const errorCodeObj = {
@@ -398,6 +398,27 @@ class EcovacsDeviceSession extends EventEmitter {
         }
 
         return commandPromise;
+    }
+
+    /**
+     * Build the resolved value for a `returnPromise` command that has no
+     * `expectedEvent` (action/set commands). Mirrors the expectedEvent path:
+     * resolve with the parsed device-response payload (`resp.body.data`), so
+     * `runAsync()` returns the same shape regardless of whether an event was
+     * awaited — instead of leaking the raw HTTP envelope. Returns `undefined`
+     * when the response carries no device envelope.
+     * @param {Object} command - the command instance
+     * @param {Object} responseData - the portal HTTP response body
+     * @returns {*} the parsed device payload, or undefined
+     * @private
+     */
+    _resolveImmediatePayload(command, responseData) {
+        const body = responseData && responseData.resp && responseData.resp.body;
+        const payload = (body && body.code === 0) ? body.data : undefined;
+        if ((payload !== undefined) && (typeof command.parseResponse === 'function')) {
+            return command.parseResponse(payload);
+        }
+        return payload;
     }
 
     /**
