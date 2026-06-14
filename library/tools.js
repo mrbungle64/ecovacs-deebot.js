@@ -272,7 +272,9 @@ function getDeviceProperty(deviceClass, property, defaultValue = false) {
                     value = true;
                 }
             }
-        } else if (property === '950type_V2') {
+        } else if ((property === '950type_V2') || (property === '950type_v2')) {
+            // Back-compat alias for the canonical `V2` property — accept either
+            // casing so callers don't get a silent `false` from a casing mismatch.
             if (value === defaultValue) {
                 const v2 = getDeviceProperty(deviceClass, 'V2', 'NOT_FOUND');
                 if (v2 !== 'NOT_FOUND') {

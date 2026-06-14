@@ -659,11 +659,14 @@ class EcovacsAPI extends EventEmitter {
 
   /**
    * Returns true if the device class is 950_v2 type
+   * (i.e. implements the newer `_V2` JSON/MQTT commands).
+   * Reads the canonical `V2` property, so it agrees with
+   * `EcovacsDevice.is950type_V2()`.
    * @param {string} deviceClass - The device class to check
-   * @returns {boolean} the value of the '950type_v2' property
+   * @returns {boolean} the value of the canonical `V2` property
    */
   static isDeviceClass950v2type(deviceClass) {
-    return tools.getDeviceProperty(deviceClass, '950type_v2', false);
+    return tools.getDeviceProperty(deviceClass, 'V2', false);
   }
 
   /**

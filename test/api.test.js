@@ -354,6 +354,29 @@ describe('API tools', function () {
     });
   });
 
+  describe('950 V2 type resolution (casing consistency)', function () {
+    // Regression for the `950type_v2` casing bug: EcovacsAPI.isDeviceClass950v2type()
+    // used the lowercase key, which never matched the back-compat alias and always
+    // returned false — disagreeing with EcovacsDevice.is950type_V2() (which reads `V2`).
+    const V2_CLASS = 'x5d34r';     // DEEBOT OZMO T8 AIVI (V2: true)
+    const NON_V2_CLASS = 'vi829v'; // DEEBOT OZMO 920 (V2: false)
+
+    it('isDeviceClass950v2type() should agree with the canonical V2 property', function () {
+      assert.strictEqual(ecovacsDeebot.EcovacsAPI.isDeviceClass950v2type(V2_CLASS), true);
+      assert.strictEqual(ecovacsDeebot.EcovacsAPI.isDeviceClass950v2type(NON_V2_CLASS), false);
+    });
+
+    it('getDeviceProperty() should resolve the V2 back-compat alias in either casing', function () {
+      for (const cls of [V2_CLASS, NON_V2_CLASS]) {
+        const canonical = tools.getDeviceProperty(cls, 'V2', false);
+        assert.strictEqual(tools.getDeviceProperty(cls, '950type_v2', false), canonical,
+          `lowercase '950type_v2' should equal 'V2' for ${cls}`);
+        assert.strictEqual(tools.getDeviceProperty(cls, '950type_V2', false), canonical,
+          `uppercase '950type_V2' should equal 'V2' for ${cls}`);
+      }
+    });
+  });
+
   describe('VacBot platform type, device category & smartType robustness', function () {
     const VacBot = require('../library/vacBot');
 
