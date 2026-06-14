@@ -66,7 +66,7 @@ class ExampleClient {
      */
     async disconnect() {
         if (this.vacbot) {
-            await this.vacbot.disconnectAsync();
+            await this.vacbot.disconnect();
         }
     }
 }

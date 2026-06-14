@@ -1037,24 +1037,31 @@ class EcovacsDevice {
     }
 
     /**
-     * Disconnect from MQTT server (fully async)
+     * Disconnect from the MQTT server (fire-and-forget safe).
+     * Returns a Promise so callers can `await` completion, but it never rejects —
+     * any disconnect error is caught and logged. Use `disconnectAsync()` if you
+     * need to handle disconnect failures programmatically.
+     * @returns {Promise<void>}
      */
-    async disconnectAsync() {
+    async disconnect() {
         try {
-            await this.ecovacs.disconnect();
-            this.is_ready = false;
+            await this.disconnectAsync();
         } catch (e) {
             tools.envLogError(`error disconnecting: ${e.message}`);
         }
     }
 
     /**
-     * Disconnect from MQTT server
+     * Disconnect from the MQTT server, propagating any error to the caller.
+     * Clears `is_ready` even when the underlying disconnect fails.
+     * @returns {Promise<void>}
      */
-    disconnect() {
-        (async () => {
-            await this.disconnectAsync();
-        })();
+    async disconnectAsync() {
+        try {
+            await this.ecovacs.disconnect();
+        } finally {
+            this.is_ready = false;
+        }
     }
 
     async callCleanResultsLogsApi() {
