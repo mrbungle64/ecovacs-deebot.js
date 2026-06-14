@@ -22,7 +22,7 @@ module.exports = [
             'no-console': 'off',
             'no-var': 'error',
             'no-unused-vars': 'warn',
-            'prefer-const': 'off',
+            'prefer-const': 'error',
             'semi': ['error', 'always'],
             'no-prototype-builtins': 'off'
         }
