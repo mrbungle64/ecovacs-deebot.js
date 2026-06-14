@@ -471,7 +471,7 @@ describe('BotState – handleTimeZone()', function () {
     it('should format negative UTC offset correctly', function () {
         const state = new BotState(makeFakeBot());
         state.handleTimeZone({ tzm: -300 });
-        assert.strictEqual(state.timezone, 'GMT--5:00');
+        assert.strictEqual(state.timezone, 'GMT-5:00');
     });
 });
 

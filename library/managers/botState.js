@@ -824,7 +824,8 @@ class BotState {
      * @param {Object} payload
      */
     handleTimeZone(payload) {
-        this.timezone = 'GMT' + (payload.tzm > 0 ? '+' : '-') + (payload.tzm / 60) + ':00';
+        const sign = payload.tzm >= 0 ? '+' : '-';
+        this.timezone = `GMT${sign}${Math.abs(payload.tzm) / 60}:00`;
     }
 
     /**
