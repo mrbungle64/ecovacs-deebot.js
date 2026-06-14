@@ -95,6 +95,39 @@ describe('PendingCommandRegistry.resolveByEvent()', function () {
     });
 });
 
+describe('PendingCommandRegistry.register() duplicate-id guard', function () {
+    it('supersedes an existing entry with the same id (rejects old, keeps new)', async function () {
+        const reg = new PendingCommandRegistry();
+        const first = register(reg, 'dup', 'BatteryInfo');
+        const second = register(reg, 'dup', 'BatteryInfo');
+
+        // The first registration is settled (rejected) rather than silently
+        // dropped, and only the new entry remains pending.
+        await assert.rejects(first.promise, /superseded/);
+        assert.strictEqual(reg.size, 1, 'only the new entry remains pending');
+
+        // The new command still resolves normally.
+        assert.strictEqual(reg.resolveById('dup', { ok: true }), true);
+        await second.promise;
+        assert.deepStrictEqual(second.resolved, { ok: true });
+        assert.strictEqual(reg.size, 0);
+    });
+
+    it('the superseded entry does not later affect the new entry', async function () {
+        const reg = new PendingCommandRegistry();
+        const first = register(reg, 'dup', 'BatteryInfo');
+        const second = register(reg, 'dup', 'ChargeState');
+        await assert.rejects(first.promise, /superseded/);
+
+        // A response for the new entry's event resolves the new command,
+        // proving the old (cleared) timer/entry can't interfere.
+        assert.strictEqual(reg.resolveByEvent('ChargeState', { v: 'new' }, 'dup'), true);
+        await second.promise;
+        assert.deepStrictEqual(second.resolved, { v: 'new' });
+        assert.strictEqual(reg.size, 0);
+    });
+});
+
 describe('PendingCommandRegistry.resolveById()', function () {
     it('resolves the matching id and returns true; false for unknown id', async function () {
         const reg = new PendingCommandRegistry();

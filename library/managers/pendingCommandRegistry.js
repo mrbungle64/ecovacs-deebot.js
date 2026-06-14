@@ -40,6 +40,18 @@ class PendingCommandRegistry {
      * @param {number} [timeoutMs=10000] - Timeout in milliseconds before the Promise rejects
      */
     register(requestId, commandName, expectedEvent, commandInstance, resolve, reject, timeoutMs = DEFAULT_TIMEOUT_MS) {
+        // Guard against an id collision (a random getReqID() clash, or the same
+        // command instance re-sent while still pending). Without this the previous
+        // entry's timer would leak, and that stale timer could later delete/reject
+        // the *new* entry — leaving the newer Promise to hang forever. Settle the
+        // old entry deterministically and clear its timer before replacing it.
+        const existing = this._pending.get(requestId);
+        if (existing) {
+            clearTimeout(existing.timer);
+            this._pending.delete(requestId);
+            existing.reject(new Error(`Command '${existing.commandName}' superseded by a new request with id '${requestId}'`));
+        }
+
         const timer = setTimeout(() => {
             if (this._pending.has(requestId)) {
                 this._pending.delete(requestId);
