@@ -686,7 +686,9 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
-   * Create a hash of the given text using the MD5 algorithm
+   * Create a hash of the given text using the MD5 algorithm.
+   * NOTE: MD5 is mandated by the Ecovacs API request-signature scheme (authSign)
+   * and request-id generation — it is NOT used as a security primitive here.
    * @param {string} text - the text to be hashed
    * @returns {string} the MD5 hash of the text
    */
