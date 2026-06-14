@@ -255,6 +255,14 @@ class EcovacsDevice {
      *
      * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
      *
+     * Concurrency caveat: a command's own HTTP response resolves its exact Promise
+     * (matched by request id). But an *unsolicited* MQTT broadcast of the same event
+     * carries no request id, so it resolves the **oldest still-pending** call for
+     * that event. If you issue several `runAsync()` calls for the *same* command
+     * concurrently, a caller may therefore receive a payload from a broadcast (or
+     * another trigger) rather than strictly its own request. For strict 1:1
+     * correlation, await one such call before starting the next.
+     *
      * @param {string} command - The command name (same as used in `run()`)
      * @param {...*} args - Zero or more arguments to perform the command (optionally an options object at the end)
      * @returns {Promise<any>}
