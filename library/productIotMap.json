@@ -4320,6 +4320,24 @@
     }
   },
   {
+    "classid": "msvqd6",
+    "product": {
+      "_id": "69e59df2a8119be74620b18c",
+      "materialNo": "110-2353-2400",
+      "smartType": "MQ_APM",
+      "name": "DEEBOT N30 PRO",
+      "icon": "6889b3fbf68ece46f311459c",
+      "model": "FS_DOCK_BLACK_LIDL_NEW",
+      "UILogicId": "aesdock_ww_h_fsh5",
+      "ota": true,
+      "supportType": {
+        "share": true
+      },
+      "iconUrl": "https://portal-ww.ecouser.net/api/pim/file/get/6889b3fbf68ece46f311459c",
+      "status": "valid"
+    }
+  },
+  {
     "classid": "n0vyif",
     "product": {
       "_id": "66daaa789dd37cf146cb1d2e",
@@ -6827,7 +6845,7 @@
       "_id": "69a650b1255adfa960ec2f3c",
       "materialNo": "111-E003-0102",
       "smartType": "BT",
-      "name": "WINBOT W2 PRO OMNI",
+      "name": "WINBOT W2 PRO OMNI 7-11",
       "icon": "69ae62104066fead5641e6bb",
       "model": "W2_PRO_OMNI_711",
       "UILogicId": "w2pro_ww_h_w2",
