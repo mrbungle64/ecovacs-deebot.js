@@ -98,7 +98,18 @@ class EcovacsDeviceSession extends EventEmitter {
         this.client.subscribe(this.channel, (error) => {
             if (!error) {
                 tools.envLogSuccess(`successfully subscribed to atr channel`);
+                // 'ready' is edge-triggered: it fires on *every* successful
+                // (re)subscribe — initial connect, auto-reconnect and token
+                // refresh — so consumers should treat it as a "channel is live"
+                // signal and debounce any heavy work.
                 this.emit('ready', 'Successfully subscribed to atr channel');
+                // 'initialized' is the one-shot companion: it fires exactly once
+                // per session, on the first successful subscribe, so consumers can
+                // run one-time setup without having to guard/debounce 'ready'.
+                if (!this._initialized) {
+                    this._initialized = true;
+                    this.emit('initialized', 'Successfully subscribed to atr channel');
+                }
             } else {
                 tools.envLogError(`subscribe error: ${error.toString()}`);
             }
@@ -113,6 +124,10 @@ class EcovacsDeviceSession extends EventEmitter {
         // Detach from any previous client before replacing it, so the old client
         // stops routing events here (and the listener bookkeeping stays correct)
         this._detachClientListeners();
+        // Remember the client we are replacing so we can close it once the new one
+        // exists. A shared client is owned by another instance and must not be ended.
+        const previousClient = this.client;
+        const previousWasOwned = Boolean(previousClient) && !this._sharedClient;
         this._sharedClient = false;
         const url = `mqtts://${this.serverAddress}:${this.serverPort}`;
         const clientId = this.username + '/' + this.resource;
@@ -128,7 +143,26 @@ class EcovacsDeviceSession extends EventEmitter {
             rejectUnauthorized: false
         });
 
+        // End the previous owned client so its socket does not linger (and keep
+        // auto-reconnecting with stale credentials) until GC. `end(true)` forces
+        // the close; calling it on an already-ended client (e.g. the token-refresh
+        // path, which ends before reconnecting) is a harmless no-op.
+        if (previousWasOwned && previousClient !== this.client) {
+            try {
+                previousClient.end(true);
+            } catch (e) {
+                tools.envLogError(`error ending previous MQTT client: ${e.message}`);
+            }
+        }
+
         this._attachClientListeners();
+
+        // Signal that the owned MQTT client object was replaced (e.g. after a token
+        // refresh), so consumers sharing this client via connectShared() can
+        // re-attach on an event instead of polling for the new client.
+        if (previousClient && previousClient !== this.client) {
+            this.emit('mqttClientReplaced', this.client);
+        }
     }
 
     /**

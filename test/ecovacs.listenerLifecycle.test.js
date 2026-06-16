@@ -111,6 +111,80 @@ describe('Ecovacs MQTT listener lifecycle', function () {
         assert.strictEqual(client.getMaxListeners(), baseline + 5, 'one bot left -> +5');
     });
 
+    it('connect() ends the previous owned client and emits mqttClientReplaced with the new one', function () {
+        const oldClient = new EventEmitter();
+        let ended = false;
+        oldClient.end = () => { ended = true; };
+
+        const newClient = new EventEmitter();
+        const ecovacs = makeEcovacs({
+            client: oldClient,
+            _sharedClient: false,
+            serverAddress: 'mq.example', serverPort: 8883,
+            username: 'u@dom', resource: 'res', secret: 's',
+            mqtt: { connect: () => newClient },
+        });
+
+        let replacedWith = null;
+        ecovacs.on('mqttClientReplaced', (client) => { replacedWith = client; });
+
+        ecovacs.connect();
+
+        assert.strictEqual(ended, true, 'previous owned client was ended');
+        assert.strictEqual(ecovacs.client, newClient, 'new client is in place');
+        assert.strictEqual(replacedWith, newClient, 'mqttClientReplaced carries the new client');
+    });
+
+    it('connect() does not end a previous shared client and does not emit on first connect', function () {
+        const sharedClient = new EventEmitter();
+        let ended = false;
+        sharedClient.end = () => { ended = true; };
+        const newClient = new EventEmitter();
+
+        // No previous client at all -> initial connect must not emit.
+        const fresh = makeEcovacs({
+            client: null, _sharedClient: false,
+            serverAddress: 'mq.example', serverPort: 8883,
+            username: 'u@dom', resource: 'res', secret: 's',
+            mqtt: { connect: () => newClient },
+        });
+        let emitted = false;
+        fresh.on('mqttClientReplaced', () => { emitted = true; });
+        fresh.connect();
+        assert.strictEqual(emitted, false, 'no replacement event on first connect');
+
+        // Previous client owned by another instance (shared) must not be ended.
+        const swapped = makeEcovacs({
+            client: sharedClient, _sharedClient: true,
+            serverAddress: 'mq.example', serverPort: 8883,
+            username: 'u@dom', resource: 'res', secret: 's',
+            mqtt: { connect: () => newClient },
+        });
+        swapped.connect();
+        assert.strictEqual(ended, false, 'previous shared client was not ended');
+    });
+
+    it('subscribe() emits ready on every subscribe but initialized only once', function () {
+        let subscribeCb = null;
+        const client = { subscribe: (channel, cb) => { subscribeCb = cb; } };
+        const ecovacs = makeEcovacs({ client });
+        // Use the real subscribe() instead of the makeEcovacs stub.
+        delete ecovacs.subscribe;
+
+        let readyCount = 0;
+        let initializedCount = 0;
+        ecovacs.on('ready', () => readyCount++);
+        ecovacs.on('initialized', () => initializedCount++);
+
+        ecovacs.subscribe();
+        subscribeCb(null);
+        ecovacs.subscribe();
+        subscribeCb(null);
+
+        assert.strictEqual(readyCount, 2, 'ready fires on every subscribe');
+        assert.strictEqual(initializedCount, 1, 'initialized fires only once');
+    });
+
     it('shared client: each bot keeps its own listeners; disconnect removes only its own', async function () {
         const client = new EventEmitter();
         client.connected = true;

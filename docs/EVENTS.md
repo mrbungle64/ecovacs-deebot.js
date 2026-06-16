@@ -128,7 +128,9 @@ These events help with troubleshooting, connection state, network details, firmw
 | **`TimeZone`** | `string \| object` | Configured time-zone value or raw time-zone payload, depending on the command or push path. |
 | **`HeaderInfo`** | `object` | Hardware and firmware version information with `fwVer` and `hwVer`. |
 | **`Sysinfo`** | `object` | Detailed internal system information. |
-| **`ready`** | `string` | Fired after the MQTT ATR channel was subscribed successfully. |
+| **`ready`** | `string` | Fired after the MQTT ATR channel was subscribed successfully. **Edge-triggered:** fires on *every* (re)subscribe — initial connect, auto-reconnect, and after a token refresh — so treat it as a "channel is live" signal and debounce any heavy/one-time work. Use **`initialized`** for one-time setup. |
+| **`initialized`** | `string` | One-shot companion to `ready`: fired exactly once per device session, on the first successful subscribe. Run one-time setup here instead of guarding/debouncing `ready` yourself. |
+| **`mqttClientReplaced`** | `object` | The underlying owned MQTT client (`mqtt.Client`) was replaced, e.g. after a token refresh reconnect. The new client is passed as the payload. Consumers that share this client via `connectShared()` should re-attach to the new client on this event instead of polling `getMqttClient()`. |
 | **`disconnect`** | `boolean` | Fired when the library disconnects after an error or disconnect path. |
 | **`messageReceived`** | `string` | Fired for every raw message received from the MQTT broker after command normalization. |
 | **`genericCommandPayload`** | `object` | Fired when a generic command response is received. |
