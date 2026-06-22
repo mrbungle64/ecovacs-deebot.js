@@ -27,8 +27,12 @@ class EcovacsDeviceSession extends EventEmitter {
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
+     * @param {Object} [options] - optional transport overrides (mainly for local testing)
+     * @param {string} [options.serverAddress] - overrides the MQTT server address
+     * @param {number} [options.serverPort] - overrides the MQTT server port
+     * @param {string} [options.protocol='mqtts'] - MQTT URL scheme; set to `'mqtt'` for a non-TLS local broker
      */
-    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883) {
+    constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883, options = {}) {
         super();
 
         this.bot = vacBot;
@@ -41,12 +45,16 @@ class EcovacsDeviceSession extends EventEmitter {
         this.continent = continent;
         this.vacuum = vacuum;
 
-        if (!serverAddress) {
+        const resolvedServerAddress = options.serverAddress || serverAddress;
+        if (!resolvedServerAddress) {
             this.serverAddress = this.getEcovacsEndpoint();
         } else {
-            this.serverAddress = serverAddress;
+            this.serverAddress = resolvedServerAddress;
         }
-        this.serverPort = serverPort;
+        this.serverPort = options.serverPort != null ? options.serverPort : serverPort;
+        // MQTT URL scheme. Defaults to TLS (`mqtts`); a non-TLS `mqtt` broker can be
+        // requested via options for local/integration testing against e.g. aedes.
+        this.protocol = options.protocol === 'mqtt' ? 'mqtt' : 'mqtts';
 
         this.mqtt = require('mqtt');
         this.channel = '';
@@ -129,7 +137,7 @@ class EcovacsDeviceSession extends EventEmitter {
         const previousClient = this.client;
         const previousWasOwned = Boolean(previousClient) && !this._sharedClient;
         this._sharedClient = false;
-        const url = `mqtts://${this.serverAddress}:${this.serverPort}`;
+        const url = `${this.protocol}://${this.serverAddress}:${this.serverPort}`;
         const clientId = this.username + '/' + this.resource;
         tools.envLogInfo(`url: '${url}'`);
         tools.envLogInfo(`username: '${this.username}'`);

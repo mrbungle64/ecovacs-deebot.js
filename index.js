@@ -543,19 +543,21 @@ class EcovacsAPI extends EventEmitter {
    * Get an `EcovacsDevice` instance for a device, using the credentials of the
    * current API session (convenience wrapper for `getDevice`, with only 1 parameter).
    * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+   * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link getDevice}); mainly for local testing
    * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
-  getDeviceObj(vacuum) {
-    return this.getDevice(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum);
+  getDeviceObj(vacuum, options = {}) {
+    return this.getDevice(this.uid, EcovacsAPI.REALM, this.resource, this.user_access_token, vacuum, '', options);
   }
 
   /**
    * @deprecated Use `getDeviceObj()` instead. Retained as a backward-compatible alias.
    * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+   * @param {Object} [options] - optional transport overrides forwarded to the device session
    * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
-  getVacBotObj(vacuum) {
-    return this.getDeviceObj(vacuum);
+  getVacBotObj(vacuum, options = {}) {
+    return this.getDeviceObj(vacuum, options);
   }
 
   /**
@@ -566,9 +568,10 @@ class EcovacsAPI extends EventEmitter {
    * @param {string} userToken - the user token
    * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
+   * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol}`, mainly for local testing
    * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
-  getDevice(user, hostname, resource, userToken, vacuum, continent = '') {
+  getDevice(user, hostname, resource, userToken, vacuum, continent = '', options = {}) {
     tools.envLogHeader(`getDevice('${user}','${hostname}','${resource}','${userToken}','${vacuum}','${continent}')`);
     if (continent !== '') {
       tools.envLogWarn(`got value '${continent}' for continent (deprecated)`);
@@ -589,7 +592,7 @@ class EcovacsAPI extends EventEmitter {
       tools.envLogError(msg);
       throw new Error(msg);
     }
-    return new DeviceClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain);
+    return new DeviceClass(user, hostname, resource, userToken, vacuum, this.getContinent(), this.country, '', this.authDomain, options);
   }
 
   /**
@@ -600,10 +603,11 @@ class EcovacsAPI extends EventEmitter {
    * @param {string} userToken - the user token
    * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
+   * @param {Object} [options] - optional transport overrides forwarded to the device session
    * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
-  getVacBot(user, hostname, resource, userToken, vacuum, continent = '') {
-    return this.getDevice(user, hostname, resource, userToken, vacuum, continent);
+  getVacBot(user, hostname, resource, userToken, vacuum, continent = '', options = {}) {
+    return this.getDevice(user, hostname, resource, userToken, vacuum, continent, options);
   }
 
   /**

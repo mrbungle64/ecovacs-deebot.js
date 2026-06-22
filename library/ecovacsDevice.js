@@ -113,8 +113,9 @@ class EcovacsDevice {
      * @param {string} [country] - the country where the Ecovacs account is registered
      * @param {string} [serverAddress=''] - the server address of the MQTT and XMPP server
      * @param {string} [authDomain=''] - the domain for authorization
+     * @param {Object} [options={}] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); mainly for local testing
      */
-    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
+    constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '', options = {}) {
 
         this.country = country;
         this.continent = continent;
@@ -148,7 +149,7 @@ class EcovacsDevice {
         this.vacBotCommand = VacBotCommand;
         this.protocolModule = require('./ecovacsDeviceSession');
 
-        this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress);
+        this.ecovacs = new this.protocolModule(this, user, hostname, resource, secret, continent, country, vacuum, serverAddress, undefined, options);
 
         this.dispatcher = new CommandDispatcher(this);
         this.mapManager = new MapManager(this);
