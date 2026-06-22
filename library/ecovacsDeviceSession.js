@@ -31,6 +31,7 @@ class EcovacsDeviceSession extends EventEmitter {
      * @param {string} [options.serverAddress] - overrides the MQTT server address
      * @param {number} [options.serverPort] - overrides the MQTT server port
      * @param {string} [options.protocol='mqtts'] - MQTT URL scheme; set to `'mqtt'` for a non-TLS local broker
+     * @param {boolean} [options.rejectUnauthorized=true] - verify the broker's TLS certificate; set to `false` only for local/self-signed brokers
      */
     constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883, options = {}) {
         super();
@@ -55,6 +56,11 @@ class EcovacsDeviceSession extends EventEmitter {
         // MQTT URL scheme. Defaults to TLS (`mqtts`); a non-TLS `mqtt` broker can be
         // requested via options for local/integration testing against e.g. aedes.
         this.protocol = options.protocol === 'mqtt' ? 'mqtt' : 'mqtts';
+        // Verify the broker's TLS certificate by default. The MQTT password is the
+        // user access token, so an unverified link lets a path attacker MITM the
+        // connection and harvest it. Opt out (e.g. for a local/self-signed broker)
+        // only by explicitly passing options.rejectUnauthorized = false.
+        this.rejectUnauthorized = options.rejectUnauthorized !== false;
 
         this.mqtt = require('mqtt');
         this.channel = '';
@@ -148,7 +154,7 @@ class EcovacsDeviceSession extends EventEmitter {
             password: this.secret,
             protocolVersion: 4,
             keepalive: 120,
-            rejectUnauthorized: false
+            rejectUnauthorized: this.rejectUnauthorized
         });
 
         // End the previous owned client so its socket does not linger (and keep

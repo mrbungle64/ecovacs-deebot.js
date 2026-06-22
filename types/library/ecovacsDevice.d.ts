@@ -18,8 +18,9 @@ declare class EcovacsDevice {
      * @param {string} [country] - the country where the Ecovacs account is registered
      * @param {string} [serverAddress=''] - the server address of the MQTT and XMPP server
      * @param {string} [authDomain=''] - the domain for authorization
+     * @param {Object} [options={}] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); mainly for local testing
      */
-    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: Object, continent: string, country?: string, serverAddress?: string, authDomain?: string);
+    constructor(user: string, hostname: string, resource: string, secret: string, vacuum: Object, continent: string, country?: string, serverAddress?: string, authDomain?: string, options?: Object);
     country: string | undefined;
     continent: string;
     did: any;
@@ -120,6 +121,14 @@ declare class EcovacsDevice {
      * The Promise resolves when the command's `expectedEvent` fires (as defined in commandRegistry).
      *
      * Existing `bot.on('EventName', ...)` listeners continue to work unchanged.
+     *
+     * Concurrency caveat: a command's own HTTP response resolves its exact Promise
+     * (matched by request id). But an *unsolicited* MQTT broadcast of the same event
+     * carries no request id, so it resolves the **oldest still-pending** call for
+     * that event. If you issue several `runAsync()` calls for the *same* command
+     * concurrently, a caller may therefore receive a payload from a broadcast (or
+     * another trigger) rather than strictly its own request. For strict 1:1
+     * correlation, await one such call before starting the next.
      *
      * @param {string} command - The command name (same as used in `run()`)
      * @param {...*} args - Zero or more arguments to perform the command (optionally an options object at the end)
@@ -434,6 +443,18 @@ declare class EcovacsDevice {
      */
     hasAirFreshenerInfo(): boolean;
     /**
+     * Returns true if the model has indoor air quality sensors
+     * (PM2.5, PM10, AQI, VOC, temperature, humidity)
+     * @returns {boolean}
+     */
+    hasAirQualitySensors(): boolean;
+    /**
+     * Returns true if the model has the AIRBOT "three module" bay
+     * (UV sanitizer, humidifier, and air-freshener modules)
+     * @returns {boolean}
+     */
+    hasThreeModule(): boolean;
+    /**
      * Returns true if the model has Edge cleaning mode
      * It is assumed that a model can have either an Edge or Spot Area mode
      * @returns {boolean}
@@ -535,13 +556,19 @@ declare class EcovacsDevice {
      */
     getProductImageURL(): string;
     /**
-     * Disconnect from MQTT server (fully async)
+     * Disconnect from the MQTT server (fire-and-forget safe).
+     * Returns a Promise so callers can `await` completion, but it never rejects —
+     * any disconnect error is caught and logged. Use `disconnectAsync()` if you
+     * need to handle disconnect failures programmatically.
+     * @returns {Promise<void>}
+     */
+    disconnect(): Promise<void>;
+    /**
+     * Disconnect from the MQTT server, propagating any error to the caller.
+     * Clears `is_ready` even when the underlying disconnect fails.
+     * @returns {Promise<void>}
      */
     disconnectAsync(): Promise<void>;
-    /**
-     * Disconnect from MQTT server
-     */
-    disconnect(): void;
     callCleanResultsLogsApi(): Promise<Object>;
     getCryptoHashStringForSecuredContent(): string;
     downloadSecuredContent(url: any, targetFilename: any): Promise<void>;

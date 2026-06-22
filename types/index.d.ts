@@ -45,8 +45,11 @@ export class EcovacsAPI extends EventEmitter<any> {
     static isDeviceClass950type(deviceClass: string): boolean;
     /**
      * Returns true if the device class is 950_v2 type
+     * (i.e. implements the newer `_V2` JSON/MQTT commands).
+     * Reads the canonical `V2` property, so it agrees with
+     * `EcovacsDevice.is950type_V2()`.
      * @param {string} deviceClass - The device class to check
-     * @returns {boolean} the value of the '950type_v2' property
+     * @returns {boolean} the value of the canonical `V2` property
      */
     static isDeviceClass950v2type(deviceClass: string): boolean;
     /**
@@ -63,7 +66,9 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     static getDeviceId(machineId: string, deviceNumber?: number): string;
     /**
-     * Create a hash of the given text using the MD5 algorithm
+     * Create a hash of the given text using the MD5 algorithm.
+     * NOTE: MD5 is mandated by the Ecovacs API request-signature scheme (authSign)
+     * and request-id generation — it is NOT used as a security primitive here.
      * @param {string} text - the text to be hashed
      * @returns {string} the MD5 hash of the text
      */
@@ -250,15 +255,17 @@ export class EcovacsAPI extends EventEmitter<any> {
      * Get an `EcovacsDevice` instance for a device, using the credentials of the
      * current API session (convenience wrapper for `getDevice`, with only 1 parameter).
      * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+     * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link getDevice}); mainly for local testing
      * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
-    getDeviceObj(vacuum: ApiDevice): import("./library/ecovacsDevice");
+    getDeviceObj(vacuum: ApiDevice, options?: Object): import("./library/ecovacsDevice");
     /**
      * @deprecated Use `getDeviceObj()` instead. Retained as a backward-compatible alias.
      * @param {ApiDevice} vacuum - The object for the device, retrieved by the `devices` dictionary
+     * @param {Object} [options] - optional transport overrides forwarded to the device session
      * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
-    getVacBotObj(vacuum: ApiDevice): import("./library/ecovacsDevice");
+    getVacBotObj(vacuum: ApiDevice, options?: Object): import("./library/ecovacsDevice");
     /**
      * Get a corresponding instance of the `EcovacsDevice` class
      * @param {string} user - the user ID (retrieved from Ecovacs API)
@@ -267,9 +274,10 @@ export class EcovacsAPI extends EventEmitter<any> {
      * @param {string} userToken - the user token
      * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {string} [continent] - the continent
+     * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol}`, mainly for local testing
      * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
-    getDevice(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string): import("./library/ecovacsDevice");
+    getDevice(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string, options?: Object): import("./library/ecovacsDevice");
     /**
      * @deprecated Use `getDevice()` instead. Retained as a backward-compatible alias.
      * @param {string} user - the user ID (retrieved from Ecovacs API)
@@ -278,9 +286,10 @@ export class EcovacsAPI extends EventEmitter<any> {
      * @param {string} userToken - the user token
      * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {string} [continent] - the continent
+     * @param {Object} [options] - optional transport overrides forwarded to the device session
      * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
-    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string): import("./library/ecovacsDevice");
+    getVacBot(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string, options?: Object): import("./library/ecovacsDevice");
     /**
      * Get the version of the package
      * @returns {string} the version of the package

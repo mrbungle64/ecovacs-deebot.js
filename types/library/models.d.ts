@@ -28,16 +28,19 @@ export const SupportedAirPurifierModels: {
     sdp1y1: {
         name: string;
         smartType: string;
+        capabilities: string[];
         type: string;
     };
     "20anby": {
         name: string;
         smartType: string;
+        capabilities: string[];
         type: string;
     };
     "99fqkn": {
         name: string;
         smartType: string;
+        capabilities: string[];
         type: string;
     };
 };

@@ -568,7 +568,7 @@ class EcovacsAPI extends EventEmitter {
    * @param {string} userToken - the user token
    * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
-   * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol}`, mainly for local testing
+   * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol, rejectUnauthorized}`. The first three are mainly for local testing; `rejectUnauthorized` defaults to `true` (verify the broker's TLS certificate) and should only be set to `false` for a local/self-signed broker
    * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
   getDevice(user, hostname, resource, userToken, vacuum, continent = '', options = {}) {

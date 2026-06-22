@@ -100,5 +100,13 @@ export namespace CapabilityTypes {
         let auto_empty_station_5: boolean;
         export { auto_empty_station_5 as auto_empty_station };
     }
+    namespace airQualitySensors {
+        let air_quality_sensors: boolean;
+    }
+    namespace airPurifierBase {
+        let filter_1: boolean;
+        export { filter_1 as filter };
+        export let three_module: boolean;
+    }
 }
 //# sourceMappingURL=capabilityTypes.d.ts.map

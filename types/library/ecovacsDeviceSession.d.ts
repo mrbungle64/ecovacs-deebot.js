@@ -11,8 +11,16 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
      * @param {Object} vacuum - the device object for the vacuum
      * @param {string} serverAddress - the address of the MQTT server
      * @param {number} [serverPort=8883] - the port that the MQTT server is listening on
+     * @param {Object} [options] - optional transport overrides (mainly for local testing)
+     * @param {string} [options.serverAddress] - overrides the MQTT server address
+     * @param {number} [options.serverPort] - overrides the MQTT server port
+     * @param {string} [options.protocol='mqtts'] - MQTT URL scheme; set to `'mqtt'` for a non-TLS local broker
      */
-    constructor(vacBot: Object, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: Object, serverAddress: string, serverPort?: number);
+    constructor(vacBot: Object, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: Object, serverAddress: string, serverPort?: number, options?: {
+        serverAddress?: string | undefined;
+        serverPort?: number | undefined;
+        protocol?: string | undefined;
+    });
     bot: Object;
     dictionary: typeof import("./dictionary");
     user: string;
@@ -24,6 +32,7 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
     vacuum: Object;
     serverAddress: string;
     serverPort: number;
+    protocol: string;
     mqtt: typeof import("mqtt");
     channel: string;
     username: string;
@@ -41,10 +50,12 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
      * @see https://deebot.readthedocs.io/advanced/protocols/mqtt/#mqtt
      */
     subscribe(): void;
+    _initialized: boolean | undefined;
     /**
      * Connect to the MQTT server and listen to broadcast messages
      */
     connect(): void;
+    _sharedClient: boolean | undefined;
     client: Object | import("mqtt").MqttClient | undefined;
     /**
      * Attach to an existing MQTT client owned by another Ecovacs instance.
@@ -54,7 +65,6 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
      * @param {Object} existingClient - connected mqtt.Client to reuse
      */
     connectShared(existingClient: Object): void;
-    _sharedClient: boolean | undefined;
     /**
      * Bind this instance's MQTT event handlers and attach them to `this.client`.
      * The handlers are stored so they can be removed again in `disconnect()`.
@@ -122,6 +132,19 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
         returnPromise?: boolean | undefined;
         timeoutMs?: number | undefined;
     }): Promise<any> | void;
+    /**
+     * Build the resolved value for a `returnPromise` command that has no
+     * `expectedEvent` (action/set commands). Mirrors the expectedEvent path:
+     * resolve with the parsed device-response payload (`resp.body.data`), so
+     * `runAsync()` returns the same shape regardless of whether an event was
+     * awaited — instead of leaking the raw HTTP envelope. Returns `undefined`
+     * when the response carries no device envelope.
+     * @param {Object} command - the command instance
+     * @param {Object} responseData - the portal HTTP response body
+     * @returns {*} the parsed device payload, or undefined
+     * @private
+     */
+    private _resolveImmediatePayload;
     /**
      * Emit an event message and resolve any pending commands waiting for this event.
      * @param {string} name - Event name.

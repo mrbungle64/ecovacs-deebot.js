@@ -21,7 +21,7 @@ async function main() {
         // Setup dynamic listeners based on device capabilities
         setupCommonListeners(vacbot);
 
-        if (vacbot.getDeviceType() === 'AirPurifier') {
+        if (vacbot.getDeviceCategory() === 'Air Purifier') {
             setupAirPurifierListeners(vacbot);
         } else {
             setupVacuumListeners(vacbot);
@@ -41,7 +41,7 @@ async function main() {
             vacbot.run('GetBatteryState');
             vacbot.run('GetSleepStatus');
 
-            if (vacbot.getDeviceType() === 'AirPurifier') {
+            if (vacbot.getDeviceCategory() === 'Air Purifier') {
                 vacbot.run('GetAirQuality');
             } else {
                 vacbot.run('GetCleanState');
