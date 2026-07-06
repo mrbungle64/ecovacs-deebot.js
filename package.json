@@ -23,7 +23,7 @@
     "smart home",
     "home automation"
   ],
-  "author": "Sascha Hölzel",
+  "author": "Sascha H\u00f6lzel",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
@@ -37,7 +37,8 @@
     "@xmldom/xmldom": "0.9.10",
     "lzma": "2.3.2",
     "uniqid": "5.4.0",
-    "chalk": "4.1.2"
+    "chalk": "4.1.2",
+    "fzstd": "^0.1.1"
   },
   "optionalDependencies": {
     "canvas": "2.10.2"
