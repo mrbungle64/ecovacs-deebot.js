@@ -614,6 +614,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "MapSet_V2": {
                 await this.vacBot.handleMapSet_V2(payload);
                 this.emitMessage("MapSet_V2", this.vacBot.mapSet_V2);
+                // For V2 devices the spot areas are only delivered via MapSet_V2.
+                // Emit the same events as the non-V2 path so consumers create
+                // the spot area objects.
+                if ((payload['type'] === 'ar') && this.vacBot.mapSpotAreas) {
+                    this.emitMessage("MapSpotAreas", this.vacBot.mapSpotAreas);
+                    if (Array.isArray(this.vacBot.mapSpotAreaInfos_lastV2)) {
+                        for (const spotAreaInfo of this.vacBot.mapSpotAreaInfos_lastV2) {
+                            this.emitMessage("MapSpotAreaInfo", spotAreaInfo);
+                        }
+                    }
+                }
                 break;
             }
             case "MapSubSet": {

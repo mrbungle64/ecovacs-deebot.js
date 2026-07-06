@@ -1087,6 +1087,38 @@ class VacBot_950type extends VacBot {
                 'mid': payload['mid'],
                 'subsets': subsetData
             };
+            // Also build the spot area structures and expose them so the
+            // 'MapSpotAreas'/'MapSpotAreaInfo' events can be emitted for V2
+            // devices (e.g. DEEBOT T80S OMNI), whose map set is only sent as
+            // MapSet_V2 and was therefore never turned into spot area objects.
+            if (type === 'ar') {
+                const mapID = payload['mid'];
+                const mapSpotAreas = new map.EcovacsMapSpotAreas(mapID, payload['msid']);
+                const mapSpotAreaInfos = [];
+                subsets.forEach((subset) => {
+                    const mssid = subset[0];
+                    mapSpotAreas.push(new map.EcovacsMapSpotArea(mssid));
+                    const info = new map.EcovacsMapSpotAreaInfo(
+                        mapID,
+                        mssid,
+                        (subset[3] || '').replace(/-/g, ','),
+                        '',
+                        subset[2],
+                        subset[1]
+                    );
+                    if (subset[7]) {
+                        info.setCleanSet(subset[7].replace(/-/g, ','));
+                    }
+                    info.setSequenceNumber(subset[4]);
+                    if (typeof this.mapSpotAreaInfos[mapID] === 'undefined') {
+                        this.mapSpotAreaInfos[mapID] = [];
+                    }
+                    this.mapSpotAreaInfos[mapID][mssid] = info;
+                    mapSpotAreaInfos.push(info);
+                });
+                this.mapSpotAreas = mapSpotAreas;
+                this.mapSpotAreaInfos_lastV2 = mapSpotAreaInfos;
+            }
         }
     }
 
@@ -1564,7 +1596,11 @@ class VacBot_950type extends VacBot {
             case 'GetSpotAreas'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
-                    this.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
+                    if (this.is950type_V2()) {
+                        this.sendCommand(new VacBotCommand.GetMapSpotAreas_V2(mapID));
+                    } else {
+                        this.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
+                    }
                 }
                 break;
             }
