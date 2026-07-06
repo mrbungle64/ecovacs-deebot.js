@@ -685,6 +685,10 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "X2"
     },
+    "rzwv5p": {
+        "name": "DEEBOT T80S OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
     "lf3bn4": {
         "name": "DEEBOT X2",
         "deviceClassLink": "e6ofmn"
