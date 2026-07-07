@@ -1904,7 +1904,9 @@ class VacBot_950type extends VacBot {
             case 'SpotArea_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
-                    if (this.isModelTypeX2()) {
+                    if (this.isModelTypeX2() || this.getDeviceProperty('usesFreeClean')) {
+                        // Some newer models (e.g. T80 OMNI, T50 Pro Gen3) reject spotArea_V2
+                        // and require the freeClean command instead
                         const areaValues = tools.convertAreaValuesForFreeCleanCmd(area);
                         this.run('FreeClean', areaValues);
                     } else {
