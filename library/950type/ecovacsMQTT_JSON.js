@@ -532,7 +532,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "WaterInfo": {
                 // "Water Flow Level"
                 this.vacBot.handleWaterInfo(payload);
-                this.emitMessage("WaterLevel", this.vacBot.waterLevel);
+                // Some models (e.g. DEEBOT T80S OMNI with OZMO roller) do not report a
+                // numeric water level; only emit it when a value is actually present
+                if ((this.vacBot.waterLevel !== undefined) && (this.vacBot.waterLevel !== null)) {
+                    this.emitMessage("WaterLevel", this.vacBot.waterLevel);
+                }
                 this.emitMessage("WaterBoxInfo", this.vacBot.waterboxInfo);
                 if (this.vacBot.moppingType !== null) {
                     this.emitMessage("WaterBoxMoppingType", this.vacBot.moppingType);
