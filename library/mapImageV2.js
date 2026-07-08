@@ -163,4 +163,49 @@ function buildRoomsSvg(mapData, options = {}) {
     return parts.join('\n');
 }
 
+/**
+ * Ray-casting point-in-polygon test.
+ * @param {number} x
+ * @param {number} y
+ * @param {Array<Array<number>>} points
+ * @returns {boolean}
+ */
+function pointInPolygon(x, y, points) {
+    let inside = false;
+    for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+        const xi = points[i][0], yi = points[i][1];
+        const xj = points[j][0], yj = points[j][1];
+        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
+
+/**
+ * Return the id of the room whose outline polygon contains the given point,
+ * or undefined. Uses the same decoded getMapInfo_V2 `info` array as buildRoomsSvg,
+ * so the current room can be derived purely from geometry (needed on models that
+ * do not report a usable currentSpotAreaID).
+ * @param {Array} mapData
+ * @param {number} x
+ * @param {number} y
+ * @returns {(string|undefined)}
+ */
+function roomAtPoint(mapData, x, y) {
+    if (!Array.isArray(mapData)) return undefined;
+    const px = Number(x), py = Number(y);
+    if (!Number.isFinite(px) || !Number.isFinite(py)) return undefined;
+    let layer = mapData.find((s) => Array.isArray(s) && String(s[0]) === '2');
+    if (!layer) layer = mapData.find((s) => Array.isArray(s) && s.length > 1);
+    if (!layer) return undefined;
+    for (let i = 1; i < layer.length; i++) {
+        const p = parsePolygon(layer[i]);
+        if (p.points.length >= 3 && pointInPolygon(px, py, p.points)) {
+            return p.room;
+        }
+    }
+    return undefined;
+}
+
 module.exports.buildRoomsSvg = buildRoomsSvg;
+module.exports.roomAtPoint = roomAtPoint;

@@ -935,10 +935,15 @@ class VacBot_950type extends VacBot {
                 // Cache the decoded rooms so the live overlay can re-render the
                 // robot marker on position changes without re-fetching the map.
                 this.mapImageV2Data = {mapID: this.currentMapMID, mapData, names};
+                const robotPos = this.getLiveRobotPos();
+                let highlight;
+                if (robotPos && this.isCleaningActive()) {
+                    highlight = mapImageV2.roomAtPoint(mapData, robotPos.x, robotPos.y);
+                }
                 const svg = mapImageV2.buildRoomsSvg(mapData, {
                     names,
-                    highlight: this.getCleaningHighlight(),
-                    robotPos: this.getLiveRobotPos(),
+                    highlight,
+                    robotPos,
                     chargePos: this.chargePosition
                 });
                 if (svg) {
@@ -951,20 +956,12 @@ class VacBot_950type extends VacBot {
     }
 
     /**
-     * Returns the spot area id to highlight (the room currently being cleaned),
-     * or undefined. Only highlights while an actual cleaning motion is running.
-     * @returns {(string|number|undefined)}
+     * Whether an actual cleaning motion is currently running.
+     * @returns {boolean}
      */
-    getCleaningHighlight() {
+    isCleaningActive() {
         const cleaningStates = ['auto', 'spot', 'spot_area', 'single_room', 'edge', 'freeClean'];
-        const dp = this.deebotPosition;
-        if (dp && dp.currentSpotAreaID !== undefined && dp.currentSpotAreaID !== null
-            && String(dp.currentSpotAreaID) !== 'unknown'
-            && Number(dp.currentSpotAreaID) >= 0
-            && cleaningStates.includes(this.cleanReport)) {
-            return dp.currentSpotAreaID;
-        }
-        return undefined;
+        return cleaningStates.includes(this.cleanReport);
     }
 
     /**
@@ -987,10 +984,15 @@ class VacBot_950type extends VacBot {
         if (!data || String(data.mapID) !== String(this.currentMapMID)) return null;
         const now = Date.now();
         if (this._liveMapLastTs && (now - this._liveMapLastTs) < 1000) return null;
+        const robotPos = this.getLiveRobotPos();
+        let highlight;
+        if (robotPos && this.isCleaningActive()) {
+            highlight = mapImageV2.roomAtPoint(data.mapData, robotPos.x, robotPos.y);
+        }
         const svg = mapImageV2.buildRoomsSvg(data.mapData, {
             names: data.names,
-            highlight: this.getCleaningHighlight(),
-            robotPos: this.getLiveRobotPos(),
+            highlight,
+            robotPos,
             chargePos: this.chargePosition
         });
         if (!svg) return null;
