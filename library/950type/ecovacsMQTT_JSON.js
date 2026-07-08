@@ -421,6 +421,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     });
                     this.vacBot.chargePosition["changeFlag"] = false;
                 }
+                // Live map overlay: re-render the robot marker on position changes
+                // (opt-in, throttled, no extra cloud request).
+                if (this.vacBot.createMapImageOnPositionChange) {
+                    const liveMap = this.vacBot.buildLiveMapImageV2();
+                    if (liveMap) {
+                        this.vacBot.mapImageV2 = liveMap;
+                        this.emitMessage("MapImageV2", liveMap);
+                    }
+                }
                 break;
             }
             case 'QuickCommand': {
