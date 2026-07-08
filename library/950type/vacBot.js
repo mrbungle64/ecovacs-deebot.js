@@ -908,7 +908,26 @@ class VacBot_950type extends VacBot {
                         }
                     }
                 }
-                const svg = mapImageV2.buildRoomsSvg(mapData, {names});
+                // Highlight the room currently being cleaned: the robot's
+                // current spot area, but only while an actual cleaning motion
+                // is running (not while docked / returning / stopped).
+                const cleaningStates = ['auto', 'spot', 'spot_area', 'single_room', 'edge'];
+                let highlight;
+                const dp = this.deebotPosition;
+                if (dp && dp.currentSpotAreaID !== undefined && dp.currentSpotAreaID !== null
+                    && String(dp.currentSpotAreaID) !== 'unknown'
+                    && Number(dp.currentSpotAreaID) >= 0
+                    && cleaningStates.includes(this.cleanReport)) {
+                    highlight = dp.currentSpotAreaID;
+                }
+                // Only draw the robot marker when we have a valid live position.
+                const robotPos = (dp && dp.x !== null && dp.y !== null && !dp.isInvalid) ? dp : undefined;
+                const svg = mapImageV2.buildRoomsSvg(mapData, {
+                    names,
+                    highlight,
+                    robotPos,
+                    chargePos: this.chargePosition
+                });
                 if (svg) {
                     this.mapImageV2 = {mapID: this.currentMapMID, svg};
                 }
