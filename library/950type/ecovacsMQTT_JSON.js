@@ -271,8 +271,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMessage("CleanCount", this.vacBot.cleanCount);
                 break;
             }
-            case "CleanInfo": {
+            case "CleanInfo":
+            case "CleanInfo_V2": {
                 // Various information about the cleaning status
+                // ("_V2" is the variant newer models like the T80S OMNI push)
                 this.vacBot.handleCleanInfo(payload);
                 this.emitMessage("CleanReport", this.vacBot.cleanReport);
                 this.emitMoppingSystemReport();
