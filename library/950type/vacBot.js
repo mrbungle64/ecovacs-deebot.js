@@ -6,6 +6,7 @@ const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
+const mapImageV2 = require('../mapImageV2');
 const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 const {eventCodes} = require('../eventCodes.json');
@@ -886,18 +887,35 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
      */
-    handleMapInfoV2(payload) {
+    async handleMapInfoV2(payload) {
         this.currentMapMID = payload['mid'];
+        this.mapImageV2 = null;
         tools.envLogNotice(`mid: ${this.currentMapMID}`);
-        tools.envLogNotice(`batid: ${payload['batid']}`);
-        tools.envLogNotice(`serial: ${payload['serial']}`);
-        tools.envLogNotice(`index: ${payload['index']}`);
         tools.envLogNotice(`type: ${payload['type']}`);
-        tools.envLogNotice(`outlineVer: ${payload['outlineVer']}`);
-        tools.envLogNotice(`info: ${payload['info']}`);
         tools.envLogNotice(`infoSize: ${payload['infoSize']}`);
-        tools.envLogNotice(`using: ${payload['using']}`);
-        tools.envLogNotice(`outlineCpmplete: ${payload['outlineCpmplete']}`); // The typo in 'Cpmplete' is intended
+        // The `info` field is base64 + Zstandard and holds the vector map
+        // (array of [layerType, "roomId;x,y;..."]). Decode it and build an SVG.
+        try {
+            if (payload['info']) {
+                const decoded = await mapTemplate.mapPieceToIntArray(payload['info']);
+                const mapData = (typeof decoded === 'string') ? JSON.parse(decoded) : decoded;
+                const names = {};
+                const infos = this.mapSpotAreaInfos && this.mapSpotAreaInfos[this.currentMapMID];
+                if (infos) {
+                    for (const k in infos) {
+                        if (Object.prototype.hasOwnProperty.call(infos, k) && infos[k] && infos[k].mapSpotAreaName) {
+                            names[k] = infos[k].mapSpotAreaName;
+                        }
+                    }
+                }
+                const svg = mapImageV2.buildRoomsSvg(mapData, {names});
+                if (svg) {
+                    this.mapImageV2 = {mapID: this.currentMapMID, svg};
+                }
+            }
+        } catch (e) {
+            tools.envLogError('Failed to build map SVG from MapInfo_V2: ' + e.message);
+        }
     }
 
     /**

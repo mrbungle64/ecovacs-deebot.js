@@ -590,7 +590,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             }
             case "MapInfo_V2": {
                 try {
-                    this.vacBot.handleMapInfoV2(payload);
+                    await this.vacBot.handleMapInfoV2(payload);
+                    if (this.vacBot.mapImageV2 && this.vacBot.mapImageV2.svg) {
+                        this.emitMessage("MapImageV2", this.vacBot.mapImageV2);
+                    }
                 } catch (e) {
                     tools.envLogError(`error on handling MapInfo_V2: ${e.message}`);
                 }
