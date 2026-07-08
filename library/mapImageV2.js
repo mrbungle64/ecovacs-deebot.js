@@ -112,7 +112,10 @@ function buildRoomsSvg(mapData, options = {}) {
     const ty = (y) => Math.round((maxY - y) * scale * 10) / 10;
 
     const parts = [];
-    parts.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + vw + ' ' + vh + '" width="' + vw + '" height="' + vh + '" style="background:' + background + ';border-radius:8px">');
+    // Expose the world->pixel transform so external overlays (e.g. a live
+    // robot dot in a dashboard) can place points without re-decoding the map:
+    //   pixelX = (worldX - minX) * scale ; pixelY = (maxY - worldY) * scale
+    parts.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + vw + ' ' + vh + '" width="' + vw + '" height="' + vh + '" data-minx="' + minX + '" data-maxy="' + maxY + '" data-scale="' + scale + '" style="background:' + background + ';border-radius:8px">');
     polys.forEach((p, idx) => {
         const d = 'M ' + p.points.map(([x, y]) => tx(x) + ',' + ty(y)).join(' L ') + ' Z';
         const col = PALETTE[idx % PALETTE.length];
