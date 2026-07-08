@@ -494,6 +494,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emitMessage("CurrentStats", this.vacBot.currentStats);
                     this.vacBot.currentStats = null;
                 }
+                // Newer models report the working state via Stats (stopReason),
+                // not via CleanInfo -> forward it as a CleanReport.
+                if (this.vacBot.cleanReportFromStats) {
+                    this.emitMessage("CleanReport", this.vacBot.cleanReport);
+                    this.vacBot.cleanReportFromStats = false;
+                }
                 break;
             }
             case 'SweepMode': {

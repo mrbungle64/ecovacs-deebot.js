@@ -39,6 +39,8 @@ class VacBot_950type extends VacBot {
         this.createMapImageOnPositionChange = false;
         this.mapImageV2Data = null;
         this._liveMapLastTs = 0;
+        this.cleanReportFromStats = false;
+        this._statsCleaning = false;
 
         this.advancedMode = null;
         this.aiBlockPlate = null;
@@ -804,6 +806,21 @@ class VacBot_950type extends VacBot {
             }
             this.obstacleTypes = payload['aitypes'];
         }
+        // Newer models (e.g. DEEBOT T80S OMNI) do not report the working state
+        // via CleanInfo (it stays 'idle'); the Stats message carries it instead:
+        // an empty stopReason means a clean is currently in progress.
+        if (payload.hasOwnProperty('stopReason')) {
+            if (payload['stopReason'] === '') {
+                this.cleanReport = 'freeClean';
+                this.cleanReportFromStats = true;
+                this._statsCleaning = true;
+            } else if (this._statsCleaning) {
+                // a Stats with a stop reason after cleaning -> the clean ended
+                this.cleanReport = 'stop';
+                this.cleanReportFromStats = true;
+                this._statsCleaning = false;
+            }
+        }
     }
 
     /**
@@ -939,7 +956,7 @@ class VacBot_950type extends VacBot {
      * @returns {(string|number|undefined)}
      */
     getCleaningHighlight() {
-        const cleaningStates = ['auto', 'spot', 'spot_area', 'single_room', 'edge'];
+        const cleaningStates = ['auto', 'spot', 'spot_area', 'single_room', 'edge', 'freeClean'];
         const dp = this.deebotPosition;
         if (dp && dp.currentSpotAreaID !== undefined && dp.currentSpotAreaID !== null
             && String(dp.currentSpotAreaID) !== 'unknown'
