@@ -91,6 +91,22 @@ describe('API', function () {
       assert.strictEqual(ecovacsApi._authDomainValue('eco', 'yd'), 'eco');
       assert.strictEqual(yeediApi._authDomainValue('eco', 'yd'), 'yd');
     });
+
+    it('verification meta inherits Ecovacs appCode for the default auth domain', function () {
+      const api = new ecovacsDeebot.EcovacsAPI(DEVICE_ID, 'DE', 'eu');
+      const verifyMeta = api.getVerificationMetaObject();
+      assert.strictEqual(verifyMeta.appCode, 'global_e');
+      assert.strictEqual(verifyMeta.appVersion, constants.VERIFY_APP_VERSION);
+      assert.strictEqual(verifyMeta.country, 'de', 'verification meta should lowercase the country');
+    });
+
+    it('verification meta inherits yeedi appCode for the yeedi auth domain', function () {
+      const api = new ecovacsDeebot.EcovacsAPI(DEVICE_ID, 'DE', 'eu', constants.AUTH_DOMAIN_YD);
+      const verifyMeta = api.getVerificationMetaObject();
+      assert.strictEqual(verifyMeta.appCode, 'yd_global_e');
+      assert.strictEqual(verifyMeta.appVersion, constants.VERIFY_APP_VERSION);
+      assert.strictEqual(verifyMeta.country, 'de');
+    });
   });
 
   describe('rsa key file', function () {

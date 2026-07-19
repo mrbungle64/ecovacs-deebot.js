@@ -378,21 +378,17 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
-   * Get the meta-object for the device-verification endpoints. Same shape as
-   * {@link getMetaObject} but with a lowercase country and the distinct app
-   * version the verification endpoints require.
+   * Get the meta-object for the device-verification endpoints. Derives from
+   * {@link getMetaObject} (inheriting the correct appCode via
+   * {@link _authDomainValue}) and overrides only the country casing and the
+   * distinct app version the verification endpoints require.
    * @returns {import('./library/typedefs').MetaObject}
    */
   getVerificationMetaObject() {
-    // deviceType 1 = Android
     return {
+      ...this.getMetaObject(),
       'country': this.country.toLowerCase(),
-      'lang': 'EN',
-      'deviceId': this.deviceId,
-      'appCode': 'global_e',
-      'appVersion': constants.VERIFY_APP_VERSION,
-      'channel': 'google_play',
-      'deviceType': '1'
+      'appVersion': constants.VERIFY_APP_VERSION
     };
   }
 
@@ -426,11 +422,13 @@ class EcovacsAPI extends EventEmitter {
 
     // Sign over the meta object merged with the request params (params win).
     const authSignParams = { ...meta, ...requestParams };
+    const authAppkey = this._authDomainValue(constants.AUTH_USERLOGIN_AUTH_APPKEY, constants.AUTH_USERLOGIN_AUTH_APPKEY_YD);
+    const authSecret = this._authDomainValue(constants.AUTH_USERLOGIN_SECRET, constants.AUTH_USERLOGIN_SECRET_YD);
     const query = this.buildQueryList(
       requestParams,
       authSignParams,
-      constants.AUTH_USERLOGIN_AUTH_APPKEY,
-      constants.AUTH_USERLOGIN_SECRET
+      authAppkey,
+      authSecret
     );
 
     let portalPath = tools.formatString(constants.AUTH_GL_API, { domain: this.authDomain });
