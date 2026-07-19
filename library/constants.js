@@ -15,6 +15,14 @@ exports.USER_API_PATH = 'users/user.do';
 exports.USER_LOGIN_PATH = 'user/login';
 exports.USER_GETAUTHCODE_PATH = 'user/getAuthCode';
 
+// Device verification (client device-id verification) endpoints. They run over
+// the same private-API host as `user/login` but with a distinct app version.
+exports.VERIFY_APP_VERSION = '3.14.0';
+exports.VERIFY_GETCONFIG_PATH = 'common/getConfig';
+exports.VERIFY_SENDEMAIL_PATH = 'user/sendEmailVerifyCode';
+exports.VERIFY_DEVICE_PATH = 'user/verifyDevice';
+exports.VERIFY_PUBLIC_KEY_CONFIG_KEY = 'PUBLIC.KEY.CONFIG';
+
 exports.IOT_DEVMANAGER_PATH = 'iot/devmanager.do';
 
 exports.CLEANLOGS_PATH = 'lg/log.do';

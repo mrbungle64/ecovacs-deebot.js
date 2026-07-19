@@ -1,5 +1,6 @@
 'use strict';
 
+const readline = require('node:readline/promises');
 const nodeMachineId = require('node-machine-id');
 const { EcovacsAPI } = require('../../index');
 
@@ -26,16 +27,20 @@ class ExampleClient {
      * @returns {Promise<Object>} The connected EcovacsDevice instance
      */
     async init() {
-        const { ACCOUNT_ID, PASSWORD, COUNTRY_CODE, DEVICE_NUMBER = 0, AUTH_DOMAIN = '' } = this.config;
+        const { ACCOUNT_ID, PASSWORD, COUNTRY_CODE, DEVICE_NUMBER = 0, AUTH_DOMAIN = '', CLIENT_DEVICE_ID = '' } = this.config;
 
         const passwordHash = EcovacsAPI.md5(PASSWORD);
-        const machineId = await nodeMachineId.machineId();
-        const deviceId = EcovacsAPI.getDeviceId(machineId, DEVICE_NUMBER);
+        // Prefer an explicitly configured, stable client device id. Otherwise
+        // derive one from the host machine id. A stable id matters because Ecovacs
+        // ties its device verification to this client device id (account-level):
+        // a changing id (e.g. in a fresh Docker container on every run)
+        // re-triggers verification each start.
+        const deviceId = CLIENT_DEVICE_ID || EcovacsAPI.getDeviceId(await nodeMachineId.machineId(), DEVICE_NUMBER);
 
         this.api = new EcovacsAPI(deviceId, COUNTRY_CODE, '', AUTH_DOMAIN);
 
         try {
-            await this.api.connect(ACCOUNT_ID, passwordHash);
+            await this.connectWithDeviceVerification(ACCOUNT_ID, passwordHash);
             const devices = await this.api.devices();
 
             if (!devices || devices.length === 0) {
@@ -59,6 +64,55 @@ class ExampleClient {
         } catch (error) {
             throw new Error(`Failed to initialize ExampleClient: ${error.message}`, { cause: error });
         }
+    }
+
+    /**
+     * Runs the login and, if Ecovacs requires client-device verification
+     * (response code `1013`), performs the two-step e-mail-code flow:
+     * request a code, read it from stdin, then confirm it. Retries on an
+     * invalid/expired code.
+     * @param {string} accountId - the Ecovacs account id (e-mail)
+     * @param {string} passwordHash - the MD5 password hash
+     * @returns {Promise<void>}
+     */
+    async connectWithDeviceVerification(accountId, passwordHash) {
+        try {
+            await this.api.connect(accountId, passwordHash);
+        } catch (error) {
+            if (!(error instanceof EcovacsAPI.DeviceVerificationRequired)) {
+                throw error;
+            }
+            console.log('\nEcovacs requires verification of this device before login.');
+            await this.api.requestDeviceVerificationCode();
+            console.log('A verification code has been sent to your account e-mail address.');
+
+            for (;;) {
+                const code = await this.promptForCode('Enter the verification code from the e-mail: ');
+                try {
+                    await this.api.verifyDevice(code);
+                    return;
+                } catch (verifyError) {
+                    if (!(verifyError instanceof EcovacsAPI.InvalidVerificationCode)) {
+                        throw verifyError;
+                    }
+                    console.error('Invalid or expired code – please try again.');
+                }
+            }
+        }
+    }
+
+    /**
+     * Prompt the user for a single line of input on stdin.
+     * @param {string} question - the prompt text
+     * @returns {Promise<string>} the entered line
+     */
+    promptForCode(question) {
+        // Print the prompt via console.log first (newline-terminated, so it is
+        // flushed and visible even under `docker compose up` log multiplexing),
+        // then read the answer from stdin.
+        console.log(question);
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        return rl.question('> ').finally(() => rl.close());
     }
 
     /**

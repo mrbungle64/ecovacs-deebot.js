@@ -16,6 +16,8 @@ services:
       - ECOVACS_ACCOUNT_ID
       - ECOVACS_PASSWORD
       - ECOVACS_DEVICE_NUMBER
+      - ECOVACS_CLIENT_DEVICE_ID
+      - ECOVACS_DEVICE_ID # deprecated alias for ECOVACS_CLIENT_DEVICE_ID
       - ECOVACS_COUNTRY_CODE
       - ECOVACS_AUTH_DOMAIN
     command: node example/app.js

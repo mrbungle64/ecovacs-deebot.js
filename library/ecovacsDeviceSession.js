@@ -31,7 +31,7 @@ class EcovacsDeviceSession extends EventEmitter {
      * @param {string} [options.serverAddress] - overrides the MQTT server address
      * @param {number} [options.serverPort] - overrides the MQTT server port
      * @param {string} [options.protocol='mqtts'] - MQTT URL scheme; set to `'mqtt'` for a non-TLS local broker
-     * @param {boolean} [options.rejectUnauthorized=true] - verify the broker's TLS certificate; set to `false` only for local/self-signed brokers
+     * @param {boolean} [options.rejectUnauthorized=false] - verify the broker's TLS certificate; defaults to `false` because the Ecovacs cloud broker uses a private CA that is not publicly verifiable (see below). Set to `true` for a local broker whose CA Node can verify
      */
     constructor(vacBot, user, hostname, resource, secret, continent, country, vacuum, serverAddress, serverPort = 8883, options = {}) {
         super();
@@ -56,11 +56,14 @@ class EcovacsDeviceSession extends EventEmitter {
         // MQTT URL scheme. Defaults to TLS (`mqtts`); a non-TLS `mqtt` broker can be
         // requested via options for local/integration testing against e.g. aedes.
         this.protocol = options.protocol === 'mqtt' ? 'mqtt' : 'mqtts';
-        // Verify the broker's TLS certificate by default. The MQTT password is the
-        // user access token, so an unverified link lets a path attacker MITM the
-        // connection and harvest it. Opt out (e.g. for a local/self-signed broker)
-        // only by explicitly passing options.rejectUnauthorized = false.
-        this.rejectUnauthorized = options.rejectUnauthorized !== false;
+        // Do NOT verify the broker's TLS certificate by default: the Ecovacs cloud
+        // broker (mq-*.ecouser.net) presents a leaf certificate signed by a private
+        // "ECOVACS CA" and does not send that CA, so it can never be verified against
+        // the public trust store (Node fails with UNABLE_TO_VERIFY_LEAF_SIGNATURE /
+        // "unable to verify the first certificate"). Verification is therefore opt-in
+        // via options.rejectUnauthorized = true, for local brokers whose CA Node can
+        // verify (or once the ECOVACS CA is pinned via a `ca` option in the future).
+        this.rejectUnauthorized = options.rejectUnauthorized === true;
 
         this.mqtt = require('mqtt');
         this.channel = '';

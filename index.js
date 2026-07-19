@@ -8,6 +8,7 @@ const fs = require('fs');
 const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
+const { DeviceVerificationRequired, InvalidVerificationCode } = require('./library/errors');
 
 /**
  * @typedef {Object} ApiDevice
@@ -73,14 +74,31 @@ class EcovacsAPI extends EventEmitter {
       throw new Error('Wrong or unknown country code provided');
     }
 
-    let result = await this.callUserAuthApi(this.getLoginPath(), {
+    // Remember the account so a subsequent device-verification flow
+    // (requestDeviceVerificationCode/verifyDevice) can encrypt the same e-mail.
+    this.account = accountId;
+
+    const result = await this.callUserAuthApi(this.getLoginPath(), {
       'account': accountId,
       'password': passwordHash
     });
     this.uid = result.uid;
-    const loginAccessToken = result.accessToken;
 
-    result = await this.callUserAuthApi(constants.USER_GETAUTHCODE_PATH, {
+    return this.completeLogin(result.accessToken);
+  }
+
+  /**
+   * Finish the login once a login access token has been obtained – either from
+   * the password login (`connect`) or from device verification (`verifyDevice`).
+   * Exchanges the token for an auth code, performs `loginByItToken`, tracks the
+   * expiry and fires the `credentialsUpdated` event.
+   * @param {string} loginAccessToken - the login access token
+   * @returns {Promise<string>} `'ready'` on success
+   * @fires EcovacsAPI#credentialsUpdated
+   * @private
+   */
+  async completeLogin(loginAccessToken) {
+    let result = await this.callUserAuthApi(constants.USER_GETAUTHCODE_PATH, {
       'uid': this.uid,
       'accessToken': loginAccessToken
     });
@@ -103,6 +121,65 @@ class EcovacsAPI extends EventEmitter {
      */
     this.emit('credentialsUpdated', this.getCredentials());
     return 'ready';
+  }
+
+  /**
+   * Request an e-mailed device-verification code for the account used with
+   * {@link connect}. This is step one of the two-step device-verification flow
+   * that Ecovacs requires when {@link connect} throws a
+   * {@link DeviceVerificationRequired} (response code `1013`): the cloud sends a
+   * code to the account's e-mail address. Confirm it with {@link verifyDevice}.
+   *
+   * ```js
+   * try {
+   *   await api.connect(account, passwordHash);
+   * } catch (e) {
+   *   if (e instanceof EcovacsAPI.DeviceVerificationRequired) {
+   *     await api.requestDeviceVerificationCode();
+   *     // ... obtain the code from the user's mailbox ...
+   *     await api.verifyDevice(code);
+   *   }
+   * }
+   * ```
+   * @returns {Promise<void>}
+   */
+  async requestDeviceVerificationCode() {
+    if (!this.account) {
+      throw new Error('No account set – call connect() first');
+    }
+    const encryptEmail = await this.encryptAccount(this.account);
+    await this.callVerificationApi(constants.VERIFY_SENDEMAIL_PATH, {
+      'encryptEmail': encryptEmail,
+      'verifyType': 'EMAIL_VERIFY_DEVICE',
+      'supportChar': 'N',
+      'isForce': 'N'
+    });
+  }
+
+  /**
+   * Confirm a device-verification code (step two) and finish the login. On
+   * success the credentials are stored and the same `credentialsUpdated` event /
+   * refresh mechanism as a normal login is triggered, so `authenticate()` /
+   * {@link getCredentials} return the fresh credentials afterwards.
+   * @param {string} code - the verification code from the e-mail (surrounding whitespace is trimmed)
+   * @returns {Promise<string>} `'ready'` on success
+   * @throws {InvalidVerificationCode} if the code is invalid or expired (response code `1012`)
+   * @fires EcovacsAPI#credentialsUpdated
+   */
+  async verifyDevice(code) {
+    if (!this.account) {
+      throw new Error('No account set – call connect() first');
+    }
+    const encryptAccount = await this.encryptAccount(this.account);
+    const result = await this.callVerificationApi(constants.VERIFY_DEVICE_PATH, {
+      'encryptAccount': encryptAccount,
+      'backUpEmail': '',
+      'verifyCode': String(code).trim(),
+      'model': 'Pixel 7',
+      'system': 'Android 14'
+    });
+    this.uid = result['uid'];
+    return this.completeLogin(result['accessToken']);
   }
 
   /**
@@ -301,6 +378,117 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
+   * Get the meta-object for the device-verification endpoints. Same shape as
+   * {@link getMetaObject} but with a lowercase country and the distinct app
+   * version the verification endpoints require.
+   * @returns {import('./library/typedefs').MetaObject}
+   */
+  getVerificationMetaObject() {
+    // deviceType 1 = Android
+    return {
+      'country': this.country.toLowerCase(),
+      'lang': 'EN',
+      'deviceId': this.deviceId,
+      'appCode': 'global_e',
+      'appVersion': constants.VERIFY_APP_VERSION,
+      'channel': 'google_play',
+      'deviceType': '1'
+    };
+  }
+
+  /**
+   * Build the per-request metadata (request id, timestamp, time zone) shared by
+   * the signed device-verification requests.
+   * @returns {{requestId: string, authTimespan: number, authTimeZone: string}}
+   */
+  getRequestMetadata() {
+    const now = Date.now() / 1000;              // seconds as a float
+    return {
+      'requestId': EcovacsAPI.md5(String(now)), // md5 of the seconds-float, not ms
+      'authTimespan': Math.floor(now * 1000),   // milliseconds as an integer
+      'authTimeZone': 'GMT-8'
+    };
+  }
+
+  /**
+   * Call one of the signed device-verification GET endpoints. Uses the same
+   * private-API host and signing scheme as `user/login` but with the
+   * verification meta object (see {@link getVerificationMetaObject}).
+   * @param {string} endpoint - the endpoint, e.g. `common/getConfig`
+   * @param {Object} params - the endpoint-specific parameters (before signing)
+   * @returns {Promise<Object|Array>} the response `data`
+   * @private
+   */
+  async callVerificationApi(endpoint, params) {
+    tools.envLogHeader(`callVerificationApi('${endpoint}')`);
+    const meta = this.getVerificationMetaObject();
+    const requestParams = { ...params, ...this.getRequestMetadata() };
+
+    // Sign over the meta object merged with the request params (params win).
+    const authSignParams = { ...meta, ...requestParams };
+    const query = this.buildQueryList(
+      requestParams,
+      authSignParams,
+      constants.AUTH_USERLOGIN_AUTH_APPKEY,
+      constants.AUTH_USERLOGIN_SECRET
+    );
+
+    let portalPath = tools.formatString(constants.AUTH_GL_API, { domain: this.authDomain });
+    if (this.country === 'CN') {
+      portalPath = portalPath.replace('.com', '.cn');
+    }
+    const portalUrl = new url.URL(tools.formatString(portalPath + '/' + endpoint, meta));
+    const searchParams = new url.URLSearchParams(query);
+
+    tools.envLogInfo(`portalUrl.href: '${portalUrl.href}'`);
+    // The Ecovacs cloud sporadically returns HTTP 502; retry defensively.
+    const res = await tools.withRetry(
+      () => axios.get(portalUrl.href, { params: searchParams }),
+      { retryOn: ({ error }) => tools.isBadGatewayError(error) }
+    );
+    return this.handleAuthResponse(res.data);
+  }
+
+  /**
+   * Fetch (and cache) the RSA public key used to encrypt the account for the
+   * device-verification requests. Retrieves it via `common/getConfig`, whose
+   * response is a list; the `PUBLIC.KEY.CONFIG` entry's `value` is a JSON string
+   * `{"publicKey":"<base64 SPKI DER>"}`.
+   * @returns {Promise<string>} the base64-encoded SPKI DER public key
+   * @private
+   */
+  async getVerificationPublicKey() {
+    if (this.verificationPublicKey) {
+      return this.verificationPublicKey;
+    }
+    const config = await this.callVerificationApi(constants.VERIFY_GETCONFIG_PATH, {
+      'keys': constants.VERIFY_PUBLIC_KEY_CONFIG_KEY
+    });
+    if (!Array.isArray(config)) {
+      throw new Error('Unexpected getConfig response (expected a list)');
+    }
+    const entry = config.find((e) => e && e.key === constants.VERIFY_PUBLIC_KEY_CONFIG_KEY);
+    if (!entry) {
+      throw new Error(`getConfig response is missing the ${constants.VERIFY_PUBLIC_KEY_CONFIG_KEY} entry`);
+    }
+    const publicKey = JSON.parse(entry.value).publicKey;
+    this.verificationPublicKey = publicKey;
+    return publicKey;
+  }
+
+  /**
+   * Encrypt the account (e-mail) with the device-verification public key using
+   * RSA / PKCS#1 v1.5 padding, base64-encoded.
+   * @param {string} account - the account (e-mail) to encrypt
+   * @returns {Promise<string>} the base64-encoded ciphertext
+   * @private
+   */
+  async encryptAccount(account) {
+    const publicKey = await this.getVerificationPublicKey();
+    return EcovacsAPI.encryptWithPublicKey(account, publicKey);
+  }
+
+  /**
    * @param {string} loginPath - the login path
    * @param {Object} params - an object with the data to retrieve the parameters
    * @returns {Promise<Object>} an object including access token and user ID
@@ -338,7 +526,25 @@ class EcovacsAPI extends EventEmitter {
       { retryOn: ({ error }) => tools.isBadGatewayError(error) }
     );
     const result = res.data;
-    tools.envLogPayload(result);
+    return this.handleAuthResponse(result);
+  }
+
+  /**
+   * Shared handler for the private auth API response envelope (`user/login`,
+   * `user/getAuthCode` and the device-verification endpoints). Returns the
+   * `data` payload on success (a list for `common/getConfig`, an object
+   * otherwise) or throws a typed error for a known failure code.
+   *
+   * Security: a successful response may carry tokens / credentials, so only the
+   * response code is logged here – never the full payload.
+   * @param {Object} result - the parsed response envelope (`{ code, data, msg }`)
+   * @returns {Object|Array} the response `data`
+   * @throws {DeviceVerificationRequired} on code `1013`
+   * @throws {InvalidVerificationCode} on code `1012`
+   * @private
+   */
+  handleAuthResponse(result) {
+    tools.envLogInfo(`auth response code: ${result.code}`);
     if (result.code === '0000') {
       return result.data;
     }
@@ -346,6 +552,14 @@ class EcovacsAPI extends EventEmitter {
     // (the latter matches deebot-client's invalid-authentication handling).
     if ((result.code === '1005') || (result.code === '1010')) {
       throw new Error('Incorrect account id or password');
+    }
+    // '1012' -> supplied verification code invalid/expired.
+    if (result.code === '1012') {
+      throw new InvalidVerificationCode(result.msg);
+    }
+    // '1013' -> the client device id must be verified before login can proceed.
+    if (result.code === '1013') {
+      throw new DeviceVerificationRequired(result.msg);
     }
     throw new Error(`Failure code ${result.code}: ${result.msg}`);
   }
@@ -568,7 +782,7 @@ class EcovacsAPI extends EventEmitter {
    * @param {string} userToken - the user token
    * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
    * @param {string} [continent] - the continent
-   * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol, rejectUnauthorized}`. The first three are mainly for local testing; `rejectUnauthorized` defaults to `true` (verify the broker's TLS certificate) and should only be set to `false` for a local/self-signed broker
+   * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol, rejectUnauthorized}`. The first three are mainly for local testing; `rejectUnauthorized` defaults to `false` because the Ecovacs cloud broker uses a private CA that is not publicly verifiable — set it to `true` only for a local broker whose CA Node can verify
    * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
    */
   getDevice(user, hostname, resource, userToken, vacuum, continent = '', options = {}) {
@@ -715,6 +929,26 @@ class EcovacsAPI extends EventEmitter {
     }, Buffer.from(text)).toString('base64');
   }
 
+  /**
+   * Encrypt text with a base64-encoded SPKI DER RSA public key using
+   * PKCS#1 v1.5 padding. Used for the device-verification account encryption
+   * where the key is fetched at runtime (see {@link getVerificationPublicKey}).
+   * @param {string} text - the text to encrypt
+   * @param {string} base64Der - the base64-encoded SPKI DER public key
+   * @returns {string} the base64-encoded ciphertext
+   */
+  static encryptWithPublicKey(text, base64Der) {
+    const publicKey = crypto.createPublicKey({
+      key: Buffer.from(base64Der, 'base64'),
+      format: 'der',
+      type: 'spki'
+    });
+    return crypto.publicEncrypt({
+      key: publicKey,
+      padding: crypto.constants.RSA_PKCS1_PADDING
+    }, Buffer.from(text, 'utf8')).toString('base64');
+  }
+
   logInfo(message) {
     tools.logInfo(message);
   }
@@ -735,10 +969,20 @@ class EcovacsAPI extends EventEmitter {
 EcovacsAPI.PUBLIC_KEY = fs.readFileSync(__dirname + "/key.pem", "utf8");
 EcovacsAPI.REALM = constants.REALM;
 
+const errors = require('./library/errors');
+// Expose the auth error types as static properties so callers can do
+// `err instanceof EcovacsAPI.DeviceVerificationRequired`.
+EcovacsAPI.AuthError = errors.AuthError;
+EcovacsAPI.DeviceVerificationRequired = errors.DeviceVerificationRequired;
+EcovacsAPI.InvalidVerificationCode = errors.InvalidVerificationCode;
+
 module.exports.EcovacsAPI = EcovacsAPI;
 /** @deprecated Use EcovacsAPI instead */
 module.exports.EcoVacsAPI = EcovacsAPI;
 module.exports.countries = countries;
+module.exports.AuthError = errors.AuthError;
+module.exports.DeviceVerificationRequired = errors.DeviceVerificationRequired;
+module.exports.InvalidVerificationCode = errors.InvalidVerificationCode;
 module.exports.EcovacsDevice = require('./library/ecovacsDevice');
 /** @deprecated Use EcovacsDevice instead */
 module.exports.VacBot = module.exports.EcovacsDevice;

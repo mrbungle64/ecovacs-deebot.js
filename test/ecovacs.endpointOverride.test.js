@@ -98,27 +98,29 @@ describe('EcovacsDeviceSession endpoint overrides', function () {
         assert.strictEqual(ecovacs.serverPort, 0);
     });
 
-    it('verifies the broker TLS certificate by default (rejectUnauthorized: true)', function () {
+    it('does NOT verify the broker TLS certificate by default (rejectUnauthorized: false)', function () {
+        // The Ecovacs cloud broker uses a private CA that is not publicly
+        // verifiable, so verification is off unless explicitly opted in.
         const ecovacs = new Ecovacs(mockBot, 'user', 'host.name', 'resource', 'secret', 'eu', 'DE', mockVacuum);
-        assert.strictEqual(ecovacs.rejectUnauthorized, true);
-        assert.strictEqual(optionsFromConnect(ecovacs).rejectUnauthorized, true);
-    });
-
-    it('allows opting out of TLS verification via options.rejectUnauthorized=false', function () {
-        const ecovacs = new Ecovacs(
-            mockBot, 'user', 'host.name', 'resource', 'secret', 'eu', 'DE', mockVacuum,
-            undefined, undefined,
-            { rejectUnauthorized: false }
-        );
         assert.strictEqual(ecovacs.rejectUnauthorized, false);
         assert.strictEqual(optionsFromConnect(ecovacs).rejectUnauthorized, false);
     });
 
-    it('only a strict false disables verification (truthy/omitted stay verified)', function () {
+    it('allows opting in to TLS verification via options.rejectUnauthorized=true', function () {
+        const ecovacs = new Ecovacs(
+            mockBot, 'user', 'host.name', 'resource', 'secret', 'eu', 'DE', mockVacuum,
+            undefined, undefined,
+            { rejectUnauthorized: true }
+        );
+        assert.strictEqual(ecovacs.rejectUnauthorized, true);
+        assert.strictEqual(optionsFromConnect(ecovacs).rejectUnauthorized, true);
+    });
+
+    it('only a strict true enables verification (falsy/omitted/truthy-non-boolean stay unverified)', function () {
         const omitted = new Ecovacs(mockBot, 'user', 'host.name', 'resource', 'secret', 'eu', 'DE', mockVacuum, undefined, undefined, {});
-        assert.strictEqual(omitted.rejectUnauthorized, true);
-        // A non-boolean truthy value must not be mistaken for an opt-out.
-        const truthy = new Ecovacs(mockBot, 'user', 'host.name', 'resource', 'secret', 'eu', 'DE', mockVacuum, undefined, undefined, { rejectUnauthorized: 0 });
-        assert.strictEqual(truthy.rejectUnauthorized, true);
+        assert.strictEqual(omitted.rejectUnauthorized, false);
+        // A non-boolean truthy value must not be mistaken for an opt-in.
+        const truthy = new Ecovacs(mockBot, 'user', 'host.name', 'resource', 'secret', 'eu', 'DE', mockVacuum, undefined, undefined, { rejectUnauthorized: 1 });
+        assert.strictEqual(truthy.rejectUnauthorized, false);
     });
 });
