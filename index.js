@@ -276,6 +276,10 @@ class EcovacsAPI extends EventEmitter {
        * @type {Error}
        */
       this.emit('credentialsRefreshError', e);
+      if (e instanceof DeviceVerificationRequired) {
+        this.disableAutoTokenRefresh();
+        return;
+      }
       if (this._refreshTimer) {
         clearTimeout(this._refreshTimer);
       }

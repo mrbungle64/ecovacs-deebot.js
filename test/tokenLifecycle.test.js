@@ -132,4 +132,25 @@ describe('EcovacsAPI auto token refresh scheduling', function () {
         }
         assert.strictEqual(capturedDelay, 60000);
     });
+
+    it('disables auto token refresh when a DeviceVerificationRequired error occurs', async function () {
+        const { DeviceVerificationRequired } = require('../index.js');
+        const api = new EcovacsAPI('deviceId123', 'de');
+        api.connect = async () => {
+            throw new DeviceVerificationRequired('verification required');
+        };
+        api.tokenExpiresAt = Date.now() + 3600000;
+        api.enableAutoTokenRefresh('user', 'hash');
+
+        let emittedError = null;
+        api.on('credentialsRefreshError', (err) => {
+            emittedError = err;
+        });
+
+        await api._runTokenRefresh();
+
+        assert.ok(emittedError instanceof DeviceVerificationRequired);
+        assert.strictEqual(api._autoRefresh, null);
+        assert.strictEqual(api._refreshTimer, null);
+    });
 });
