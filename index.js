@@ -473,7 +473,16 @@ class EcovacsAPI extends EventEmitter {
     if (!entry) {
       throw new Error(`getConfig response is missing the ${constants.VERIFY_PUBLIC_KEY_CONFIG_KEY} entry`);
     }
-    const publicKey = JSON.parse(entry.value).publicKey;
+    let publicKey;
+    try {
+      const parsed = JSON.parse(entry.value);
+      publicKey = parsed && parsed.publicKey;
+    } catch (e) {
+      throw new Error(`Failed to parse ${constants.VERIFY_PUBLIC_KEY_CONFIG_KEY} JSON value`, { cause: e });
+    }
+    if (!publicKey) {
+      throw new Error(`getConfig entry ${constants.VERIFY_PUBLIC_KEY_CONFIG_KEY} is missing the publicKey property`);
+    }
     this.verificationPublicKey = publicKey;
     return publicKey;
   }

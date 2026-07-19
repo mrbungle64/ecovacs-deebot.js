@@ -207,6 +207,40 @@ describe('Device verification', function () {
     await assert.rejects(api.verifyDevice('123456'), /No account set/);
   });
 
+  it('requestDeviceVerificationCode() throws if getConfig returns invalid JSON', async function () {
+    const api = new EcovacsAPI('deviceId123', 'de');
+    api.account = 'user@example.com';
+    axios.get = async () => ({
+      data: {
+        code: '0000',
+        data: [
+          { key: 'PUBLIC.KEY.CONFIG', value: 'not-a-json-string' }
+        ]
+      }
+    });
+    await assert.rejects(
+      api.requestDeviceVerificationCode(),
+      /Failed to parse PUBLIC.KEY.CONFIG JSON value/
+    );
+  });
+
+  it('requestDeviceVerificationCode() throws if getConfig value does not contain publicKey', async function () {
+    const api = new EcovacsAPI('deviceId123', 'de');
+    api.account = 'user@example.com';
+    axios.get = async () => ({
+      data: {
+        code: '0000',
+        data: [
+          { key: 'PUBLIC.KEY.CONFIG', value: JSON.stringify({ notPublicKey: 'somekey' }) }
+        ]
+      }
+    });
+    await assert.rejects(
+      api.requestDeviceVerificationCode(),
+      /getConfig entry PUBLIC.KEY.CONFIG is missing the publicKey property/
+    );
+  });
+
   describe('ExampleClient non-interactive stdin prevention', function () {
     const ExampleClient = require('../example/lib/client');
     let originalIsTTY;
