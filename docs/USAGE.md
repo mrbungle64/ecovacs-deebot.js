@@ -175,6 +175,53 @@ api.disableAutoTokenRefresh();
 * If an automatic refresh fails, a **`credentialsRefreshError`** event is emitted and the refresh is retried after a short delay.
 * For multiple bots sharing one MQTT connection, call `updateUserAccessToken()` on **every** `EcovacsDevice` instance — each one needs its own refreshed REST token. Only the connection owner actually reconnects MQTT; the shared instances just update their token in place.
 
+### Device verification (login code `1013`)
+Ecovacs may require a one-time **device verification** the first time a new client (a new `deviceId`) logs in. In that case `api.connect()` does not return a token but **throws** — the cloud e-mails a short code to the account owner, and the login is only completed once that code is confirmed. The library exposes this as a two-step flow:
+
+* `api.connect()` throws **`EcovacsAPI.DeviceVerificationRequired`** (response code `1013`) instead of resolving.
+* `api.requestDeviceVerificationCode()` → triggers the verification e-mail.
+* `api.verifyDevice(code)` → confirms the code, finishes the login, and fires `credentialsUpdated` (the same event / token-refresh path as a normal login). Surrounding whitespace in `code` is trimmed.
+* If the entered code is wrong or expired, `verifyDevice()` throws **`EcovacsAPI.InvalidVerificationCode`** (response code `1012`) — let the user re-enter it instead of failing hard.
+
+Both error classes are exported (`EcovacsAPI.DeviceVerificationRequired` / `EcovacsAPI.InvalidVerificationCode`, also at the package root) so you can branch with `instanceof`.
+
+```javascript
+async function connectWithVerification(api, accountId, passwordHash, promptForCode) {
+    try {
+        await api.connect(accountId, passwordHash);
+    } catch (e) {
+        if (!(e instanceof EcovacsAPI.DeviceVerificationRequired)) {
+            throw e; // unrelated auth/network error – handle as before
+        }
+        // Step 1: ask the cloud to e-mail a code to the account owner
+        await api.requestDeviceVerificationCode();
+
+        // Step 2: obtain the code however your client can (stdin, HTTP endpoint,
+        // UI form, writable state/config, callback ...) and confirm it. Retry on 1012.
+        for (;;) {
+            const code = (await promptForCode()).trim();
+            try {
+                await api.verifyDevice(code); // fires 'credentialsUpdated' on success
+                break;
+            } catch (err) {
+                if (err instanceof EcovacsAPI.InvalidVerificationCode) {
+                    console.warn('Invalid or expired code – please try again.');
+                    continue;
+                }
+                throw err;
+            }
+        }
+    }
+    // From here the login is complete: api.devices(), getDeviceObj(), device.connect() ...
+}
+```
+
+**Important — reuse the same `api` instance:** call `requestDeviceVerificationCode()` and `verifyDevice()` on the **same** `EcovacsAPI` object whose `connect()` threw `1013`. It keeps the internal state (account, cached RSA key) needed to encrypt the request; a fresh instance would lose it.
+
+**Avoid repeated verification — persist your `deviceId`:** the cloud ties verification to the client `deviceId`. If that value changes between runs, you get a new `1013` each time. Deriving it from `machineIdSync()` is fine for a short-lived script, but on hosts where the machine ID is not stable (e.g. rebuilt containers) you should **generate the `deviceId` once and persist it** (config file, database, secret store), then reuse it on every subsequent start. Keep **one `deviceId` per account** — not per device.
+
+**Logging:** never log the entered code or the resulting tokens; log status transitions and response codes only (the library itself does not log payloads).
+
 ### `getDeviceObj(vacuum)`
 * This is the preferred, high-level method to initialize your device instance from the retrieved `devices` array. It automatically passes the correct auth tokens, uid, realm, and resource behind the scenes.
 * Returns an **`EcovacsDevice`** instance — the client-side handle for one device (vacuum, air purifier, lawn mower or air-quality monitor).
