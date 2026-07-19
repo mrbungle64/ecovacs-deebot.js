@@ -30,12 +30,13 @@ class ExampleClient {
         const { ACCOUNT_ID, PASSWORD, COUNTRY_CODE, DEVICE_NUMBER = 0, AUTH_DOMAIN = '', CLIENT_DEVICE_ID = '' } = this.config;
 
         const passwordHash = EcovacsAPI.md5(PASSWORD);
-        // Prefer an explicitly configured, stable client device id. Otherwise
-        // derive one from the host machine id. A stable id matters because Ecovacs
-        // ties its device verification to this client device id (account-level):
-        // a changing id (e.g. in a fresh Docker container on every run)
-        // re-triggers verification each start.
-        const deviceId = CLIENT_DEVICE_ID || EcovacsAPI.getDeviceId(await nodeMachineId.machineId(), DEVICE_NUMBER);
+        // Derive the client device id from either the explicitly configured
+        // CLIENT_DEVICE_ID or the host machine id. In both cases the
+        // DEVICE_NUMBER is folded in so that multiple instances sharing the
+        // same .env but addressing different robots get distinct MQTT client
+        // identities (resource = deviceId.substring(0,8)).
+        const machineId = CLIENT_DEVICE_ID || await nodeMachineId.machineId();
+        const deviceId = EcovacsAPI.getDeviceId(machineId, DEVICE_NUMBER);
 
         this.api = new EcovacsAPI(deviceId, COUNTRY_CODE, '', AUTH_DOMAIN);
 
@@ -86,7 +87,7 @@ class ExampleClient {
             await this.api.requestDeviceVerificationCode();
             console.log('A verification code has been sent to your account e-mail address.');
 
-            for (;;) {
+            for (; ;) {
                 const code = await this.promptForCode('Enter the verification code from the e-mail: ');
                 try {
                     await this.api.verifyDevice(code);
