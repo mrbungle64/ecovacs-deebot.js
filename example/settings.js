@@ -12,5 +12,12 @@ module.exports = {
     // (which re-triggers verification) — important in ephemeral/Docker containers
     // where the auto-detected machine id changes each run.
     // `ECOVACS_DEVICE_ID` is a deprecated alias kept for backward compatibility.
-    CLIENT_DEVICE_ID: process.env.ECOVACS_CLIENT_DEVICE_ID || process.env.ECOVACS_DEVICE_ID || ''
+    CLIENT_DEVICE_ID: (() => {
+        const rawId = process.env.ECOVACS_CLIENT_DEVICE_ID || process.env.ECOVACS_DEVICE_ID || '';
+        const trimmed = rawId.trim();
+        if (trimmed && !/^[a-zA-Z0-9.\-_:]+$/.test(trimmed)) {
+            throw new Error('ECOVACS_CLIENT_DEVICE_ID contains invalid characters. Only alphanumeric characters, dots, hyphens, colons, and underscores are allowed.');
+        }
+        return trimmed;
+    })()
 };

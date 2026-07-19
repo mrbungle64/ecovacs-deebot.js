@@ -319,4 +319,43 @@ describe('Device verification', function () {
       );
     });
   });
+
+  describe('Example settings validation', function () {
+    let originalClientId;
+    let originalDeviceId;
+
+    beforeEach(() => {
+      originalClientId = process.env.ECOVACS_CLIENT_DEVICE_ID;
+      originalDeviceId = process.env.ECOVACS_DEVICE_ID;
+    });
+
+    afterEach(() => {
+      if (originalClientId === undefined) {
+        delete process.env.ECOVACS_CLIENT_DEVICE_ID;
+      } else {
+        process.env.ECOVACS_CLIENT_DEVICE_ID = originalClientId;
+      }
+      if (originalDeviceId === undefined) {
+        delete process.env.ECOVACS_DEVICE_ID;
+      } else {
+        process.env.ECOVACS_DEVICE_ID = originalDeviceId;
+      }
+      delete require.cache[require.resolve('../example/settings')];
+    });
+
+    it('trims whitespace from ECOVACS_CLIENT_DEVICE_ID', function () {
+      process.env.ECOVACS_CLIENT_DEVICE_ID = '  my-device-id \n';
+      delete require.cache[require.resolve('../example/settings')];
+      const settings = require('../example/settings');
+      assert.strictEqual(settings.CLIENT_DEVICE_ID, 'my-device-id');
+    });
+
+    it('throws error for invalid characters in ECOVACS_CLIENT_DEVICE_ID', function () {
+      process.env.ECOVACS_CLIENT_DEVICE_ID = 'invalid/device?id';
+      delete require.cache[require.resolve('../example/settings')];
+      assert.throws(() => {
+        require('../example/settings');
+      }, /ECOVACS_CLIENT_DEVICE_ID contains invalid characters/);
+    });
+  });
 });
