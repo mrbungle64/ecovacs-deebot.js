@@ -190,6 +190,26 @@ describe('EcovacsAPI Extended tests', function () {
       await assert.rejects(api.callUserAuthApi('user/login', {}), /Incorrect account id or password/);
     });
 
+    it('should log the failure message if response code is not 0000', async function () {
+      const tools = require('../library/tools');
+      const originalEnvLogInfo = tools.envLogInfo;
+      const logged = [];
+      tools.envLogInfo = (msg) => { logged.push(msg); };
+
+      try {
+        const api = new EcovacsAPI('deviceId123', 'de');
+        mockGetResponse = {
+          code: '1005',
+          msg: 'account locked, try in 30 min'
+        };
+        await assert.rejects(api.callUserAuthApi('user/login', {}), /Incorrect account id or password/);
+        assert.ok(logged.includes('auth response code: 1005'), 'should log auth response code');
+        assert.ok(logged.includes('auth response message: account locked, try in 30 min'), 'should log auth response message');
+      } finally {
+        tools.envLogInfo = originalEnvLogInfo;
+      }
+    });
+
     it('should throw clear error on invalid authentication code 1010', async function () {
       const api = new EcovacsAPI('deviceId123', 'de');
       mockGetResponse = {

@@ -562,6 +562,9 @@ class EcovacsAPI extends EventEmitter {
     if (result.code === '0000') {
       return result.data;
     }
+    if (result.msg) {
+      tools.envLogInfo(`auth response message: ${result.msg}`);
+    }
     // '1005' and '1010' both indicate an invalid account id / password
     // (the latter matches deebot-client's invalid-authentication handling).
     if ((result.code === '1005') || (result.code === '1010')) {
