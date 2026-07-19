@@ -83,6 +83,9 @@ class ExampleClient {
             if (!(error instanceof EcovacsAPI.DeviceVerificationRequired)) {
                 throw error;
             }
+            if (!process.stdin.isTTY) {
+                throw new Error('Verification required, but stdin is not interactive (not a TTY). Cannot prompt for code.', { cause: error });
+            }
             console.log('\nEcovacs requires verification of this device before login.');
             await this.api.requestDeviceVerificationCode();
             console.log('A verification code has been sent to your account e-mail address.');
@@ -108,6 +111,9 @@ class ExampleClient {
      * @returns {Promise<string>} the entered line
      */
     promptForCode(question) {
+        if (!process.stdin.isTTY) {
+            throw new Error('stdin is not interactive (not a TTY). Cannot prompt for code.');
+        }
         // Print the prompt via console.log first (newline-terminated, so it is
         // flushed and visible even under `docker compose up` log multiplexing),
         // then read the answer from stdin.

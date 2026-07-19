@@ -206,4 +206,51 @@ describe('Device verification', function () {
     await assert.rejects(api.requestDeviceVerificationCode(), /No account set/);
     await assert.rejects(api.verifyDevice('123456'), /No account set/);
   });
+
+  describe('ExampleClient non-interactive stdin prevention', function () {
+    const ExampleClient = require('../example/lib/client');
+    let originalIsTTY;
+    let client;
+
+    beforeEach(() => {
+      originalIsTTY = process.stdin.isTTY;
+      process.stdin.isTTY = false;
+      client = new ExampleClient({
+        ACCOUNT_ID: 'user@example.com',
+        PASSWORD: 'password',
+        COUNTRY_CODE: 'de'
+      });
+      // Mock client.api
+      client.api = {
+        connect: async () => {
+          throw new DeviceVerificationRequired('verify device', '1013');
+        },
+        requestDeviceVerificationCode: async () => {
+          throw new Error('Should not call requestDeviceVerificationCode');
+        }
+      };
+    });
+
+    afterEach(() => {
+      if (originalIsTTY === undefined) {
+        delete process.stdin.isTTY;
+      } else {
+        process.stdin.isTTY = originalIsTTY;
+      }
+    });
+
+    it('connectWithDeviceVerification throws immediately and does not call requestDeviceVerificationCode if stdin is not TTY', async function () {
+      await assert.rejects(
+        client.connectWithDeviceVerification('user@example.com', 'password_hash'),
+        /Verification required, but stdin is not interactive \(not a TTY\)/
+      );
+    });
+
+    it('promptForCode throws if stdin is not TTY', async function () {
+      assert.throws(
+        () => client.promptForCode('some question'),
+        /stdin is not interactive \(not a TTY\)/
+      );
+    });
+  });
 });
