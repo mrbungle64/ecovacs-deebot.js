@@ -178,6 +178,9 @@ class EcovacsAPI extends EventEmitter {
       'model': 'Pixel 7',
       'system': 'Android 14'
     });
+    if (!result || !result.uid || !result.accessToken) {
+      throw new Error('Unexpected verifyDevice response (missing uid or accessToken)');
+    }
     this.uid = result['uid'];
     return this.completeLogin(result['accessToken']);
   }

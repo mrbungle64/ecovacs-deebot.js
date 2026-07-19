@@ -201,6 +201,38 @@ describe('Device verification', function () {
     assert.strictEqual(postCalled, false, 'loginByItToken must not be called on invalid code');
   });
 
+  it('verifyDevice() throws if response data is null', async function () {
+    const api = new EcovacsAPI('deviceId123', 'de');
+    api.account = 'user@example.com';
+    axios.get = async (reqUrl) => {
+      if (reqUrl.includes('common/getConfig')) return { data: getConfigResponse };
+      if (reqUrl.includes('user/verifyDevice')) {
+        return { data: { code: '0000', data: null } };
+      }
+      throw new Error(`unexpected GET ${reqUrl}`);
+    };
+    await assert.rejects(
+      api.verifyDevice('123456'),
+      /Unexpected verifyDevice response \(missing uid or accessToken\)/
+    );
+  });
+
+  it('verifyDevice() throws if response data is missing uid or accessToken', async function () {
+    const api = new EcovacsAPI('deviceId123', 'de');
+    api.account = 'user@example.com';
+    axios.get = async (reqUrl) => {
+      if (reqUrl.includes('common/getConfig')) return { data: getConfigResponse };
+      if (reqUrl.includes('user/verifyDevice')) {
+        return { data: { code: '0000', data: { uid: 'verified_uid' } } };
+      }
+      throw new Error(`unexpected GET ${reqUrl}`);
+    };
+    await assert.rejects(
+      api.verifyDevice('123456'),
+      /Unexpected verifyDevice response \(missing uid or accessToken\)/
+    );
+  });
+
   it('verifyDevice()/requestDeviceVerificationCode() throw if no account is set', async function () {
     const api = new EcovacsAPI('deviceId123', 'de');
     await assert.rejects(api.requestDeviceVerificationCode(), /No account set/);
