@@ -438,10 +438,7 @@ class EcovacsAPI extends EventEmitter {
       authSecret
     );
 
-    let portalPath = tools.formatString(constants.AUTH_GL_API, { domain: this.authDomain });
-    if (this.country === 'CN') {
-      portalPath = portalPath.replace('.com', '.cn');
-    }
+    const portalPath = this.getPortalPath(endpoint);
     const portalUrl = new url.URL(tools.formatString(portalPath + '/' + endpoint, meta));
     const searchParams = new url.URLSearchParams(query);
 
