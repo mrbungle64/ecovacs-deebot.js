@@ -3,6 +3,7 @@
 const tools = require('../tools');
 const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
+const vectorMap = require('../render/vectorMap');
 const dictionary = require('../dictionary');
 const VacBotCommand = require('../command');
 const constants = require('../constants');
@@ -383,18 +384,37 @@ class MapManager {
      * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
      */
-    handleMapInfoV2(payload) {
+    async handleMapInfoV2(payload) {
         this.currentMapMID = payload['mid'];
-        tools.envLogNotice(`mid: ${this.currentMapMID}`);
-        tools.envLogNotice(`batid: ${payload['batid']}`);
-        tools.envLogNotice(`serial: ${payload['serial']}`);
-        tools.envLogNotice(`index: ${payload['index']}`);
-        tools.envLogNotice(`type: ${payload['type']}`);
-        tools.envLogNotice(`outlineVer: ${payload['outlineVer']}`);
-        tools.envLogNotice(`info: ${payload['info']}`);
-        tools.envLogNotice(`infoSize: ${payload['infoSize']}`);
-        tools.envLogNotice(`using: ${payload['using']}`);
-        tools.envLogNotice(`outlineCpmplete: ${payload['outlineCpmplete']}`); // The typo in 'Cpmplete' is intended
+        tools.envLogNotice(`[MapManager] MapInfo_V2 mid: ${this.currentMapMID} type: ${payload['type']} infoSize: ${payload['infoSize']}`);
+        // Newer devices (T80/T80S/X8 OMNI ...) deliver the active map as a vector
+        // floor plan in the base64 + Zstandard `info` field, not as raster pieces.
+        // Decode it and render a PNG so consumers get a map image via 'MapImage'.
+        if (!payload['info']) {
+            return;
+        }
+        try {
+            const decoded = await mapTemplate.decompressToString(payload['info']);
+            if (!decoded) {
+                // e.g. zstd unsupported on this Node runtime (< 22.15)
+                tools.envLogWarn('[MapManager] Could not decode MapInfo_V2 info payload');
+                return;
+            }
+            const vector = JSON.parse(decoded);
+            const dataURL = vectorMap.renderVectorMapPNG(vector, {
+                deebotPosition: this.bot.deebotPosition,
+                chargePosition: this.bot.chargePosition
+            });
+            if (!dataURL) {
+                tools.envLogInfo('[MapManager] MapInfo_V2 vector produced no renderable geometry');
+                return;
+            }
+            this.mapImageV2 = dataURL;
+            this.bot.ecovacs.emit('MapImageV2', { mapID: this.currentMapMID, mapBase64PNG: dataURL });
+            this.bot.ecovacs.emit('MapImage', dataURL);
+        } catch (e) {
+            tools.envLogError(`[MapManager] Error rendering MapInfo_V2 map: ${e.message}`);
+        }
     }
 
     /**
