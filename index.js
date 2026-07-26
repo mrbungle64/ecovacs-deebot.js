@@ -560,6 +560,95 @@ class EcovacsAPI {
    * @param {number} [deviceNumber=0] - the device number is a number that is assigned to each device
    * @returns {string} the device ID
    */
+  // ---------------------------------------------------------------------------
+  // Device verification — recovery for Ecovacs error 1013
+  // ("Please update to the latest version to continue.")
+  //
+  // Since mid-July 2026 Ecovacs rejects logins with code 1013. This is a
+  // per-deviceId device-trust block, NOT an appVersion problem: a deviceId that
+  // has completed a one-time email verification logs in normally again (even on
+  // the old appVersion). These methods perform that verification for THIS
+  // deviceId. They sign with the app keys published in deebot-client and
+  // appVersion 3.14.0, independently of the normal login signing.
+  // ---------------------------------------------------------------------------
+
+  _deviceVerifyMeta() {
+    const cc = ({ 'GB': 'UK' }[this.country] || this.country).toLowerCase();
+    return {
+      base: `https://gl-${cc}-api.${this.authDomain || constants.AUTH_DOMAIN}`,
+      sign: { country: cc, lang: 'EN', deviceId: this.deviceId, appCode: 'global_e',
+              appVersion: '3.14.0', channel: 'google_play', deviceType: '1' },
+      path: `/v1/private/${cc}/EN/${this.deviceId}/global_e/3.14.0/google_play/1`
+    };
+  }
+
+  async _deviceVerifyRequest(endpoint, params) {
+    const KEY = '1520391301804';
+    const SECRET = '6c319b2a5cd3e66e39159c2e28f2fce9';
+    const meta = this._deviceVerifyMeta();
+    const base = {
+      requestId: EcovacsAPI.md5(String(Date.now() / 1000)),
+      authTimespan: Date.now(),
+      authTimeZone: 'GMT-8'
+    };
+    const all = { ...meta.sign, ...base, ...params };
+    let text = KEY;
+    Object.keys(all).sort().forEach((k) => { text += `${k}=${all[k]}`; });
+    text += SECRET;
+    const query = { ...base, ...params, authSign: EcovacsAPI.md5(text), authAppkey: KEY };
+    const res = await axios.get(`${meta.base}${meta.path}${endpoint}`, { params: query });
+    const body = (res && res.data) || {};
+    if (String(body.code) !== '0000') {
+      throw new Error(`Ecovacs verify ${endpoint} -> code=${body.code} msg=${body.msg}`);
+    }
+    return body.data || {};
+  }
+
+  async getDeviceVerifyPublicKey() {
+    const data = await this._deviceVerifyRequest('/common/getConfig', { keys: 'PUBLIC.KEY.CONFIG' });
+    for (const e of data) {
+      if (e && e.key === 'PUBLIC.KEY.CONFIG') return JSON.parse(e.value).publicKey;
+    }
+    throw new Error('PUBLIC.KEY.CONFIG missing from getConfig response');
+  }
+
+  _deviceVerifyEncrypt(publicKeyBase64, value) {
+    const key = crypto.createPublicKey({ key: Buffer.from(publicKeyBase64, 'base64'), format: 'der', type: 'spki' });
+    return crypto.publicEncrypt({ key, padding: crypto.constants.RSA_PKCS1_PADDING }, Buffer.from(value)).toString('base64');
+  }
+
+  /**
+   * Email a one-time device-verification code to the account.
+   * @param {string} accountId - the account email
+   */
+  async sendDeviceVerifyCode(accountId) {
+    const pub = await this.getDeviceVerifyPublicKey();
+    await this._deviceVerifyRequest('/user/sendEmailVerifyCode', {
+      encryptEmail: this._deviceVerifyEncrypt(pub, accountId),
+      verifyType: 'EMAIL_VERIFY_DEVICE',
+      supportChar: 'N',
+      isForce: 'N'
+    });
+    return true;
+  }
+
+  /**
+   * Verify this deviceId with the emailed code. After this, the normal login works again.
+   * @param {string} accountId - the account email
+   * @param {string} code - the emailed verification code
+   */
+  async verifyDevice(accountId, code) {
+    const pub = await this.getDeviceVerifyPublicKey();
+    await this._deviceVerifyRequest('/user/verifyDevice', {
+      encryptAccount: this._deviceVerifyEncrypt(pub, accountId),
+      backUpEmail: '',
+      verifyCode: code,
+      model: 'Pixel 7',
+      system: 'Android 14'
+    });
+    return true;
+  }
+
   static getDeviceId(machineId, deviceNumber = 0) {
     return EcovacsAPI.md5(machineId + deviceNumber.toString());
   }

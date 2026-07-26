@@ -6,6 +6,7 @@ const tools = require('../tools');
 const mapTools = require('../mapTools');
 const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
+const mapImageV2 = require('../mapImageV2');
 const dictionary = require('./dictionary');
 const {errorCodes} = require('../errorCodes.json');
 const {eventCodes} = require('../eventCodes.json');
@@ -31,6 +32,15 @@ class VacBot_950type extends VacBot {
      */
     constructor(user, hostname, resource, secret, vacuum, continent, country, serverAddress = '', authDomain = '') {
         super(user, hostname, resource, secret, vacuum, continent, country, serverAddress, authDomain);
+
+        // Live map overlay (opt-in). When the adapter sets
+        // createMapImageOnPositionChange = true, the robot marker is
+        // re-rendered on every position push (no extra cloud request).
+        this.createMapImageOnPositionChange = false;
+        this.mapImageV2Data = null;
+        this._liveMapLastTs = 0;
+        this.cleanReportFromStats = false;
+        this._statsCleaning = false;
 
         this.advancedMode = null;
         this.aiBlockPlate = null;
@@ -796,6 +806,21 @@ class VacBot_950type extends VacBot {
             }
             this.obstacleTypes = payload['aitypes'];
         }
+        // Newer models (e.g. DEEBOT T80S OMNI) do not report the working state
+        // via CleanInfo (it stays 'idle'); the Stats message carries it instead:
+        // an empty stopReason means a clean is currently in progress.
+        if (payload.hasOwnProperty('stopReason')) {
+            if (payload['stopReason'] === '') {
+                this.cleanReport = 'freeClean';
+                this.cleanReportFromStats = true;
+                this._statsCleaning = true;
+            } else if (this._statsCleaning) {
+                // a Stats with a stop reason after cleaning -> the clean ended
+                this.cleanReport = 'stop';
+                this.cleanReportFromStats = true;
+                this._statsCleaning = false;
+            }
+        }
     }
 
     /**
@@ -886,18 +911,93 @@ class VacBot_950type extends VacBot {
      * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
      */
-    handleMapInfoV2(payload) {
+    async handleMapInfoV2(payload) {
         this.currentMapMID = payload['mid'];
+        this.mapImageV2 = null;
         tools.envLogNotice(`mid: ${this.currentMapMID}`);
-        tools.envLogNotice(`batid: ${payload['batid']}`);
-        tools.envLogNotice(`serial: ${payload['serial']}`);
-        tools.envLogNotice(`index: ${payload['index']}`);
         tools.envLogNotice(`type: ${payload['type']}`);
-        tools.envLogNotice(`outlineVer: ${payload['outlineVer']}`);
-        tools.envLogNotice(`info: ${payload['info']}`);
         tools.envLogNotice(`infoSize: ${payload['infoSize']}`);
-        tools.envLogNotice(`using: ${payload['using']}`);
-        tools.envLogNotice(`outlineCpmplete: ${payload['outlineCpmplete']}`); // The typo in 'Cpmplete' is intended
+        // The `info` field is base64 + Zstandard and holds the vector map
+        // (array of [layerType, "roomId;x,y;..."]). Decode it and build an SVG.
+        try {
+            if (payload['info']) {
+                const decoded = await mapTemplate.mapPieceToIntArray(payload['info']);
+                const mapData = (typeof decoded === 'string') ? JSON.parse(decoded) : decoded;
+                const names = {};
+                const infos = this.mapSpotAreaInfos && this.mapSpotAreaInfos[this.currentMapMID];
+                if (infos) {
+                    for (const k in infos) {
+                        if (Object.prototype.hasOwnProperty.call(infos, k) && infos[k] && infos[k].mapSpotAreaName) {
+                            names[k] = infos[k].mapSpotAreaName;
+                        }
+                    }
+                }
+                // Cache the decoded rooms so the live overlay can re-render the
+                // robot marker on position changes without re-fetching the map.
+                this.mapImageV2Data = {mapID: this.currentMapMID, mapData, names};
+                const robotPos = this.getLiveRobotPos();
+                let highlight;
+                if (robotPos && this.isCleaningActive()) {
+                    highlight = mapImageV2.roomAtPoint(mapData, robotPos.x, robotPos.y);
+                }
+                const svg = mapImageV2.buildRoomsSvg(mapData, {
+                    names,
+                    highlight,
+                    robotPos,
+                    chargePos: this.chargePosition
+                });
+                if (svg) {
+                    this.mapImageV2 = {mapID: this.currentMapMID, svg};
+                }
+            }
+        } catch (e) {
+            tools.envLogError('Failed to build map SVG from MapInfo_V2: ' + e.message);
+        }
+    }
+
+    /**
+     * Whether an actual cleaning motion is currently running.
+     * @returns {boolean}
+     */
+    isCleaningActive() {
+        const cleaningStates = ['auto', 'spot', 'spot_area', 'single_room', 'edge', 'freeClean'];
+        return cleaningStates.includes(this.cleanReport);
+    }
+
+    /**
+     * Returns the current robot position when valid (to draw a marker), else undefined.
+     * @returns {(Object|undefined)}
+     */
+    getLiveRobotPos() {
+        const dp = this.deebotPosition;
+        return (dp && dp.x !== null && dp.y !== null && !dp.isInvalid) ? dp : undefined;
+    }
+
+    /**
+     * Re-render the vector map SVG from the cached rooms plus the current robot
+     * and dock positions (and cleaning highlight). Keeps a live overlay in sync
+     * on position pushes WITHOUT any additional cloud request. Throttled to 1s.
+     * @returns {(Object|null)} {mapID, svg} or null
+     */
+    buildLiveMapImageV2() {
+        const data = this.mapImageV2Data;
+        if (!data || String(data.mapID) !== String(this.currentMapMID)) return null;
+        const now = Date.now();
+        if (this._liveMapLastTs && (now - this._liveMapLastTs) < 1000) return null;
+        const robotPos = this.getLiveRobotPos();
+        let highlight;
+        if (robotPos && this.isCleaningActive()) {
+            highlight = mapImageV2.roomAtPoint(data.mapData, robotPos.x, robotPos.y);
+        }
+        const svg = mapImageV2.buildRoomsSvg(data.mapData, {
+            names: data.names,
+            highlight,
+            robotPos,
+            chargePos: this.chargePosition
+        });
+        if (!svg) return null;
+        this._liveMapLastTs = now;
+        return {mapID: data.mapID, svg};
     }
 
     /**
@@ -1087,6 +1187,38 @@ class VacBot_950type extends VacBot {
                 'mid': payload['mid'],
                 'subsets': subsetData
             };
+            // Also build the spot area structures and expose them so the
+            // 'MapSpotAreas'/'MapSpotAreaInfo' events can be emitted for V2
+            // devices (e.g. DEEBOT T80S OMNI), whose map set is only sent as
+            // MapSet_V2 and was therefore never turned into spot area objects.
+            if (type === 'ar') {
+                const mapID = payload['mid'];
+                const mapSpotAreas = new map.EcovacsMapSpotAreas(mapID, payload['msid']);
+                const mapSpotAreaInfos = [];
+                subsets.forEach((subset) => {
+                    const mssid = subset[0];
+                    mapSpotAreas.push(new map.EcovacsMapSpotArea(mssid));
+                    const info = new map.EcovacsMapSpotAreaInfo(
+                        mapID,
+                        mssid,
+                        (subset[3] || '').replace(/-/g, ','),
+                        '',
+                        subset[2],
+                        subset[1]
+                    );
+                    if (subset[7]) {
+                        info.setCleanSet(subset[7].replace(/-/g, ','));
+                    }
+                    info.setSequenceNumber(subset[4]);
+                    if (typeof this.mapSpotAreaInfos[mapID] === 'undefined') {
+                        this.mapSpotAreaInfos[mapID] = [];
+                    }
+                    this.mapSpotAreaInfos[mapID][mssid] = info;
+                    mapSpotAreaInfos.push(info);
+                });
+                this.mapSpotAreas = mapSpotAreas;
+                this.mapSpotAreaInfos_lastV2 = mapSpotAreaInfos;
+            }
         }
     }
 
@@ -1564,7 +1696,11 @@ class VacBot_950type extends VacBot {
             case 'GetSpotAreas'.toLowerCase(): {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
-                    this.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
+                    if (this.is950type_V2()) {
+                        this.sendCommand(new VacBotCommand.GetMapSpotAreas_V2(mapID));
+                    } else {
+                        this.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID));
+                    }
                 }
                 break;
             }
@@ -1868,7 +2004,9 @@ class VacBot_950type extends VacBot {
             case 'SpotArea_V2'.toLowerCase(): {
                 const area = args[0].toString();
                 if (area !== '') {
-                    if (this.isModelTypeX2()) {
+                    if (this.isModelTypeX2() || this.getDeviceProperty('usesFreeClean')) {
+                        // Some newer models (e.g. T80 OMNI, T50 Pro Gen3) reject spotArea_V2
+                        // and require the freeClean command instead
                         const areaValues = tools.convertAreaValuesForFreeCleanCmd(area);
                         this.run('FreeClean', areaValues);
                     } else {

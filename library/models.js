@@ -685,6 +685,10 @@ exports.KnownDevices = {
         "yiko": true,
         "type": "X2"
     },
+    "rzwv5p": {
+        "name": "DEEBOT T80S OMNI",
+        "deviceClassLink": "e6ofmn"
+    },
     "lf3bn4": {
         "name": "DEEBOT X2",
         "deviceClassLink": "e6ofmn"
@@ -1267,15 +1271,24 @@ exports.KnownDevices = {
     },
     "02qwum": {
         "name": "DEEBOT T80 OMNI",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "p1jij8",
+        "usesFreeClean": true
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "p1jij8",
+        "usesFreeClean": true
     },
+    "jjg8ne": {
+        "name": "DEEBOT T50 Pro Omni Gen3",
+        "deviceClassLink": "p1jij8",
+        "usesFreeClean": true
+    },
+
     "k8qkc7": {
         "name": "DEEBOT T80 OMNI",
-        "deviceClassLink": "p1jij8"
+        "deviceClassLink": "p1jij8",
+        "usesFreeClean": true
     },
     "626v6g": {
         "name": "DEEBOT TEO+",

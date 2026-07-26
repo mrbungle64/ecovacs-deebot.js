@@ -420,8 +420,19 @@ class EcovacsMapImage extends EcovacsMapImageBase {
 // converts the compressed data retrieved from ecovacs API into int array containing the map pixels
 // thanks to https://gitlab.com/michael.becker/vacuumclean/-/blob/master/deebot/deebot-core/README.md#map-details
 async function mapPieceToIntArray(pieceValue) {
-    const fixArray = new Int8Array([0, 0, 0, 0]);
     let buff = Buffer.from(pieceValue, 'base64');
+    // Newer models (e.g. DEEBOT T80S OMNI) send map data as Zstandard (magic 28 b5 2f fd)
+    // instead of LZMA. Detect the format and decompress accordingly.
+    if (buff.length >= 4 && buff[0] === 0x28 && buff[1] === 0xb5 && buff[2] === 0x2f && buff[3] === 0xfd) {
+        const fzstd = require('fzstd');
+        const decompressed = Buffer.from(fzstd.decompress(new Uint8Array(buff)));
+        // Subsets and boundaries are JSON/text; map image pieces are binary
+        if (decompressed.length && (decompressed[0] === 0x5b || decompressed[0] === 0x7b)) {
+            return decompressed.toString('utf8');
+        }
+        return [...new Int8Array(decompressed.buffer, decompressed.byteOffset, decompressed.length)];
+    }
+    const fixArray = new Int8Array([0, 0, 0, 0]);
     let int8Array = new Int8Array(buff.buffer, buff.byteOffset, buff.length);
     //fix 9 byte header to 13 bytes for lzma decompression
     let correctedArray = [...int8Array.slice(0, 9), ...fixArray, ...int8Array.slice(9)];

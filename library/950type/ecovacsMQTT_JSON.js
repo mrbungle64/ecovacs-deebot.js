@@ -271,8 +271,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                 this.emitMessage("CleanCount", this.vacBot.cleanCount);
                 break;
             }
-            case "CleanInfo": {
+            case "CleanInfo":
+            case "CleanInfo_V2": {
                 // Various information about the cleaning status
+                // ("_V2" is the variant newer models like the T80S OMNI push)
                 this.vacBot.handleCleanInfo(payload);
                 this.emitMessage("CleanReport", this.vacBot.cleanReport);
                 this.emitMoppingSystemReport();
@@ -419,6 +421,15 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     });
                     this.vacBot.chargePosition["changeFlag"] = false;
                 }
+                // Live map overlay: re-render the robot marker on position changes
+                // (opt-in, throttled, no extra cloud request).
+                if (this.vacBot.createMapImageOnPositionChange) {
+                    const liveMap = this.vacBot.buildLiveMapImageV2();
+                    if (liveMap) {
+                        this.vacBot.mapImageV2 = liveMap;
+                        this.emitMessage("MapImageV2", liveMap);
+                    }
+                }
                 break;
             }
             case 'QuickCommand': {
@@ -483,6 +494,12 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
                     this.emitMessage("CurrentStats", this.vacBot.currentStats);
                     this.vacBot.currentStats = null;
                 }
+                // Newer models report the working state via Stats (stopReason),
+                // not via CleanInfo -> forward it as a CleanReport.
+                if (this.vacBot.cleanReportFromStats) {
+                    this.emitMessage("CleanReport", this.vacBot.cleanReport);
+                    this.vacBot.cleanReportFromStats = false;
+                }
                 break;
             }
             case 'SweepMode': {
@@ -532,7 +549,11 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "WaterInfo": {
                 // "Water Flow Level"
                 this.vacBot.handleWaterInfo(payload);
-                this.emitMessage("WaterLevel", this.vacBot.waterLevel);
+                // Some models (e.g. DEEBOT T80S OMNI with OZMO roller) do not report a
+                // numeric water level; only emit it when a value is actually present
+                if ((this.vacBot.waterLevel !== undefined) && (this.vacBot.waterLevel !== null)) {
+                    this.emitMessage("WaterLevel", this.vacBot.waterLevel);
+                }
                 this.emitMessage("WaterBoxInfo", this.vacBot.waterboxInfo);
                 if (this.vacBot.moppingType !== null) {
                     this.emitMessage("WaterBoxMoppingType", this.vacBot.moppingType);
@@ -586,7 +607,10 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             }
             case "MapInfo_V2": {
                 try {
-                    this.vacBot.handleMapInfoV2(payload);
+                    await this.vacBot.handleMapInfoV2(payload);
+                    if (this.vacBot.mapImageV2 && this.vacBot.mapImageV2.svg) {
+                        this.emitMessage("MapImageV2", this.vacBot.mapImageV2);
+                    }
                 } catch (e) {
                     tools.envLogError(`error on handling MapInfo_V2: ${e.message}`);
                 }
@@ -614,6 +638,17 @@ class EcovacsMQTT_JSON extends EcovacsMQTT {
             case "MapSet_V2": {
                 await this.vacBot.handleMapSet_V2(payload);
                 this.emitMessage("MapSet_V2", this.vacBot.mapSet_V2);
+                // For V2 devices the spot areas are only delivered via MapSet_V2.
+                // Emit the same events as the non-V2 path so consumers create
+                // the spot area objects.
+                if ((payload['type'] === 'ar') && this.vacBot.mapSpotAreas) {
+                    this.emitMessage("MapSpotAreas", this.vacBot.mapSpotAreas);
+                    if (Array.isArray(this.vacBot.mapSpotAreaInfos_lastV2)) {
+                        for (const spotAreaInfo of this.vacBot.mapSpotAreaInfos_lastV2) {
+                            this.emitMessage("MapSpotAreaInfo", spotAreaInfo);
+                        }
+                    }
+                }
                 break;
             }
             case "MapSubSet": {
