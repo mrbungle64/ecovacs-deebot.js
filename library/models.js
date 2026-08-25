@@ -763,7 +763,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "k8qkc7": {
         "name": "DEEBOT T80 OMNI",
@@ -775,19 +775,19 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "hu94nh": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "kdnfi5": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
