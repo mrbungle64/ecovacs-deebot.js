@@ -475,7 +475,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T30C Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
+        "type": "X2"
     },
     "ulzked": {
         "name": "DEEBOT T30C",
@@ -487,7 +487,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T30C Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
+        "type": "X2"
     },
     "x9ugz3": {
         "name": "DEEBOT T30C",
@@ -757,7 +757,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
@@ -769,7 +769,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "aasdks": {
         "name": "DEEBOT T80 OMNI",
