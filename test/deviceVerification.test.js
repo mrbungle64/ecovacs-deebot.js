@@ -23,11 +23,16 @@ const getConfigResponse = {
   ]
 };
 
+// Node refuses RSA_PKCS1_PADDING for private decryption unless OpenSSL supports
+// implicit rejection (OpenSSL >= 3.2, i.e. not Node 22.15), so decrypt raw and
+// strip the PKCS#1 v1.5 padding (00 02 <non-zero bytes> 00 <message>) by hand.
 function decryptWithTestKey(base64Cipher) {
-  return crypto.privateDecrypt(
-    { key: testPrivateKey, padding: crypto.constants.RSA_PKCS1_PADDING },
+  const block = crypto.privateDecrypt(
+    { key: testPrivateKey, padding: crypto.constants.RSA_NO_PADDING },
     Buffer.from(base64Cipher, 'base64')
-  ).toString('utf8');
+  );
+  assert.deepStrictEqual([block[0], block[1]], [0, 2], 'expected a PKCS#1 v1.5 encryption block');
+  return block.subarray(block.indexOf(0, 2) + 1).toString('utf8');
 }
 
 describe('Device verification', function () {
