@@ -80,6 +80,15 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     static encrypt(text: string): string;
     /**
+     * Encrypt text with a base64-encoded SPKI DER RSA public key using
+     * PKCS#1 v1.5 padding. Used for the device-verification account encryption
+     * where the key is fetched at runtime (see {@link getVerificationPublicKey}).
+     * @param {string} text - the text to encrypt
+     * @param {string} base64Der - the base64-encoded SPKI DER public key
+     * @returns {string} the base64-encoded ciphertext
+     */
+    static encryptWithPublicKey(text: string, base64Der: string): string;
+    /**
      * @param {string} deviceId - the device ID of the bot
      * @param {string} country - the country code of the country where the Ecovacs account is registered
      * @param {string} [continent=''] - the continent code
@@ -97,10 +106,105 @@ export class EcovacsAPI extends EventEmitter<any> {
      * @returns {Promise<string>}
      */
     connect(accountId: string, passwordHash: string): Promise<string>;
+    account: string | undefined;
+    /**
+     * Finish a login with a freshly obtained account uid + access token (from the
+     * password login or from device verification), remember them as the account
+     * session and announce it, so callers can persist it.
+     * @param {string} uid - the account uid
+     * @param {string} accessToken - the account access token
+     * @returns {Promise<string>} `'ready'` on success
+     * @fires EcovacsAPI#credentialsUpdated
+     * @fires EcovacsAPI#accountSessionUpdated
+     * @private
+     */
+    private loginWithAccountToken;
     uid: any;
+    accountUid: string | undefined;
+    loginAccessToken: string | null | undefined;
+    /**
+     * Finish the login once a login access token has been obtained – either from
+     * the password login (`connect`) or from device verification (`verifyDevice`).
+     * Exchanges the token for an auth code, performs `loginByItToken`, tracks the
+     * expiry and fires the `credentialsUpdated` event.
+     * @param {string} loginAccessToken - the login access token
+     * @returns {Promise<string>} `'ready'` on success
+     * @fires EcovacsAPI#credentialsUpdated
+     * @private
+     */
+    private completeLogin;
     authCode: any;
     user_access_token: any;
     tokenExpiresAt: number | undefined;
+    /**
+     * Request an e-mailed device-verification code for the account used with
+     * {@link connect}. This is step one of the two-step device-verification flow
+     * that Ecovacs requires when {@link connect} throws a
+     * {@link DeviceVerificationRequired} (response code `1013`): the cloud sends a
+     * code to the account's e-mail address. Confirm it with {@link verifyDevice}.
+     *
+     * ```js
+     * try {
+     *   await api.connect(account, passwordHash);
+     * } catch (e) {
+     *   if (e instanceof EcovacsAPI.DeviceVerificationRequired) {
+     *     await api.requestDeviceVerificationCode();
+     *     // ... obtain the code from the user's mailbox ...
+     *     await api.verifyDevice(code);
+     *   }
+     * }
+     * ```
+     * @returns {Promise<void>}
+     */
+    requestDeviceVerificationCode(): Promise<void>;
+    /**
+     * Confirm a device-verification code (step two) and finish the login. On
+     * success the credentials are stored and the same `credentialsUpdated` event /
+     * refresh mechanism as a normal login is triggered, so `authenticate()` /
+     * {@link getCredentials} return the fresh credentials afterwards.
+     * @param {string} code - the verification code from the e-mail (surrounding whitespace is trimmed)
+     * @returns {Promise<string>} `'ready'` on success
+     * @throws {InvalidVerificationCode} if the code is invalid or expired (response code `1012`)
+     * @fires EcovacsAPI#credentialsUpdated
+     */
+    verifyDevice(code: string): Promise<string>;
+    /**
+     * Get the current account session (account uid + access token, bound to this
+     * client device id) for persisting, or `null` before the first login. Pass it
+     * to {@link restoreAccountSession} on a later start to log in without the
+     * password – a repeated password login may require device verification again.
+     * The access token is as sensitive as the password: never log it.
+     * @returns {import('./library/typedefs').AccountSession|null}
+     */
+    getAccountSession(): import("./library/typedefs").AccountSession | null;
+    /**
+     * Log in from a session previously returned by {@link getAccountSession},
+     * without the password. Fires `credentialsUpdated` like a normal login.
+     *
+     * ```js
+     * try {
+     *   await api.restoreAccountSession(savedSession);
+     * } catch (e) {
+     *   if (!(e instanceof EcovacsAPI.AccountSessionRejected)) throw e;
+     *   await api.connect(account, passwordHash); // may require device verification
+     * }
+     * ```
+     * @param {import('./library/typedefs').AccountSession} session - the stored session
+     * @returns {Promise<string>} `'ready'` on success
+     * @throws {AccountSessionRejected} if the session is malformed, belongs to another
+     *   client device id / country / auth domain, or is no longer accepted by the cloud
+     * @fires EcovacsAPI#credentialsUpdated
+     */
+    restoreAccountSession(session: import("./library/typedefs").AccountSession): Promise<string>;
+    /**
+     * Exchange the stored account access token for fresh credentials. A rejection
+     * by the auth API (any response code) discards the session and is reported as
+     * {@link AccountSessionRejected}; network/portal errors pass through unchanged.
+     * @returns {Promise<string>} `'ready'` on success
+     * @throws {AccountSessionRejected}
+     * @private
+     */
+    private loginWithAccountSession;
     /**
      * Get the current credentials (user id + access token + expiry timestamp).
      * @returns {import('./library/typedefs').Credentials}
@@ -113,24 +217,29 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     getTokenExpiry(): number | null;
     /**
-     * Enable automatic, proactive re-authentication shortly before the access
-     * token expires. Opt-in: when enabled, the API re-runs the login flow and
-     * emits a {@link EcovacsAPI#event:credentialsUpdated} event with the new
-     * credentials. Wire it to your bot(s) so the refreshed token is applied:
+     * Enable automatic, proactive re-authentication before the access token
+     * expires. Opt-in: when enabled, the API renews the credentials from the
+     * account session (no password login) and emits a
+     * {@link EcovacsAPI#event:credentialsUpdated} event with the new credentials.
+     * Only if the cloud rejects the session does it fall back to a password login
+     * – which may require device verification – and only if `passwordHash` was
+     * given. Wire it to your bot(s) so the refreshed token is applied:
      *
      * ```js
      * api.on('credentialsUpdated', (c) => vacbot.updateUserAccessToken(c.token));
      * api.enableAutoTokenRefresh(accountId, passwordHash);
      * ```
      *
-     * @param {string} accountId - the account ID (same as used for `connect()`)
-     * @param {string} passwordHash - the password hash (same as used for `connect()`)
+     * @param {string} [accountId] - the account ID (same as used for `connect()`)
+     * @param {string} [passwordHash] - the password hash (same as used for `connect()`);
+     *   omit both to refresh from the account session only
      * @returns {EcovacsAPI} this (for chaining)
+     * @throws {Error} if neither an account session nor a password is available
      */
-    enableAutoTokenRefresh(accountId: string, passwordHash: string): EcovacsAPI;
+    enableAutoTokenRefresh(accountId?: string, passwordHash?: string): EcovacsAPI;
     _autoRefresh: {
-        accountId: string;
-        passwordHash: string;
+        accountId: string | undefined;
+        passwordHash: string | undefined;
     } | null | undefined;
     /**
      * Disable automatic token refresh and cancel any pending refresh timer.
@@ -143,12 +252,20 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     private _scheduleTokenRefresh;
     /**
-     * Perform a token refresh by re-running the login flow, then reschedule.
-     * On failure, retries after a short delay.
+     * Perform a token refresh, then reschedule. On a transient failure, retries
+     * after a short delay; if neither the session nor a password login can
+     * succeed without user interaction, the auto refresh is disabled.
      * @private
      * @fires EcovacsAPI#credentialsRefreshError
      */
     private _runTokenRefresh;
+    /**
+     * Renew the credentials from the account session; fall back to a password
+     * login only if the session was rejected and a password hash is available.
+     * @returns {Promise<string>} `'ready'` on success
+     * @private
+     */
+    private _refreshCredentials;
     /**
      * Select between an Ecovacs and a yeedi value based on the configured auth domain.
      * @template T
@@ -186,11 +303,72 @@ export class EcovacsAPI extends EventEmitter<any> {
      */
     getMetaObject(): import("./library/typedefs").MetaObject;
     /**
+     * Get the meta-object for the device-verification endpoints. Derives from
+     * {@link getMetaObject} (inheriting the correct appCode via
+     * {@link _authDomainValue}) and overrides only the country casing and the
+     * distinct app version the verification endpoints require.
+     * @returns {import('./library/typedefs').MetaObject}
+     */
+    getVerificationMetaObject(): import("./library/typedefs").MetaObject;
+    /**
+     * Build the per-request metadata (request id, timestamp, time zone) shared by
+     * the signed device-verification requests.
+     * @returns {{requestId: string, authTimespan: number, authTimeZone: string}}
+     */
+    getRequestMetadata(): {
+        requestId: string;
+        authTimespan: number;
+        authTimeZone: string;
+    };
+    /**
+     * Call one of the signed device-verification GET endpoints. Uses the same
+     * private-API host and signing scheme as `user/login` but with the
+     * verification meta object (see {@link getVerificationMetaObject}).
+     * @param {string} endpoint - the endpoint, e.g. `common/getConfig`
+     * @param {Object} params - the endpoint-specific parameters (before signing)
+     * @returns {Promise<Object|Array>} the response `data`
+     * @private
+     */
+    private callVerificationApi;
+    /**
+     * Fetch (and cache) the RSA public key used to encrypt the account for the
+     * device-verification requests. Retrieves it via `common/getConfig`, whose
+     * response is a list; the `PUBLIC.KEY.CONFIG` entry's `value` is a JSON string
+     * `{"publicKey":"<base64 SPKI DER>"}`.
+     * @returns {Promise<string>} the base64-encoded SPKI DER public key
+     * @private
+     */
+    private getVerificationPublicKey;
+    verificationPublicKey: any;
+    /**
+     * Encrypt the account (e-mail) with the device-verification public key using
+     * RSA / PKCS#1 v1.5 padding, base64-encoded.
+     * @param {string} account - the account (e-mail) to encrypt
+     * @returns {Promise<string>} the base64-encoded ciphertext
+     * @private
+     */
+    private encryptAccount;
+    /**
      * @param {string} loginPath - the login path
      * @param {Object} params - an object with the data to retrieve the parameters
      * @returns {Promise<Object>} an object including access token and user ID
      */
     callUserAuthApi(loginPath: string, params: Object): Promise<Object>;
+    /**
+     * Shared handler for the private auth API response envelope (`user/login`,
+     * `user/getAuthCode` and the device-verification endpoints). Returns the
+     * `data` payload on success (a list for `common/getConfig`, an object
+     * otherwise) or throws a typed error for a known failure code.
+     *
+     * Security: a successful response may carry tokens / credentials, so only the
+     * response code is logged here – never the full payload.
+     * @param {Object} result - the parsed response envelope (`{ code, data, msg }`)
+     * @returns {Object|Array} the response `data`
+     * @throws {DeviceVerificationRequired} on code `1013`
+     * @throws {InvalidVerificationCode} on code `1012`
+     * @private
+     */
+    private handleAuthResponse;
     /**
      * Returns the portal path for the given login path
      * @param {string} loginPath - the path for the login
@@ -274,7 +452,7 @@ export class EcovacsAPI extends EventEmitter<any> {
      * @param {string} userToken - the user token
      * @param {ApiDevice} vacuum - the object for the specific device retrieved by the devices dictionary
      * @param {string} [continent] - the continent
-     * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol}`, mainly for local testing
+     * @param {Object} [options] - optional transport overrides forwarded to the device session (see {@link EcovacsDeviceSession}); `{serverAddress, serverPort, protocol, rejectUnauthorized}`. The first three are mainly for local testing; `rejectUnauthorized` defaults to `false` because the Ecovacs cloud broker uses a private CA that is not publicly verifiable — set it to `true` only for a local broker whose CA Node can verify
      * @returns {import('./library/ecovacsDevice')} a corresponding instance of the `EcovacsDevice` class
      */
     getDevice(user: string, hostname: string, resource: string, userToken: string, vacuum: ApiDevice, continent?: string, options?: Object): import("./library/ecovacsDevice");
@@ -309,6 +487,10 @@ export class EcovacsAPI extends EventEmitter<any> {
 export namespace EcovacsAPI {
     let PUBLIC_KEY: string;
     let REALM: "ecouser.net";
+    let AuthError: typeof errors.AuthError;
+    let DeviceVerificationRequired: typeof errors.DeviceVerificationRequired;
+    let InvalidVerificationCode: typeof errors.InvalidVerificationCode;
+    let AccountSessionRejected: typeof errors.AccountSessionRejected;
 }
 /**
  * @typedef {Object} ApiDevice
@@ -325,5 +507,6 @@ export namespace EcovacsAPI {
 /** @type {Object} */
 export const countries: Object;
 import EventEmitter = require("node:events");
-export { EcovacsAPI as EcoVacsAPI, EcovacsDevice as VacBot };
+import errors = require("./library/errors");
+export { EcovacsAPI as EcoVacsAPI, AuthError, DeviceVerificationRequired, InvalidVerificationCode, AccountSessionRejected, EcovacsDevice as VacBot };
 //# sourceMappingURL=index.d.ts.map

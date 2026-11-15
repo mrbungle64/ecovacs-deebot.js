@@ -162,17 +162,19 @@ api.on('credentialsUpdated', (creds) => {
     device.updateUserAccessToken(creds.token);
 });
 
-// Re-authenticate automatically shortly before the token expires
+// Re-authenticate automatically before the token expires
 api.enableAutoTokenRefresh(accountId, passwordHash);
 
 // ... and when shutting down:
 api.disableAutoTokenRefresh();
 ```
 
+* The refresh renews the token from the **account session** (see below) — **no password login**, so it does not run into device verification (`1013`) again. Only if the cloud rejects the session does it fall back to a password login, and only if `passwordHash` was passed. Call `api.enableAutoTokenRefresh()` without arguments to refresh from the session only.
+* The refresh runs **24 hours before** the token expires (at most half of its validity), leaving time for retries or a re-verification.
 * **`api.getTokenExpiry()`** returns the absolute timestamp (ms since epoch) at which the token will be refreshed, or `null` before the first login.
 * **`api.getCredentials()`** returns `{ userId, token, expiresAt }`.
 * The **`credentialsUpdated`** event also fires after the initial `connect()`, so you can register the listener before connecting.
-* If an automatic refresh fails, a **`credentialsRefreshError`** event is emitted and the refresh is retried after a short delay.
+* If an automatic refresh fails, a **`credentialsRefreshError`** event is emitted and the refresh is retried after a short delay. If it cannot succeed without user interaction — the session was rejected and no password is available, or the password login requires device verification — the event carries an `AccountSessionRejected` / `DeviceVerificationRequired` error and the auto refresh is **disabled**.
 * For multiple bots sharing one MQTT connection, call `updateUserAccessToken()` on **every** `EcovacsDevice` instance — each one needs its own refreshed REST token. Only the connection owner actually reconnects MQTT; the shared instances just update their token in place.
 
 ### Device verification (login code `1013`)
@@ -221,6 +223,31 @@ async function connectWithVerification(api, accountId, passwordHash, promptForCo
 **Avoid repeated verification — persist your `deviceId`:** the cloud ties verification to the client `deviceId`. If that value changes between runs, you get a new `1013` each time. Deriving it from `machineIdSync()` is fine for a short-lived script, but on hosts where the machine ID is not stable (e.g. rebuilt containers) you should **generate the `deviceId` once and persist it** (config file, database, secret store), then reuse it on every subsequent start. Keep **one `deviceId` per account** — not per device.
 
 **Logging:** never log the entered code or the resulting tokens; log status transitions and response codes only (the library itself does not log payloads).
+
+### Account session: log in again without a password
+A repeated password login can require device verification again, even for an already verified `deviceId` (observed roughly every 7 days). Both `connect()` and `verifyDevice()` therefore establish an **account session** — the account uid and access token, bound to the client `deviceId`, country and auth domain. The automatic token refresh renews the credentials from it, and you can persist it to log in on the next start **without a password**:
+
+```javascript
+// Persist the session whenever a new one is obtained (password login or device verification)
+api.on('accountSessionUpdated', (session) => saveSecret('ecovacsSession', session));
+
+try {
+    // A missing (null) session is rejected like an unusable one
+    await api.restoreAccountSession(loadSecret('ecovacsSession')); // fires 'credentialsUpdated'
+} catch (e) {
+    if (!(e instanceof EcovacsAPI.AccountSessionRejected)) {
+        throw e; // network error – retry later, keep the saved session
+    }
+    await connectWithVerification(api, accountId, passwordHash, promptForCode);
+}
+api.enableAutoTokenRefresh(accountId, passwordHash);
+```
+
+* **`api.getAccountSession()`** returns the current session as a plain JSON object (`{ version, uid, accessToken, deviceId, country, authDomain }`), or `null` before the first login.
+* **`api.restoreAccountSession(session)`** logs in from it. It throws **`EcovacsAPI.AccountSessionRejected`** if the session is malformed, belongs to a different `deviceId` / country / auth domain, or is no longer accepted by the cloud — fall back to `connect()` then. Network errors are passed through unchanged; the session stays valid for a retry.
+* The **`accountSessionUpdated`** event fires during `connect()` and `verifyDevice()` — as soon as the session is obtained, before `credentialsUpdated` — and not on a session-based refresh (the session does not change).
+* **One session per client `deviceId`:** several processes on the same account each use their own `deviceId` and therefore their own session — never share one between them.
+* **Security:** the session's `accessToken` is as sensitive as the password. Store it encrypted or with restrictive file permissions (e.g. `0600`) and never log it.
 
 ### `getDeviceObj(vacuum)`
 * This is the preferred, high-level method to initialize your device instance from the retrieved `devices` array. It automatically passes the correct auth tokens, uid, realm, and resource behind the scenes.

@@ -15,11 +15,13 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
      * @param {string} [options.serverAddress] - overrides the MQTT server address
      * @param {number} [options.serverPort] - overrides the MQTT server port
      * @param {string} [options.protocol='mqtts'] - MQTT URL scheme; set to `'mqtt'` for a non-TLS local broker
+     * @param {boolean} [options.rejectUnauthorized=false] - verify the broker's TLS certificate; defaults to `false` because the Ecovacs cloud broker uses a private CA that is not publicly verifiable (see below). Set to `true` for a local broker whose CA Node can verify
      */
     constructor(vacBot: Object, user: string, hostname: string, resource: string, secret: string, continent: string, country: string, vacuum: Object, serverAddress: string, serverPort?: number, options?: {
         serverAddress?: string | undefined;
         serverPort?: number | undefined;
         protocol?: string | undefined;
+        rejectUnauthorized?: boolean | undefined;
     });
     bot: Object;
     dictionary: typeof import("./dictionary");
@@ -33,6 +35,7 @@ declare class EcovacsDeviceSession extends EventEmitter<any> {
     serverAddress: string;
     serverPort: number;
     protocol: string;
+    rejectUnauthorized: boolean;
     mqtt: typeof import("mqtt");
     channel: string;
     username: string;

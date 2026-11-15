@@ -46,24 +46,25 @@ describe('EcovacsAPI token lifecycle', function () {
         axios.post = originalPost;
     });
 
-    it('tracks token expiry from the `last` field (at 99% of validity)', async function () {
+    it('caps the refresh margin at half of a short `last` validity', async function () {
         stubConnect({ last: 1000000 });
         const api = new EcovacsAPI('deviceId123', 'de');
         const before = Date.now();
         await api.connect('user@example.com', 'hash');
         const expiry = api.getTokenExpiry();
-        // ~99% of 1_000_000 ms in the future
-        assert.ok(expiry >= before + 980000, `expiry too small: ${expiry - before}`);
-        assert.ok(expiry <= Date.now() + 990000, `expiry too large: ${expiry - Date.now()}`);
+        // 1_000_000 ms validity - min(24h, 500_000 ms) margin
+        assert.ok(expiry >= before + 500000, `expiry too small: ${expiry - before}`);
+        assert.ok(expiry <= Date.now() + 500000, `expiry too large: ${expiry - Date.now()}`);
     });
 
-    it('falls back to the 7-day default validity when `last` is missing', async function () {
+    it('refreshes 24h before the 7-day default validity when `last` is missing', async function () {
         stubConnect();
         const api = new EcovacsAPI('deviceId123', 'de');
         const before = Date.now();
         await api.connect('user@example.com', 'hash');
-        const sevenDays = 604800000;
-        assert.ok(api.getTokenExpiry() >= before + Math.floor(sevenDays * 0.99) - 1000);
+        const sixDays = 6 * 86400000;
+        assert.ok(api.getTokenExpiry() >= before + sixDays);
+        assert.ok(api.getTokenExpiry() <= Date.now() + sixDays);
     });
 
     it('getCredentials() returns userId, token and expiresAt', async function () {

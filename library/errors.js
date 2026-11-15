@@ -56,8 +56,30 @@ class InvalidVerificationCode extends AuthError {
   }
 }
 
+/**
+ * Thrown when a stored account session cannot be used (any more): the cloud
+ * rejected its access token, or the session belongs to a different client
+ * device id / region. Recover with a password login (`connect()`), which may in
+ * turn require device verification.
+ */
+class AccountSessionRejected extends AuthError {
+  /**
+   * @param {string} [message] - a human-readable description
+   * @param {string} [code] - the Ecovacs API response code, if the cloud rejected the session
+   * @param {{cause?: unknown}} [options] - the underlying error
+   */
+  constructor(message, code, options) {
+    super(message || 'Account session rejected', code);
+    this.name = 'AccountSessionRejected';
+    if (options && options.cause) {
+      this.cause = options.cause;
+    }
+  }
+}
+
 module.exports = {
   AuthError,
   DeviceVerificationRequired,
-  InvalidVerificationCode
+  InvalidVerificationCode,
+  AccountSessionRejected
 };

@@ -55,6 +55,38 @@ export type Credentials = {
     expiresAt: number | null;
 };
 /**
+ * A verified account session, as returned by `EcovacsAPI.getAccountSession()`.
+ * Plain JSON, meant to be persisted and passed to `restoreAccountSession()` to
+ * log in again without a password. The access token is as sensitive as the
+ * password: store it encrypted or with restrictive permissions, never log it.
+ */
+export type AccountSession = {
+    /**
+     * - format version (currently 1)
+     */
+    version: number;
+    /**
+     * - the account uid
+     */
+    uid: string;
+    /**
+     * - the account access token (secret)
+     */
+    accessToken: string;
+    /**
+     * - the client device id the session was verified for
+     */
+    deviceId: string;
+    /**
+     * - the country code
+     */
+    country: string;
+    /**
+     * - the auth domain
+     */
+    authDomain: string;
+};
+/**
  * The app-identity meta object mixed into auth requests/signatures.
  */
 export type MetaObject = {

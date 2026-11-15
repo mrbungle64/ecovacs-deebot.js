@@ -41,6 +41,20 @@
  */
 
 /**
+ * A verified account session, as returned by `EcovacsAPI.getAccountSession()`.
+ * Plain JSON, meant to be persisted and passed to `restoreAccountSession()` to
+ * log in again without a password. The access token is as sensitive as the
+ * password: store it encrypted or with restrictive permissions, never log it.
+ * @typedef {Object} AccountSession
+ * @property {number} version - format version (currently 1)
+ * @property {string} uid - the account uid
+ * @property {string} accessToken - the account access token (secret)
+ * @property {string} deviceId - the client device id the session was verified for
+ * @property {string} country - the country code
+ * @property {string} authDomain - the auth domain
+ */
+
+/**
  * The app-identity meta object mixed into auth requests/signatures.
  * @typedef {Object} MetaObject
  * @property {string} country

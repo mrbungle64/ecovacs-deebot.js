@@ -9,6 +9,11 @@ export const APP_ECOUSER_API_CN: "https://portal.ecouser.net/app";
 export const USER_API_PATH: "users/user.do";
 export const USER_LOGIN_PATH: "user/login";
 export const USER_GETAUTHCODE_PATH: "user/getAuthCode";
+export const VERIFY_APP_VERSION: "3.14.0";
+export const VERIFY_GETCONFIG_PATH: "common/getConfig";
+export const VERIFY_SENDEMAIL_PATH: "user/sendEmailVerifyCode";
+export const VERIFY_DEVICE_PATH: "user/verifyDevice";
+export const VERIFY_PUBLIC_KEY_CONFIG_KEY: "PUBLIC.KEY.CONFIG";
 export const IOT_DEVMANAGER_PATH: "iot/devmanager.do";
 export const CLEANLOGS_PATH: "lg/log.do";
 export const CLEAN_RESULT_API: "dln/api/log/clean_result/list";
@@ -30,4 +35,6 @@ export const APP_SK_GLOBAL: "2ea31cf06e6711eaa0aff7b9558a534e";
 export const APP_SK_YEEDI: "8b611ff06e6211eab47193426edbdb27";
 export const CRC_EMPTY_PIECE: "1295764014";
 export const TOKEN_DEFAULT_VALIDITY_MS: 604800000;
+export const TOKEN_REFRESH_MARGIN_MS: 86400000;
+export const ACCOUNT_SESSION_VERSION: 1;
 //# sourceMappingURL=constants.d.ts.map

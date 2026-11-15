@@ -8,7 +8,7 @@ const fs = require('fs');
 const constants = require('./library/constants');
 const uniqid = require('uniqid');
 const tools = require('./library/tools');
-const { DeviceVerificationRequired, InvalidVerificationCode } = require('./library/errors');
+const { AuthError, DeviceVerificationRequired, InvalidVerificationCode, AccountSessionRejected } = require('./library/errors');
 
 /**
  * @typedef {Object} ApiDevice
@@ -82,9 +82,36 @@ class EcovacsAPI extends EventEmitter {
       'account': accountId,
       'password': passwordHash
     });
-    this.uid = result.uid;
+    return this.loginWithAccountToken(result.uid, result.accessToken);
+  }
 
-    return this.completeLogin(result.accessToken);
+  /**
+   * Finish a login with a freshly obtained account uid + access token (from the
+   * password login or from device verification), remember them as the account
+   * session and announce it, so callers can persist it.
+   * @param {string} uid - the account uid
+   * @param {string} accessToken - the account access token
+   * @returns {Promise<string>} `'ready'` on success
+   * @fires EcovacsAPI#credentialsUpdated
+   * @fires EcovacsAPI#accountSessionUpdated
+   * @private
+   */
+  async loginWithAccountToken(uid, accessToken) {
+    this.uid = uid;
+    // Kept apart from `uid`, which completeLogin() replaces by the portal userId
+    this.accountUid = uid;
+    this.loginAccessToken = accessToken;
+    /**
+     * Fired when a new account session was obtained (password login or device
+     * verification) – not on a session-based token refresh, which keeps it.
+     * Persist the payload to log in later with {@link restoreAccountSession}.
+     * @event EcovacsAPI#accountSessionUpdated
+     * @type {import('./library/typedefs').AccountSession}
+     */
+    // Announced before the remaining login steps: if those fail transiently,
+    // the session (and a consumed verification code) is not lost.
+    this.emit('accountSessionUpdated', this.getAccountSession());
+    return this.completeLogin(accessToken);
   }
 
   /**
@@ -109,9 +136,10 @@ class EcovacsAPI extends EventEmitter {
     this.uid = result['userId'];
 
     // `last` is the token validity in milliseconds (usually 7 days). Track the
-    // expiry at 99% of the validity so it can be refreshed proactively.
+    // refresh time well ahead of the expiry, so a failed refresh still leaves
+    // time for retries or a device re-verification.
     const validityMs = Number(result['last']) > 0 ? Number(result['last']) : constants.TOKEN_DEFAULT_VALIDITY_MS;
-    this.tokenExpiresAt = Date.now() + Math.floor(validityMs * 0.99);
+    this.tokenExpiresAt = Date.now() + validityMs - Math.min(constants.TOKEN_REFRESH_MARGIN_MS, Math.floor(validityMs / 2));
 
     tools.envLogSuccess('user authentication complete');
     /**
@@ -181,8 +209,88 @@ class EcovacsAPI extends EventEmitter {
     if (!result || !result.uid || !result.accessToken) {
       throw new Error('Unexpected verifyDevice response (missing uid or accessToken)');
     }
-    this.uid = result['uid'];
-    return this.completeLogin(result['accessToken']);
+    return this.loginWithAccountToken(result['uid'], result['accessToken']);
+  }
+
+  /**
+   * Get the current account session (account uid + access token, bound to this
+   * client device id) for persisting, or `null` before the first login. Pass it
+   * to {@link restoreAccountSession} on a later start to log in without the
+   * password – a repeated password login may require device verification again.
+   * The access token is as sensitive as the password: never log it.
+   * @returns {import('./library/typedefs').AccountSession|null}
+   */
+  getAccountSession() {
+    if (!this.accountUid || !this.loginAccessToken) {
+      return null;
+    }
+    return {
+      version: constants.ACCOUNT_SESSION_VERSION,
+      uid: this.accountUid,
+      accessToken: this.loginAccessToken,
+      deviceId: this.deviceId,
+      country: this.country,
+      authDomain: this.authDomain
+    };
+  }
+
+  /**
+   * Log in from a session previously returned by {@link getAccountSession},
+   * without the password. Fires `credentialsUpdated` like a normal login.
+   *
+   * ```js
+   * try {
+   *   await api.restoreAccountSession(savedSession);
+   * } catch (e) {
+   *   if (!(e instanceof EcovacsAPI.AccountSessionRejected)) throw e;
+   *   await api.connect(account, passwordHash); // may require device verification
+   * }
+   * ```
+   * @param {import('./library/typedefs').AccountSession} session - the stored session
+   * @returns {Promise<string>} `'ready'` on success
+   * @throws {AccountSessionRejected} if the session is malformed, belongs to another
+   *   client device id / country / auth domain, or is no longer accepted by the cloud
+   * @fires EcovacsAPI#credentialsUpdated
+   */
+  async restoreAccountSession(session) {
+    const matches = Boolean(session)
+      && (session.version === constants.ACCOUNT_SESSION_VERSION)
+      && Boolean(session.uid) && Boolean(session.accessToken)
+      && (session.deviceId === this.deviceId)
+      && (session.country === this.country)
+      && (session.authDomain === this.authDomain);
+    if (!matches) {
+      throw new AccountSessionRejected('Account session is invalid or belongs to a different client device id / region');
+    }
+    this.accountUid = session.uid;
+    this.loginAccessToken = session.accessToken;
+    return this.loginWithAccountSession();
+  }
+
+  /**
+   * Exchange the stored account access token for fresh credentials. A rejection
+   * by the auth API (any response code) discards the session and is reported as
+   * {@link AccountSessionRejected}; network/portal errors pass through unchanged.
+   * @returns {Promise<string>} `'ready'` on success
+   * @throws {AccountSessionRejected}
+   * @private
+   */
+  async loginWithAccountSession() {
+    // A failed attempt must leave the uid of the still valid credentials alone
+    const previousUid = this.uid;
+    this.uid = this.accountUid;
+    try {
+      // TODO: whether user/getAuthCode ever rotates the account access token is
+      // not verified yet; field-wise only `authCode` is known to be returned.
+      return await this.completeLogin(this.loginAccessToken);
+    } catch (e) {
+      this.uid = previousUid;
+      if (!(e instanceof AuthError)) {
+        throw e;
+      }
+      this.loginAccessToken = null;
+      throw new AccountSessionRejected(`Account session rejected: ${e.message}`, e.code, { cause: e });
+    }
   }
 
   /**
@@ -207,21 +315,29 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
-   * Enable automatic, proactive re-authentication shortly before the access
-   * token expires. Opt-in: when enabled, the API re-runs the login flow and
-   * emits a {@link EcovacsAPI#event:credentialsUpdated} event with the new
-   * credentials. Wire it to your bot(s) so the refreshed token is applied:
+   * Enable automatic, proactive re-authentication before the access token
+   * expires. Opt-in: when enabled, the API renews the credentials from the
+   * account session (no password login) and emits a
+   * {@link EcovacsAPI#event:credentialsUpdated} event with the new credentials.
+   * Only if the cloud rejects the session does it fall back to a password login
+   * – which may require device verification – and only if `passwordHash` was
+   * given. Wire it to your bot(s) so the refreshed token is applied:
    *
    * ```js
    * api.on('credentialsUpdated', (c) => vacbot.updateUserAccessToken(c.token));
    * api.enableAutoTokenRefresh(accountId, passwordHash);
    * ```
    *
-   * @param {string} accountId - the account ID (same as used for `connect()`)
-   * @param {string} passwordHash - the password hash (same as used for `connect()`)
+   * @param {string} [accountId] - the account ID (same as used for `connect()`)
+   * @param {string} [passwordHash] - the password hash (same as used for `connect()`);
+   *   omit both to refresh from the account session only
    * @returns {EcovacsAPI} this (for chaining)
+   * @throws {Error} if neither an account session nor a password is available
    */
   enableAutoTokenRefresh(accountId, passwordHash) {
+    if (!this.loginAccessToken && !passwordHash) {
+      throw new Error('No account session or password available for token refresh – log in first');
+    }
     this._autoRefresh = { accountId, passwordHash };
     this._scheduleTokenRefresh();
     return this;
@@ -258,8 +374,9 @@ class EcovacsAPI extends EventEmitter {
   }
 
   /**
-   * Perform a token refresh by re-running the login flow, then reschedule.
-   * On failure, retries after a short delay.
+   * Perform a token refresh, then reschedule. On a transient failure, retries
+   * after a short delay; if neither the session nor a password login can
+   * succeed without user interaction, the auto refresh is disabled.
    * @private
    * @fires EcovacsAPI#credentialsRefreshError
    */
@@ -268,8 +385,8 @@ class EcovacsAPI extends EventEmitter {
       return;
     }
     try {
-      // connect() updates the token/expiry and emits 'credentialsUpdated'
-      await this.connect(this._autoRefresh.accountId, this._autoRefresh.passwordHash);
+      // updates the token/expiry and emits 'credentialsUpdated'
+      await this._refreshCredentials();
       this._scheduleTokenRefresh();
     } catch (e) {
       tools.envLogError(`token refresh failed: ${e.message}`);
@@ -279,7 +396,7 @@ class EcovacsAPI extends EventEmitter {
        * @type {Error}
        */
       this.emit('credentialsRefreshError', e);
-      if (e instanceof DeviceVerificationRequired) {
+      if ((e instanceof DeviceVerificationRequired) || (e instanceof AccountSessionRejected)) {
         this.disableAutoTokenRefresh();
         return;
       }
@@ -291,6 +408,30 @@ class EcovacsAPI extends EventEmitter {
         this._refreshTimer.unref();
       }
     }
+  }
+
+  /**
+   * Renew the credentials from the account session; fall back to a password
+   * login only if the session was rejected and a password hash is available.
+   * @returns {Promise<string>} `'ready'` on success
+   * @private
+   */
+  async _refreshCredentials() {
+    const { accountId, passwordHash } = this._autoRefresh;
+    if (this.loginAccessToken) {
+      try {
+        return await this.loginWithAccountSession();
+      } catch (e) {
+        if (!(e instanceof AccountSessionRejected) || !passwordHash) {
+          throw e;
+        }
+        tools.envLogNotice('account session rejected – falling back to password login');
+      }
+    }
+    if (!passwordHash) {
+      throw new AccountSessionRejected('No account session available for token refresh');
+    }
+    return this.connect(accountId, passwordHash);
   }
 
   /**
@@ -508,7 +649,9 @@ class EcovacsAPI extends EventEmitter {
     if (loginPath === 'user/login') {
       tools.envLogHeader(`callUserAuthApi('${loginPath}',{account:accountId,password:passwordHash})`);
     } else {
-      tools.envLogHeader(`callUserAuthApi('${loginPath}',${JSON.stringify(params)})`);
+      // The account access token is a long-lived, persistable secret: mask it
+      const loggedParams = params.accessToken ? { ...params, accessToken: '***' } : params;
+      tools.envLogHeader(`callUserAuthApi('${loginPath}',${JSON.stringify(loggedParams)})`);
     }
     const portalPath = this.getPortalPath(loginPath);
     let portalUrl;
@@ -565,7 +708,7 @@ class EcovacsAPI extends EventEmitter {
     // '1005' and '1010' both indicate an invalid account id / password
     // (the latter matches deebot-client's invalid-authentication handling).
     if ((result.code === '1005') || (result.code === '1010')) {
-      throw new Error('Incorrect account id or password');
+      throw new AuthError('Incorrect account id or password', result.code);
     }
     // '1012' -> supplied verification code invalid/expired.
     if (result.code === '1012') {
@@ -575,7 +718,7 @@ class EcovacsAPI extends EventEmitter {
     if (result.code === '1013') {
       throw new DeviceVerificationRequired(result.msg);
     }
-    throw new Error(`Failure code ${result.code}: ${result.msg}`);
+    throw new AuthError(`Failure code ${result.code}: ${result.msg}`, result.code);
   }
 
   /**
@@ -989,6 +1132,7 @@ const errors = require('./library/errors');
 EcovacsAPI.AuthError = errors.AuthError;
 EcovacsAPI.DeviceVerificationRequired = errors.DeviceVerificationRequired;
 EcovacsAPI.InvalidVerificationCode = errors.InvalidVerificationCode;
+EcovacsAPI.AccountSessionRejected = errors.AccountSessionRejected;
 
 module.exports.EcovacsAPI = EcovacsAPI;
 /** @deprecated Use EcovacsAPI instead */
@@ -997,6 +1141,7 @@ module.exports.countries = countries;
 module.exports.AuthError = errors.AuthError;
 module.exports.DeviceVerificationRequired = errors.DeviceVerificationRequired;
 module.exports.InvalidVerificationCode = errors.InvalidVerificationCode;
+module.exports.AccountSessionRejected = errors.AccountSessionRejected;
 module.exports.EcovacsDevice = require('./library/ecovacsDevice');
 /** @deprecated Use EcovacsDevice instead */
 module.exports.VacBot = module.exports.EcovacsDevice;

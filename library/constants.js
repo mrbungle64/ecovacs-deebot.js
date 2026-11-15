@@ -53,3 +53,10 @@ exports.CRC_EMPTY_PIECE = "1295764014";
 
 // Fallback access-token validity (7 days in ms) when the API omits the `last` field
 exports.TOKEN_DEFAULT_VALIDITY_MS = 604800000;
+
+// Refresh the access token this long before it expires (capped at half the
+// validity), leaving time for retries or a device re-verification
+exports.TOKEN_REFRESH_MARGIN_MS = 86400000;
+
+// Format version of the object returned by EcovacsAPI.getAccountSession()
+exports.ACCOUNT_SESSION_VERSION = 1;

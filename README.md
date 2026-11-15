@@ -81,6 +81,7 @@ Support for new models is no longer added upon request. Due to high time constra
     * Refactoring for pure MQTT/JSON communication
 * **Device verification:** Added support for the Ecovacs device-verification flow (login code `1013`). `connect()` throws `EcovacsAPI.DeviceVerificationRequired`; complete the login with `api.requestDeviceVerificationCode()` and `api.verifyDevice(code)` (invalid codes throw `EcovacsAPI.InvalidVerificationCode`, code `1012`). See [Usage Instructions](docs/USAGE.md#device-verification-login-code-1013).
 * **Long-running connections:** Opt-in automatic access-token refresh (`api.enableAutoTokenRefresh()` / `credentialsUpdated` event) for 24/7 clients.
+* **Account session:** The token refresh now renews the credentials from the verified account session instead of repeating the password login, which Ecovacs answered with a new device verification (`1013`) about every 7 days. It runs 24 hours before the token expires. Persist the session (`api.getAccountSession()` / `accountSessionUpdated` event) and log in without a password via `api.restoreAccountSession()` (throws `EcovacsAPI.AccountSessionRejected` when it can no longer be used). See [Usage Instructions](docs/USAGE.md#account-session-log-in-again-without-a-password).
 * **Refactoring:** Centralized model identification and properties documentation in `docs/MODELS.md`
 
 ### 0.9.6 (Final Legacy Support)
