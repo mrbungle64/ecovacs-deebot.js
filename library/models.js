@@ -1066,6 +1066,12 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "X2"
     },
+    "tj7mri": {
+        "name": "DEEBOT X12S OmniCyclone Care Kit",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
+        "type": "X2"
+    },
     "m2nkyq": {
         "name": "DEEBOT X8 MAX PRO OMNI",
         "smartType": "BLAP2",
