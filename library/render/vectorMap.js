@@ -39,17 +39,34 @@ const ROOM_COLORS = [
 // ];
 
 const WALL_COLOR = [230, 230, 230];
-const TRACE_COLOR = [150, 35, 45]; // dark red
-// Observed white cleaning route in the supplied device trace.
-const TRACE_CLEANING_FLAGS = new Set([
-    0x08,
-    0x10,
-    0x18,
-    0x40
+// Diagnostic colours; flag meanings are not yet confirmed.
+const TRACE_FLAG_COLORS = new Map([
+    [0x08, [210, 30, 40]],   // 8: red
+    [0x10, [20, 70, 210]],   // 16: blue
+    [0x18, [150, 30, 180]],  // 24: purple
+    [0x40, [0, 110, 50]],    // 64: green
+    [0x48, [230, 110, 0]],   // 72: orange
+    [0xC8, [30, 30, 30]]    // 200: almost black
 ]);
 const BG_COLOR = [11, 11, 11];
 const ROBOT_COLOR = [33, 150, 243];
 const CHARGER_COLOR = [76, 175, 80];
+
+// function getTraceFlagColor(flag) {
+//     return TRACE_FLAG_COLORS.get(flag)
+//         ?? [flag, 255 - flag, 180];
+// }
+function getTraceFlagColor(flag) {
+    let color = TRACE_FLAG_COLORS.get(flag);
+    if (color) {
+        return color;
+    }
+    else{
+        console.log(`Unknown trace flag: ${flag}`);
+        return [255, 0, 255];
+    }
+    // return TRACE_FLAG_COLORS.get(flag) ?? [255, 0, 255];
+}
 
 /**
  * Parses a layer coordinate string `"roomId;x,y[,flag];..."`.
@@ -254,8 +271,8 @@ function renderVectorMapPNG(vector, opts = {}) {
         shapes.strokePolyline(fb, pts, WALL_COLOR, { width: 2 });
     });
 
-    // Draw the observed cleaning route above walls and below markers.
-    // Do not bridge missing indexes, other flags or invalid coordinates.
+    // Diagnostic route: draw all flags above walls and below markers.
+    // Do not bridge missing indexes or invalid coordinates.
     // Keep the map transform fixed: route points do not affect its bounds.
     const tracePoints = Array.isArray(opts.tracePoints) ? opts.tracePoints : [];
     for (let i = 1; i < tracePoints.length; i++) {
@@ -267,8 +284,6 @@ function renderVectorMapPNG(vector, opts = {}) {
             !Number.isInteger(previous.index) ||
             !Number.isInteger(current.index) ||
             current.index !== previous.index + 1 ||
-            !TRACE_CLEANING_FLAGS.has(previous.flag) ||
-            !TRACE_CLEANING_FLAGS.has(current.flag) ||
             !Number.isFinite(previous.x) ||
             !Number.isFinite(previous.y) ||
             !Number.isFinite(current.x) ||
@@ -277,10 +292,13 @@ function renderVectorMapPNG(vector, opts = {}) {
             continue;
         }
 
+        // Colour the segment using its destination point's flag.
+        const color = getTraceFlagColor(current.flag);
+
         shapes.strokePolyline(fb, [
             [tx(previous.x), ty(previous.y)],
             [tx(current.x), ty(current.y)]
-        ], TRACE_COLOR, { width: 6 });
+        ], color, { width: 6 });
     }
 
     const marker = (pos, color, radius) => {
@@ -292,7 +310,6 @@ function renderVectorMapPNG(vector, opts = {}) {
     };
 
     marker(opts.chargePosition, CHARGER_COLOR, 8);
-
     // White outline, followed by the larger blue robot marker.
     marker(opts.deebotPosition, [255, 255, 255], 32);
     marker(opts.deebotPosition, ROBOT_COLOR, 28);
@@ -300,6 +317,7 @@ function renderVectorMapPNG(vector, opts = {}) {
     return encodePNGDataURL(fb);
 }
 
+module.exports.getTraceFlagColor = getTraceFlagColor;
 module.exports.renderVectorMapPNG = renderVectorMapPNG;
 module.exports.parseLayer = parseLayer;
 module.exports.classifyLayers = classifyLayers;

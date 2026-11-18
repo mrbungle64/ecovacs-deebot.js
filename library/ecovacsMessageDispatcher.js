@@ -464,6 +464,10 @@ class EcovacsMessageDispatcher {
      */
     _msgPos(payload) {
         this.bot.handlePos(payload);
+
+        // Forward position responses independently of changeFlag.
+        this.bot.mapManager.handleLiveMapPositionV2(payload);
+
         if (this.bot.deebotPosition["changeFlag"]) {
             if ((this.bot.deebotPosition["isInvalid"] === true) && ((this.bot.relocationState === 'ok') || (this.bot.relocationState === null))) {
                 this.bot.relocationState = 'required';
@@ -495,7 +499,7 @@ class EcovacsMessageDispatcher {
             this.bot.chargePosition["changeFlag"] = false;
         }
     }
-
+    
     /**
      * "Customized Scenario Cleaning" scenarios
      * @param {Object} payload

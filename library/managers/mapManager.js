@@ -1,7 +1,7 @@
 'use strict';
 
 const TRACE_COORDINATE_SCALE = 10;
-const LIVE_IMAGE_SCHEDULE_INTERVAL = 5000; // Example interval in milliseconds for live image updates
+const LIVE_IMAGE_SCHEDULE_INTERVAL = 5000; // Default minimum live PNG update interval in milliseconds
 
 const tools = require('../tools');
 const map = require('../mapInfo');
@@ -447,15 +447,35 @@ class MapManager {
             );
 
             const latestPoint = tracePoints[tracePoints.length - 1];
+            const position = this._liveMapPosition;
+
+            // Prefer a position response received after the latest trace chunk.
+            // Receipt times approximate freshness; they are not device timestamps.
+            const usePosition =
+                position?.mapId === trace.mapId &&
+                position.receivedAt >= Date.parse(trace.receivedAt);
+
             const isCurrentMap = String(this.currentMapMID) === trace.mapId;
+
             const dataURL = vectorMap.renderVectorMapPNG(vector, {
                 tracePoints,
-                deebotPosition: latestPoint,
-                chargePosition: isCurrentMap ? this.bot.chargePosition : undefined
+                deebotPosition: usePosition ? position : latestPoint,
+                chargePosition: isCurrentMap
+                    ? this.bot.chargePosition
+                    : undefined
             });
             if (!dataURL) {
                 return;
             }
+
+
+            console.log(JSON.stringify({
+                event: 'LiveMapImageV2 emitted',
+                mapId: trace.mapId,
+                receivedCount: trace.points.size,
+                latestIndex: latestPoint.index
+            }));
+
 
             this.bot.ecovacs.emit('LiveMapImageV2', {
                 mapID: trace.mapId,
@@ -803,6 +823,29 @@ class MapManager {
      */
     async handleMapTrace(payload) {
         try {
+
+
+            // const now = Date.now();
+            // if (now - (this._lastTraceDiagnosticAt ?? 0) >= 5000) {
+            //     this._lastTraceDiagnosticAt = now;
+
+                console.log(JSON.stringify({
+                    event: 'MapTrace received',
+                    mapId: payload.mid,
+                    cleanId: payload.cleanId,
+                    traceId: payload.tid,
+                    traceStart: payload.traceStart,
+                    pointCount: payload.pointCount,
+                    totalCount: payload.totalCount,
+                    retired: this._retiredTraceKeys?.has(JSON.stringify([
+                        String(payload.mid),
+                        String(payload.cleanId),
+                        String(payload.tid)
+                    ])) ?? false
+                }));
+            // }
+
+
             const bytes = await mapTemplate.mapPieceToIntArray(
                 payload.traceValue
             );
@@ -895,10 +938,21 @@ class MapManager {
             return;
         }
 
+        const trace = this._mapTrace;
+
+        // Incoming traces can start mid-cleaning, before geometry is loaded.
+        // Do not consume the update interval until rendering is possible.
+        if (!trace?.points.size || !this._vectorMaps.has(trace.mapId)) {
+            return;
+        }
+
         const now = Date.now();
         const interval = this.liveMapImageIntervalMs ?? LIVE_IMAGE_SCHEDULE_INTERVAL;
 
-        if (now - (this._lastLiveMapImageAt ?? 0) < interval) {
+        if (
+            this._lastLiveMapImageAt !== undefined &&
+            now - this._lastLiveMapImageAt < interval
+        ) {
             return;
         }
 
@@ -929,6 +983,46 @@ class MapManager {
 
         this.liveMapImageIntervalMs = intervalMs;
     }
+
+    handleLiveMapPositionV2(payload) {
+        const pos = payload?.deebotPos;
+
+        // Require the response's map ID to avoid placing the robot
+        // on a different floor.
+        if (
+            !pos ||
+            payload.mid === undefined ||
+            payload.mid === null ||
+            pos.x === undefined || pos.x === null ||
+            pos.y === undefined || pos.y === null
+        ) {
+            return;
+        }
+
+        const mapId = String(payload.mid);
+        const x = Number(pos.x);
+        const y = Number(pos.y);
+
+        if (
+            Number(pos.invalid) === 1 ||
+            !Number.isFinite(x) ||
+            !Number.isFinite(y)
+        ) {
+            this._liveMapPosition = null;
+            return;
+        }
+
+        this._liveMapPosition = {
+            mapId,
+            x,
+            y,
+            a: pos.a,
+            receivedAt: Date.now()
+        };
+
+        this.scheduleLiveMapImageV2();
+    }
+
 }
 
 module.exports = MapManager;
