@@ -1067,7 +1067,7 @@ exports.KnownDeebotModels = {
         "type": "X2"
     },
     "tj7mri": {
-        "name": "DEEBOT X12S OmniCyclone Care Kit",
+        "name": "DEEBOT X12S OmniCyclone",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "X2"
@@ -1091,7 +1091,7 @@ exports.KnownDeebotModels = {
         "type": "T20"
     },
     "qqp88t": {
-        "name": "DEEBOT T90 MAX PRO OMNI Care Kit",
+        "name": "DEEBOT T90 MAX PRO OMNI",
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "X2"
