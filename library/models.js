@@ -819,6 +819,12 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
         "type": "T9"
     },
+    "dj8zpr": {
+        "name": "DEEBOT T9+",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "PLUS", "moppingUltraHigh"],
+        "type": "T9"
+    },
     "85nbtp": {
         "name": "DEEBOT TEO OMNI",
         "smartType": "MQ_AP",
