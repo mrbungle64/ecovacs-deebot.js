@@ -475,7 +475,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T30C Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
+        "type": "X2"
     },
     "ulzked": {
         "name": "DEEBOT T30C",
@@ -487,7 +487,7 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T30C Gen2",
         "smartType": "MQ_APM",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "moppingUltraHigh", "OMNI"],
-        "type": "T20"
+        "type": "X2"
     },
     "x9ugz3": {
         "name": "DEEBOT T30C",
@@ -757,37 +757,37 @@ exports.KnownDeebotModels = {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "9eamof": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "k8qkc7": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "aasdks": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "hu94nh": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "kdnfi5": {
         "name": "DEEBOT T80 OMNI",
         "smartType": "BLAP2",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
-        "type": "T20"
+        "type": "X2"
     },
     "ucn2xe": {
         "name": "DEEBOT T9",
@@ -1066,6 +1066,18 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI"],
         "type": "X2"
     },
+    "c4wu9j": {
+        "name": "DEEBOT X12 OmniCyclone",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
+        "type": "X2"
+    },
+    "tj7mri": {
+        "name": "DEEBOT X12S OmniCyclone",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
+        "type": "X2"
+    },
     "m2nkyq": {
         "name": "DEEBOT X8 MAX PRO OMNI",
         "smartType": "BLAP2",
@@ -1083,7 +1095,20 @@ exports.KnownDeebotModels = {
         "smartType": "MQ_AP",
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "T20"
+    },
+    "jhb3cb": {
+        "name": "DEEBOT T90S PRO OMNI",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
+        "type": "T20"
+    },
+    "qqp88t": {
+        "name": "DEEBOT T90 MAX PRO OMNI",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
+        "type": "X2"
     }
+
 };
 
 // Known models of the Yeedi brand

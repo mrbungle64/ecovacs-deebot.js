@@ -151,6 +151,36 @@ class EcovacsAPI extends EventEmitter {
     return 'ready';
   }
 
+  async setCredentials(credentials) {
+    if (!credentials) {
+      throw new Error('No credentials provided');
+    }
+    let now = Date.now();
+    if (credentials.tokenExpiresAt < now) {
+      throw new Error('Credentials expired');
+    }
+    this.account = credentials.email;
+    this.uid = credentials.uid;
+    this.user_access_token = credentials.user_access_token ;
+    this.tokenExpiresAt = credentials.tokenExpiresAt ;
+
+    if (this.tokenExpiresAt < now) {
+      throw new Error('Credentials expired');
+    }
+
+    // Check if the credentials are still valid.
+    await this.getDevices();
+
+    tools.envLogSuccess('user credentials set');
+    /**
+     * Fired after a successful (re-)login with fresh credentials.
+     * @event EcovacsAPI#credentialsUpdated
+     * @type {import('./library/typedefs').Credentials}
+     */
+    this.emit('credentialsUpdated', this.getCredentials());
+    return 'ready';
+  }
+
   /**
    * Request an e-mailed device-verification code for the account used with
    * {@link connect}. This is step one of the two-step device-verification flow

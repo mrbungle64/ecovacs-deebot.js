@@ -1,8 +1,12 @@
 'use strict';
 
+const TRACE_COORDINATE_SCALE = 10;
+const LIVE_IMAGE_SCHEDULE_INTERVAL = 5000; // Default minimum live PNG update interval in milliseconds
+
 const tools = require('../tools');
 const map = require('../mapInfo');
 const mapTemplate = require('../mapTemplate');
+const vectorMap = require('../render/vectorMap');
 const dictionary = require('../dictionary');
 const VacBotCommand = require('../command');
 const constants = require('../constants');
@@ -43,6 +47,9 @@ class MapManager {
         this.mapDataObject = null;
         this.mapDataObjectQueue = [];
         this.mapImageDataQueue = [];
+
+        // Decoded V2 geometry, keyed by floor ID for live trace rendering.
+        this._vectorMaps = new Map();
 
         this.setupEventListeners();
     }
@@ -383,20 +390,102 @@ class MapManager {
      * Handle the payload of the 'MapInfo_V2' response/message
      * @param {Object} payload
      */
-    handleMapInfoV2(payload) {
-        this.currentMapMID = payload['mid'];
-        tools.envLogNotice(`mid: ${this.currentMapMID}`);
-        tools.envLogNotice(`batid: ${payload['batid']}`);
-        tools.envLogNotice(`serial: ${payload['serial']}`);
-        tools.envLogNotice(`index: ${payload['index']}`);
-        tools.envLogNotice(`type: ${payload['type']}`);
-        tools.envLogNotice(`outlineVer: ${payload['outlineVer']}`);
-        tools.envLogNotice(`info: ${payload['info']}`);
-        tools.envLogNotice(`infoSize: ${payload['infoSize']}`);
-        tools.envLogNotice(`using: ${payload['using']}`);
-        tools.envLogNotice(`outlineCpmplete: ${payload['outlineCpmplete']}`); // The typo in 'Cpmplete' is intended
+    async handleMapInfoV2(payload) {
+        // A fetched floor is not necessarily the robot's active floor.
+        const mapId = String(payload.mid);
+        // Newer devices return vector geometry instead of raster pieces.
+        if (!payload['info']) {
+            return;
+        }
+        try {
+            const decoded = await mapTemplate.decompressToString(payload['info']);
+            if (!decoded) {
+                tools.envLogWarn('[MapManager] Could not decode MapInfo_V2 info payload');
+                return;
+            }
+            const vector = JSON.parse(decoded);
+            this._vectorMaps.set(mapId, vector);
+
+            // Do not draw the active robot/dock onto another floor's image.
+            const isCurrentMap = String(this.currentMapMID) === mapId;
+            const dataURL = vectorMap.renderVectorMapPNG(vector, {
+                deebotPosition: isCurrentMap ? this.bot.deebotPosition : undefined,
+                chargePosition: isCurrentMap ? this.bot.chargePosition : undefined
+            });
+            if (!dataURL) {
+                tools.envLogInfo('[MapManager] MapInfo_V2 vector produced no renderable geometry');
+                return;
+            }
+            this.mapImageV2 = dataURL;
+            this.bot.ecovacs.emit('MapImageV2', { mapID: mapId, mapBase64PNG: dataURL });
+            this.bot.ecovacs.emit('MapImage', dataURL);
+
+            // Trace data may have arrived before this floor's geometry.
+            if (this._mapTrace?.mapId === mapId) {
+                this.scheduleLiveMapImageV2();
+            }
+        } catch (e) {
+            tools.envLogError(`[MapManager] Error rendering MapInfo_V2 map: ${e.message}`);
+        }
     }
 
+    /**
+     * Render a live PNG from cached V2 geometry and indexed route points.
+     * The robot marker uses the latest trace point as an estimated position.
+     * Emits LiveMapImageV2 only; floor snapshot events remain separate.
+     */
+    renderLiveMapImageV2() {
+        const trace = this._mapTrace;
+        const vector = trace ? this._vectorMaps.get(trace.mapId) : undefined;
+        if (!trace || !vector || !trace.points.size) {
+            return;
+        }
+
+        try {
+            const tracePoints = [...trace.points.values()].sort(
+                (a, b) => a.index - b.index
+            );
+
+            const latestPoint = tracePoints[tracePoints.length - 1];
+            const position = this._liveMapPosition;
+
+            // Prefer a position response received after the latest trace chunk.
+            // Receipt times approximate freshness; they are not device timestamps.
+            const usePosition =
+                position?.mapId === trace.mapId &&
+                position.receivedAt >= Date.parse(trace.receivedAt);
+
+            const isCurrentMap = String(this.currentMapMID) === trace.mapId;
+
+            const dataURL = vectorMap.renderVectorMapPNG(vector, {
+                tracePoints,
+                deebotPosition: usePosition ? position : latestPoint,
+                chargePosition: isCurrentMap
+                    ? this.bot.chargePosition
+                    : undefined
+            });
+            if (!dataURL) {
+                return;
+            }
+
+
+            console.log(JSON.stringify({
+                event: 'LiveMapImageV2 emitted',
+                mapId: trace.mapId,
+                receivedCount: trace.points.size,
+                latestIndex: latestPoint.index
+            }));
+
+
+            this.bot.ecovacs.emit('LiveMapImageV2', {
+                mapID: trace.mapId,
+                mapBase64PNG: dataURL
+            });
+        } catch (error) {
+            tools.envLogError(`[MapManager] Error rendering live map: ${error.message}`);
+        }
+    }
+    
     /**
      * Handle the payload of the 'MapInfo_V2' response/message (Yeedi)
      * @param {Object} payload
@@ -550,41 +639,46 @@ class MapManager {
      * @param {Object} payload
      */
     async handleMapSet_V2(payload) {
-        let subsets = payload['subsets'];
-        if (typeof subsets === 'string') {
-            subsets = JSON.parse(await mapTemplate.decompressToString(subsets));
-        }
-        if ((subsets !== undefined) && Array.isArray(subsets)) {
-            const type = payload['type'];
-            const subsetData = [];
-            subsets.forEach((subset) => {
-                const mssid = subset[0];
-                const name = subset[1];
-                const subtype = subset[2];
-                const areaConnections = subset[3];
-                const index = subset[4];
-                const spotPosition = subset[5] + ',' + subset[6];
-                const cleanCount = subset[7].split('-')[0];
-                const cleanSpeed = subset[7].split('-')[1];
-                const waterLevel = subset[7].split('-')[2];
-                const singleSubsetData = {
-                    'index': index,
-                    'mssid': mssid,
-                    'name': name,
-                    'subtype': subtype,
-                    'type': type,
-                    'areaConnections': areaConnections.replace(/-/g, ','),
-                    'cleanCount': Number(cleanCount),
-                    'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[cleanSpeed],
-                    'waterLevel': Number(waterLevel),
-                    'spotPosition': spotPosition
+        try{
+            let subsets = payload['subsets'];
+            if (typeof subsets === 'string') {
+                subsets = JSON.parse(await mapTemplate.decompressToString(subsets));
+            }
+            if ((subsets !== undefined) && Array.isArray(subsets)) {
+                const type = payload['type'];
+                const subsetData = [];
+                subsets.forEach((subset) => {
+                    const mssid = subset[0];
+                    const name = subset[1];
+                    const subtype = subset[2];
+                    const areaConnections = subset[3];
+                    const index = subset[4];
+                    const spotPosition = subset[5] + ',' + subset[6];
+                    const cleanCount = subset[7]?.split('-')[0];
+                    const cleanSpeed = subset[7]?.split('-')[1];
+                    const waterLevel = subset[7]?.split('-')[2];
+                    const singleSubsetData = {
+                        'index': index,
+                        'mssid': mssid,
+                        'name': name,
+                        'subtype': subtype,
+                        'type': type,
+                        'areaConnections': areaConnections.replace(/-/g, ','),
+                        'cleanCount': cleanCount !== undefined ? Number(cleanCount) : undefined,
+                        'cleanSpeed': dictionary.CLEAN_SPEED_FROM_ECOVACS[cleanSpeed],
+                        'waterLevel': waterLevel !== undefined ? Number(waterLevel) : undefined,
+                        'spotPosition': spotPosition
+                    };
+                    subsetData.push(singleSubsetData);
+                });
+                this.mapSet_V2 = {
+                    'mid': payload['mid'],
+                    'subsets': subsetData
                 };
-                subsetData.push(singleSubsetData);
-            });
-            this.mapSet_V2 = {
-                'mid': payload['mid'],
-                'subsets': subsetData
-            };
+            }
+        } catch (e) {
+            tools.envLogError(`error handling MapSet_V2: ${e.message}`);
+            throw new Error(`error handling MapSet_V2: ${e.message}`, { cause: e });
         }
     }
 
@@ -728,7 +822,142 @@ class MapManager {
      * @param {Object} payload - The message payload.
      */
     async handleMapTrace(payload) {
-        tools.envLogPayload(payload);
+        try {
+
+
+            // const now = Date.now();
+            // if (now - (this._lastTraceDiagnosticAt ?? 0) >= 5000) {
+            //     this._lastTraceDiagnosticAt = now;
+
+                console.log(JSON.stringify({
+                    event: 'MapTrace received',
+                    mapId: payload.mid,
+                    cleanId: payload.cleanId,
+                    traceId: payload.tid,
+                    traceStart: payload.traceStart,
+                    pointCount: payload.pointCount,
+                    totalCount: payload.totalCount,
+                    retired: this._retiredTraceKeys?.has(JSON.stringify([
+                        String(payload.mid),
+                        String(payload.cleanId),
+                        String(payload.tid)
+                    ])) ?? false
+                }));
+            // }
+
+
+            const bytes = await mapTemplate.mapPieceToIntArray(
+                payload.traceValue
+            );
+
+            if (!bytes) {
+                return;
+            }
+
+            const buffer = Buffer.from(bytes);
+            const pointCount = Number(payload.pointCount);
+            const traceStart = Number(payload.traceStart);
+            const totalCount = Number(payload.totalCount);
+
+            if (
+                !Number.isInteger(pointCount) || pointCount < 0 ||
+                !Number.isInteger(traceStart) || traceStart < 0 ||
+                !Number.isInteger(totalCount) ||
+                totalCount < traceStart + pointCount
+            ) {
+                throw new Error('Invalid trace point counts or start index');
+            }
+
+            if (buffer.length !== pointCount * 5) {
+                throw new Error(
+                    `Unexpected trace size: ${buffer.length} bytes; ` +
+                    `expected ${pointCount * 5}`
+                );
+            }
+
+            const traceKey = JSON.stringify([
+                String(payload.mid),
+                String(payload.cleanId),
+                String(payload.tid)
+            ]);
+
+            this._retiredTraceKeys ??= new Set();
+
+            // Ignore delayed chunks from a previously replaced trace.
+            if (this._retiredTraceKeys.has(traceKey)) {
+                return;
+            }
+
+            if (this._mapTrace?.key !== traceKey) {
+                if (this._mapTrace) {
+                    this._retiredTraceKeys.add(this._mapTrace.key);
+                }
+
+                // A new trace starts with an empty route.
+                this._mapTrace = {
+                    key: traceKey,
+                    mapId: String(payload.mid),
+                    cleanId: String(payload.cleanId),
+                    traceId: String(payload.tid),
+                    coordinateScale: TRACE_COORDINATE_SCALE,
+                    points: new Map(),
+                    totalCount: 0
+                };
+            }
+
+            // Insert by index; overlapping chunks replace existing points.
+            for (let offset = 0; offset < buffer.length; offset += 5) {
+                const index = traceStart + offset / 5;
+
+                this._mapTrace.points.set(index, {
+                    index,
+                    x: buffer.readInt16LE(offset) * TRACE_COORDINATE_SCALE,
+                    y: buffer.readInt16LE(offset + 2) * TRACE_COORDINATE_SCALE,
+                    flag: buffer.readUInt8(offset + 4)
+                });
+            }
+
+            // Late chunks must not reduce the known total.
+            this._mapTrace.totalCount = Math.max(
+                this._mapTrace.totalCount,
+                totalCount
+            );
+
+            this._mapTrace.receivedAt = new Date().toISOString();
+
+            this.scheduleLiveMapImageV2();
+        } catch (error) {
+            tools.envLogError(
+                `[MapManager] Error decoding MapTrace: ${error.message}`
+            );
+        }
+    }
+    
+    scheduleLiveMapImageV2() {
+        if (this.bot.ecovacs.listenerCount('LiveMapImageV2') === 0) {
+            return;
+        }
+
+        const trace = this._mapTrace;
+
+        // Incoming traces can start mid-cleaning, before geometry is loaded.
+        // Do not consume the update interval until rendering is possible.
+        if (!trace?.points.size || !this._vectorMaps.has(trace.mapId)) {
+            return;
+        }
+
+        const now = Date.now();
+        const interval = this.liveMapImageIntervalMs ?? LIVE_IMAGE_SCHEDULE_INTERVAL;
+
+        if (
+            this._lastLiveMapImageAt !== undefined &&
+            now - this._lastLiveMapImageAt < interval
+        ) {
+            return;
+        }
+
+        this._lastLiveMapImageAt = now;
+        this.renderLiveMapImageV2();
     }
 
     /**
@@ -744,6 +973,56 @@ class MapManager {
         }
         return currentSpotAreaName;
     }
+
+    setLiveMapImageInterval(intervalMs) {
+        if (!Number.isFinite(intervalMs) || intervalMs < 0) {
+            throw new TypeError(
+                'Live map image interval must be a non-negative number'
+            );
+        }
+
+        this.liveMapImageIntervalMs = intervalMs;
+    }
+
+    handleLiveMapPositionV2(payload) {
+        const pos = payload?.deebotPos;
+
+        // Require the response's map ID to avoid placing the robot
+        // on a different floor.
+        if (
+            !pos ||
+            payload.mid === undefined ||
+            payload.mid === null ||
+            pos.x === undefined || pos.x === null ||
+            pos.y === undefined || pos.y === null
+        ) {
+            return;
+        }
+
+        const mapId = String(payload.mid);
+        const x = Number(pos.x);
+        const y = Number(pos.y);
+
+        if (
+            Number(pos.invalid) === 1 ||
+            !Number.isFinite(x) ||
+            !Number.isFinite(y)
+        ) {
+            this._liveMapPosition = null;
+            return;
+        }
+
+        this._liveMapPosition = {
+            mapId,
+            x,
+            y,
+            a: pos.a,
+            receivedAt: Date.now()
+        };
+
+        this.scheduleLiveMapImageV2();
+    }
+
 }
 
 module.exports = MapManager;

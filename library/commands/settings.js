@@ -64,11 +64,17 @@ class SetWaterLevel extends VacBotCommand {
  */
 class SetWaterInfo extends VacBotCommand {
     constructor(amount, customAmount, sweepType) {
-        super('setWaterInfo', {
-            'amount': amount,
-            'customAmount': customAmount,
-            'sweepType': sweepType
-        });
+        let payload = {};
+        if (amount != undefined) {
+            payload["amount"] = amount;
+        }
+        if (customAmount != undefined) {
+            payload["customAmount"] = customAmount;
+        }
+        if (sweepType != undefined) {
+            payload["sweepType"] = sweepType;
+        }
+        super('setWaterInfo', payload);
     }
 }
 
