@@ -1090,6 +1090,12 @@ exports.KnownDeebotModels = {
         "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
         "type": "T20"
     },
+    "jhb3cb": {
+        "name": "DEEBOT T90S PRO OMNI",
+        "smartType": "MQ_AP",
+        "capabilities": ["vacuumBase", "navigationBase", "suctionMaxPlus", "OMNI", "rollerMop"],
+        "type": "T20"
+    },
     "qqp88t": {
         "name": "DEEBOT T90 MAX PRO OMNI",
         "smartType": "MQ_AP",
