@@ -191,6 +191,16 @@ class Pause extends VacBotCommand {
     }
 }
 
+class Pause_V2 extends VacBotCommand {
+    constructor(action = 'pause', kwargs = {}) {
+        const payload = {
+            'act': action,
+             "content": {"type": ""}
+            }
+        super('clean_V2', payload);
+       };
+}
+
 /**
  * Represents the 'resume' function
  * @extends VacBotCommand
@@ -198,9 +208,19 @@ class Pause extends VacBotCommand {
 class Resume extends VacBotCommand {
     constructor(command = 'clean') {
         super(command, {
-            'act': 'resume'
+            'act': 'resume',
+            "content": {}
         });
     }
+}
+
+class Resume_V2 extends VacBotCommand {
+    constructor(action = 'resume', kwargs = {}) {
+        const payload = {
+            'act': action,
+            }
+        super('clean_V2', payload);
+       };
 }
 
 /**
@@ -216,6 +236,14 @@ class Stop extends VacBotCommand {
     }
 }
 
+class Stop_V2 extends VacBotCommand {
+    constructor(action = 'stop', kwargs = {}) {
+        const payload = {
+            'act': action,
+            }
+        super('clean_V2', payload);
+       };
+}
 /**
  * Requests various information about the cleaning status
  * @extends VacBotCommand
@@ -720,7 +748,10 @@ module.exports = {
     MapPoint_V2,
     Pause,
     Resume,
+    Pause_V2,
+    Resume_V2,
     Stop,
+    Stop_V2,
     GetCleanState,
     GetCleanState_V2,
     GetCleanSpeed,

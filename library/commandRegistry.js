@@ -34,6 +34,8 @@ const COMMAND_REGISTRY = {
     'HostedCleanMode': { className: 'HostedCleanMode' },
     'Pause': { specialLogic: true },
     'Resume': { specialLogic: true },
+    'Pause_V2': { specialLogic: true },
+    'Resume_V2': { specialLogic: true },
     'SetAutonomousClean': { className: 'SetAutonomousClean', minArgs: 1 },
     'SetCleanCount': { className: 'SetCleanCount', minArgs: 1 },
     'SetCleanPreference': { className: 'SetCleanPreference', minArgs: 1 },
@@ -42,6 +44,7 @@ const COMMAND_REGISTRY = {
     'SpotArea': { specialLogic: true },
     'SpotArea_V2': { specialLogic: true },
     'Stop': { specialLogic: true },
+    'Stop_V2': { specialLogic: true },
 
     // ==================
     // Continuous Cleaning
@@ -194,6 +197,7 @@ const COMMAND_REGISTRY = {
     'GetMultiMapState': { className: 'GetMultiMapState' },
     'GetSpotAreaInfo': { specialLogic: true },
     'GetSpotAreas': { specialLogic: true },
+    'GetSpotAreas_V2': { specialLogic: true },
     'GetVirtualBoundaries': { specialLogic: true },
     'GetVirtualBoundaryInfo': { specialLogic: true },
     'MapPoint_V2': { specialLogic: true },

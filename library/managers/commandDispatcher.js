@@ -71,6 +71,12 @@ class CommandDispatcher {
                 }
                 break;
             }
+            case 'Pause_V2'.toLowerCase(): {
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Pause_V2(), options);
+            }
+            case 'Resume_V2'.toLowerCase(): {
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Resume_V2(), options);
+            }
             case 'Stop'.toLowerCase(): {
                 if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
                     promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop('clean_V2'), options);
@@ -78,6 +84,9 @@ class CommandDispatcher {
                     promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop(), options);
                 }
                 break;
+            }
+            case 'Stop_V2'.toLowerCase(): {
+                promise = this.bot.ecovacs.sendCommand(new this.bot.vacBotCommand.Stop_V2(), options);
             }
             case 'Resume'.toLowerCase(): {
                 if (this.bot.isPlatformTypeAirbot() || this.bot.isPlatformTypeX2()) {
@@ -184,6 +193,13 @@ class CommandDispatcher {
                 const mapID = args[0]; // mapID is a string
                 if (Number(mapID) > 0) {
                     promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreas(mapID), options);
+                }
+                break;
+            }
+            case 'GetSpotAreas_V2'.toLowerCase(): {
+                const mapID = args[0]; // mapID is a string
+                if (Number(mapID) > 0) {
+                    promise = this.bot.ecovacs.sendCommand(new VacBotCommand.GetMapSpotAreas_V2(mapID), options);
                 }
                 break;
             }
